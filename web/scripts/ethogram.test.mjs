@@ -1083,6 +1083,18 @@ assert.equal(names("periwinkle").includes("rasp"), false);
 assert.equal(names("periwinkle").includes("graze"), false);
 assert.equal(names("periwinkle").includes("still"), false);
 assert.equal(names("periwinkle").includes("sit"), false);
+assert.ok(names("sand_dollar").includes("mellitahush"));
+assert.ok(names("sand_dollar").includes("lunulesift_soft"));
+assert.ok(names("sand_dollar").includes("dollarright_soft"));
+assert.ok(names("sand_dollar").includes("sandfilmburrow_soft"));
+assert.ok(names("sand_dollar").includes("spinefurcreep_soft"));
+assert.ok(names("sand_dollar").includes("petaloid_soft"));
+assert.ok(names("sand_dollar").includes("ambulacra_soft"));
+assert.ok(names("sand_dollar").includes("freeze"));
+assert.equal(names("sand_dollar").includes("bury"), false);
+assert.equal(names("sand_dollar").includes("flat"), false);
+assert.equal(names("sand_dollar").includes("still"), false);
+assert.equal(names("sand_dollar").includes("sit"), false);
 
   assert.ok(names("lugworm").includes("heap"));
   for (const key of MEADOW) {
