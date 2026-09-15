@@ -1275,8 +1275,8 @@ test("eyespot/flagellum/chloroplast/phototaxis/euglenid/metaboly/paramylon are E
   assert.equal(T.HAPPY.includes("carlini"), false);
   assert.equal(T.HAPPY.includes("andrenini"), false);
   assert.equal(T.TRICKS.includes("hum"), false);
-  assert.deepEqual([...HoneyDrone.TRICKS], ["holoptic", "congregation", "sortie", "ocellus", "mellifera"]);
-  assert.deepEqual([...OverlayHoneyDrone.TRICKS], ["holoptic", "congregation", "sortie", "ocellus", "mellifera"]);
+  assert.deepEqual([...HoneyDrone.TRICKS], ["holoptic", "congregation", "sortie", "ocellus", "mellifera", "dronepatrol", "eyemeet"]);
+  assert.deepEqual([...OverlayHoneyDrone.TRICKS], ["holoptic", "congregation", "sortie", "ocellus", "mellifera", "dronepatrol", "eyemeet"]);
   assert.deepEqual([...HoneyDrone.HAPPY], ["ligustica", "carnica", "apisini"]);
   assert.equal(T.TRICKS.includes("holoptic"), false);
   assert.equal(T.TRICKS.includes("congregation"), false);
