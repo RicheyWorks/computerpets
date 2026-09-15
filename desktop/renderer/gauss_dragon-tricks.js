@@ -1,12 +1,22 @@
-/** Gauss ground tricks while idle. House neighborly Filing Dragon (gauss_dragon / Gauss) desk life -- filing-lines band walk / iron-filings stand / field-line align / magnetic-perch settle / long gauss hush; NOT Ion ion_dragon (esp. not paleionhazecling/outlinehazedrift/chargehazeclaim/mistperchsettle/longionhush/dension/inkion/densiondragon); NOT Spark; NOT Flux; NOT Trace; NOT Volt; NOT Arc; NOT Magneton; NOT Hide; NOT Soar; NOT Vesper; NOT Relay; NOT Fuse; NOT Rui; guest slug Gauss / key gauss_dragon -- accept gauss_dragon and gauss; Thank-yous densgauss / inkgauss / densgaussdragon. Sleep, hide, leave, rest, card, ribbon still win. Same map as web gauss_dragon-tricks.ts. Next: Boot / paramecium. Catalog 216. */
+/** Gauss ground tricks while idle — ultra-polish pass. House neighborly Filing Dragon gauss_dragon desk life (gauss_dragon / Gauss) — filinglinesbandwalk / ironfilingsstand / fieldlinealign / magneticperchsettle / filingsweep / bandclamp / gausshush personality (filinglinesbandwalk filing-lines band walk without naming filing or lines or band or walk alone as wait — filing-lines band walk tell; ironfilingsstand iron-filings stand without naming iron or filings or stand alone as wait — iron-filings stand tell; fieldlinealign field-line align without naming field or line or align alone as wait — field-line align tell; magneticperchsettle magnetic-perch settle without naming magnetic or perch or settle alone as wait — magnetic-perch settle tell (distinct from Magneton lodestone/dipole); filingsweep filing-sweep without naming filing or sweep alone as wait — filing sweep tell; bandclamp band-clamp without naming band or clamp alone as wait — band clamp tell; gausshush gauss hush hold (THE gausshush sit_hold tell) — never named wait or crouch or sit or still or gauss_dragon or gauss or filing as bare ethogram-only trick kinds; Ion ion_dragon owns filinglinesbandwalk? NO — Ion owns paleionhazecling/outlinehazedrift/chargehazeclaim/mistperchsettle/hazeveil/ionbloom/ionhush — do NOT reuse; Spark spark_dragon owns crackpointskitter/snoutcrackpop/clawtipcrackle/tailpointperch/fissureflash/tipscorch/sparkhush — do NOT reuse; Flux flux_dragon owns heatfieldclaimwalk/fieldlineshimmer/hideheatbloom/treatyfieldsettle/fieldripple/boundaryglow/fluxhush — do NOT reuse; Trace trace_dragon owns outlinetracepathwalk/dashedlineflicker/cornersnapturn/breadcrumbperch/pathglow/waypointskip/tracehush — do NOT reuse; Volt volt_dragon owns coiledgecharge/windowwireskim/staticfringecrackle/sparkhop/coilwind/coronaflash/volthush — do NOT reuse; Arc cyber_dragon owns arcsparkcoil/circuitridgewalk/databreathshimmer/perchscanblink/gridpulse/packetflick/cyberhush — do NOT reuse; Magneton owns lodestone/flux/azimuth/dipole/remanence/barkhausen/hysteresis — do NOT reuse bare flux or dipole; Relay owns click/latch/arc/buzz/switch — do NOT reuse bare arc; Fuse owns fuse life — do NOT reuse; Vesper dragon owns sprawl/guard/smolder/claim/fold — do NOT reuse claim; Relay relay_dragon next — do NOT start; guest slug Gauss / key gauss_dragon only for wantsThankYou matching — accept "gauss_dragon" and "gauss"; do NOT name a trick "gauss_dragon" or "gauss" or "filing" or "ion_dragon" or "ion" or "haze" or "spark_dragon" or "spark" or "crackle" or "flux_dragon" or "flux" or "trace_dragon" or "trace" or "volt_dragon" or "volt" or "cyber_dragon" or "arc" or "magneton" or "relay" or "fuse" or "dragon" or "vesper" or "firefly" or "veil"; not Ion Haze Dragon life, not Spark Crack Dragon life, not Flux Field Dragon life, not Trace Path Dragon life, not Volt Coil Dragon life, not Arc Grid Dragon life, not Magneton life, not Relay click/latch life, not Fuse life, not Vesper dragon life, not Rui. Filinglinesbandwalk / ironfilingsstand / fieldlinealign / magneticperchsettle / filingsweep / bandclamp / gausshush; densgauss / inkgauss / densgaussdragon thank-yous. Same map as web gauss_dragon-tricks.ts. Window-play unchanged. Ethogram softs + freeze — never names filing/still/watch/wait/gauss_dragon as bare ethogram-only trick kinds. True Filing Dragon gauss_dragon desk life only — filing-lines band walk, iron-filings stand, field-line align, magnetic-perch settle, filing sweep, band clamp, gauss hush. Next house-order ultra: Relay / relay_dragon. No cry inventing — gauss_dragon.wav EXISTS so prefersHouseCry adds gauss_dragon after ion_dragon. Amplitudes raised toward Rui richness; denser waits/weights; GAUSSHUSH_HOLD=11.2 RELEASE_S=1.18 (not 37.81/2.77). Catalog 221. */
 (function (root) {
+
   const TRICK_KEY = "gauss_dragon";
-  const TRICKS = ["filinglinesbandwalk", "ironfilingsstand", "fieldlinealign", "magneticperchsettle", "longgausshush"];
+  const TRICKS = ["filinglinesbandwalk", "ironfilingsstand", "fieldlinealign", "magneticperchsettle", "filingsweep", "bandclamp", "gausshush"];
   const HAPPY = ["densgauss", "inkgauss", "densgaussdragon"];
-  const HAPPY_DUR = { densgauss: 3.33, inkgauss: 3.01, densgaussdragon: 3.19 };
-  const LONGGAUSSHUSH_HOLD = 37.81;
-  const RELEASE_S = 2.77;
-  const DUR = { longgausshush: LONGGAUSSHUSH_HOLD + RELEASE_S, filinglinesbandwalk: 6.71, ironfilingsstand: 6.14, fieldlinealign: 5.89, magneticperchsettle: 6.02 };
+
+  const HAPPY_DUR = { densgauss: 1.70, inkgauss: 1.84, densgaussdragon: 1.76 };
+  const GAUSSHUSH_HOLD = 11.2;
+  const RELEASE_S = 1.18;
+  const DUR = {
+    gausshush: GAUSSHUSH_HOLD + RELEASE_S,
+    filinglinesbandwalk: 2.48,
+    ironfilingsstand: 2.42,
+    fieldlinealign: 2.40,
+    magneticperchsettle: 2.44,
+    filingsweep: 2.38,
+    bandclamp: 2.56,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,40 +46,78 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "longgausshush") return 233 + roll * 40;
-    if (kind === "ironfilingsstand") return 29.7 + roll * 3.6;
-    if (kind === "magneticperchsettle") return 27.6 + roll * 3.3;
-    if (kind === "filinglinesbandwalk") return 28.5 + roll * 3.5;
-    if (kind === "fieldlinealign") return 26.8 + roll * 3.4;
-    return justFinished ? 21.0 + roll * 3.5 : 16.1 + roll * 3.0;
+    if (kind === "gausshush") return 40 + roll * 26;
+    if (kind === "filingsweep" || kind === "filinglinesbandwalk" || kind === "bandclamp") return 12.8 + roll * 9.4;
+    if (kind === "fieldlinealign" || kind === "ironfilingsstand" || kind === "magneticperchsettle") return 11.6 + roll * 8.5;
+    return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
 
-  function pickTrick(rand, musicOn, lastKind) {
-    if (musicOn) return "longgausshush";
+    function pickTrick(rand, musicOn, lastKind) {
+    if (musicOn) return "gausshush";
     const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "longgausshush") {
-      if (roll < 0.26) return "ironfilingsstand";
-      if (roll < 0.55) return "magneticperchsettle";
-      if (roll < 0.74) return "filinglinesbandwalk";
-      return "fieldlinealign";
+    if (lastKind === "gausshush") {
+      if (roll < 0.17) return "filinglinesbandwalk";
+      if (roll < 0.33) return "ironfilingsstand";
+      if (roll < 0.49) return "fieldlinealign";
+      if (roll < 0.65) return "magneticperchsettle";
+      if (roll < 0.83) return "filingsweep";
+      return "bandclamp";
+    }
+    if (lastKind === "filinglinesbandwalk") {
+      if (roll < 0.16) return "gausshush";
+      if (roll < 0.32) return "ironfilingsstand";
+      if (roll < 0.48) return "fieldlinealign";
+      if (roll < 0.64) return "magneticperchsettle";
+      if (roll < 0.82) return "filingsweep";
+      return "bandclamp";
     }
     if (lastKind === "ironfilingsstand") {
-      if (roll < 0.26) return "longgausshush";
-      if (roll < 0.5) return "magneticperchsettle";
-      if (roll < 0.74) return "filinglinesbandwalk";
-      return "fieldlinealign";
+      if (roll < 0.14) return "gausshush";
+      if (roll < 0.3) return "filinglinesbandwalk";
+      if (roll < 0.46) return "fieldlinealign";
+      if (roll < 0.62) return "magneticperchsettle";
+      if (roll < 0.8) return "filingsweep";
+      return "bandclamp";
+    }
+    if (lastKind === "fieldlinealign") {
+      if (roll < 0.15) return "gausshush";
+      if (roll < 0.31) return "filinglinesbandwalk";
+      if (roll < 0.47) return "ironfilingsstand";
+      if (roll < 0.63) return "magneticperchsettle";
+      if (roll < 0.81) return "filingsweep";
+      return "bandclamp";
     }
     if (lastKind === "magneticperchsettle") {
-      if (roll < 0.22) return "longgausshush";
-      if (roll < 0.44) return "ironfilingsstand";
-      if (roll < 0.74) return "filinglinesbandwalk";
-      return "fieldlinealign";
+      if (roll < 0.16) return "gausshush";
+      if (roll < 0.32) return "filinglinesbandwalk";
+      if (roll < 0.48) return "ironfilingsstand";
+      if (roll < 0.64) return "fieldlinealign";
+      if (roll < 0.82) return "filingsweep";
+      return "bandclamp";
     }
-    if (roll < 0.2) return "longgausshush";
-    if (roll < 0.4) return "ironfilingsstand";
-    if (roll < 0.6) return "magneticperchsettle";
-    if (roll < 0.8) return "filinglinesbandwalk";
-    return "fieldlinealign";
+    if (lastKind === "filingsweep") {
+      if (roll < 0.15) return "gausshush";
+      if (roll < 0.31) return "filinglinesbandwalk";
+      if (roll < 0.47) return "ironfilingsstand";
+      if (roll < 0.63) return "fieldlinealign";
+      if (roll < 0.81) return "magneticperchsettle";
+      return "bandclamp";
+    }
+    if (lastKind === "bandclamp") {
+      if (roll < 0.16) return "gausshush";
+      if (roll < 0.32) return "filinglinesbandwalk";
+      if (roll < 0.48) return "ironfilingsstand";
+      if (roll < 0.64) return "fieldlinealign";
+      if (roll < 0.82) return "magneticperchsettle";
+      return "filingsweep";
+    }
+    if (roll < 0.14) return "gausshush";
+    if (roll < 0.28) return "filinglinesbandwalk";
+    if (roll < 0.42) return "ironfilingsstand";
+    if (roll < 0.56) return "fieldlinealign";
+    if (roll < 0.7) return "magneticperchsettle";
+    if (roll < 0.85) return "filingsweep";
+    return "bandclamp";
   }
 
   function happyCanStart(state) {
@@ -97,11 +145,17 @@
     );
   }
 
-  function wantsThankYou(key) {
+  function wantsThankYou(key  ) {
     return key === TRICK_KEY || key === "gauss";
   }
 
-  function startThankYou(key, lastKind, x, facing, flags) {
+  function startThankYou(
+    key  ,
+    lastKind,
+    x,
+    facing,
+    flags
+  ) {
     if (!wantsThankYou(key)) return null;
     if (!happyCanStart(flags || { cmd: "idle" })) return null;
     const pick = pickHappy(lastKind);
@@ -110,95 +164,80 @@
 
   function pickHappy(lastKind, rand) {
     const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
+    const list = pool.length ? pool : [...HAPPY];
     const roll = rand == null ? Math.random() : rand;
     return list[Math.floor(roll * list.length)] || list[0];
   }
 
   function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "densgauss";
+    const name = (HAPPY).includes(kind) ? (kind) : "densgauss";
     return {
       kind: name,
       happy: true,
       phase: "go",
       t: 0,
-      x: x,
+      x,
       lift: 0,
       rot: 0,
-      anim: name === "densgauss" ? "sit" : name === "inkgauss" ? "play" : "play",
-      facing: facing == null ? 1 : facing,
+      anim: (name === "densgauss" ? "sit" : name === "inkgauss" ? "play" : "play"),
+      facing: (facing == null ? 1 : facing),
       fromX: x,
     };
   }
 
-
-
-
-
-
-
-
   function densgaussPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densgauss));
-    if (u < 0.11) {
-      const s = u / 0.11;
-      return { lift: s * 0.005, rot: s * -0.35, anim: "sit" };
+    if (u < 0.14) {
+      const s = u / 0.14;
+      return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" };
     }
-    if (u < 0.5) {
-      const sway = Math.sin(((u - 0.11) / 0.39) * Math.PI * 2.8);
-      const haze = Math.sin(((u - 0.11) / 0.39) * Math.PI * 5.4);
-      return { lift: 0.005 + Math.abs(sway) * 0.0016 + Math.abs(haze) * 0.00055, rot: -0.32 + sway * 0.23 + haze * 0.055, anim: "sit" };
+    if (u < 0.78) {
+      const flash = Math.sin(t * 2.2);
+      return {
+        lift: 2.8 + Math.abs(flash) * 1.4,
+        rot: 12 + flash * 8,
+        dx: flash * 0.08,
+        anim: "sit",
+      };
     }
-    if (u < 0.86) {
-      const sway = Math.sin(((u - 0.5) / 0.36) * Math.PI * 2.3);
-      return { lift: 0.005 + Math.abs(sway) * 0.0013, rot: -0.27 + sway * 0.17, anim: "sit" };
-    }
-    const s = (u - 0.86) / 0.14;
-    return { lift: 0.005 * (1 - s), rot: -0.27 * (1 - s), anim: "idle" };
+    const s = (u - 0.78) / 0.22;
+    return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
+
   function inkgaussPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkgauss));
-    if (u < 0.1) {
-      const s = u / 0.1;
-      return { lift: s * 0.0059, rot: s * 0.42, anim: "play" };
-    }
-    if (u < 0.49) {
-      const bob = Math.sin(((u - 0.1) / 0.39) * Math.PI * 3.05);
-      const ion = Math.sin(((u - 0.1) / 0.39) * Math.PI * 5.9);
-      return { lift: 0.0059 + Math.abs(bob) * 0.002 + Math.abs(ion) * 0.00065, rot: 0.4 + bob * 0.22 + ion * 0.05, anim: "play" };
-    }
-    if (u < 0.86) {
-      const bob = Math.sin(((u - 0.49) / 0.37) * Math.PI * 2.45);
-      return { lift: 0.0059 + Math.abs(bob) * 0.0015, rot: 0.35 + bob * 0.16, anim: "play" };
-    }
-    const s = (u - 0.86) / 0.14;
-    return { lift: 0.0059 * (1 - s), rot: 0.35 * (1 - s), anim: "idle" };
-  }
-  function densgaussdragonPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densgaussdragon));
     if (u < 0.12) {
       const s = u / 0.12;
-      return { lift: s * 0.0043, rot: s * -0.255, anim: "play" };
+      return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" };
     }
-    if (u < 0.53) {
-      const hush = Math.sin(((u - 0.12) / 0.41) * Math.PI * 2.2);
-      const haze = Math.sin(((u - 0.12) / 0.41) * Math.PI * 4.5);
-      return { lift: 0.0043 + Math.abs(hush) * 0.0014 + Math.abs(haze) * 0.0005, rot: -0.24 + hush * 0.17 + haze * 0.05, anim: "play" };
+    if (u < 0.8) {
+      const wriggle = Math.sin(t * 2.6);
+      return {
+        lift: 3.4 + Math.abs(wriggle) * 1.6,
+        rot: -14 + wriggle * 10,
+        dx: wriggle * 0.12,
+        anim: "play",
+      };
     }
-    if (u < 0.86) {
-      const hush = Math.sin(((u - 0.53) / 0.33) * Math.PI * 1.85);
-      return { lift: 0.0043 + Math.abs(hush) * 0.0011, rot: -0.2 + hush * 0.13, anim: "play" };
-    }
-    const s = (u - 0.86) / 0.14;
-    return { lift: 0.0043 * (1 - s), rot: -0.2 * (1 - s), anim: "idle" };
+    const s = (u - 0.8) / 0.2;
+    return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
+  }
+
+  function densgaussdragonPose(t) {
+    return {
+      lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+      rot: Math.sin(t * 0.58) * 8,
+      dx: Math.sin(t * 0.4) * 0.06,
+      anim: "play",
+    };
   }
 
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+      return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort };
     }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+    const next = { ...happy, t: happy.t + Math.max(0, dt) };
     const hold = HAPPY_DUR[next.kind];
     if (next.kind === "densgauss") {
       const pose = densgaussPose(next.t);
@@ -216,7 +255,7 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
 
@@ -225,22 +264,26 @@
   }
 
   function beginTrick(kind, x, facing) {
-    const k = TRICKS.indexOf(kind) >= 0 ? kind : "longgausshush";
+    const k = TRICKS.indexOf(kind) >= 0 ? kind : "gausshush";
     const anim =
-      k === "longgausshush"
+      k === "gausshush"
         ? "sit"
-        : k === "ironfilingsstand"
-          ? "sit"
-          : k === "magneticperchsettle"
-            ? "sit"
-            : k === "fieldlinealign"
-              ? "play"
-              : k === "filinglinesbandwalk"
-                ? "walk"
-                : "sit";
+        : k === "filinglinesbandwalk"
+          ? "play"
+          : k === "bandclamp"
+            ? "talk"
+            : k === "ironfilingsstand"
+              ? "walk"
+              : k === "fieldlinealign"
+                ? "sit"
+                : k === "magneticperchsettle"
+                  ? "sit"
+                  : k === "filingsweep"
+                    ? "walk"
+                    : "sit";
     return {
       kind: k,
-      phase: k === "longgausshush" ? "hold" : "go",
+      phase: k === "gausshush" ? "hold" : "go",
       t: 0,
       x: x,
       lift: 0,
@@ -256,223 +299,270 @@
     return x * x * (3 - 2 * x);
   }
 
-
-
-
-
-
-
-
-  function longgausshushPose(t) {
-    const breath = Math.sin(t * 0.00025) + 0.00017 * Math.sin(t * 0.00084) + 0.00009 * Math.sin(t * 0.00155);
-    const haze = Math.abs(Math.sin(t * 0.00020)) + 0.42 * Math.abs(Math.sin(t * 0.00043)) + 0.18 * Math.abs(Math.sin(t * 0.00071));
-    return { lift: -0.00017 + haze * 0.00018, rot: 0.0014 + breath * 0.0027 };
+  function gausshushPose(t) {
+    return {
+      lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+      rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+    };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    const ease = Math.sin(u * Math.PI * 0.5);
-    return { lift: -0.00016 * (1 - ease), rot: 0.0037 * (1 - u) + 0.00050 * Math.sin(u * Math.PI * 2.1) };
+    return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
+  }
+
+  function filinglinesbandwalkPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.filinglinesbandwalk));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.8, lift: s * 3.0, rot: s * -12 * face, anim: "play" };
+    }
+    if (u < 0.78) {
+      const bar = Math.sin(t * 2.4);
+      return {
+        x: fromX + face * (0.8 + bar * 0.16),
+        lift: 2.8 + Math.abs(bar) * 1.5,
+        rot: face * (-12 + bar * 10),
+        anim: "play",
+      };
+    }
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX + face * 0.8 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (-4 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function ironfilingsstandPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.ironfilingsstand));
     const face = facing == null ? 1 : facing;
-    if (u < 0.1) {
-      const s = smoothstep(u / 0.1);
-      return { x: fromX + face * s * 0.00016, lift: s * 0.0020, rot: s * 0.06 * face, anim: "sit" };
-    }
-    if (u < 0.36) {
-      const drift = Math.sin(((u - 0.1) / 0.26) * Math.PI * 6.2);
-      const outline = Math.sin(((u - 0.1) / 0.26) * Math.PI * 10.5);
-      return {
-        x: fromX + face * (0.00016 + (u - 0.1) / 0.26 * 0.00062 + outline * 0.00004),
-        lift: 0.0017 + Math.abs(drift) * 0.0026 + Math.abs(outline) * 0.001,
-        rot: (0.05 + drift * 0.13 + outline * 0.045) * face,
-        anim: "sit",
-      };
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX, lift: s * 2.6, rot: s * 10 * face, anim: "walk" };
     }
     if (u < 0.78) {
-      const haze = Math.sin(((u - 0.36) / 0.42) * Math.PI * 7.8);
-      const pale = Math.sin(((u - 0.36) / 0.42) * Math.PI * 3.4);
-      const on = haze > -0.15 ? 1 : 0.20;
+      const bob = Math.sin(t * 2.2);
       return {
-        x: fromX + face * (0.00078 + (u - 0.36) / 0.42 * 0.00088 + pale * 0.00007),
-        lift: 0.0025 * on + Math.abs(pale) * 0.0016 + Math.abs(haze) * 0.0012,
-        rot: (0.07 + haze * 0.11 + pale * 0.06) * face,
-        anim: "sit",
+        x: fromX + face * bob * 0.12,
+        lift: 2.6 + Math.abs(bob) * 1.3,
+        rot: face * (10 + bob * 8),
+        anim: "walk",
       };
     }
     const s = smoothstep((u - 0.78) / 0.22);
-    return { x: fromX + face * (0.00166 * (1 - s) + 0.00016 * s), lift: 0.0021 * (1 - s), rot: 0.07 * (1 - s) * face, anim: "idle" };
+    return {
+      x: fromX,
+      lift: 1.2 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
   }
+
+  function bandclampPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.bandclamp));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.6, lift: s * 3.2, rot: s * 14 * face, anim: "talk" };
+    }
+    if (u < 0.8) {
+      const cloud = Math.sin(t * 3.0);
+      return {
+        x: fromX + face * (0.6 + cloud * 0.18),
+        lift: 3.0 + Math.abs(cloud) * 1.8,
+        rot: face * (14 + cloud * 12),
+        anim: "talk",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.5 * (1 - s),
+      rot: face * (5 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
   function magneticperchsettlePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.magneticperchsettle));
     const face = facing == null ? 1 : facing;
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.00005, lift: s * 0.0037, rot: s * -0.10 * face, anim: "sit" };
+    if (u < 0.1) {
+      const s = smoothstep(u / 0.1);
+      return { x: fromX + face * s * 1.0, lift: s * 4.0, rot: s * 18 * face, anim: "sit" };
     }
-    if (u < 0.33) {
-      const s = smoothstep((u - 0.12) / 0.21);
-      return { x: fromX + face * (0.00005 + s * 0.000346), lift: 0.0034 + s * 0.0078, rot: (-0.09 + s * 0.2) * face, anim: "sit" };
-    }
-    if (u < 0.58) {
-      const mist = Math.sin(((u - 0.33) / 0.25) * Math.PI * 4.3);
-      const settle = Math.sin(((u - 0.33) / 0.25) * Math.PI * 2.2);
+    if (u < 0.8) {
+      const thrash = Math.sin(t * 3.6);
       return {
-        x: fromX + face * (0.00041 + mist * 0.00008),
-        lift: 0.011 - ((u - 0.33) / 0.25) * 0.0026 + Math.abs(settle) * 0.0013,
-        rot: (0.11 + mist * 0.15 + settle * 0.05) * face,
+        x: fromX + face * (1.0 + thrash * 0.22),
+        lift: 3.6 + Math.abs(thrash) * 2.0,
+        rot: face * (18 + thrash * 14),
         anim: "sit",
       };
     }
-    if (u < 0.83) {
-      const soft = Math.sin(((u - 0.58) / 0.25) * Math.PI * 2.9);
-      return {
-        x: fromX + face * (0.00041 + soft * 0.00004),
-        lift: 0.0084 - ((u - 0.58) / 0.25) * 0.0032 + Math.abs(soft) * 0.0008,
-        rot: (0.13 + soft * 0.09) * face,
-        anim: "sit",
-      };
-    }
-    const s = smoothstep((u - 0.83) / 0.17);
-    return { x: fromX + face * 0.00041 * (1 - s), lift: 0.0052 * (1 - s), rot: 0.13 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 1.0 * (1 - s),
+      lift: 1.6 * (1 - s),
+      rot: face * (6 * (1 - s)),
+      anim: "idle",
+    };
   }
-  function filinglinesbandwalkPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.filinglinesbandwalk));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.0003, lift: s * 0.0025, rot: s * 0.06 * face, anim: "walk" };
-    }
-    if (u < 0.44) {
-      const cling = Math.sin(((u - 0.12) / 0.32) * Math.PI * 5.0);
-      const pale = Math.sin(((u - 0.12) / 0.32) * Math.PI * 8.6);
-      const path = (u - 0.12) / 0.32;
-      return {
-        x: fromX + face * (0.0003 + path * 0.00098 + cling * 0.0001),
-        lift: 0.0022 + Math.abs(cling) * 0.002 + Math.abs(pale) * 0.0008,
-        rot: (0.06 + cling * 0.1 + pale * 0.04) * face,
-        anim: "walk",
-      };
-    }
-    if (u < 0.76) {
-      const haze = Math.sin(((u - 0.44) / 0.32) * Math.PI * 5.8);
-      const ion = Math.sin(((u - 0.44) / 0.32) * Math.PI * 2.6);
-      const path = (u - 0.44) / 0.32;
-      return {
-        x: fromX + face * (0.00128 + path * 0.00112 + haze * 0.00011),
-        lift: 0.0027 + Math.abs(haze) * 0.0018 + Math.abs(ion) * 0.0011,
-        rot: (0.085 + haze * 0.12 + ion * 0.055) * face,
-        anim: "walk",
-      };
-    }
-    const s = smoothstep((u - 0.76) / 0.24);
-    return { x: fromX + face * (0.0024 * (1 - s) + 0.0003 * s), lift: 0.0025 * (1 - s), rot: 0.085 * (1 - s) * face, anim: "idle" };
-  }
+
   function fieldlinealignPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.fieldlinealign));
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX + face * s * 0.00004, lift: s * 0.0030, rot: s * 0.15 * face, anim: "play" };
+      return { x: fromX + face * s * 0.5, lift: s * 2.8, rot: s * 11 * face, anim: "sit" };
     }
-    if (u < 0.37) {
-      const s = smoothstep((u - 0.14) / 0.23);
-      return { x: fromX + face * (0.00004 + s * 0.00027), lift: 0.0029 + s * 0.0057, rot: (0.13 + s * 0.5) * face, anim: "play" };
-    }
-    if (u < 0.70) {
-      const charge = Math.sin(((u - 0.37) / 0.26) * Math.PI * 4.2);
-      const haze = Math.sin(((u - 0.37) / 0.26) * Math.PI * 8.0);
+    if (u < 0.78) {
+      const hang = Math.sin(t * 2.0);
       return {
-        x: fromX + face * (0.00031 + charge * 0.00009),
-        lift: 0.0087 + Math.abs(charge) * 0.0021 + Math.abs(haze) * 0.001,
-        rot: (0.63 + charge * 0.3 + haze * 0.11) * face,
-        anim: "play",
+        x: fromX + face * (0.5 + hang * 0.1),
+        lift: 2.8 + Math.abs(hang) * 1.2,
+        rot: face * (11 + hang * 8),
+        anim: "sit",
       };
     }
-    if (u < 0.84) {
-      const claim = Math.sin(((u - 0.63) / 0.21) * Math.PI * 2.85);
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX + face * 0.5 * (1 - s),
+      lift: 1.3 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function filingsweepPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.filingsweep));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.6, lift: s * 3.0, rot: s * 12 * face, anim: "walk" };
+    }
+    if (u < 0.8) {
+      const cast = Math.sin(t * 2.8);
       return {
-        x: fromX + face * (0.00031 + claim * 0.00005),
-        lift: 0.0075 - ((u - 0.63) / 0.21) * 0.0027 + Math.abs(claim) * 0.0012,
-        rot: (0.68 + claim * 0.17) * face,
-        anim: "play",
+        x: fromX + face * (0.6 + cast * 0.16),
+        lift: 2.8 + Math.abs(cast) * 1.6,
+        rot: face * (12 + cast * 10),
+        anim: "walk",
       };
     }
-    const s = smoothstep((u - 0.84) / 0.16);
-    return { x: fromX + face * 0.00031 * (1 - s), lift: 0.0048 * (1 - s), rot: 0.68 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (4 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "ironfilingsstand" && trick.kind !== "magneticperchsettle" && trick.kind !== "filinglinesbandwalk" && trick.kind !== "fieldlinealign") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+    if (
+      shouldAbort(flags) &&
+      trick.kind !== "filinglinesbandwalk" &&
+      trick.kind !== "ironfilingsstand" &&
+      trick.kind !== "fieldlinealign" &&
+      trick.kind !== "magneticperchsettle" &&
+      trick.kind !== "filingsweep" &&
+      trick.kind !== "bandclamp"
+    ) {
+      return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
-    if (next.kind === "longgausshush") {
-      if (next.t < LONGGAUSSHUSH_HOLD) {
-        const pose = longgausshushPose(next.t);
+    const next = { ...trick, t: trick.t + Math.max(0, dt) };
+    if (next.kind === "gausshush") {
+      if (next.t < GAUSSHUSH_HOLD) {
+        const pose = gausshushPose(next.t);
         next.phase = "hold";
         next.lift = pose.lift;
         next.rot = pose.rot;
         next.anim = "sit";
         return next;
       }
-      if (next.t < LONGGAUSSHUSH_HOLD + RELEASE_S) {
-        const pose = releasePose(next.t - LONGGAUSSHUSH_HOLD);
+      if (next.t < GAUSSHUSH_HOLD + RELEASE_S) {
+        const pose = releasePose(next.t - GAUSSHUSH_HOLD);
         next.phase = "release";
         next.lift = pose.lift;
         next.rot = pose.rot;
         next.anim = "sit";
         return next;
       }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+      return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
-    if (next.kind === "ironfilingsstand") {
-      const pose = ironfilingsstandPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const fromX = trick.fromX != null ? trick.fromX : trick.x;
+    if (next.kind === "filinglinesbandwalk") {
+      const pose = filinglinesbandwalkPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "ironfilingsstand") {
+      const pose = ironfilingsstandPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "fieldlinealign") {
+      const pose = fieldlinealignPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "magneticperchsettle") {
-      const pose = magneticperchsettlePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = magneticperchsettlePose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "filinglinesbandwalk") {
-      const pose = filinglinesbandwalkPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    } else if (next.kind === "filingsweep") {
+      const pose = filingsweepPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = fieldlinealignPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = bandclampPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
+
+
 
   const api = {
     TRICK_KEY,
     TRICKS,
     HAPPY,
     HAPPY_DUR,
-    LONGGAUSSHUSH_HOLD,
+    GAUSSHUSH_HOLD,
     RELEASE_S,
     DUR,
     canStart,
     shouldAbort,
     nextTrickWait,
     pickTrick,
+    sleepHoldFrame,
+    beginTrick,
+    gausshushPose,
+    releasePose,
+    filinglinesbandwalkPose,
+    ironfilingsstandPose,
+    bandclampPose,
+    magneticperchsettlePose,
+    fieldlinealignPose,
+    filingsweepPose,
+    stepTrick,
     happyCanStart,
     happyShouldAbort,
     wantsThankYou,
@@ -482,17 +572,8 @@
     densgaussPose,
     inkgaussPose,
     densgaussdragonPose,
-    stepHappy,
-    sleepHoldFrame,
-    beginTrick,
-    longgausshushPose,
-    releasePose,
-    ironfilingsstandPose,
-    magneticperchsettlePose,
-    filinglinesbandwalkPose,
-    fieldlinealignPose,
-    stepTrick,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetGaussDragonTricks = api;
-})(typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : this);
+})(typeof window !== "undefined" ? window : globalThis);
