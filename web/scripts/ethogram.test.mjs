@@ -1387,6 +1387,22 @@ assert.equal(names("howler").includes("still"), false);
 assert.equal(names("howler").includes("howler"), false);
 assert.equal(names("howler").includes("wait"), false);
 
+assert.ok(names("tarsier").includes("tarsiushush"));
+assert.ok(names("tarsier").includes("eyeswivel_soft"));
+assert.ok(names("tarsier").includes("clingleap_soft"));
+assert.ok(names("tarsier").includes("insectpounce_soft"));
+assert.ok(names("tarsier").includes("stillstare_soft"));
+assert.ok(names("tarsier").includes("earfan_soft"));
+assert.ok(names("tarsier").includes("verticalcling_soft"));
+assert.ok(names("tarsier").includes("freeze"));
+assert.equal(names("tarsier").includes("gaze"), false);
+assert.equal(names("tarsier").includes("leap"), false);
+assert.equal(names("tarsier").includes("still"), false);
+assert.equal(names("tarsier").includes("tarsier"), false);
+assert.equal(names("tarsier").includes("sit"), false);
+assert.equal(names("tarsier").includes("wait"), false);
+
+
   assert.ok(names("koala").includes("chew"));
   for (const key of REEF) {
     const acts = names(key);
