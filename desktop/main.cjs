@@ -11,6 +11,17 @@ const HouseMusic = require("./renderer/house-music.js");
 const PetNews = require("./renderer/news.js");
 const PetMarket = require("./renderer/market.js");
 
+/** Buffffff opt-in: COMPUTERPETS_GUI_HARNESS=1 runs Electron smokes then quits. */
+const GUI_HARNESS = process.env.COMPUTERPETS_GUI_HARNESS === "1";
+const GUI_HARNESS_OUT = process.env.COMPUTERPETS_GUI_HARNESS_OUT || "";
+if (GUI_HARNESS) {
+  const os = require("os");
+  const harnessData = path.join(os.tmpdir(), `computerpets-gui-harness-${process.pid}`);
+  fs.mkdirSync(harnessData, { recursive: true });
+  app.setPath("userData", harnessData);
+  app.commandLine.appendSwitch("disable-gpu-sandbox");
+}
+
 app.setAppUserModelId("works.richey.computerpets.desk");
 app.commandLine.appendSwitch("enable-transparent-visuals");
 app.commandLine.appendSwitch("disable-renderer-backgrounding");
@@ -298,10 +309,26 @@ function createWindow() {
   win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
   win.setIgnoreMouseEvents(true, { forward: true });
   win.setMenuBarVisibility(false);
-  win.loadFile(path.join(__dirname, "renderer", "index.html"));
+  if (GUI_HARNESS) {
+    win.loadFile(path.join(__dirname, "renderer", "index.html"), { query: { gui_harness: "1" } });
+  } else {
+    win.loadFile(path.join(__dirname, "renderer", "index.html"));
+  }
   win.once("ready-to-show", () => {
     fitWorkArea();
     win?.showInactive();
+    if (GUI_HARNESS) {
+      setTimeout(() => {
+        runGuiHarnessSmokes(win).catch((err) => {
+          writeGuiHarnessResult({
+            ok: false,
+            error: `${err && err.name}: ${err && err.message}`,
+            results: {},
+          });
+          app.quit();
+        });
+      }, 900);
+    }
   });
   win.on("closed", () => {
     win = null;
@@ -346,28 +373,144 @@ function popupPetMenu(x, y) {
   ]).popup({ window: win, x: Math.round(x), y: Math.round(y) });
 }
 
-const gotLock = app.requestSingleInstanceLock();
-if (!gotLock) {
-  app.quit();
-} else {
-  app.on("second-instance", () => {
-    win?.showInactive();
-    win?.setAlwaysOnTop(true, "screen-saver");
-  });
+let guiHarnessDone = false;
+
+function writeGuiHarnessResult(payload) {
+  guiHarnessDone = true;
+  const body = `${JSON.stringify(payload)}\n`;
+  if (GUI_HARNESS_OUT) {
+    try {
+      fs.writeFileSync(GUI_HARNESS_OUT, body, "utf8");
+    } catch (err) {
+      process.stderr.write(`gui-harness write failed: ${err && err.message}\n`);
+    }
+  }
+  process.stdout.write(body);
+}
+
+async function runGuiHarnessSmokes(target) {
+  if (!target || target.isDestroyed()) {
+    writeGuiHarnessResult({ ok: false, error: "no window", results: {} });
+    app.quit();
+    return;
+  }
+  const script = `(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    for (let i = 0; i < 60; i++) {
+      if (window.PetGuiHarness && window.PetGuiHarness.snapshot().kind) break;
+      await sleep(100);
+    }
+    const H = window.PetGuiHarness;
+    if (!H) return { ok: false, error: "PetGuiHarness missing (gui_harness query?)", results: {} };
+    const results = {};
+    const boot = H.snapshot();
+    results["gui.overlay_paint"] = {
+      ok: !!(boot.kind && boot.petSrc && boot.hudName && boot.hudName !== "?"),
+      detail: "kind=" + boot.kind + " hud=" + boot.hudName,
+      trace: [
+        "kind=" + boot.kind,
+        "petSrc=" + boot.petSrc,
+        "hudName=" + boot.hudName,
+        "vital=" + (boot.vital || ""),
+      ],
+      extras: boot,
+    };
+    let s = H.openHostChoice();
+    const opened = !!(s.choiceOpen && s.choiceHasClose && s.choiceHasExit);
+    s = H.pick("close");
+    const closed = !s.choiceOpen;
+    s = H.openHostChoice();
+    s = H.pick("exit");
+    const exited = !s.choiceOpen && !!s.collapsed;
+    results["gui.overlay_paint"].ok = !!(results["gui.overlay_paint"].ok && opened && closed && exited);
+    results["gui.overlay_paint"].trace.push(
+      "choice.open=" + opened,
+      "choice.close=" + closed,
+      "choice.exit.collapse=" + exited,
+    );
+    results["gui.overlay_paint"].detail += " choice close/exit";
+
+    s = H.openCard();
+    const openOk = !s.collapsed && s.hudShow && !!(s.vital && s.vital.length > 1);
+    const vitalSnap = s.vital;
+    s = H.collapse();
+    const collapseOk = !!s.collapsed && s.hudCollapsedAttr === "1";
+    s = H.openCard();
+    const reopenOk = !s.collapsed && s.hudShow;
+    results["gui.card_hud_paint"] = {
+      ok: !!(openOk && collapseOk && reopenOk),
+      detail: "vital=" + (vitalSnap || ""),
+      trace: [
+        "open.show=" + openOk,
+        "collapse.attr=" + collapseOk,
+        "reopen.show=" + reopenOk,
+        "vital=" + (vitalSnap || ""),
+      ],
+      extras: s,
+    };
+
+    s = H.placeGift();
+    const placed = s.gifts >= 1 && s.giftDots >= 1;
+    s = H.clickGiftDot();
+    const picked = s.gifts === 0 && s.giftDots === 0;
+    results["gui.gift_drag_place"] = {
+      ok: !!(placed && picked),
+      detail: "place+hit-target pick (gift-dot data-hit)",
+      trace: [
+        "place.gifts=" + (placed ? "1+" : "0"),
+        "giftDots.hit=" + placed,
+        "pick.clear=" + picked,
+      ],
+      extras: s,
+    };
+
+    const ok = Object.values(results).every((r) => r && r.ok);
+    return { ok, results, error: ok ? null : "one or more gui smokes failed" };
+  })()`;
+  const payload = await target.webContents.executeJavaScript(script, true);
+  writeGuiHarnessResult(payload || { ok: false, error: "empty harness payload", results: {} });
+  setTimeout(() => app.quit(), 200);
+}
+
+function bootDesk() {
   app.whenReady().then(() => {
     loadRoster();
     if (process.platform === "darwin") app.dock?.hide();
     createWindow();
-    createTray();
-    startHitForward();
-    startWindowTick();
-    screen.on("display-metrics-changed", fitWorkArea);
-    screen.on("display-added", fitWorkArea);
-    screen.on("display-removed", fitWorkArea);
-    powerMonitor.on("suspend", () => win?.webContents.send("command", "rest"));
-    powerMonitor.on("resume", fitWorkArea);
-    powerMonitor.on("lock-screen", () => win?.webContents.send("command", "rest"));
+    if (!GUI_HARNESS) {
+      createTray();
+      startHitForward();
+      startWindowTick();
+      screen.on("display-metrics-changed", fitWorkArea);
+      screen.on("display-added", fitWorkArea);
+      screen.on("display-removed", fitWorkArea);
+      powerMonitor.on("suspend", () => win?.webContents.send("command", "rest"));
+      powerMonitor.on("resume", fitWorkArea);
+      powerMonitor.on("lock-screen", () => win?.webContents.send("command", "rest"));
+    } else {
+      setTimeout(() => {
+        if (!guiHarnessDone) {
+          writeGuiHarnessResult({ ok: false, error: "gui harness timed out", results: {} });
+          app.quit();
+        }
+      }, 45000);
+    }
   });
+}
+
+if (GUI_HARNESS) {
+  bootDesk();
+} else {
+  const gotLock = app.requestSingleInstanceLock();
+  if (!gotLock) {
+    app.quit();
+  } else {
+    app.on("second-instance", () => {
+      win?.showInactive();
+      win?.setAlwaysOnTop(true, "screen-saver");
+    });
+    bootDesk();
+  }
 }
 
 let hitRects = [];
