@@ -1,12 +1,22 @@
-/** Boom ground tricks while idle. House neighborly mantled howler (Alouatta palliata / Atelidae Alouattinae) desk life -- hyoidboom / tailbrace / canopylounge / leafchew / alouattahush personality (hyoidboom silent hyoid-boom roar cue posture distinct from Swing whoopduet and Crow hopwalk; tailbrace prehensile-tail desk brace distinct from Sun ringtailcurl and Hang hangsway; canopylounge canopy lounge sprawl distinct from Sun bellybask and Hang hangsway; leafchew leaf-browse graze distinct from Grasshopper mandiblegraze and Deer freeze; long alouattahush Alouatta palliata hush -- never named wait; NOT Glide flying squirrel; NOT Sail colugo; NOT Swing gibbon; NOT Sun lemur; NOT Rui red panda; guest slug Boom / key howler -- accept howler and boom; Thank-yous densboom / inkboom / densalouatta. Sleep, hide, leave, rest, card, ribbon still win. Same map as web howler-tricks.ts. Next: Gaze / tarsier. Catalog 220. */
+/** Boom ground tricks while idle — ultra-polish pass. House neighborly Mantled Howler Alouatta palliata desk life (howler / Boom) — hyoidboom / tailbrace / canopylounge / leafchew / mantelstretch / throatpuff / alouattahush personality (hyoidboom hyoid boom roar-cue posture without naming boom or roar or howl alone as wait — distinct from Swing whoopduet and Crow; tailbrace prehensile-tail brace without naming brace or tail or wrap alone as wait — distinct from Sun ringtailcurl and Hang hangsway; canopylounge canopy lounge without naming lounge or canopy or sprawl alone as wait — distinct from Sun bellybask and Hang; leafchew leaf browse without naming chew or leaf or graze alone as wait — distinct from Grasshopper mandiblegraze and Deer; mantelstretch mantle fur stretch without naming stretch or mantle or fur alone as wait — distinct from Glide flapstretch and Sail membranespread; throatpuff throat-sac puff without naming puff or throat or sac alone as wait — distinct from Cicada tymbal and Swing whoopduet; long alouattahush Alouatta palliata hush hold (THE alouattahush sit_hold tell) — never named wait or crouch or sit or boom or still or howler or howl as bare ethogram-only trick kinds; Glide flying_squirrel owns membranelaunch/softland/nestboxhuddle/nocturnalscurry/flapstretch/barksprint/glaucomyshush — do NOT reuse; Swing gibbon owns whoopduet/brachiate/hylobateshush — do NOT reuse; Sun lemur owns lemurhush/ringtailcurl/bellybask — do NOT reuse; Hang sloth owns hangsway — do NOT reuse; Cicada owns tymbal — do NOT reuse; guest slug Boom / key howler only for wantsThankYou matching — accept "howler" and "boom"; do NOT name a trick "howler" or "boom" or "howl" or "gibbon" or "lemur" or "sloth" or "glide" or "flying_squirrel"; not Glide Glaucomys life, not Swing Hylobates life, not Sun Lemur life, not Hang Bradypus life, not Gaze Tarsius life, not Rui. Hyoidboom / tailbrace / canopylounge / leafchew / mantelstretch / throatpuff / alouattahush; densboom / inkboom / densalouatta thank-yous. Same map as web howler-tricks.ts. Window-play unchanged. Ethogram softs + freeze — never names boom/sit/still/wait/howler as bare ethogram-only trick kinds. True Mantled Howler Alouatta palliata desk life only — hyoid boom, tail brace, canopy lounge, leaf chew, mantle stretch, throat puff, Alouatta hush. Next house-order ultra: Gaze / tarsier. No cry inventing — howler.wav EXISTS so prefersHouseCry adds howler after flying_squirrel. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 (function (root) {
+
   const TRICK_KEY = "howler";
-  const TRICKS = ["hyoidboom", "tailbrace", "canopylounge", "leafchew", "alouattahush"];
+  const TRICKS = ["hyoidboom", "tailbrace", "canopylounge", "leafchew", "mantelstretch", "throatpuff", "alouattahush"];
   const HAPPY = ["densboom", "inkboom", "densalouatta"];
-  const HAPPY_DUR = { densboom: 2.62, inkboom: 2.79, densalouatta: 2.51 };
-  const ALOUATTAHUSH_HOLD = 31.48;
-  const RELEASE_S = 2.34;
-  const DUR = { alouattahush: ALOUATTAHUSH_HOLD + RELEASE_S, hyoidboom: 5.44, tailbrace: 5.18, canopylounge: 5.31, leafchew: 5.04 };
+
+  const HAPPY_DUR = { densboom: 1.70, inkboom: 1.84, densalouatta: 1.76 };
+  const ALOUATTAHUSH_HOLD = 11.2;
+  const RELEASE_S = 1.18;
+  const DUR = {
+    alouattahush: ALOUATTAHUSH_HOLD + RELEASE_S,
+    hyoidboom: 2.48,
+    tailbrace: 2.42,
+    canopylounge: 2.40,
+    leafchew: 2.44,
+    mantelstretch: 2.38,
+    throatpuff: 2.56,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,40 +46,78 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "alouattahush") return 201 + roll * 22;
-    if (kind === "hyoidboom") return 24.6 + roll * 3.7;
-    if (kind === "tailbrace") return 23.9 + roll * 3.4;
-    if (kind === "canopylounge") return 26.1 + roll * 3.6;
-    if (kind === "leafchew") return 22.8 + roll * 3.5;
-    return justFinished ? 18.6 + roll * 2.9 : 13.9 + roll * 2.5;
+    if (kind === "alouattahush") return 40 + roll * 26;
+    if (kind === "mantelstretch" || kind === "hyoidboom" || kind === "leafchew") return 12.8 + roll * 9.4;
+    if (kind === "canopylounge" || kind === "tailbrace" || kind === "throatpuff") return 11.6 + roll * 8.5;
+    return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
 
-  function pickTrick(rand, musicOn, lastKind) {
+    function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "alouattahush";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "alouattahush") {
-      if (roll < 0.26) return "hyoidboom";
-      if (roll < 0.5) return "tailbrace";
-      if (roll < 0.74) return "canopylounge";
-      return "leafchew";
+      if (roll < 0.17) return "hyoidboom";
+      if (roll < 0.33) return "tailbrace";
+      if (roll < 0.49) return "canopylounge";
+      if (roll < 0.65) return "leafchew";
+      if (roll < 0.83) return "mantelstretch";
+      return "throatpuff";
     }
     if (lastKind === "hyoidboom") {
-      if (roll < 0.26) return "alouattahush";
-      if (roll < 0.5) return "tailbrace";
-      if (roll < 0.74) return "canopylounge";
-      return "leafchew";
+      if (roll < 0.16) return "alouattahush";
+      if (roll < 0.32) return "tailbrace";
+      if (roll < 0.48) return "canopylounge";
+      if (roll < 0.64) return "leafchew";
+      if (roll < 0.82) return "mantelstretch";
+      return "throatpuff";
     }
     if (lastKind === "tailbrace") {
-      if (roll < 0.22) return "alouattahush";
-      if (roll < 0.44) return "hyoidboom";
-      if (roll < 0.68) return "canopylounge";
-      return "leafchew";
+      if (roll < 0.14) return "alouattahush";
+      if (roll < 0.3) return "hyoidboom";
+      if (roll < 0.46) return "canopylounge";
+      if (roll < 0.62) return "leafchew";
+      if (roll < 0.8) return "mantelstretch";
+      return "throatpuff";
     }
-    if (roll < 0.2) return "alouattahush";
-    if (roll < 0.4) return "hyoidboom";
-    if (roll < 0.6) return "tailbrace";
-    if (roll < 0.8) return "canopylounge";
-    return "leafchew";
+    if (lastKind === "canopylounge") {
+      if (roll < 0.15) return "alouattahush";
+      if (roll < 0.31) return "hyoidboom";
+      if (roll < 0.47) return "tailbrace";
+      if (roll < 0.63) return "leafchew";
+      if (roll < 0.81) return "mantelstretch";
+      return "throatpuff";
+    }
+    if (lastKind === "leafchew") {
+      if (roll < 0.16) return "alouattahush";
+      if (roll < 0.32) return "hyoidboom";
+      if (roll < 0.48) return "tailbrace";
+      if (roll < 0.64) return "canopylounge";
+      if (roll < 0.82) return "mantelstretch";
+      return "throatpuff";
+    }
+    if (lastKind === "mantelstretch") {
+      if (roll < 0.15) return "alouattahush";
+      if (roll < 0.31) return "hyoidboom";
+      if (roll < 0.47) return "tailbrace";
+      if (roll < 0.63) return "canopylounge";
+      if (roll < 0.81) return "leafchew";
+      return "throatpuff";
+    }
+    if (lastKind === "throatpuff") {
+      if (roll < 0.16) return "alouattahush";
+      if (roll < 0.32) return "hyoidboom";
+      if (roll < 0.48) return "tailbrace";
+      if (roll < 0.64) return "canopylounge";
+      if (roll < 0.82) return "leafchew";
+      return "mantelstretch";
+    }
+    if (roll < 0.14) return "alouattahush";
+    if (roll < 0.28) return "hyoidboom";
+    if (roll < 0.42) return "tailbrace";
+    if (roll < 0.56) return "canopylounge";
+    if (roll < 0.7) return "leafchew";
+    if (roll < 0.85) return "mantelstretch";
+    return "throatpuff";
   }
 
   function happyCanStart(state) {
@@ -97,11 +145,17 @@
     );
   }
 
-  function wantsThankYou(key) {
+  function wantsThankYou(key  ) {
     return key === TRICK_KEY || key === "boom";
   }
 
-  function startThankYou(key, lastKind, x, facing, flags) {
+  function startThankYou(
+    key  ,
+    lastKind,
+    x,
+    facing,
+    flags
+  ) {
     if (!wantsThankYou(key)) return null;
     if (!happyCanStart(flags || { cmd: "idle" })) return null;
     const pick = pickHappy(lastKind);
@@ -110,72 +164,80 @@
 
   function pickHappy(lastKind, rand) {
     const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
+    const list = pool.length ? pool : [...HAPPY];
     const roll = rand == null ? Math.random() : rand;
     return list[Math.floor(roll * list.length)] || list[0];
   }
 
   function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "densboom";
+    const name = (HAPPY).includes(kind) ? (kind) : "densboom";
     return {
       kind: name,
       happy: true,
       phase: "go",
       t: 0,
-      x: x,
+      x,
       lift: 0,
       rot: 0,
-      anim: name === "densboom" ? "sit" : name === "inkboom" ? "play" : "play",
-      facing: facing == null ? 1 : facing,
+      anim: (name === "densboom" ? "sit" : name === "inkboom" ? "play" : "play"),
+      facing: (facing == null ? 1 : facing),
       fromX: x,
     };
   }
 
   function densboomPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densboom));
-    if (u < 0.15) {
-      const s = u / 0.15;
-      return { lift: s * 0.0041, rot: s * -0.15, anim: "sit" };
+    if (u < 0.14) {
+      const s = u / 0.14;
+      return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" };
     }
-    if (u < 0.84) {
-      const sway = Math.sin(((u - 0.15) / 0.69) * Math.PI * 2.08);
-      return { lift: 0.0041 + Math.abs(sway) * 0.0013, rot: -0.15 + sway * 0.16, anim: "sit" };
+    if (u < 0.78) {
+      const flash = Math.sin(t * 2.2);
+      return {
+        lift: 2.8 + Math.abs(flash) * 1.4,
+        rot: 12 + flash * 8,
+        dx: flash * 0.08,
+        anim: "sit",
+      };
     }
-    const s = (u - 0.84) / 0.16;
-    return { lift: 0.0041 * (1 - s), rot: -0.15 * (1 - s), anim: "idle" };
+    const s = (u - 0.78) / 0.22;
+    return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
+
   function inkboomPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkboom));
     if (u < 0.12) {
       const s = u / 0.12;
-      return { lift: s * 0.0033, rot: s * 0.24, anim: "play" };
+      return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" };
     }
-    if (u < 0.82) {
-      const arc = Math.sin(((u - 0.12) / 0.7) * Math.PI * 3.05);
-      return { lift: 0.0033 + Math.abs(arc) * 0.0019, rot: 0.24 + arc * 0.26, anim: "play" };
+    if (u < 0.8) {
+      const wriggle = Math.sin(t * 2.6);
+      return {
+        lift: 3.4 + Math.abs(wriggle) * 1.6,
+        rot: -14 + wriggle * 10,
+        dx: wriggle * 0.12,
+        anim: "play",
+      };
     }
-    const s = (u - 0.82) / 0.18;
-    return { lift: 0.0033 * (1 - s), rot: 0.24 * (1 - s), anim: "idle" };
+    const s = (u - 0.8) / 0.2;
+    return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
   }
+
   function densalouattaPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densalouatta));
-    if (u < 0.14) {
-      const s = u / 0.14;
-      return { lift: s * -0.0015, rot: s * 0.16, anim: "play" };
-    }
-    if (u < 0.83) {
-      const hush = Math.sin(((u - 0.14) / 0.69) * Math.PI * 2.08);
-      return { lift: -0.0015 + Math.abs(hush) * 0.0011, rot: 0.16 + hush * 0.15, anim: "play" };
-    }
-    const s = (u - 0.83) / 0.17;
-    return { lift: -0.0015 * (1 - s), rot: 0.16 * (1 - s), anim: "idle" };
+    return {
+      lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+      rot: Math.sin(t * 0.58) * 8,
+      dx: Math.sin(t * 0.4) * 0.06,
+      anim: "play",
+    };
   }
+
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+      return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort };
     }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+    const next = { ...happy, t: happy.t + Math.max(0, dt) };
     const hold = HAPPY_DUR[next.kind];
     if (next.kind === "densboom") {
       const pose = densboomPose(next.t);
@@ -193,7 +255,7 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
 
@@ -202,27 +264,30 @@
   }
 
   function beginTrick(kind, x, facing) {
-    const k = TRICKS.indexOf(kind) >= 0 ? kind : "alouattahush";
     const anim =
-      k === "alouattahush"
+      kind === "alouattahush"
         ? "sit"
-        : k === "hyoidboom"
-          ? "sit"
-          : k === "tailbrace"
-            ? "sit"
-            : k === "leafchew"
-              ? "sit"
-              : k === "canopylounge"
+        : kind === "hyoidboom"
+          ? "play"
+          : kind === "throatpuff"
+            ? "talk"
+            : kind === "tailbrace"
+              ? "walk"
+              : kind === "canopylounge"
                 ? "sit"
-                : "sit";
+                : kind === "leafchew"
+                  ? "play"
+                  : kind === "mantelstretch"
+                    ? "walk"
+                    : "sit";
     return {
-      kind: k,
-      phase: k === "alouattahush" ? "hold" : "go",
+      kind,
+      phase: kind === "alouattahush" ? "hold" : "go",
       t: 0,
-      x: x,
+      x,
       lift: 0,
       rot: 0,
-      anim: anim,
+      anim,
       facing: facing == null ? 1 : facing,
       fromX: x,
     };
@@ -234,102 +299,181 @@
   }
 
   function alouattahushPose(t) {
-    const breath = Math.sin(t * 0.00058) + 0.00021 * Math.sin(t * 0.00164);
-    const hush = Math.abs(Math.sin(t * 0.00029));
-    return { lift: -0.00022 + hush * 0.00006, rot: 0.0021 + breath * 0.0015 };
+    return {
+      lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+      rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+    };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: -0.0002 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.0034 * (1 - u) };
+    return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
   }
 
   function hyoidboomPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.hyoidboom));
     const face = facing == null ? 1 : facing;
-    if (u < 0.18) {
-      const s = smoothstep(u / 0.18);
-      return { x: fromX + face * s * 0.0003, lift: s * 0.0038, rot: s * -0.22 * face, anim: "sit" };
-    }
-    if (u < 0.42) {
-      const s = smoothstep((u - 0.18) / 0.24);
-      return { x: fromX + face * (0.0003 + s * 0.0004), lift: 0.0038 + s * 0.0046, rot: (-0.22 - s * 0.18) * face, anim: "play" };
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.8, lift: s * 3.0, rot: s * -12 * face, anim: "play" };
     }
     if (u < 0.78) {
-      const boom = Math.sin(((u - 0.42) / 0.36) * Math.PI * 2.15);
+      const bar = Math.sin(t * 2.4);
       return {
-        x: fromX + face * (0.0007 + Math.abs(boom) * 0.00035),
-        lift: 0.0084 + Math.abs(boom) * 0.0016,
-        rot: (-0.4 + boom * 0.08) * face,
+        x: fromX + face * (0.8 + bar * 0.16),
+        lift: 2.8 + Math.abs(bar) * 1.5,
+        rot: face * (-12 + bar * 10),
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.78) / 0.22);
-    return { x: fromX + face * 0.0008 * (1 - s), lift: 0.0084 * (1 - s), rot: -0.4 * (1 - s) * face, anim: "idle" };
+    return {
+      x: fromX + face * 0.8 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (-4 * (1 - s)),
+      anim: "idle",
+    };
   }
+
   function tailbracePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.tailbrace));
     const face = facing == null ? 1 : facing;
-    if (u < 0.2) {
-      const s = smoothstep(u / 0.2);
-      return { x: fromX + face * s * -0.0006, lift: s * -0.0032, rot: s * 0.32 * face, anim: "sit" };
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX, lift: s * 2.6, rot: s * 10 * face, anim: "walk" };
     }
-    if (u < 0.72) {
-      const wrap = Math.sin(((u - 0.2) / 0.52) * Math.PI * 1.9);
+    if (u < 0.78) {
+      const bob = Math.sin(t * 2.2);
       return {
-        x: fromX + face * (-0.0006 + wrap * 0.0005),
-        lift: -0.0032 + Math.abs(wrap) * 0.0014,
-        rot: (0.32 + wrap * 0.14) * face,
-        anim: "sit",
+        x: fromX + face * bob * 0.12,
+        lift: 2.6 + Math.abs(bob) * 1.3,
+        rot: face * (10 + bob * 8),
+        anim: "walk",
       };
     }
-    const s = smoothstep((u - 0.72) / 0.28);
-    return { x: fromX + face * -0.0006 * (1 - s), lift: -0.0032 * (1 - s), rot: 0.32 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX,
+      lift: 1.2 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
   }
-  function canopyloungePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.canopylounge));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.22) {
-      const s = smoothstep(u / 0.22);
-      return { x: fromX + face * s * 0.0005, lift: s * -0.0068, rot: s * 0.18 * face, anim: "sit" };
-    }
-    if (u < 0.8) {
-      const sprawl = Math.sin(((u - 0.22) / 0.58) * Math.PI * 1.35);
-      return {
-        x: fromX + face * (0.0005 + Math.abs(sprawl) * 0.0003),
-        lift: -0.0068 + Math.abs(sprawl) * 0.0009,
-        rot: (0.18 + sprawl * 0.09) * face,
-        anim: "sit",
-      };
-    }
-    const s = smoothstep((u - 0.8) / 0.2);
-    return { x: fromX + face * 0.0005 * (1 - s), lift: -0.0068 * (1 - s), rot: 0.18 * (1 - s) * face, anim: "idle" };
-  }
-  function leafchewPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.leafchew));
+
+  function throatpuffPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.throatpuff));
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX + face * s * 0.0009, lift: s * 0.0016, rot: s * 0.12 * face, anim: "sit" };
+      return { x: fromX + face * s * 0.6, lift: s * 3.2, rot: s * 14 * face, anim: "talk" };
     }
-    if (u < 0.86) {
-      const chew = Math.sin(((u - 0.14) / 0.72) * Math.PI * 4.4);
+    if (u < 0.8) {
+      const cloud = Math.sin(t * 3.0);
       return {
-        x: fromX + face * (0.0009 + Math.abs(chew) * 0.00055),
-        lift: 0.0016 + Math.abs(chew) * 0.0011,
-        rot: (0.12 + chew * 0.11) * face,
+        x: fromX + face * (0.6 + cloud * 0.18),
+        lift: 3.0 + Math.abs(cloud) * 1.8,
+        rot: face * (14 + cloud * 12),
+        anim: "talk",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.5 * (1 - s),
+      rot: face * (5 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function leafchewPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.leafchew));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.1) {
+      const s = smoothstep(u / 0.1);
+      return { x: fromX + face * s * 1.0, lift: s * 4.0, rot: s * 18 * face, anim: "play" };
+    }
+    if (u < 0.8) {
+      const thrash = Math.sin(t * 3.6);
+      return {
+        x: fromX + face * (1.0 + thrash * 0.22),
+        lift: 3.6 + Math.abs(thrash) * 2.0,
+        rot: face * (18 + thrash * 14),
         anim: "play",
       };
     }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.0011 * (1 - s), lift: 0.0016 * (1 - s), rot: 0.12 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 1.0 * (1 - s),
+      lift: 1.6 * (1 - s),
+      rot: face * (6 * (1 - s)),
+      anim: "idle",
+    };
   }
+
+  function canopyloungePose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.canopylounge));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.5, lift: s * 2.8, rot: s * 11 * face, anim: "sit" };
+    }
+    if (u < 0.78) {
+      const hang = Math.sin(t * 2.0);
+      return {
+        x: fromX + face * (0.5 + hang * 0.1),
+        lift: 2.8 + Math.abs(hang) * 1.2,
+        rot: face * (11 + hang * 8),
+        anim: "sit",
+      };
+    }
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX + face * 0.5 * (1 - s),
+      lift: 1.3 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function mantelstretchPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.mantelstretch));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.6, lift: s * 3.0, rot: s * 12 * face, anim: "walk" };
+    }
+    if (u < 0.8) {
+      const cast = Math.sin(t * 2.8);
+      return {
+        x: fromX + face * (0.6 + cast * 0.16),
+        lift: 2.8 + Math.abs(cast) * 1.6,
+        rot: face * (12 + cast * 10),
+        anim: "walk",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (4 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "hyoidboom" && trick.kind !== "tailbrace" && trick.kind !== "canopylounge" && trick.kind !== "leafchew") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+    if (
+      shouldAbort(flags) &&
+      trick.kind !== "hyoidboom" &&
+      trick.kind !== "tailbrace" &&
+      trick.kind !== "canopylounge" &&
+      trick.kind !== "leafchew" &&
+      trick.kind !== "mantelstretch" &&
+      trick.kind !== "throatpuff"
+    ) {
+      return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
+    const next = { ...trick, t: trick.t + Math.max(0, dt) };
     if (next.kind === "alouattahush") {
       if (next.t < ALOUATTAHUSH_HOLD) {
         const pose = alouattahushPose(next.t);
@@ -347,38 +491,53 @@
         next.anim = "sit";
         return next;
       }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+      return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
+    const fromX = trick.fromX != null ? trick.fromX : trick.x;
     if (next.kind === "hyoidboom") {
-      const pose = hyoidboomPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = hyoidboomPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "tailbrace") {
-      const pose = tailbracePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = tailbracePose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "canopylounge") {
-      const pose = canopyloungePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = canopyloungePose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "leafchew") {
+      const pose = leafchewPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "mantelstretch") {
+      const pose = mantelstretchPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = leafchewPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = throatpuffPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
+
+
 
   const api = {
     TRICK_KEY,
@@ -392,6 +551,17 @@
     shouldAbort,
     nextTrickWait,
     pickTrick,
+    sleepHoldFrame,
+    beginTrick,
+    alouattahushPose,
+    releasePose,
+    hyoidboomPose,
+    tailbracePose,
+    throatpuffPose,
+    leafchewPose,
+    canopyloungePose,
+    mantelstretchPose,
+    stepTrick,
     happyCanStart,
     happyShouldAbort,
     wantsThankYou,
@@ -401,17 +571,8 @@
     densboomPose,
     inkboomPose,
     densalouattaPose,
-    stepHappy,
-    sleepHoldFrame,
-    beginTrick,
-    alouattahushPose,
-    releasePose,
-    hyoidboomPose,
-    tailbracePose,
-    canopyloungePose,
-    leafchewPose,
-    stepTrick,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetHowlerTricks = api;
-})(typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : this);
+})(typeof window !== "undefined" ? window : globalThis);
