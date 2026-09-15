@@ -1034,6 +1034,18 @@ test("shore and meadow keys never schedule scratch or a snake tongue", () => {
   assert.equal(E.actsFor("swallowtail").some((a) => a.name === "flutter"), false);
   assert.equal(E.actsFor("swallowtail").some((a) => a.name === "still"), false);
   assert.equal(E.actsFor("swallowtail").some((a) => a.name === "walk"), false);
+  assert.ok(E.actsFor("jewelwing").some((a) => a.name === "calopteryxhush"));
+  assert.ok(E.actsFor("jewelwing").some((a) => a.name === "jewelflick_soft"));
+  assert.ok(E.actsFor("jewelwing").some((a) => a.name === "creekpatrol_soft"));
+  assert.ok(E.actsFor("jewelwing").some((a) => a.name === "perchfan_soft"));
+  assert.ok(E.actsFor("jewelwing").some((a) => a.name === "ovipositdip_soft"));
+  assert.ok(E.actsFor("jewelwing").some((a) => a.name === "metallicwing_soft"));
+  assert.ok(E.actsFor("jewelwing").some((a) => a.name === "damselflick_soft"));
+  assert.ok(E.actsFor("jewelwing").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("jewelwing").some((a) => a.name === "jewel"), false);
+  assert.equal(E.actsFor("jewelwing").some((a) => a.name === "hover"), false);
+  assert.equal(E.actsFor("jewelwing").some((a) => a.name === "still"), false);
+  assert.equal(E.actsFor("jewelwing").some((a) => a.name === "walk"), false);
   assert.ok(E.actsFor("click_beetle").some((a) => a.name === "click"));
 });
 
