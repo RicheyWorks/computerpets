@@ -649,6 +649,9 @@ class DeskWindow(QMainWindow):
         self._close_choice()
         if picked is None:
             return
+        # Close: dismiss menu only. Exit: leave pet care (same dismiss on blotter; no keeper card).
+        if picked in {"close", "exit"}:
+            return
         if picked == "rest":
             self._rest()
         elif picked == "walk":

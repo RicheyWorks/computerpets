@@ -125,7 +125,7 @@ test("hide, hidden click, and robin perch from 470 still hold", () => {
   assert.match(livingSrc, /opacity: hidden \? 0\.22 : 1/);
   assert.equal(Gait.hideTuck(80, 800, 176, 16), 16);
   assert.match(petSrc, /PetGait\.hideTuck/);
-  assert.deepEqual(Choice.guestMarks({ hidden: true }).map((m) => m.id), ["talk", "special", "call"]);
+  assert.deepEqual(Choice.guestMarks({ hidden: true }).map((m) => m.id), ["talk", "special", "call", "close", "exit"]);
   const sit = ["sprites/robin/sit/1.png", "sprites/robin/sit/2.png"];
   const walk = ["sprites/robin/walk/1.png"];
   const perched = { key: "robin", phase: "perch", frame: 0 };
