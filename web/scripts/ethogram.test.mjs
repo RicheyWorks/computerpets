@@ -2146,6 +2146,20 @@ test("pitcher ethogram is Well ultra (urn sit_hold + peristome_soft + softs + fr
   assert.equal(names("pitcher").includes("nod"), false);
 });
 
+test("sundew ethogram is Dew ultra (rosette sit_hold + mucilage_soft + softs + freeze, not curl/lean/nod)", () => {
+  assert.ok(names("sundew").includes("rosette"));
+  assert.ok(names("sundew").includes("mucilage_soft"));
+  assert.ok(names("sundew").includes("tentacle_soft"));
+  assert.ok(names("sundew").includes("digest_soft"));
+  assert.ok(names("sundew").includes("gland_soft"));
+  assert.ok(names("sundew").includes("lamina_soft"));
+  assert.ok(names("sundew").includes("circinate_soft"));
+  assert.ok(names("sundew").includes("freeze"));
+  assert.equal(names("sundew").includes("curl"), false);
+  assert.equal(names("sundew").includes("lean"), false);
+  assert.equal(names("sundew").includes("nod"), false);
+});
+
 test("pickAct can schedule tongue on a snake and never scratch", () => {
   let tongue = 0;
   for (let i = 0; i < 80; i++) {
