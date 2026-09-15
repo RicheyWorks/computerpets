@@ -1,12 +1,22 @@
-/** Swing ground tricks while idle. House neighborly lar gibbon (Hylobates lar / Hylobatidae) desk life -- brachiate / whoopduet / bipedalstrut / hangreach / hylobateshush personality (brachiate brachiation swing-arc distinct from Hang hangsway and Opossum hang; whoopduet silent whoop-duet cue posture distinct from Crow hopwalk and Cicada tymbal; bipedalstrut upright bipedal strut distinct from Deer freeze and Lemur hopgallop; hangreach hang-reach fruit pick distinct from Hang reachcrawl and Sloth algaescratch; long hylobateshush Hylobates lar hush -- never named wait; NOT Sun lemur; NOT Hang sloth; NOT Rui red panda; guest slug Swing / key gibbon -- accept gibbon and swing; Thank-yous densswing / inkswing / denshylobates. Sleep, hide, leave, rest, card, ribbon still win. Same map as web gibbon-tricks.ts. Next: Wrist / kinkajou. Catalog 220. */
+/** Swing ground tricks while idle — ultra-polish pass. House neighborly Hylobates lar / Lar Gibbon desk life (gibbon / Swing) — brachiate / whoopduet / bipedalstrut / hangreach / armhook / duetbow / hylobateshush personality (brachiate brachiation swing-arc without naming swing or hang or brachiate alone as wait — distinct from Hang hangsway and Opossum hang; whoopduet silent whoop-duet cue posture without naming whoop or song or call alone as wait — distinct from Crow hopwalk and Cicada tymbal; bipedalstrut upright bipedal strut without naming walk or strut or bipedal alone as wait — distinct from Deer freeze and Sun hopgallop; hangreach hang-reach fruit pick without naming hang or reach or crawl alone as wait — distinct from Hang reachcrawl and Sloth algaescratch; armhook arm-hook branch hold without naming hook or claw or hang alone as wait — distinct from Hang clawhook and Sun scentmark; duetbow duet-bow pair posture without naming bow or song or duet alone as wait — distinct from Sun stinkfight and Crow hopwalk; long hylobateshush Hylobates lar hush hold (THE hylobateshush sit_hold tell) — never named wait or crouch or sit or walk or swing or gibbon as bare ethogram-only trick kinds; Sun lemur owns bellybask/ringtailcurl/hopgallop/scentmark/stinkfight/sunworship/lemurhush — do NOT reuse; Hang sloth owns hangsway/reachcrawl/algaescratch/headturnstare/clawhook/slowdrip/bradypushush — do NOT reuse; Rob robber_fly owns sallyhawk/beardgroom/midsnatch/stiltsstance/mystaxwipe/perchsally/asilushush — do NOT reuse; guest slug Swing / key gibbon only for wantsThankYou matching — accept "gibbon" and "swing"; do NOT name a trick "gibbon" or "swing" or "lemur" or "sun" or "sloth" or "hang" or "lemurhush" or "hangsway"; not Sun Lemur catta life, not Hang Choloepus life, not Wrist kinkajou, not Rui. Brachiate / whoopduet / bipedalstrut / hangreach / armhook / duetbow / hylobateshush; densswing / inkswing / denshylobates thank-yous. Same map as web gibbon-tricks.ts. Window-play unchanged. Ethogram softs + freeze — never names swing/song/still/sit/wait/gibbon as bare ethogram-only trick kinds. True Lar Gibbon Hylobates lar desk life only — brachiate, whoop-duet, bipedal strut, hang-reach, arm-hook, duet-bow, Hylobates hush. Next house-order ultra: Wrist / kinkajou. No cry inventing — gibbon.wav EXISTS so prefersHouseCry adds gibbon after lemur. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 (function (root) {
+
   const TRICK_KEY = "gibbon";
-  const TRICKS = ["brachiate", "whoopduet", "bipedalstrut", "hangreach", "hylobateshush"];
+  const TRICKS = ["brachiate", "whoopduet", "bipedalstrut", "hangreach", "armhook", "duetbow", "hylobateshush"];
   const HAPPY = ["densswing", "inkswing", "denshylobates"];
-  const HAPPY_DUR = { densswing: 2.61, inkswing: 2.77, denshylobates: 2.49 };
-  const HYLOBATESHUSH_HOLD = 31.05;
-  const RELEASE_S = 2.31;
-  const DUR = { hylobateshush: HYLOBATESHUSH_HOLD + RELEASE_S, brachiate: 5.28, whoopduet: 5.06, bipedalstrut: 5.42, hangreach: 4.94 };
+
+  const HAPPY_DUR = { densswing: 1.70, inkswing: 1.84, denshylobates: 1.76 };
+  const HYLOBATESHUSH_HOLD = 11.2;
+  const RELEASE_S = 1.18;
+  const DUR = {
+    hylobateshush: HYLOBATESHUSH_HOLD + RELEASE_S,
+    brachiate: 2.48,
+    whoopduet: 2.42,
+    bipedalstrut: 2.40,
+    hangreach: 2.44,
+    armhook: 2.38,
+    duetbow: 2.56,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,40 +46,78 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "hylobateshush") return 197 + roll * 20;
-    if (kind === "brachiate") return 22.6 + roll * 3.5;
-    if (kind === "whoopduet") return 24.4 + roll * 3.6;
-    if (kind === "bipedalstrut") return 21.8 + roll * 3.4;
-    if (kind === "hangreach") return 25.0 + roll * 3.7;
-    return justFinished ? 18.8 + roll * 3.0 : 14.0 + roll * 2.6;
+    if (kind === "hylobateshush") return 40 + roll * 26;
+    if (kind === "armhook" || kind === "brachiate" || kind === "hangreach") return 12.8 + roll * 9.4;
+    if (kind === "bipedalstrut" || kind === "whoopduet" || kind === "duetbow") return 11.6 + roll * 8.5;
+    return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
 
-  function pickTrick(rand, musicOn, lastKind) {
+    function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "hylobateshush";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "hylobateshush") {
-      if (roll < 0.26) return "brachiate";
-      if (roll < 0.5) return "whoopduet";
-      if (roll < 0.74) return "bipedalstrut";
-      return "hangreach";
+      if (roll < 0.17) return "brachiate";
+      if (roll < 0.33) return "whoopduet";
+      if (roll < 0.49) return "bipedalstrut";
+      if (roll < 0.65) return "hangreach";
+      if (roll < 0.83) return "armhook";
+      return "duetbow";
     }
     if (lastKind === "brachiate") {
-      if (roll < 0.26) return "hylobateshush";
-      if (roll < 0.5) return "whoopduet";
-      if (roll < 0.74) return "bipedalstrut";
-      return "hangreach";
+      if (roll < 0.16) return "hylobateshush";
+      if (roll < 0.32) return "whoopduet";
+      if (roll < 0.48) return "bipedalstrut";
+      if (roll < 0.64) return "hangreach";
+      if (roll < 0.82) return "armhook";
+      return "duetbow";
     }
     if (lastKind === "whoopduet") {
-      if (roll < 0.22) return "hylobateshush";
-      if (roll < 0.44) return "brachiate";
-      if (roll < 0.68) return "bipedalstrut";
-      return "hangreach";
+      if (roll < 0.14) return "hylobateshush";
+      if (roll < 0.3) return "brachiate";
+      if (roll < 0.46) return "bipedalstrut";
+      if (roll < 0.62) return "hangreach";
+      if (roll < 0.8) return "armhook";
+      return "duetbow";
     }
-    if (roll < 0.2) return "hylobateshush";
-    if (roll < 0.4) return "brachiate";
-    if (roll < 0.6) return "whoopduet";
-    if (roll < 0.8) return "bipedalstrut";
-    return "hangreach";
+    if (lastKind === "bipedalstrut") {
+      if (roll < 0.15) return "hylobateshush";
+      if (roll < 0.31) return "brachiate";
+      if (roll < 0.47) return "whoopduet";
+      if (roll < 0.63) return "hangreach";
+      if (roll < 0.81) return "armhook";
+      return "duetbow";
+    }
+    if (lastKind === "hangreach") {
+      if (roll < 0.16) return "hylobateshush";
+      if (roll < 0.32) return "brachiate";
+      if (roll < 0.48) return "whoopduet";
+      if (roll < 0.64) return "bipedalstrut";
+      if (roll < 0.82) return "armhook";
+      return "duetbow";
+    }
+    if (lastKind === "armhook") {
+      if (roll < 0.15) return "hylobateshush";
+      if (roll < 0.31) return "brachiate";
+      if (roll < 0.47) return "whoopduet";
+      if (roll < 0.63) return "bipedalstrut";
+      if (roll < 0.81) return "hangreach";
+      return "duetbow";
+    }
+    if (lastKind === "duetbow") {
+      if (roll < 0.16) return "hylobateshush";
+      if (roll < 0.32) return "brachiate";
+      if (roll < 0.48) return "whoopduet";
+      if (roll < 0.64) return "bipedalstrut";
+      if (roll < 0.82) return "hangreach";
+      return "armhook";
+    }
+    if (roll < 0.14) return "hylobateshush";
+    if (roll < 0.28) return "brachiate";
+    if (roll < 0.42) return "whoopduet";
+    if (roll < 0.56) return "bipedalstrut";
+    if (roll < 0.7) return "hangreach";
+    if (roll < 0.85) return "armhook";
+    return "duetbow";
   }
 
   function happyCanStart(state) {
@@ -97,11 +145,17 @@
     );
   }
 
-  function wantsThankYou(key) {
+  function wantsThankYou(key  ) {
     return key === TRICK_KEY || key === "swing";
   }
 
-  function startThankYou(key, lastKind, x, facing, flags) {
+  function startThankYou(
+    key  ,
+    lastKind,
+    x,
+    facing,
+    flags
+  ) {
     if (!wantsThankYou(key)) return null;
     if (!happyCanStart(flags || { cmd: "idle" })) return null;
     const pick = pickHappy(lastKind);
@@ -110,72 +164,80 @@
 
   function pickHappy(lastKind, rand) {
     const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
+    const list = pool.length ? pool : [...HAPPY];
     const roll = rand == null ? Math.random() : rand;
     return list[Math.floor(roll * list.length)] || list[0];
   }
 
   function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "densswing";
+    const name = (HAPPY).includes(kind) ? (kind) : "densswing";
     return {
       kind: name,
       happy: true,
       phase: "go",
       t: 0,
-      x: x,
+      x,
       lift: 0,
       rot: 0,
-      anim: name === "densswing" ? "sit" : name === "inkswing" ? "play" : "play",
-      facing: facing == null ? 1 : facing,
+      anim: (name === "densswing" ? "sit" : name === "inkswing" ? "play" : "play"),
+      facing: (facing == null ? 1 : facing),
       fromX: x,
     };
   }
 
   function densswingPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densswing));
-    if (u < 0.15) {
-      const s = u / 0.15;
-      return { lift: s * 0.0046, rot: s * -0.16, anim: "sit" };
+    if (u < 0.14) {
+      const s = u / 0.14;
+      return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" };
     }
-    if (u < 0.84) {
-      const sway = Math.sin(((u - 0.15) / 0.69) * Math.PI * 2.35);
-      return { lift: 0.0046 + Math.abs(sway) * 0.0014, rot: -0.16 + sway * 0.18, anim: "sit" };
+    if (u < 0.78) {
+      const flash = Math.sin(t * 2.2);
+      return {
+        lift: 2.8 + Math.abs(flash) * 1.4,
+        rot: 12 + flash * 8,
+        dx: flash * 0.08,
+        anim: "sit",
+      };
     }
-    const s = (u - 0.84) / 0.16;
-    return { lift: 0.0046 * (1 - s), rot: -0.16 * (1 - s), anim: "idle" };
+    const s = (u - 0.78) / 0.22;
+    return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
+
   function inkswingPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkswing));
     if (u < 0.12) {
       const s = u / 0.12;
-      return { lift: s * 0.0034, rot: s * 0.24, anim: "play" };
+      return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" };
     }
-    if (u < 0.82) {
-      const arc = Math.sin(((u - 0.12) / 0.7) * Math.PI * 3.15);
-      return { lift: 0.0034 + Math.abs(arc) * 0.0020, rot: 0.24 + arc * 0.26, anim: "play" };
+    if (u < 0.8) {
+      const wriggle = Math.sin(t * 2.6);
+      return {
+        lift: 3.4 + Math.abs(wriggle) * 1.6,
+        rot: -14 + wriggle * 10,
+        dx: wriggle * 0.12,
+        anim: "play",
+      };
     }
-    const s = (u - 0.82) / 0.18;
-    return { lift: 0.0034 * (1 - s), rot: 0.24 * (1 - s), anim: "idle" };
+    const s = (u - 0.8) / 0.2;
+    return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
   }
+
   function denshylobatesPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denshylobates));
-    if (u < 0.14) {
-      const s = u / 0.14;
-      return { lift: s * -0.0016, rot: s * 0.17, anim: "play" };
-    }
-    if (u < 0.83) {
-      const hush = Math.sin(((u - 0.14) / 0.69) * Math.PI * 2.25);
-      return { lift: -0.0016 + Math.abs(hush) * 0.0011, rot: 0.17 + hush * 0.15, anim: "play" };
-    }
-    const s = (u - 0.83) / 0.17;
-    return { lift: -0.0016 * (1 - s), rot: 0.17 * (1 - s), anim: "idle" };
+    return {
+      lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+      rot: Math.sin(t * 0.58) * 8,
+      dx: Math.sin(t * 0.4) * 0.06,
+      anim: "play",
+    };
   }
+
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+      return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort };
     }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+    const next = { ...happy, t: happy.t + Math.max(0, dt) };
     const hold = HAPPY_DUR[next.kind];
     if (next.kind === "densswing") {
       const pose = densswingPose(next.t);
@@ -193,7 +255,7 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
 
@@ -202,27 +264,30 @@
   }
 
   function beginTrick(kind, x, facing) {
-    const k = TRICKS.indexOf(kind) >= 0 ? kind : "hylobateshush";
     const anim =
-      k === "hylobateshush"
+      kind === "hylobateshush"
         ? "sit"
-        : k === "brachiate"
+        : kind === "brachiate"
           ? "play"
-          : k === "whoopduet"
-            ? "play"
-            : k === "bipedalstrut"
+          : kind === "duetbow"
+            ? "talk"
+            : kind === "whoopduet"
               ? "walk"
-              : k === "hangreach"
-                ? "play"
-                : "sit";
+              : kind === "bipedalstrut"
+                ? "sit"
+                : kind === "hangreach"
+                  ? "play"
+                  : kind === "armhook"
+                    ? "walk"
+                    : "sit";
     return {
-      kind: k,
-      phase: k === "hylobateshush" ? "hold" : "go",
+      kind,
+      phase: kind === "hylobateshush" ? "hold" : "go",
       t: 0,
-      x: x,
+      x,
       lift: 0,
       rot: 0,
-      anim: anim,
+      anim,
       facing: facing == null ? 1 : facing,
       fromX: x,
     };
@@ -234,129 +299,181 @@
   }
 
   function hylobateshushPose(t) {
-    const breath = Math.sin(t * 0.00076) + 0.00024 * Math.sin(t * 0.0020);
-    const hush = Math.abs(Math.sin(t * 0.00031));
-    return { lift: -0.00016 + hush * 0.000045, rot: 0.0035 + breath * 0.0022 };
+    return {
+      lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+      rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+    };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: -0.00018 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.0045 * (1 - u) };
+    return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
   }
 
   function brachiatePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.brachiate));
     const face = facing == null ? 1 : facing;
-    // brachiation swing-arc: reach, pendulum swing, plant, settle -- not Hang hangsway, not Opossum hang
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX + face * s * 0.0012, lift: s * 0.0075, rot: s * -0.42 * face, anim: "play" };
-    }
-    if (u < 0.48) {
-      const s = smoothstep((u - 0.14) / 0.34);
-      const arc = Math.sin(s * Math.PI);
-      return {
-        x: fromX + face * (0.0012 + s * 0.018),
-        lift: 0.0075 + arc * 0.0065,
-        rot: (-0.42 + s * 0.85) * face,
-        anim: "play",
-      };
+      return { x: fromX + face * s * 0.8, lift: s * 3.0, rot: s * -12 * face, anim: "play" };
     }
     if (u < 0.78) {
-      const s = smoothstep((u - 0.48) / 0.3);
-      const arc = Math.sin(s * Math.PI);
+      const bar = Math.sin(t * 2.4);
       return {
-        x: fromX + face * (0.0192 + s * 0.012),
-        lift: 0.0075 + arc * 0.0055,
-        rot: (0.43 - s * 0.55) * face,
+        x: fromX + face * (0.8 + bar * 0.16),
+        lift: 2.8 + Math.abs(bar) * 1.5,
+        rot: face * (-12 + bar * 10),
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.78) / 0.22);
-    return { x: fromX + face * (0.0312 - s * 0.0015), lift: 0.0075 * (1 - s), rot: -0.12 * (1 - s) * face, anim: "idle" };
+    return {
+      x: fromX + face * 0.8 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (-4 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function whoopduetPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.whoopduet));
     const face = facing == null ? 1 : facing;
-    // silent whoop-duet cue: inflate chest, toss head, pulse thrice, settle -- no audio, desk motion only
-    if (u < 0.16) {
-      const s = smoothstep(u / 0.16);
-      return { x: fromX + face * s * 0.00004, lift: s * 0.0052, rot: s * -0.32 * face, anim: "play" };
-    }
-    if (u < 0.8) {
-      const cue = (u - 0.16) / 0.64;
-      const whoop = Math.sin(cue * Math.PI * 3.2);
-      return {
-        x: fromX + face * (0.00004 + whoop * 0.00018),
-        lift: 0.0052 + Math.abs(whoop) * 0.0018,
-        rot: (-0.32 + whoop * 0.22) * face,
-        anim: "play",
-      };
-    }
-    const s = smoothstep((u - 0.8) / 0.2);
-    return { x: fromX + face * 0.00004 * (1 - s), lift: 0.0052 * (1 - s), rot: -0.32 * (1 - s) * face, anim: "idle" };
-  }
-
-  function bipedalstrutPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.bipedalstrut));
-    const face = facing == null ? 1 : facing;
-    // upright bipedal strut with arms high for balance -- not lemur hop-gallop, not deer freeze
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.0006, lift: s * 0.0038, rot: s * -0.08 * face, anim: "walk" };
+      return { x: fromX, lift: s * 2.6, rot: s * 10 * face, anim: "walk" };
     }
-    if (u < 0.82) {
-      const strut = (u - 0.12) / 0.7;
-      const step = Math.sin(strut * Math.PI * 4.0);
+    if (u < 0.78) {
+      const bob = Math.sin(t * 2.2);
       return {
-        x: fromX + face * (0.0006 + strut * 0.016),
-        lift: 0.0038 + Math.abs(step) * 0.0024,
-        rot: (-0.08 + step * 0.12) * face,
+        x: fromX + face * bob * 0.12,
+        lift: 2.6 + Math.abs(bob) * 1.3,
+        rot: face * (10 + bob * 8),
         anim: "walk",
       };
     }
-    const s = smoothstep((u - 0.82) / 0.18);
-    return { x: fromX + face * (0.0166 - s * 0.0008), lift: 0.0038 * (1 - s), rot: -0.08 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX,
+      lift: 1.2 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function duetbowPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.duetbow));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.6, lift: s * 3.2, rot: s * 14 * face, anim: "talk" };
+    }
+    if (u < 0.8) {
+      const cloud = Math.sin(t * 3.0);
+      return {
+        x: fromX + face * (0.6 + cloud * 0.18),
+        lift: 3.0 + Math.abs(cloud) * 1.8,
+        rot: face * (14 + cloud * 12),
+        anim: "talk",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.5 * (1 - s),
+      rot: face * (5 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function hangreachPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.hangreach));
     const face = facing == null ? 1 : facing;
-    // hang from desk edge, long-arm reach-pick, draw in, settle -- not Hang reachcrawl
-    if (u < 0.15) {
-      const s = smoothstep(u / 0.15);
-      return { x: fromX + face * s * 0.0003, lift: s * 0.0088, rot: s * 0.48 * face, anim: "play" };
+    if (u < 0.1) {
+      const s = smoothstep(u / 0.1);
+      return { x: fromX + face * s * 1.0, lift: s * 4.0, rot: s * 18 * face, anim: "play" };
     }
-    if (u < 0.55) {
-      const reach = (u - 0.15) / 0.4;
-      const stretch = Math.sin(reach * Math.PI * 1.2);
+    if (u < 0.8) {
+      const thrash = Math.sin(t * 3.6);
       return {
-        x: fromX + face * (0.0003 + stretch * 0.0009),
-        lift: 0.0088 + stretch * 0.0022,
-        rot: (0.48 + stretch * 0.16) * face,
+        x: fromX + face * (1.0 + thrash * 0.22),
+        lift: 3.6 + Math.abs(thrash) * 2.0,
+        rot: face * (18 + thrash * 14),
         anim: "play",
       };
     }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 1.0 * (1 - s),
+      lift: 1.6 * (1 - s),
+      rot: face * (6 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function bipedalstrutPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.bipedalstrut));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.5, lift: s * 2.8, rot: s * 11 * face, anim: "sit" };
+    }
     if (u < 0.78) {
-      const draw = Math.sin(((u - 0.55) / 0.23) * Math.PI);
+      const hang = Math.sin(t * 2.0);
       return {
-        x: fromX + face * (0.0012 - draw * 0.0004),
-        lift: 0.0088 - draw * 0.0015,
-        rot: (0.64 - draw * 0.22) * face,
-        anim: "play",
+        x: fromX + face * (0.5 + hang * 0.1),
+        lift: 2.8 + Math.abs(hang) * 1.2,
+        rot: face * (11 + hang * 8),
+        anim: "sit",
       };
     }
     const s = smoothstep((u - 0.78) / 0.22);
-    return { x: fromX + face * 0.0008 * (1 - s), lift: 0.0073 * (1 - s), rot: 0.42 * (1 - s) * face, anim: "idle" };
+    return {
+      x: fromX + face * 0.5 * (1 - s),
+      lift: 1.3 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function armhookPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.armhook));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.6, lift: s * 3.0, rot: s * 12 * face, anim: "walk" };
+    }
+    if (u < 0.8) {
+      const cast = Math.sin(t * 2.8);
+      return {
+        x: fromX + face * (0.6 + cast * 0.16),
+        lift: 2.8 + Math.abs(cast) * 1.6,
+        rot: face * (12 + cast * 10),
+        anim: "walk",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (4 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "brachiate" && trick.kind !== "whoopduet" && trick.kind !== "bipedalstrut" && trick.kind !== "hangreach") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+    if (
+      shouldAbort(flags) &&
+      trick.kind !== "brachiate" &&
+      trick.kind !== "whoopduet" &&
+      trick.kind !== "bipedalstrut" &&
+      trick.kind !== "hangreach" &&
+      trick.kind !== "armhook" &&
+      trick.kind !== "duetbow"
+    ) {
+      return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
+    const next = { ...trick, t: trick.t + Math.max(0, dt) };
     if (next.kind === "hylobateshush") {
       if (next.t < HYLOBATESHUSH_HOLD) {
         const pose = hylobateshushPose(next.t);
@@ -374,38 +491,53 @@
         next.anim = "sit";
         return next;
       }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+      return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
+    const fromX = trick.fromX != null ? trick.fromX : trick.x;
     if (next.kind === "brachiate") {
-      const pose = brachiatePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = brachiatePose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "whoopduet") {
-      const pose = whoopduetPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = whoopduetPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "bipedalstrut") {
-      const pose = bipedalstrutPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = bipedalstrutPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "hangreach") {
+      const pose = hangreachPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "armhook") {
+      const pose = armhookPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = hangreachPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = duetbowPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
+
+
 
   const api = {
     TRICK_KEY,
@@ -419,6 +551,17 @@
     shouldAbort,
     nextTrickWait,
     pickTrick,
+    sleepHoldFrame,
+    beginTrick,
+    hylobateshushPose,
+    releasePose,
+    brachiatePose,
+    whoopduetPose,
+    duetbowPose,
+    hangreachPose,
+    bipedalstrutPose,
+    armhookPose,
+    stepTrick,
     happyCanStart,
     happyShouldAbort,
     wantsThankYou,
@@ -428,17 +571,8 @@
     densswingPose,
     inkswingPose,
     denshylobatesPose,
-    stepHappy,
-    sleepHoldFrame,
-    beginTrick,
-    hylobateshushPose,
-    releasePose,
-    brachiatePose,
-    whoopduetPose,
-    bipedalstrutPose,
-    hangreachPose,
-    stepTrick,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetGibbonTricks = api;
-})(typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : this);
+})(typeof window !== "undefined" ? window : globalThis);
