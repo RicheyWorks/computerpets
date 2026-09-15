@@ -1118,8 +1118,19 @@ assert.ok(names("knobbed_whelk").includes("freeze"));
 assert.equal(names("knobbed_whelk").includes("hunt"), false);
 assert.equal(names("knobbed_whelk").includes("sit"), false);
 assert.equal(names("knobbed_whelk").includes("still"), false);
-
-  assert.ok(names("lugworm").includes("heap"));
+assert.ok(names("lugworm").includes("arenicolahush"));
+assert.ok(names("lugworm").includes("uburrow_soft"));
+assert.ok(names("lugworm").includes("sedgulp_soft"));
+assert.ok(names("lugworm").includes("gillflush_soft"));
+assert.ok(names("lugworm").includes("heapcast_soft"));
+assert.ok(names("lugworm").includes("tailcast_soft"));
+assert.ok(names("lugworm").includes("headdig_soft"));
+assert.ok(names("lugworm").includes("freeze"));
+assert.equal(names("lugworm").includes("hunt"), false);
+assert.equal(names("lugworm").includes("sit"), false);
+assert.equal(names("lugworm").includes("still"), false);
+assert.equal(names("lugworm").includes("heap"), false);
+assert.equal(names("lugworm").includes("cast"), false);
   for (const key of MEADOW) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
