@@ -1957,7 +1957,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Pebble Rui-dense ultra (BUFONID_HOLD=11.2); Eft now Rue-dense; Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; next leftover Drake / mallard", () => {
+test("notes: Pebble Rui-dense ultra (BUFONID_HOLD=11.2); Eft now Rue-dense; Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; Drake now Rue-dense; next leftover Vee / canada_goose", () => {
   assert.equal(T.TRICK_KEY, "toad");
   assert.deepEqual([...T.TRICKS], ["verruca", "burrow", "parotoid", "tubercle", "bufonid", "unken", "cranial"]);
   assert.deepEqual([...T.HAPPY], ["loam", "knurl", "plump"]);
