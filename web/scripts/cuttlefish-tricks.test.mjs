@@ -375,9 +375,13 @@ test("ultra-polish: Sepia bone/strike/zebra lifts are Rui-visible (not micro idl
   assert.ok(c2.lift > 0.5 || Math.abs(c2.rot) > 4 || Math.abs(c2.x - 80) > 0.5, `chroma mid ${c2.lift}/${c2.rot}/${c2.x}`);
   assert.ok(Overlay.strikePose && Overlay.zebraPose);
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.BONE_HOLD, Overlay.BONE_HOLD);
+  assert.equal(T.BONE_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "bone") > 39);
 });
 
-test("notes: Sepia idle-life ultra done; Chamber / nautilus ultra done; Pulse / moon_jelly ultra done; Anchor / seahorse ultra done; next house-order ultra guest is Kite / manta (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger + Anchor already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
+test("notes: Sepia Rui-dense ultra (BONE_HOLD=11.2); next leftover Chamber / nautilus", () => {
   assert.equal(T.TRICK_KEY, "cuttlefish");
   assert.equal(T.wantsThankYou("sepia"), true);
   assert.equal(OverlayGround.tricksFor("cuttlefish"), Overlay);
@@ -396,4 +400,5 @@ test("notes: Sepia idle-life ultra done; Chamber / nautilus ultra done; Pulse / 
   assert.equal(OverlayGround.tricksFor("bloom"), OverlayAxolotl);
   assert.equal(OverlayGround.tricksFor("nautilus") == null, true);
   assert.equal(OverlayGround.wantsThankYou("nautilus"), false);
+  assert.equal(OverlayGround.tricksFor("chamber") == null, true);
 });
