@@ -476,7 +476,7 @@ test("ultra-polish: Blush pebble/dune/talus lifts are Rui-visible (not micro idl
   assert.ok(T.nextTrickWait(true, 0, "pebble") > 39);
 });
 
-test("notes: Blush Rui-dense ultra (PEBBLE_HOLD=11.2); Atlas densified; Cup densified; Sepia densified; Chamber densified; Pulse densified; Ochre densified; Tenant densified; Ledger densified; next leftover Anchor / seahorse", () => {
+test("notes: Blush Rui-dense ultra (PEBBLE_HOLD=11.2); Atlas densified; Cup densified; Sepia densified; Chamber densified; Pulse densified; Ochre densified; Tenant densified; Ledger densified; Anchor densified; next leftover Kite / manta", () => {
   assert.equal(T.TRICK_KEY, "rosy_boa");
   assert.equal(T.wantsThankYou("blush"), true);
   assert.equal(OverlayGround.tricksFor("boa"), OverlayBoa);

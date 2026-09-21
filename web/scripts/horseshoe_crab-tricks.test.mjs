@@ -541,7 +541,7 @@ test("ultra-polish: Ledger carapace/pusher/ocular lifts are Rui-visible (not mic
   assert.ok(T.nextTrickWait(true, 0, "carapace") > 39);
 });
 
-test("notes: Ledger Rui-dense ultra (CARAPACE_HOLD=11.2); next leftover Anchor / seahorse", () => {
+test("notes: Ledger Rui-dense ultra (CARAPACE_HOLD=11.2); Anchor densified; next leftover Kite / manta", () => {
   assert.equal(T.TRICK_KEY, "horseshoe_crab");
   assert.equal(T.wantsThankYou("ledger"), true);
   assert.equal(OverlayGround.tricksFor("horseshoe_crab"), Overlay);
