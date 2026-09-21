@@ -1,4 +1,4 @@
-/** Brine ground tricks while idle — ultra-polish pass. House neighborly alien salt-drinker brine desk FROST life — halite / salina / rime / bittern / deliquesce / ectoine / sabkha personality (salt craving, halo-feed without naming halo, alien brine desk life — never named brine or salt or frost or waste or still or halo or halovore as trick kinds; window-play FROST + ethogram-old frost/still/waste own those words; Drown/pitcher already owns trick name brine; Sheen/sweat_bee already owns trick name salt; Pulse/moon_jelly already owns thank-you halo; guest slug Brine / key halovore only for isKey matching — accept "halovore" and "brine"; do NOT name a trick "halovore" or "brine" or "salt" or "frost" or "waste" or "still" or "halo") — not Knot plexus/splice/braid/weft/mesh/fascicle/sennit junction-weave, not Dusk belt/penumbra/eclipse/limb/limitor/umbra/syzygy twilight-belt, not Shard cleavage/twinning/inclusion/grit/crescit/hopper/phantom living-crystal, not Drift waft/billow/cirrus/virga/stratus/tholin/nucleate methane-cloud, not Choir polyphony/partial/timbre/resonance/harmonia/formant/dyad chord-body, not Gleam photon/wavelength/lumen/glass/photovore/opsin/iridophore lamp-drinker, not Drown peristome/cistern/brine/operculum/urn pitcher, not Pulse bell/oral/lucent/trail/medusa jelly, not Pact podetium/photobiont/fruticose/stone/cladonia/soredia/scyphi plaque, not Starter bud/proof/levain/ferment/saccharomyces/ascus/floc bloom, not Flame sulfur/rosette/oak/soft/laetiporus/poroid/cluster drip, not Puff ostiole/gleba/peridium/duff/lycoperdon cloud, not Mane spine/icicle/cascade/wound/hericium teeth, not Ring pore/bracket/band/leathery/trametes underside, not Frill lamella/imbricate/lasso/margin/pleurotus oyster, not Cap annulus/volva/veil/symbiont/amanita, not Wax tessera/hex honeycomb, not Spark firefly lantern, not Coin goldfish drift, not Door hinge/pharynx/knot/lurk/jamb moray, not Sheen lustre/tumulus/salt/commune/agapostemon; never named brine (Drown/pitcher trick — never reuse) / salt (Sheen/sweat_bee trick — never reuse) / frost (window-play FROST + ethogram-old — never a trick kind) / waste (ethogram-old) / still (ethogram-old) / halo (Pulse thank-you — never reuse) / halovore (guest key — never a trick kind) / brine-slug-as-trick (guest name slug — never a trick kind) / plexus / splice / braid / weft / mesh / fascicle / sennit / accord / quorum / entente / belt / penumbra / eclipse / limb / limitor / umbra / syzygy / crepuscule / gloaming / eventide / cleavage / twinning / inclusion / grit / crescit / hopper / phantom / euhedral / vitreous / adamantine / facet / silica / shard / glass / stone / float / waft / billow / cirrus / virga / stratus / zephyr / fogbow / mizzle / tholin / nucleate / photon / wavelength / lumen / actinic / lux / candela / opsin / iridophore / polyphony / partial / timbre / resonance / harmonia / formant / dyad / diapason / motet / canticle / cloud / mist / fog / haze / puff / dust / rain / chord / thirst / drink / drone / pulse / gleam / shine / glint / sheen / dig / nest / bank / buzz / dance / plaque / share / bloom / loaf / hinge / pharynx / lurk / jamb / rim / edge / trail / terminator / dusk / treaty / peristome / cistern / operculum / urn / lustre / tumulus / commune / agapostemon / many / count / ripple / name / nexus / knot — Echo/Quill are birds with sound — do not copy their tricks. halite soft salt-crystal craving gather across the blotter, salina evaporating salt-pan walk, rime leave a frost-of-waste film without naming frost, bittern concentrate mother-liquor draw, deliquesce long soft salt-body hold that drinks ambient humidity while brine stays the blood (not Knot weave colony, not Gleam lamp-drinker, not Drown pitcher brine, not Sheen salt lick, not Pulse jelly halo) with natron / trona / aureole cousins in the thank-yous — never named mellifera / regina / andrena / langstroth; ectoine compatible osmoprotectant settle (THE salt-body protect tell — never named brine / salt / frost / waste / still / halo / halovore as this new tell); sabkha coastal salt-flat pan walk (THE evaporite-pan tell — never named brine / salt / frost / waste / still / halo / halovore as this new tell); guest slug Brine / key halovore only for isKey matching — accept "halovore" and "brine"; do NOT name a trick "halovore" or "brine". Feed-happy thank-yous sit after eat. Card-open freeze and window-play FROST do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop halovore-tricks.js. Not a Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/honey_drone/Hum/honey_queen/Keep/honeycomb/Wax/oyster/Frill/fly_agaric/Cap/morel/Lattice/chanterelle/Horn/turkey_tail/Ring/lions_mane/Mane/puffball/Puff/chicken_of_woods/Flame/yeast/Starter/lichen/Pact/photovore/Gleam/choir/Choir/nimbus/Drift/silica/Shard/terminator/Dusk/nexus/Knot/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold/cicada/Brood or *Dragon electrical clone. Window-play FROST unchanged — never names frost. Ethogram softs + freeze — never names frost or still or waste as trick kinds. Hinge owns the next seat. No cry inventing — thank-yous are silent desk motion only. Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via halovore.wav. */
+/** Brine ground tricks while idle — ultra-polish pass. House neighborly alien salt-drinker brine desk FROST life — halite / salina / rime / bittern / deliquesce / ectoine / sabkha personality (salt craving, halo-feed without naming halo, alien brine desk life — never named brine or salt or frost or waste or still or halo or halovore as trick kinds; window-play FROST + ethogram-old frost/still/waste own those words; Drown/pitcher already owns trick name brine; Sheen/sweat_bee already owns trick name salt; Pulse/moon_jelly already owns thank-you halo; guest slug Brine / key halovore only for isKey matching — accept "halovore" and "brine"; do NOT name a trick "halovore" or "brine" or "salt" or "frost" or "waste" or "still" or "halo") — not Knot plexus/splice/braid/weft/mesh/fascicle/sennit junction-weave, not Dusk belt/penumbra/eclipse/limb/limitor/umbra/syzygy twilight-belt, not Shard cleavage/twinning/inclusion/grit/crescit/hopper/phantom living-crystal, not Drift waft/billow/cirrus/virga/stratus/tholin/nucleate methane-cloud, not Choir polyphony/partial/timbre/resonance/harmonia/formant/dyad chord-body, not Gleam photon/wavelength/lumen/glass/photovore/opsin/iridophore lamp-drinker, not Drown peristome/cistern/brine/operculum/urn pitcher, not Pulse bell/oral/lucent/trail/medusa jelly, not Pact podetium/photobiont/fruticose/stone/cladonia/soredia/scyphi plaque, not Starter bud/proof/levain/ferment/saccharomyces/ascus/floc bloom, not Flame sulfur/rosette/oak/soft/laetiporus/poroid/cluster drip, not Puff ostiole/gleba/peridium/duff/lycoperdon cloud, not Mane spine/icicle/cascade/wound/hericium teeth, not Ring pore/bracket/band/leathery/trametes underside, not Frill lamella/imbricate/lasso/margin/pleurotus oyster, not Cap annulus/volva/veil/symbiont/amanita, not Wax tessera/hex honeycomb, not Spark firefly lantern, not Coin goldfish drift, not Door hinge/pharynx/knot/lurk/jamb moray, not Sheen lustre/tumulus/salt/commune/agapostemon; never named brine (Drown/pitcher trick — never reuse) / salt (Sheen/sweat_bee trick — never reuse) / frost (window-play FROST + ethogram-old — never a trick kind) / waste (ethogram-old) / still (ethogram-old) / halo (Pulse thank-you — never reuse) / halovore (guest key — never a trick kind) / brine-slug-as-trick (guest name slug — never a trick kind) / plexus / splice / braid / weft / mesh / fascicle / sennit / accord / quorum / entente / belt / penumbra / eclipse / limb / limitor / umbra / syzygy / crepuscule / gloaming / eventide / cleavage / twinning / inclusion / grit / crescit / hopper / phantom / euhedral / vitreous / adamantine / facet / silica / shard / glass / stone / float / waft / billow / cirrus / virga / stratus / zephyr / fogbow / mizzle / tholin / nucleate / photon / wavelength / lumen / actinic / lux / candela / opsin / iridophore / polyphony / partial / timbre / resonance / harmonia / formant / dyad / diapason / motet / canticle / cloud / mist / fog / haze / puff / dust / rain / chord / thirst / drink / drone / pulse / gleam / shine / glint / sheen / dig / nest / bank / buzz / dance / plaque / share / bloom / loaf / hinge / pharynx / lurk / jamb / rim / edge / trail / terminator / dusk / treaty / peristome / cistern / operculum / urn / lustre / tumulus / commune / agapostemon / many / count / ripple / name / nexus / knot — Echo/Quill are birds with sound — do not copy their tricks. halite soft salt-crystal craving gather across the blotter, salina evaporating salt-pan walk, rime leave a frost-of-waste film without naming frost, bittern concentrate mother-liquor draw, deliquesce long soft salt-body hold that drinks ambient humidity while brine stays the blood (not Knot weave colony, not Gleam lamp-drinker, not Drown pitcher brine, not Sheen salt lick, not Pulse jelly halo) with natron / trona / aureole cousins in the thank-yous — never named mellifera / regina / andrena / langstroth; ectoine compatible osmoprotectant settle (THE salt-body protect tell — never named brine / salt / frost / waste / still / halo / halovore as this new tell); sabkha coastal salt-flat pan walk (THE evaporite-pan tell — never named brine / salt / frost / waste / still / halo / halovore as this new tell); guest slug Brine / key halovore only for isKey matching — accept "halovore" and "brine"; do NOT name a trick "halovore" or "brine". Feed-happy thank-yous sit after eat. Card-open freeze and window-play FROST do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop halovore-tricks.js. Not a Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/honey_drone/Hum/honey_queen/Keep/honeycomb/Wax/oyster/Frill/fly_agaric/Cap/morel/Lattice/chanterelle/Horn/turkey_tail/Ring/lions_mane/Mane/puffball/Puff/chicken_of_woods/Flame/yeast/Starter/lichen/Pact/photovore/Gleam/choir/Choir/nimbus/Drift/silica/Shard/terminator/Dusk/nexus/Knot/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold/cicada/Brood or *Dragon electrical clone. Window-play FROST unchanged — never names frost. Ethogram softs + freeze — never names frost or still or waste as trick kinds. Hinge owns the next seat. No cry inventing — thank-yous are silent desk motion only. Amplitudes raised toward Rui richness; denser waits/weights (DELIQUESCE_HOLD=11.2 RELEASE_S=1.18). Next leftover Beacon / magneton. prefersHouseCry via halovore.wav. */
 (function (root) {
 const TRICK_KEY = "halovore";
 const TRICKS = ["halite", "salina", "rime", "bittern", "deliquesce", "ectoine", "sabkha"];
@@ -14,8 +14,8 @@ const HAPPY_DUR = {
 };
 
 /** Deliquesce hold — Brine parks soft salt-body calm as salt-drinker desk life. Not window-play FROST. */
-const DELIQUESCE_HOLD = 10.8;
-const RELEASE_S = 0.62;
+const DELIQUESCE_HOLD = 11.2;
+const RELEASE_S = 1.18;
 const DUR = {
   deliquesce: DELIQUESCE_HOLD + RELEASE_S,
   halite: 1.58,
@@ -54,54 +54,27 @@ function shouldAbort(state) {
 
 function nextTrickWait(justFinished, rand, kind) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "deliquesce") return 38 + roll * 24;
-  if (kind === "ectoine" || kind === "sabkha" || kind === "salina") return 12 + roll * 9;
-  if (kind === "halite" || kind === "rime" || kind === "bittern") return 11 + roll * 8;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "deliquesce") return 40 + roll * 26;
+  if (kind === "halite" || kind === "salina" || kind === "rime" || kind === "bittern" || kind === "ectoine" || kind === "sabkha") return 12.8 + roll * 9.4;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 function pickTrick(rand, musicOn, lastKind) {
   if (musicOn) return "deliquesce";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "deliquesce") {
-    if (roll < 0.18) return "halite";
-    if (roll < 0.34) return "salina";
-    if (roll < 0.5) return "rime";
-    if (roll < 0.66) return "bittern";
-    if (roll < 0.83) return "ectoine";
-    return "sabkha";
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : TRICKS.slice();
+  const weights = list.map((k) =>
+    k === "deliquesce" ? 0.72 : k === "halite" || k === "ectoine" ? 1.28 : k === "sabkha" ? 1.18 : 1.08
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i];
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return list[i];
   }
-  if (lastKind === "halite") {
-    if (roll < 0.2) return "deliquesce";
-    if (roll < 0.36) return "salina";
-    if (roll < 0.52) return "rime";
-    if (roll < 0.68) return "bittern";
-    if (roll < 0.84) return "ectoine";
-    return "sabkha";
-  }
-  if (lastKind === "salina") {
-    if (roll < 0.18) return "deliquesce";
-    if (roll < 0.34) return "halite";
-    if (roll < 0.5) return "rime";
-    if (roll < 0.66) return "bittern";
-    if (roll < 0.83) return "ectoine";
-    return "sabkha";
-  }
-  if (lastKind === "ectoine" || lastKind === "sabkha") {
-    if (roll < 0.16) return "deliquesce";
-    if (roll < 0.32) return "halite";
-    if (roll < 0.48) return "salina";
-    if (roll < 0.64) return "rime";
-    if (roll < 0.8) return "bittern";
-    return lastKind === "ectoine" ? ("sabkha") : ("ectoine");
-  }
-  if (roll < 0.14) return "deliquesce";
-  if (roll < 0.28) return "halite";
-  if (roll < 0.42) return "salina";
-  if (roll < 0.56) return "rime";
-  if (roll < 0.7) return "bittern";
-  if (roll < 0.85) return "ectoine";
-  return "sabkha";
+  return list[list.length - 1] || "halite";
 }
 
 function happyCanStart(state) {
@@ -167,45 +140,45 @@ function natronPose(t) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.natron));
   if (u < 0.2) {
     const s = u / 0.2;
-    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" };
+    return { lift: s * 3.36, rot: s * 14.4, dx: 0, anim: "talk" };
   }
   if (u < 0.76) {
     const tick = Math.sin(t * 1.72);
     return {
-      lift: 2.8 + Math.abs(tick) * 1.4,
-      rot: 12 + tick * 10,
-      dx: tick * 0.12,
+      lift: 3.36 + Math.abs(tick) * 1.68,
+      rot: 14.4 + tick * 12,
+      dx: tick * 0.14,
       anim: "talk",
     };
   }
   const s = (u - 0.76) / 0.24;
-  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "talk" };
+  return { lift: 2.4 * (1 - s), rot: 7.2 * (1 - s), dx: 0, anim: "talk" };
 }
 
 function tronaPose(t) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.trona));
   if (u < 0.18) {
     const s = u / 0.18;
-    return { lift: s * 3.4, rot: s * -14, dx: s * 0.15, anim: "play" };
+    return { lift: s * 4.08, rot: s * -16.8, dx: s * 0.18, anim: "play" };
   }
   if (u < 0.78) {
     const flash = Math.sin(t * 2.1);
     return {
-      lift: 3.4 + Math.abs(flash) * 1.6,
-      rot: -14 + flash * 12,
-      dx: flash * 0.18,
+      lift: 4.08 + Math.abs(flash) * 1.92,
+      rot: -16.8 + flash * 14.4,
+      dx: flash * 0.22,
       anim: "play",
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
+  return { lift: 2.64 * (1 - s), rot: -7.2 * (1 - s), dx: 0, anim: "sit" };
 }
 
 function aureolePose(t) {
   return {
-    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
-    rot: Math.sin(t * 0.72) * 8,
-    dx: Math.sin(t * 0.41) * 0.1,
+    lift: 2.64 + Math.abs(Math.sin(t * 0.58)) * 1.32,
+    rot: Math.sin(t * 0.72) * 9.6,
+    dx: Math.sin(t * 0.41) * 0.12,
     anim: "sit",
   };
 }
@@ -280,15 +253,15 @@ function smoothstep(t) {
 function deliquescePose(t) {
   const breath = Math.sin(t * 0.42) + 0.18 * Math.sin(t * 1.1);
   return {
-    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
-    rot: 4 + breath * 6,
+    lift: 2.88 + Math.abs(Math.sin(t * 0.42)) * 1.44,
+    rot: 4.8 + breath * 7.2,
   };
 }
 
 function releasePose(t) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
   const s = smoothstep(u);
-  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 4 * (1 - s) };
+  return { lift: 2.88 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 4.8 * (1 - s) };
 }
 
 /** Halite — soft salt-crystal craving gather across the blotter. */
@@ -296,32 +269,32 @@ function halitePose(t, fromX, facing) {
   const u = Math.max(0, Math.min(1, t / DUR.halite));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 3.2, rot: s * -8 * facing, anim: "sit" };
+    return { x: fromX, lift: s * 3.84, rot: s * -9.6 * facing, anim: "sit" };
   }
   if (u < 0.62) {
     const s = (u - 0.16) / 0.46;
     const bob = Math.sin(s * Math.PI * 3.4);
     return {
-      x: fromX + facing * (s * 0.8 + bob * 0.15),
-      lift: 3.2 - s * 0.8 + Math.abs(bob) * 0.6,
-      rot: facing * (-8 + bob * 12),
+      x: fromX + facing * (s * 0.96 + bob * 0.18),
+      lift: 3.84 - s * 0.96 + Math.abs(bob) * 0.72,
+      rot: facing * (-9.6 + bob * 14.4),
       anim: "walk",
     };
   }
   if (u < 0.84) {
     const settle = smoothstep((u - 0.62) / 0.22);
     return {
-      x: fromX + facing * 0.8 * (1 - settle * 0.4),
-      lift: 2.4 * (1 - settle * 0.85),
-      rot: facing * (-4 + settle * 8),
+      x: fromX + facing * 0.96 * (1 - settle * 0.48),
+      lift: 2.88 * (1 - settle * 1.02),
+      rot: facing * (-4.8 + settle * 9.6),
       anim: "sit",
     };
   }
   const s = smoothstep((u - 0.84) / 0.16);
   return {
-    x: fromX + facing * 0.4 * (1 - s),
-    lift: 0.8 * (1 - s),
-    rot: facing * (3 * (1 - s)),
+    x: fromX + facing * 0.48 * (1 - s),
+    lift: 0.96 * (1 - s),
+    rot: facing * (3.6 * (1 - s)),
     anim: "idle",
   };
 }
@@ -331,23 +304,23 @@ function salinaPose(t, fromX, facing) {
   const u = Math.max(0, Math.min(1, t / DUR.salina));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 2.6, rot: s * -10 * facing, anim: "talk" };
+    return { x: fromX, lift: s * 3.12, rot: s * -12 * facing, anim: "talk" };
   }
   if (u < 0.7) {
     const s = (u - 0.14) / 0.56;
     const open = Math.sin(s * Math.PI * 2.8);
     return {
-      x: fromX + facing * (0.4 + open * 0.35),
-      lift: 2.6 + Math.abs(open) * 1.6,
-      rot: facing * (-10 + open * 14),
+      x: fromX + facing * (0.48 + open * 0.42),
+      lift: 3.12 + Math.abs(open) * 1.92,
+      rot: facing * (-12 + open * 16.8),
       anim: "talk",
     };
   }
   const s = smoothstep((u - 0.7) / 0.3);
   return {
-    x: fromX + facing * 0.4 * (1 - s),
-    lift: 1.8 * (1 - s),
-    rot: facing * (-6 * (1 - s)),
+    x: fromX + facing * 0.48 * (1 - s),
+    lift: 2.16 * (1 - s),
+    rot: facing * (-7.2 * (1 - s)),
     anim: "sit",
   };
 }
@@ -357,15 +330,15 @@ function rimePose(t, fromX, facing) {
   const u = Math.max(0, Math.min(1, t / DUR.rime));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 2.4, rot: s * 14 * facing, anim: "sit" };
+    return { x: fromX, lift: s * 2.88, rot: s * 16.8 * facing, anim: "sit" };
   }
   if (u < 0.58) {
     const s = (u - 0.16) / 0.42;
     const press = Math.sin(s * Math.PI * 3.1);
     return {
-      x: fromX + facing * press * 0.25,
-      lift: 2.4 + Math.abs(press) * 1.4,
-      rot: facing * (14 + press * 12),
+      x: fromX + facing * press * 0.3,
+      lift: 2.88 + Math.abs(press) * 1.68,
+      rot: facing * (16.8 + press * 14.4),
       anim: "sleep",
     };
   }
@@ -373,16 +346,16 @@ function rimePose(t, fromX, facing) {
     const settle = smoothstep((u - 0.58) / 0.24);
     return {
       x: fromX,
-      lift: 3.2 - settle * 1.2,
-      rot: facing * (14 - settle * 16),
+      lift: 3.84 - settle * 1.44,
+      rot: facing * (16.8 - settle * 19.2),
       anim: "sit",
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
     x: fromX,
-    lift: 2.0 * (1 - s),
-    rot: facing * (-3 * (1 - s)),
+    lift: 2.4 * (1 - s),
+    rot: facing * (-3.6 * (1 - s)),
     anim: "idle",
   };
 }
@@ -392,15 +365,15 @@ function bitternPose(t, fromX, facing) {
   const u = Math.max(0, Math.min(1, t / DUR.bittern));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" };
+    return { x: fromX, lift: s * 3.12, rot: s * 12 * facing, anim: "talk" };
   }
   if (u < 0.55) {
     const s = (u - 0.14) / 0.41;
     const cup = smoothstep(s);
     return {
-      x: fromX + facing * cup * 0.35,
-      lift: 2.6 * (1 - cup * 0.7),
-      rot: facing * (10 - cup * 14),
+      x: fromX + facing * cup * 0.42,
+      lift: 3.12 * (1 - cup * 0.84),
+      rot: facing * (12 - cup * 16.8),
       anim: "play",
     };
   }
@@ -408,17 +381,17 @@ function bitternPose(t, fromX, facing) {
     const s = (u - 0.55) / 0.27;
     const hold = Math.sin(s * Math.PI * 2.6);
     return {
-      x: fromX + facing * 0.35,
-      lift: 0.8 + Math.abs(hold) * 0.6,
-      rot: facing * (-4 + hold * 10),
+      x: fromX + facing * 0.42,
+      lift: 0.96 + Math.abs(hold) * 0.72,
+      rot: facing * (-4.8 + hold * 12),
       anim: "play",
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
-    x: fromX + facing * 0.35 * (1 - s),
-    lift: 0.6 * (1 - s),
-    rot: facing * (-2 * (1 - s)),
+    x: fromX + facing * 0.42 * (1 - s),
+    lift: 0.72 * (1 - s),
+    rot: facing * (-2.4 * (1 - s)),
     anim: "idle",
   };
 }
@@ -428,15 +401,15 @@ function ectoinePose(t, fromX, facing) {
   const u = Math.max(0, Math.min(1, t / DUR.ectoine));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 1.8, rot: s * -8 * facing, anim: "sit" };
+    return { x: fromX, lift: s * 2.16, rot: s * -9.6 * facing, anim: "sit" };
   }
   if (u < 0.55) {
     const s = (u - 0.16) / 0.39;
     const rock = Math.sin(s * Math.PI * 4.2);
     return {
-      x: fromX + facing * (s * 0.6 + rock * 0.2),
-      lift: 1.8 + Math.abs(rock) * 1.6,
-      rot: facing * (-8 + rock * 14),
+      x: fromX + facing * (s * 0.72 + rock * 0.24),
+      lift: 2.16 + Math.abs(rock) * 1.92,
+      rot: facing * (-9.6 + rock * 16.8),
       anim: "sit",
     };
   }
@@ -444,17 +417,17 @@ function ectoinePose(t, fromX, facing) {
     const s = (u - 0.55) / 0.23;
     const spin = Math.sin(s * Math.PI * 3.4);
     return {
-      x: fromX + facing * 0.6,
-      lift: 2.8 + Math.abs(spin) * 0.8,
-      rot: facing * (4 + spin * 10),
+      x: fromX + facing * 0.72,
+      lift: 3.36 + Math.abs(spin) * 0.96,
+      rot: facing * (4.8 + spin * 12),
       anim: "sit",
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * 0.6 * (1 - s),
-    lift: 1.8 * (1 - s) + s * 0.2,
-    rot: facing * (4 * (1 - s)),
+    x: fromX + facing * 0.72 * (1 - s),
+    lift: 2.16 * (1 - s) + s * 0.24,
+    rot: facing * (4.8 * (1 - s)),
     anim: "idle",
   };
 }
@@ -464,15 +437,15 @@ function sabkhaPose(t, fromX, facing) {
   const u = Math.max(0, Math.min(1, t / DUR.sabkha));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" };
+    return { x: fromX, lift: s * 3.12, rot: s * 12 * facing, anim: "talk" };
   }
   if (u < 0.4) {
     const s = (u - 0.14) / 0.26;
     const sip = smoothstep(s);
     return {
-      x: fromX + facing * sip * 0.5,
-      lift: 2.6 + sip * 2.4,
-      rot: facing * (10 + sip * 8),
+      x: fromX + facing * sip * 0.6,
+      lift: 3.12 + sip * 2.88,
+      rot: facing * (12 + sip * 9.6),
       anim: "talk",
     };
   }
@@ -480,17 +453,17 @@ function sabkhaPose(t, fromX, facing) {
     const s = (u - 0.4) / 0.38;
     const drink = Math.sin(s * Math.PI * 3.2);
     return {
-      x: fromX + facing * (0.5 + drink * 0.3),
-      lift: 4.8 + Math.abs(drink) * 0.8,
-      rot: facing * (6 + drink * 14),
+      x: fromX + facing * (0.6 + drink * 0.36),
+      lift: 5.76 + Math.abs(drink) * 0.96,
+      rot: facing * (7.2 + drink * 16.8),
       anim: "play",
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * 0.5 * (1 - s),
-    lift: 2.6 * (1 - s),
-    rot: facing * (6 * (1 - s)),
+    x: fromX + facing * 0.6 * (1 - s),
+    lift: 3.12 * (1 - s),
+    rot: facing * (7.2 * (1 - s)),
     anim: "idle",
   };
 }
