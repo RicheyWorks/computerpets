@@ -1,4 +1,4 @@
-/** Vesper ground tricks while idle — ultra-polish pass. House dragon — sprawl / guard / smolder / claim / fold / ruff / scrape personality (wyrm on the mantel; sleeping-dragon desk life). Sprawl heat-hold without naming bask/flatten/drape (window-play owns those); guard watchful rise without naming alert/loaf; smolder breath-glow without naming huff/steam thank-you collision; claim blotter plant without naming hoard special; fold wing-tuck settle without naming curl/coil; ruff neck-ruff flare without naming dewlap/fan/frill/mantle; scrape claw-scrape mark without naming scratch/dig. Window-play DRAPE unchanged — never names a trick `drape`. Window-play BASK/COIL untouched — never names `bask` or `coil`. Special `hoard` stays the special. Guest slug Vesper / key dragon — accept "dragon" and "vesper". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via dragon.wav. Thank-yous thrum / glow / incline. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `dragon-tricks.js`. True house-dragon desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol or *Dragon electrical (Relay/Fuse/Ground) clones. Bird ultra (Soot→Ember) + Miso→Sol done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Nori / ball_python (skip Ember). No cry inventing beyond house dragon.wav prefer. Never retouch Rui sprites. */
+/** Vesper ground tricks while idle — ultra-polish pass. House dragon — sprawl / guard / smolder / claim / fold / ruff / scrape personality (wyrm on the mantel; sleeping-dragon desk life). Sprawl heat-hold without naming bask/flatten/drape (window-play owns those); guard watchful rise without naming alert/loaf; smolder breath-glow without naming huff/steam thank-you collision; claim blotter plant without naming hoard special; fold wing-tuck settle without naming curl/coil; ruff neck-ruff flare without naming dewlap/fan/frill/mantle; scrape claw-scrape mark without naming scratch/dig. Window-play DRAPE unchanged — never names a trick `drape`. Window-play BASK/COIL untouched — never names `bask` or `coil`. Special `hoard` stays the special. Guest slug Vesper / key dragon — accept "dragon" and "vesper". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via dragon.wav. Thank-yous thrum / glow / incline. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `dragon-tricks.js`. True house-dragon desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol or *Dragon electrical (Relay/Fuse/Ground) clones. Bird ultra (Soot→Ember) + Miso→Sol done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip birds. prefersHouseCry via dragon.wav. Amplitudes raised toward Rui richness; denser waits/weights (SPRAWL_HOLD=11.2 RELEASE_S=1.18). Next leftover Ember / phoenix. Catalog 221. Never retouch Rui sprites. */
 
 export const TRICK_KEY = "dragon";
 export const TRICKS = ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"] as const;
@@ -52,8 +52,8 @@ export const HAPPY_DUR: Record<DragonHappyKind, number> = {
 };
 
 /** Sprawl hold — Vesper sprawls on the mantel blotter. Not window-play BASK or FLATTEN. Sleeping-dragon heat-holding. */
-export const SPRAWL_HOLD = 12.8;
-export const RELEASE_S = 0.88;
+export const SPRAWL_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 
 export const DUR: Record<DragonTrickKind, number> = {
   sprawl: SPRAWL_HOLD + RELEASE_S,
@@ -93,11 +93,10 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: DragonTrickKind) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "sprawl") return 38 + roll * 24;
-  if (kind === "guard" || kind === "smolder") return 11 + roll * 8;
-  if (kind === "claim" || kind === "fold" || kind === "scrape") return 10 + roll * 8;
-  if (kind === "ruff") return 12 + roll * 9;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "sprawl") return 40 + roll * 26;
+  if (kind === "guard" || kind === "ruff" || kind === "smolder") return 12.8 + roll * 9.4;
+  if (kind === "claim" || kind === "fold" || kind === "scrape") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 export function pickTrick(rand?: number, musicOn = false, lastKind?: DragonTrickKind | null): DragonTrickKind {
@@ -106,7 +105,7 @@ export function pickTrick(rand?: number, musicOn = false, lastKind?: DragonTrick
   const pool = TRICKS.filter((k) => k !== lastKind);
   const list = pool.length ? pool : [...TRICKS];
   const weights = list.map((k) =>
-    k === "sprawl" ? 0.55 : k === "guard" || k === "ruff" || k === "smolder" ? 1.15 : 1
+    k === "sprawl" ? 0.72 : k === "guard" || k === "ruff" || k === "smolder" ? 1.28 : k === "claim" || k === "fold" ? 1.18 : 1.08
   );
   let total = 0;
   for (let i = 0; i < weights.length; i++) total += weights[i]!;
@@ -187,43 +186,43 @@ export function thrumPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.thrum));
   if (u < 0.18) {
     const s = u / 0.18;
-    return { lift: s * 4.4, rot: s * 14, dx: 0, anim: "sit" as const };
+    return { lift: s * 5.3, rot: s * 16.8, dx: 0, anim: "sit" as const };
   }
   if (u < 0.78) {
     return {
-      lift: 4.4 + Math.abs(Math.sin(t * 5.2)) * 2.6,
-      rot: 14 + Math.sin(t * 4.4) * 10,
+      lift: 5.3 + Math.abs(Math.sin(t * 5.2)) * 3.1,
+      rot: 16.8 + Math.sin(t * 4.4) * 12,
       dx: 0,
       anim: "sit" as const,
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 4.4 * (1 - s), rot: 14 * (1 - s), dx: 0, anim: "idle" as const };
+  return { lift: 5.3 * (1 - s), rot: 16.8 * (1 - s), dx: 0, anim: "idle" as const };
 }
 
 export function glowPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.glow));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 5.6, rot: -s * 16, dx: 0, anim: "sit" as const };
+    return { lift: s * 6.7, rot: -s * 19.2, dx: 0, anim: "sit" as const };
   }
   if (u < 0.86) {
     return {
-      lift: 5.6 + Math.abs(Math.sin(t * 10)) * 3.2,
-      rot: -16 + Math.sin(t * 12) * 18,
-      dx: Math.sin(t * 6) * 1.2,
+      lift: 6.7 + Math.abs(Math.sin(t * 10)) * 3.8,
+      rot: -19.2 + Math.sin(t * 12) * 21.6,
+      dx: Math.sin(t * 6) * 1.4,
       anim: "sit" as const,
     };
   }
   const s = (u - 0.86) / 0.14;
-  return { lift: 5.6 * (1 - s), rot: -16 * (1 - s), dx: 0, anim: "sit" as const };
+  return { lift: 6.7 * (1 - s), rot: -19.2 * (1 - s), dx: 0, anim: "sit" as const };
 }
 
 export function inclinePose(t: number) {
   return {
-    lift: Math.abs(Math.sin(t * 3.4)) * 3.8 + 1.2,
-    rot: -14 + Math.sin(t * 3.0) * 12,
-    dx: Math.sin(t * 2.4) * 1.4,
+    lift: Math.abs(Math.sin(t * 3.4)) * 4.6 + 1.4,
+    rot: -16.8 + Math.sin(t * 3.0) * 14.4,
+    dx: Math.sin(t * 2.4) * 1.7,
     anim: "talk" as const,
   };
 }
@@ -298,15 +297,15 @@ function smoothstep(t: number) {
 /** Sprawl — sleeping-dragon desk sprawl on the blotter. Heat-holding. Not window-play DRAPE or BASK. Ethogram sit_hold true. */
 export function sprawlPose(t: number) {
   return {
-    lift: 2.2 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
-    rot: 30 + Math.sin(t * 2.4) * 12 + Math.sin(t * 4.6) * 6,
+    lift: 2.6 + Math.sin(t * 1.7) * 3.4 + Math.abs(Math.sin(t * 3.4)) * 1.9,
+    rot: 36 + Math.sin(t * 2.4) * 14.4 + Math.sin(t * 4.6) * 7.2,
   };
 }
 
 /** Soft lift — Vesper leaves the mantel sprawl; stays on the desk. Not window-play leave. */
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: (2.2 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)), rot: 30 * (1 - u) };
+  return { lift: (2.6 + 3.4) * (1 - Math.sin(u * Math.PI * 0.5)), rot: 36 * (1 - u) };
 }
 
 /** Guard — watchful province turn on the mantel. Not earth bed. Not window-play DRAPE. Ethogram watch true. */
@@ -314,23 +313,23 @@ export function guardPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.guard));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 4.6, rot: s * 18 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 5.5, rot: s * 21.6 * facing, anim: "sit" as const };
   }
   if (u < 0.86) {
     const s = (u - 0.14) / 0.72;
     const sweep = Math.sin(s * Math.PI * 2.4);
     return {
-      x: fromX + facing * Math.sin(s * Math.PI) * 1.6,
-      lift: 4.6 + Math.abs(sweep) * 4.2,
-      rot: facing * (18 + sweep * 16),
+      x: fromX + facing * Math.sin(s * Math.PI) * 1.9,
+      lift: 5.5 + Math.abs(sweep) * 5.0,
+      rot: facing * (21.6 + sweep * 19.2),
       anim: "talk" as const,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX,
-    lift: 4.6 * (1 - s),
-    rot: facing * 9 * (1 - s),
+    lift: 5.5 * (1 - s),
+    rot: facing * 10.8 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -340,23 +339,23 @@ export function smolderPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.smolder));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 3.8, rot: s * 12 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 4.6, rot: s * 14.4 * facing, anim: "sit" as const };
   }
   if (u < 0.86) {
     const s = (u - 0.12) / 0.74;
     const breath = Math.abs(Math.sin(s * Math.PI * 3.2));
     return {
-      x: fromX + facing * Math.sin(s * Math.PI) * 1.2,
-      lift: 3.8 + breath * 4.6,
-      rot: facing * (12 + breath * 14),
+      x: fromX + facing * Math.sin(s * Math.PI) * 1.4,
+      lift: 4.6 + breath * 5.5,
+      rot: facing * (14.4 + breath * 16.8),
       anim: "sit" as const,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX,
-    lift: 3.8 * (1 - s),
-    rot: facing * 6 * (1 - s),
+    lift: 4.6 * (1 - s),
+    rot: facing * 7.2 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -366,23 +365,23 @@ export function claimPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.claim));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 5.2, rot: -s * 14 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 6.2, rot: -s * 16.8 * facing, anim: "sit" as const };
   }
   if (u < 0.86) {
     const s = (u - 0.12) / 0.74;
     const plant = Math.abs(Math.sin(s * Math.PI * 2.4));
     return {
-      x: fromX + facing * (5.5 * smoothstep(s) + plant * 1.4),
-      lift: 5.2 + plant * 4.8,
-      rot: facing * (-14 + plant * 18),
+      x: fromX + facing * (6.6 * smoothstep(s) + plant * 1.7),
+      lift: 6.2 + plant * 5.8,
+      rot: facing * (-16.8 + plant * 21.6),
       anim: "play" as const,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
-    x: fromX + facing * 5.5,
-    lift: 5.2 * (1 - s),
-    rot: facing * -7 * (1 - s),
+    x: fromX + facing * 6.6,
+    lift: 6.2 * (1 - s),
+    rot: facing * -8.4 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -392,23 +391,23 @@ export function foldPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.fold));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 5.0, rot: -s * 22 * facing, anim: "play" as const };
+    return { x: fromX, lift: s * 6.0, rot: -s * 26.4 * facing, anim: "play" as const };
   }
   if (u < 0.78) {
     const s = (u - 0.16) / 0.62;
     const tuck = smoothstep(s);
     return {
-      x: fromX + facing * Math.sin(s * Math.PI) * 1.8,
-      lift: 5.0 * (1 - tuck * 0.45),
-      rot: facing * (-22 + tuck * 28),
+      x: fromX + facing * Math.sin(s * Math.PI) * 2.2,
+      lift: 6.0 * (1 - tuck * 0.45),
+      rot: facing * (-26.4 + tuck * 33.6),
       anim: "sit" as const,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 5.0 * 0.55 * (1 - s),
-    rot: facing * 8 * (1 - s),
+    lift: 6.0 * 0.55 * (1 - s),
+    rot: facing * 9.6 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -419,23 +418,23 @@ export function ruffPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.ruff));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 4.8, rot: s * 20 * facing, anim: "talk" as const };
+    return { x: fromX, lift: s * 5.8, rot: s * 24 * facing, anim: "talk" as const };
   }
   if (u < 0.86) {
     const s = (u - 0.14) / 0.72;
     const flare = Math.abs(Math.sin(s * Math.PI * 2.8));
     return {
-      x: fromX + facing * Math.sin(s * Math.PI) * 1.4,
-      lift: 4.8 + flare * 5.2,
-      rot: facing * (20 + flare * 18),
+      x: fromX + facing * Math.sin(s * Math.PI) * 1.7,
+      lift: 5.8 + flare * 6.2,
+      rot: facing * (24 + flare * 21.6),
       anim: "talk" as const,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX,
-    lift: 4.8 * (1 - s),
-    rot: facing * 10 * (1 - s),
+    lift: 5.8 * (1 - s),
+    rot: facing * 12 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -445,23 +444,23 @@ export function scrapePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.scrape));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 2.8, rot: s * 16 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 3.4, rot: s * 19.2 * facing, anim: "sit" as const };
   }
   if (u < 0.88) {
     const s = (u - 0.12) / 0.76;
     const drag = Math.sin(s * Math.PI * 3.6);
     return {
-      x: fromX + facing * (Math.abs(drag) * 8.5 + s * 2.2),
-      lift: 2.8 + Math.abs(drag) * 7.2,
-      rot: facing * (16 + drag * 32),
+      x: fromX + facing * (Math.abs(drag) * 10.2 + s * 2.6),
+      lift: 3.4 + Math.abs(drag) * 8.6,
+      rot: facing * (19.2 + drag * 38.4),
       anim: "play" as const,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
   return {
-    x: fromX + facing * 6.0,
-    lift: 2.8 * (1 - s),
-    rot: facing * 8 * (1 - s),
+    x: fromX + facing * 7.2,
+    lift: 3.4 * (1 - s),
+    rot: facing * 9.6 * (1 - s),
     anim: "sit" as const,
   };
 }
