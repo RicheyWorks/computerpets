@@ -257,9 +257,9 @@ test("ground registry keeps prior guests gated; Wick selectable; no thread/scurr
   assert.equal(Parrot.TRICK_KEY, "parrot");
   assert.equal(T.TRICK_KEY, "ferret");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...Relay.TRICKS], ["click", "latch", "arc", "buzz", "switch"]);
-  assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
-  assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
+  assert.deepEqual([...Relay.TRICKS], ["contactclick", "latchseat", "arcflick", "coilbuzz", "poleswitch", "armaturetap", "relayhush"]);
+  assert.deepEqual([...Fuse.TRICKS], ["railseat", "holdcurrent", "blowclear", "reseatsnap", "cartridgerattle", "bladeflash", "fusehush"]);
+  assert.deepEqual([...Earth.TRICKS], ["lugstrap", "earthseat", "heaveplate", "bedsettle", "soilgrip", "plateclamp", "groundhush"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
@@ -440,11 +440,12 @@ test("ultra-polish: Wick tube/romp/corkscrew/slink lifts are Rui-visible (not mi
   assert.equal(T.DUR.corkscrew, Overlay.DUR.corkscrew);
   assert.equal(T.DUR.slink, Overlay.DUR.slink);
   assert.equal(T.TUBE_HOLD, Overlay.TUBE_HOLD);
-  assert.equal(T.TUBE_HOLD, 14.4);
-  assert.ok(T.nextTrickWait(true, 0, "tube") > 40);
+  assert.equal(T.TUBE_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "tube") > 39);
 });
 
-test("notes: Wick idle-life ultra done; Burr / hedgehog + Floss / chinchilla ultra next-or-done; following house-order ultra guest is Bloom / axolotl (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip bird; skip Ember if bird)", () => {
+test("notes: Wick Rui-dense ultra (TUBE_HOLD=11.2); next house-order densify leftover after early house guests: Burr / hedgehog then Floss / chinchilla", () => {
   assert.deepEqual([...T.TRICKS], ["tube", "romp", "steal", "puff", "noodle", "corkscrew", "slink"]);
   assert.equal(T.TRICKS.includes("thread"), false);
   assert.equal(Overlay.TRICKS.includes("corkscrew"), true);
