@@ -416,7 +416,7 @@ test("Hold tricks start only on idle ground", () => {
   assert.equal(Umbral.TRICKS.includes("silhouette"), true);
   assert.equal(Axolotl.TRICKS.includes("gill"), true);
   assert.equal(Turtle.TRICKS.includes("soak"), true);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("railseat"), true);
   assert.deepEqual([...Umbral.TRICKS], ["silhouette", "adumbrate", "occultation", "antumbra", "caligo", "sfumato", "tenebrae"]);
   assert.deepEqual([...OverlayUmbral.TRICKS], ["silhouette", "adumbrate", "occultation", "antumbra", "caligo", "sfumato", "tenebrae"]);
   assert.deepEqual([...Umbral.HAPPY], ["skotos", "umbriel", "softfall"]);
@@ -533,7 +533,7 @@ test("Hold tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("frost"), false);
   assert.equal(T.TRICKS.includes("halo"), false);
   assert.equal(T.HAPPY.includes("halo"), false);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("railseat"), true);
   assert.equal(Umbral.TRICKS.includes("silhouette"), true);
   assert.equal(Magneton.TRICKS.includes("lodestone"), true);
   assert.equal(Halovore.TRICKS.includes("halite"), true);
@@ -633,7 +633,7 @@ test("Hold tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("frost"), false);
   assert.equal(T.TRICKS.includes("halo"), false);
   assert.equal(T.HAPPY.includes("halo"), false);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("railseat"), true);
   assert.equal(Magneton.TRICKS.includes("lodestone"), true);
   assert.equal(Halovore.TRICKS.includes("halite"), true);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
@@ -710,7 +710,7 @@ test("Hold tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("frost"), false);
   assert.equal(T.TRICKS.includes("halo"), false);
   assert.equal(T.HAPPY.includes("halo"), false);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("railseat"), true);
   assert.equal(Halovore.TRICKS.includes("halite"), true);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.deepEqual([...Nexus.TRICKS], ["plexus", "splice", "braid", "weft", "mesh", "fascicle", "sennit"]);
@@ -1263,6 +1263,11 @@ test("holdfast/haptera/blade/pneumatocyst/meristem/sorus/sporophyll are Kelp-tru
   assert.equal(neo.kind, "sporophyll");
   h = T.stepTrick(neo, 0.5, ground);
   assert.ok(h.lift > 1.0, "sporophyll should be Rui-visible");
+  assert.equal(T.MERISTEM_HOLD, Overlay.MERISTEM_HOLD);
+  assert.equal(T.MERISTEM_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "meristem") > 39);
+  assert.ok(T.MERISTEM_HOLD <= 12);
   const sinusDone = T.stepTrick(sinus, T.DUR.blade + 0.01, ground);
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
@@ -1438,7 +1443,7 @@ test("holdfast/haptera/blade/pneumatocyst/meristem/sorus/sporophyll are Kelp-tru
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -1819,7 +1824,7 @@ globalThis.PetLeechTricks = OverlayLeech;
   assert.deepEqual([...OverlayNimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Nimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("railseat"), true);
   assert.equal(T.TRICKS.includes("current"), false);
   assert.equal(Magneton.TRICKS.includes("lodestone"), true);
   assert.equal(T.TRICKS.includes("lodestone"), false);
@@ -1870,7 +1875,7 @@ globalThis.PetLeechTricks = OverlayLeech;
   assert.deepEqual([...OverlayNimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Nimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("railseat"), true);
   assert.equal(T.TRICKS.includes("current"), false);
   assert.equal(Halovore.TRICKS.includes("halite"), true);
   assert.equal(T.TRICKS.includes("halite"), false);
@@ -2151,7 +2156,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(T.TRICKS.includes("thatch"), false);
   assert.equal(T.TRICKS.includes("unfurl"), false);
   assert.equal(T.TRICKS.includes("hinge"), false);
-  assert.equal(Relay.TRICKS.includes("latch"), true);
+  assert.equal(Relay.TRICKS.includes("latchseat"), true);
   assert.equal(T.TRICKS.includes("latch"), false);
   assert.equal(T.TRICKS.includes("swell"), false);
   assert.equal(T.TRICKS.includes("lift"), false);
@@ -2167,7 +2172,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Hold ultra idle-life done; next house-order ultra is Bell / stentor", () => {
+test("notes: Hold Rui-dense ultra (MERISTEM_HOLD=11.2); next leftover Spin / chlamydomonas", () => {
   assert.equal(T.TRICK_KEY, "kelp");
   assert.deepEqual([...T.TRICKS], ["holdfast", "haptera", "blade", "pneumatocyst", "meristem", "sorus", "sporophyll"]);
   assert.deepEqual([...T.HAPPY], ["pyrifera", "integrifolia", "angustifolia"]);
@@ -2229,7 +2234,7 @@ test("notes: Hold ultra idle-life done; next house-order ultra is Bell / stentor
   assert.equal(OverlayGround.tricksFor("pulse"), OverlayMoonJelly);
   assert.equal(OverlayGround.tricksFor("bloom"), OverlayAxolotl);
   assert.equal(OverlayGround.tricksFor("ink"), OverlayTurtle);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("railseat"), true);
   assert.equal(T.TRICKS.includes("current"), false);
   assert.equal(Toad.TRICKS.includes("verruca"), true);
   assert.equal(T.TRICKS.includes("verruca"), false);
@@ -2356,9 +2361,9 @@ test("notes: Hold ultra idle-life done; next house-order ultra is Bell / stentor
   assert.equal(T.TRICKS.includes("dart"), false);
   assert.equal(Goldfish.TRICKS.includes("flare"), true);
   assert.equal(T.TRICKS.includes("flare"), false);
-  // Recommend next house-order ultra guest (do not implement): Hold / kelp.
-  assert.equal("kelp", "kelp");
-  assert.equal("Hold", "Hold");
+  // Recommend next leftover (do not implement): Spin / chlamydomonas.
+  assert.equal("chlamydomonas", "chlamydomonas");
+  assert.equal("Spin", "Spin");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("chelate"), false);
   assert.equal(Salamander.TRICKS.includes("holdfast"), false);
