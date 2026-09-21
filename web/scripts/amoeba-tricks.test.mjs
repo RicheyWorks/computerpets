@@ -2145,7 +2145,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Reach Rui-dense ultra (PROTEUS_HOLD=11.2); Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Hook now Rue-dense; next leftover Dee / chickadee", () => {
+test("notes: Reach Rui-dense ultra (PROTEUS_HOLD=11.2); Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Dee now Rue-dense; next leftover Brick / robin", () => {
   assert.equal(T.TRICK_KEY, "amoeba");
   assert.deepEqual([...T.TRICKS], ["pseudopod", "ectoplasm", "endoplasm", "foodcup", "proteus", "uroid", "streaming"]);
   assert.deepEqual([...T.HAPPY], ["chaos", "discoides", "dubia"]);
