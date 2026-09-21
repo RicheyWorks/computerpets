@@ -438,7 +438,7 @@ test("ultra-polish: Quill quote/strut/fan/pineye/invert lifts are Rui-visible (n
   assert.ok(T.nextTrickWait(true, 0, "quote") > T.nextTrickWait(true, 0, "strut"));
 });
 
-test("notes: Quill Rui-dense ultra (QUOTE_HOLD=11.2); Brood now Rue-dense; Frill now Rue-dense; Cap now Rue-dense; next leftover Lattice / morel", () => {
+test("notes: Quill Rui-dense ultra (QUOTE_HOLD=11.2); Brood now Rue-dense; Frill now Rue-dense; Cap now Rue-dense; Lattice now Rue-dense; next leftover Horn / chanterelle", () => {
   assert.deepEqual([...T.TRICKS], ["quote", "strut", "fan", "crack", "flash", "pineye", "invert"]);
   assert.equal(T.TRICKS.includes("hook"), false);
   assert.equal(T.TRICKS.includes("preen"), false);
@@ -449,5 +449,5 @@ test("notes: Quill Rui-dense ultra (QUOTE_HOLD=11.2); Brood now Rue-dense; Frill
   assert.equal(T.TRICKS.includes("rockhop"), false);
   assert.equal(T.TRICKS.includes("roost"), false);
   assert.equal(T.TRICKS.includes("berry"), false);
-  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Lattice / morel.
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Horn / chanterelle.
 });
