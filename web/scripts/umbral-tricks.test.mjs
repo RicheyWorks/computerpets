@@ -306,7 +306,7 @@ test("Hush tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("frost"), false);
   assert.equal(T.TRICKS.includes("halo"), false);
   assert.equal(T.HAPPY.includes("halo"), false);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("holdcurrent"), true);
   assert.equal(Magneton.TRICKS.includes("lodestone"), true);
   assert.equal(Halovore.TRICKS.includes("halite"), true);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
@@ -383,7 +383,7 @@ test("Hush tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("frost"), false);
   assert.equal(T.TRICKS.includes("halo"), false);
   assert.equal(T.HAPPY.includes("halo"), false);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("holdcurrent"), true);
   assert.equal(Halovore.TRICKS.includes("halite"), true);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.deepEqual([...Nexus.TRICKS], ["plexus", "splice", "braid", "weft", "mesh", "fascicle", "sennit"]);
@@ -906,6 +906,11 @@ test("silhouette/adumbrate/occultation/antumbra/caligo/sfumato/tenebrae are shad
   assert.equal(held.anim, "sit");
   assert.ok(held.rot !== 0 || held.lift > 0);
   const release = T.stepTrick(bole, T.CALIGO_HOLD + 0.2, ground);
+  assert.equal(T.CALIGO_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.equal(T.CALIGO_HOLD, Overlay.CALIGO_HOLD);
+  assert.equal(T.RELEASE_S, Overlay.RELEASE_S);
+  assert.ok(T.CALIGO_HOLD <= 12);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
   const doneBole = T.stepTrick(bole, T.DUR.caligo + 0.1, ground);
@@ -1110,7 +1115,7 @@ test("silhouette/adumbrate/occultation/antumbra/caligo/sfumato/tenebrae are shad
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -1455,7 +1460,7 @@ globalThis.PetUmbralTricks = Overlay;
   assert.deepEqual([...OverlayNimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Nimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("holdcurrent"), true);
   assert.equal(T.TRICKS.includes("current"), false);
   assert.equal(Magneton.TRICKS.includes("lodestone"), true);
   assert.equal(T.TRICKS.includes("lodestone"), false);
@@ -1495,7 +1500,7 @@ globalThis.PetUmbralTricks = Overlay;
   assert.deepEqual([...OverlayNimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Nimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("holdcurrent"), true);
   assert.equal(T.TRICKS.includes("current"), false);
   assert.equal(Halovore.TRICKS.includes("halite"), true);
   assert.equal(T.TRICKS.includes("halite"), false);
@@ -1746,7 +1751,8 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Hush ultra idle-life done; next house-order ultra is Reed / frog", () => {
+test("notes: Hush Rui-dense ultra (CALIGO_HOLD=11.2); next leftover Arca / cyst", () => {
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Arca / cyst.
   assert.equal(T.TRICK_KEY, "umbral");
   assert.deepEqual([...T.TRICKS], ["silhouette", "adumbrate", "occultation", "antumbra", "caligo", "sfumato", "tenebrae"]);
   assert.deepEqual([...T.HAPPY], ["skotos", "umbriel", "softfall"]);
@@ -1780,7 +1786,7 @@ test("notes: Hush ultra idle-life done; next house-order ultra is Reed / frog", 
   assert.equal(OverlayGround.wantsThankYou("choir"), true);
   assert.equal(OverlayGround.tricksFor("gleam"), OverlayPhotovore);
   assert.equal(OverlayGround.tricksFor("pulse"), OverlayMoonJelly);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("holdcurrent"), true);
   assert.equal(T.TRICKS.includes("current"), false);
   assert.equal(Magneton.TRICKS.includes("lodestone"), true);
   assert.equal(T.TRICKS.includes("lodestone"), false);
@@ -1788,9 +1794,8 @@ test("notes: Hush ultra idle-life done; next house-order ultra is Reed / frog", 
   assert.equal(T.TRICKS.includes("halite"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next house-order ultra (do not implement): Reed / frog.
-  assert.equal("frog", "frog");
-  assert.equal("Reed", "Reed");
+  assert.equal("cyst", "cyst");
+  assert.equal("Arca", "Arca");
 });
 
 
