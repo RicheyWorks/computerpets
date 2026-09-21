@@ -1921,7 +1921,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Hinge Rui-dense ultra (UNIONID_HOLD=11.2); Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; next leftover Rose / haloarchaea", () => {
+test("notes: Hinge Rui-dense ultra (UNIONID_HOLD=11.2); Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; next leftover Soot / crow", () => {
   assert.equal(T.TRICK_KEY, "mussel");
   assert.deepEqual([...T.TRICKS], ["adductor", "protractor", "inhalant", "ctenidium", "unionid", "ligament", "glochid"]);
   assert.deepEqual([...T.HAPPY], ["complanata", "alate", "elliptio"]);
@@ -2048,9 +2048,9 @@ test("notes: Hinge Rui-dense ultra (UNIONID_HOLD=11.2); Latch now Rue-dense; Pri
   assert.equal(OverlayGround.tricksFor("hinge"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("mussel"), true);
   assert.equal(OverlayGround.wantsThankYou("hinge"), true);
-  // Recommend next leftover (do not implement): Rose / haloarchaea.
-  assert.equal("haloarchaea", "haloarchaea");
-  assert.equal("Rose", "Rose");
+  // Recommend next leftover (do not implement): Soot / crow.
+  assert.equal("crow", "crow");
+  assert.equal("Soot", "Soot");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("chelate"), false);
   assert.equal(Salamander.TRICKS.includes("adductor"), false);
