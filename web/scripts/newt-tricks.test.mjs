@@ -1998,7 +1998,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Eft Rui-dense ultra (CAUDATE_HOLD=11.2); Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; next leftover Hinge / mussel", () => {
+test("notes: Eft Rui-dense ultra (CAUDATE_HOLD=11.2); Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; next leftover Latch / leech", () => {
   assert.equal(T.TRICK_KEY, "newt");
   assert.deepEqual([...T.TRICKS], ["crest", "caudal", "filament", "costal", "caudate", "hedonic", "aposematic"]);
   assert.deepEqual([...T.HAPPY], ["vermilion", "eftish", "palmate"]);
@@ -2076,9 +2076,9 @@ test("notes: Eft Rui-dense ultra (CAUDATE_HOLD=11.2); Dapple now Rue-dense; Slip
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next leftover (do not implement): Hinge / mussel.
-  assert.equal("mussel", "mussel");
-  assert.equal("Hinge", "Hinge");
+  // Recommend next leftover (do not implement): Latch / leech.
+  assert.equal("leech", "leech");
+  assert.equal("Latch", "Latch");
 });
 
 
