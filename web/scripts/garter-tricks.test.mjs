@@ -422,7 +422,7 @@ test("ultra-polish: Sash seam/rounds/ribbon/creek lifts are Rui-visible (not mic
   assert.equal(T.HAPPY_DUR.copy, Overlay.HAPPY_DUR.copy);
 });
 
-test("notes: Sash Rui-dense ultra (SEAM_HOLD=11.2); Lula densified; Coral densified; Blush densified; Atlas densified; Cup densified; Sepia densified; Chamber densified; Pulse densified; Ochre densified; Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; next leftover Felt / moss", () => {
+test("notes: Sash Rui-dense ultra (SEAM_HOLD=11.2); Lula densified; Coral densified; Blush densified; Atlas densified; Cup densified; Sepia densified; Chamber densified; Pulse densified; Ochre densified; Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; Felt densified; next leftover Vein / maidenhair", () => {
   assert.equal(T.TRICK_KEY, "garter");
   assert.equal(T.wantsThankYou("sash"), true);
   globalThis.PetGarterTricks = Overlay;

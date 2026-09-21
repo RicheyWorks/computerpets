@@ -504,7 +504,7 @@ test("ultra-polish: Atlas legend/canopy/inset lifts are Rui-visible (not micro i
   assert.ok(T.nextTrickWait(true, 0, "legend") > 39);
 });
 
-test("notes: Atlas Rui-dense ultra (LEGEND_HOLD=11.2); Cup densified; Sepia densified; Chamber densified; Pulse densified; Ochre densified; Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; next leftover Felt / moss", () => {
+test("notes: Atlas Rui-dense ultra (LEGEND_HOLD=11.2); Cup densified; Sepia densified; Chamber densified; Pulse densified; Ochre densified; Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; Felt densified; next leftover Vein / maidenhair", () => {
   assert.equal(T.TRICK_KEY, "carpet_python");
   assert.equal(T.wantsThankYou("atlas"), true);
   assert.equal(OverlayGround.tricksFor("boa"), OverlayBoa);

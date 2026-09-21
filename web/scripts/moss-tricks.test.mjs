@@ -268,7 +268,7 @@ test("tuft/bead/spore/cushion/thatch/rhizoid/seta are house-moss-true, not copie
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("pulse"), false);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -577,9 +577,13 @@ test("ground registry keeps prior guests gated; Felt selectable; prior guests st
   assert.equal(T.TRICKS.includes("creep"), false);
   assert.equal(T.TRICKS.includes("lean"), false);
   assert.equal(T.HAPPY.includes("swell"), false);
+  assert.equal(T.THATCH_HOLD, Overlay.THATCH_HOLD);
+  assert.equal(T.THATCH_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "thatch") > 39);
 });
 
-test("notes: Felt idle-life done; next house-order guest still lacking tricks is Vein / maidenhair", () => {
+test("notes: Felt Rui-dense ultra (THATCH_HOLD=11.2); next leftover Vein / maidenhair", () => {
   assert.equal(T.TRICK_KEY, "moss");
   assert.equal(T.wantsThankYou("felt"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
