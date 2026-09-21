@@ -2172,7 +2172,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Hold Rui-dense ultra (MERISTEM_HOLD=11.2); Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Wedge now Rue-dense; next leftover Heart / barn_owl", () => {
+test("notes: Hold Rui-dense ultra (MERISTEM_HOLD=11.2); Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Heart now Rue-dense; next leftover Hook / red_tail", () => {
   assert.equal(T.TRICK_KEY, "kelp");
   assert.deepEqual([...T.TRICKS], ["holdfast", "haptera", "blade", "pneumatocyst", "meristem", "sorus", "sporophyll"]);
   assert.deepEqual([...T.HAPPY], ["pyrifera", "integrifolia", "angustifolia"]);

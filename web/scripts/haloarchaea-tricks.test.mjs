@@ -2979,7 +2979,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Rose Rui-dense ultra (RETINAL_HOLD=11.2); Wedge now Rue-dense; next leftover Heart / barn_owl", () => {
+test("notes: Rose Rui-dense ultra (RETINAL_HOLD=11.2); Heart now Rue-dense; next leftover Hook / red_tail", () => {
   assert.equal("Loom", "Loom");
   assert.equal("orb_weaver", "orb_weaver");
 
