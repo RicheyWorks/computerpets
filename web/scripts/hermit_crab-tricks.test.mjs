@@ -229,7 +229,8 @@ test("swap/antenna/scuttle/withdraw/vacancy/chela/bailer are house-hermit-true, 
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("pulse"), false);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -502,9 +503,13 @@ test("ultra-polish: Tenant withdraw/chela/bailer lifts are Rui-visible (not micr
   assert.ok(s2.lift > 0.5 || Math.abs(s2.rot) > 4 || Math.abs(s2.x - 80) > 0.5, `scuttle mid ${s2.lift}/${s2.rot}/${s2.x}`);
   assert.ok(Overlay.chelaPose && Overlay.bailerPose);
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.WITHDRAW_HOLD, Overlay.WITHDRAW_HOLD);
+  assert.equal(T.WITHDRAW_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "withdraw") > 39);
 });
 
-test("notes: Tenant idle-life ultra done; Anchor / seahorse ultra done; next house-order ultra guest is Kite / manta (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger + Anchor already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Tenant Rui-dense ultra (WITHDRAW_HOLD=11.2); next leftover Ledger / horseshoe_crab", () => {
   assert.equal(T.TRICK_KEY, "hermit_crab");
   assert.equal(T.wantsThankYou("tenant"), true);
   assert.equal(OverlayGround.tricksFor("hermit_crab"), Overlay);

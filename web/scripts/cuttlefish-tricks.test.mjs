@@ -381,7 +381,7 @@ test("ultra-polish: Sepia bone/strike/zebra lifts are Rui-visible (not micro idl
   assert.ok(T.nextTrickWait(true, 0, "bone") > 39);
 });
 
-test("notes: Sepia Rui-dense ultra (BONE_HOLD=11.2); Chamber densified; Pulse densified; Ochre densified; next leftover Tenant / hermit_crab", () => {
+test("notes: Sepia Rui-dense ultra (BONE_HOLD=11.2); Chamber densified; Pulse densified; Ochre densified; Tenant densified; next leftover Ledger / horseshoe_crab", () => {
   assert.equal(T.TRICK_KEY, "cuttlefish");
   assert.equal(T.wantsThankYou("sepia"), true);
   assert.equal(OverlayGround.tricksFor("cuttlefish"), Overlay);
@@ -398,7 +398,7 @@ test("notes: Sepia Rui-dense ultra (BONE_HOLD=11.2); Chamber densified; Pulse de
   assert.equal(OverlayGround.tricksFor("coin"), OverlayGoldfish);
   assert.equal(OverlayGround.tricksFor("axolotl"), OverlayAxolotl);
   assert.equal(OverlayGround.tricksFor("bloom"), OverlayAxolotl);
-  assert.equal(OverlayGround.tricksFor("hermit_crab") == null, true);
-  assert.equal(OverlayGround.wantsThankYou("hermit_crab"), false);
-  assert.equal(OverlayGround.tricksFor("tenant") == null, true);
+  assert.equal(OverlayGround.tricksFor("horseshoe_crab") == null, true);
+  assert.equal(OverlayGround.wantsThankYou("horseshoe_crab"), false);
+  assert.equal(OverlayGround.tricksFor("ledger") == null, true);
 });
