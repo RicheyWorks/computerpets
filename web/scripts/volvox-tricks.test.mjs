@@ -2158,7 +2158,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Orb Rui-dense ultra (COENOBIUM_HOLD=11.2); Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Wedge now Rue-dense; next leftover Heart / barn_owl", () => {
+test("notes: Orb Rui-dense ultra (COENOBIUM_HOLD=11.2); Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Heart now Rue-dense; next leftover Hook / red_tail", () => {
   assert.equal(T.TRICK_KEY, "volvox");
   assert.deepEqual([...T.TRICKS], ["colony", "inversion", "phialopore", "somatic", "coenobium", "daughter", "gonidia"]);
   assert.deepEqual([...T.HAPPY], ["aureus", "carteri", "globator"]);

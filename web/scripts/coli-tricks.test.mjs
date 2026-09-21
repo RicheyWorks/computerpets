@@ -2968,7 +2968,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Rod Rui-dense ultra (NUCLEOID_HOLD=11.2); Rose now Rue-dense; Wedge now Rue-dense; next leftover Heart / barn_owl", () => {
+test("notes: Rod Rui-dense ultra (NUCLEOID_HOLD=11.2); Rose now Rue-dense; Heart now Rue-dense; next leftover Hook / red_tail", () => {
   assert.equal("Rose", "Rose");
   assert.equal("haloarchaea", "haloarchaea");
 

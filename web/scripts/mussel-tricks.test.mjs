@@ -1921,7 +1921,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Hinge Rui-dense ultra (UNIONID_HOLD=11.2); Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Wedge now Rue-dense; next leftover Heart / barn_owl", () => {
+test("notes: Hinge Rui-dense ultra (UNIONID_HOLD=11.2); Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Heart now Rue-dense; next leftover Hook / red_tail", () => {
   assert.equal(T.TRICK_KEY, "mussel");
   assert.deepEqual([...T.TRICKS], ["adductor", "protractor", "inhalant", "ctenidium", "unionid", "ligament", "glochid"]);
   assert.deepEqual([...T.HAPPY], ["complanata", "alate", "elliptio"]);
