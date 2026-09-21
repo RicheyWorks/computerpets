@@ -384,7 +384,7 @@ test("ultra-polish: Jade bracelet/sway/jewel/liana/arbor lifts are Rui-visible (
   assert.equal(T.HAPPY_DUR.pendant, Overlay.HAPPY_DUR.pendant);
 });
 
-test("notes: Jade Rui-dense ultra (BRACELET_HOLD=11.2); Bluff densified; Sash densified; Lula densified; Coral densified; Blush densified; Atlas densified; Cup densified; Sepia densified; Chamber densified; Pulse densified; Ochre densified; next leftover Tenant / hermit_crab", () => {
+test("notes: Jade Rui-dense ultra (BRACELET_HOLD=11.2); Bluff densified; Sash densified; Lula densified; Coral densified; Blush densified; Atlas densified; Cup densified; Sepia densified; Chamber densified; Pulse densified; Ochre densified; Tenant densified; next leftover Ledger / horseshoe_crab", () => {
   assert.deepEqual([...T.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough", "liana", "arbor"]);
   assert.equal(T.TRICK_KEY, "green_tree_python");
   assert.equal(T.wantsThankYou("jade"), true);
