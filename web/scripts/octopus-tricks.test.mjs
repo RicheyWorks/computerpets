@@ -349,9 +349,13 @@ test("ultra-polish: Cup mantle/papilla/ooze lifts are Rui-visible (not micro idl
   assert.ok(v2.lift > 0.5 || Math.abs(v2.rot) > 4 || Math.abs(v2.x - 80) > 0.5, `veil mid ${v2.lift}/${v2.rot}/${v2.x}`);
   assert.ok(Overlay.papillaPose && Overlay.oozePose);
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.MANTLE_HOLD, Overlay.MANTLE_HOLD);
+  assert.equal(T.MANTLE_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "mantle") > 39);
 });
 
-test("notes: Cup idle-life ultra done; Sepia / cuttlefish ultra done; Chamber / nautilus ultra done; Pulse / moon_jelly ultra done; Anchor / seahorse ultra done; next house-order ultra guest is Kite / manta (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger + Anchor already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
+test("notes: Cup Rui-dense ultra (MANTLE_HOLD=11.2); next leftover Sepia / cuttlefish", () => {
   assert.equal(T.TRICK_KEY, "octopus");
   assert.equal(T.wantsThankYou("cup"), true);
   assert.equal(OverlayGround.tricksFor("octopus"), Overlay);
