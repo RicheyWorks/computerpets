@@ -331,7 +331,7 @@ test("Eft tricks start only on idle ground", () => {
   assert.equal(Umbral.TRICKS.includes("silhouette"), true);
   assert.equal(Axolotl.TRICKS.includes("gill"), true);
   assert.equal(Turtle.TRICKS.includes("soak"), true);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("railseat"), true);
   assert.deepEqual([...Umbral.TRICKS], ["silhouette", "adumbrate", "occultation", "antumbra", "caligo", "sfumato", "tenebrae"]);
   assert.deepEqual([...OverlayUmbral.TRICKS], ["silhouette", "adumbrate", "occultation", "antumbra", "caligo", "sfumato", "tenebrae"]);
   assert.deepEqual([...Umbral.HAPPY], ["skotos", "umbriel", "softfall"]);
@@ -448,7 +448,7 @@ test("Eft tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("frost"), false);
   assert.equal(T.TRICKS.includes("halo"), false);
   assert.equal(T.HAPPY.includes("halo"), false);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("railseat"), true);
   assert.equal(Umbral.TRICKS.includes("silhouette"), true);
   assert.equal(Magneton.TRICKS.includes("lodestone"), true);
   assert.equal(Halovore.TRICKS.includes("halite"), true);
@@ -548,7 +548,7 @@ test("Eft tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("frost"), false);
   assert.equal(T.TRICKS.includes("halo"), false);
   assert.equal(T.HAPPY.includes("halo"), false);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("railseat"), true);
   assert.equal(Magneton.TRICKS.includes("lodestone"), true);
   assert.equal(Halovore.TRICKS.includes("halite"), true);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
@@ -625,7 +625,7 @@ test("Eft tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("frost"), false);
   assert.equal(T.TRICKS.includes("halo"), false);
   assert.equal(T.HAPPY.includes("halo"), false);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("railseat"), true);
   assert.equal(Halovore.TRICKS.includes("halite"), true);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.deepEqual([...Nexus.TRICKS], ["plexus", "splice", "braid", "weft", "mesh", "fascicle", "sennit"]);
@@ -1162,6 +1162,10 @@ test("crest/caudal/filament/costal/caudate/hedonic/aposematic are salamandridae-
   assert.equal(aposematic.kind, "aposematic");
   let a = T.stepTrick(aposematic, 0.5, ground);
   assert.ok(a.lift > 1.0, "aposematic should be Rui-visible");
+  assert.equal(T.CAUDATE_HOLD, Overlay.CAUDATE_HOLD);
+  assert.equal(T.CAUDATE_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "caudate") > 39);
   assert.ok(T.CAUDATE_HOLD <= 12);
   const acorn = T.beginTrick("crest", 80, 1);
   assert.equal(acorn.anim, "play");
@@ -1354,7 +1358,7 @@ test("crest/caudal/filament/costal/caudate/hedonic/aposematic are salamandridae-
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -1703,7 +1707,7 @@ globalThis.PetNewtTricks = Overlay;
   assert.deepEqual([...OverlayNimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Nimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("railseat"), true);
   assert.equal(T.TRICKS.includes("current"), false);
   assert.equal(Magneton.TRICKS.includes("lodestone"), true);
   assert.equal(T.TRICKS.includes("lodestone"), false);
@@ -1743,7 +1747,7 @@ globalThis.PetNewtTricks = Overlay;
   assert.deepEqual([...OverlayNimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Nimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("railseat"), true);
   assert.equal(T.TRICKS.includes("current"), false);
   assert.equal(Halovore.TRICKS.includes("halite"), true);
   assert.equal(T.TRICKS.includes("halite"), false);
@@ -1994,7 +1998,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Eft ultra idle-life done; next house-order ultra is Pinch / crayfish", () => {
+test("notes: Eft Rui-dense ultra (CAUDATE_HOLD=11.2); next leftover Dapple / salamander", () => {
   assert.equal(T.TRICK_KEY, "newt");
   assert.deepEqual([...T.TRICKS], ["crest", "caudal", "filament", "costal", "caudate", "hedonic", "aposematic"]);
   assert.deepEqual([...T.HAPPY], ["vermilion", "eftish", "palmate"]);
@@ -2046,7 +2050,7 @@ test("notes: Eft ultra idle-life done; next house-order ultra is Pinch / crayfis
   assert.equal(OverlayGround.tricksFor("pulse"), OverlayMoonJelly);
   assert.equal(OverlayGround.tricksFor("bloom"), OverlayAxolotl);
   assert.equal(OverlayGround.tricksFor("ink"), OverlayTurtle);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("railseat"), true);
   assert.equal(T.TRICKS.includes("current"), false);
   assert.equal(Toad.TRICKS.includes("verruca"), true);
   assert.equal(T.TRICKS.includes("verruca"), false);
@@ -2072,9 +2076,9 @@ test("notes: Eft ultra idle-life done; next house-order ultra is Pinch / crayfis
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next house-order ultra (do not implement): Pinch / crayfish.
-  assert.equal("crayfish", "crayfish");
-  assert.equal("Pinch", "Pinch");
+  // Recommend next leftover (do not implement): Dapple / salamander.
+  assert.equal("salamander", "salamander");
+  assert.equal("Dapple", "Dapple");
 });
 
 

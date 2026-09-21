@@ -1,4 +1,4 @@
-/** Eft ground tricks while idle — ultra-polish pass. House neighborly Salamandridae Crested/smooth-newt desk life — crest / caudal / filament / costal / caudate / hedonic / aposematic personality (dorsal crest raise, caudal aquatic undulation, palmate filament tip, costal-groove land crawl, long caudate metabolic hold, hedonic-gland courtship press, aposematic TTX warning flash — never named wait or wake or still or wiggle or dart or trail or paddle or newt or eft or frog or toad or reed or pebble or gular or nictitate or tympanum or iliac or lentic or toepad or webbing or verruca or burrow or parotoid or tubercle or bufonid or unken or cranial or gill or amble or mend or smile or plume or hop or puff or dig or soak or tuck or crane or plod or warning or cirrus as trick kinds; window-play TRAIL owns trail; ethogram softs + freeze own those words; Ink turtle owns paddle; Bloom owns gill/amble/mend/smile/plume; Reed owns gular/nictitate/tympanum/iliac/lentic/toepad/webbing; Pebble owns verruca/burrow/parotoid/tubercle/bufonid/unken/cranial; Milk owns warning; Drift owns cirrus; guest slug Eft / key newt only for isKey matching — accept "newt" and "eft"; do NOT name a trick "newt" or "eft" or "wait" or "wake" or "still" or "wiggle" or "dart" or "trail" or "paddle" or "frog" or "toad" or "reed" or "pebble" or "gular" or "lentic" or "verruca" or "bufonid" or "gill" or "hop" or "puff" or "dig" or "warning" or "cirrus") — not Pebble Bufonidae American-toad, not Reed Anura green-frog, not Arca sealed-vault, not Bloom axolotl, not Ink turtle, not Hush shade-umbra, not Beacon field-magnet, not Brine salt-brine, not Knot junction-weave, not Dusk twilight-belt, not Shard living-crystal, not Drift methane-cloud, not Choir chord-body, not Gleam lamp-drinker, not Blush rosy-boa; never named wait / wake / still / wiggle / dart / trail / paddle / newt / eft / frog / toad / reed / pebble / gular / nictitate / tympanum / iliac / lentic / toepad / webbing / verruca / burrow / parotoid / tubercle / bufonid / unken / cranial / loam / knurl / plump / chorus / rivulet / spring / gill / amble / mend / smile / plume / warning / cirrus / hop / puff / dig / freeze — Echo/Quill birds — do not copy. crest dorsal crest raise without naming trail, caudal caudal-fin aquatic undulation without naming paddle or wiggle or dart, filament palmate filament tip sway without naming trail, costal costal-groove land crawl without naming dig, caudate long Caudata metabolic hold, hedonic hedonic-gland courtship press (THE salamandrid courtship tell), aposematic aposematic TTX orange-warning flash (THE Notophthalmus toxicity tell); vermilion / eftish / palmate thank-yous. Feed-happy after eat. Card-open freeze and window-play TRAIL do not swallow a thank-you. Sleep, hide, leave win. Same map as desktop newt-tricks.js. Window-play TRAIL unchanged. Ethogram softs + freeze — never names wiggle/dart/still as trick kinds. Hinge owns the next seat. No cry inventing. Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via newt.wav. */
+/** Eft ground tricks while idle — ultra-polish pass. House neighborly Salamandridae Crested/smooth-newt desk life — crest / caudal / filament / costal / caudate / hedonic / aposematic personality (dorsal crest raise, caudal aquatic undulation, palmate filament tip, costal-groove land crawl, long caudate metabolic hold, hedonic-gland courtship press, aposematic TTX warning flash — never named wait or wake or still or wiggle or dart or trail or paddle or newt or eft or frog or toad or reed or pebble or gular or nictitate or tympanum or iliac or lentic or toepad or webbing or verruca or burrow or parotoid or tubercle or bufonid or unken or cranial or gill or amble or mend or smile or plume or hop or puff or dig or soak or tuck or crane or plod or warning or cirrus as trick kinds; window-play TRAIL owns trail; ethogram softs + freeze own those words; Ink turtle owns paddle; Bloom owns gill/amble/mend/smile/plume; Reed owns gular/nictitate/tympanum/iliac/lentic/toepad/webbing; Pebble owns verruca/burrow/parotoid/tubercle/bufonid/unken/cranial; Milk owns warning; Drift owns cirrus; guest slug Eft / key newt only for isKey matching — accept "newt" and "eft"; do NOT name a trick "newt" or "eft" or "wait" or "wake" or "still" or "wiggle" or "dart" or "trail" or "paddle" or "frog" or "toad" or "reed" or "pebble" or "gular" or "lentic" or "verruca" or "bufonid" or "gill" or "hop" or "puff" or "dig" or "warning" or "cirrus") — not Pebble Bufonidae American-toad, not Reed Anura green-frog, not Arca sealed-vault, not Bloom axolotl, not Ink turtle, not Hush shade-umbra, not Beacon field-magnet, not Brine salt-brine, not Knot junction-weave, not Dusk twilight-belt, not Shard living-crystal, not Drift methane-cloud, not Choir chord-body, not Gleam lamp-drinker, not Blush rosy-boa; never named wait / wake / still / wiggle / dart / trail / paddle / newt / eft / frog / toad / reed / pebble / gular / nictitate / tympanum / iliac / lentic / toepad / webbing / verruca / burrow / parotoid / tubercle / bufonid / unken / cranial / loam / knurl / plump / chorus / rivulet / spring / gill / amble / mend / smile / plume / warning / cirrus / hop / puff / dig / freeze — Echo/Quill birds — do not copy. crest dorsal crest raise without naming trail, caudal caudal-fin aquatic undulation without naming paddle or wiggle or dart, filament palmate filament tip sway without naming trail, costal costal-groove land crawl without naming dig, caudate long Caudata metabolic hold, hedonic hedonic-gland courtship press (THE salamandrid courtship tell), aposematic aposematic TTX orange-warning flash (THE Notophthalmus toxicity tell); vermilion / eftish / palmate thank-yous. Feed-happy after eat. Card-open freeze and window-play TRAIL do not swallow a thank-you. Sleep, hide, leave win. Same map as desktop newt-tricks.js. Window-play TRAIL unchanged. Ethogram softs + freeze — never names wiggle/dart/still as trick kinds. Hinge owns the next seat. No cry inventing. Amplitudes raised toward Rui richness; denser waits/weights (CAUDATE_HOLD=11.2 RELEASE_S=1.18). Next leftover Dapple / salamander. prefersHouseCry via newt.wav. */
 export const TRICK_KEY = "newt";
 export const TRICKS = ["crest", "caudal", "filament", "costal", "caudate", "hedonic", "aposematic"] as const;
 export const HAPPY = ["vermilion", "eftish", "palmate"] as const;
@@ -45,8 +45,8 @@ export type NewtHappy = {
 };
 
 export const HAPPY_DUR = { vermilion: 1.62, eftish: 1.74, palmate: 1.69 } as const;
-export const CAUDATE_HOLD = 10.8;
-export const RELEASE_S = 1.14;
+export const CAUDATE_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 export const DUR = {
   caudate: CAUDATE_HOLD + RELEASE_S,
   crest: 2.28,
@@ -85,54 +85,28 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: NewtTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "caudate") return 38 + roll * 24;
-  if (kind === "hedonic" || kind === "aposematic" || kind === "crest") return 12 + roll * 9;
-  if (kind === "caudal" || kind === "filament" || kind === "costal") return 11 + roll * 8;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "caudate") return 40 + roll * 26;
+  if (kind === "hedonic" || kind === "aposematic") return 12.8 + roll * 9.4;
+  if (kind === "crest" || kind === "caudal" || kind === "filament" || kind === "costal") return 12.8 + roll * 9.4;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: NewtTrickKind | string | null) {
-  if (musicOn) return "caudate" as const;
+export function pickTrick(rand?: number, musicOn = false, lastKind?: NewtTrickKind | string | null): NewtTrickKind {
+  if (musicOn) return "caudate";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "caudate") {
-    if (roll < 0.16) return "crest" as const;
-    if (roll < 0.32) return "caudal" as const;
-    if (roll < 0.48) return "filament" as const;
-    if (roll < 0.64) return "costal" as const;
-    if (roll < 0.82) return "hedonic" as const;
-    return "aposematic" as const;
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...TRICKS];
+  const weights = list.map((k) =>
+    k === "caudate" ? 0.72 : k === "hedonic" || k === "aposematic" ? 1.28 : k === "crest" || k === "caudal" || k === "filament" ? 1.18 : 1.08
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i]!;
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i]!;
+    if (r <= 0) return list[i]!;
   }
-  if (lastKind === "crest") {
-    if (roll < 0.16) return "caudate" as const;
-    if (roll < 0.32) return "caudal" as const;
-    if (roll < 0.48) return "filament" as const;
-    if (roll < 0.64) return "costal" as const;
-    if (roll < 0.82) return "hedonic" as const;
-    return "aposematic" as const;
-  }
-  if (lastKind === "caudal") {
-    if (roll < 0.14) return "caudate" as const;
-    if (roll < 0.3) return "crest" as const;
-    if (roll < 0.46) return "filament" as const;
-    if (roll < 0.62) return "costal" as const;
-    if (roll < 0.8) return "hedonic" as const;
-    return "aposematic" as const;
-  }
-  if (lastKind === "hedonic" || lastKind === "aposematic") {
-    if (roll < 0.14) return "caudate" as const;
-    if (roll < 0.3) return "crest" as const;
-    if (roll < 0.46) return "caudal" as const;
-    if (roll < 0.62) return "filament" as const;
-    if (roll < 0.78) return "costal" as const;
-    return lastKind === "hedonic" ? ("aposematic" as const) : ("hedonic" as const);
-  }
-  if (roll < 0.14) return "caudate" as const;
-  if (roll < 0.28) return "crest" as const;
-  if (roll < 0.42) return "caudal" as const;
-  if (roll < 0.56) return "filament" as const;
-  if (roll < 0.7) return "costal" as const;
-  if (roll < 0.85) return "hedonic" as const;
-  return "aposematic" as const;
+  return list[list.length - 1] || "crest";
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -204,44 +178,44 @@ export function vermilionPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.vermilion));
   if (u < 0.16) {
     const s = u / 0.16;
-    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" as TrickAnim };
+    return { lift: s * 3.36, rot: s * 14.4, dx: 0, anim: "talk" as TrickAnim };
   }
   if (u < 0.82) {
     const flash = Math.sin(t * 1.72);
     return {
-      lift: 2.8 + Math.abs(flash) * 1.4,
-      rot: 12 + flash * 8,
+        lift: 3.36 + Math.abs(flash) * 1.68,
+      rot: 14.4 + flash * 9.6,
       dx: 0,
       anim: "talk" as TrickAnim,
     };
   }
   const s = (u - 0.82) / 0.18;
-  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  return { lift: 2.4 * (1 - s), rot: 7.2 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
 
 export function eftishPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.eftish));
   if (u < 0.14) {
     const s = u / 0.14;
-    return { lift: s * 3.4, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
+    return { lift: s * 4.08, rot: s * -16.8, dx: s * 0.18, anim: "play" as TrickAnim };
   }
   if (u < 0.84) {
     const wriggle = Math.sin(t * 2.1);
     return {
-      lift: 3.4 + Math.abs(wriggle) * 1.6,
-      rot: -14 + wriggle * 10,
-      dx: 0.08,
+        lift: 4.08 + Math.abs(wriggle) * 1.92,
+      rot: -16.8 + wriggle * 12,
+      dx: 0.096,
       anim: "play" as TrickAnim,
     };
   }
   const s = (u - 0.84) / 0.16;
-  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  return { lift: 2.64 * (1 - s), rot: -7.2 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function palmatePose(t: number) {
   return {
-    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
-    rot: Math.sin(t * 0.52) * 6,
+    lift: 2.64 + Math.abs(Math.sin(t * 0.696)) * 1.32,
+    rot: Math.sin(t * 0.624) * 7.2,
     dx: 0,
     anim: "sit" as TrickAnim,
   };
@@ -314,30 +288,30 @@ function smoothstep(t: number) {
 
 export function caudatePose(t: number) {
   return {
-    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
-    rot: -0.18 + Math.sin(t * 0.14) * 4,
+    lift: 2.88 + Math.abs(Math.sin(t * 0.504)) * 1.44,
+    rot: -0.216 + Math.sin(t * 0.168) * 4.8,
     anim: "sit" as TrickAnim,
   };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
+  return { lift: 2.88 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.216 * (1 - u) };
 }
 
 export function crestPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.crest));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 3.2, rot: s * -8 * facing, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 3.84, rot: s * -9.6 * facing, anim: "play" as TrickAnim };
   }
   if (u < 0.48) {
     const s = (u - 0.16) / 0.32;
     const crest = Math.sin(s * Math.PI);
     return {
-      x: fromX + facing * crest * 0.12,
-      lift: 3.2 + Math.abs(crest) * 1.4,
-      rot: facing * (-8 + crest * 14),
+      x: fromX + facing * crest * 0.144,
+      lift: 3.84 + Math.abs(crest) * 1.68,
+      rot: facing * (-9.6 + crest * 16.8),
       anim: "play" as TrickAnim,
     };
   }
@@ -346,16 +320,16 @@ export function crestPose(t: number, fromX: number, facing: 1 | -1) {
     const sway = Math.sin(s * Math.PI * 2.4);
     return {
       x: fromX,
-      lift: 2.2 + Math.abs(sway) * 0.9,
-      rot: facing * (4 + sway * 8),
+      lift: 2.64 + Math.abs(sway) * 1.08,
+      rot: facing * (4.8 + sway * 9.6),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 1.4 * (1 - s),
-    rot: facing * (2 * (1 - s)),
+    lift: 1.68 * (1 - s),
+    rot: facing * (2.4 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -364,24 +338,24 @@ export function caudalPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.caudal));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX, lift: s * 3.12, rot: s * 12 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.78) {
     const s = (u - 0.14) / 0.64;
     const wave = Math.sin(s * Math.PI * 3.4);
     const glide = Math.sin(s * Math.PI * 1.2);
     return {
-      x: fromX + facing * wave * 0.28,
-      lift: 2.6 + Math.abs(glide) * 1.3 + Math.abs(wave) * 0.7,
-      rot: facing * (10 + wave * 12 + glide * 8),
+      x: fromX + facing * wave * 0.336,
+      lift: 3.12 + Math.abs(glide) * 1.56 + Math.abs(wave) * 0.84,
+      rot: facing * (12 + wave * 14.4 + glide * 9.6),
       anim: "walk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 1.2 * (1 - s),
-    rot: facing * (3 * (1 - s)),
+    lift: 1.44 * (1 - s),
+    rot: facing * (3.6 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -390,24 +364,24 @@ export function filamentPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.filament));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 2.4, rot: s * -6 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 2.88, rot: s * -7.2 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.74) {
     const s = (u - 0.16) / 0.58;
     const tip = Math.sin(s * Math.PI * 4.2) + 0.22 * Math.sin(s * Math.PI * 7.1);
     const hush = smoothstep(Math.min(1, s * 1.2));
     return {
-      x: fromX + facing * tip * 0.1,
-      lift: 2.4 + hush * 1.2 + Math.abs(tip) * 0.7,
-      rot: facing * (-6 + hush * 5 + tip * 4),
+      x: fromX + facing * tip * 0.12,
+      lift: 2.88 + hush * 1.44 + Math.abs(tip) * 0.84,
+      rot: facing * (-7.2 + hush * 6 + tip * 4.8),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.74) / 0.26);
   return {
     x: fromX,
-    lift: 1.4 * (1 - s),
-    rot: facing * (-2 * (1 - s)),
+    lift: 1.68 * (1 - s),
+    rot: facing * (-2.4 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -416,24 +390,24 @@ export function costalPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.costal));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX, lift: s * 3.12, rot: s * 12 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.78) {
     const s = (u - 0.12) / 0.66;
     const groove = Math.sin(s * Math.PI * 2.55);
     const crawl = Math.sin(s * Math.PI * 1.15);
     return {
-      x: fromX + facing * crawl * 0.22,
-      lift: 2.6 + Math.abs(crawl) * 1.3 + Math.abs(groove) * 0.7,
-      rot: facing * (10 + crawl * 12 + groove * 8),
+      x: fromX + facing * crawl * 0.264,
+      lift: 3.12 + Math.abs(crawl) * 1.56 + Math.abs(groove) * 0.84,
+      rot: facing * (12 + crawl * 14.4 + groove * 9.6),
       anim: "walk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 1.2 * (1 - s),
-    rot: facing * (3 * (1 - s)),
+    lift: 1.44 * (1 - s),
+    rot: facing * (3.6 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -442,15 +416,15 @@ export function hedonicPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.hedonic));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 2.8, rot: s * 12 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 3.36, rot: s * 14.4 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.42) {
     const s = (u - 0.16) / 0.26;
     const press = smoothstep(s);
     return {
       x: fromX,
-      lift: 2.8 + press * 1.6,
-      rot: facing * (12 + press * 16),
+      lift: 3.36 + press * 1.92,
+      rot: facing * (14.4 + press * 19.2),
       anim: "sit" as TrickAnim,
     };
   }
@@ -459,16 +433,16 @@ export function hedonicPose(t: number, fromX: number, facing: 1 | -1) {
     const scent = Math.sin(s * Math.PI * 2.2);
     return {
       x: fromX,
-      lift: 4.2 + Math.abs(scent) * 0.6,
-      rot: facing * (24 + scent * 4),
+      lift: 5.04 + Math.abs(scent) * 0.72,
+      rot: facing * (28.8 + scent * 4.8),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 2.0 * (1 - s),
-    rot: facing * (8 * (1 - s)),
+    lift: 2.4 * (1 - s),
+    rot: facing * (9.6 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -477,15 +451,15 @@ export function aposematicPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.aposematic));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 2.2, rot: s * -10 * facing, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 2.64, rot: s * -12 * facing, anim: "play" as TrickAnim };
   }
   if (u < 0.4) {
     const s = (u - 0.14) / 0.26;
     const flash = smoothstep(s);
     return {
       x: fromX,
-      lift: 2.2 + flash * 1.2,
-      rot: facing * (-10 - flash * 8),
+      lift: 2.64 + flash * 1.44,
+      rot: facing * (-12 - flash * 9.6),
       anim: "play" as TrickAnim,
     };
   }
@@ -493,17 +467,17 @@ export function aposematicPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.4) / 0.38;
     const warn = Math.sin(s * Math.PI * 3.1);
     return {
-      x: fromX + facing * warn * 0.08,
-      lift: 3.2 + Math.abs(warn) * 0.7,
-      rot: facing * (-16 + warn * 6),
+      x: fromX + facing * warn * 0.096,
+      lift: 3.84 + Math.abs(warn) * 0.84,
+      rot: facing * (-19.2 + warn * 7.2),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 1.5 * (1 - s),
-    rot: facing * (-4 * (1 - s)),
+    lift: 1.8 * (1 - s),
+    rot: facing * (-4.8 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
