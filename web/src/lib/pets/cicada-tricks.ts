@@ -1,4 +1,4 @@
-/** Brood ground tricks while idle — ultra-polish pass. House periodical cicada — tymbal / cast / egress / harden / magicicada / xylem / pharaoh personality (tymbal tymbal-song vibration on the inkstone — never named buzz (Relay + Snap) / song (field cricket window SONG) / burst (ethogram-old) / flash (Quill) / semaphore (Spark) / lantern (Spark) / talk, cast molt-shell leave-behind — never named shed (Ember) / exuvia (Dart happy) / molt / peel / strip / skin, egress ground-emergence climb from the dark years — never named emerge (window EMERGE + ethogram-old) / dig (Thimble) / heave (Ground) / lug (Ground) / earth (Ground) / crawl (Cling) / climb (Seven) / rise / surface, harden sun-perch cuticle set after egress — never named perch (Echo window) / sun (Sol) / bask (Ink window) / warm (Sol happy) / heat (Jade) / press (Sol) / glare / roost (Keel), magicicada desk life as a Magicicada septendecim periodical week with annual cousins in the thank-yous, xylem xylem-sap sip settle (species-true Magicicada xylem feeding — never named sip (Sip guest) / drink / suck / forage / feed / gulp (Coin) / bask / press), pharaoh Pharaoh-cicada wing-flare identity (common-name Magicicada septendecim presence flare — never named flash (Quill) / warning (Milk) / semaphore (Spark) / elytra (Spark) / soar / rise / hover / flare (Coin) / deimatic (Fold) / wing (Kite) / alar (Seven)); not Fold raptorial/gimbal/snatch/pendulum/mantodea/ootheca/deimatic, Seven spots/aphid/reflex/climb/coccinella/pronotum/alar, Column gallery/pheromone/crumb/bustle/camponotus/trophallaxis/frass, Twig rocking/catalepsy/browse/tread/diapheromera/oviposit/filiform, Dart hawking/tandem/nymph/whir/anax/obelisk/ommatidia, Spark lantern/jstroke/semaphore/elytra/photinus, Ghost plumose/lunule/silk/stream/actias, Milk asclepias/oyamel/warning/chrysalis/danaus, Comb figure/corbicula/hex/proboscis/hive, Relay buzz, Sol sun, Echo perch, Ember shed, Vesper fold, Sip sip, Coin gulp/flare, Quill flash, Kite wing, or *Dragon copies). Xylem is the iconic Magicicada xylem-sap sip (not Sip guest, not Coin gulp). Pharaoh is the iconic Pharaoh-cicada wing-flare (not Fold deimatic, not Quill flash, not Seven alar). Window-play EMERGE unchanged — never names emerge/burst/still. Ethogram keeps magicicada sit_hold; adds tymbal/cast/egress/harden/xylem/pharaoh softs + freeze (replaces thin still/emerge/burst). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via cicada.wav. Thank-yous septendecim / cassini / cicadidae. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `cicada-tricks.js`. True house-cicada desk life — not Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold or *Dragon electrical clone. Next guest ultra is Shard / silica. Magicicada Periodical Cicada desk life only. No cry inventing — thank-yous are silent desk motion only. */
+/** Brood ground tricks while idle — ultra-polish pass. House periodical cicada — tymbal / cast / egress / harden / magicicada / xylem / pharaoh personality (tymbal tymbal-song vibration on the inkstone — never named buzz (Relay + Snap) / song (field cricket window SONG) / burst (ethogram-old) / flash (Quill) / semaphore (Spark) / lantern (Spark) / talk, cast molt-shell leave-behind — never named shed (Ember) / exuvia (Dart happy) / molt / peel / strip / skin, egress ground-emergence climb from the dark years — never named emerge (window EMERGE + ethogram-old) / dig (Thimble) / heave (Ground) / lug (Ground) / earth (Ground) / crawl (Cling) / climb (Seven) / rise / surface, harden sun-perch cuticle set after egress — never named perch (Echo window) / sun (Sol) / bask (Ink window) / warm (Sol happy) / heat (Jade) / press (Sol) / glare / roost (Keel), magicicada desk life as a Magicicada septendecim periodical week with annual cousins in the thank-yous, xylem xylem-sap sip settle (species-true Magicicada xylem feeding — never named sip (Sip guest) / drink / suck / forage / feed / gulp (Coin) / bask / press), pharaoh Pharaoh-cicada wing-flare identity (common-name Magicicada septendecim presence flare — never named flash (Quill) / warning (Milk) / semaphore (Spark) / elytra (Spark) / soar / rise / hover / flare (Coin) / deimatic (Fold) / wing (Kite) / alar (Seven)); not Fold raptorial/gimbal/snatch/pendulum/mantodea/ootheca/deimatic, Seven spots/aphid/reflex/climb/coccinella/pronotum/alar, Column gallery/pheromone/crumb/bustle/camponotus/trophallaxis/frass, Twig rocking/catalepsy/browse/tread/diapheromera/oviposit/filiform, Dart hawking/tandem/nymph/whir/anax/obelisk/ommatidia, Spark lantern/jstroke/semaphore/elytra/photinus, Ghost plumose/lunule/silk/stream/actias, Milk asclepias/oyamel/warning/chrysalis/danaus, Comb figure/corbicula/hex/proboscis/hive, Relay buzz, Sol sun, Echo perch, Ember shed, Vesper fold, Sip sip, Coin gulp/flare, Quill flash, Kite wing, or *Dragon copies). Xylem is the iconic Magicicada xylem-sap sip (not Sip guest, not Coin gulp). Pharaoh is the iconic Pharaoh-cicada wing-flare (not Fold deimatic, not Quill flash, not Seven alar). Window-play EMERGE unchanged — never names emerge/burst/still. Ethogram keeps magicicada sit_hold; adds tymbal/cast/egress/harden/xylem/pharaoh softs + freeze (replaces thin still/emerge/burst). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via cicada.wav. Thank-yous septendecim / cassini / cicadidae. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `cicada-tricks.js`. True house-cicada desk life — not Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold or *Dragon electrical clone. Frill owns the next leftover. Amplitudes raised toward Rui richness; denser waits/weights (MAGICICADA_HOLD=11.2 RELEASE_S=1.18). Ethogram softs + freeze — never names cicada/brood/emerge as bare ethogram-only trick kinds. Window-play EMERGE unchanged. Next leftover Frill / oyster. Catalog 221. Never retouch Rui sprites. Magicicada Periodical Cicada desk life only. No cry inventing — thank-yous are silent desk motion only. */
 export const TRICK_KEY = "cicada";
 export const TRICKS = ["tymbal", "cast", "egress", "harden", "magicicada", "xylem", "pharaoh"] as const;
 export const HAPPY = ["septendecim", "cassini", "cicadidae"] as const;
@@ -49,8 +49,8 @@ export const HAPPY_DUR: Record<CicadaHappyKind, number> = {
   cassini: 1.34,
   cicadidae: 1.3,
 };
-export const MAGICICADA_HOLD = 11.6;
-export const RELEASE_S = 0.64;
+export const MAGICICADA_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 export const DUR: Record<CicadaTrickKind, number> = {
   magicicada: MAGICICADA_HOLD + RELEASE_S,
   tymbal: 1.58,
@@ -89,56 +89,28 @@ export function shouldAbort(state?: TrickFlags | null) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number | null, kind?: string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "magicicada") return 40 + roll * 24;
-  if (kind === "xylem" || kind === "pharaoh" || kind === "tymbal") return 12 + roll * 9;
-  if (kind === "cast" || kind === "egress" || kind === "harden") return 11 + roll * 8;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "magicicada") return 40 + roll * 26;
+  if (kind === "tymbal" || kind === "cast" || kind === "egress" || kind === "harden" || kind === "xylem" || kind === "pharaoh") return 12.8 + roll * 9.4;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 export function pickTrick(rand?: number | null, musicOn?: boolean, lastKind?: string): CicadaTrickKind {
   if (musicOn) return "magicicada";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "magicicada") {
-    if (roll < 0.16) return "tymbal";
-    if (roll < 0.32) return "cast";
-    if (roll < 0.48) return "egress";
-    if (roll < 0.64) return "harden";
-    if (roll < 0.82) return "xylem";
-    return "pharaoh";
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : TRICKS.slice();
+  const weights = list.map((k) =>
+    k === "magicicada" ? 0.72 : k === "tymbal" || k === "pharaoh" ? 1.28 : k === "xylem" ? 1.18 : 1.08
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i];
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return list[i];
   }
-  if (lastKind === "tymbal") {
-    if (roll < 0.18) return "magicicada";
-    if (roll < 0.34) return "cast";
-    if (roll < 0.5) return "egress";
-    if (roll < 0.66) return "harden";
-    if (roll < 0.83) return "xylem";
-    return "pharaoh";
-  }
-  if (lastKind === "cast") {
-    if (roll < 0.16) return "magicicada";
-    if (roll < 0.32) return "tymbal";
-    if (roll < 0.48) return "egress";
-    if (roll < 0.64) return "harden";
-    if (roll < 0.82) return "xylem";
-    return "pharaoh";
-  }
-  if (lastKind === "xylem" || lastKind === "pharaoh") {
-    if (roll < 0.16) return "magicicada";
-    if (roll < 0.32) return "tymbal";
-    if (roll < 0.48) return "cast";
-    if (roll < 0.64) return "egress";
-    if (roll < 0.8) return "harden";
-    return lastKind === "xylem" ? "pharaoh" : "xylem";
-  }
-  if (roll < 0.14) return "magicicada";
-  if (roll < 0.28) return "tymbal";
-  if (roll < 0.42) return "cast";
-  if (roll < 0.56) return "egress";
-  if (roll < 0.7) return "harden";
-  if (roll < 0.85) return "xylem";
-  return "pharaoh";
+  return list[list.length - 1] || "tymbal";
 }
-
 export function happyCanStart(state?: TrickFlags | null) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
@@ -202,43 +174,43 @@ export function septendecimPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.septendecim));
   if (u < 0.14) {
     const s = u / 0.14;
-    return { lift: s * 2.9, rot: s * 12, dx: 0, anim: "talk" };
+    return { lift: s * 3.48, rot: s * 14.4, dx: 0, anim: "talk" };
   }
   if (u < 0.74) {
     const buzz = Math.sin(t * 14.5) + 0.35 * Math.sin(t * 29);
     return {
-      lift: 2.9 + Math.abs(buzz) * 1.35,
-      rot: 12 + buzz * 10,
-      dx: buzz * 0.18,
+      lift: 3.48 + Math.abs(buzz) * 1.62,
+      rot: 14.4 + buzz * 12,
+      dx: buzz * 0.22,
       anim: "talk",
     };
   }
   const s = (u - 0.74) / 0.26;
-  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
+  return { lift: 2.4 * (1 - s), rot: 7.2 * (1 - s), dx: 0, anim: "idle" };
 }
 export function cassiniPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.cassini));
   if (u < 0.16) {
     const s = u / 0.16;
-    return { lift: s * 3.2, rot: s * -9.5, dx: s * 0.2, anim: "play" };
+    return { lift: s * 3.84, rot: s * -11.4, dx: s * 0.24, anim: "play" };
   }
   if (u < 0.78) {
     const pulse = Math.sin(t * 5.2) + 0.28 * Math.sin(t * 10.4);
     return {
-      lift: 3.2 + Math.abs(pulse) * 1.4,
-      rot: -9.5 + pulse * 9,
-      dx: pulse * 0.22,
+      lift: 3.84 + Math.abs(pulse) * 1.68,
+      rot: -11.4 + pulse * 10.8,
+      dx: pulse * 0.26,
       anim: "play",
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 2.1 * (1 - s), rot: -4.5 * (1 - s), dx: 0, anim: "sit" };
+  return { lift: 2.52 * (1 - s), rot: -5.4 * (1 - s), dx: 0, anim: "sit" };
 }
 export function cicadidaePose(t: number) {
   return {
-    lift: 2.1 + Math.abs(Math.sin(t * 0.4)) * 0.85,
-    rot: Math.sin(t * 0.52) * 6.5,
-    dx: Math.sin(t * 0.28) * 0.08,
+    lift: 2.52 + Math.abs(Math.sin(t * 0.4)) * 1.02,
+    rot: Math.sin(t * 0.52) * 7.8,
+    dx: Math.sin(t * 0.28) * 0.1,
     anim: "sit",
   };
 }
@@ -312,36 +284,36 @@ export function magicicadaPose(t: number) {
   const breath = Math.sin(t * 0.16) + 0.03 * Math.sin(t * 0.72);
   const grain = Math.abs(Math.sin(t * 0.34));
   return {
-    lift: 2.4 + grain * 1.1,
-    rot: 3.8 + breath * 3.2,
+    lift: 2.88 + grain * 1.32,
+    rot: 4.56 + breath * 3.84,
   };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 3.0 * (1 - u) };
+  return { lift: 2.88 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 3.6 * (1 - u) };
 }
 
 export function tymbalPose(t: number, fromX: number, facing: number) {
   const u = Math.max(0, Math.min(1, t / DUR.tymbal));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 2.85, rot: s * 11 * facing, anim: "talk" };
+    return { x: fromX, lift: s * 3.42, rot: s * 13.2 * facing, anim: "talk" };
   }
   if (u < 0.86) {
     const buzz = Math.sin(t * 16.2) + 0.4 * Math.sin(t * 32.4) + 0.15 * Math.sin(t * 48);
     return {
-      x: fromX + facing * buzz * 0.2,
-      lift: 2.85 + Math.abs(buzz) * 1.25,
-      rot: facing * (11 + buzz * 8),
+      x: fromX + facing * buzz * 0.24,
+      lift: 3.42 + Math.abs(buzz) * 1.5,
+      rot: facing * (13.2 + buzz * 9.6),
       anim: "talk",
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX,
-    lift: 2.0 * (1 - s),
-    rot: facing * (4.5 * (1 - s)),
+    lift: 2.4 * (1 - s),
+    rot: facing * (5.4 * (1 - s)),
     anim: "sit",
   };
 }
@@ -349,15 +321,15 @@ export function castPose(t: number, fromX: number, facing: number) {
   const u = Math.max(0, Math.min(1, t / DUR.cast));
   if (u < 0.2) {
     const s = smoothstep(u / 0.2);
-    return { x: fromX, lift: s * 2.7, rot: s * -10 * facing, anim: "sit" };
+    return { x: fromX, lift: s * 3.24, rot: s * -12 * facing, anim: "sit" };
   }
   if (u < 0.45) {
     const s = (u - 0.2) / 0.25;
     const arch = Math.sin(s * Math.PI);
     return {
-      x: fromX + facing * arch * 0.35,
-      lift: 2.7 + arch * 1.4,
-      rot: facing * (-10 + arch * 6),
+      x: fromX + facing * arch * 0.42,
+      lift: 3.24 + arch * 1.68,
+      rot: facing * (-12 + arch * 7.2),
       anim: "play",
     };
   }
@@ -365,17 +337,17 @@ export function castPose(t: number, fromX: number, facing: number) {
     const s = (u - 0.45) / 0.27;
     const slip = Math.sin(s * Math.PI * 1.6) * 0.22;
     return {
-      x: fromX + facing * (0.45 + slip * 0.25),
-      lift: 3.4 - s * 1.2,
-      rot: facing * (-4 + slip * 5),
+      x: fromX + facing * (0.54 + slip * 0.3),
+      lift: 4.08 - s * 1.44,
+      rot: facing * (-4.8 + slip * 6),
       anim: "play",
     };
   }
   const s = smoothstep((u - 0.72) / 0.28);
   return {
-    x: fromX + facing * 0.25 * (1 - s),
-    lift: 1.8 * (1 - s),
-    rot: facing * (-2.0 * (1 - s)),
+    x: fromX + facing * 0.3 * (1 - s),
+    lift: 2.16 * (1 - s),
+    rot: facing * (-2.4 * (1 - s)),
     anim: "sit",
   };
 }
@@ -383,15 +355,15 @@ export function egressPose(t: number, fromX: number, facing: number) {
   const u = Math.max(0, Math.min(1, t / DUR.egress));
   if (u < 0.18) {
     const s = smoothstep(u / 0.18);
-    return { x: fromX, lift: -0.6 + s * 1.4, rot: s * 6 * facing, anim: "sit" };
+    return { x: fromX, lift: -0.72 + s * 1.68, rot: s * 7.2 * facing, anim: "sit" };
   }
   if (u < 0.55) {
     const s = (u - 0.18) / 0.37;
     const climb = smoothstep(s);
     return {
-      x: fromX + facing * climb * 0.9,
-      lift: 0.8 + climb * 2.6,
-      rot: facing * (6 + climb * 8),
+      x: fromX + facing * climb * 1.08,
+      lift: 0.96 + climb * 3.12,
+      rot: facing * (7.2 + climb * 9.6),
       anim: "play",
     };
   }
@@ -399,17 +371,17 @@ export function egressPose(t: number, fromX: number, facing: number) {
     const s = (u - 0.55) / 0.27;
     const settle = Math.sin(s * Math.PI);
     return {
-      x: fromX + facing * (0.9 + settle * 0.18),
-      lift: 3.4 - settle * 0.7,
-      rot: facing * (14 - settle * 5),
+      x: fromX + facing * (1.08 + settle * 0.22),
+      lift: 4.08 - settle * 0.84,
+      rot: facing * (16.8 - settle * 6),
       anim: "play",
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
-    x: fromX + facing * 0.7 * (1 - s * 0.3),
-    lift: 2.2 * (1 - s),
-    rot: facing * (5 * (1 - s)),
+    x: fromX + facing * 0.84 * (1 - s * 0.36),
+    lift: 2.64 * (1 - s),
+    rot: facing * (6 * (1 - s)),
     anim: "sit",
   };
 }
@@ -417,23 +389,23 @@ export function hardenPose(t: number, fromX: number, facing: number) {
   const u = Math.max(0, Math.min(1, t / DUR.harden));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 2.75, rot: s * 10 * facing, anim: "sit" };
+    return { x: fromX, lift: s * 3.3, rot: s * 12 * facing, anim: "sit" };
   }
   if (u < 0.84) {
     const s = (u - 0.14) / 0.7;
     const sun = Math.sin(s * Math.PI * 2.2) * 0.28;
     return {
-      x: fromX + facing * sun * 0.2,
-      lift: 2.75 + Math.abs(sun) * 1.15,
-      rot: facing * (10 + sun * 7),
+      x: fromX + facing * sun * 0.24,
+      lift: 3.3 + Math.abs(sun) * 1.38,
+      rot: facing * (12 + sun * 8.4),
       anim: "sit",
     };
   }
   const s = smoothstep((u - 0.84) / 0.16);
   return {
     x: fromX,
-    lift: 1.9 * (1 - s),
-    rot: facing * (4.0 * (1 - s)),
+    lift: 2.28 * (1 - s),
+    rot: facing * (4.8 * (1 - s)),
     anim: "sit",
   };
 }
@@ -441,23 +413,23 @@ export function xylemPose(t: number, fromX: number, facing: number) {
   const u = Math.max(0, Math.min(1, t / DUR.xylem));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 2.55, rot: s * -8.5 * facing, anim: "sit" };
+    return { x: fromX, lift: s * 3.06, rot: s * -10.2 * facing, anim: "sit" };
   }
   if (u < 0.78) {
     const s = (u - 0.14) / 0.64;
     const sip = Math.sin(s * Math.PI * 4.8) + 0.28 * Math.sin(s * Math.PI * 9.2);
     return {
-      x: fromX + facing * sip * 0.14,
-      lift: 2.55 + Math.abs(sip) * 1.15,
-      rot: facing * (-8.5 + sip * 8),
+      x: fromX + facing * sip * 0.17,
+      lift: 3.06 + Math.abs(sip) * 1.38,
+      rot: facing * (-10.2 + sip * 9.6),
       anim: "sit",
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 1.8 * (1 - s),
-    rot: facing * (-3.5 * (1 - s)),
+    lift: 2.16 * (1 - s),
+    rot: facing * (-4.2 * (1 - s)),
     anim: "sit",
   };
 }
@@ -465,15 +437,15 @@ export function pharaohPose(t: number, fromX: number, facing: number) {
   const u = Math.max(0, Math.min(1, t / DUR.pharaoh));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 3.15, rot: s * 9 * facing, anim: "play" };
+    return { x: fromX, lift: s * 3.78, rot: s * 10.8 * facing, anim: "play" };
   }
   if (u < 0.55) {
     const s = (u - 0.12) / 0.43;
     const flare = Math.sin(s * Math.PI * 7.6) + 0.32 * Math.sin(s * Math.PI * 13.4);
     return {
-      x: fromX + facing * (0.4 * s + flare * 0.18),
-      lift: 3.15 + s * 1.7 + Math.abs(flare) * 0.95,
-      rot: facing * (9 + flare * 10),
+      x: fromX + facing * (0.48 * s + flare * 0.22),
+      lift: 3.78 + s * 2.04 + Math.abs(flare) * 1.14,
+      rot: facing * (10.8 + flare * 12),
       anim: "play",
     };
   }
@@ -481,17 +453,17 @@ export function pharaohPose(t: number, fromX: number, facing: number) {
     const s = (u - 0.55) / 0.27;
     const settle = Math.sin(s * Math.PI);
     return {
-      x: fromX + facing * (0.5 + settle * 0.12),
-      lift: 4.8 - s * 2.1 + Math.abs(settle) * 0.55,
-      rot: facing * (7 - settle * 4),
+      x: fromX + facing * (0.6 + settle * 0.14),
+      lift: 5.76 - s * 2.52 + Math.abs(settle) * 0.66,
+      rot: facing * (8.4 - settle * 4.8),
       anim: "play",
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
-    x: fromX + facing * 0.32 * (1 - s),
-    lift: 2.3 * (1 - s),
-    rot: facing * (3 * (1 - s)),
+    x: fromX + facing * 0.38 * (1 - s),
+    lift: 2.76 * (1 - s),
+    rot: facing * (3.6 * (1 - s)),
     anim: "sit",
   };
 }
