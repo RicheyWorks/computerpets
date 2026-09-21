@@ -1,19 +1,19 @@
-/** Nori ground tricks while idle — ultra-polish pass. House ball python — orb / nook / taste / inch / unroll / loom / weave personality (ball/hide/tongue desk life; shy inkwell bun). Orb comfort-ball without naming bun/ball/coil/curl (window-play BUN + hedgehog own those); nook head-tuck hide without naming hide/tuck; taste tongue-flick chemosense without naming flick/sniff; inch shy lunge without naming strike/pounce; unroll long-body stretch without naming noodle/fold; loom periscope head-raise survey without naming periscope (rabbit); weave S-curve body weave without naming corkscrew/spiral. Window-play BUN unchanged — never names `bun`. Hedgehog owns curl/ball; volt window-play owns coil; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun/press. Guest slug Nori / key ball_python — accept "ball_python" and "nori". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via ball_python.wav. Thank-yous savor / nestle / center. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web `ball-python-tricks.ts`. True house-ball-python desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember or *Dragon electrical (Relay/Fuse/Ground) clones. Bird ultra (Soot→Ember) + Miso→Vesper done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Saffron / corn_snake. No cry inventing beyond house ball_python.wav prefer. Never retouch Rui sprites. */
+/** Nori ground tricks while idle — ultra-polish pass. House ball python — orb / nook / taste / inch / unroll / loom / weave personality (ball/hide/tongue desk life; shy inkwell bun). Orb comfort-ball without naming bun/ball/coil/curl (window-play BUN + hedgehog own those); nook head-tuck hide without naming hide/tuck; taste tongue-flick chemosense without naming flick/sniff; inch shy lunge without naming strike/pounce; unroll long-body stretch without naming noodle/fold; loom periscope head-raise survey without naming periscope (rabbit); weave S-curve body weave without naming corkscrew/spiral. Window-play BUN unchanged — never names `bun`. Hedgehog owns curl/ball; volt window-play owns coil; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun/press. Guest slug Nori / key ball_python — accept "ball_python" and "nori". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via ball_python.wav. Thank-yous savor / nestle / center. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web `ball-python-tricks.ts`. True house-ball-python desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember or *Dragon electrical (Relay/Fuse/Ground) clones. Bird ultra (Soot→Ember) + Miso→Vesper done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. prefersHouseCry via ball_python.wav. Amplitudes raised toward Rui richness; denser waits/weights (ORB_HOLD=11.2 RELEASE_S=1.18). Next leftover Saffron / corn_snake. Catalog 221. Never retouch Rui sprites. */
 (function (root) {
   const TRICK_KEY = "ball_python";
   const TRICKS = ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"];
   const HAPPY = ["savor", "nestle", "center"];
-  const HAPPY_DUR = { savor: 1.55, nestle: 1.62, center: 1.58 };
-  const ORB_HOLD = 12.8;
-  const RELEASE_S = 0.88;
+  const HAPPY_DUR = { savor: 1.58, nestle: 1.66, center: 1.72 };
+  const ORB_HOLD = 11.2;
+  const RELEASE_S = 1.18;
   const DUR = {
     orb: ORB_HOLD + RELEASE_S,
-    nook: 1.82,
-    taste: 1.76,
-    inch: 1.88,
-    unroll: 1.72,
-    loom: 2.02,
-    weave: 2.1,
+    nook: 2.12,
+    taste: 2.05,
+    inch: 2.18,
+    unroll: 1.95,
+    loom: 2.28,
+    weave: 2.34,
   };
 
   function canStart(state) {
@@ -44,11 +44,10 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "orb") return 38 + roll * 24;
-    if (kind === "nook" || kind === "taste") return 11 + roll * 8;
-    if (kind === "inch" || kind === "unroll" || kind === "weave") return 10 + roll * 8;
-    if (kind === "loom") return 12 + roll * 9;
-    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+    if (kind === "orb") return 40 + roll * 26;
+    if (kind === "nook" || kind === "taste" || kind === "loom") return 12.8 + roll * 9.4;
+    if (kind === "inch" || kind === "unroll" || kind === "weave") return 11.6 + roll * 8.5;
+    return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
 
   function pickTrick(rand, musicOn, lastKind) {
@@ -57,7 +56,7 @@
     const pool = TRICKS.filter(function (k) { return k !== lastKind; });
     const list = pool.length ? pool : TRICKS.slice();
     const weights = list.map(function (k) {
-      return k === "orb" ? 0.55 : k === "nook" || k === "loom" || k === "taste" ? 1.15 : 1;
+      return k === "orb" ? 0.72 : k === "nook" || k === "loom" || k === "taste" ? 1.28 : k === "inch" || k === "unroll" ? 1.18 : 1.08;
     });
     let total = 0;
     for (let i = 0; i < weights.length; i++) total += weights[i];
@@ -132,43 +131,43 @@
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.savor));
     if (u < 0.18) {
       const s = u / 0.18;
-      return { lift: s * 4.4, rot: s * 14, dx: 0, anim: "sit" };
+      return { lift: s * 5.28, rot: s * 16.8, dx: 0, anim: "sit" };
     }
     if (u < 0.78) {
       return {
-        lift: 4.4 + Math.abs(Math.sin(t * 5.2)) * 2.6,
-        rot: 14 + Math.sin(t * 4.4) * 10,
+        lift: 5.28 + Math.abs(Math.sin(t * 5.2)) * 3.12,
+        rot: 16.8 + Math.sin(t * 4.4) * 12,
         dx: 0,
         anim: "sit",
       };
     }
     const s = (u - 0.78) / 0.22;
-    return { lift: 4.4 * (1 - s), rot: 14 * (1 - s), dx: 0, anim: "idle" };
+    return { lift: 5.28 * (1 - s), rot: 16.8 * (1 - s), dx: 0, anim: "idle" };
   }
 
   function nestlePose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.nestle));
     if (u < 0.12) {
       const s = u / 0.12;
-      return { lift: s * 5.6, rot: -s * 16, dx: 0, anim: "sit" };
+      return { lift: s * 6.72, rot: -s * 19.2, dx: 0, anim: "sit" };
     }
     if (u < 0.86) {
       return {
-        lift: 5.6 + Math.abs(Math.sin(t * 10)) * 3.2,
-        rot: -16 + Math.sin(t * 12) * 18,
-        dx: Math.sin(t * 6) * 1.2,
+        lift: 6.72 + Math.abs(Math.sin(t * 10)) * 3.84,
+        rot: -19.2 + Math.sin(t * 12) * 21.6,
+        dx: Math.sin(t * 6) * 1.44,
         anim: "sit",
       };
     }
     const s = (u - 0.86) / 0.14;
-    return { lift: 5.6 * (1 - s), rot: -16 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: 6.72 * (1 - s), rot: -19.2 * (1 - s), dx: 0, anim: "sit" };
   }
 
   function centerPose(t) {
     return {
-      lift: Math.abs(Math.sin(t * 3.4)) * 3.8 + 1.2,
-      rot: -14 + Math.sin(t * 3.0) * 12,
-      dx: Math.sin(t * 2.4) * 1.4,
+      lift: Math.abs(Math.sin(t * 3.4)) * 4.56 + 1.44,
+      rot: -16.8 + Math.sin(t * 3.0) * 14.4,
+      dx: Math.sin(t * 2.4) * 1.68,
       anim: "talk",
     };
   }
@@ -232,37 +231,37 @@
 
   function orbPose(t) {
     return {
-      lift: 2.2 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
-      rot: 18 + Math.sin(t * 2.4) * 22 + Math.sin(t * 4.6) * 12,
+      lift: 2.64 + Math.sin(t * 1.7) * 3.36 + Math.abs(Math.sin(t * 3.4)) * 1.92,
+      rot: 21.6 + Math.sin(t * 2.4) * 26.4 + Math.sin(t * 4.6) * 14.4,
     };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: (2.2 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)), rot: 18 * (1 - u) };
+    return { lift: (2.64 + 3.36) * (1 - Math.sin(u * Math.PI * 0.5)), rot: 21.6 * (1 - u) };
   }
 
   function nookPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.nook));
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 4.6, rot: s * -18 * facing, anim: "sit" };
+      return { x: fromX, lift: s * 5.52, rot: s * -21.6 * facing, anim: "sit" };
     }
     if (u < 0.86) {
       const s = (u - 0.14) / 0.72;
       const tuck = Math.abs(Math.sin(s * Math.PI * 1.6));
       return {
-        x: fromX + facing * Math.sin(s * Math.PI) * 1.6,
-        lift: 4.6 + tuck * 4.2,
-        rot: facing * (-18 - tuck * 16),
+        x: fromX + facing * Math.sin(s * Math.PI) * 1.92,
+        lift: 5.52 + tuck * 5.04,
+        rot: facing * (-21.6 - tuck * 19.2),
         anim: "sit",
       };
     }
     const s = smoothstep((u - 0.86) / 0.14);
     return {
       x: fromX,
-      lift: 4.6 * (1 - s),
-      rot: facing * -9 * (1 - s),
+      lift: 5.52 * (1 - s),
+      rot: facing * -10.8 * (1 - s),
       anim: "sit",
     };
   }
@@ -271,23 +270,23 @@
     const u = Math.max(0, Math.min(1, t / DUR.taste));
     if (u < 0.1) {
       const s = smoothstep(u / 0.1);
-      return { x: fromX, lift: s * 3.8, rot: s * 12 * facing, anim: "talk" };
+      return { x: fromX, lift: s * 4.56, rot: s * 14.4 * facing, anim: "talk" };
     }
     if (u < 0.88) {
       const s = (u - 0.1) / 0.78;
       const flick = Math.sin(s * Math.PI * 6.5);
       return {
-        x: fromX + facing * flick * 1.8,
-        lift: 3.8 + Math.abs(flick) * 5.5,
-        rot: facing * (12 + flick * 22),
+        x: fromX + facing * flick * 2.16,
+        lift: 4.56 + Math.abs(flick) * 6.6,
+        rot: facing * (14.4 + flick * 26.4),
         anim: "talk",
       };
     }
     const s = smoothstep((u - 0.88) / 0.12);
     return {
       x: fromX,
-      lift: 3.8 * (1 - s),
-      rot: facing * 6 * (1 - s),
+      lift: 4.56 * (1 - s),
+      rot: facing * 7.2 * (1 - s),
       anim: "sit",
     };
   }
@@ -296,14 +295,14 @@
     const u = Math.max(0, Math.min(1, t / DUR.inch));
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 5.0, rot: -s * 14 * facing, anim: "play" };
+      return { x: fromX, lift: s * 6.0, rot: -s * 16.8 * facing, anim: "play" };
     }
     if (u < 0.5) {
       const s = (u - 0.14) / 0.36;
       return {
-        x: fromX + facing * smoothstep(s) * 8.5,
-        lift: 5.0 + Math.sin(s * Math.PI) * 4.8,
-        rot: facing * (-14 + s * 28),
+        x: fromX + facing * smoothstep(s) * 10.2,
+        lift: 6.0 + Math.sin(s * Math.PI) * 5.76,
+        rot: facing * (-16.8 + s * 33.6),
         anim: "play",
       };
     }
@@ -311,17 +310,17 @@
       const s = (u - 0.5) / 0.32;
       const home = smoothstep(s);
       return {
-        x: fromX + facing * (8.5 * (1 - home)),
-        lift: 5.0 * (1 - home * 0.45) + Math.sin(s * Math.PI) * 2.2,
-        rot: facing * (14 - home * 20),
+        x: fromX + facing * (10.2 * (1 - home)),
+        lift: 6.0 * (1 - home * 0.45) + Math.sin(s * Math.PI) * 2.64,
+        rot: facing * (16.8 - home * 24),
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.82) / 0.18);
     return {
       x: fromX,
-      lift: 5.0 * 0.55 * (1 - s),
-      rot: facing * -4 * (1 - s),
+      lift: 6.0 * 0.55 * (1 - s),
+      rot: facing * -4.8 * (1 - s),
       anim: "sit",
     };
   }
@@ -330,23 +329,23 @@
     const u = Math.max(0, Math.min(1, t / DUR.unroll));
     if (u < 0.18) {
       const s = smoothstep(u / 0.18);
-      return { x: fromX + facing * s * 4.2, lift: s * 4.6, rot: s * -14 * facing, anim: "play" };
+      return { x: fromX + facing * s * 5.04, lift: s * 5.52, rot: s * -16.8 * facing, anim: "play" };
     }
     if (u < 0.62) {
       const s = (u - 0.18) / 0.44;
       const wave = Math.sin(s * Math.PI * 2.2);
       return {
-        x: fromX + facing * (4.2 + s * 5.5 + wave * 1.6),
-        lift: 4.6 + Math.abs(wave) * 4.2,
-        rot: facing * (-14 + wave * 22),
+        x: fromX + facing * (5.04 + s * 6.6 + wave * 1.92),
+        lift: 5.52 + Math.abs(wave) * 5.04,
+        rot: facing * (-16.8 + wave * 26.4),
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.62) / 0.38);
     return {
-      x: fromX + facing * (9.7 * (1 - s)),
-      lift: 4.6 * (1 - s) * 0.45,
-      rot: facing * (-4 + s * 16),
+      x: fromX + facing * (11.64 * (1 - s)),
+      lift: 5.52 * (1 - s) * 0.45,
+      rot: facing * (-4.8 + s * 19.2),
       anim: "sit",
     };
   }
@@ -355,23 +354,23 @@
     const u = Math.max(0, Math.min(1, t / DUR.loom));
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 4.8, rot: s * 20 * facing, anim: "talk" };
+      return { x: fromX, lift: s * 5.76, rot: s * 24 * facing, anim: "talk" };
     }
     if (u < 0.86) {
       const s = (u - 0.14) / 0.72;
       const rise = Math.abs(Math.sin(s * Math.PI * 2.8));
       return {
-        x: fromX + facing * Math.sin(s * Math.PI) * 1.4,
-        lift: 4.8 + rise * 5.2,
-        rot: facing * (20 + rise * 18),
+        x: fromX + facing * Math.sin(s * Math.PI) * 1.68,
+        lift: 5.76 + rise * 6.24,
+        rot: facing * (24 + rise * 21.6),
         anim: "talk",
       };
     }
     const s = smoothstep((u - 0.86) / 0.14);
     return {
       x: fromX,
-      lift: 4.8 * (1 - s),
-      rot: facing * 10 * (1 - s),
+      lift: 5.76 * (1 - s),
+      rot: facing * 12 * (1 - s),
       anim: "sit",
     };
   }
@@ -380,23 +379,23 @@
     const u = Math.max(0, Math.min(1, t / DUR.weave));
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 2.8, rot: s * 16 * facing, anim: "sit" };
+      return { x: fromX, lift: s * 3.36, rot: s * 19.2 * facing, anim: "sit" };
     }
     if (u < 0.88) {
       const s = (u - 0.12) / 0.76;
       const sway = Math.sin(s * Math.PI * 3.6);
       return {
-        x: fromX + facing * (Math.abs(sway) * 8.5 + s * 2.2),
-        lift: 2.8 + Math.abs(sway) * 7.2,
-        rot: facing * (16 + sway * 32),
+        x: fromX + facing * (Math.abs(sway) * 10.2 + s * 2.64),
+        lift: 3.36 + Math.abs(sway) * 8.64,
+        rot: facing * (19.2 + sway * 38.4),
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.88) / 0.12);
     return {
-      x: fromX + facing * 6.0,
-      lift: 2.8 * (1 - s),
-      rot: facing * 8 * (1 - s),
+      x: fromX + facing * 7.2,
+      lift: 3.36 * (1 - s),
+      rot: facing * 9.6 * (1 - s),
       anim: "sit",
     };
   }
