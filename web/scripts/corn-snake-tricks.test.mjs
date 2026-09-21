@@ -334,10 +334,15 @@ test("ultra-polish: Saffron scribble/gap/comma/blotter/pencil lifts are Rui-visi
   assert.equal(T.DUR.blotter, Overlay.DUR.blotter);
   assert.equal(T.DUR.pencil, Overlay.DUR.pencil);
   assert.equal(T.COMMA_HOLD, Overlay.COMMA_HOLD);
+  assert.equal(T.COMMA_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "comma") > 39);
+  assert.ok(T.nextTrickWait(true, 0, "comma") < 80);
+  assert.ok(T.nextTrickWait(true, 0, "comma") > T.nextTrickWait(true, 0, "gap"));
   assert.equal(T.HAPPY_DUR.clause, Overlay.HAPPY_DUR.clause);
 });
 
-test("notes: Saffron idle-life ultra done; Bandit / kingsnake + Jade / green_tree_python + Bluff / hognose + Sash / garter ultra next-or-done; Lula / boa ultra next-or-done; following house-order ultra guest is Coral / milk_snake (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Saffron Rui-dense ultra (COMMA_HOLD=11.2); next leftover Bandit / kingsnake", () => {
   assert.deepEqual([...T.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
   assert.equal(T.TRICK_KEY, "corn_snake");
   assert.equal(T.wantsThankYou("saffron"), true);
