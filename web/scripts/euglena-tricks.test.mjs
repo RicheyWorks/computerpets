@@ -2151,7 +2151,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Spot Rui-dense ultra (EUGLENID_HOLD=11.2); Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; next leftover Drake / mallard", () => {
+test("notes: Spot Rui-dense ultra (EUGLENID_HOLD=11.2); Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; Drake now Rue-dense; next leftover Vee / canada_goose", () => {
   assert.equal(T.TRICK_KEY, "euglena");
   assert.deepEqual([...T.TRICKS], ["eyespot", "flagellum", "chloroplast", "phototaxis", "euglenid", "metaboly", "paramylon"]);
   assert.deepEqual([...T.HAPPY], ["viridis", "gracilis", "sanguinea"]);

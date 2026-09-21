@@ -2136,7 +2136,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Wedge Rui-dense ultra (HACKLES_HOLD=11.2); Brick now Rue-dense; next leftover Drake / mallard", () => {
+test("notes: Wedge Rui-dense ultra (HACKLES_HOLD=11.2); Brick now Rue-dense; Drake now Rue-dense; next leftover Vee / canada_goose", () => {
 
   assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Crow.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
@@ -2323,7 +2323,7 @@ test("notes: Wedge Rui-dense ultra (HACKLES_HOLD=11.2); Brick now Rue-dense; nex
   assert.equal(T.TRICKS.includes("dart"), false);
   assert.equal(Goldfish.TRICKS.includes("flare"), true);
   assert.equal(T.TRICKS.includes("flare"), false);
-  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Drake / mallard.
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Vee / canada_goose.
   assert.equal("raven", "raven");
   assert.equal("Wedge", "Wedge");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
