@@ -598,6 +598,11 @@ test("belt/penumbra/eclipse/limb/limitor/umbra/syzygy are twilight-belt-true, no
   assert.equal(held.anim, "sit");
   assert.ok(held.rot !== 0 || held.lift > 0);
   const release = T.stepTrick(bole, T.LIMITOR_HOLD + 0.2, ground);
+  assert.equal(T.LIMITOR_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.equal(T.LIMITOR_HOLD, Overlay.LIMITOR_HOLD);
+  assert.equal(T.RELEASE_S, Overlay.RELEASE_S);
+  assert.ok(T.LIMITOR_HOLD <= 12);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
   const doneBole = T.stepTrick(bole, T.DUR.limitor + 0.1, ground);
@@ -802,7 +807,7 @@ test("belt/penumbra/eclipse/limb/limitor/umbra/syzygy are twilight-belt-true, no
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -1294,7 +1299,8 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Dusk ultra idle-life done; next house-order ultra is Reed / frog", () => {
+test("notes: Dusk Rui-dense ultra (LIMITOR_HOLD=11.2); next leftover Knot / nexus", () => {
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Knot / nexus.
   assert.equal(T.TRICK_KEY, "terminator");
   assert.deepEqual([...T.TRICKS], ["belt", "penumbra", "eclipse", "limb", "limitor", "umbra", "syzygy"]);
   assert.deepEqual([...T.HAPPY], ["crepuscule", "gloaming", "eventide"]);
