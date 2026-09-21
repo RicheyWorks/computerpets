@@ -551,7 +551,7 @@ test("ultra-polish: Anchor coil/dorsal/pectoral lifts are Rui-visible (not micro
   assert.ok(T.nextTrickWait(true, 0, "coil") > 39);
 });
 
-test("notes: Anchor Rui-dense ultra (COIL_HOLD=11.2); next leftover Kite / manta", () => {
+test("notes: Anchor Rui-dense ultra (COIL_HOLD=11.2); Kite densified; next leftover Door / moray", () => {
   assert.equal(T.TRICK_KEY, "seahorse");
   assert.equal(T.wantsThankYou("anchor"), true);
   assert.equal(OverlayGround.tricksFor("seahorse"), Overlay);

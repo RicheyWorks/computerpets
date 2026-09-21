@@ -435,7 +435,7 @@ test("ultra-polish: Pulse bell/rhopalium/horseshoe lifts are Rui-visible (not mi
   assert.ok(T.nextTrickWait(true, 0, "bell") > 39);
 });
 
-test("notes: Pulse Rui-dense ultra (BELL_HOLD=11.2); Ochre densified; Tenant densified; Ledger densified; Anchor densified; next leftover Kite / manta", () => {
+test("notes: Pulse Rui-dense ultra (BELL_HOLD=11.2); Ochre densified; Tenant densified; Ledger densified; Anchor densified; Kite densified; next leftover Door / moray", () => {
   assert.equal(T.TRICK_KEY, "moon_jelly");
   assert.equal(T.wantsThankYou("pulse"), true);
   assert.equal(OverlayGround.tricksFor("moon_jelly"), Overlay);
