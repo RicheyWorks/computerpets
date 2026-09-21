@@ -252,7 +252,8 @@ test("wing/lobe/gyre/vault/span/breach/ram are house-manta-true, not copies of p
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("pulse"), false);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -557,9 +558,13 @@ test("ultra-polish: Kite span/wing/breach/ram lifts are Rui-visible (not micro i
   assert.ok(r2.lift > 0.5 || Math.abs(r2.rot) > 4 || Math.abs(r2.x - 80) > 0.5, `ram mid ${r2.lift}/${r2.rot}/${r2.x}`);
   assert.ok(Overlay.breachPose && Overlay.ramPose);
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.SPAN_HOLD, Overlay.SPAN_HOLD);
+  assert.equal(T.SPAN_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "span") > 39);
 });
 
-test("notes: Kite idle-life ultra done; Door / moray ultra follows; next after Door is Felt / moss — retained check that Kite still wires", () => {
+test("notes: Kite Rui-dense ultra (SPAN_HOLD=11.2); next leftover Door / moray", () => {
   assert.equal(T.TRICK_KEY, "manta");
   assert.equal(T.wantsThankYou("kite"), true);
   assert.equal(OverlayGround.tricksFor("seahorse"), OverlaySeahorse);

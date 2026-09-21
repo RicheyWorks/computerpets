@@ -1,4 +1,4 @@
-/** Kite ground tricks while idle — ultra-polish pass. House reef manta — wing / lobe / gyre / vault / span / breach / ram personality (pectoral wingbeat glide, cephalic-lobe plankton scoop, barrel-roll curiosity as a gyre (never named barrel — window-play owns BARREL), forward somersault vault (never named somersault — Rui owns that), gentle-giant wingspan desk hold, surface breach leap, ram-filter mouth-open feed glide; not Coin drift/gulp/flare/glint/dart/yawn/forage, Pulse bell/oral/lucent/trail/medusa, Anchor coil/buoy/siphon/swivel/pouch/dorsal/pectoral, Ledger carapace/bookgill/telson/furrow/fossil/pusher/ocular, Tenant swap/antenna/scuttle/withdraw/vacancy/chela/bailer, Ochre podia/righting/crawl/evert/penta/madre/papula, Sepia hover/pupil, Chamber spiral, Cup mantle/jet, Ink soak/tuck, Clip nest, or Soar eagle_ray spots). Breach is the species-true surface leap (not vault flip alone, not Rui somersault, not window-play BARREL); ram is Mobula/Manta filter-feeding with cephalic lobes funneling (not lobe scoop alone, not Coin gulp, not Cup jet). Window-play BARREL unchanged — never names `barrel`. Special Soar (eagle_ray) unchanged — never names soar. Ethogram keeps span sit_hold; adds wing/lobe/gyre/vault/breach/ram softs + freeze (replaces thin soar/glide). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via manta.wav. Thank-yous ceil / scoop / breadth. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web `manta-tricks.ts`. True house-manta desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids barrel/soar/spots/hitch/hover/coil/buoy/siphon/swivel/pouch/dorsal/pectoral/carapace/bookgill/swap/withdraw/podia/bell/oral/mantle/jet/drift/gulp/flare/somersault name collisions with prior guests and manta window-play. Bird ultra (Soot→Ember) + Miso→Anchor done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Door / moray ultra done. Next guest ultra is Felt / moss. No cry inventing beyond house manta.wav prefer. Never retouch Rui sprites. */
+/** Kite ground tricks while idle — ultra-polish pass. House reef manta — wing / lobe / gyre / vault / span / breach / ram personality (pectoral wingbeat glide, cephalic-lobe plankton scoop, barrel-roll curiosity as a gyre (never named barrel — window-play owns BARREL), forward somersault vault (never named somersault — Rui owns that), gentle-giant wingspan desk hold, surface breach leap, ram-filter mouth-open feed glide; not Coin drift/gulp/flare/glint/dart/yawn/forage, Pulse bell/oral/lucent/trail/medusa, Anchor coil/buoy/siphon/swivel/pouch/dorsal/pectoral, Ledger carapace/bookgill/telson/furrow/fossil/pusher/ocular, Tenant swap/antenna/scuttle/withdraw/vacancy/chela/bailer, Ochre podia/righting/crawl/evert/penta/madre/papula, Sepia hover/pupil, Chamber spiral, Cup mantle/jet, Ink soak/tuck, Clip nest, or Soar eagle_ray spots). Breach is the species-true surface leap (not vault flip alone, not Rui somersault, not window-play BARREL); ram is Mobula/Manta filter-feeding with cephalic lobes funneling (not lobe scoop alone, not Coin gulp, not Cup jet). Window-play BARREL unchanged — never names `barrel`. Special Soar (eagle_ray) unchanged — never names soar. Ethogram keeps span sit_hold; adds wing/lobe/gyre/vault/breach/ram softs + freeze (replaces thin soar/glide). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via manta.wav. Thank-yous ceil / scoop / breadth. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web `manta-tricks.ts`. True house-manta desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids barrel/soar/spots/hitch/hover/coil/buoy/siphon/swivel/pouch/dorsal/pectoral/carapace/bookgill/swap/withdraw/podia/bell/oral/mantle/jet/drift/gulp/flare/somersault name collisions with prior guests and manta window-play. Bird ultra (Soot→Ember) + Miso→Anchor done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Door / moray ultra done. Next guest ultra is Felt / moss. Amplitudes raised toward Rui richness; denser waits/weights (SPAN_HOLD=11.2 RELEASE_S=1.18). Next leftover Door / moray. No cry inventing beyond house manta.wav prefer. Never retouch Rui sprites. */
 (function (root) {
 const TRICK_KEY = "manta";
 const TRICKS = ["wing", "lobe", "gyre", "vault", "span", "breach", "ram"];
@@ -9,8 +9,8 @@ const HAPPY_DUR = {
     breadth: 1.24,
 };
 /** Span hold — Kite opens the full pectoral wingspan on the desk. Not window-play BARREL. Not Anchor coil. */
-const SPAN_HOLD = 10.8;
-const RELEASE_S = 0.62;
+const SPAN_HOLD = 11.2;
+const RELEASE_S = 1.18;
 const DUR = {
     span: SPAN_HOLD + RELEASE_S,
     wing: 1.58,
@@ -51,12 +51,12 @@ function shouldAbort(state) {
 function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
     if (kind === "span")
-        return 38 + roll * 24;
+        return 40 + roll * 26;
     if (kind === "breach" || kind === "gyre" || kind === "vault")
-        return 12 + roll * 9;
+        return 12.8 + roll * 9.4;
     if (kind === "wing" || kind === "lobe" || kind === "ram")
-        return 11 + roll * 8;
-    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+        return 12.8 + roll * 9.4;
+    return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 function pickTrick(rand, musicOn = false, lastKind) {
     if (musicOn)
@@ -64,7 +64,7 @@ function pickTrick(rand, musicOn = false, lastKind) {
     const roll = rand == null ? Math.random() : rand;
     const pool = TRICKS.filter((k) => k !== lastKind);
     const list = pool.length ? pool : [...TRICKS];
-    const weights = list.map((k) => k === "span" ? 0.55 : k === "breach" || k === "gyre" || k === "vault" ? 1.15 : 1);
+    const weights = list.map((k) => k === "span" ? 0.72 : k === "breach" || k === "gyre" || k === "vault" ? 1.28 : k === "wing" || k === "lobe" || k === "ram" ? 1.18 : 1.08);
     let total = 0;
     for (let i = 0; i < weights.length; i++)
         total += weights[i];
@@ -139,55 +139,55 @@ function ceilPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.ceil));
     if (u < 0.18) {
         const s = u / 0.18;
-        return { lift: s * 2.8, rot: s * -12, dx: 0, anim: "play" };
+        return { lift: s * 3.36, rot: s * -14.4, dx: 0, anim: "play" };
     }
     if (u < 0.8) {
         const tip = Math.sin(t * 1.85);
         return {
-            lift: 2.8 + Math.abs(tip) * 1.4,
-            rot: -12 + tip * 16,
-            dx: tip * 0.35,
+            lift: 3.36 + Math.abs(tip) * 1.68,
+            rot: -14.4 + tip * 19.2,
+            dx: tip * 0.42,
             anim: "play",
         };
     }
     const s = (u - 0.8) / 0.2;
-    return { lift: 2.0 * (1 - s), rot: -8 * (1 - s), dx: 0, anim: "idle" };
+    return { lift: 2.88 * (1 - s), rot: -9.6 * (1 - s), dx: 0, anim: "idle" };
 }
 function scoopPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.scoop));
     if (u < 0.2) {
         const s = u / 0.2;
-        return { lift: s * 2.4, rot: s * 18, dx: 0, anim: "talk" };
+        return { lift: s * 2.88, rot: s * 21.6, dx: 0, anim: "talk" };
     }
     if (u < 0.78) {
         const draw = Math.sin(t * 2.2);
         return {
-            lift: 2.4 + Math.abs(draw) * 1.3,
-            rot: 18 + draw * 14,
-            dx: draw * 0.28,
+            lift: 2.88 + Math.abs(draw) * 1.56,
+            rot: 21.6 + draw * 16.8,
+            dx: draw * 0.336,
             anim: "talk",
         };
     }
     const s = (u - 0.78) / 0.22;
-    return { lift: 1.6 * (1 - s), rot: 10 * (1 - s), dx: 0, anim: "idle" };
+    return { lift: 1.92 * (1 - s), rot: 12 * (1 - s), dx: 0, anim: "idle" };
 }
 function breadthPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.breadth));
     if (u < 0.22) {
         const s = u / 0.22;
-        return { lift: s * 2.2, rot: s * 6, dx: 0, anim: "sit" };
+        return { lift: s * 2.64, rot: s * 7.2, dx: 0, anim: "sit" };
     }
     if (u < 0.78) {
         const breath = Math.sin(t * 1.1);
         return {
-            lift: 2.2 + Math.abs(breath) * 1.1,
-            rot: 6 + breath * 8,
-            dx: breath * 0.2,
+            lift: 2.64 + Math.abs(breath) * 1.32,
+            rot: 7.2 + breath * 9.6,
+            dx: breath * 0.24,
             anim: "sit",
         };
     }
     const s = (u - 0.78) / 0.22;
-    return { lift: 1.5 * (1 - s), rot: 4 * (1 - s), dx: 0, anim: "idle" };
+    return { lift: 2.16 * (1 - s), rot: 4.8 * (1 - s), dx: 0, anim: "idle" };
 }
 function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done")
@@ -237,8 +237,8 @@ function smoothstep(t) {
 function spanPose(t) {
     const breath = Math.sin(t * 0.42);
     return {
-        lift: 2.4 + Math.abs(breath) * 1.2,
-        rot: breath * 6,
+        lift: 2.88 + Math.abs(breath) * 1.44,
+        rot: breath * 7.2,
         anim: "sit",
     };
 }
@@ -246,8 +246,8 @@ function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
     const s = smoothstep(u);
     return {
-        lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)),
-        rot: 4 * (1 - s),
+        lift: 2.88 * (1 - Math.sin(u * Math.PI * 0.5)),
+        rot: 4.8 * (1 - s),
         anim: "sit",
     };
 }
@@ -256,24 +256,24 @@ function wingPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.wing));
     if (u < 0.14) {
         const s = smoothstep(u / 0.14);
-        return { x: fromX, lift: s * 3.0, rot: s * -14 * facing, anim: "walk" };
+        return { x: fromX, lift: s * 3.6, rot: s * -16.8 * facing, anim: "walk" };
     }
     if (u < 0.72) {
         const s = (u - 0.14) / 0.58;
         const beat = Math.sin(s * Math.PI * 4.6);
         const surge = Math.sin(s * Math.PI * 1.3);
         return {
-            x: fromX + facing * (surge * 1.4 + beat * 0.4),
-            lift: 3.0 + Math.abs(beat) * 1.7,
-            rot: facing * (-14 + beat * 18 + surge * 8),
+            x: fromX + facing * (surge * 1.68 + beat * 0.48),
+            lift: 3.6 + Math.abs(beat) * 2.04,
+            rot: facing * (-16.8 + beat * 21.6 + surge * 9.6),
             anim: "walk",
         };
     }
     const s = smoothstep((u - 0.72) / 0.28);
     return {
-        x: fromX + facing * 1.1 * (1 - s),
-        lift: 2.2 * (1 - s),
-        rot: facing * (-8 * (1 - s)),
+        x: fromX + facing * 1.32 * (1 - s),
+        lift: 2.64 * (1 - s),
+        rot: facing * (-9.6 * (1 - s)),
         anim: "idle",
     };
 }
@@ -282,23 +282,23 @@ function lobePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.lobe));
     if (u < 0.16) {
         const s = smoothstep(u / 0.16);
-        return { x: fromX, lift: s * 2.6, rot: s * 18 * facing, anim: "talk" };
+        return { x: fromX, lift: s * 3.12, rot: s * 21.6 * facing, anim: "talk" };
     }
     if (u < 0.74) {
         const s = (u - 0.16) / 0.58;
         const scoop = Math.sin(s * Math.PI * 3.4);
         return {
-            x: fromX + facing * scoop * 0.55,
-            lift: 2.6 + Math.abs(scoop) * 1.4,
-            rot: facing * (18 + scoop * 16),
+            x: fromX + facing * scoop * 0.66,
+            lift: 3.12 + Math.abs(scoop) * 1.68,
+            rot: facing * (21.6 + scoop * 19.2),
             anim: "talk",
         };
     }
     const s = smoothstep((u - 0.74) / 0.26);
     return {
         x: fromX,
-        lift: 1.8 * (1 - s),
-        rot: facing * (10 * (1 - s)),
+        lift: 2.16 * (1 - s),
+        rot: facing * (12 * (1 - s)),
         anim: "idle",
     };
 }
@@ -307,23 +307,23 @@ function gyrePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.gyre));
     if (u < 0.12) {
         const s = smoothstep(u / 0.12);
-        return { x: fromX, lift: s * 3.4, rot: s * -16 * facing, anim: "play" };
+        return { x: fromX, lift: s * 4.08, rot: s * -19.2 * facing, anim: "play" };
     }
     if (u < 0.78) {
         const s = (u - 0.12) / 0.66;
         const roll = Math.sin(s * Math.PI * 2);
         return {
-            x: fromX + facing * Math.sin(s * Math.PI) * 2.2,
-            lift: 3.4 + Math.abs(Math.sin(s * Math.PI * 2)) * 1.8,
-            rot: facing * (-16 + s * 42 + roll * 22),
+            x: fromX + facing * Math.sin(s * Math.PI) * 2.64,
+            lift: 4.08 + Math.abs(Math.sin(s * Math.PI * 2)) * 2.16,
+            rot: facing * (-19.2 + s * 50.4 + roll * 26.4),
             anim: "play",
         };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
-        x: fromX + facing * 1.2 * (1 - s),
-        lift: 2.4 * (1 - s),
-        rot: facing * (10 * (1 - s)),
+        x: fromX + facing * 1.44 * (1 - s),
+        lift: 2.88 * (1 - s),
+        rot: facing * (12 * (1 - s)),
         anim: "idle",
     };
 }
@@ -332,23 +332,23 @@ function vaultPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.vault));
     if (u < 0.14) {
         const s = smoothstep(u / 0.14);
-        return { x: fromX, lift: s * 3.6, rot: s * -12 * facing, anim: "play" };
+        return { x: fromX, lift: s * 4.32, rot: s * -14.4 * facing, anim: "play" };
     }
     if (u < 0.72) {
         const s = (u - 0.14) / 0.58;
         const flip = Math.sin(s * Math.PI);
         return {
-            x: fromX + facing * s * 2.8,
-            lift: 3.6 + flip * 2.2,
-            rot: facing * (-12 + s * 36),
+            x: fromX + facing * s * 3.36,
+            lift: 4.32 + flip * 2.64,
+            rot: facing * (-14.4 + s * 43.2),
             anim: "play",
         };
     }
     const s = smoothstep((u - 0.72) / 0.28);
     return {
-        x: fromX + facing * 2.4 * (1 - s),
-        lift: 2.4 * (1 - s),
-        rot: facing * (8 * (1 - s)),
+        x: fromX + facing * 2.88 * (1 - s),
+        lift: 2.88 * (1 - s),
+        rot: facing * (9.6 * (1 - s)),
         anim: "idle",
     };
 }
@@ -357,15 +357,15 @@ function breachPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.breach));
     if (u < 0.12) {
         const s = smoothstep(u / 0.12);
-        return { x: fromX, lift: s * 2.2, rot: s * -8 * facing, anim: "play" };
+        return { x: fromX, lift: s * 2.64, rot: s * -9.6 * facing, anim: "play" };
     }
     if (u < 0.45) {
         const s = (u - 0.12) / 0.33;
         const rise = smoothstep(s);
         return {
-            x: fromX + facing * rise * 1.6,
-            lift: 2.2 + rise * 4.2,
-            rot: facing * (-8 + rise * -18),
+            x: fromX + facing * rise * 1.92,
+            lift: 2.64 + rise * 5.04,
+            rot: facing * (-9.6 + rise * -21.6),
             anim: "play",
         };
     }
@@ -373,17 +373,17 @@ function breachPose(t, fromX, facing) {
         const s = (u - 0.45) / 0.33;
         const arc = Math.sin(s * Math.PI);
         return {
-            x: fromX + facing * (1.6 + s * 2.4),
-            lift: 6.4 - s * 3.2 + arc * 0.8,
-            rot: facing * (-26 + s * 40),
+            x: fromX + facing * (1.92 + s * 2.88),
+            lift: 7.68 - s * 3.84 + arc * 0.96,
+            rot: facing * (-31.2 + s * 48),
             anim: "play",
         };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
-        x: fromX + facing * 3.6 * (1 - s * 0.35),
-        lift: 2.8 * (1 - s),
-        rot: facing * (10 * (1 - s)),
+        x: fromX + facing * 4.32 * (1 - s * 0.35),
+        lift: 3.36 * (1 - s),
+        rot: facing * (12 * (1 - s)),
         anim: "idle",
     };
 }
@@ -392,24 +392,24 @@ function ramPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.ram));
     if (u < 0.14) {
         const s = smoothstep(u / 0.14);
-        return { x: fromX, lift: s * 2.8, rot: s * 14 * facing, anim: "talk" };
+        return { x: fromX, lift: s * 3.36, rot: s * 16.8 * facing, anim: "talk" };
     }
     if (u < 0.74) {
         const s = (u - 0.14) / 0.6;
         const surge = Math.sin(s * Math.PI * 1.6);
         const filter = Math.sin(s * Math.PI * 4.2);
         return {
-            x: fromX + facing * (s * 2.6 + filter * 0.25),
-            lift: 2.8 + Math.abs(surge) * 1.5 + Math.abs(filter) * 0.6,
-            rot: facing * (14 + surge * 10 + filter * 6),
+            x: fromX + facing * (s * 3.12 + filter * 0.3),
+            lift: 3.36 + Math.abs(surge) * 1.8 + Math.abs(filter) * 0.72,
+            rot: facing * (16.8 + surge * 12 + filter * 7.2),
             anim: "talk",
         };
     }
     const s = smoothstep((u - 0.74) / 0.26);
     return {
-        x: fromX + facing * 2.2 * (1 - s),
-        lift: 2.0 * (1 - s),
-        rot: facing * (8 * (1 - s)),
+        x: fromX + facing * 2.64 * (1 - s),
+        lift: 2.4 * (1 - s),
+        rot: facing * (9.6 * (1 - s)),
         anim: "idle",
     };
 }
