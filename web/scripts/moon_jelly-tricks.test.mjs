@@ -217,7 +217,8 @@ test("bell/oral/lucent/trail/medusa/rhopalium/horseshoe are house-moon-jelly-tru
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("pulse"), false);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
 });
 
 test("Pulse feed-happy is its own sit: halo/lumen/gel, and two feeds are not the same", () => {
