@@ -393,7 +393,7 @@ test("ultra-polish: Bluff hood/feign/quiver/upright lifts are Rui-visible (not m
   assert.equal(T.HAPPY_DUR.aside, Overlay.HAPPY_DUR.aside);
 });
 
-test("notes: Bluff Rui-dense ultra (HOOD_HOLD=11.2); Sash densified; Lula densified; Coral densified; Blush densified; Atlas densified; Cup densified; Sepia densified; Chamber densified; Pulse densified; Ochre densified; Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; Felt densified; next leftover Vein / maidenhair", () => {
+test("notes: Bluff Rui-dense ultra (HOOD_HOLD=11.2); Sash densified; Lula densified; Coral densified; Blush densified; Atlas densified; Cup densified; Sepia densified; Chamber densified; Pulse densified; Ochre densified; Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; Felt densified; Vein densified; next leftover Fan / ginkgo", () => {
   assert.equal(T.TRICK_KEY, "hognose");
   assert.equal(T.wantsThankYou("bluff"), true);
   globalThis.PetHognoseTricks = Overlay;
