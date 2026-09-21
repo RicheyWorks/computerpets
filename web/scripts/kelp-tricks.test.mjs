@@ -2172,7 +2172,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Hold Rui-dense ultra (MERISTEM_HOLD=11.2); next leftover Spin / chlamydomonas", () => {
+test("notes: Hold Rui-dense ultra (MERISTEM_HOLD=11.2); Spin now Rue-dense; next leftover Bell / stentor", () => {
   assert.equal(T.TRICK_KEY, "kelp");
   assert.deepEqual([...T.TRICKS], ["holdfast", "haptera", "blade", "pneumatocyst", "meristem", "sorus", "sporophyll"]);
   assert.deepEqual([...T.HAPPY], ["pyrifera", "integrifolia", "angustifolia"]);
@@ -2361,9 +2361,9 @@ test("notes: Hold Rui-dense ultra (MERISTEM_HOLD=11.2); next leftover Spin / chl
   assert.equal(T.TRICKS.includes("dart"), false);
   assert.equal(Goldfish.TRICKS.includes("flare"), true);
   assert.equal(T.TRICKS.includes("flare"), false);
-  // Recommend next leftover (do not implement): Spin / chlamydomonas.
-  assert.equal("chlamydomonas", "chlamydomonas");
-  assert.equal("Spin", "Spin");
+  // Recommend next leftover (do not implement): Bell / stentor.
+  assert.equal("stentor", "stentor");
+  assert.equal("Bell", "Bell");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("chelate"), false);
   assert.equal(Salamander.TRICKS.includes("holdfast"), false);
