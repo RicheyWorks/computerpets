@@ -221,7 +221,8 @@ test("podia/righting/crawl/evert/penta/madre/papula are house-sea-star-true, not
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("pulse"), false);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
 });
 
 test("Cling feed-happy is its own sit: damp/press/tide, and two feeds are not the same", () => {
@@ -442,9 +443,13 @@ test("ultra-polish: Ochre podia/madre/papula lifts are Rui-visible (not micro id
   assert.ok(c2.lift > 0.5 || Math.abs(c2.rot) > 4 || Math.abs(c2.x - 80) > 0.5, `crawl mid ${c2.lift}/${c2.rot}/${c2.x}`);
   assert.ok(Overlay.madrePose && Overlay.papulaPose);
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.PODIA_HOLD, Overlay.PODIA_HOLD);
+  assert.equal(T.PODIA_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "podia") > 39);
 });
 
-test("notes: Ochre idle-life ultra done; Anchor / seahorse ultra done; next house-order ultra guest is Kite / manta (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger + Anchor already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Ochre Rui-dense ultra (PODIA_HOLD=11.2); next leftover Tenant / hermit_crab", () => {
   assert.equal(T.TRICK_KEY, "sea_star");
   assert.equal(T.wantsThankYou("cling"), true);
   assert.equal(OverlayGround.tricksFor("sea_star"), Overlay);
