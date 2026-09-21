@@ -1933,7 +1933,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Reed Rui-dense ultra (LENTIC_HOLD=11.2); Pebble now Rue-dense; Eft now Rue-dense; Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; next leftover Prickle / stickleback", () => {
+test("notes: Reed Rui-dense ultra (LENTIC_HOLD=11.2); Pebble now Rue-dense; Eft now Rue-dense; Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; next leftover Boot / paramecium", () => {
   assert.equal(T.TRICK_KEY, "frog");
   assert.deepEqual([...T.TRICKS], ["gular", "nictitate", "tympanum", "iliac", "lentic", "toepad", "webbing"]);
   assert.deepEqual([...T.HAPPY], ["chorus", "rivulet", "spring"]);
@@ -1995,9 +1995,9 @@ test("notes: Reed Rui-dense ultra (LENTIC_HOLD=11.2); Pebble now Rue-dense; Eft 
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next leftover (do not implement): Prickle / stickleback.
-  assert.equal("stickleback", "stickleback");
-  assert.equal("Prickle", "Prickle");
+  // Recommend next leftover (do not implement): Boot / paramecium.
+  assert.equal("paramecium", "paramecium");
+  assert.equal("Boot", "Boot");
 });
 
 
