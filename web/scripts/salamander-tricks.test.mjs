@@ -2044,7 +2044,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Dapple Rui-dense ultra (AMBYSTOMID_HOLD=11.2); Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; Drake now Rue-dense; Vee now Rue-dense; next leftover Drum / pileated", () => {
+test("notes: Dapple Rui-dense ultra (AMBYSTOMID_HOLD=11.2); Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; Drake now Rue-dense; Vee now Rue-dense; Drum now Rue-dense; next leftover Sip / hummingbird", () => {
   assert.equal(T.TRICK_KEY, "salamander");
   assert.deepEqual([...T.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.deepEqual([...T.HAPPY], ["mottled", "speckled", "blotched"]);
