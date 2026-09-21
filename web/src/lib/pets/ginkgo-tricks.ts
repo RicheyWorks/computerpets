@@ -1,4 +1,4 @@
-/** Fan ground tricks while idle — ultra-polish pass. House ginkgo — biloba / notch / flutter / drop / amber / dichotomy / petiole personality (two-lobed biloba fan leaf open — never named fan (Parrot owns fan) / lobe (Kite owns lobe) / frond (Vein owns frond), apical notch tip settle, flutter fall as flutter — never named lean (Felt window owns lean) / unfurl (Vein window owns unfurl) / nod (Sol owns nod) / gold (Fan window owns gold), soft golden drop to blotter, living-fossil amber calm desk life under the lamp, dichotomous vein-fork shimmer as dichotomy — never named fork (taken) / venation collision with Vein name / midrib (taken), slender leaf-stalk petiole flex (species-true ginkgo petiole — never named stipe (Vein owns stipe) / rachis (Vein) / root (Burr) / rhizoid (Felt)); not Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest, Bloom gill, parrot fan/flash, or snake guests Sash seam/moss/lap copies). Dichotomy is the species-true forking leaf-vein polish (not Vein name, not fork token). Petiole is the iconic long slender stalk flex (not Vein stipe, not Burr root). Window-play GOLD unchanged — never names gold as a trick. Ethogram keeps amber sit_hold; adds biloba/notch/flutter/drop/dichotomy/petiole softs + freeze (replaces thin lean/nod/still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via ginkgo.wav. Thank-yous ochre / gilt / linger. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `ginkgo-tricks.js`. True house-ginkgo desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/sheet-moss/Felt/maidenhair/Vein or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids fan/gold/lean/unfurl/nod/frond/rachis/fiddle/pinna/saucer/sori/stipe/tuft/bead/spore/cushion/thatch/rhizoid/seta/fork/midrib/fossil/root name collisions. Bird ultra (Soot→Ember) + Miso→Vein done; skip Rui + birds. Next guest ultra is Mast / oak. No cry inventing beyond house ginkgo.wav prefer. Never retouch Rui sprites. */
+/** Fan ground tricks while idle — ultra-polish pass. House ginkgo — biloba / notch / flutter / drop / amber / dichotomy / petiole personality (two-lobed biloba fan leaf open — never named fan (Parrot owns fan) / lobe (Kite owns lobe) / frond (Vein owns frond), apical notch tip settle, flutter fall as flutter — never named lean (Felt window owns lean) / unfurl (Vein window owns unfurl) / nod (Sol owns nod) / gold (Fan window owns gold), soft golden drop to blotter, living-fossil amber calm desk life under the lamp, dichotomous vein-fork shimmer as dichotomy — never named fork (taken) / venation collision with Vein name / midrib (taken), slender leaf-stalk petiole flex (species-true ginkgo petiole — never named stipe (Vein owns stipe) / rachis (Vein) / root (Burr) / rhizoid (Felt)); not Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest, Bloom gill, parrot fan/flash, or snake guests Sash seam/moss/lap copies). Dichotomy is the species-true forking leaf-vein polish (not Vein name, not fork token). Petiole is the iconic long slender stalk flex (not Vein stipe, not Burr root). Window-play GOLD unchanged — never names gold as a trick. Ethogram keeps amber sit_hold; adds biloba/notch/flutter/drop/dichotomy/petiole softs + freeze (replaces thin lean/nod/still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via ginkgo.wav. Thank-yous ochre / gilt / linger. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `ginkgo-tricks.js`. True house-ginkgo desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/sheet-moss/Felt/maidenhair/Vein or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids fan/gold/lean/unfurl/nod/frond/rachis/fiddle/pinna/saucer/sori/stipe/tuft/bead/spore/cushion/thatch/rhizoid/seta/fork/midrib/fossil/root name collisions. Bird ultra (Soot→Ember) + Miso→Vein done; skip Rui + birds. Amplitudes raised toward Rui richness; denser waits/weights (AMBER_HOLD=11.2 RELEASE_S=1.18). Next leftover Mast / oak. No cry inventing beyond house ginkgo.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "ginkgo";
 export const TRICKS = ["biloba", "notch", "flutter", "drop", "amber", "dichotomy", "petiole"] as const;
 export const HAPPY = ["ochre", "gilt", "linger"] as const;
@@ -51,8 +51,8 @@ export const HAPPY_DUR: Record<GinkgoHappyKind, number> = {
 };
 
 /** Amber hold — Fan parks living-fossil calm on the blotter. Not window-play GOLD. */
-export const AMBER_HOLD = 10.8;
-export const RELEASE_S = 0.62;
+export const AMBER_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 
 export const DUR: Record<GinkgoTrickKind, number> = {
   amber: AMBER_HOLD + RELEASE_S,
@@ -92,54 +92,28 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: GinkgoTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "amber") return 38 + roll * 24;
-  if (kind === "flutter" || kind === "dichotomy" || kind === "petiole") return 12 + roll * 9;
-  if (kind === "biloba" || kind === "notch" || kind === "drop") return 11 + roll * 8;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "amber") return 40 + roll * 26;
+  if (kind === "dichotomy" || kind === "petiole") return 12.8 + roll * 9.4;
+  if (kind === "biloba" || kind === "notch" || kind === "flutter") return 12.8 + roll * 9.4;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: GinkgoTrickKind | string | null) {
-  if (musicOn) return "amber" as const;
+export function pickTrick(rand?: number, musicOn = false, lastKind?: GinkgoTrickKind | string | null): GinkgoTrickKind {
+  if (musicOn) return "amber";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "amber") {
-    if (roll < 0.18) return "biloba" as const;
-    if (roll < 0.34) return "notch" as const;
-    if (roll < 0.5) return "flutter" as const;
-    if (roll < 0.66) return "drop" as const;
-    if (roll < 0.83) return "dichotomy" as const;
-    return "petiole" as const;
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...TRICKS];
+  const weights = list.map((k) =>
+    k === "amber" ? 0.72 : k === "dichotomy" || k === "petiole" ? 1.28 : k === "biloba" || k === "notch" || k === "flutter" ? 1.18 : 1.08
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i]!;
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i]!;
+    if (r <= 0) return list[i]!;
   }
-  if (lastKind === "biloba") {
-    if (roll < 0.2) return "amber" as const;
-    if (roll < 0.36) return "notch" as const;
-    if (roll < 0.52) return "flutter" as const;
-    if (roll < 0.68) return "drop" as const;
-    if (roll < 0.84) return "dichotomy" as const;
-    return "petiole" as const;
-  }
-  if (lastKind === "notch") {
-    if (roll < 0.18) return "amber" as const;
-    if (roll < 0.34) return "biloba" as const;
-    if (roll < 0.5) return "flutter" as const;
-    if (roll < 0.66) return "drop" as const;
-    if (roll < 0.83) return "dichotomy" as const;
-    return "petiole" as const;
-  }
-  if (lastKind === "dichotomy" || lastKind === "petiole") {
-    if (roll < 0.16) return "amber" as const;
-    if (roll < 0.32) return "biloba" as const;
-    if (roll < 0.48) return "notch" as const;
-    if (roll < 0.64) return "flutter" as const;
-    if (roll < 0.8) return "drop" as const;
-    return lastKind === "dichotomy" ? ("petiole" as const) : ("dichotomy" as const);
-  }
-  if (roll < 0.14) return "amber" as const;
-  if (roll < 0.28) return "biloba" as const;
-  if (roll < 0.42) return "notch" as const;
-  if (roll < 0.56) return "flutter" as const;
-  if (roll < 0.7) return "drop" as const;
-  if (roll < 0.85) return "dichotomy" as const;
-  return "petiole" as const;
+  return list[list.length - 1] || "biloba";
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -211,45 +185,45 @@ export function ochrePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.ochre));
   if (u < 0.2) {
     const s = u / 0.2;
-    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" as TrickAnim };
+    return { lift: s * 3.36, rot: s * 14.4, dx: 0, anim: "talk" as TrickAnim };
   }
   if (u < 0.76) {
     const warm = Math.sin(t * 1.72);
     return {
-      lift: 2.8 + Math.abs(warm) * 1.4,
-      rot: 12 + warm * 10,
-      dx: warm * 0.12,
+      lift: 3.36 + Math.abs(warm) * 1.68,
+      rot: 14.4 + warm * 12,
+      dx: warm * 0.144,
       anim: "talk" as TrickAnim,
     };
   }
   const s = (u - 0.76) / 0.24;
-  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  return { lift: 2.4 * (1 - s), rot: 7.2 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function giltPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.gilt));
   if (u < 0.18) {
     const s = u / 0.18;
-    return { lift: s * 3.0, rot: s * -10, dx: 0, anim: "play" as TrickAnim };
+    return { lift: s * 3.6, rot: s * -12, dx: 0, anim: "play" as TrickAnim };
   }
   if (u < 0.78) {
     const flash = Math.sin(t * 2.05);
     return {
-      lift: 3.0 + Math.abs(flash) * 1.5,
-      rot: -10 + flash * 14,
-      dx: flash * 0.14,
+      lift: 3.6 + Math.abs(flash) * 1.8,
+      rot: -12 + flash * 16.8,
+      dx: flash * 0.168,
       anim: "play" as TrickAnim,
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 2.0 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  return { lift: 2.4 * (1 - s), rot: -7.2 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
 
 export function lingerPose(t: number) {
   return {
-    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
-    rot: Math.sin(t * 0.72) * 8,
-    dx: Math.sin(t * 0.4) * -0.12,
+    lift: 2.64 + Math.abs(Math.sin(t * 0.696)) * 1.32,
+    rot: Math.sin(t * 0.864) * 9.6,
+    dx: Math.sin(t * 0.48) * -0.144,
     anim: "sit" as TrickAnim,
   };
 }
@@ -323,15 +297,15 @@ function smoothstep(t: number) {
 export function amberPose(t: number) {
   const breath = Math.sin(t * 0.42) + 0.06 * Math.sin(t * 1.15);
   return {
-    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
-    rot: 4 + breath * 6,
+    lift: 2.88 + Math.abs(Math.sin(t * 0.504)) * 1.44,
+    rot: 4.8 + breath * 7.2,
   };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
   const s = smoothstep(u);
-  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 4 * (1 - s) };
+  return { lift: 2.88 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 4.8 * (1 - s) };
 }
 
 /** Biloba — two-lobed leaf open. Not parrot fan. Not Vein frond. */
@@ -339,23 +313,23 @@ export function bilobaPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.biloba));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 2.6, rot: s * -10 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 3.12, rot: s * -12 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.78) {
     const s = (u - 0.16) / 0.62;
     const split = Math.sin(s * Math.PI * 1.6);
     return {
-      x: fromX + facing * Math.abs(split) * 0.35,
-      lift: 2.6 + Math.abs(split) * 1.6,
-      rot: facing * (-10 + split * 14),
+      x: fromX + facing * Math.abs(split) * 0.42,
+      lift: 3.12 + Math.abs(split) * 1.92,
+      rot: facing * (-12 + split * 16.8),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 1.8 * (1 - s),
-    rot: facing * (-6 * (1 - s)),
+    lift: 2.16 * (1 - s),
+    rot: facing * (-7.2 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -365,15 +339,15 @@ export function notchPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.notch));
   if (u < 0.18) {
     const s = smoothstep(u / 0.18);
-    return { x: fromX, lift: s * 2.4, rot: s * 14 * facing, anim: "talk" as TrickAnim };
+    return { x: fromX, lift: s * 2.88, rot: s * 16.8 * facing, anim: "talk" as TrickAnim };
   }
   if (u < 0.55) {
     const s = (u - 0.18) / 0.37;
     const tip = Math.sin(s * Math.PI * 3.4);
     return {
-      x: fromX + facing * tip * 0.4,
-      lift: 2.4 + Math.abs(tip) * 1.4,
-      rot: facing * (14 + tip * 12),
+      x: fromX + facing * tip * 0.48,
+      lift: 2.88 + Math.abs(tip) * 1.68,
+      rot: facing * (16.8 + tip * 14.4),
       anim: "talk" as TrickAnim,
     };
   }
@@ -381,17 +355,17 @@ export function notchPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.55) / 0.23;
     const settle = smoothstep(s);
     return {
-      x: fromX + facing * (1 - settle) * 0.5,
-      lift: 3.2 - settle * 1.2,
-      rot: facing * (14 - settle * 16),
+      x: fromX + facing * (1 - settle) * 0.6,
+      lift: 3.84 - settle * 1.44,
+      rot: facing * (16.8 - settle * 19.2),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 2.0 * (1 - s),
-    rot: facing * (-3 * (1 - s)),
+    lift: 2.4 * (1 - s),
+    rot: facing * (-3.6 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -401,24 +375,24 @@ export function flutterPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.flutter));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 4.2, rot: s * 8 * facing, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 5.04, rot: s * 9.6 * facing, anim: "play" as TrickAnim };
   }
   if (u < 0.72) {
     const s = (u - 0.14) / 0.58;
     const fall = Math.sin(s * Math.PI * 6.4);
     const descend = s * 2.4;
     return {
-      x: fromX + facing * fall * 0.45,
-      lift: 4.2 - descend + Math.abs(fall) * 0.8,
-      rot: facing * (8 + fall * 12 - s * 10),
+      x: fromX + facing * fall * 0.54,
+      lift: 5.04 - descend + Math.abs(fall) * 0.96,
+      rot: facing * (9.6 + fall * 14.4 - s * 12),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.72) / 0.28);
   return {
-    x: fromX + facing * 0.2 * (1 - s),
-    lift: 1.6 * (1 - s),
-    rot: facing * (-4 * (1 - s)),
+    x: fromX + facing * 0.24 * (1 - s),
+    lift: 1.92 * (1 - s),
+    rot: facing * (-4.8 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -428,15 +402,15 @@ export function dropPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.drop));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 3.2, rot: s * -8 * facing, anim: "talk" as TrickAnim };
+    return { x: fromX, lift: s * 3.84, rot: s * -9.6 * facing, anim: "talk" as TrickAnim };
   }
   if (u < 0.55) {
     const s = (u - 0.16) / 0.39;
     const hang = Math.sin(s * Math.PI * 1.8);
     return {
-      x: fromX + facing * hang * 0.35,
-      lift: 3.2 - s * 0.8 + Math.abs(hang) * 0.6,
-      rot: facing * (-8 + hang * 12),
+      x: fromX + facing * hang * 0.42,
+      lift: 3.84 - s * 0.96 + Math.abs(hang) * 0.72,
+      rot: facing * (-9.6 + hang * 14.4),
       anim: "talk" as TrickAnim,
     };
   }
@@ -444,17 +418,17 @@ export function dropPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.55) / 0.27;
     const land = smoothstep(s);
     return {
-      x: fromX + facing * (1 - land) * 0.4,
-      lift: 2.4 * (1 - land * 0.85),
-      rot: facing * (-4 + land * 8),
+      x: fromX + facing * (1 - land) * 0.48,
+      lift: 2.88 * (1 - land * 1.02),
+      rot: facing * (-4.8 + land * 9.6),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
     x: fromX,
-    lift: 0.8 * (1 - s),
-    rot: facing * (3 * (1 - s)),
+    lift: 0.96 * (1 - s),
+    rot: facing * (3.6 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -464,15 +438,15 @@ export function dichotomyPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.dichotomy));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 1.8, rot: s * -8 * facing, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 2.16, rot: s * -9.6 * facing, anim: "play" as TrickAnim };
   }
   if (u < 0.55) {
     const s = (u - 0.16) / 0.39;
     const shimmer = Math.sin(s * Math.PI * 4.2);
     return {
-      x: fromX + facing * (s * 0.6 + shimmer * 0.2),
-      lift: 1.8 + Math.abs(shimmer) * 1.6,
-      rot: facing * (-8 + shimmer * 14),
+      x: fromX + facing * (s * 0.72 + shimmer * 0.24),
+      lift: 2.16 + Math.abs(shimmer) * 1.92,
+      rot: facing * (-9.6 + shimmer * 16.8),
       anim: "play" as TrickAnim,
     };
   }
@@ -480,17 +454,17 @@ export function dichotomyPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.55) / 0.23;
     const hold = Math.sin(s * Math.PI * 3.4);
     return {
-      x: fromX + facing * 0.6,
-      lift: 2.8 + Math.abs(hold) * 0.8,
-      rot: facing * (4 + hold * 10),
+      x: fromX + facing * 0.72,
+      lift: 3.36 + Math.abs(hold) * 0.96,
+      rot: facing * (4.8 + hold * 12),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * 0.6 * (1 - s),
-    lift: 1.8 * (1 - s) + s * 0.2,
-    rot: facing * (4 * (1 - s)),
+    x: fromX + facing * 0.72 * (1 - s),
+    lift: 2.16 * (1 - s) + s * 0.24,
+    rot: facing * (4.8 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -500,15 +474,15 @@ export function petiolePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.petiole));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" as TrickAnim };
+    return { x: fromX, lift: s * 3.12, rot: s * 12 * facing, anim: "talk" as TrickAnim };
   }
   if (u < 0.4) {
     const s = (u - 0.14) / 0.26;
     const flex = smoothstep(s);
     return {
-      x: fromX + facing * flex * 0.5,
-      lift: 2.6 + flex * 2.4,
-      rot: facing * (10 + flex * 8),
+      x: fromX + facing * flex * 0.6,
+      lift: 3.12 + flex * 2.88,
+      rot: facing * (12 + flex * 9.6),
       anim: "talk" as TrickAnim,
     };
   }
@@ -516,17 +490,17 @@ export function petiolePose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.4) / 0.38;
     const sway = Math.sin(s * Math.PI * 3.2);
     return {
-      x: fromX + facing * (0.5 + sway * 0.3),
-      lift: 4.8 + Math.abs(sway) * 0.8,
-      rot: facing * (6 + sway * 14),
+      x: fromX + facing * (0.6 + sway * 0.36),
+      lift: 5.76 + Math.abs(sway) * 0.96,
+      rot: facing * (7.2 + sway * 16.8),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * 0.5 * (1 - s),
-    lift: 2.6 * (1 - s),
-    rot: facing * (6 * (1 - s)),
+    x: fromX + facing * 0.6 * (1 - s),
+    lift: 3.12 * (1 - s),
+    rot: facing * (7.2 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }

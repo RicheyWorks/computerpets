@@ -566,6 +566,10 @@ test("ground registry keeps prior guests gated; Fan selectable; prior guests sti
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), Overlay);
   assert.equal(OverlayGround.tricksFor("fan"), Overlay);
+  assert.equal(T.AMBER_HOLD, Overlay.AMBER_HOLD);
+  assert.equal(T.AMBER_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "amber") > 39);
   assert.deepEqual([...Overlay.TRICKS], ["biloba", "notch", "flutter", "drop", "amber", "dichotomy", "petiole"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
@@ -622,7 +626,7 @@ test("ground registry keeps prior guests gated; Fan selectable; prior guests sti
   assert.equal(OverlayGround.tricksFor("fan"), Overlay);
 });
 
-test("notes: Fan ultra-polish done; next house-order ultra is Mast / oak", () => {
+test("notes: Fan Rui-dense ultra (AMBER_HOLD=11.2); next leftover Mast / oak", () => {
   assert.equal(T.TRICK_KEY, "ginkgo");
   assert.equal(T.wantsThankYou("fan"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
