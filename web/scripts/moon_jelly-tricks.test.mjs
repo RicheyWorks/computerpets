@@ -217,7 +217,8 @@ test("bell/oral/lucent/trail/medusa/rhopalium/horseshoe are house-moon-jelly-tru
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("pulse"), false);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
 });
 
 test("Pulse feed-happy is its own sit: halo/lumen/gel, and two feeds are not the same", () => {
@@ -428,9 +429,13 @@ test("ultra-polish: Pulse bell/rhopalium/horseshoe lifts are Rui-visible (not mi
   assert.ok(t2.lift > 0.5 || Math.abs(t2.rot) > 4 || Math.abs(t2.x - 80) > 0.5, `trail mid ${t2.lift}/${t2.rot}/${t2.x}`);
   assert.ok(Overlay.rhopaliumPose && Overlay.horseshoePose);
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.BELL_HOLD, Overlay.BELL_HOLD);
+  assert.equal(T.BELL_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "bell") > 39);
 });
 
-test("notes: Pulse idle-life ultra done; Anchor / seahorse ultra done; next house-order ultra guest is Kite / manta (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger + Anchor already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
+test("notes: Pulse Rui-dense ultra (BELL_HOLD=11.2); next leftover Ochre / sea_star", () => {
   assert.equal(T.TRICK_KEY, "moon_jelly");
   assert.equal(T.wantsThankYou("pulse"), true);
   assert.equal(OverlayGround.tricksFor("moon_jelly"), Overlay);
