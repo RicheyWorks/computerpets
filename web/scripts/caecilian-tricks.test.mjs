@@ -2085,7 +2085,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Slip Rui-dense ultra (GYMNOPHION_HOLD=11.2); Pinch now Rue-dense; Whorl now Rue-dense; next leftover Hinge / mussel", () => {
+test("notes: Slip Rui-dense ultra (GYMNOPHION_HOLD=11.2); Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; next leftover Latch / leech", () => {
   assert.equal(T.TRICK_KEY, "caecilian");
   assert.deepEqual([...T.TRICKS], ["annulate", "fossorial", "tentacular", "hydrostatic", "gymnophion", "stegos", "dualjaw"]);
   assert.deepEqual([...T.HAPPY], ["annular", "silted", "glossed"]);
@@ -2171,9 +2171,9 @@ test("notes: Slip Rui-dense ultra (GYMNOPHION_HOLD=11.2); Pinch now Rue-dense; W
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next leftover (do not implement): Hinge / mussel.
-  assert.equal("mussel", "mussel");
-  assert.equal("Hinge", "Hinge");
+  // Recommend next leftover (do not implement): Latch / leech.
+  assert.equal("leech", "leech");
+  assert.equal("Latch", "Latch");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("annulate"), false);
   assert.equal(T.TRICKS.includes("maculate"), false);

@@ -1921,7 +1921,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Whorl Rui-dense ultra (LYMNAEID_HOLD=11.2); next leftover Hinge / mussel", () => {
+test("notes: Whorl Rui-dense ultra (LYMNAEID_HOLD=11.2); Hinge now Rue-dense; next leftover Latch / leech", () => {
   assert.equal(T.TRICK_KEY, "pond_snail");
   assert.deepEqual([...T.TRICKS], ["radula", "pedal", "pneumostome", "ommatophore", "lymnaeid", "odontophore", "neuston"]);
   assert.deepEqual([...T.HAPPY], ["stagnalis", "physa", "radix"]);
@@ -2048,9 +2048,9 @@ test("notes: Whorl Rui-dense ultra (LYMNAEID_HOLD=11.2); next leftover Hinge / m
   assert.equal(OverlayGround.tricksFor("whorl"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("pond_snail"), true);
   assert.equal(OverlayGround.wantsThankYou("whorl"), true);
-  // Recommend next leftover (do not implement): Hinge / mussel.
-  assert.equal("mussel", "mussel");
-  assert.equal("Hinge", "Hinge");
+  // Recommend next leftover (do not implement): Latch / leech.
+  assert.equal("leech", "leech");
+  assert.equal("Latch", "Latch");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("chelate"), false);
   assert.equal(Salamander.TRICKS.includes("radula"), false);
