@@ -2159,7 +2159,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Drake Rui-dense ultra (ANAS_HOLD=11.2); next leftover Vee / canada_goose", () => {
+test("notes: Drake Rui-dense ultra (ANAS_HOLD=11.2); Vee now Rue-dense; next leftover Drum / pileated", () => {
 
   assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Crow.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
@@ -2425,7 +2425,7 @@ test("notes: Drake Rui-dense ultra (ANAS_HOLD=11.2); next leftover Vee / canada_
   assert.equal(T.TRICKS.includes("turdus"), false);
   assert.equal(T.TRICKS.includes("feebee"), false);
   assert.equal(T.TRICKS.includes("poecile"), false);
-  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Vee / canada_goose.
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Drum / pileated.
   assert.equal("mallard", "mallard");
   assert.equal("Drake", "Drake");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
