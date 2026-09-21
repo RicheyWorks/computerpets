@@ -352,7 +352,7 @@ test("ultra-polish: Bandit stripe/audit/verdict/band/drawer lifts are Rui-visibl
   assert.equal(T.HAPPY_DUR.tribute, Overlay.HAPPY_DUR.tribute);
 });
 
-test("notes: Bandit Rui-dense ultra (VERDICT_HOLD=11.2); next leftover Jade / green_tree_python", () => {
+test("notes: Bandit Rui-dense ultra (VERDICT_HOLD=11.2); Jade densified; next leftover Bluff / hognose", () => {
   assert.deepEqual([...T.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid", "band", "drawer"]);
   assert.equal(T.TRICK_KEY, "kingsnake");
   assert.equal(T.wantsThankYou("bandit"), true);
