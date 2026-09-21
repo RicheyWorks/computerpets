@@ -464,7 +464,7 @@ test("ultra-polish: Coral rhyme/cipher/verse lifts are Rui-visible (not micro id
   assert.ok(T.nextTrickWait(true, 0, "rhyme") > 39);
 });
 
-test("notes: Coral Rui-dense ultra (RHYME_HOLD=11.2); Blush densified; Atlas densified; Cup densified; Sepia densified; Chamber densified; Pulse densified; Ochre densified; Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; Felt densified; Vein densified; next leftover Fan / ginkgo", () => {
+test("notes: Coral Rui-dense ultra (RHYME_HOLD=11.2); Blush densified; Atlas densified; Cup densified; Sepia densified; Chamber densified; Pulse densified; Ochre densified; Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; Felt densified; Vein densified; Fan densified; next leftover Mast / oak", () => {
   assert.equal(T.TRICK_KEY, "milk_snake");
   assert.equal(T.wantsThankYou("coral"), true);
   assert.equal(OverlayGround.tricksFor("boa"), OverlayBoa);
