@@ -344,10 +344,15 @@ test("ultra-polish: Bandit stripe/audit/verdict/band/drawer lifts are Rui-visibl
   assert.equal(T.DUR.band, Overlay.DUR.band);
   assert.equal(T.DUR.drawer, Overlay.DUR.drawer);
   assert.equal(T.VERDICT_HOLD, Overlay.VERDICT_HOLD);
+  assert.equal(T.VERDICT_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "verdict") > 39);
+  assert.ok(T.nextTrickWait(true, 0, "verdict") < 80);
+  assert.ok(T.nextTrickWait(true, 0, "verdict") > T.nextTrickWait(true, 0, "audit"));
   assert.equal(T.HAPPY_DUR.tribute, Overlay.HAPPY_DUR.tribute);
 });
 
-test("notes: Bandit idle-life ultra done; Jade / green_tree_python + Bluff / hognose + Sash / garter ultra next-or-done; Lula / boa ultra next-or-done; following house-order ultra guest is Coral / milk_snake (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Bandit Rui-dense ultra (VERDICT_HOLD=11.2); next leftover Jade / green_tree_python", () => {
   assert.deepEqual([...T.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid", "band", "drawer"]);
   assert.equal(T.TRICK_KEY, "kingsnake");
   assert.equal(T.wantsThankYou("bandit"), true);
