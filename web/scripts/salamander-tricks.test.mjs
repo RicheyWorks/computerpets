@@ -2044,7 +2044,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Dapple Rui-dense ultra (AMBYSTOMID_HOLD=11.2); Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; next leftover Prickle / stickleback", () => {
+test("notes: Dapple Rui-dense ultra (AMBYSTOMID_HOLD=11.2); Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; next leftover Boot / paramecium", () => {
   assert.equal(T.TRICK_KEY, "salamander");
   assert.deepEqual([...T.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.deepEqual([...T.HAPPY], ["mottled", "speckled", "blotched"]);
@@ -2128,9 +2128,9 @@ test("notes: Dapple Rui-dense ultra (AMBYSTOMID_HOLD=11.2); Slip now Rue-dense; 
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next leftover (do not implement): Prickle / stickleback.
-  assert.equal("stickleback", "stickleback");
-  assert.equal("Prickle", "Prickle");
+  // Recommend next leftover (do not implement): Boot / paramecium.
+  assert.equal("paramecium", "paramecium");
+  assert.equal("Boot", "Boot");
 });
 
 
