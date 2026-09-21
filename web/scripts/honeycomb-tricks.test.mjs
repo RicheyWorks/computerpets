@@ -529,7 +529,8 @@ test("festoon/capped/midrib/stores/tessera/alveoli/foundation are house-place-tr
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("pulse"), false);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -927,10 +928,14 @@ globalThis.PetHoneycombTricks = Overlay;
   assert.equal(T.HAPPY.includes("velvet"), false);
   assert.equal(T.HAPPY.includes("meadow"), false);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
+  assert.equal(T.TESSERA_HOLD, Overlay.TESSERA_HOLD);
+  assert.equal(T.TESSERA_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "tessera") > 39);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Wax ultra done; next house-order ultra is Puff / puffball", () => {
+test("notes: Wax Rui-dense ultra (TESSERA_HOLD=11.2); next leftover Reed / frog", () => {
   assert.equal(T.TRICK_KEY, "honeycomb");
   assert.equal(T.wantsThankYou("wax"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
