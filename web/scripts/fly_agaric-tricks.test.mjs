@@ -971,8 +971,8 @@ globalThis.PetFlyAgaricTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Cap Rui-dense ultra (AMANITA_HOLD=11.2); Lattice now Rue-dense; next leftover Horn / chanterelle", () => {
-  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Horn / chanterelle.
+test("notes: Cap Rui-dense ultra (AMANITA_HOLD=11.2); Lattice now Rue-dense; Horn now Rue-dense; next leftover Ring / turkey_tail", () => {
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Ring / turkey_tail.
   assert.equal(T.TRICK_KEY, "fly_agaric");
   assert.equal(T.wantsThankYou("cap"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
