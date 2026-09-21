@@ -240,7 +240,8 @@ test("coil/buoy/siphon/swivel/pouch/dorsal/pectoral are house-seahorse-true, not
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("pulse"), false);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -544,9 +545,13 @@ test("ultra-polish: Anchor coil/dorsal/pectoral lifts are Rui-visible (not micro
   assert.ok(b2.lift > 0.5 || Math.abs(b2.rot) > 4 || Math.abs(b2.x - 80) > 0.5, `buoy mid ${b2.lift}/${b2.rot}/${b2.x}`);
   assert.ok(Overlay.dorsalPose && Overlay.pectoralPose);
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.COIL_HOLD, Overlay.COIL_HOLD);
+  assert.equal(T.COIL_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "coil") > 39);
 });
 
-test("notes: Anchor idle-life ultra done; Kite / manta ultra follows; Door / moray ultra done; next is Felt / moss — retained check that Anchor still wires (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger + Anchor already ultra (Kite done in sibling PR); Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Anchor Rui-dense ultra (COIL_HOLD=11.2); next leftover Kite / manta", () => {
   assert.equal(T.TRICK_KEY, "seahorse");
   assert.equal(T.wantsThankYou("anchor"), true);
   assert.equal(OverlayGround.tricksFor("seahorse"), Overlay);
