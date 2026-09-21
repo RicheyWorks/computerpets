@@ -291,7 +291,8 @@ test("pad/corolla/rhizome/calyx/sheen/peltate/hydropote are house-water_lily-tru
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("pulse"), false);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -556,6 +557,11 @@ globalThis.PetWaterLilyTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("mast"), OverlayOak);
   assert.equal(OverlayGround.wantsThankYou("mast"), true);
   assert.equal(OverlayGround.tricksFor("water_lily"), Overlay);
+  assert.equal(OverlayGround.tricksFor("disk"), Overlay);
+  assert.equal(T.SHEEN_HOLD, Overlay.SHEEN_HOLD);
+  assert.equal(T.SHEEN_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "sheen") > 39);
   assert.equal(OverlayGround.wantsThankYou("water_lily"), true);
   assert.equal(OverlayGround.tricksFor("disk"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("disk"), true);
@@ -637,7 +643,7 @@ globalThis.PetWaterLilyTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Disk ultra-polish done; Moth + Arm + Snap + Well + Dew + Comb + Milk + Ghost ultra also done; Spark ultra also done; Dart ultra also done; next house-order ultra is Lattice / morel", () => {
+test("notes: Disk Rui-dense ultra (SHEEN_HOLD=11.2); next leftover Wax / honeycomb", () => {
   assert.equal(T.TRICK_KEY, "water_lily");
   assert.equal(T.wantsThankYou("disk"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -728,8 +734,8 @@ test("notes: Disk ultra-polish done; Moth + Arm + Snap + Well + Dew + Comb + Mil
   assert.equal(OverlayGround.wantsThankYou("mast"), true);
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...OverlayOak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
-  assert.ok(OverlayGround.tricksFor("orchid") == null);
-  assert.equal(OverlayGround.wantsThankYou("orchid"), false);
-  assert.ok(OverlayGround.tricksFor("moth") == null);
-  assert.equal(OverlayGround.wantsThankYou("moth"), false);
+  assert.ok(OverlayGround.tricksFor("honeycomb") == null);
+  assert.equal(OverlayGround.wantsThankYou("honeycomb"), false);
+  assert.ok(OverlayGround.tricksFor("wax") == null);
+  assert.equal(OverlayGround.wantsThankYou("wax"), false);
 });
