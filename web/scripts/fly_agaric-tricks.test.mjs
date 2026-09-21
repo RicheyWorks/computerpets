@@ -347,6 +347,11 @@ test("annulus/volva/veil/symbiont/amanita/pileus/bulb are house-place-true, not 
   assert.equal(held.anim, "sit");
   assert.ok(held.rot !== 0 || held.lift > 0);
   const release = T.stepTrick(bole, T.AMANITA_HOLD + 0.2, ground);
+  assert.equal(T.AMANITA_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.equal(T.AMANITA_HOLD, Overlay.AMANITA_HOLD);
+  assert.equal(T.RELEASE_S, Overlay.RELEASE_S);
+  assert.ok(T.AMANITA_HOLD <= 12);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
   const doneBole = T.stepTrick(bole, T.DUR.amanita + 0.1, ground);
@@ -547,7 +552,7 @@ test("annulus/volva/veil/symbiont/amanita/pileus/bulb are house-place-true, not 
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -966,7 +971,8 @@ globalThis.PetFlyAgaricTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Cap ultra idle-life done; next house-order ultra is Flame / chicken_of_woods", () => {
+test("notes: Cap Rui-dense ultra (AMANITA_HOLD=11.2); next leftover Lattice / morel", () => {
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Lattice / morel.
   assert.equal(T.TRICK_KEY, "fly_agaric");
   assert.equal(T.wantsThankYou("cap"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
