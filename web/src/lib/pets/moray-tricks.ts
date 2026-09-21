@@ -549,6 +549,6 @@ export function stepTrick(trick: MorayTrick, dt: number, flags: TrickFlags): Mor
   next.lift = pose.lift;
   next.rot = pose.rot;
   next.anim = pose.anim;
-  if (u >= 1.2) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   return next;
 }
