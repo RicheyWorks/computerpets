@@ -1,4 +1,4 @@
-/** Bluff ground tricks while idle — ultra-polish pass. House western hognose — hood / feign / shovel / gape / encore / quiver / upright personality (bluff/death-feign/nose desk life; eraser-dish theater). Hood false-cobra flatten on the eraser dish; feign belly-up death-feign drama; shovel keeled-nose dig on the blotter grit; gape open-mouth hiss bluff; encore theatrical recovery strut; quiver false-rattle tail buzz bluff (western hognose tail vibrate — not Keel toucan rattle, not Relay buzz); upright reared false-cobra stand on the eraser dish (distinct from hood flatten). Window-play FLIP unchanged — never names `flip`. Ethogram maps hood→flatten sit_hold, feign→playdead; keeps tongue/gape; adds shovel/encore/quiver/upright softs + freeze. Nori owns orb/nook/taste/inch/unroll/loom/weave and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon/blotter/pencil and clause/spice/cord; Bandit owns stripe/audit/verdict/plumb/raid/band/drawer and tribute/docket/seal; Jade owns bracelet/sway/jewel/heat/bough/liana/arbor and pendant/treaty/emerald; Sash owns moss; hedgehog owns curl/ball; volt window-play owns coil; ferret owns noodle/puff; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun/press; Lula window-play owns loop; Echo window-play owns perch; Keel owns rattle; Vee owns hiss; tarantula owns cork; Relay owns buzz. Guest slug Bluff / key hognose — accept "hognose" and "bluff". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via hognose.wav. Thank-yous aside / cue / ovation. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web `hognose-tricks.ts`. True house-western-hognose desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids flip/saddle/drape/inspect/write/orb/nook/taste/inch/unroll/loom/weave/bun/ball/coil/curl/bask/loaf/potato/tuck/hide/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/blotter/pencil/clause/spice/cord/stripe/audit/verdict/plumb/raid/tribute/docket/seal/band/drawer/bracelet/sway/jewel/heat/bough/pendant/treaty/emerald/liana/arbor/root/flare/dig/loop/perch/hang/clasp/playdead/flatten/rattle/hiss/cork/buzz/puff/moss name collisions. Bird ultra (Soot→Ember) + Miso→Jade done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Sash / garter + Lula / boa ultra done; next guest ultra is Coral / milk_snake. No cry inventing beyond house hognose.wav prefer. Never retouch Rui sprites. */
+/** Bluff ground tricks while idle — ultra-polish pass. House western hognose — hood / feign / shovel / gape / encore / quiver / upright personality (bluff/death-feign/nose desk life; eraser-dish theater). Hood false-cobra flatten on the eraser dish; feign belly-up death-feign drama; shovel keeled-nose dig on the blotter grit; gape open-mouth hiss bluff; encore theatrical recovery strut; quiver false-rattle tail buzz bluff (western hognose tail vibrate — not Keel toucan rattle, not Relay buzz); upright reared false-cobra stand on the eraser dish (distinct from hood flatten). Window-play FLIP unchanged — never names `flip`. Ethogram maps hood→flatten sit_hold, feign→playdead; keeps tongue/gape; adds shovel/encore/quiver/upright softs + freeze. Nori owns orb/nook/taste/inch/unroll/loom/weave and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon/blotter/pencil and clause/spice/cord; Bandit owns stripe/audit/verdict/plumb/raid/band/drawer and tribute/docket/seal; Jade owns bracelet/sway/jewel/heat/bough/liana/arbor and pendant/treaty/emerald; Sash owns moss; hedgehog owns curl/ball; volt window-play owns coil; ferret owns noodle/puff; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun/press; Lula window-play owns loop; Echo window-play owns perch; Keel owns rattle; Vee owns hiss; tarantula owns cork; Relay owns buzz. Guest slug Bluff / key hognose — accept "hognose" and "bluff". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via hognose.wav. Thank-yous aside / cue / ovation. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web `hognose-tricks.ts`. True house-western-hognose desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids flip/saddle/drape/inspect/write/orb/nook/taste/inch/unroll/loom/weave/bun/ball/coil/curl/bask/loaf/potato/tuck/hide/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/blotter/pencil/clause/spice/cord/stripe/audit/verdict/plumb/raid/tribute/docket/seal/band/drawer/bracelet/sway/jewel/heat/bough/pendant/treaty/emerald/liana/arbor/root/flare/dig/loop/perch/hang/clasp/playdead/flatten/rattle/hiss/cork/buzz/puff/moss name collisions. Bird ultra (Soot→Ember) + Miso→Jade done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Amplitudes raised toward Rui richness; denser waits/weights (HOOD_HOLD=11.2 RELEASE_S=1.18). Next leftover Sash / garter. No cry inventing beyond house hognose.wav prefer. Never retouch Rui sprites. */
 (function (root) {
   const TRICK_KEY = "hognose";
   const TRICKS = ["hood", "feign", "shovel", "gape", "encore", "quiver", "upright"];
@@ -9,8 +9,8 @@
       ovation: 1.58,
   };
   /** Hood hold — Bluff flattens a false cobra hood on the eraser dish. Not window-play FLIP. Not Jade bracelet. */
-  const HOOD_HOLD = 12.4;
-  const RELEASE_S = 0.88;
+  const HOOD_HOLD = 11.2;
+  const RELEASE_S = 1.18;
   const DUR = {
       hood: HOOD_HOLD + RELEASE_S,
       feign: 1.86,
@@ -51,14 +51,12 @@
   function nextTrickWait(justFinished, rand, kind) {
       const roll = rand == null ? Math.random() : rand;
       if (kind === "hood")
-          return 38 + roll * 24;
-      if (kind === "feign" || kind === "upright")
-          return 11 + roll * 8;
+          return 40 + roll * 26;
+      if (kind === "feign" || kind === "upright" || kind === "gape")
+          return 12.8 + roll * 9.4;
       if (kind === "shovel" || kind === "encore" || kind === "quiver")
-          return 10 + roll * 8;
-      if (kind === "gape")
-          return 12 + roll * 9;
-      return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+          return 11.6 + roll * 8.5;
+      return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
   function pickTrick(rand, musicOn = false, lastKind) {
       if (musicOn)
@@ -66,7 +64,7 @@
       const roll = rand == null ? Math.random() : rand;
       const pool = TRICKS.filter((k) => k !== lastKind);
       const list = pool.length ? pool : [...TRICKS];
-      const weights = list.map((k) => k === "hood" ? 0.55 : k === "feign" || k === "upright" || k === "gape" ? 1.15 : 1);
+      const weights = list.map((k) => k === "hood" ? 0.72 : k === "feign" || k === "upright" || k === "gape" ? 1.28 : k === "shovel" || k === "encore" ? 1.18 : 1.08);
       let total = 0;
       for (let i = 0; i < weights.length; i++)
           total += weights[i];
@@ -142,42 +140,42 @@
       const u = Math.max(0, Math.min(1, t / HAPPY_DUR.aside));
       if (u < 0.14) {
           const s = u / 0.14;
-          return { lift: s * 4.2, rot: s * -16, dx: 0, anim: "sit" };
+          return { lift: s * 5.04, rot: s * -19.2, dx: 0, anim: "sit" };
       }
       if (u < 0.8) {
           return {
-              lift: 4.2 + Math.abs(Math.sin(t * 4.6)) * 3.4,
-              rot: -16 + Math.sin(t * 3.4) * 14,
-              dx: Math.sin(t * 2.1) * 1.1,
+              lift: 5.04 + Math.abs(Math.sin(t * 4.6)) * 4.08,
+              rot: -19.2 + Math.sin(t * 3.4) * 16.8,
+              dx: Math.sin(t * 2.1) * 1.32,
               anim: "sit",
           };
       }
       const s = (u - 0.8) / 0.2;
-      return { lift: 4.2 * (1 - s), rot: -16 * (1 - s), dx: 0, anim: "idle" };
+      return { lift: 5.04 * (1 - s), rot: -19.2 * (1 - s), dx: 0, anim: "idle" };
   }
   function cuePose(t) {
       const u = Math.max(0, Math.min(1, t / HAPPY_DUR.cue));
       if (u < 0.12) {
           const s = u / 0.12;
-          return { lift: s * 4.6, rot: s * 18, dx: 0, anim: "talk" };
+          return { lift: s * 5.52, rot: s * 21.6, dx: 0, anim: "talk" };
       }
       if (u < 0.78) {
           const tick = Math.sin(t * 7.2);
           return {
-              lift: 4.6 + Math.abs(tick) * 3.2,
-              rot: 18 + tick * 16,
-              dx: tick * 1.2,
+              lift: 5.52 + Math.abs(tick) * 3.84,
+              rot: 21.6 + tick * 19.2,
+              dx: tick * 1.44,
               anim: "talk",
           };
       }
       const s = (u - 0.78) / 0.22;
-      return { lift: 4.6 * (1 - s), rot: 18 * (1 - s), dx: 0, anim: "sit" };
+      return { lift: 5.52 * (1 - s), rot: 21.6 * (1 - s), dx: 0, anim: "sit" };
   }
   function ovationPose(t) {
       return {
-          lift: Math.abs(Math.sin(t * 3.4)) * 3.8 + 2.4,
-          rot: -16 + Math.sin(t * 2.8) * 14,
-          dx: Math.sin(t * 2.2) * 1.4,
+          lift: Math.abs(Math.sin(t * 3.4)) * 4.56 + 2.4,
+          rot: -19.2 + Math.sin(t * 2.8) * 16.8,
+          dx: Math.sin(t * 2.2) * 1.68,
           anim: "sit",
       };
   }
@@ -250,36 +248,36 @@
   /** Hood — false-cobra flatten on the eraser dish. Soft rock. Not window-play FLIP. Not Jade bracelet. */
   function hoodPose(t) {
       return {
-          lift: 2.2 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
-          rot: -22 + Math.sin(t * 2.4) * 18 + Math.sin(t * 4.6) * 10,
+          lift: 2.64 + Math.sin(t * 1.7) * 3.36 + Math.abs(Math.sin(t * 3.4)) * 1.92,
+          rot: -26.4 + Math.sin(t * 2.4) * 21.6 + Math.sin(t * 4.6) * 12,
       };
   }
   /** Soft unflatten out of the hood; stays on the eraser dish. Not window-play leave. */
   function releasePose(t) {
       const u = Math.max(0, Math.min(1, t / RELEASE_S));
-      return { lift: (2.2 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)), rot: -22 * (1 - u) };
+      return { lift: (2.64 + 3.36) * (1 - Math.sin(u * Math.PI * 0.5)), rot: -26.4 * (1 - u) };
   }
   /** Feign — belly-up death-feign drama on the blotter. Not Nori unroll. Not Jade sway. */
   function feignPose(t, fromX, facing) {
       const u = Math.max(0, Math.min(1, t / DUR.feign));
       if (u < 0.14) {
           const s = smoothstep(u / 0.14);
-          return { x: fromX, lift: s * 3.6, rot: s * 110 * facing, anim: "play" };
+          return { x: fromX, lift: s * 4.32, rot: s * 132 * facing, anim: "play" };
       }
       if (u < 0.72) {
           const s = (u - 0.14) / 0.58;
           return {
-              x: fromX + facing * Math.sin(s * Math.PI * 0.8) * 1.4,
-              lift: 0.9 + Math.sin(s * Math.PI * 1.6) * 1.8,
-              rot: facing * (110 + Math.sin(s * Math.PI * 2.2) * 12),
+              x: fromX + facing * Math.sin(s * Math.PI * 0.8) * 1.68,
+              lift: 1.08 + Math.sin(s * Math.PI * 1.6) * 2.16,
+              rot: facing * (132 + Math.sin(s * Math.PI * 2.2) * 14.4),
               anim: "sit",
           };
       }
       const s = smoothstep((u - 0.72) / 0.28);
       return {
           x: fromX,
-          lift: 0.9 * (1 - s) + s * 2.2,
-          rot: facing * (110 * (1 - s) + s * -10),
+          lift: 1.08 * (1 - s) + s * 2.64,
+          rot: facing * (132 * (1 - s) + s * -12),
           anim: "sit",
       };
   }
@@ -288,23 +286,23 @@
       const u = Math.max(0, Math.min(1, t / DUR.shovel));
       if (u < 0.12) {
           const s = smoothstep(u / 0.12);
-          return { x: fromX + facing * s * 2.4, lift: s * 2.8, rot: s * 22 * facing, anim: "talk" };
+          return { x: fromX + facing * s * 2.88, lift: s * 3.36, rot: s * 26.4 * facing, anim: "talk" };
       }
       if (u < 0.84) {
           const s = (u - 0.12) / 0.72;
           const dig = Math.sin(s * Math.PI * 5.2);
           return {
-              x: fromX + facing * (2.4 + dig * 3.6),
-              lift: 2.4 + Math.abs(dig) * 3.2,
-              rot: facing * (22 + dig * 24),
+              x: fromX + facing * (2.88 + dig * 4.32),
+              lift: 2.88 + Math.abs(dig) * 3.84,
+              rot: facing * (26.4 + dig * 28.8),
               anim: "talk",
           };
       }
       const s = smoothstep((u - 0.84) / 0.16);
       return {
-          x: fromX + facing * (2.4 * (1 - s)),
-          lift: 2.4 * (1 - s),
-          rot: facing * 8 * (1 - s),
+          x: fromX + facing * (2.88 * (1 - s)),
+          lift: 2.88 * (1 - s),
+          rot: facing * 9.6 * (1 - s),
           anim: "sit",
       };
   }
@@ -313,23 +311,23 @@
       const u = Math.max(0, Math.min(1, t / DUR.gape));
       if (u < 0.12) {
           const s = smoothstep(u / 0.12);
-          return { x: fromX, lift: s * 5.2, rot: s * -18 * facing, anim: "talk" };
+          return { x: fromX, lift: s * 6.24, rot: s * -21.6 * facing, anim: "talk" };
       }
       if (u < 0.82) {
           const s = (u - 0.12) / 0.7;
           const hiss = Math.sin(s * Math.PI * 3.2);
           return {
-              x: fromX + facing * hiss * 2.2,
-              lift: 5.2 + Math.abs(hiss) * 3.4,
-              rot: facing * (-18 + hiss * 20),
+              x: fromX + facing * hiss * 2.64,
+              lift: 6.24 + Math.abs(hiss) * 4.08,
+              rot: facing * (-21.6 + hiss * 24),
               anim: "talk",
           };
       }
       const s = smoothstep((u - 0.82) / 0.18);
       return {
           x: fromX,
-          lift: 5.2 * (1 - s),
-          rot: facing * -8 * (1 - s),
+          lift: 6.24 * (1 - s),
+          rot: facing * -9.6 * (1 - s),
           anim: "sit",
       };
   }
@@ -338,31 +336,31 @@
       const u = Math.max(0, Math.min(1, t / DUR.encore));
       if (u < 0.12) {
           const s = smoothstep(u / 0.12);
-          return { x: fromX, lift: s * 4.8, rot: -s * 16 * facing, anim: "play" };
+          return { x: fromX, lift: s * 5.76, rot: -s * 19.2 * facing, anim: "play" };
       }
       if (u < 0.5) {
           const s = (u - 0.12) / 0.38;
           return {
-              x: fromX + facing * smoothstep(s) * 7.2,
-              lift: 4.8 + Math.sin(s * Math.PI) * 4.2,
-              rot: facing * (-16 + s * 34),
+              x: fromX + facing * smoothstep(s) * 8.64,
+              lift: 5.76 + Math.sin(s * Math.PI) * 5.04,
+              rot: facing * (-19.2 + s * 40.8),
               anim: "play",
           };
       }
       if (u < 0.78) {
           const s = (u - 0.5) / 0.28;
           return {
-              x: fromX + facing * 7.2,
-              lift: 5.4 + Math.sin(s * Math.PI * 1.8) * 2.8,
-              rot: facing * (18 - s * 10),
+              x: fromX + facing * 8.64,
+              lift: 6.48 + Math.sin(s * Math.PI * 1.8) * 3.36,
+              rot: facing * (21.6 - s * 12),
               anim: "sit",
           };
       }
       const s = smoothstep((u - 0.78) / 0.22);
       return {
-          x: fromX + facing * (7.2 * (1 - s)),
-          lift: 5.4 * (1 - s),
-          rot: facing * 6 * (1 - s),
+          x: fromX + facing * (8.64 * (1 - s)),
+          lift: 6.48 * (1 - s),
+          rot: facing * 7.2 * (1 - s),
           anim: "sit",
       };
   }
@@ -371,23 +369,23 @@
       const u = Math.max(0, Math.min(1, t / DUR.quiver));
       if (u < 0.1) {
           const s = smoothstep(u / 0.1);
-          return { x: fromX, lift: s * 3.2, rot: s * 12 * facing, anim: "play" };
+          return { x: fromX, lift: s * 3.84, rot: s * 14.4 * facing, anim: "play" };
       }
       if (u < 0.86) {
           const s = (u - 0.1) / 0.76;
           const buzz = Math.sin(s * Math.PI * 14);
           return {
-              x: fromX + facing * buzz * 2.8,
-              lift: 3.2 + Math.abs(buzz) * 2.4 + Math.sin(s * Math.PI * 2.2) * 1.6,
-              rot: facing * (12 + buzz * 28),
+              x: fromX + facing * buzz * 3.36,
+              lift: 3.84 + Math.abs(buzz) * 2.88 + Math.sin(s * Math.PI * 2.2) * 1.92,
+              rot: facing * (14.4 + buzz * 33.6),
               anim: "play",
           };
       }
       const s = smoothstep((u - 0.86) / 0.14);
       return {
           x: fromX,
-          lift: 3.2 * (1 - s),
-          rot: facing * 6 * (1 - s),
+          lift: 3.84 * (1 - s),
+          rot: facing * 7.2 * (1 - s),
           anim: "sit",
       };
   }
@@ -396,23 +394,23 @@
       const u = Math.max(0, Math.min(1, t / DUR.upright));
       if (u < 0.14) {
           const s = smoothstep(u / 0.14);
-          return { x: fromX, lift: s * 6.4, rot: s * -14 * facing, anim: "sit" };
+          return { x: fromX, lift: s * 7.68, rot: s * -16.8 * facing, anim: "sit" };
       }
       if (u < 0.82) {
           const s = (u - 0.14) / 0.68;
           const sway = Math.sin(s * Math.PI * 2.4);
           return {
-              x: fromX + facing * sway * 1.8,
-              lift: 6.4 + Math.abs(sway) * 2.2,
-              rot: facing * (-14 + sway * 18),
+              x: fromX + facing * sway * 2.16,
+              lift: 7.68 + Math.abs(sway) * 2.64,
+              rot: facing * (-16.8 + sway * 21.6),
               anim: "sit",
           };
       }
       const s = smoothstep((u - 0.82) / 0.18);
       return {
           x: fromX,
-          lift: 6.4 * (1 - s),
-          rot: facing * -6 * (1 - s),
+          lift: 7.68 * (1 - s),
+          rot: facing * -7.2 * (1 - s),
           anim: "sit",
       };
   }
