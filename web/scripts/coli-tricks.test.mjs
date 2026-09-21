@@ -2968,7 +2968,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Rod Rui-dense ultra (NUCLEOID_HOLD=11.2); Rose now Rue-dense; Brick now Rue-dense; Drake now Rue-dense; Vee now Rue-dense; Drum now Rue-dense; Sip now Rue-dense; Echo now Rue-dense; Peck now Rue-dense; Quill now Rue-dense; next leftover Brood / cicada", () => {
+test("notes: Rod Rui-dense ultra (NUCLEOID_HOLD=11.2); Rose now Rue-dense; Brick now Rue-dense; Drake now Rue-dense; Vee now Rue-dense; Drum now Rue-dense; Sip now Rue-dense; Echo now Rue-dense; Peck now Rue-dense; Quill now Rue-dense; Brood now Rue-dense; next leftover Frill / oyster", () => {
   assert.equal("Rose", "Rose");
   assert.equal("haloarchaea", "haloarchaea");
 
