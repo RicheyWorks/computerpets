@@ -465,7 +465,7 @@ test("ground registry keeps prior guests gated; Keel selectable; no toss/flash/b
   assert.equal(OverlayGround.sleepHoldFrame("dragon", 4), null);
 });
 
-test("notes: Keel base idle-life done; Sol / iguana now has tricks; Vesper / dragon now has tricks; Ember / phoenix now has tricks; Nori densified; Saffron densified; Bandit densified; Jade densified; Bluff densified; Sash densified; Lula densified; Coral densified; Blush densified; Atlas densified; Cup densified; Sepia densified; Chamber densified; Pulse densified; Ochre densified; next leftover Tenant / hermit_crab", () => {
+test("notes: Keel base idle-life done; Sol / iguana now has tricks; Vesper / dragon now has tricks; Ember / phoenix now has tricks; Nori densified; Saffron densified; Bandit densified; Jade densified; Bluff densified; Sash densified; Lula densified; Coral densified; Blush densified; Atlas densified; Cup densified; Sepia densified; Chamber densified; Pulse densified; Ochre densified; Tenant densified; next leftover Ledger / horseshoe_crab", () => {
   assert.equal(T.TRICK_KEY, "toucan");
   assert.equal(T.wantsThankYou("keel"), true);
   assert.equal(OverlayGround.tricksFor("iguana"), OverlayIguana);

@@ -355,7 +355,7 @@ test("ultra-polish: Cup mantle/papilla/ooze lifts are Rui-visible (not micro idl
   assert.ok(T.nextTrickWait(true, 0, "mantle") > 39);
 });
 
-test("notes: Cup Rui-dense ultra (MANTLE_HOLD=11.2); Sepia densified; Chamber densified; Pulse densified; Ochre densified; next leftover Tenant / hermit_crab", () => {
+test("notes: Cup Rui-dense ultra (MANTLE_HOLD=11.2); Sepia densified; Chamber densified; Pulse densified; Ochre densified; Tenant densified; next leftover Ledger / horseshoe_crab", () => {
   assert.equal(T.TRICK_KEY, "octopus");
   assert.equal(T.wantsThankYou("cup"), true);
   assert.equal(OverlayGround.tricksFor("octopus"), Overlay);
@@ -370,8 +370,8 @@ test("notes: Cup Rui-dense ultra (MANTLE_HOLD=11.2); Sepia densified; Chamber de
   assert.equal(OverlayGround.tricksFor("coin"), OverlayGoldfish);
   assert.equal(OverlayGround.tricksFor("axolotl"), OverlayAxolotl);
   assert.equal(OverlayGround.tricksFor("bloom"), OverlayAxolotl);
-  // Tenant already has base idle tricks (not Rue-dense); registry returns undefined until PetHermitCrabTricks is loaded.
-  assert.equal(OverlayGround.tricksFor("hermit_crab") == null, true);
-  assert.equal(OverlayGround.wantsThankYou("hermit_crab"), false);
-  assert.equal(OverlayGround.tricksFor("tenant") == null, true);
+  // Ledger already has base idle tricks (not Rue-dense); registry returns undefined until PetHorseshoeCrabTricks is loaded.
+  assert.equal(OverlayGround.tricksFor("horseshoe_crab") == null, true);
+  assert.equal(OverlayGround.wantsThankYou("horseshoe_crab"), false);
+  assert.equal(OverlayGround.tricksFor("ledger") == null, true);
 });
