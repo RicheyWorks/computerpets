@@ -355,7 +355,7 @@ test("ultra-polish: Cup mantle/papilla/ooze lifts are Rui-visible (not micro idl
   assert.ok(T.nextTrickWait(true, 0, "mantle") > 39);
 });
 
-test("notes: Cup Rui-dense ultra (MANTLE_HOLD=11.2); Sepia densified; next leftover Chamber / nautilus", () => {
+test("notes: Cup Rui-dense ultra (MANTLE_HOLD=11.2); Sepia densified; Chamber densified; next leftover Pulse / moon_jelly", () => {
   assert.equal(T.TRICK_KEY, "octopus");
   assert.equal(T.wantsThankYou("cup"), true);
   assert.equal(OverlayGround.tricksFor("octopus"), Overlay);
@@ -370,8 +370,8 @@ test("notes: Cup Rui-dense ultra (MANTLE_HOLD=11.2); Sepia densified; next lefto
   assert.equal(OverlayGround.tricksFor("coin"), OverlayGoldfish);
   assert.equal(OverlayGround.tricksFor("axolotl"), OverlayAxolotl);
   assert.equal(OverlayGround.tricksFor("bloom"), OverlayAxolotl);
-  // Chamber already has base idle tricks (not Rue-dense); registry returns undefined until PetNautilusTricks is loaded.
-  assert.equal(OverlayGround.tricksFor("nautilus") == null, true);
-  assert.equal(OverlayGround.wantsThankYou("nautilus"), false);
-  assert.equal(OverlayGround.tricksFor("chamber") == null, true);
+  // Pulse already has base idle tricks (not Rue-dense); registry returns undefined until PetMoonJellyTricks is loaded.
+  assert.equal(OverlayGround.tricksFor("moon_jelly") == null, true);
+  assert.equal(OverlayGround.wantsThankYou("moon_jelly"), false);
+  assert.equal(OverlayGround.tricksFor("pulse") == null, true);
 });
