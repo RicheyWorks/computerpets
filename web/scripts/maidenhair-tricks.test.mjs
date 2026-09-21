@@ -605,7 +605,7 @@ test("ground registry keeps prior guests gated; Vein selectable; prior guests st
   assert.ok(T.nextTrickWait(true, 0, "saucer") > 39);
 });
 
-test("notes: Vein Rui-dense ultra (SAUCER_HOLD=11.2); Fan densified; next leftover Mast / oak", () => {
+test("notes: Vein Rui-dense ultra (SAUCER_HOLD=11.2); Fan densified; Mast densified; next leftover Disk / water_lily", () => {
   assert.equal(T.TRICK_KEY, "maidenhair");
   assert.equal(T.wantsThankYou("vein"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -661,8 +661,8 @@ test("notes: Vein Rui-dense ultra (SAUCER_HOLD=11.2); Fan densified; next leftov
   assert.equal(T.TRICKS.includes("tuft"), false);
   assert.equal(T.TRICKS.includes("hinge"), false);
   assert.equal(T.TRICKS.includes("unfurl"), false);
-  assert.ok(OverlayGround.tricksFor("oak") == null);
-  assert.equal(OverlayGround.wantsThankYou("oak"), false);
-  assert.ok(OverlayGround.tricksFor("mast") == null);
-  assert.equal(OverlayGround.wantsThankYou("mast"), false);
+  assert.ok(OverlayGround.tricksFor("water_lily") == null);
+  assert.equal(OverlayGround.wantsThankYou("water_lily"), false);
+  assert.ok(OverlayGround.tricksFor("disk") == null);
+  assert.equal(OverlayGround.wantsThankYou("disk"), false);
 });
