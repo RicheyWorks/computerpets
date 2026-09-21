@@ -406,9 +406,13 @@ test("ultra-polish: Chamber spiral/hyponome/aperture lifts are Rui-visible (not 
   assert.ok(f2.lift > 0.5 || Math.abs(f2.rot) > 4 || Math.abs(f2.x - 80) > 0.5, `fringe mid ${f2.lift}/${f2.rot}/${f2.x}`);
   assert.ok(Overlay.hyponomePose && Overlay.aperturePose);
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.SPIRAL_HOLD, Overlay.SPIRAL_HOLD);
+  assert.equal(T.SPIRAL_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "spiral") > 39);
 });
 
-test("notes: Chamber idle-life ultra done; Pulse / moon_jelly ultra done; Anchor / seahorse ultra done; next house-order ultra guest is Kite / manta (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger + Anchor already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
+test("notes: Chamber Rui-dense ultra (SPIRAL_HOLD=11.2); next leftover Pulse / moon_jelly", () => {
   assert.equal(T.TRICK_KEY, "nautilus");
   assert.equal(T.wantsThankYou("chamber"), true);
   assert.equal(OverlayGround.tricksFor("nautilus"), Overlay);
