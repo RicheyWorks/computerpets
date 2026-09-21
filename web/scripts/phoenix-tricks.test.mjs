@@ -346,9 +346,9 @@ test("ground registry keeps prior guests gated; Ember selectable; no kindle/ash/
   assert.equal(Iguana.TRICK_KEY, "iguana");
   assert.equal(T.TRICK_KEY, "phoenix");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...Relay.TRICKS], ["click", "latch", "arc", "buzz", "switch"]);
-  assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
-  assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
+  assert.deepEqual([...Relay.TRICKS], ["contactclick", "latchseat", "arcflick", "coilbuzz", "poleswitch", "armaturetap", "relayhush"]);
+  assert.deepEqual([...Fuse.TRICKS], ["railseat", "holdcurrent", "blowclear", "reseatsnap", "cartridgerattle", "bladeflash", "fusehush"]);
+  assert.deepEqual([...Earth.TRICKS], ["lugstrap", "earthseat", "heaveplate", "bedsettle", "soilgrip", "plateclamp", "groundhush"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
@@ -506,7 +506,7 @@ test("ground registry keeps prior guests gated; Ember selectable; no kindle/ash/
   assert.equal(OverlayGround.sleepHoldFrame("phoenix", 4), null);
 });
 
-test("notes: Ember base idle-life done; next house-order guest still lacking tricks is Nori / ball_python", () => {
+test("notes: Ember Rui-dense ultra (CINDER_HOLD=11.2); next house-order leftover is Nori / ball_python", () => {
   assert.equal(T.TRICK_KEY, "phoenix");
   assert.equal(T.wantsThankYou("ember"), true);
   assert.equal(OverlayGround.tricksFor("phoenix"), Overlay);
@@ -541,11 +541,15 @@ test("ultra-polish: Ember cinder/blaze/shed/reignite/hearth lifts are Rui-visibl
   const h2 = T.stepTrick(ht, T.DUR.hearth * 0.4, { cmd: "idle" });
   assert.ok(Math.abs(h2.lift) > 2 || Math.abs(h2.rot) > 6, `hearth mid lift/rot ${h2.lift}/${h2.rot}`);
   assert.ok(Overlay.reignitePose && Overlay.hearthPose);
+  assert.equal(T.CINDER_HOLD, Overlay.CINDER_HOLD);
+  assert.equal(T.CINDER_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "cinder") > 39);
   assert.ok(T.nextTrickWait(true, 0, "cinder") < 80);
   assert.ok(T.nextTrickWait(true, 0, "cinder") > T.nextTrickWait(true, 0, "blaze"));
 });
 
-test("notes: Ember idle-life ultra done; bird ultra-polish line complete (Soot→Ember); Loom still next for base idle-ground; Nori still lacking", () => {
+test("notes: Ember Rui-dense ultra (CINDER_HOLD=11.2); bird line densified through Ember; next leftover Nori / ball_python", () => {
   assert.deepEqual([...T.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
   assert.equal(T.TRICKS.includes("kindle"), false);
   assert.equal(T.TRICKS.includes("ash"), false);
