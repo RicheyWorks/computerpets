@@ -667,10 +667,10 @@ assert.ok(names("toad").includes("freeze"));
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
   }
-  assert.ok(names("crow").includes("caw"));
-  assert.ok(names("crow").includes("cock_look"));
-  assert.ok(names("crow").includes("bill_wipe"));
-  assert.ok(names("crow").includes("perch"));
+  assert.ok(names("crow").includes("corvid"));
+  assert.ok(names("crow").includes("hopwalk_soft"));
+  assert.ok(names("crow").includes("scrutinize_soft"));
+  assert.ok(names("crow").includes("freeze"));
   assert.ok(names("raven").includes("kronk"));
   assert.ok(names("raven").includes("ruff_flare"));
   assert.ok(names("raven").includes("head_cock"));

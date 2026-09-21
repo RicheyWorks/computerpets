@@ -1205,6 +1205,11 @@ test("hopwalk/monocle/fossick/anting/scrutinize/glean/corvid are Corvus-true, no
   assert.equal(release.anim, "sit");
   const doneBole = T.stepTrick(bole, T.DUR.corvid + 0.1, ground);
   assert.equal(doneBole.phase, "done");
+  assert.equal(T.CORVID_HOLD, Overlay.CORVID_HOLD);
+  assert.equal(T.CORVID_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "corvid") > 39);
+  assert.ok(T.CORVID_HOLD <= 12);
   assert.ok(T.nextTrickWait(true, 0, "corvid") > T.nextTrickWait(true, 0, "anting"));
   const acorn = T.beginTrick("hopwalk", 80, 1);
   assert.equal(acorn.anim, "walk");
@@ -2124,7 +2129,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Soot idle-life done; next house-order guest still lacking tricks is Heart / barn_owl", () => {
+test("notes: Soot Rui-dense ultra (CORVID_HOLD=11.2); next leftover Wedge / raven", () => {
   assert.equal(T.TRICK_KEY, "crow");
   assert.deepEqual([...T.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...T.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
@@ -2293,7 +2298,7 @@ test("notes: Soot idle-life done; next house-order guest still lacking tricks is
   assert.equal(T.TRICKS.includes("dart"), false);
   assert.equal(Goldfish.TRICKS.includes("flare"), true);
   assert.equal(T.TRICKS.includes("flare"), false);
-  // Recommend next house-order guest still lacking idle tricks (do not implement): Heart / barn_owl.
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Wedge / raven.
   assert.equal("crow", "crow");
   assert.equal("Soot", "Soot");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid"]);
