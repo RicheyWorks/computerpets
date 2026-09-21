@@ -381,7 +381,7 @@ test("ultra-polish: Sepia bone/strike/zebra lifts are Rui-visible (not micro idl
   assert.ok(T.nextTrickWait(true, 0, "bone") > 39);
 });
 
-test("notes: Sepia Rui-dense ultra (BONE_HOLD=11.2); Chamber densified; Pulse densified; Ochre densified; Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; Felt densified; Vein densified; next leftover Fan / ginkgo", () => {
+test("notes: Sepia Rui-dense ultra (BONE_HOLD=11.2); Chamber densified; Pulse densified; Ochre densified; Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; Felt densified; Vein densified; Fan densified; next leftover Mast / oak", () => {
   assert.equal(T.TRICK_KEY, "cuttlefish");
   assert.equal(T.wantsThankYou("sepia"), true);
   assert.equal(OverlayGround.tricksFor("cuttlefish"), Overlay);
