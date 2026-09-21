@@ -1,4 +1,4 @@
-/** Hook ground tricks while idle — ultra-polish pass. House neighborly Accipitridae / Buteoninae red-tailed hawk desk life — kettle / stoop / bind / keeyer / patagial / tower / buteo personality (kettle thermal-circle wing-set without naming soar or dihedral, stoop dive-coil without naming softcrouch or plunge, bind talon-bind without naming mantle, keeyer kee-eer stance without naming soar-cry or cronk or snore, patagial wing-mark flash without naming flash or fan or strut, tower rising spiral without naming soar or kettle-cry, long buteo Buteo jamaicensis fencepost perch — never named wait or soar or hop or preen or fan or strut or roost or hopwalk or monocle or fossick or anting or scrutinize or glean or corvid or dihedral or billtap or tumble or cronk or invite or toeing or hackles or diskturn or softcrouch or parallax or snore or twist or pellet or tytonid; window-play SOAR owns soar; Soot/Wedge/Heart own their tricks; guest slug Hook / key red_tail — accept "red_tail" and "hook"; do NOT name a trick red_tail or hook or soar or mantle). Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk. Thank-yous borealis / calurus / harlani. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web red_tail-tricks.ts. Window-play SOAR unchanged. True red-tailed hawk desk life — not owl/crow/raven clones. Dee owns the next seat. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites. */
+/** Hook ground tricks while idle — ultra-polish pass. House neighborly Accipitridae / Buteoninae red-tailed hawk desk life — kettle / stoop / bind / keeyer / patagial / tower / buteo personality (kettle thermal-circle wing-set without naming soar or dihedral, stoop dive-coil without naming softcrouch or plunge, bind talon-bind without naming mantle, keeyer kee-eer stance without naming soar-cry or cronk or snore, patagial wing-mark flash without naming flash or fan or strut, tower rising spiral without naming soar or kettle-cry, long buteo Buteo jamaicensis fencepost perch — never named wait or soar or hop or preen or fan or strut or roost or hopwalk or monocle or fossick or anting or scrutinize or glean or corvid or dihedral or billtap or tumble or cronk or invite or toeing or hackles or diskturn or softcrouch or parallax or snore or twist or pellet or tytonid; window-play SOAR owns soar; Soot/Wedge/Heart own their tricks; guest slug Hook / key red_tail — accept "red_tail" and "hook"; do NOT name a trick red_tail or hook or soar or mantle). Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk. Thank-yous borealis / calurus / harlani. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web red_tail-tricks.ts. Window-play SOAR unchanged. True red-tailed hawk desk life — not owl/crow/raven clones. Dee owns the next leftover. No cry inventing — thank-yous are silent desk motion only; prefersHouseCry via red_tail.wav. Amplitudes raised toward Rui richness; denser waits/weights (BUTEO_HOLD=11.2 RELEASE_S=1.18). Ethogram softs + freeze — never names red_tail/hook/soar/mantle as bare ethogram-only trick kinds. Window-play SOAR unchanged. Next leftover Dee / chickadee. Catalog 221. Never retouch Rui sprites. */
 export const TRICK_KEY = "red_tail";
 export const TRICKS = ["kettle", "stoop", "bind", "keeyer", "patagial", "tower", "buteo"] as const;
 export const HAPPY = ["borealis", "calurus", "harlani"] as const;
@@ -48,8 +48,8 @@ export type RedTailHappy = {
   abort?: boolean;
 };
 export const HAPPY_DUR: Record<RedTailHappyKind, number> = { borealis: 1.58, calurus: 1.72, harlani: 1.65 };
-export const BUTEO_HOLD = 14.8;
-export const RELEASE_S = 1.08;
+export const BUTEO_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 export const DUR: Record<RedTailTrickKind, number> = {
   buteo: BUTEO_HOLD + RELEASE_S,
   kettle: 2.48,
@@ -88,11 +88,9 @@ export function shouldAbort(state: TrickFlags | null | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "buteo") return 44 + roll * 30;
-  if (kind === "keeyer" || kind === "tower") return 13 + roll * 9;
-  if (kind === "stoop" || kind === "bind") return 12 + roll * 9;
-  if (kind === "kettle" || kind === "patagial") return 11 + roll * 8;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "buteo") return 40 + roll * 26;
+  if (kind === "kettle" || kind === "stoop" || kind === "bind" || kind === "keeyer" || kind === "patagial" || kind === "tower") return 12.8 + roll * 9.4;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: string): RedTailTrickKind {
@@ -100,7 +98,7 @@ export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: string): 
   const roll = rand == null ? Math.random() : rand;
   const pool = TRICKS.filter((k) => k !== lastKind);
   const list = pool.length ? pool : [...TRICKS];
-  const weights = list.map((k) => (k === "buteo" ? 0.55 : k === "keeyer" || k === "kettle" ? 1.15 : 1));
+  const weights = list.map((k) => (k === "buteo" ? 0.72 : k === "keeyer" || k === "kettle" ? 1.28 : k === "stoop" || k === "bind" || k === "patagial" ? 1.18 : 1.08));
   let total = 0;
   for (let i = 0; i < weights.length; i++) total += weights[i];
   let r = roll * total;
@@ -180,35 +178,35 @@ export function borealisPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.borealis));
   if (u < 0.16) {
     const s = u / 0.16;
-    return { lift: s * 6, rot: s * 12, dx: 0, anim: "sit" as TrickAnim };
+    return { lift: s * 7.2, rot: s * 14.4, dx: 0, anim: "sit" as TrickAnim };
   }
   if (u < 0.82) {
     const flash = Math.sin(t * 5.8) + 0.28 * Math.sin(t * 11.6);
-    return { lift: 6 + Math.abs(flash) * 5, rot: 12 + flash * 8, dx: flash * 2.2, anim: "sit" as TrickAnim };
+    return { lift: 7.2 + Math.abs(flash) * 6, rot: 14.4 + flash * 9.6, dx: flash * 2.64, anim: "sit" as TrickAnim };
   }
   const s = (u - 0.82) / 0.18;
-  return { lift: 4 * (1 - s), rot: 4 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  return { lift: 4.8 * (1 - s), rot: 4.8 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
 
 export function calurusPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.calurus));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 14, rot: s * -12, dx: s * 3, anim: "play" as TrickAnim };
+    return { lift: s * 16.8, rot: s * -14.4, dx: s * 3.6, anim: "play" as TrickAnim };
   }
   if (u < 0.85) {
     const wriggle = Math.sin(t * 4.4) + 0.24 * Math.sin(t * 7.9);
-    return { lift: 12 + Math.abs(wriggle) * 10, rot: -10 + wriggle * 14, dx: wriggle * 4, anim: "play" as TrickAnim };
+    return { lift: 14.4 + Math.abs(wriggle) * 12, rot: -12 + wriggle * 16.8, dx: wriggle * 4.8, anim: "play" as TrickAnim };
   }
   const s = (u - 0.85) / 0.15;
-  return { lift: 5 * (1 - s), rot: -4 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  return { lift: 6 * (1 - s), rot: -4.8 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function harlaniPose(t: number) {
   return {
-    lift: 3 + Math.abs(Math.sin(t * 4.0)) * 7,
-    rot: Math.sin(t * 3.4) * 9,
-    dx: Math.sin(t * 2.6) * 3,
+    lift: 3.6 + Math.abs(Math.sin(t * 4.0)) * 8.4,
+    rot: Math.sin(t * 3.4) * 10.8,
+    dx: Math.sin(t * 2.6) * 3.6,
     anim: "sit" as TrickAnim,
   };
 }
@@ -264,12 +262,12 @@ function smoothstep(t: number) {
 export function buteoPose(t: number) {
   const breath = Math.sin(t * 0.55) + 0.18 * Math.sin(t * 1.4);
   const soft = Math.abs(Math.sin(t * 0.9));
-  return { lift: 2 + soft * 4 + Math.abs(breath) * 1.5, rot: -2 + breath * 4 };
+  return { lift: 2.4 + soft * 4.8 + Math.abs(breath) * 1.8, rot: -2.4 + breath * 4.8 };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 3 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -3 * (1 - u) };
+  return { lift: 3.6 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -3.6 * (1 - u) };
 }
 
 export function kettlePose(t: number, fromX: number, facing?: number) {
@@ -277,21 +275,21 @@ export function kettlePose(t: number, fromX: number, facing?: number) {
   const face = facing == null ? 1 : facing;
   if (u < 0.10) {
     const s = smoothstep(u / 0.10);
-    return { x: fromX, lift: s * 10, rot: s * -8 * face, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 12, rot: s * -9.6 * face, anim: "sit" as TrickAnim };
   }
   if (u < 0.88) {
     const s = (u - 0.10) / 0.78;
     const circle = Math.sin(s * Math.PI * 2);
     const liftWave = Math.abs(Math.sin(s * Math.PI * 3));
     return {
-      x: fromX + face * circle * 12,
-      lift: 8 + liftWave * 10,
-      rot: (-6 + circle * 10) * face,
+      x: fromX + face * circle * 14.4,
+      lift: 9.6 + liftWave * 12,
+      rot: (-7.2 + circle * 12) * face,
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
-  return { x: fromX, lift: 5 * (1 - s), rot: -3 * (1 - s) * face, anim: "idle" as TrickAnim };
+  return { x: fromX, lift: 6 * (1 - s), rot: -3.6 * (1 - s) * face, anim: "idle" as TrickAnim };
 }
 
 export function stoopPose(t: number, fromX: number, facing?: number) {
@@ -299,14 +297,14 @@ export function stoopPose(t: number, fromX: number, facing?: number) {
   const face = facing == null ? 1 : facing;
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 16, rot: s * -14 * face, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 19.2, rot: s * -16.8 * face, anim: "sit" as TrickAnim };
   }
   if (u < 0.55) {
     const s = (u - 0.12) / 0.43;
     return {
       x: fromX + face * s * 8,
-      lift: 16 - s * 18,
-      rot: (-14 - s * 8) * face,
+      lift: 19.2 - s * 21.6,
+      rot: (-16.8 - s * 9.6) * face,
       anim: "sit" as TrickAnim,
     };
   }
@@ -315,13 +313,13 @@ export function stoopPose(t: number, fromX: number, facing?: number) {
     const settle = Math.sin(s * Math.PI);
     return {
       x: fromX + face * 8,
-      lift: -2 + settle * 4,
-      rot: (-10 + settle * 6) * face,
+      lift: -2.4 + settle * 4.8,
+      rot: (-12 + settle * 7.2) * face,
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
-  return { x: fromX + face * 8 * (1 - s), lift: 2 * (1 - s), rot: -3 * (1 - s) * face, anim: "idle" as TrickAnim };
+  return { x: fromX + face * 8 * (1 - s), lift: 2.4 * (1 - s), rot: -3.6 * (1 - s) * face, anim: "idle" as TrickAnim };
 }
 
 export function bindPose(t: number, fromX: number, facing?: number) {
@@ -329,19 +327,19 @@ export function bindPose(t: number, fromX: number, facing?: number) {
   const face = facing == null ? 1 : facing;
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 8, rot: s * 10 * face, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 9.6, rot: s * 12 * face, anim: "play" as TrickAnim };
   }
   if (u < 0.86) {
     const clamp = Math.sin(t * 4.2) + 0.22 * Math.sin(t * 8.4);
     return {
-      x: fromX + face * clamp * 2.5,
-      lift: 6 + Math.abs(clamp) * 5,
-      rot: (10 + clamp * 7) * face,
+      x: fromX + face * clamp * 3,
+      lift: 7.2 + Math.abs(clamp) * 6,
+      rot: (12 + clamp * 8.4) * face,
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
-  return { x: fromX, lift: 3 * (1 - s), rot: 3 * (1 - s) * face, anim: "idle" as TrickAnim };
+  return { x: fromX, lift: 3.6 * (1 - s), rot: 3.6 * (1 - s) * face, anim: "idle" as TrickAnim };
 }
 
 export function keeyerPose(t: number, fromX: number, facing?: number) {
@@ -349,19 +347,19 @@ export function keeyerPose(t: number, fromX: number, facing?: number) {
   const face = facing == null ? 1 : facing;
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 6, rot: s * 14 * face, anim: "talk" as TrickAnim };
+    return { x: fromX, lift: s * 7.2, rot: s * 16.8 * face, anim: "talk" as TrickAnim };
   }
   if (u < 0.88) {
     const pulse = Math.sin(t * 3.6) + 0.26 * Math.sin(t * 7.2);
     return {
-      x: fromX + face * pulse * 2.6,
-      lift: 5 + Math.abs(pulse) * 5,
-      rot: (14 + pulse * 7) * face,
+      x: fromX + face * pulse * 3.12,
+      lift: 6 + Math.abs(pulse) * 6,
+      rot: (16.8 + pulse * 8.4) * face,
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
-  return { x: fromX, lift: 3 * (1 - s), rot: 4 * (1 - s) * face, anim: "idle" as TrickAnim };
+  return { x: fromX, lift: 3.6 * (1 - s), rot: 4.8 * (1 - s) * face, anim: "idle" as TrickAnim };
 }
 
 export function patagialPose(t: number, fromX: number, facing?: number) {
@@ -369,19 +367,19 @@ export function patagialPose(t: number, fromX: number, facing?: number) {
   const face = facing == null ? 1 : facing;
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 7, rot: s * -12 * face, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 8.4, rot: s * -14.4 * face, anim: "sit" as TrickAnim };
   }
   if (u < 0.86) {
     const flash = Math.sin(t * 5.1) + 0.3 * Math.sin(t * 10.2);
     return {
-      x: fromX + face * flash * 3,
-      lift: 6 + Math.abs(flash) * 6,
-      rot: (-12 + flash * 10) * face,
+      x: fromX + face * flash * 3.6,
+      lift: 7.2 + Math.abs(flash) * 7.2,
+      rot: (-14.4 + flash * 12) * face,
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
-  return { x: fromX, lift: 3 * (1 - s), rot: -3 * (1 - s) * face, anim: "idle" as TrickAnim };
+  return { x: fromX, lift: 3.6 * (1 - s), rot: -3.6 * (1 - s) * face, anim: "idle" as TrickAnim };
 }
 
 export function towerPose(t: number, fromX: number, facing?: number) {
@@ -389,20 +387,20 @@ export function towerPose(t: number, fromX: number, facing?: number) {
   const face = facing == null ? 1 : facing;
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 6, rot: s * -6 * face, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 7.2, rot: s * -7.2 * face, anim: "play" as TrickAnim };
   }
   if (u < 0.88) {
     const s = (u - 0.12) / 0.76;
     const spiral = Math.sin(s * Math.PI * 2.5);
     return {
-      x: fromX + face * spiral * 8,
-      lift: 6 + s * 16 + Math.abs(spiral) * 4,
-      rot: (-6 + spiral * 9) * face,
+      x: fromX + face * spiral * 9.6,
+      lift: 7.2 + s * 19.2 + Math.abs(spiral) * 4.8,
+      rot: (-7.2 + spiral * 10.8) * face,
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
-  return { x: fromX, lift: 8 * (1 - s), rot: -3 * (1 - s) * face, anim: "idle" as TrickAnim };
+  return { x: fromX, lift: 9.6 * (1 - s), rot: -3.6 * (1 - s) * face, anim: "idle" as TrickAnim };
 }
 
 export function stepTrick(trick: RedTailTrick, dt: number, flags?: TrickFlags): RedTailTrick {
