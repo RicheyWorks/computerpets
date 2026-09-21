@@ -1998,7 +1998,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Eft Rui-dense ultra (CAUDATE_HOLD=11.2); next leftover Dapple / salamander", () => {
+test("notes: Eft Rui-dense ultra (CAUDATE_HOLD=11.2); Dapple now Rue-dense; next leftover Slip / caecilian", () => {
   assert.equal(T.TRICK_KEY, "newt");
   assert.deepEqual([...T.TRICKS], ["crest", "caudal", "filament", "costal", "caudate", "hedonic", "aposematic"]);
   assert.deepEqual([...T.HAPPY], ["vermilion", "eftish", "palmate"]);
@@ -2076,9 +2076,9 @@ test("notes: Eft Rui-dense ultra (CAUDATE_HOLD=11.2); next leftover Dapple / sal
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next leftover (do not implement): Dapple / salamander.
-  assert.equal("salamander", "salamander");
-  assert.equal("Dapple", "Dapple");
+  // Recommend next leftover (do not implement): Slip / caecilian.
+  assert.equal("caecilian", "caecilian");
+  assert.equal("Slip", "Slip");
 });
 
 
