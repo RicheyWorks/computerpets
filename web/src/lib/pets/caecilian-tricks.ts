@@ -1,4 +1,4 @@
-/** Slip ground tricks while idle — ultra-polish pass. House neighborly Gymnophiona Rio-caecilian desk life — annulate / fossorial / tentacular / hydrostatic / gymnophion / stegos / dualjaw personality (ringed annulate body flex without naming ring, silt fossorial swim-burrow undulation without naming burrow or dig or fossor, chemosensory tentacular tip-sniff without naming tentacle or nasolabial, hydrostatic body push through substrate without naming heave or earth, long gymnophion limbless hold under silt, stegos stegokrotaphic solid-skull settle, dualjaw dual jaw-closing levator/interhyoideus bite press — never named wait or wake or still or hide or cover or wiggle or dart or trail or paddle or ring or slip or caecilian or salamander or dapple or newt or eft or frog or toad or reed or pebble or crest or caudal or filament or costal or caudate or hedonic or aposematic or maculate or litter or cutaneous or nasolabial or ambystomid or mental or granular or gular or nictitate or tympanum or iliac or lentic or toepad or webbing or verruca or burrow or parotoid or tubercle or bufonid or unken or cranial or gill or amble or mend or smile or plume or hop or puff or dig or soak or tuck or crane or plod or tentacle or fossor or warning or cirrus or vernal as trick kinds; window-play RING owns ring; ethogram softs + freeze own those words; Dapple owns maculate/litter/cutaneous/nasolabial/ambystomid/mental/granular; Eft owns crest/caudal/filament/costal/caudate/hedonic/aposematic; Bloom owns gill/amble/mend/smile/plume; Reed owns gular/nictitate/tympanum/iliac/lentic/toepad/webbing; Pebble owns verruca/burrow/parotoid/tubercle/bufonid/unken/cranial; Sundew owns tentacle; Bumblebee owns fossor; MiningBee owns vernal; Milk owns warning; Drift owns cirrus; guest slug Slip / key caecilian only for isKey matching — accept "caecilian" and "slip"; do NOT name a trick "caecilian" or "slip" or "wait" or "wake" or "still" or "hide" or "cover" or "wiggle" or "dart" or "trail" or "paddle" or "ring" or "salamander" or "dapple" or "newt" or "eft" or "frog" or "toad" or "reed" or "pebble" or "gular" or "lentic" or "verruca" or "bufonid" or "gill" or "hop" or "puff" or "dig" or "tentacle" or "fossor" or "warning" or "cirrus" or "vernal") — not Dapple Ambystomatidae spotted-salamander, not Eft Salamandridae Crested/smooth-newt, not Pebble Bufonidae American-toad, not Reed Anura green-frog, not Arca sealed-vault, not Bloom axolotl, not Ink turtle, not Hush shade-umbra, not Beacon field-magnet, not Brine salt-brine, not Knot junction-weave, not Dusk twilight-belt, not Shard living-crystal, not Drift methane-cloud, not Choir chord-body, not Gleam lamp-drinker, not Blush rosy-boa; never named wait / wake / still / hide / cover / wiggle / dart / trail / paddle / ring / slip / caecilian / salamander / dapple / newt / eft / frog / toad / reed / pebble / crest / caudal / filament / costal / caudate / hedonic / aposematic / maculate / litter / cutaneous / nasolabial / ambystomid / mental / granular / gular / nictitate / tympanum / iliac / lentic / toepad / webbing / verruca / burrow / parotoid / tubercle / bufonid / unken / cranial / gill / amble / mend / smile / plume / tentacle / fossor / warning / cirrus / vernal / hop / puff / dig / freeze — Echo/Quill birds — do not copy. annulate ringed body flex without naming ring or slip, fossorial silt swim-burrow undulation without naming burrow or dig or fossor, tentacular chemosensory tip-sniff without naming tentacle or nasolabial, hydrostatic body push without naming heave or earth, gymnophion long limbless metabolic hold under silt, stegos stegokrotaphic solid-skull settle (THE Gymnophiona cranial tell), dualjaw dual jaw-closing levator/interhyoideus bite press (THE caecilian jaw apparatus tell); annular / silted / glossed thank-yous. Feed-happy after eat. Card-open freeze and window-play RING do not swallow a thank-you. Sleep, hide, leave win. Same map as desktop caecilian-tricks.js. Window-play RING unchanged. Ethogram softs + freeze — never names slip/ring/still/wiggle as trick kinds. Hinge owns the next seat. No cry inventing. Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via caecilian.wav. */
+/** Slip ground tricks while idle — ultra-polish pass. House neighborly Gymnophiona Rio-caecilian desk life — annulate / fossorial / tentacular / hydrostatic / gymnophion / stegos / dualjaw personality (ringed annulate body flex without naming ring, silt fossorial swim-burrow undulation without naming burrow or dig or fossor, chemosensory tentacular tip-sniff without naming tentacle or nasolabial, hydrostatic body push through substrate without naming heave or earth, long gymnophion limbless hold under silt, stegos stegokrotaphic solid-skull settle, dualjaw dual jaw-closing levator/interhyoideus bite press — never named wait or wake or still or hide or cover or wiggle or dart or trail or paddle or ring or slip or caecilian or salamander or dapple or newt or eft or frog or toad or reed or pebble or crest or caudal or filament or costal or caudate or hedonic or aposematic or maculate or litter or cutaneous or nasolabial or ambystomid or mental or granular or gular or nictitate or tympanum or iliac or lentic or toepad or webbing or verruca or burrow or parotoid or tubercle or bufonid or unken or cranial or gill or amble or mend or smile or plume or hop or puff or dig or soak or tuck or crane or plod or tentacle or fossor or warning or cirrus or vernal as trick kinds; window-play RING owns ring; ethogram softs + freeze own those words; Dapple owns maculate/litter/cutaneous/nasolabial/ambystomid/mental/granular; Eft owns crest/caudal/filament/costal/caudate/hedonic/aposematic; Bloom owns gill/amble/mend/smile/plume; Reed owns gular/nictitate/tympanum/iliac/lentic/toepad/webbing; Pebble owns verruca/burrow/parotoid/tubercle/bufonid/unken/cranial; Sundew owns tentacle; Bumblebee owns fossor; MiningBee owns vernal; Milk owns warning; Drift owns cirrus; guest slug Slip / key caecilian only for isKey matching — accept "caecilian" and "slip"; do NOT name a trick "caecilian" or "slip" or "wait" or "wake" or "still" or "hide" or "cover" or "wiggle" or "dart" or "trail" or "paddle" or "ring" or "salamander" or "dapple" or "newt" or "eft" or "frog" or "toad" or "reed" or "pebble" or "gular" or "lentic" or "verruca" or "bufonid" or "gill" or "hop" or "puff" or "dig" or "tentacle" or "fossor" or "warning" or "cirrus" or "vernal") — not Dapple Ambystomatidae spotted-salamander, not Eft Salamandridae Crested/smooth-newt, not Pebble Bufonidae American-toad, not Reed Anura green-frog, not Arca sealed-vault, not Bloom axolotl, not Ink turtle, not Hush shade-umbra, not Beacon field-magnet, not Brine salt-brine, not Knot junction-weave, not Dusk twilight-belt, not Shard living-crystal, not Drift methane-cloud, not Choir chord-body, not Gleam lamp-drinker, not Blush rosy-boa; never named wait / wake / still / hide / cover / wiggle / dart / trail / paddle / ring / slip / caecilian / salamander / dapple / newt / eft / frog / toad / reed / pebble / crest / caudal / filament / costal / caudate / hedonic / aposematic / maculate / litter / cutaneous / nasolabial / ambystomid / mental / granular / gular / nictitate / tympanum / iliac / lentic / toepad / webbing / verruca / burrow / parotoid / tubercle / bufonid / unken / cranial / gill / amble / mend / smile / plume / tentacle / fossor / warning / cirrus / vernal / hop / puff / dig / freeze — Echo/Quill birds — do not copy. annulate ringed body flex without naming ring or slip, fossorial silt swim-burrow undulation without naming burrow or dig or fossor, tentacular chemosensory tip-sniff without naming tentacle or nasolabial, hydrostatic body push without naming heave or earth, gymnophion long limbless metabolic hold under silt, stegos stegokrotaphic solid-skull settle (THE Gymnophiona cranial tell), dualjaw dual jaw-closing levator/interhyoideus bite press (THE caecilian jaw apparatus tell); annular / silted / glossed thank-yous. Feed-happy after eat. Card-open freeze and window-play RING do not swallow a thank-you. Sleep, hide, leave win. Same map as desktop caecilian-tricks.js. Window-play RING unchanged. Ethogram softs + freeze — never names slip/ring/still/wiggle as trick kinds. Hinge owns the next seat. No cry inventing. Amplitudes raised toward Rui richness; denser waits/weights (GYMNOPHION_HOLD=11.2 RELEASE_S=1.18). Next leftover Pinch / crayfish. prefersHouseCry via caecilian.wav. */
 export const TRICK_KEY = "caecilian";
 export const TRICKS = ["annulate", "fossorial", "tentacular", "hydrostatic", "gymnophion", "stegos", "dualjaw"] as const;
 export const HAPPY = ["annular", "silted", "glossed"] as const;
@@ -45,8 +45,8 @@ export type CaecilianHappy = {
 };
 
 export const HAPPY_DUR = { annular: 1.64, silted: 1.76, glossed: 1.71 } as const;
-export const GYMNOPHION_HOLD = 10.8;
-export const RELEASE_S = 1.14;
+export const GYMNOPHION_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 export const DUR = {
   gymnophion: GYMNOPHION_HOLD + RELEASE_S,
   annulate: 2.28,
@@ -85,54 +85,28 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: CaecilianTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "gymnophion") return 38 + roll * 24;
-  if (kind === "stegos" || kind === "dualjaw" || kind === "annulate") return 12 + roll * 9;
-  if (kind === "fossorial" || kind === "tentacular" || kind === "hydrostatic") return 11 + roll * 8;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "gymnophion") return 40 + roll * 26;
+  if (kind === "stegos" || kind === "dualjaw") return 12.8 + roll * 9.4;
+  if (kind === "annulate" || kind === "fossorial" || kind === "tentacular" || kind === "hydrostatic") return 12.8 + roll * 9.4;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: CaecilianTrickKind | string | null) {
-  if (musicOn) return "gymnophion" as const;
+export function pickTrick(rand?: number, musicOn = false, lastKind?: CaecilianTrickKind | string | null): CaecilianTrickKind {
+  if (musicOn) return "gymnophion";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "gymnophion") {
-    if (roll < 0.16) return "annulate" as const;
-    if (roll < 0.32) return "fossorial" as const;
-    if (roll < 0.48) return "tentacular" as const;
-    if (roll < 0.64) return "hydrostatic" as const;
-    if (roll < 0.82) return "stegos" as const;
-    return "dualjaw" as const;
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...TRICKS];
+  const weights = list.map((k) =>
+    k === "gymnophion" ? 0.72 : k === "stegos" || k === "dualjaw" ? 1.28 : k === "annulate" || k === "fossorial" || k === "tentacular" ? 1.18 : 1.08
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i]!;
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i]!;
+    if (r <= 0) return list[i]!;
   }
-  if (lastKind === "annulate") {
-    if (roll < 0.16) return "gymnophion" as const;
-    if (roll < 0.32) return "fossorial" as const;
-    if (roll < 0.48) return "tentacular" as const;
-    if (roll < 0.64) return "hydrostatic" as const;
-    if (roll < 0.82) return "stegos" as const;
-    return "dualjaw" as const;
-  }
-  if (lastKind === "fossorial") {
-    if (roll < 0.14) return "gymnophion" as const;
-    if (roll < 0.3) return "annulate" as const;
-    if (roll < 0.46) return "tentacular" as const;
-    if (roll < 0.62) return "hydrostatic" as const;
-    if (roll < 0.8) return "stegos" as const;
-    return "dualjaw" as const;
-  }
-  if (lastKind === "stegos" || lastKind === "dualjaw") {
-    if (roll < 0.14) return "gymnophion" as const;
-    if (roll < 0.3) return "annulate" as const;
-    if (roll < 0.46) return "fossorial" as const;
-    if (roll < 0.62) return "tentacular" as const;
-    if (roll < 0.78) return "hydrostatic" as const;
-    return lastKind === "stegos" ? ("dualjaw" as const) : ("stegos" as const);
-  }
-  if (roll < 0.14) return "gymnophion" as const;
-  if (roll < 0.28) return "annulate" as const;
-  if (roll < 0.42) return "fossorial" as const;
-  if (roll < 0.56) return "tentacular" as const;
-  if (roll < 0.7) return "hydrostatic" as const;
-  if (roll < 0.85) return "stegos" as const;
-  return "dualjaw" as const;
+  return list[list.length - 1] || "annulate";
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -204,44 +178,44 @@ export function annularPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.annular));
   if (u < 0.16) {
     const s = u / 0.16;
-    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" as TrickAnim };
+    return { lift: s * 3.36, rot: s * 14.4, dx: 0, anim: "talk" as TrickAnim };
   }
   if (u < 0.82) {
     const flash = Math.sin(t * 1.72);
     return {
-      lift: 2.8 + Math.abs(flash) * 1.4,
-      rot: 12 + flash * 8,
+      lift: 3.36 + Math.abs(flash) * 1.68,
+      rot: 14.4 + flash * 9.6,
       dx: 0,
       anim: "talk" as TrickAnim,
     };
   }
   const s = (u - 0.82) / 0.18;
-  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  return { lift: 2.4 * (1 - s), rot: 7.2 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
 
 export function siltedPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.silted));
   if (u < 0.14) {
     const s = u / 0.14;
-    return { lift: s * 3.4, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
+    return { lift: s * 4.08, rot: s * -16.8, dx: s * 0.18, anim: "play" as TrickAnim };
   }
   if (u < 0.84) {
     const wriggle = Math.sin(t * 2.1);
     return {
-      lift: 3.4 + Math.abs(wriggle) * 1.6,
-      rot: -14 + wriggle * 10,
-      dx: 0.08,
+      lift: 4.08 + Math.abs(wriggle) * 1.92,
+      rot: -16.8 + wriggle * 12,
+      dx: 0.096,
       anim: "play" as TrickAnim,
     };
   }
   const s = (u - 0.84) / 0.16;
-  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  return { lift: 2.64 * (1 - s), rot: -7.2 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function glossedPose(t: number) {
   return {
-    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
-    rot: Math.sin(t * 0.52) * 6,
+    lift: 2.64 + Math.abs(Math.sin(t * 0.696)) * 1.32,
+    rot: Math.sin(t * 0.624) * 7.2,
     dx: 0,
     anim: "sit" as TrickAnim,
   };
@@ -314,30 +288,30 @@ function smoothstep(t: number) {
 
 export function gymnophionPose(t: number) {
   return {
-    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
-    rot: -0.18 + Math.sin(t * 0.14) * 4,
+    lift: 2.88 + Math.abs(Math.sin(t * 0.504)) * 1.44,
+    rot: -0.216 + Math.sin(t * 0.168) * 4.8,
     anim: "sit" as TrickAnim,
   };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
+  return { lift: 2.88 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.216 * (1 - u) };
 }
 
 export function annulatePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.annulate));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 3.2, rot: s * -8 * facing, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 3.84, rot: s * -9.6 * facing, anim: "play" as TrickAnim };
   }
   if (u < 0.48) {
     const s = (u - 0.16) / 0.32;
     const annulate = Math.sin(s * Math.PI);
     return {
-      x: fromX + facing * annulate * 0.12,
-      lift: 3.2 + Math.abs(annulate) * 1.4,
-      rot: facing * (-8 + annulate * 14),
+      x: fromX + facing * annulate * 0.144,
+      lift: 3.84 + Math.abs(annulate) * 1.68,
+      rot: facing * (-9.6 + annulate * 16.8),
       anim: "play" as TrickAnim,
     };
   }
@@ -346,16 +320,16 @@ export function annulatePose(t: number, fromX: number, facing: 1 | -1) {
     const sway = Math.sin(s * Math.PI * 2.4);
     return {
       x: fromX,
-      lift: 2.2 + Math.abs(sway) * 0.9,
-      rot: facing * (4 + sway * 8),
+      lift: 2.64 + Math.abs(sway) * 1.08,
+      rot: facing * (4.8 + sway * 9.6),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 1.4 * (1 - s),
-    rot: facing * (2 * (1 - s)),
+    lift: 1.68 * (1 - s),
+    rot: facing * (2.4 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -364,24 +338,24 @@ export function fossorialPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.fossorial));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX, lift: s * 3.12, rot: s * 12 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.78) {
     const s = (u - 0.14) / 0.64;
     const wave = Math.sin(s * Math.PI * 3.4);
     const glide = Math.sin(s * Math.PI * 1.2);
     return {
-      x: fromX + facing * wave * 0.28,
-      lift: 2.6 + Math.abs(glide) * 1.3 + Math.abs(wave) * 0.7,
-      rot: facing * (10 + wave * 12 + glide * 8),
+      x: fromX + facing * wave * 0.336,
+      lift: 3.12 + Math.abs(glide) * 1.56 + Math.abs(wave) * 0.84,
+      rot: facing * (12 + wave * 14.4 + glide * 9.6),
       anim: "walk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 1.2 * (1 - s),
-    rot: facing * (3 * (1 - s)),
+    lift: 1.44 * (1 - s),
+    rot: facing * (3.6 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -390,24 +364,24 @@ export function tentacularPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.tentacular));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 2.4, rot: s * -6 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 2.88, rot: s * -7.2 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.74) {
     const s = (u - 0.16) / 0.58;
     const tip = Math.sin(s * Math.PI * 4.2) + 0.22 * Math.sin(s * Math.PI * 7.1);
     const hush = smoothstep(Math.min(1, s * 1.2));
     return {
-      x: fromX + facing * tip * 0.1,
-      lift: 2.4 + hush * 1.2 + Math.abs(tip) * 0.7,
-      rot: facing * (-6 + hush * 5 + tip * 4),
+      x: fromX + facing * tip * 0.12,
+      lift: 2.88 + hush * 1.44 + Math.abs(tip) * 0.84,
+      rot: facing * (-7.2 + hush * 6 + tip * 4.8),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.74) / 0.26);
   return {
     x: fromX,
-    lift: 1.4 * (1 - s),
-    rot: facing * (-2 * (1 - s)),
+    lift: 1.68 * (1 - s),
+    rot: facing * (-2.4 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -416,24 +390,24 @@ export function hydrostaticPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.hydrostatic));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX, lift: s * 3.12, rot: s * 12 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.78) {
     const s = (u - 0.12) / 0.66;
     const groove = Math.sin(s * Math.PI * 2.55);
     const crawl = Math.sin(s * Math.PI * 1.15);
     return {
-      x: fromX + facing * crawl * 0.22,
-      lift: 2.6 + Math.abs(crawl) * 1.3 + Math.abs(groove) * 0.7,
-      rot: facing * (10 + crawl * 12 + groove * 8),
+      x: fromX + facing * crawl * 0.264,
+      lift: 3.12 + Math.abs(crawl) * 1.56 + Math.abs(groove) * 0.84,
+      rot: facing * (12 + crawl * 14.4 + groove * 9.6),
       anim: "walk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 1.2 * (1 - s),
-    rot: facing * (3 * (1 - s)),
+    lift: 1.44 * (1 - s),
+    rot: facing * (3.6 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -442,15 +416,15 @@ export function stegosPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.stegos));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 2.8, rot: s * 12 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 3.36, rot: s * 14.4 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.42) {
     const s = (u - 0.16) / 0.26;
     const press = smoothstep(s);
     return {
       x: fromX,
-      lift: 2.8 + press * 1.6,
-      rot: facing * (12 + press * 16),
+      lift: 3.36 + press * 1.92,
+      rot: facing * (14.4 + press * 19.2),
       anim: "sit" as TrickAnim,
     };
   }
@@ -459,16 +433,16 @@ export function stegosPose(t: number, fromX: number, facing: 1 | -1) {
     const scent = Math.sin(s * Math.PI * 2.2);
     return {
       x: fromX,
-      lift: 4.2 + Math.abs(scent) * 0.6,
-      rot: facing * (24 + scent * 4),
+      lift: 5.04 + Math.abs(scent) * 0.72,
+      rot: facing * (28.8 + scent * 4.8),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 2.0 * (1 - s),
-    rot: facing * (8 * (1 - s)),
+    lift: 2.4 * (1 - s),
+    rot: facing * (9.6 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -477,15 +451,15 @@ export function dualjawPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.dualjaw));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 2.2, rot: s * -10 * facing, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 2.64, rot: s * -12 * facing, anim: "play" as TrickAnim };
   }
   if (u < 0.4) {
     const s = (u - 0.14) / 0.26;
     const flash = smoothstep(s);
     return {
       x: fromX,
-      lift: 2.2 + flash * 1.2,
-      rot: facing * (-10 - flash * 8),
+      lift: 2.64 + flash * 1.44,
+      rot: facing * (-12 - flash * 9.6),
       anim: "play" as TrickAnim,
     };
   }
@@ -493,17 +467,17 @@ export function dualjawPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.4) / 0.38;
     const warn = Math.sin(s * Math.PI * 3.1);
     return {
-      x: fromX + facing * warn * 0.08,
-      lift: 3.2 + Math.abs(warn) * 0.7,
-      rot: facing * (-16 + warn * 6),
+      x: fromX + facing * warn * 0.096,
+      lift: 3.84 + Math.abs(warn) * 0.84,
+      rot: facing * (-19.2 + warn * 7.2),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 1.5 * (1 - s),
-    rot: facing * (-4 * (1 - s)),
+    lift: 1.8 * (1 - s),
+    rot: facing * (-4.8 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
