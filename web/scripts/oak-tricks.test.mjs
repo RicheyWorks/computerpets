@@ -288,7 +288,8 @@ test("acorn/sinus/gall/taproot/bole/catkin/tyloses are house-oak-true, not copie
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("pulse"), false);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -636,7 +637,7 @@ globalThis.PetOakTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Mast ultra-polish done; Disk + Moth + Arm + Snap + Well + Dew + Comb ultra also done; Milk + Ghost ultra also done; Spark ultra also done; Dart ultra also done; next house-order ultra is Lattice / morel", () => {
+test("notes: Mast Rui-dense ultra (BOLE_HOLD=11.2); next leftover Disk / water_lily", () => {
   assert.equal(T.TRICK_KEY, "oak");
   assert.equal(T.wantsThankYou("mast"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -716,11 +717,16 @@ test("notes: Mast ultra-polish done; Disk + Moth + Arm + Snap + Well + Dew + Com
   assert.equal(T.HAPPY.includes("humid"), false);
   assert.deepEqual([...Ginkgo.TRICKS], ["biloba", "notch", "flutter", "drop", "amber", "dichotomy", "petiole"]);
   assert.equal(OverlayGround.tricksFor("oak"), Overlay);
+  assert.equal(OverlayGround.tricksFor("mast"), Overlay);
+  assert.equal(T.BOLE_HOLD, Overlay.BOLE_HOLD);
+  assert.equal(T.BOLE_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "bole") > 39);
   assert.equal(OverlayGround.wantsThankYou("oak"), true);
   assert.equal(OverlayGround.tricksFor("mast"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("mast"), true);
-  assert.ok(OverlayGround.tricksFor("orchid") == null);
-  assert.equal(OverlayGround.wantsThankYou("orchid"), false);
-  assert.ok(OverlayGround.tricksFor("moth") == null);
-  assert.equal(OverlayGround.wantsThankYou("moth"), false);
+  assert.ok(OverlayGround.tricksFor("water_lily") == null);
+  assert.equal(OverlayGround.wantsThankYou("water_lily"), false);
+  assert.ok(OverlayGround.tricksFor("disk") == null);
+  assert.equal(OverlayGround.wantsThankYou("disk"), false);
 });
