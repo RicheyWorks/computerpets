@@ -970,8 +970,8 @@ globalThis.PetOysterTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Frill Rui-dense ultra (PLEUROTUS_HOLD=11.2); Cap now Rue-dense; Lattice now Rue-dense; Horn now Rue-dense; next leftover Ring / turkey_tail", () => {
-  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Ring / turkey_tail.
+test("notes: Frill Rui-dense ultra (PLEUROTUS_HOLD=11.2); Cap now Rue-dense; Lattice now Rue-dense; Horn now Rue-dense; Ring now Rue-dense; next leftover Mane / lions_mane", () => {
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Mane / lions_mane.
   assert.equal(T.TRICK_KEY, "oyster");
   assert.equal(T.wantsThankYou("frill"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);

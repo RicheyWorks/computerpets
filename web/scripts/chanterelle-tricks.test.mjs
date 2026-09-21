@@ -1030,8 +1030,8 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Horn Rui-dense ultra (CANTHARELLUS_HOLD=11.2); next leftover Ring / turkey_tail", () => {
-  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Ring / turkey_tail.
+test("notes: Horn Rui-dense ultra (CANTHARELLUS_HOLD=11.2); Ring now Rue-dense; next leftover Mane / lions_mane", () => {
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Mane / lions_mane.
   assert.equal(T.TRICK_KEY, "chanterelle");
   assert.equal(T.wantsThankYou("horn"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
