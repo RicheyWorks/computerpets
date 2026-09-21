@@ -1,4 +1,4 @@
-/** Sash ground tricks while idle — ultra-polish pass. House common garter — seam / rounds / moss / fork / lap / ribbon / creek personality (stripe/patrol/moss desk life; damp-moss desk officer). Seam rests the three longitudinal lines as a desk seam; rounds patrols a short blotter circuit; moss claims a damp blotter patch; fork tongue-flick scent check; lap quick desk circuit; ribbon side-stripe flash (roll to show the bright lateral line — not Bandit stripe, not Parrot flash); creek damp-moss waterline wiggle (edge undulation like a creek bank — not Lula loop, not window-play PATROL). Window-play PATROL unchanged — never names `patrol`. Ethogram retires thin lone `patrol`/`dart` (seam covers rest); keeps tongue; adds seam/rounds/moss/fork/ribbon/creek softs + freeze. Nori owns orb/nook/taste/inch/unroll/loom/weave and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon/blotter/pencil and clause/spice/cord; Bandit owns stripe/audit/verdict/plumb/raid/band/drawer and tribute/docket/seal; Jade owns bracelet/sway/jewel/heat/bough/liana/arbor and pendant/treaty/emerald; Bluff owns hood/feign/shovel/gape/encore/quiver/upright and aside/cue/ovation; hedgehog owns curl/ball; volt window-play owns coil; ferret owns noodle/puff; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun/press; Lula window-play owns loop; Echo window-play owns perch; Fox window-play owns scent; Parrot owns flash; Sundew owns dew. Guest slug Sash / key garter — accept "garter" and "sash". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via garter.wav. Thank-yous copy / brief / visa. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `garter-tricks.js`. True house-common-garter desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids patrol/stripe/hood/feign/shovel/gape/encore/quiver/upright/flip/saddle/drape/inspect/write/orb/nook/taste/inch/unroll/loom/weave/bun/ball/coil/curl/bask/loaf/potato/tuck/hide/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/blotter/pencil/clause/spice/cord/audit/verdict/plumb/raid/tribute/docket/seal/band/drawer/bracelet/sway/jewel/heat/bough/pendant/treaty/emerald/liana/arbor/aside/cue/ovation/root/flare/dig/loop/perch/hang/clasp/scent/flash/dew/officer name collisions. Bird ultra (Soot→Ember) + Miso→Bluff done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Lula / boa ultra done; next guest ultra is Coral / milk_snake. No cry inventing beyond house garter.wav prefer. Never retouch Rui sprites. */
+/** Sash ground tricks while idle — ultra-polish pass. House common garter — seam / rounds / moss / fork / lap / ribbon / creek personality (stripe/patrol/moss desk life; damp-moss desk officer). Seam rests the three longitudinal lines as a desk seam; rounds patrols a short blotter circuit; moss claims a damp blotter patch; fork tongue-flick scent check; lap quick desk circuit; ribbon side-stripe flash (roll to show the bright lateral line — not Bandit stripe, not Parrot flash); creek damp-moss waterline wiggle (edge undulation like a creek bank — not Lula loop, not window-play PATROL). Window-play PATROL unchanged — never names `patrol`. Ethogram retires thin lone `patrol`/`dart` (seam covers rest); keeps tongue; adds seam/rounds/moss/fork/ribbon/creek softs + freeze. Nori owns orb/nook/taste/inch/unroll/loom/weave and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon/blotter/pencil and clause/spice/cord; Bandit owns stripe/audit/verdict/plumb/raid/band/drawer and tribute/docket/seal; Jade owns bracelet/sway/jewel/heat/bough/liana/arbor and pendant/treaty/emerald; Bluff owns hood/feign/shovel/gape/encore/quiver/upright and aside/cue/ovation; hedgehog owns curl/ball; volt window-play owns coil; ferret owns noodle/puff; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun/press; Lula window-play owns loop; Echo window-play owns perch; Fox window-play owns scent; Parrot owns flash; Sundew owns dew. Guest slug Sash / key garter — accept "garter" and "sash". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via garter.wav. Thank-yous copy / brief / visa. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `garter-tricks.js`. True house-common-garter desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids patrol/stripe/hood/feign/shovel/gape/encore/quiver/upright/flip/saddle/drape/inspect/write/orb/nook/taste/inch/unroll/loom/weave/bun/ball/coil/curl/bask/loaf/potato/tuck/hide/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/blotter/pencil/clause/spice/cord/audit/verdict/plumb/raid/tribute/docket/seal/band/drawer/bracelet/sway/jewel/heat/bough/pendant/treaty/emerald/liana/arbor/aside/cue/ovation/root/flare/dig/loop/perch/hang/clasp/scent/flash/dew/officer name collisions. Bird ultra (Soot→Ember) + Miso→Bluff done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Amplitudes raised toward Rui richness; denser waits/weights (SEAM_HOLD=11.2 RELEASE_S=1.18). Next leftover Lula / boa. No cry inventing beyond house garter.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "garter";
 export const TRICKS = ["seam", "rounds", "moss", "fork", "lap", "ribbon", "creek"] as const;
 export const HAPPY = ["copy", "brief", "visa"] as const;
@@ -51,8 +51,8 @@ export const HAPPY_DUR: Record<GarterHappyKind, number> = {
 };
 
 /** Seam hold — Sash rests the three longitudinal lines as a desk seam. Not window-play PATROL. Not Bandit stripe. */
-export const SEAM_HOLD = 12.4;
-export const RELEASE_S = 0.88;
+export const SEAM_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 
 export const DUR: Record<GarterTrickKind, number> = {
   seam: SEAM_HOLD + RELEASE_S,
@@ -92,11 +92,10 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: GarterTrickKind) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "seam") return 38 + roll * 24;
-  if (kind === "rounds" || kind === "creek") return 11 + roll * 8;
-  if (kind === "moss" || kind === "lap" || kind === "ribbon") return 10 + roll * 8;
-  if (kind === "fork") return 12 + roll * 9;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "seam") return 40 + roll * 26;
+  if (kind === "rounds" || kind === "creek" || kind === "fork") return 12.8 + roll * 9.4;
+  if (kind === "moss" || kind === "lap" || kind === "ribbon") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 export function pickTrick(rand?: number, musicOn = false, lastKind?: GarterTrickKind | null): GarterTrickKind {
@@ -105,7 +104,7 @@ export function pickTrick(rand?: number, musicOn = false, lastKind?: GarterTrick
   const pool = TRICKS.filter((k) => k !== lastKind);
   const list = pool.length ? pool : [...TRICKS];
   const weights = list.map((k) =>
-    k === "seam" ? 0.55 : k === "rounds" || k === "creek" || k === "fork" ? 1.15 : 1
+    k === "seam" ? 0.72 : k === "rounds" || k === "creek" || k === "fork" ? 1.28 : k === "moss" || k === "lap" ? 1.18 : 1.08
   );
   let total = 0;
   for (let i = 0; i < weights.length; i++) total += weights[i]!;
@@ -186,44 +185,44 @@ export function copyPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.copy));
   if (u < 0.14) {
     const s = u / 0.14;
-    return { lift: s * 4.2, rot: s * -16, dx: 0, anim: "sit" as const };
+    return { lift: s * 5.04, rot: s * -19.2, dx: 0, anim: "sit" as const };
   }
   if (u < 0.8) {
     return {
-      lift: 4.2 + Math.abs(Math.sin(t * 4.6)) * 3.4,
-      rot: -16 + Math.sin(t * 3.4) * 14,
-      dx: Math.sin(t * 2.1) * 1.1,
+      lift: 5.04 + Math.abs(Math.sin(t * 4.6)) * 4.08,
+      rot: -19.2 + Math.sin(t * 3.4) * 16.8,
+      dx: Math.sin(t * 2.1) * 1.32,
       anim: "sit" as const,
     };
   }
   const s = (u - 0.8) / 0.2;
-  return { lift: 4.2 * (1 - s), rot: -16 * (1 - s), dx: 0, anim: "idle" as const };
+  return { lift: 5.04 * (1 - s), rot: -19.2 * (1 - s), dx: 0, anim: "idle" as const };
 }
 
 export function briefPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.brief));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 4.6, rot: s * 18, dx: 0, anim: "talk" as const };
+    return { lift: s * 5.52, rot: s * 21.6, dx: 0, anim: "talk" as const };
   }
   if (u < 0.78) {
     const tick = Math.sin(t * 7.2);
     return {
-      lift: 4.6 + Math.abs(tick) * 3.2,
-      rot: 18 + tick * 16,
-      dx: tick * 1.2,
+      lift: 5.52 + Math.abs(tick) * 3.84,
+      rot: 21.6 + tick * 19.2,
+      dx: tick * 1.44,
       anim: "talk" as const,
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 4.6 * (1 - s), rot: 18 * (1 - s), dx: 0, anim: "sit" as const };
+  return { lift: 5.52 * (1 - s), rot: 21.6 * (1 - s), dx: 0, anim: "sit" as const };
 }
 
 export function visaPose(t: number) {
   return {
-    lift: Math.abs(Math.sin(t * 3.4)) * 3.8 + 2.4,
-    rot: -16 + Math.sin(t * 2.8) * 14,
-    dx: Math.sin(t * 2.2) * 1.4,
+    lift: Math.abs(Math.sin(t * 3.4)) * 4.56 + 2.4,
+    rot: -19.2 + Math.sin(t * 2.8) * 16.8,
+    dx: Math.sin(t * 2.2) * 1.68,
     anim: "sit" as const,
   };
 }
@@ -298,15 +297,15 @@ function smoothstep(t: number) {
 /** Seam — three longitudinal lines as a desk seam. Soft rock. Not window-play PATROL. Not Bandit stripe. */
 export function seamPose(t: number) {
   return {
-    lift: 2.2 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
-    rot: -22 + Math.sin(t * 2.4) * 18 + Math.sin(t * 4.6) * 10,
+    lift: 2.64 + Math.sin(t * 1.7) * 3.36 + Math.abs(Math.sin(t * 3.4)) * 1.92,
+    rot: -26.4 + Math.sin(t * 2.4) * 21.6 + Math.sin(t * 4.6) * 12,
   };
 }
 
 /** Soft unseam out of the desk seam; stays on the blotter. Not window-play leave. */
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: (2.2 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)), rot: -22 * (1 - u) };
+  return { lift: (2.64 + 3.36) * (1 - Math.sin(u * Math.PI * 0.5)), rot: -26.4 * (1 - u) };
 }
 
 /** Rounds — short blotter circuit. Not window-play PATROL. Not Bandit raid. */
@@ -314,31 +313,31 @@ export function roundsPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.rounds));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX + facing * s * 2.4, lift: s * 2.8, rot: s * 14 * facing, anim: "walk" as const };
+    return { x: fromX + facing * s * 2.88, lift: s * 3.36, rot: s * 16.8 * facing, anim: "walk" as const };
   }
   if (u < 0.5) {
     const s = (u - 0.12) / 0.38;
     return {
-      x: fromX + facing * (2.4 + smoothstep(s) * 7.2),
-      lift: 2.8 + Math.sin(s * Math.PI * 2.2) * 2.4,
-      rot: facing * (14 + Math.sin(s * Math.PI * 3) * 16),
+      x: fromX + facing * (2.88 + smoothstep(s) * 8.64),
+      lift: 3.36 + Math.sin(s * Math.PI * 2.2) * 2.88,
+      rot: facing * (16.8 + Math.sin(s * Math.PI * 3) * 19.2),
       anim: "walk" as const,
     };
   }
   if (u < 0.78) {
     const s = (u - 0.5) / 0.28;
     return {
-      x: fromX + facing * (9.6 - smoothstep(s) * 4.2),
-      lift: 2.6 + Math.abs(Math.sin(s * Math.PI * 2)) * 1.8,
-      rot: facing * (10 - s * 18),
+      x: fromX + facing * (11.52 - smoothstep(s) * 5.04),
+      lift: 3.12 + Math.abs(Math.sin(s * Math.PI * 2)) * 2.16,
+      rot: facing * (12 - s * 21.6),
       anim: "walk" as const,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * (5.4 * (1 - s)),
-    lift: 2.6 * (1 - s),
-    rot: facing * (-4 * (1 - s)),
+    x: fromX + facing * (6.48 * (1 - s)),
+    lift: 3.12 * (1 - s),
+    rot: facing * (-4.8 * (1 - s)),
     anim: "sit" as const,
   };
 }
@@ -348,23 +347,23 @@ export function mossPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.moss));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX + facing * s * 1.8, lift: s * 2.4, rot: s * 28 * facing, anim: "sit" as const };
+    return { x: fromX + facing * s * 2.16, lift: s * 2.88, rot: s * 33.6 * facing, anim: "sit" as const };
   }
   if (u < 0.78) {
     const s = (u - 0.14) / 0.64;
     const nudge = Math.sin(s * Math.PI * 2.8);
     return {
-      x: fromX + facing * (1.8 + nudge * 1.6),
-      lift: 2.0 + Math.abs(nudge) * 2.2,
-      rot: facing * (28 + nudge * 14),
+      x: fromX + facing * (2.16 + nudge * 1.92),
+      lift: 2.4 + Math.abs(nudge) * 2.64,
+      rot: facing * (33.6 + nudge * 16.8),
       anim: "sit" as const,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * (1.8 * (1 - s)),
-    lift: 2.0 * (1 - s),
-    rot: facing * 10 * (1 - s),
+    x: fromX + facing * (2.16 * (1 - s)),
+    lift: 2.4 * (1 - s),
+    rot: facing * 14.4 * (1 - s),
     anim: "idle" as const,
   };
 }
@@ -374,23 +373,23 @@ export function forkPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.fork));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 5.2, rot: s * -18 * facing, anim: "talk" as const };
+    return { x: fromX, lift: s * 6.24, rot: s * -21.6 * facing, anim: "talk" as const };
   }
   if (u < 0.82) {
     const s = (u - 0.12) / 0.7;
     const flick = Math.sin(s * Math.PI * 5.2);
     return {
-      x: fromX + facing * flick * 2.2,
-      lift: 5.2 + Math.abs(flick) * 3.4,
-      rot: facing * (-18 + flick * 20),
+      x: fromX + facing * flick * 2.64,
+      lift: 6.24 + Math.abs(flick) * 4.08,
+      rot: facing * (-21.6 + flick * 24),
       anim: "talk" as const,
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
     x: fromX,
-    lift: 5.2 * (1 - s),
-    rot: facing * -8 * (1 - s),
+    lift: 6.24 * (1 - s),
+    rot: facing * -9.6 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -400,31 +399,31 @@ export function lapPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.lap));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 4.8, rot: -s * 16 * facing, anim: "play" as const };
+    return { x: fromX, lift: s * 5.76, rot: -s * 19.2 * facing, anim: "play" as const };
   }
   if (u < 0.5) {
     const s = (u - 0.12) / 0.38;
     return {
-      x: fromX + facing * smoothstep(s) * 7.2,
-      lift: 4.8 + Math.sin(s * Math.PI) * 4.2,
-      rot: facing * (-16 + s * 34),
+      x: fromX + facing * smoothstep(s) * 8.64,
+      lift: 5.76 + Math.sin(s * Math.PI) * 5.04,
+      rot: facing * (-19.2 + s * 40.8),
       anim: "play" as const,
     };
   }
   if (u < 0.78) {
     const s = (u - 0.5) / 0.28;
     return {
-      x: fromX + facing * 7.2,
-      lift: 5.4 + Math.sin(s * Math.PI * 1.8) * 2.8,
-      rot: facing * (18 - s * 10),
+      x: fromX + facing * 8.64,
+      lift: 6.48 + Math.sin(s * Math.PI * 1.8) * 3.36,
+      rot: facing * (21.6 - s * 12),
       anim: "sit" as const,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * (7.2 * (1 - s)),
-    lift: 5.4 * (1 - s),
-    rot: facing * 6 * (1 - s),
+    x: fromX + facing * (8.64 * (1 - s)),
+    lift: 6.48 * (1 - s),
+    rot: facing * 7.2 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -434,23 +433,23 @@ export function ribbonPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.ribbon));
   if (u < 0.1) {
     const s = smoothstep(u / 0.1);
-    return { x: fromX, lift: s * 3.2, rot: s * 42 * facing, anim: "play" as const };
+    return { x: fromX, lift: s * 3.84, rot: s * 50.4 * facing, anim: "play" as const };
   }
   if (u < 0.86) {
     const s = (u - 0.1) / 0.76;
     const flash = Math.sin(s * Math.PI * 4.6);
     return {
-      x: fromX + facing * flash * 2.4,
-      lift: 3.2 + Math.abs(flash) * 2.8 + Math.sin(s * Math.PI * 2.2) * 1.6,
-      rot: facing * (42 + flash * 22),
+      x: fromX + facing * flash * 2.88,
+      lift: 3.84 + Math.abs(flash) * 3.36 + Math.sin(s * Math.PI * 2.2) * 1.92,
+      rot: facing * (50.4 + flash * 26.4),
       anim: "play" as const,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX,
-    lift: 3.2 * (1 - s),
-    rot: facing * 12 * (1 - s),
+    lift: 3.84 * (1 - s),
+    rot: facing * 14.4 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -460,23 +459,23 @@ export function creekPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.creek));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX + facing * s * 1.6, lift: s * 3.6, rot: s * -12 * facing, anim: "play" as const };
+    return { x: fromX + facing * s * 1.92, lift: s * 4.32, rot: s * -14.4 * facing, anim: "play" as const };
   }
   if (u < 0.82) {
     const s = (u - 0.14) / 0.68;
     const wave = Math.sin(s * Math.PI * 5.6);
     return {
-      x: fromX + facing * (1.6 + wave * 3.4),
-      lift: 3.6 + Math.abs(wave) * 2.6,
-      rot: facing * (-12 + wave * 24),
+      x: fromX + facing * (1.92 + wave * 4.08),
+      lift: 4.32 + Math.abs(wave) * 3.12,
+      rot: facing * (-14.4 + wave * 28.8),
       anim: "play" as const,
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
-    x: fromX + facing * (1.6 * (1 - s)),
-    lift: 3.6 * (1 - s),
-    rot: facing * -6 * (1 - s),
+    x: fromX + facing * (1.92 * (1 - s)),
+    lift: 4.32 * (1 - s),
+    rot: facing * -7.2 * (1 - s),
     anim: "sit" as const,
   };
 }
