@@ -1,4 +1,4 @@
-/** Spot ground tricks while idle — ultra-polish pass. House neighborly Euglena desk life — eyespot / flagellum / chloroplast / phototaxis / euglenid / metaboly / paramylon personality (eyespot stigma turn without naming turn or glance or still or dart or red, flagellum anterior whip without naming whip or swim or still or dart, chloroplast green drink without naming drink or glow or still or dart, phototaxis lamp-seek without naming seek or swim or still or red, long euglenid Euglena desk hold under the lamp drop, metaboly euglenoid shape-change without naming stretch or dart or still or foot (THE euglena metaboly tell), paramylon storage-grain glint without naming glint or flare or still or dart (THE euglena paramylon tell) — never named wait or wake or still or hide or cover or glue or flare or dart or nest or zig or swim or gulp or drift or glint or hinge or sucker or latch or crawl or dig or burrow or pedal or radula or pneumostome or ommatophore or lymnaeid or adductor or protractor or inhalant or ctenidium or unionid or acetabulum or prostomium or looping or undulatory or hirudinean or botryoidal or auricle or spiggin or zigzag or spinous or fanning or gasterosteid or nuptial or pelvic or cilia or pellicle or cytostome or vacuole or ciliophora or trichocyst or avoiding or slipper or row or wiggle or scute or pseudopod or ectoplasm or endoplasm or foodcup or proteus or uroid or streaming or chaos or discoides or dubia or eyespotturn or flagellumwhip or chloroplastdrink or phototaxisswim or longspothush as trick kinds; ethogram softs + freeze own those words; window-play RED owns the lamp-drop red; Coin owns flare/dart/drift/gulp/glint; Twig owns stick-insect life; Latch owns acetabulum/prostomium/looping/undulatory/hirudinean/botryoidal/auricle; Hinge owns adductor/protractor/inhalant/ctenidium/unionid/ligament/glochid; Whorl owns radula/pedal/pneumostome/ommatophore/lymnaeid/odontophore/neuston; Prickle owns spiggin/zigzag/spinous/fanning/gasterosteid/nuptial/pelvic; Boot owns cilia/pellicle/cytostome/vacuole/ciliophora/trichocyst/avoiding; Reach owns pseudopod/ectoplasm/endoplasm/foodcup/proteus/uroid/streaming; Door owns hinge; Anchor owns siphon; guest slug Spot / key euglena only for isKey matching — accept "euglena" and "spot"; do NOT name a trick "euglena" or "spot" or "glue" or "flare" or "dart" or "still" or "foot" or "red" or "drink" or "glow" or "swim" or "whip") — not Reach amoeba life, not Boot paramecium life, not Prickle stickleback life, not Coin goldfish life, not Latch leech life, not Hinge mussel life, not Twig stick-insect life, not Door moray, not Anchor seahorse, not Kite manta, not Gauss filing-dragon, not Orb volvox. Eyespot stigma turn on the drop without naming glance, flagellum anterior whip without naming dart, chloroplast green drink without naming glow, phototaxis lamp-seek without naming swim, euglenid long Euglena metabolic hold under the scrap lamp, metaboly euglenoid shape-change (THE euglena metaboly tell), paramylon storage-grain glint (THE euglena paramylon tell); viridis / gracilis / sanguinea thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play RED do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web euglena-tricks.ts. Window-play RED unchanged. Ethogram softs + freeze — never names spot/red/still as bare ethogram-only trick kinds. True Euglena desk life only — distinct from Reach amoeba, Boot paramecium, Prickle stickleback, Coin goldfish, Latch leech, Hinge mussel, Twig stick insect, Door moray, Anchor seahorse, Kite manta, Gauss filing-dragon, and Orb volvox. Spin owns the next seat. No cry inventing — thank-yous are silent desk motion only. Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via euglena.wav. */
+/** Spot ground tricks while idle — ultra-polish pass. House neighborly Euglena desk life — eyespot / flagellum / chloroplast / phototaxis / euglenid / metaboly / paramylon personality (eyespot stigma turn without naming turn or glance or still or dart or red, flagellum anterior whip without naming whip or swim or still or dart, chloroplast green drink without naming drink or glow or still or dart, phototaxis lamp-seek without naming seek or swim or still or red, long euglenid Euglena desk hold under the lamp drop, metaboly euglenoid shape-change without naming stretch or dart or still or foot (THE euglena metaboly tell), paramylon storage-grain glint without naming glint or flare or still or dart (THE euglena paramylon tell) — never named wait or wake or still or hide or cover or glue or flare or dart or nest or zig or swim or gulp or drift or glint or hinge or sucker or latch or crawl or dig or burrow or pedal or radula or pneumostome or ommatophore or lymnaeid or adductor or protractor or inhalant or ctenidium or unionid or acetabulum or prostomium or looping or undulatory or hirudinean or botryoidal or auricle or spiggin or zigzag or spinous or fanning or gasterosteid or nuptial or pelvic or cilia or pellicle or cytostome or vacuole or ciliophora or trichocyst or avoiding or slipper or row or wiggle or scute or pseudopod or ectoplasm or endoplasm or foodcup or proteus or uroid or streaming or chaos or discoides or dubia or eyespotturn or flagellumwhip or chloroplastdrink or phototaxisswim or longspothush as trick kinds; ethogram softs + freeze own those words; window-play RED owns the lamp-drop red; Coin owns flare/dart/drift/gulp/glint; Twig owns stick-insect life; Latch owns acetabulum/prostomium/looping/undulatory/hirudinean/botryoidal/auricle; Hinge owns adductor/protractor/inhalant/ctenidium/unionid/ligament/glochid; Whorl owns radula/pedal/pneumostome/ommatophore/lymnaeid/odontophore/neuston; Prickle owns spiggin/zigzag/spinous/fanning/gasterosteid/nuptial/pelvic; Boot owns cilia/pellicle/cytostome/vacuole/ciliophora/trichocyst/avoiding; Reach owns pseudopod/ectoplasm/endoplasm/foodcup/proteus/uroid/streaming; Door owns hinge; Anchor owns siphon; guest slug Spot / key euglena only for isKey matching — accept "euglena" and "spot"; do NOT name a trick "euglena" or "spot" or "glue" or "flare" or "dart" or "still" or "foot" or "red" or "drink" or "glow" or "swim" or "whip") — not Reach amoeba life, not Boot paramecium life, not Prickle stickleback life, not Coin goldfish life, not Latch leech life, not Hinge mussel life, not Twig stick-insect life, not Door moray, not Anchor seahorse, not Kite manta, not Gauss filing-dragon, not Orb volvox. Eyespot stigma turn on the drop without naming glance, flagellum anterior whip without naming dart, chloroplast green drink without naming glow, phototaxis lamp-seek without naming swim, euglenid long Euglena metabolic hold under the scrap lamp, metaboly euglenoid shape-change (THE euglena metaboly tell), paramylon storage-grain glint (THE euglena paramylon tell); viridis / gracilis / sanguinea thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play RED do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web euglena-tricks.ts. Window-play RED unchanged. Ethogram softs + freeze — never names spot/red/still as bare ethogram-only trick kinds. True Euglena desk life only — distinct from Reach amoeba, Boot paramecium, Prickle stickleback, Coin goldfish, Latch leech, Hinge mussel, Twig stick insect, Door moray, Anchor seahorse, Kite manta, Gauss filing-dragon, and Orb volvox. Spin owns the next seat. No cry inventing — thank-yous are silent desk motion only. Amplitudes raised toward Rui richness; denser waits/weights (EUGLENID_HOLD=11.2 RELEASE_S=1.18). Next leftover Orb / volvox. prefersHouseCry via euglena.wav. */
 (function (root) {
   const TRICK_KEY = "euglena";
   const TRICKS = ["eyespot", "flagellum", "chloroplast", "phototaxis", "euglenid", "metaboly", "paramylon"];
@@ -43,56 +43,29 @@
     );
   }
 
-  function nextTrickWait(justFinished,rand,kind) {
+  function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
     if (kind === "euglenid") return 40 + roll * 26;
-    if (kind === "metaboly" || kind === "paramylon" || kind === "eyespot") return 12.8 + roll * 9.4;
-    if (kind === "flagellum" || kind === "chloroplast" || kind === "phototaxis") return 11.6 + roll * 8.5;
+    if (kind === "metaboly" || kind === "paramylon" || kind === "eyespot" || kind === "flagellum" || kind === "chloroplast" || kind === "phototaxis") return 12.8 + roll * 9.4;
     return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
 
-  function pickTrick(rand,musicOn,lastKind) {
+  function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "euglenid";
     const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "euglenid") {
-      if (roll < 0.17) return "eyespot";
-      if (roll < 0.33) return "flagellum";
-      if (roll < 0.49) return "chloroplast";
-      if (roll < 0.65) return "phototaxis";
-      if (roll < 0.83) return "metaboly";
-      return "paramylon";
+    const pool = TRICKS.filter((k) => k !== lastKind);
+    const list = pool.length ? pool : TRICKS.slice();
+    const weights = list.map((k) =>
+      k === "euglenid" ? 0.72 : k === "metaboly" || k === "paramylon" ? 1.28 : k === "eyespot" || k === "flagellum" || k === "chloroplast" ? 1.18 : 1.08
+    );
+    let total = 0;
+    for (let i = 0; i < weights.length; i++) total += weights[i];
+    let r = roll * total;
+    for (let i = 0; i < list.length; i++) {
+      r -= weights[i];
+      if (r <= 0) return list[i];
     }
-    if (lastKind === "eyespot") {
-      if (roll < 0.16) return "euglenid";
-      if (roll < 0.32) return "flagellum";
-      if (roll < 0.48) return "chloroplast";
-      if (roll < 0.64) return "phototaxis";
-      if (roll < 0.82) return "metaboly";
-      return "paramylon";
-    }
-    if (lastKind === "flagellum") {
-      if (roll < 0.14) return "euglenid";
-      if (roll < 0.3) return "eyespot";
-      if (roll < 0.46) return "chloroplast";
-      if (roll < 0.62) return "phototaxis";
-      if (roll < 0.8) return "metaboly";
-      return "paramylon";
-    }
-    if (lastKind === "metaboly" || lastKind === "paramylon") {
-      if (roll < 0.14) return "euglenid";
-      if (roll < 0.3) return "eyespot";
-      if (roll < 0.46) return "flagellum";
-      if (roll < 0.62) return "chloroplast";
-      if (roll < 0.78) return "phototaxis";
-      return lastKind === "metaboly" ? ("paramylon") : ("metaboly");
-    }
-    if (roll < 0.14) return "euglenid";
-    if (roll < 0.28) return "eyespot";
-    if (roll < 0.42) return "flagellum";
-    if (roll < 0.56) return "chloroplast";
-    if (roll < 0.7) return "phototaxis";
-    if (roll < 0.85) return "metaboly";
-    return "paramylon";
+    return list[list.length - 1] || "eyespot";
   }
 
   function happyCanStart(state) {
@@ -157,44 +130,44 @@
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.viridis));
     if (u < 0.16) {
       const s = u / 0.16;
-      return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" };
+      return { lift: s * 3.36, rot: s * 14.4, dx: 0, anim: "talk" };
     }
     if (u < 0.82) {
       const flash = Math.sin(t * 1.72);
       return {
-        lift: 2.8 + Math.abs(flash) * 1.4,
-        rot: 12 + flash * 8,
+        lift: 3.36 + Math.abs(flash) * 1.68,
+        rot: 14.4 + flash * 9.6,
         dx: 0,
         anim: "talk",
       };
     }
     const s = (u - 0.82) / 0.18;
-    return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
+    return { lift: 2.4 * (1 - s), rot: 7.2 * (1 - s), dx: 0, anim: "idle" };
   }
 
   function gracilisPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.gracilis));
     if (u < 0.14) {
       const s = u / 0.14;
-      return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" };
+      return { lift: s * 4.44, rot: s * -16.8, dx: s * 0.18, anim: "play" };
     }
     if (u < 0.84) {
       const wriggle = Math.sin(t * 2.1);
       return {
-        lift: 3.4 + Math.abs(wriggle) * 1.6,
-        rot: -14 + wriggle * 10,
-        dx: 0.08,
+        lift: 4.08 + Math.abs(wriggle) * 1.92,
+        rot: -16.8 + wriggle * 12,
+        dx: 0.096,
         anim: "play",
       };
     }
     const s = (u - 0.84) / 0.16;
-    return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: 2.64 * (1 - s), rot: -7.2 * (1 - s), dx: 0, anim: "sit" };
   }
 
   function sanguineaPose(t) {
     return {
-      lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
-      rot: Math.sin(t * 0.52) * 6,
+      lift: 2.64 + Math.abs(Math.sin(t * 0.696)) * 1.32,
+      rot: Math.sin(t * 0.624) * 7.2,
       dx: 0,
       anim: "sit",
     };
@@ -264,15 +237,15 @@
 
   function euglenidPose(t) {
     return {
-      lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
-      rot: -0.18 + Math.sin(t * 0.14) * 4,
+      lift: 2.88 + Math.abs(Math.sin(t * 0.504)) * 1.44,
+      rot: -0.216 + Math.sin(t * 0.168) * 4.8,
       anim: "sit",
     };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
+    return { lift: 2.88 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.216 * (1 - u) };
   }
 
   function eyespotPose(t,fromX, facing) {
@@ -280,22 +253,22 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 3.5, rot: s * 14 * face, anim: "sit" };
+      return { x: fromX, lift: s * 4.2, rot: s * 16.8 * face, anim: "sit" };
     }
     if (u < 0.78) {
       const snap = Math.sin(t * 2.4);
       return {
-        x: fromX + face * snap * 0.14,
-        lift: 3.5 + Math.abs(snap) * 1.5,
-        rot: face * (15 + snap * 11),
+        x: fromX + face * snap * 0.168,
+        lift: 4.2 + Math.abs(snap) * 1.8,
+        rot: face * (18 + snap * 13.2),
         anim: "sit",
       };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
       x: fromX,
-      lift: 1.4 * (1 - s),
-      rot: face * (4 * (1 - s)),
+      lift: 1.68 * (1 - s),
+      rot: face * (4.8 * (1 - s)),
       anim: "idle",
     };
   }
@@ -305,14 +278,14 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 3.9, rot: s * -16 * face, anim: "walk" };
+      return { x: fromX, lift: s * 4.68, rot: s * -19.2 * face, anim: "walk" };
     }
     if (u < 0.48) {
       const s = smoothstep((u - 0.12) / 0.36);
       return {
-        x: fromX - face * (2.2 + s * 4.5),
-        lift: 3.6 + Math.sin(s * Math.PI) * 2.2,
-        rot: face * (-16 + s * 22),
+        x: fromX - face * (2.64 + s * 5.4),
+        lift: 4.32 + Math.sin(s * Math.PI) * 2.64,
+        rot: face * (-19.2 + s * 26.4),
         anim: "walk",
       };
     }
@@ -320,17 +293,17 @@
       const s = (u - 0.48) / 0.3;
       const settle = Math.sin(s * Math.PI * 2.1);
       return {
-        x: fromX - face * (6.7 * (1 - s)),
-        lift: 2.4 + Math.abs(settle) * 1.1,
-        rot: face * (6 + settle * 8),
+        x: fromX - face * (8.04 * (1 - s)),
+        lift: 2.88 + Math.abs(settle) * 1.32,
+        rot: face * (7.2 + settle * 9.6),
         anim: "walk",
       };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
       x: fromX,
-      lift: 1.4 * (1 - s),
-      rot: face * (3 * (1 - s)),
+      lift: 1.68 * (1 - s),
+      rot: face * (3.6 * (1 - s)),
       anim: "idle",
     };
   }
@@ -340,23 +313,23 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.16) {
       const s = smoothstep(u / 0.16);
-      return { x: fromX + face * s * 0.8, lift: s * 2.2, rot: s * 8 * face, anim: "play" };
+      return { x: fromX + face * s * 0.96, lift: s * 2.64, rot: s * 9.6 * face, anim: "play" };
     }
     if (u < 0.72) {
       const mud = Math.sin(t * 1.6);
       return {
-        x: fromX + face * (0.8 + mud * 0.4),
-        lift: 2.2 + Math.abs(mud) * 1.0,
-        rot: face * (8 + mud * 10),
+        x: fromX + face * (0.96 + mud * 0.48),
+        lift: 2.64 + Math.abs(mud) * 1.0,
+        rot: face * (9.6 + mud * 12),
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.72) / 0.28);
     return {
-      x: fromX + face * 0.8 * (1 - s),
-      lift: 1.2 * (1 - s),
-      rot: face * (3 * (1 - s)),
-      anim: s > 0.6 ? ("idle") : ("play"),
+      x: fromX + face * 0.96 * (1 - s),
+      lift: 1.44 * (1 - s),
+      rot: face * (3.6 * (1 - s)),
+      anim: s > 0.72 ? ("idle") : ("play"),
     };
   }
 
@@ -365,22 +338,22 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 2.4, rot: s * 10 * face, anim: "play" };
+      return { x: fromX, lift: s * 2.88, rot: s * 12 * face, anim: "play" };
     }
     if (u < 0.84) {
       const tap = Math.sin(t * 2.8);
       return {
-        x: fromX + face * tap * 0.2,
-        lift: 2.4 + Math.abs(tap) * 1.1,
-        rot: face * (10 + tap * 12),
+        x: fromX + face * tap * 0.24,
+        lift: 2.88 + Math.abs(tap) * 1.32,
+        rot: face * (12 + tap * 14.4),
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.84) / 0.16);
     return {
       x: fromX,
-      lift: 1.2 * (1 - s),
-      rot: face * (3 * (1 - s)),
+      lift: 1.44 * (1 - s),
+      rot: face * (3.6 * (1 - s)),
       anim: "idle",
     };
   }
@@ -390,31 +363,31 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 2.8, rot: s * 12 * face, anim: "play" };
+      return { x: fromX, lift: s * 3.36, rot: s * 14.4 * face, anim: "play" };
     }
     if (u < 0.55) {
       const pulse = Math.sin(t * 3.2);
       return {
         x: fromX,
-        lift: 2.8 + pulse * 1.6,
-        rot: face * (12 + pulse * 14),
+        lift: 3.36 + pulse * 1.92,
+        rot: face * (14.4 + pulse * 16.8),
         anim: "play",
       };
     }
     if (u < 0.78) {
       const scent = Math.sin(t * 1.1);
       return {
-        x: fromX + face * scent * 0.15,
-        lift: 4.0 + Math.abs(scent) * 0.6,
-        rot: face * (22 + scent * 4),
+        x: fromX + face * scent * 0.18,
+        lift: 4.8 + Math.abs(scent) * 0.72,
+        rot: face * (26.4 + scent * 4),
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
       x: fromX,
-      lift: 2.0 * (1 - s),
-      rot: face * (8 * (1 - s)),
+      lift: 2.4 * (1 - s),
+      rot: face * (9.6 * (1 - s)),
       anim: "idle",
     };
   }
@@ -424,14 +397,14 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 3.4, rot: s * -12 * face, anim: "walk" };
+      return { x: fromX, lift: s * 4.08, rot: s * -14.4 * face, anim: "walk" };
     }
     if (u < 0.55) {
       const flash = Math.abs(Math.sin(t * 2.6));
       return {
-        x: fromX + face * flash * 0.2,
-        lift: 3.4 + flash * 1.4,
-        rot: face * (-12 - flash * 10),
+        x: fromX + face * flash * 0.24,
+        lift: 4.08 + flash * 1.68,
+        rot: face * (-14.4 - flash * 12),
         anim: "walk",
       };
     }
@@ -439,16 +412,16 @@
       const warn = Math.sin(t * 1.4);
       return {
         x: fromX,
-        lift: 4.4 + Math.abs(warn) * 0.7,
-        rot: face * (-18 + warn * 6),
+        lift: 5.28 + Math.abs(warn) * 0.84,
+        rot: face * (-21.6 + warn * 7.2),
         anim: "walk",
       };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
       x: fromX,
-      lift: 1.8 * (1 - s),
-      rot: face * (-5 * (1 - s)),
+      lift: 2.16 * (1 - s),
+      rot: face * (-6 * (1 - s)),
       anim: "idle",
     };
   }
