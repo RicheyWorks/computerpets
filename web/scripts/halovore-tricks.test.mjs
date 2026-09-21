@@ -716,6 +716,11 @@ test("halite/salina/rime/bittern/deliquesce/ectoine/sabkha are salt-brine-true, 
   assert.equal(held.anim, "sit");
   assert.ok(held.rot !== 0 || held.lift > 0);
   const release = T.stepTrick(bole, T.DELIQUESCE_HOLD + 0.2, ground);
+  assert.equal(T.DELIQUESCE_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.equal(T.DELIQUESCE_HOLD, Overlay.DELIQUESCE_HOLD);
+  assert.equal(T.RELEASE_S, Overlay.RELEASE_S);
+  assert.ok(T.DELIQUESCE_HOLD <= 12);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
   const doneBole = T.stepTrick(bole, T.DUR.deliquesce + 0.1, ground);
@@ -920,7 +925,7 @@ test("halite/salina/rime/bittern/deliquesce/ectoine/sabkha are salt-brine-true, 
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -1470,7 +1475,8 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Brine ultra idle-life done; next house-order ultra is Reed / frog", () => {
+test("notes: Brine Rui-dense ultra (DELIQUESCE_HOLD=11.2); next leftover Beacon / magneton", () => {
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Beacon / magneton.
   assert.equal(T.TRICK_KEY, "halovore");
   assert.deepEqual([...T.TRICKS], ["halite", "salina", "rime", "bittern", "deliquesce", "ectoine", "sabkha"]);
   assert.deepEqual([...T.HAPPY], ["natron", "trona", "aureole"]);
