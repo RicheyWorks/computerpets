@@ -269,9 +269,9 @@ test("ground registry keeps prior guests gated; Burr selectable; no ball/tube/di
   assert.equal(Ferret.TRICK_KEY, "ferret");
   assert.equal(T.TRICK_KEY, "hedgehog");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...Relay.TRICKS], ["click", "latch", "arc", "buzz", "switch"]);
-  assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
-  assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
+  assert.deepEqual([...Relay.TRICKS], ["contactclick", "latchseat", "arcflick", "coilbuzz", "poleswitch", "armaturetap", "relayhush"]);
+  assert.deepEqual([...Fuse.TRICKS], ["railseat", "holdcurrent", "blowclear", "reseatsnap", "cartridgerattle", "bladeflash", "fusehush"]);
+  assert.deepEqual([...Earth.TRICKS], ["lugstrap", "earthseat", "heaveplate", "bedsettle", "soilgrip", "plateclamp", "groundhush"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
@@ -454,11 +454,12 @@ test("ultra-polish: Burr curl/snuffle/trundle/wheel lifts are Rui-visible (not m
   assert.equal(T.DUR.trundle, Overlay.DUR.trundle);
   assert.equal(T.DUR.wheel, Overlay.DUR.wheel);
   assert.equal(T.CURL_HOLD, Overlay.CURL_HOLD);
-  assert.equal(T.CURL_HOLD, 13.6);
-  assert.ok(T.nextTrickWait(true, 0, "curl") > 38);
+  assert.equal(T.CURL_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "curl") > 39);
 });
 
-test("notes: Burr idle-life ultra done; Floss / chinchilla + Bloom / axolotl + Sol / iguana ultra next-or-done; following house-order ultra guest is Vesper / dragon (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip bird; skip Ember if bird)", () => {
+test("notes: Burr Rui-dense ultra (CURL_HOLD=11.2); next house-order densify leftover after early house guests: Floss / chinchilla then Bloom / axolotl", () => {
   assert.deepEqual([...T.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root", "trundle", "wheel"]);
   assert.equal(T.TRICK_KEY, "hedgehog");
   assert.equal(T.wantsThankYou("burr"), true);
