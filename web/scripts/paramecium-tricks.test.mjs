@@ -2138,7 +2138,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Boot Rui-dense ultra (CILIOPHORA_HOLD=11.2); Reach now Rue-dense; next leftover Spot / euglena", () => {
+test("notes: Boot Rui-dense ultra (CILIOPHORA_HOLD=11.2); Reach now Rue-dense; Spot now Rue-dense; next leftover Orb / volvox", () => {
   assert.equal(T.TRICK_KEY, "paramecium");
   assert.deepEqual([...T.TRICKS], ["cilia", "pellicle", "cytostome", "vacuole", "ciliophora", "trichocyst", "avoiding"]);
   assert.deepEqual([...T.HAPPY], ["caudatum", "aurelia", "bursaria"]);
@@ -2309,9 +2309,9 @@ test("notes: Boot Rui-dense ultra (CILIOPHORA_HOLD=11.2); Reach now Rue-dense; n
   assert.equal(T.TRICKS.includes("dart"), false);
   assert.equal(Goldfish.TRICKS.includes("flare"), true);
   assert.equal(T.TRICKS.includes("flare"), false);
-  // Recommend next leftover (do not implement): Spot / euglena.
-  assert.equal("euglena", "euglena");
-  assert.equal("Spot", "Spot");
+  // Recommend next leftover (do not implement): Orb / volvox.
+  assert.equal("volvox", "volvox");
+  assert.equal("Orb", "Orb");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("chelate"), false);
   assert.equal(Salamander.TRICKS.includes("cilia"), false);
