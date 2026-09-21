@@ -470,9 +470,13 @@ test("ultra-polish: Blush pebble/dune/talus lifts are Rui-visible (not micro idl
   assert.ok(r2.lift > 0.5 || Math.abs(r2.rot) > 4 || Math.abs(r2.x - 80) > 0.5, `rosy mid ${r2.lift}/${r2.rot}/${r2.x}`);
   assert.ok(Overlay.dunePose && Overlay.talusPose);
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.PEBBLE_HOLD, Overlay.PEBBLE_HOLD);
+  assert.equal(T.PEBBLE_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "pebble") > 39);
 });
 
-test("notes: Blush idle-life ultra done; Atlas / carpet_python ultra done; Cup / octopus ultra done; Sepia / cuttlefish ultra done; Chamber / nautilus ultra done; Pulse / moon_jelly ultra done; Anchor / seahorse ultra done; next house-order ultra guest is Kite / manta (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger + Anchor already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
+test("notes: Blush Rui-dense ultra (PEBBLE_HOLD=11.2); next leftover Atlas / carpet_python", () => {
   assert.equal(T.TRICK_KEY, "rosy_boa");
   assert.equal(T.wantsThankYou("blush"), true);
   assert.equal(OverlayGround.tricksFor("boa"), OverlayBoa);

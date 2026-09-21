@@ -464,7 +464,7 @@ test("ultra-polish: Coral rhyme/cipher/verse lifts are Rui-visible (not micro id
   assert.ok(T.nextTrickWait(true, 0, "rhyme") > 39);
 });
 
-test("notes: Coral Rui-dense ultra (RHYME_HOLD=11.2); next leftover Blush / rosy_boa", () => {
+test("notes: Coral Rui-dense ultra (RHYME_HOLD=11.2); Blush densified; next leftover Atlas / carpet_python", () => {
   assert.equal(T.TRICK_KEY, "milk_snake");
   assert.equal(T.wantsThankYou("coral"), true);
   assert.equal(OverlayGround.tricksFor("boa"), OverlayBoa);

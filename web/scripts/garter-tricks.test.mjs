@@ -422,7 +422,7 @@ test("ultra-polish: Sash seam/rounds/ribbon/creek lifts are Rui-visible (not mic
   assert.equal(T.HAPPY_DUR.copy, Overlay.HAPPY_DUR.copy);
 });
 
-test("notes: Sash Rui-dense ultra (SEAM_HOLD=11.2); Lula densified; Coral densified; next leftover Blush / rosy_boa", () => {
+test("notes: Sash Rui-dense ultra (SEAM_HOLD=11.2); Lula densified; Coral densified; Blush densified; next leftover Atlas / carpet_python", () => {
   assert.equal(T.TRICK_KEY, "garter");
   assert.equal(T.wantsThankYou("sash"), true);
   globalThis.PetGarterTricks = Overlay;
