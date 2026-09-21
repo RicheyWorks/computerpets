@@ -381,7 +381,7 @@ assert.equal(names("mining_bee").includes("still"), false);
 
 
 
-  assert.ok(names("honey_queen").includes("lay"));
+  assert.ok(names("honey_queen").includes("regina"));
   assert.ok(names("bumblebee").includes("bombus"));
 assert.ok(names("bumblebee").includes("sonicate_soft"));
 assert.ok(names("bumblebee").includes("scopa_soft"));
