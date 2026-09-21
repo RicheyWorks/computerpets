@@ -927,10 +927,14 @@ globalThis.PetHoneycombTricks = Overlay;
   assert.equal(T.HAPPY.includes("velvet"), false);
   assert.equal(T.HAPPY.includes("meadow"), false);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
+  assert.equal(T.TESSERA_HOLD, Overlay.TESSERA_HOLD);
+  assert.equal(T.TESSERA_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "tessera") > 39);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Wax ultra done; next house-order ultra is Puff / puffball", () => {
+test("notes: Wax Rui-dense ultra (TESSERA_HOLD=11.2); next leftover Reed / frog", () => {
   assert.equal(T.TRICK_KEY, "honeycomb");
   assert.equal(T.wantsThankYou("wax"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
