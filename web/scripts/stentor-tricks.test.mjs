@@ -2186,7 +2186,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Bell Rui-dense ultra (INTROVERSUS_HOLD=11.2); Rod now Rue-dense; Rose now Rue-dense; Dee now Rue-dense; next leftover Brick / robin", () => {
+test("notes: Bell Rui-dense ultra (INTROVERSUS_HOLD=11.2); Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; next leftover Drake / mallard", () => {
   assert.equal(T.TRICK_KEY, "stentor");
   assert.deepEqual([...T.TRICKS], ["adoral", "myoneme", "membranelle", "holdfoot", "introversus", "vortex", "beadedmac"]);
   assert.deepEqual([...T.HAPPY], ["coeruleus", "polymorphus", "muelleri"]);
