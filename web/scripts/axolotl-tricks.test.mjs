@@ -306,9 +306,9 @@ test("ground registry keeps prior guests gated; Bloom selectable; no wall/float/
   assert.equal(Chinchilla.TRICK_KEY, "chinchilla");
   assert.equal(T.TRICK_KEY, "axolotl");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...Relay.TRICKS], ["click", "latch", "arc", "buzz", "switch"]);
-  assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
-  assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
+  assert.deepEqual([...Relay.TRICKS], ["contactclick", "latchseat", "arcflick", "coilbuzz", "poleswitch", "armaturetap", "relayhush"]);
+  assert.deepEqual([...Fuse.TRICKS], ["railseat", "holdcurrent", "blowclear", "reseatsnap", "cartridgerattle", "bladeflash", "fusehush"]);
+  assert.deepEqual([...Earth.TRICKS], ["lugstrap", "earthseat", "heaveplate", "bedsettle", "soilgrip", "plateclamp", "groundhush"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
@@ -503,10 +503,13 @@ test("ultra-polish: Bloom gill/amble/sprout/glop lifts are Rui-visible (not micr
   assert.equal(T.DUR.sprout, Overlay.DUR.sprout);
   assert.equal(T.DUR.glop, Overlay.DUR.glop);
   assert.equal(T.GILL_HOLD, Overlay.GILL_HOLD);
+  assert.equal(T.GILL_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "gill") > 39);
   assert.equal(T.HAPPY_DUR.wink, Overlay.HAPPY_DUR.wink);
 });
 
-test("notes: Bloom idle-life ultra done; Sol / iguana + Vesper / dragon + Nori / ball_python + Saffron / corn_snake + Bandit / kingsnake + Jade / green_tree_python + Bluff / hognose + Sash / garter ultra next-or-done; Lula / boa ultra next-or-done; following house-order ultra guest is Coral / milk_snake (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Bloom Rui-dense ultra (GILL_HOLD=11.2); next house-order densify leftover after early house guests: Keel / toucan then Sol / iguana", () => {
   assert.deepEqual([...T.TRICKS], ["gill", "amble", "mend", "smile", "plume", "sprout", "glop"]);
   assert.equal(T.TRICK_KEY, "axolotl");
   assert.equal(T.wantsThankYou("bloom"), true);
