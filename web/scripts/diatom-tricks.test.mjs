@@ -2165,7 +2165,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Pane Rui-dense ultra (NAVICULA_HOLD=11.2); Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; Drake now Rue-dense; Vee now Rue-dense; Drum now Rue-dense; Sip now Rue-dense; next leftover Echo / budgie", () => {
+test("notes: Pane Rui-dense ultra (NAVICULA_HOLD=11.2); Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; Drake now Rue-dense; Vee now Rue-dense; Drum now Rue-dense; Sip now Rue-dense; Echo now Rue-dense; next leftover Peck / penguin", () => {
   assert.equal(T.TRICK_KEY, "diatom");
   assert.deepEqual([...T.TRICKS], ["frustule", "raphe", "girdle", "oilstore", "navicula", "pennate", "epitheca"]);
   assert.deepEqual([...T.HAPPY], ["bacillaris", "cryptocephala", "tripunctata"]);
