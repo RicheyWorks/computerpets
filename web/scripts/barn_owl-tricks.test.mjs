@@ -2143,7 +2143,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Heart Rui-dense ultra (TYTONID_HOLD=11.2); next leftover Hook / red_tail", () => {
+test("notes: Heart Rui-dense ultra (TYTONID_HOLD=11.2); Hook now Rue-dense; next leftover Dee / chickadee", () => {
 
   assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Crow.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
@@ -2345,7 +2345,7 @@ test("notes: Heart Rui-dense ultra (TYTONID_HOLD=11.2); next leftover Hook / red
   assert.equal(T.TRICKS.includes("dart"), false);
   assert.equal(Goldfish.TRICKS.includes("flare"), true);
   assert.equal(T.TRICKS.includes("flare"), false);
-  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Hook / red_tail.
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Dee / chickadee.
   assert.equal("barn_owl", "barn_owl");
   assert.equal("Heart", "Heart");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
