@@ -2179,7 +2179,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Spin Rui-dense ultra (PALMELLA_HOLD=11.2); Bell now Rue-dense; Rod now Rue-dense; next leftover Rose / haloarchaea", () => {
+test("notes: Spin Rui-dense ultra (PALMELLA_HOLD=11.2); Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; next leftover Soot / crow", () => {
   assert.equal(T.TRICK_KEY, "chlamydomonas");
   assert.deepEqual([...T.TRICKS], ["biflagellate", "cupplast", "stigma", "pyrenoid", "palmella", "cellwall", "wetplate"]);
   assert.deepEqual([...T.HAPPY], ["reinhardtii", "moewusii", "eugametos"]);
@@ -2368,9 +2368,9 @@ test("notes: Spin Rui-dense ultra (PALMELLA_HOLD=11.2); Bell now Rue-dense; Rod 
   assert.equal(T.TRICKS.includes("dart"), false);
   assert.equal(Goldfish.TRICKS.includes("flare"), true);
   assert.equal(T.TRICKS.includes("flare"), false);
-  // Recommend next leftover (do not implement): Rose / haloarchaea.
-  assert.equal("haloarchaea", "haloarchaea");
-  assert.equal("Rose", "Rose");
+  // Recommend next leftover (do not implement): Soot / crow.
+  assert.equal("crow", "crow");
+  assert.equal("Soot", "Soot");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("chelate"), false);
   assert.equal(Salamander.TRICKS.includes("biflagellate"), false);

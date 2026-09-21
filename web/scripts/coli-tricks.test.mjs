@@ -2968,7 +2968,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Rod Rui-dense ultra (NUCLEOID_HOLD=11.2); next leftover Rose / haloarchaea", () => {
+test("notes: Rod Rui-dense ultra (NUCLEOID_HOLD=11.2); Rose now Rue-dense; next leftover Soot / crow", () => {
   assert.equal("Rose", "Rose");
   assert.equal("haloarchaea", "haloarchaea");
 
@@ -4459,9 +4459,9 @@ assert.equal(OverlayGround.tricksFor("earwig"), OverlayEarwig);
   assert.equal(OverlayGround.tricksFor("flying_squirrel"), OverlayFlyingSquirrel);
   assert.equal(OverlayGround.tricksFor("glide"), OverlayFlyingSquirrel);
 
-// Recommend next leftover (do not implement): Rose / haloarchaea.
-  assert.equal("haloarchaea", "haloarchaea");
-  assert.equal("Rose", "Rose");
+// Recommend next leftover (do not implement): Soot / crow.
+  assert.equal("crow", "crow");
+  assert.equal("Soot", "Soot");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("chelate"), false);
   assert.equal(Salamander.TRICKS.includes("clampseal"), false);
