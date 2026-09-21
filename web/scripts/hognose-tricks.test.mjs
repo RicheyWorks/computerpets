@@ -393,7 +393,7 @@ test("ultra-polish: Bluff hood/feign/quiver/upright lifts are Rui-visible (not m
   assert.equal(T.HAPPY_DUR.aside, Overlay.HAPPY_DUR.aside);
 });
 
-test("notes: Bluff Rui-dense ultra (HOOD_HOLD=11.2); next leftover Sash / garter", () => {
+test("notes: Bluff Rui-dense ultra (HOOD_HOLD=11.2); Sash densified; next leftover Lula / boa", () => {
   assert.equal(T.TRICK_KEY, "hognose");
   assert.equal(T.wantsThankYou("bluff"), true);
   globalThis.PetHognoseTricks = Overlay;
