@@ -703,9 +703,10 @@ assert.ok(names("toad").includes("freeze"));
   assert.ok(names("pileated").includes("excavate_soft"));
   assert.ok(names("pileated").includes("kuk_soft"));
   assert.ok(names("pileated").includes("freeze"));
-  assert.ok(names("hummingbird").includes("hover"));
+  assert.ok(names("hummingbird").includes("archilochus"));
+  assert.ok(names("hummingbird").includes("nectary_soft"));
   assert.ok(names("hummingbird").includes("chip_soft"));
-  assert.ok(names("hummingbird").includes("perch"));
+  assert.ok(names("hummingbird").includes("freeze"));
   for (const key of CORNER) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
