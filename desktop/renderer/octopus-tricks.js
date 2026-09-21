@@ -1,4 +1,4 @@
-/** Cup ground tricks while idle — ultra-polish pass. House octopus — mantle / sucker / jet / veil / tinker / papilla / ooze personality (cephalopod desk life; suckers, siphon jet, ink veil, problem-solving curiosity, dermal papillae texture-camouflage, boneless crack-ooze; teacup dens, not Coin bowl-drift or Bloom gill-amble or Ink soak-tuck or Sepia flush-hover). Mantle dens as a teacup-shaped cephalopod plate; sucker arm-tastes the blotter; jet siphon-darts; veil ink-clouds then settles; tinker puzzle-handles a desk gadget; papilla raises skin papillae for 3D camouflage (species-true Octopus vulgaris — not veil ink, not window-play LID, not Sepia chroma); ooze boneless-squeezes through a narrow gap (species-true escape — not mantle dens-hold, not jet dart). Window-play LID unchanged — never names `lid`. Ethogram keeps hide sit_hold; adds sucker/jet/veil/tinker/papilla/ooze softs + freeze (replaces thin hide/jet/taste). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via octopus.wav. Thank-yous keep / tint / squeeze. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web `octopus-tricks.ts`. True house-octopus desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids lid/drift/gulp/flare/dart/soak/tuck/paddle/gill/amble/plume/legend/flush/fan/latch/puff/unfurl/chart/climb/probe/canyon/ripple/chroma/hover/blot/bone/pupil/crawl/siphon/pulse/slink/den/cork/nest/savor/settle/survey name collisions with prior guests and octopus window-play. Bird ultra (Soot→Ember) + Miso→Atlas done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Sepia / cuttlefish. No cry inventing beyond house octopus.wav prefer. Never retouch Rui sprites. */
+/** Cup ground tricks while idle — ultra-polish pass. House octopus — mantle / sucker / jet / veil / tinker / papilla / ooze personality (cephalopod desk life; suckers, siphon jet, ink veil, problem-solving curiosity, dermal papillae texture-camouflage, boneless crack-ooze; teacup dens, not Coin bowl-drift or Bloom gill-amble or Ink soak-tuck or Sepia flush-hover). Mantle dens as a teacup-shaped cephalopod plate; sucker arm-tastes the blotter; jet siphon-darts; veil ink-clouds then settles; tinker puzzle-handles a desk gadget; papilla raises skin papillae for 3D camouflage (species-true Octopus vulgaris — not veil ink, not window-play LID, not Sepia chroma); ooze boneless-squeezes through a narrow gap (species-true escape — not mantle dens-hold, not jet dart). Window-play LID unchanged — never names `lid`. Ethogram keeps hide sit_hold; adds sucker/jet/veil/tinker/papilla/ooze softs + freeze (replaces thin hide/jet/taste). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via octopus.wav. Thank-yous keep / tint / squeeze. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web `octopus-tricks.ts`. True house-octopus desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids lid/drift/gulp/flare/dart/soak/tuck/paddle/gill/amble/plume/legend/flush/fan/latch/puff/unfurl/chart/climb/probe/canyon/ripple/chroma/hover/blot/bone/pupil/crawl/siphon/pulse/slink/den/cork/nest/savor/settle/survey name collisions with prior guests and octopus window-play. Bird ultra (Soot→Ember) + Miso→Atlas done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Amplitudes raised toward Rui richness; denser waits/weights (MANTLE_HOLD=11.2 RELEASE_S=1.18). Next leftover Sepia / cuttlefish. No cry inventing beyond house octopus.wav prefer. Never retouch Rui sprites. */
 
 (function (root) {
 const TRICK_KEY = "octopus";
@@ -10,8 +10,8 @@ const HAPPY_DUR = {
     squeeze: 1.5,
 };
 /** Mantle hold — Cup dens as a teacup-shaped cephalopod plate. Not window-play LID. Not Coin drift. */
-const MANTLE_HOLD = 12.2;
-const RELEASE_S = 0.82;
+const MANTLE_HOLD = 11.2;
+const RELEASE_S = 1.18;
 const DUR = {
     mantle: MANTLE_HOLD + RELEASE_S,
     sucker: 1.78,
@@ -52,14 +52,14 @@ function shouldAbort(state) {
 function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
     if (kind === "mantle")
-        return 38 + roll * 24;
+        return 40 + roll * 26;
     if (kind === "papilla" || kind === "ooze" || kind === "veil")
-        return 12 + roll * 9;
+        return 12.8 + roll * 9.4;
     if (kind === "sucker" || kind === "tinker")
-        return 11 + roll * 8;
+        return 12.8 + roll * 9.4;
     if (kind === "jet")
-        return 10 + roll * 8;
-    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+        return 11.6 + roll * 8.5;
+    return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 function pickTrick(rand, musicOn = false, lastKind) {
     if (musicOn)
@@ -67,7 +67,7 @@ function pickTrick(rand, musicOn = false, lastKind) {
     const roll = rand == null ? Math.random() : rand;
     const pool = TRICKS.filter((k) => k !== lastKind);
     const list = pool.length ? pool : [...TRICKS];
-    const weights = list.map((k) => k === "mantle" ? 0.55 : k === "papilla" || k === "ooze" || k === "veil" ? 1.15 : 1);
+    const weights = list.map((k) => k === "mantle" ? 0.72 : k === "papilla" || k === "ooze" || k === "veil" ? 1.28 : k === "sucker" || k === "tinker" ? 1.18 : 1.08);
     let total = 0;
     for (let i = 0; i < weights.length; i++)
         total += weights[i];
@@ -142,43 +142,43 @@ function keepPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.keep));
     if (u < 0.14) {
         const s = u / 0.14;
-        return { lift: s * 4.2, rot: s * -16, dx: 0, anim: "sit" };
+        return { lift: s * 5.04, rot: s * -19.2, dx: 0, anim: "sit" };
     }
     if (u < 0.78) {
         const wrap = Math.abs(Math.sin(t * 4.6));
         return {
-            lift: 4.2 + wrap * 3.4,
-            rot: -16 + Math.sin(t * 3.4) * 14,
-            dx: Math.sin(t * 1.8) * 0.55,
+            lift: 5.04 + wrap * 4.08,
+            rot: -19.2 + Math.sin(t * 3.4) * 16.8,
+            dx: Math.sin(t * 1.8) * 0.66,
             anim: "sit",
         };
     }
     const s = (u - 0.78) / 0.22;
-    return { lift: 4.2 * (1 - s), rot: -16 * (1 - s), dx: 0, anim: "idle" };
+    return { lift: 5.04 * (1 - s), rot: -19.2 * (1 - s), dx: 0, anim: "idle" };
 }
 function tintPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.tint));
     if (u < 0.12) {
         const s = u / 0.12;
-        return { lift: s * 4.6, rot: s * 18, dx: 0, anim: "talk" };
+        return { lift: s * 5.52, rot: s * 21.6, dx: 0, anim: "talk" };
     }
     if (u < 0.8) {
         const shimmer = Math.sin(t * 3.1);
         return {
-            lift: 4.6 + Math.abs(shimmer) * 3.2,
-            rot: 18 + shimmer * 16,
-            dx: shimmer * 0.7,
+            lift: 5.52 + Math.abs(shimmer) * 3.84,
+            rot: 21.6 + shimmer * 19.2,
+            dx: shimmer * 0.84,
             anim: "talk",
         };
     }
     const s = (u - 0.8) / 0.2;
-    return { lift: 4.6 * (1 - s), rot: 18 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: 5.52 * (1 - s), rot: 21.6 * (1 - s), dx: 0, anim: "sit" };
 }
 function squeezePose(t) {
     return {
-        lift: Math.abs(Math.sin(t * 3.4)) * 3.8 + 2.4,
-        rot: -16 + Math.sin(t * 2.8) * 14,
-        dx: Math.sin(t * 1.9) * 0.7,
+        lift: Math.abs(Math.sin(t * 3.4)) * 4.56 + 2.88,
+        rot: -19.2 + Math.sin(t * 2.8) * 16.8,
+        dx: Math.sin(t * 1.9) * 0.84,
         anim: "sit",
     };
 }
@@ -248,49 +248,49 @@ function smoothstep(t) {
     return x * x * (3 - 2 * x);
 }
 function mantlePose(t) {
-    const beat = Math.sin(t * 1.7) + 0.45 * Math.sin(t * 3.4);
+    const beat = Math.sin(t * 1.7) + 0.54 * Math.sin(t * 3.4);
     return {
-        lift: 2.4 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
-        rot: -22 + Math.sin(t * 2.4) * 18 + Math.sin(t * 4.6) * 10,
+        lift: 2.88 + Math.sin(t * 1.7) * 3.36 + Math.abs(Math.sin(t * 3.4)) * 1.92,
+        rot: -26.4 + Math.sin(t * 2.4) * 21.6 + Math.sin(t * 4.6) * 12,
     };
 }
 function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
     return {
-        lift: (2.4 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)),
-        rot: -22 * (1 - u),
+        lift: (2.88 + 3.36) * (1 - Math.sin(u * Math.PI * 0.5)),
+        rot: -26.4 * (1 - u),
     };
 }
 function suckerPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.sucker));
     if (u < 0.12) {
         const s = smoothstep(u / 0.12);
-        return { x: fromX + facing * s * 1.2, lift: s * 2.8, rot: s * 16 * facing, anim: "walk" };
+        return { x: fromX + facing * s * 1.44, lift: s * 3.36, rot: s * 19.2 * facing, anim: "walk" };
     }
     if (u < 0.55) {
         const s = (u - 0.12) / 0.43;
         const taste = Math.sin(s * Math.PI * 3.4);
         return {
-            x: fromX + facing * (1.2 + s * 3.6 + taste * 0.55),
-            lift: 2.8 + Math.abs(taste) * 2.4,
-            rot: facing * (16 + taste * 14),
+            x: fromX + facing * (1.44 + s * 4.32 + taste * 0.66),
+            lift: 3.36 + Math.abs(taste) * 2.88,
+            rot: facing * (19.2 + taste * 16.8),
             anim: "play",
         };
     }
     if (u < 0.78) {
         const s = (u - 0.55) / 0.23;
         return {
-            x: fromX + facing * (4.8 - s * 0.6),
-            lift: 3.2 + Math.sin(s * Math.PI) * 1.4,
-            rot: facing * (8 - s * 4),
+            x: fromX + facing * (5.76 - s * 0.72),
+            lift: 3.84 + Math.sin(s * Math.PI) * 1.68,
+            rot: facing * (9.6 - s * 4.8),
             anim: "sit",
         };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
-        x: fromX + facing * (4.2 * (1 - s)),
-        lift: 3.2 * (1 - s),
-        rot: facing * (4 * (1 - s)),
+        x: fromX + facing * (5.04 * (1 - s)),
+        lift: 3.84 * (1 - s),
+        rot: facing * (4.8 * (1 - s)),
         anim: "walk",
     };
 }
@@ -298,14 +298,14 @@ function jetPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.jet));
     if (u < 0.1) {
         const s = smoothstep(u / 0.1);
-        return { x: fromX - facing * s * 1.1, lift: s * 2.2, rot: s * -14 * facing, anim: "sit" };
+        return { x: fromX - facing * s * 1.32, lift: s * 2.64, rot: s * -16.8 * facing, anim: "sit" };
     }
     if (u < 0.45) {
         const s = smoothstep((u - 0.1) / 0.35);
         return {
-            x: fromX - facing * 1.1 + facing * s * 7.2,
-            lift: 2.2 + Math.sin(s * Math.PI) * 3.6,
-            rot: facing * (-14 + s * 28),
+            x: fromX - facing * 1.32 + facing * s * 8.64,
+            lift: 2.64 + Math.sin(s * Math.PI) * 4.32,
+            rot: facing * (-16.8 + s * 33.6),
             anim: "walk",
         };
     }
@@ -313,17 +313,17 @@ function jetPose(t, fromX, facing) {
         const s = (u - 0.45) / 0.27;
         const coast = Math.abs(Math.sin(s * Math.PI * 1.6));
         return {
-            x: fromX + facing * (6.1 + coast * 0.35),
-            lift: 2.0 + coast * 1.2,
-            rot: facing * (8 - s * 10),
+            x: fromX + facing * (7.32 + coast * 0.42),
+            lift: 2.4 + coast * 1.44,
+            rot: facing * (9.6 - s * 12),
             anim: "sit",
         };
     }
     const s = smoothstep((u - 0.72) / 0.28);
     return {
-        x: fromX + facing * (6.4 * (1 - s)),
-        lift: 2.2 * (1 - s),
-        rot: facing * (-2 * (1 - s)),
+        x: fromX + facing * (7.68 * (1 - s)),
+        lift: 2.64 * (1 - s),
+        rot: facing * (-2.4 * (1 - s)),
         anim: "idle",
     };
 }
@@ -331,32 +331,32 @@ function veilPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.veil));
     if (u < 0.14) {
         const s = smoothstep(u / 0.14);
-        return { x: fromX, lift: s * 4.4, rot: s * 18 * facing, anim: "sit" };
+        return { x: fromX, lift: s * 5.28, rot: s * 21.6 * facing, anim: "sit" };
     }
     if (u < 0.48) {
         const s = (u - 0.14) / 0.34;
         const cloud = Math.sin(s * Math.PI * 2.8);
         return {
-            x: fromX + facing * cloud * 0.7,
-            lift: 4.4 + Math.abs(cloud) * 2.6,
-            rot: facing * (18 + cloud * 14),
+            x: fromX + facing * cloud * 0.84,
+            lift: 5.28 + Math.abs(cloud) * 3.12,
+            rot: facing * (21.6 + cloud * 16.8),
             anim: "play",
         };
     }
     if (u < 0.78) {
         const s = (u - 0.48) / 0.3;
         return {
-            x: fromX + facing * Math.sin(s * Math.PI) * 0.4,
-            lift: 4.4 * (1 - s * 0.55),
-            rot: facing * (8 - s * 12),
+            x: fromX + facing * Math.sin(s * Math.PI) * 0.48,
+            lift: 5.28 * (1 - s * 0.66),
+            rot: facing * (9.6 - s * 14.4),
             anim: "sit",
         };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
         x: fromX,
-        lift: 2.0 * (1 - s),
-        rot: facing * (-3 * (1 - s)),
+        lift: 2.4 * (1 - s),
+        rot: facing * (-3.6 * (1 - s)),
         anim: "sit",
     };
 }
@@ -364,15 +364,15 @@ function tinkerPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.tinker));
     if (u < 0.12) {
         const s = smoothstep(u / 0.12);
-        return { x: fromX + facing * s * 1.4, lift: s * 3.2, rot: s * 18 * facing, anim: "play" };
+        return { x: fromX + facing * s * 1.68, lift: s * 3.84, rot: s * 21.6 * facing, anim: "play" };
     }
     if (u < 0.55) {
         const s = (u - 0.12) / 0.43;
         const puzzle = Math.sin(s * Math.PI * 4.2);
         return {
-            x: fromX + facing * (1.4 + puzzle * 1.1),
-            lift: 3.2 + Math.abs(puzzle) * 2.8,
-            rot: facing * (18 + puzzle * 16),
+            x: fromX + facing * (1.68 + puzzle * 1.32),
+            lift: 3.84 + Math.abs(puzzle) * 3.36,
+            rot: facing * (21.6 + puzzle * 19.2),
             anim: "play",
         };
     }
@@ -380,17 +380,17 @@ function tinkerPose(t, fromX, facing) {
         const s = (u - 0.55) / 0.23;
         const check = Math.abs(Math.sin(s * Math.PI * 2));
         return {
-            x: fromX + facing * (1.4 - s * 0.4),
-            lift: 3.4 + check * 1.4,
-            rot: facing * (10 - s * 6 + check * 4),
+            x: fromX + facing * (1.68 - s * 0.48),
+            lift: 4.08 + check * 1.68,
+            rot: facing * (12 - s * 7.2 + check * 4.8),
             anim: "sit",
         };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
-        x: fromX + facing * (1.0 * (1 - s)),
-        lift: 3.4 * (1 - s),
-        rot: facing * (4 * (1 - s)),
+        x: fromX + facing * (1.2 * (1 - s)),
+        lift: 4.08 * (1 - s),
+        rot: facing * (4.8 * (1 - s)),
         anim: "idle",
     };
 }
@@ -399,23 +399,23 @@ function papillaPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.papilla));
     if (u < 0.14) {
         const s = smoothstep(u / 0.14);
-        return { x: fromX, lift: s * 3.6, rot: s * -14 * facing, anim: "sit" };
+        return { x: fromX, lift: s * 4.32, rot: s * -16.8 * facing, anim: "sit" };
     }
     if (u < 0.72) {
         const s = (u - 0.14) / 0.58;
         const bumps = Math.sin(s * Math.PI * 5.2) + 0.35 * Math.sin(s * Math.PI * 9);
         return {
-            x: fromX + facing * bumps * 0.35,
-            lift: 3.6 + Math.abs(bumps) * 2.8,
-            rot: facing * (-14 + bumps * 16),
+            x: fromX + facing * bumps * 0.42,
+            lift: 4.32 + Math.abs(bumps) * 3.36,
+            rot: facing * (-16.8 + bumps * 19.2),
             anim: "sit",
         };
     }
     const s = smoothstep((u - 0.72) / 0.28);
     return {
         x: fromX,
-        lift: 3.6 * (1 - s),
-        rot: facing * (-14 * (1 - s)),
+        lift: 4.32 * (1 - s),
+        rot: facing * (-16.8 * (1 - s)),
         anim: "sit",
     };
 }
@@ -424,14 +424,14 @@ function oozePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.ooze));
     if (u < 0.12) {
         const s = smoothstep(u / 0.12);
-        return { x: fromX + facing * s * 0.8, lift: s * 1.8, rot: s * 12 * facing, anim: "walk" };
+        return { x: fromX + facing * s * 0.96, lift: s * 2.16, rot: s * 14.4 * facing, anim: "walk" };
     }
     if (u < 0.45) {
         const s = smoothstep((u - 0.12) / 0.33);
         return {
-            x: fromX + facing * (0.8 + s * 2.2),
-            lift: 1.8 - s * 1.2,
-            rot: facing * (12 - s * 22),
+            x: fromX + facing * (0.96 + s * 2.64),
+            lift: 2.16 - s * 1.44,
+            rot: facing * (14.4 - s * 26.4),
             anim: "walk",
         };
     }
@@ -439,17 +439,17 @@ function oozePose(t, fromX, facing) {
         const s = (u - 0.45) / 0.33;
         const flow = Math.sin(s * Math.PI * 2.4);
         return {
-            x: fromX + facing * (3.0 + s * 3.4 + flow * 0.4),
-            lift: 0.6 + Math.abs(flow) * 2.4 + s * 2.0,
-            rot: facing * (-10 + flow * 18),
+            x: fromX + facing * (3.6 + s * 4.08 + flow * 0.48),
+            lift: 0.72 + Math.abs(flow) * 2.88 + s * 2.4,
+            rot: facing * (-12 + flow * 21.6),
             anim: "play",
         };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
-        x: fromX + facing * (6.4 * (1 - s) + s * 0),
-        lift: 2.6 * (1 - s),
-        rot: facing * (4 * (1 - s)),
+        x: fromX + facing * (7.68 * (1 - s) + s * 0),
+        lift: 3.12 * (1 - s),
+        rot: facing * (4.8 * (1 - s)),
         anim: "idle",
     };
 }
