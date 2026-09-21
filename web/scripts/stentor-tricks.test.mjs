@@ -2186,7 +2186,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Bell Rui-dense ultra (INTROVERSUS_HOLD=11.2); next leftover Rod / coli", () => {
+test("notes: Bell Rui-dense ultra (INTROVERSUS_HOLD=11.2); Rod now Rue-dense; next leftover Rose / haloarchaea", () => {
   assert.equal(T.TRICK_KEY, "stentor");
   assert.deepEqual([...T.TRICKS], ["adoral", "myoneme", "membranelle", "holdfoot", "introversus", "vortex", "beadedmac"]);
   assert.deepEqual([...T.HAPPY], ["coeruleus", "polymorphus", "muelleri"]);
@@ -2375,9 +2375,9 @@ test("notes: Bell Rui-dense ultra (INTROVERSUS_HOLD=11.2); next leftover Rod / c
   assert.equal(T.TRICKS.includes("dart"), false);
   assert.equal(Goldfish.TRICKS.includes("flare"), true);
   assert.equal(T.TRICKS.includes("flare"), false);
-  // Recommend next leftover (do not implement): Rod / coli.
-  assert.equal("coli", "coli");
-  assert.equal("Rod", "Rod");
+  // Recommend next leftover (do not implement): Rose / haloarchaea.
+  assert.equal("haloarchaea", "haloarchaea");
+  assert.equal("Rose", "Rose");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("chelate"), false);
   assert.equal(Salamander.TRICKS.includes("adoral"), false);
