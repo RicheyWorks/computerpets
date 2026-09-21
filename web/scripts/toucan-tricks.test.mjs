@@ -311,9 +311,9 @@ test("ground registry keeps prior guests gated; Keel selectable; no toss/flash/b
   assert.equal(Axolotl.TRICK_KEY, "axolotl");
   assert.equal(T.TRICK_KEY, "toucan");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...Relay.TRICKS], ["click", "latch", "arc", "buzz", "switch"]);
-  assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
-  assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
+  assert.deepEqual([...Relay.TRICKS], ["contactclick", "latchseat", "arcflick", "coilbuzz", "poleswitch", "armaturetap", "relayhush"]);
+  assert.deepEqual([...Fuse.TRICKS], ["railseat", "holdcurrent", "blowclear", "reseatsnap", "cartridgerattle", "bladeflash", "fusehush"]);
+  assert.deepEqual([...Earth.TRICKS], ["lugstrap", "earthseat", "heaveplate", "bedsettle", "soilgrip", "plateclamp", "groundhush"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
@@ -497,11 +497,15 @@ test("ultra-polish: Keel roost/berry/juggle/rattle/clatter lifts are Rui-visible
   const c2 = T.stepTrick(cl, T.DUR.clatter * 0.4, { cmd: "idle" });
   assert.ok(Math.abs(c2.lift) > 2 || Math.abs(c2.rot) > 6, `clatter mid lift/rot ${c2.lift}/${c2.rot}`);
   assert.ok(Overlay.rattlePose && Overlay.clatterPose);
+  assert.equal(T.ROOST_HOLD, Overlay.ROOST_HOLD);
+  assert.equal(T.ROOST_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "roost") > 39);
   assert.ok(T.nextTrickWait(true, 0, "roost") < 80);
   assert.ok(T.nextTrickWait(true, 0, "roost") > T.nextTrickWait(true, 0, "berry"));
 });
 
-test("notes: Keel idle-life ultra done; Ember / phoenix ultra follows and closes bird ultra-polish (Loom still next for base idle-ground)", () => {
+test("notes: Keel Rui-dense ultra (ROOST_HOLD=11.2); next house-order densify leftover after early house guests: Sol / iguana then Vesper / dragon", () => {
   assert.deepEqual([...T.TRICKS], ["roost", "berry", "juggle", "peer", "skip", "rattle", "clatter"]);
   assert.equal(T.TRICKS.includes("toss"), false);
   assert.equal(T.TRICKS.includes("bill"), false);
