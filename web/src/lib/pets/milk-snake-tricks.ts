@@ -1,4 +1,4 @@
-/** Coral ground tricks while idle — ultra-polish pass. House Pueblo milk snake — rhyme / rumor / costume / frank / tile / cipher / verse personality (tricolor mimic stamp-box desk life; witty false-warning costume, not venom). Rhyme stacks the red/black/pale mnemonic flag; rumor softens a desk whisper; costume adjusts the false-warning coat; frank presses a cancellation stamp; tile places three stamp tiles; cipher ducks into a cryptic blotter fold (secretive milk-snake cover life — not hide/tuck/Nori nook); verse beats the red-black-pale teaching verse (not Bandit stripe, not rhyme hold). Window-play MOSAIC unchanged — never names `mosaic`. Ethogram keeps tongue + rhyme sit_hold; adds rumor/costume/cipher/verse/tile softs + freeze (replaces thin mimic). Nori owns orb/nook/taste/inch/unroll/loom/weave and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon/blotter/pencil and clause/spice/cord; Bandit owns stripe/audit/verdict/plumb/raid/band/drawer and tribute/docket/seal; Jade owns bracelet/sway/jewel/heat/bough/liana/arbor and pendant/treaty/emerald; Bluff owns hood/feign/shovel/gape/encore/quiver/upright and aside/cue/ovation; Sash owns seam/rounds/moss/fork/lap/ribbon/creek and copy/brief/visa; Lula owns pour/heft/oxbow/slack/bank/anchor/meander and harbor/cradle/stay; budgie owns mimic; parrot owns flash; hedgehog owns curl/root; volt window-play owns coil; ferret owns noodle; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun; Coin owns flare; Thimble owns dig; Lula window-play owns loop; Echo window-play owns perch; Fox window-play owns scent; rosy_boa window-play owns stone. Guest slug Coral / key milk_snake — accept "milk_snake" and "coral". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via milk_snake.wav. Thank-yous postmark / cachet / courtesy. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `milk-snake-tricks.js`. True house-Pueblo-milk-snake desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids mosaic/loop/patrol/stripe/hood/feign/shovel/gape/encore/quiver/upright/flip/saddle/drape/inspect/write/orb/nook/taste/inch/unroll/loom/weave/bun/ball/coil/curl/bask/loaf/potato/tuck/hide/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/blotter/pencil/clause/spice/cord/audit/verdict/plumb/raid/tribute/docket/seal/band/drawer/bracelet/sway/jewel/heat/bough/pendant/treaty/emerald/liana/arbor/aside/cue/ovation/seam/rounds/moss/fork/lap/copy/brief/visa/ribbon/creek/pour/heft/oxbow/slack/bank/anchor/meander/harbor/cradle/stay/mimic/flash/root/flare/dig/perch/hang/clasp/scent/stone/heave/lug/earth/bed/pebble/crevice/mesa/arroyo name collisions. Bird ultra (Soot→Ember) + Miso→Lula done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Blush / rosy_boa. No cry inventing beyond house milk_snake.wav prefer. Never retouch Rui sprites. */
+/** Coral ground tricks while idle — ultra-polish pass. House Pueblo milk snake — rhyme / rumor / costume / frank / tile / cipher / verse personality (tricolor mimic stamp-box desk life; witty false-warning costume, not venom). Rhyme stacks the red/black/pale mnemonic flag; rumor softens a desk whisper; costume adjusts the false-warning coat; frank presses a cancellation stamp; tile places three stamp tiles; cipher ducks into a cryptic blotter fold (secretive milk-snake cover life — not hide/tuck/Nori nook); verse beats the red-black-pale teaching verse (not Bandit stripe, not rhyme hold). Window-play MOSAIC unchanged — never names `mosaic`. Ethogram keeps tongue + rhyme sit_hold; adds rumor/costume/cipher/verse/tile softs + freeze (replaces thin mimic). Nori owns orb/nook/taste/inch/unroll/loom/weave and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon/blotter/pencil and clause/spice/cord; Bandit owns stripe/audit/verdict/plumb/raid/band/drawer and tribute/docket/seal; Jade owns bracelet/sway/jewel/heat/bough/liana/arbor and pendant/treaty/emerald; Bluff owns hood/feign/shovel/gape/encore/quiver/upright and aside/cue/ovation; Sash owns seam/rounds/moss/fork/lap/ribbon/creek and copy/brief/visa; Lula owns pour/heft/oxbow/slack/bank/anchor/meander and harbor/cradle/stay; budgie owns mimic; parrot owns flash; hedgehog owns curl/root; volt window-play owns coil; ferret owns noodle; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun; Coin owns flare; Thimble owns dig; Lula window-play owns loop; Echo window-play owns perch; Fox window-play owns scent; rosy_boa window-play owns stone. Guest slug Coral / key milk_snake — accept "milk_snake" and "coral". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via milk_snake.wav. Thank-yous postmark / cachet / courtesy. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `milk-snake-tricks.js`. True house-Pueblo-milk-snake desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids mosaic/loop/patrol/stripe/hood/feign/shovel/gape/encore/quiver/upright/flip/saddle/drape/inspect/write/orb/nook/taste/inch/unroll/loom/weave/bun/ball/coil/curl/bask/loaf/potato/tuck/hide/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/blotter/pencil/clause/spice/cord/audit/verdict/plumb/raid/tribute/docket/seal/band/drawer/bracelet/sway/jewel/heat/bough/pendant/treaty/emerald/liana/arbor/aside/cue/ovation/seam/rounds/moss/fork/lap/copy/brief/visa/ribbon/creek/pour/heft/oxbow/slack/bank/anchor/meander/harbor/cradle/stay/mimic/flash/root/flare/dig/perch/hang/clasp/scent/stone/heave/lug/earth/bed/pebble/crevice/mesa/arroyo name collisions. Bird ultra (Soot→Ember) + Miso→Lula done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Amplitudes raised toward Rui richness; denser waits/weights (RHYME_HOLD=11.2 RELEASE_S=1.18). Next leftover Blush / rosy_boa. No cry inventing beyond house milk_snake.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "milk_snake";
 export const TRICKS = ["rhyme", "rumor", "costume", "frank", "tile", "cipher", "verse"] as const;
 export const HAPPY = ["postmark", "cachet", "courtesy"] as const;
@@ -51,8 +51,8 @@ export const HAPPY_DUR: Record<MilkSnakeHappyKind, number> = {
 };
 
 /** Rhyme hold — Coral stacks red/black/pale as the desk mnemonic flag. Not Bandit stripe. Not window-play MOSAIC. */
-export const RHYME_HOLD = 12.2;
-export const RELEASE_S = 0.82;
+export const RHYME_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 
 export const DUR: Record<MilkSnakeTrickKind, number> = {
   rhyme: RHYME_HOLD + RELEASE_S,
@@ -92,11 +92,11 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: MilkSnakeTrickKind) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "rhyme") return 38 + roll * 24;
-  if (kind === "verse" || kind === "costume") return 12 + roll * 9;
-  if (kind === "cipher" || kind === "rumor") return 11 + roll * 8;
-  if (kind === "frank" || kind === "tile") return 10 + roll * 8;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "rhyme") return 40 + roll * 26;
+  if (kind === "verse" || kind === "costume") return 12.8 + roll * 9.4;
+  if (kind === "cipher" || kind === "rumor") return 12.8 + roll * 9.4;
+  if (kind === "frank" || kind === "tile") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 export function pickTrick(rand?: number, musicOn = false, lastKind?: MilkSnakeTrickKind | null): MilkSnakeTrickKind {
@@ -105,7 +105,7 @@ export function pickTrick(rand?: number, musicOn = false, lastKind?: MilkSnakeTr
   const pool = TRICKS.filter((k) => k !== lastKind);
   const list = pool.length ? pool : [...TRICKS];
   const weights = list.map((k) =>
-    k === "rhyme" ? 0.55 : k === "cipher" || k === "verse" || k === "costume" ? 1.15 : 1
+    k === "rhyme" ? 0.72 : k === "cipher" || k === "verse" || k === "costume" ? 1.28 : k === "frank" || k === "tile" ? 1.18 : 1.08
   );
   let total = 0;
   for (let i = 0; i < weights.length; i++) total += weights[i]!;
@@ -186,45 +186,45 @@ export function postmarkPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.postmark));
   if (u < 0.14) {
     const s = u / 0.14;
-    return { lift: s * 4.2, rot: s * -16, dx: 0, anim: "sit" as TrickAnim };
+    return { lift: s * 5.04, rot: s * -19.2, dx: 0, anim: "sit" as TrickAnim };
   }
   if (u < 0.78) {
     const press = Math.abs(Math.sin(t * 4.6));
     return {
-      lift: 4.2 + press * 3.4,
-      rot: -16 + Math.sin(t * 3.4) * 14,
-      dx: Math.sin(t * 1.8) * 0.55,
+      lift: 5.04 + press * 4.08,
+      rot: -19.2 + Math.sin(t * 3.4) * 16.8,
+      dx: Math.sin(t * 1.8) * 0.66,
       anim: "sit" as TrickAnim,
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 4.2 * (1 - s), rot: -16 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  return { lift: 5.04 * (1 - s), rot: -19.2 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
 
 export function cachetPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.cachet));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 4.6, rot: s * 18, dx: 0, anim: "sit" as TrickAnim };
+    return { lift: s * 5.52, rot: s * 21.6, dx: 0, anim: "sit" as TrickAnim };
   }
   if (u < 0.8) {
     const rock = Math.sin(t * 2.8);
     return {
-      lift: 4.6 + Math.abs(rock) * 3.2,
-      rot: 18 + rock * 16,
-      dx: rock * 0.7,
+      lift: 5.52 + Math.abs(rock) * 3.84,
+      rot: 21.6 + rock * 19.2,
+      dx: rock * 0.84,
       anim: "sit" as TrickAnim,
     };
   }
   const s = (u - 0.8) / 0.2;
-  return { lift: 4.6 * (1 - s), rot: 18 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  return { lift: 5.52 * (1 - s), rot: 21.6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function courtesyPose(t: number) {
   return {
-    lift: Math.abs(Math.sin(t * 3.4)) * 3.8 + 2.4,
-    rot: -16 + Math.sin(t * 2.8) * 14,
-    dx: Math.sin(t * 1.9) * 0.7,
+    lift: Math.abs(Math.sin(t * 3.4)) * 4.56 + 2.88,
+    rot: -19.2 + Math.sin(t * 2.8) * 16.8,
+    dx: Math.sin(t * 1.9) * 0.84,
     anim: "talk" as TrickAnim,
   };
 }
@@ -297,18 +297,18 @@ function smoothstep(t: number) {
 
 export function rhymePose(t: number) {
   // Three-beat tricolor rock — red / black / pale mnemonic, not Bandit band ticks.
-  const beat = Math.sin(t * 1.7) + 0.45 * Math.sin(t * 3.4);
+  const beat = Math.sin(t * 1.7) + 0.54 * Math.sin(t * 3.4);
   return {
-    lift: 2.4 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
-    rot: -22 + Math.sin(t * 2.4) * 18 + Math.sin(t * 4.6) * 10,
+    lift: 2.88 + Math.sin(t * 1.7) * 3.36 + Math.abs(Math.sin(t * 3.4)) * 1.92,
+    rot: -26.4 + Math.sin(t * 2.4) * 21.6 + Math.sin(t * 4.6) * 12,
   };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
   return {
-    lift: (2.4 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)),
-    rot: -22 * (1 - u),
+    lift: (2.88 + 3.36) * (1 - Math.sin(u * Math.PI * 0.5)),
+    rot: -26.4 * (1 - u),
   };
 }
 
@@ -316,31 +316,31 @@ export function rumorPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.rumor));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 4.8, rot: s * 16 * facing, anim: "talk" as TrickAnim };
+    return { x: fromX, lift: s * 5.76, rot: s * 19.2 * facing, anim: "talk" as TrickAnim };
   }
   if (u < 0.55) {
     const s = (u - 0.14) / 0.41;
     return {
-      x: fromX + facing * smoothstep(s) * 4.2,
-      lift: 4.8 - s * 1.4 + Math.sin(s * Math.PI) * 2.2,
-      rot: facing * (16 - s * 28),
+      x: fromX + facing * smoothstep(s) * 5.04,
+      lift: 5.76 - s * 1.68 + Math.sin(s * Math.PI) * 2.64,
+      rot: facing * (19.2 - s * 33.6),
       anim: "talk" as TrickAnim,
     };
   }
   if (u < 0.82) {
     const s = (u - 0.55) / 0.27;
     return {
-      x: fromX + facing * (4.2 - smoothstep(s) * 4.2),
-      lift: 3.2 + Math.abs(Math.sin(s * Math.PI * 1.8)) * 2.0,
-      rot: facing * (-14 + s * 10),
+      x: fromX + facing * (5.04 - smoothstep(s) * 5.04),
+      lift: 3.84 + Math.abs(Math.sin(s * Math.PI * 1.8)) * 2.4,
+      rot: facing * (-16.8 + s * 12),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
     x: fromX,
-    lift: 3.2 * (1 - s),
-    rot: facing * (-4 * (1 - s)),
+    lift: 3.84 * (1 - s),
+    rot: facing * (-4.8 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -349,23 +349,23 @@ export function costumePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.costume));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 5.2, rot: s * 28 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 6.24, rot: s * 33.6 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.72) {
     const s = (u - 0.12) / 0.6;
     const shiver = Math.sin(s * Math.PI * 4.2);
     return {
-      x: fromX + facing * shiver * 1.1,
-      lift: 5.2 - s * 1.4 + Math.abs(shiver) * 2.2,
-      rot: facing * (28 - s * 36 + shiver * 14),
+      x: fromX + facing * shiver * 1.32,
+      lift: 6.24 - s * 1.68 + Math.abs(shiver) * 2.64,
+      rot: facing * (33.6 - s * 43.2 + shiver * 16.8),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.72) / 0.28);
   return {
     x: fromX,
-    lift: 3.6 * (1 - s),
-    rot: facing * (-6 * (1 - s)),
+    lift: 4.32 * (1 - s),
+    rot: facing * (-7.2 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -374,14 +374,14 @@ export function frankPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.frank));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 4.8, rot: s * 16 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 5.76, rot: s * 19.2 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.5) {
     const s = (u - 0.14) / 0.36;
     return {
-      x: fromX + facing * s * 1.2,
-      lift: 4.8 - smoothstep(s) * 3.6,
-      rot: facing * (16 - s * 28),
+      x: fromX + facing * s * 1.44,
+      lift: 5.76 - smoothstep(s) * 4.32,
+      rot: facing * (19.2 - s * 33.6),
       anim: "sit" as TrickAnim,
     };
   }
@@ -389,17 +389,17 @@ export function frankPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.5) / 0.32;
     const press = Math.abs(Math.sin(s * Math.PI * 2.2));
     return {
-      x: fromX + facing * 1.2,
-      lift: 1.0 + press * 1.4,
-      rot: facing * (-14 + press * 8),
+      x: fromX + facing * 1.44,
+      lift: 1.2 + press * 1.68,
+      rot: facing * (-16.8 + press * 9.6),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
-    x: fromX + facing * (1.2 * (1 - s)),
-    lift: 1.0 * (1 - s),
-    rot: facing * (-4 * (1 - s)),
+    x: fromX + facing * (1.44 * (1 - s)),
+    lift: 1.2 * (1 - s),
+    rot: facing * (-4.8 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -408,33 +408,33 @@ export function tilePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.tile));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX + facing * s * 1.8, lift: s * 3.2, rot: s * 14 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX + facing * s * 2.16, lift: s * 3.84, rot: s * 16.8 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.45) {
     const s = (u - 0.12) / 0.33;
     const step = Math.floor(s * 3);
     const local = (s * 3) % 1;
     return {
-      x: fromX + facing * (1.8 + step * 2.0 + smoothstep(local) * 2.0),
-      lift: 3.2 + Math.sin(local * Math.PI) * 2.6,
-      rot: facing * (14 + Math.sin(local * Math.PI) * 22),
+      x: fromX + facing * (2.16 + step * 2.4 + smoothstep(local) * 2.4),
+      lift: 3.84 + Math.sin(local * Math.PI) * 3.12,
+      rot: facing * (16.8 + Math.sin(local * Math.PI) * 26.4),
       anim: "walk" as TrickAnim,
     };
   }
   if (u < 0.78) {
     const s = (u - 0.45) / 0.33;
     return {
-      x: fromX + facing * (7.8 - smoothstep(s) * 3.2),
-      lift: 3.4 + Math.abs(Math.sin(s * Math.PI * 1.8)) * 2.0,
-      rot: facing * (22 - s * 28),
+      x: fromX + facing * (9.36 - smoothstep(s) * 3.84),
+      lift: 4.08 + Math.abs(Math.sin(s * Math.PI * 1.8)) * 2.4,
+      rot: facing * (26.4 - s * 33.6),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * (4.6 * (1 - s)),
-    lift: 3.2 * (1 - s),
-    rot: facing * (-4 * (1 - s)),
+    x: fromX + facing * (5.52 * (1 - s)),
+    lift: 3.84 * (1 - s),
+    rot: facing * (-4.8 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -444,14 +444,14 @@ export function cipherPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.cipher));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 3.4, rot: s * -12 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 4.08, rot: s * -14.4 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.42) {
     const s = (u - 0.12) / 0.3;
     return {
-      x: fromX + facing * smoothstep(s) * -1.4,
-      lift: 3.4 - smoothstep(s) * 2.0,
-      rot: facing * (-12 + s * 4),
+      x: fromX + facing * smoothstep(s) * -1.68,
+      lift: 4.08 - smoothstep(s) * 2.4,
+      rot: facing * (-14.4 + s * 4.8),
       anim: "sit" as TrickAnim,
     };
   }
@@ -459,17 +459,17 @@ export function cipherPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.42) / 0.4;
     const hush = Math.abs(Math.sin(s * Math.PI * 1.8));
     return {
-      x: fromX + facing * -1.4,
-      lift: 1.2 + hush * 1.8,
-      rot: facing * (-10 + hush * 16),
+      x: fromX + facing * -1.68,
+      lift: 1.44 + hush * 2.16,
+      rot: facing * (-12 + hush * 19.2),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
-    x: fromX + facing * (-1.4 * (1 - s)),
-    lift: 1.2 * (1 - s),
-    rot: facing * (-4 * (1 - s)),
+    x: fromX + facing * (-1.68 * (1 - s)),
+    lift: 1.44 * (1 - s),
+    rot: facing * (-4.8 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -479,7 +479,7 @@ export function versePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.verse));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX + facing * s * 1.6, lift: s * 3.6, rot: s * 18 * facing, anim: "talk" as TrickAnim };
+    return { x: fromX + facing * s * 1.92, lift: s * 4.32, rot: s * 21.6 * facing, anim: "talk" as TrickAnim };
   }
   if (u < 0.78) {
     const s = (u - 0.12) / 0.66;
@@ -487,17 +487,17 @@ export function versePose(t: number, fromX: number, facing: 1 | -1) {
     const local = (s * 3) % 1;
     const bob = Math.sin(local * Math.PI);
     return {
-      x: fromX + facing * (1.6 + beat * 1.4 + bob * 0.6),
-      lift: 3.6 + Math.abs(bob) * 2.8,
-      rot: facing * (18 + beat * 6 + bob * 20),
+      x: fromX + facing * (1.92 + beat * 1.68 + bob * 0.72),
+      lift: 4.32 + Math.abs(bob) * 3.36,
+      rot: facing * (21.6 + beat * 7.2 + bob * 24),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * ((1.6 + 2.8) * (1 - s)),
-    lift: 3.6 * (1 - s),
-    rot: facing * (8 * (1 - s)),
+    x: fromX + facing * ((1.92 + 3.36) * (1 - s)),
+    lift: 4.32 * (1 - s),
+    rot: facing * (9.6 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }

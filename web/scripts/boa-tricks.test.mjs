@@ -445,7 +445,7 @@ test("ultra-polish: Lula pour/anchor/meander lifts are Rui-visible (not micro id
   assert.equal(T.HAPPY_DUR.harbor, Overlay.HAPPY_DUR.harbor);
 });
 
-test("notes: Lula Rui-dense ultra (POUR_HOLD=11.2); next leftover Coral / milk_snake", () => {
+test("notes: Lula Rui-dense ultra (POUR_HOLD=11.2); Coral densified; next leftover Blush / rosy_boa", () => {
   assert.equal(T.TRICK_KEY, "boa");
   assert.equal(T.wantsThankYou("lula"), true);
   assert.equal(OverlayGround.tricksFor("garter"), OverlayGarter);
