@@ -271,7 +271,7 @@ test("frond/rachis/fiddle/pinna/saucer/sori/stipe are house-fern-true, not copie
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("pulse"), false);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -599,9 +599,13 @@ test("ground registry keeps prior guests gated; Vein selectable; prior guests st
   assert.equal(T.HAPPY.includes("meadow"), false);
   assert.equal(OverlayGround.tricksFor("maidenhair"), Overlay);
   assert.equal(OverlayGround.tricksFor("vein"), Overlay);
+  assert.equal(T.SAUCER_HOLD, Overlay.SAUCER_HOLD);
+  assert.equal(T.SAUCER_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "saucer") > 39);
 });
 
-test("notes: Vein ultra-polish done; next house-order ultra is Fan / ginkgo", () => {
+test("notes: Vein Rui-dense ultra (SAUCER_HOLD=11.2); next leftover Fan / ginkgo", () => {
   assert.equal(T.TRICK_KEY, "maidenhair");
   assert.equal(T.wantsThankYou("vein"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);

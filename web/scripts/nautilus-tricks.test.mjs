@@ -412,7 +412,7 @@ test("ultra-polish: Chamber spiral/hyponome/aperture lifts are Rui-visible (not 
   assert.ok(T.nextTrickWait(true, 0, "spiral") > 39);
 });
 
-test("notes: Chamber Rui-dense ultra (SPIRAL_HOLD=11.2); Pulse densified; Ochre densified; Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; Felt densified; next leftover Vein / maidenhair", () => {
+test("notes: Chamber Rui-dense ultra (SPIRAL_HOLD=11.2); Pulse densified; Ochre densified; Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; Felt densified; Vein densified; next leftover Fan / ginkgo", () => {
   assert.equal(T.TRICK_KEY, "nautilus");
   assert.equal(T.wantsThankYou("chamber"), true);
   assert.equal(OverlayGround.tricksFor("nautilus"), Overlay);

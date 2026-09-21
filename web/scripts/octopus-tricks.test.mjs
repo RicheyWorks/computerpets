@@ -355,7 +355,7 @@ test("ultra-polish: Cup mantle/papilla/ooze lifts are Rui-visible (not micro idl
   assert.ok(T.nextTrickWait(true, 0, "mantle") > 39);
 });
 
-test("notes: Cup Rui-dense ultra (MANTLE_HOLD=11.2); Sepia densified; Chamber densified; Pulse densified; Ochre densified; Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; Felt densified; next leftover Vein / maidenhair", () => {
+test("notes: Cup Rui-dense ultra (MANTLE_HOLD=11.2); Sepia densified; Chamber densified; Pulse densified; Ochre densified; Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; Felt densified; Vein densified; next leftover Fan / ginkgo", () => {
   assert.equal(T.TRICK_KEY, "octopus");
   assert.equal(T.wantsThankYou("cup"), true);
   assert.equal(OverlayGround.tricksFor("octopus"), Overlay);
