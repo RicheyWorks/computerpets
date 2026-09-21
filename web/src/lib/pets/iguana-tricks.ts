@@ -1,4 +1,4 @@
-/** Sol ground tricks while idle — ultra-polish pass. House iguana — sun / dewlap / nod / press / flick / sneeze / lash personality (Iguana iguana desk life). Sun thermoregulation sprawl without naming bask/flatten (window-play owns those); dewlap throat-fan without naming fan/frill; nod head-bob signal without naming bob thank-you or budgie bobble; press push-up display without naming zoom; flick tongue-flick chemoreception without naming sniff/gulp; sneeze salt-gland sneeze without naming huff/cough; lash tail-lash warning without naming whip/crack/switch. Window-play FLATTEN unchanged — never names a trick `flatten`. Window-play BASK stays untouched — never names `bask`. Turtle already owns soak/tuck/crane/plod/paddle. Bloom already owns gill/amble/mend/smile/plume/sprout/glop. Keel already owns roost/berry/juggle/peer/skip. Guest slug Sol / key iguana — accept "iguana" and "sol". Amplitudes raised toward Rui richness; denser waits/weights; no house cry invent (no iguana.wav — skip prefersHouseCry). Thank-yous swell / tap / ease. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `iguana-tricks.js`. True house-iguana desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/dragon/Vesper clones. Bird ultra (Soot→Ember) + Miso→Bloom done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip birds. Next guest ultra is Vesper / dragon (skip Ember if bird). No cry inventing — thank-yous silent desk motion only. Never retouch Rui sprites. */
+/** Sol ground tricks while idle — ultra-polish pass. House iguana — sun / dewlap / nod / press / flick / sneeze / lash personality (Iguana iguana desk life). Sun thermoregulation sprawl without naming bask/flatten (window-play owns those); dewlap throat-fan without naming fan/frill; nod head-bob signal without naming bob thank-you or budgie bobble; press push-up display without naming zoom; flick tongue-flick chemoreception without naming sniff/gulp; sneeze salt-gland sneeze without naming huff/cough; lash tail-lash warning without naming whip/crack/switch. Window-play FLATTEN unchanged — never names a trick `flatten`. Window-play BASK stays untouched — never names `bask`. Turtle already owns soak/tuck/crane/plod/paddle. Bloom already owns gill/amble/mend/smile/plume/sprout/glop. Keel already owns roost/berry/juggle/peer/skip. Guest slug Sol / key iguana — accept "iguana" and "sol". Amplitudes raised toward Rui richness; denser waits/weights; no house cry invent (no iguana.wav — skip prefersHouseCry). Thank-yous swell / tap / ease. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `iguana-tricks.js`. True house-iguana desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/dragon/Vesper clones. Bird ultra (Soot→Ember) + Miso→Bloom done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip birds. Next guest ultra is Vesper / dragon (skip Ember if bird). No cry inventing — thank-yous silent desk motion only. Never retouch Rui sprites.  no iguana.wav so prefersHouseCry stays skipped. Amplitudes raised toward Rui richness; denser waits/weights (SUN_HOLD=11.2 RELEASE_S=1.18). Catalog 221. */
 
 export const TRICK_KEY = "iguana";
 export const TRICKS = ["sun", "dewlap", "nod", "press", "flick", "sneeze", "lash"] as const;
@@ -52,8 +52,8 @@ export const HAPPY_DUR: Record<IguanaHappyKind, number> = {
 };
 
 /** Sun hold — Sol sprawls under the lamp. Not window-play BASK or FLATTEN. Thermoregulation-true. */
-export const SUN_HOLD = 12.8;
-export const RELEASE_S = 0.88;
+export const SUN_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 
 export const DUR: Record<IguanaTrickKind, number> = {
   sun: SUN_HOLD + RELEASE_S,
@@ -93,11 +93,10 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: IguanaTrickKind) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "sun") return 38 + roll * 24;
-  if (kind === "dewlap" || kind === "nod") return 11 + roll * 8;
-  if (kind === "press" || kind === "flick" || kind === "lash") return 10 + roll * 8;
-  if (kind === "sneeze") return 12 + roll * 9;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "sun") return 40 + roll * 26;
+  if (kind === "dewlap" || kind === "sneeze" || kind === "press") return 12.8 + roll * 9.4;
+  if (kind === "nod" || kind === "flick" || kind === "lash") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 export function pickTrick(rand?: number, musicOn = false, lastKind?: IguanaTrickKind | null): IguanaTrickKind {
@@ -106,7 +105,7 @@ export function pickTrick(rand?: number, musicOn = false, lastKind?: IguanaTrick
   const pool = TRICKS.filter((k) => k !== lastKind);
   const list = pool.length ? pool : TRICKS.slice();
   const weights = list.map((k) =>
-    k === "sun" ? 0.55 : k === "dewlap" || k === "sneeze" || k === "press" ? 1.15 : 1
+    k === "sun" ? 0.72 : k === "dewlap" || k === "sneeze" || k === "press" ? 1.28 : k === "nod" || k === "flick" ? 1.18 : 1.08
   );
   let total = 0;
   for (let i = 0; i < weights.length; i++) total += weights[i]!;
@@ -187,43 +186,43 @@ export function swellPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.swell));
   if (u < 0.18) {
     const s = u / 0.18;
-    return { lift: s * 4.4, rot: s * 14, dx: 0, anim: "sit" as const };
+    return { lift: s * 5.3, rot: s * 16.8, dx: 0, anim: "sit" as const };
   }
   if (u < 0.78) {
     return {
-      lift: 4.4 + Math.abs(Math.sin(t * 5.2)) * 2.6,
-      rot: 14 + Math.sin(t * 4.4) * 10,
+      lift: 5.3 + Math.abs(Math.sin(t * 5.2)) * 3.1,
+      rot: 16.8 + Math.sin(t * 4.4) * 12,
       dx: 0,
       anim: "sit" as const,
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 4.4 * (1 - s), rot: 14 * (1 - s), dx: 0, anim: "idle" as const };
+  return { lift: 5.3 * (1 - s), rot: 16.8 * (1 - s), dx: 0, anim: "idle" as const };
 }
 
 export function tapPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.tap));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 5.6, rot: -s * 16, dx: 0, anim: "talk" as const };
+    return { lift: s * 6.7, rot: -s * 19.2, dx: 0, anim: "talk" as const };
   }
   if (u < 0.86) {
     return {
-      lift: 5.6 + Math.abs(Math.sin(t * 10)) * 3.2,
-      rot: -16 + Math.sin(t * 12) * 18,
-      dx: Math.sin(t * 6) * 1.2,
+      lift: 6.7 + Math.abs(Math.sin(t * 10)) * 3.8,
+      rot: -19.2 + Math.sin(t * 12) * 21.6,
+      dx: Math.sin(t * 6) * 1.4,
       anim: "talk" as const,
     };
   }
   const s = (u - 0.86) / 0.14;
-  return { lift: 5.6 * (1 - s), rot: -16 * (1 - s), dx: 0, anim: "sit" as const };
+  return { lift: 6.7 * (1 - s), rot: -19.2 * (1 - s), dx: 0, anim: "sit" as const };
 }
 
 export function easePose(t: number) {
   return {
-    lift: Math.abs(Math.sin(t * 3.4)) * 3.8 + 1.2,
-    rot: Math.sin(t * 3.0) * 12,
-    dx: Math.sin(t * 2.4) * 1.4,
+    lift: Math.abs(Math.sin(t * 3.4)) * 4.6 + 1.4,
+    rot: Math.sin(t * 3.0) * 14.4,
+    dx: Math.sin(t * 2.4) * 1.7,
     anim: "play" as const,
   };
 }
@@ -298,15 +297,15 @@ function smoothstep(t: number) {
 /** Sun — lamp sprawl thermoregulation on the blotter. Not window-play BASK or FLATTEN. Ethogram Iguana iguana true. */
 export function sunPose(t: number) {
   return {
-    lift: 2.2 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
-    rot: 18 + Math.sin(t * 2.4) * 22 + Math.sin(t * 4.6) * 12,
+    lift: 2.6 + Math.sin(t * 1.7) * 3.4 + Math.abs(Math.sin(t * 3.4)) * 1.9,
+    rot: 21.6 + Math.sin(t * 2.4) * 26.4 + Math.sin(t * 4.6) * 14.4,
   };
 }
 
 /** Soft lift — Sol leaves the lamp sprawl; stays on the desk. Not window-play leave. */
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: (2.2 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)), rot: 18 * (1 - u) };
+  return { lift: (2.6 + 3.4) * (1 - Math.sin(u * Math.PI * 0.5)), rot: 21.6 * (1 - u) };
 }
 
 /** Dewlap — throat fan extends on the blotter. Not a parrot fan. Not window-play FLATTEN. Ethogram dewlap true. */
@@ -314,22 +313,22 @@ export function dewlapPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.dewlap));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 4.6, rot: s * 18 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 5.5, rot: s * 21.6 * facing, anim: "sit" as const };
   }
   if (u < 0.86) {
     const s = (u - 0.14) / 0.72;
     return {
-      x: fromX + facing * Math.sin(s * Math.PI) * 1.6,
-      lift: 4.6 + Math.abs(Math.sin(s * Math.PI * 2.4)) * 4.2,
-      rot: facing * (18 + Math.sin(s * Math.PI * 2.8) * 16),
+      x: fromX + facing * Math.sin(s * Math.PI) * 1.9,
+      lift: 5.5 + Math.abs(Math.sin(s * Math.PI * 2.4)) * 5.0,
+      rot: facing * (21.6 + Math.sin(s * Math.PI * 2.8) * 19.2),
       anim: "sit" as const,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX,
-    lift: 4.6 * (1 - s),
-    rot: facing * 9 * (1 - s),
+    lift: 5.5 * (1 - s),
+    rot: facing * 10.8 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -339,23 +338,23 @@ export function nodPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.nod));
   if (u < 0.1) {
     const s = smoothstep(u / 0.1);
-    return { x: fromX, lift: s * 3.4, rot: -s * 14 * facing, anim: "talk" as const };
+    return { x: fromX, lift: s * 4.1, rot: -s * 16.8 * facing, anim: "talk" as const };
   }
   if (u < 0.9) {
     const s = (u - 0.1) / 0.8;
     const bob = Math.sin(s * Math.PI * 5.2);
     return {
-      x: fromX + facing * Math.sin(s * Math.PI) * 1.2,
-      lift: 3.4 + Math.abs(bob) * 7.5,
-      rot: facing * (-14 + bob * 28),
+      x: fromX + facing * Math.sin(s * Math.PI) * 1.4,
+      lift: 4.1 + Math.abs(bob) * 9.0,
+      rot: facing * (-16.8 + bob * 33.6),
       anim: "talk" as const,
     };
   }
   const s = smoothstep((u - 0.9) / 0.1);
   return {
     x: fromX,
-    lift: 3.4 * (1 - s),
-    rot: facing * -7 * (1 - s),
+    lift: 4.1 * (1 - s),
+    rot: facing * -8.4 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -365,23 +364,23 @@ export function pressPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.press));
   if (u < 0.1) {
     const s = smoothstep(u / 0.1);
-    return { x: fromX, lift: s * 4.8, rot: -s * 10 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 5.8, rot: -s * 12 * facing, anim: "sit" as const };
   }
   if (u < 0.9) {
     const s = (u - 0.1) / 0.8;
     const pump = Math.abs(Math.sin(s * Math.PI * 3.8));
     return {
-      x: fromX + facing * Math.sin(s * Math.PI * 1.5) * 2.2,
-      lift: 4.8 + pump * 9.2,
-      rot: facing * (-10 + pump * 18),
+      x: fromX + facing * Math.sin(s * Math.PI * 1.5) * 2.6,
+      lift: 5.8 + pump * 11.0,
+      rot: facing * (-12 + pump * 21.6),
       anim: "play" as const,
     };
   }
   const s = smoothstep((u - 0.9) / 0.1);
   return {
     x: fromX,
-    lift: 4.8 * (1 - s),
-    rot: facing * -5 * (1 - s),
+    lift: 5.8 * (1 - s),
+    rot: facing * -6 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -391,23 +390,23 @@ export function flickPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.flick));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: -s * 3.8, rot: s * 22 * facing, anim: "sit" as const };
+    return { x: fromX, lift: -s * 4.6, rot: s * 26.4 * facing, anim: "sit" as const };
   }
   if (u < 0.84) {
     const s = (u - 0.16) / 0.68;
     const tick = Math.abs(Math.sin(s * Math.PI * 4.4));
     return {
-      x: fromX + facing * (6.5 * smoothstep(s) + tick * 1.8),
-      lift: -3.8 + tick * 5.5,
-      rot: facing * (22 + tick * 14),
+      x: fromX + facing * (7.8 * smoothstep(s) + tick * 2.2),
+      lift: -4.6 + tick * 6.6,
+      rot: facing * (26.4 + tick * 16.8),
       anim: "sit" as const,
     };
   }
   const s = smoothstep((u - 0.84) / 0.16);
   return {
-    x: fromX + facing * 6.5,
-    lift: -3.8 * (1 - s),
-    rot: facing * 11 * (1 - s),
+    x: fromX + facing * 7.8,
+    lift: -4.6 * (1 - s),
+    rot: facing * 13.2 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -417,23 +416,23 @@ export function sneezePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.sneeze));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 3.6, rot: -s * 12 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 4.3, rot: -s * 14.4 * facing, anim: "sit" as const };
   }
   if (u < 0.88) {
     const s = (u - 0.14) / 0.74;
     const burst = Math.sin(s * Math.PI * 4.6);
     return {
-      x: fromX + facing * Math.abs(burst) * 2.4,
-      lift: 3.6 + Math.abs(burst) * 8.8,
-      rot: facing * (-12 + burst * 26),
+      x: fromX + facing * Math.abs(burst) * 2.9,
+      lift: 4.3 + Math.abs(burst) * 10.6,
+      rot: facing * (-14.4 + burst * 31.2),
       anim: "sit" as const,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
   return {
     x: fromX,
-    lift: 3.6 * (1 - s),
-    rot: facing * -6 * (1 - s),
+    lift: 4.3 * (1 - s),
+    rot: facing * -7.2 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -443,23 +442,23 @@ export function lashPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.lash));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 2.8, rot: s * 16 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 3.4, rot: s * 19.2 * facing, anim: "sit" as const };
   }
   if (u < 0.88) {
     const s = (u - 0.12) / 0.76;
     const swing = Math.sin(s * Math.PI * 3.6);
     return {
-      x: fromX + facing * swing * 8.5,
-      lift: 2.8 + Math.abs(swing) * 7.2,
-      rot: facing * (16 + swing * 32),
+      x: fromX + facing * swing * 10.2,
+      lift: 3.4 + Math.abs(swing) * 8.6,
+      rot: facing * (19.2 + swing * 38.4),
       anim: "play" as const,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
   return {
     x: fromX,
-    lift: 2.8 * (1 - s),
-    rot: facing * 8 * (1 - s),
+    lift: 3.4 * (1 - s),
+    rot: facing * 9.6 * (1 - s),
     anim: "sit" as const,
   };
 }
