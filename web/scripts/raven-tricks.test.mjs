@@ -2136,7 +2136,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Wedge Rui-dense ultra (HACKLES_HOLD=11.2); Brick now Rue-dense; Drake now Rue-dense; Vee now Rue-dense; Drum now Rue-dense; Sip now Rue-dense; Echo now Rue-dense; Peck now Rue-dense; Quill now Rue-dense; Brood now Rue-dense; Frill now Rue-dense; Cap now Rue-dense; Lattice now Rue-dense; next leftover Horn / chanterelle", () => {
+test("notes: Wedge Rui-dense ultra (HACKLES_HOLD=11.2); Brick now Rue-dense; Drake now Rue-dense; Vee now Rue-dense; Drum now Rue-dense; Sip now Rue-dense; Echo now Rue-dense; Peck now Rue-dense; Quill now Rue-dense; Brood now Rue-dense; Frill now Rue-dense; Cap now Rue-dense; Lattice now Rue-dense; Horn now Rue-dense; next leftover Ring / turkey_tail", () => {
 
   assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Crow.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
@@ -2323,7 +2323,7 @@ test("notes: Wedge Rui-dense ultra (HACKLES_HOLD=11.2); Brick now Rue-dense; Dra
   assert.equal(T.TRICKS.includes("dart"), false);
   assert.equal(Goldfish.TRICKS.includes("flare"), true);
   assert.equal(T.TRICKS.includes("flare"), false);
-  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Horn / chanterelle.
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Ring / turkey_tail.
   assert.equal("raven", "raven");
   assert.equal("Wedge", "Wedge");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
