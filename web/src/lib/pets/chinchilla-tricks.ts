@@ -1,4 +1,4 @@
-/** Floss ground tricks while idle — ultra-polish pass. House chinchilla — ash / bound / fluff / chin / sift / ricochet / gnaw personality (soft Chinchilla lanigera desk life). Ash volcanic dust-bath hold without naming dust (window-play) or curl/ball; bound springy Andean hop without naming zoom/popcorn/binky/romp; fluff densest-fur cloud without naming wash/preen/bristle; chin chin-mark without naming scent/steal; sift ash-through-sixty-hairs without naming anoint/wag; ricochet cascading wall-bounce play without naming cascade/zoom/scurry/dart; gnaw soft desk-edge chew without naming crack/nosh/hay/teeth. Window-play DUST unchanged — never names a trick `dust`. Guest slug Floss / key chinchilla — accept "chinchilla" and "floss". Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk (`chinchilla.wav`). Thank-yous eep / coo / bark. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `chinchilla-tricks.js`. True house-chinchilla desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/axolotl/toucan/iguana/dragon/Vesper clones. Bird ultra (Soot→Ember) + Miso/Pip/Thimble/Clip/Whee/Ink/Coin/Rue/Wick/Burr done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip birds. Next guest ultra is Bloom / axolotl (skip Ember if bird). No cry inventing — thank-yous silent desk motion only. Never retouch Rui sprites. */
+/** Floss ground tricks while idle — ultra-polish pass. House chinchilla — ash / bound / fluff / chin / sift / ricochet / gnaw personality (soft Chinchilla lanigera desk life). Ash volcanic dust-bath hold without naming dust (window-play) or curl/ball; bound springy Andean hop without naming zoom/popcorn/binky/romp; fluff densest-fur cloud without naming wash/preen/bristle; chin chin-mark without naming scent/steal; sift ash-through-sixty-hairs without naming anoint/wag; ricochet cascading wall-bounce play without naming cascade/zoom/scurry/dart; gnaw soft desk-edge chew without naming crack/nosh/hay/teeth. Window-play DUST unchanged — never names a trick `dust`. Guest slug Floss / key chinchilla — accept "chinchilla" and "floss". Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk (`chinchilla.wav`). Thank-yous eep / coo / bark. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `chinchilla-tricks.js`. True house-chinchilla desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/axolotl/toucan/iguana/dragon/Vesper clones. Bird ultra (Soot→Ember) + Miso/Pip/Thimble/Clip/Whee/Ink/Coin/Rue/Wick/Burr done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip birds. Next guest ultra is Bloom / axolotl (skip Ember if bird). No cry inventing — thank-yous silent desk motion only. Never retouch Rui sprites.  chinchilla.wav EXISTS so prefersHouseCry adds chinchilla. Amplitudes raised toward Rui richness; denser waits/weights (ASH_HOLD=11.2 RELEASE_S=1.18). Catalog 221. */
 
 export const TRICK_KEY = "chinchilla";
 export const TRICKS = ["ash", "bound", "fluff", "chin", "sift", "ricochet", "gnaw"] as const;
@@ -52,8 +52,8 @@ export const HAPPY_DUR: Record<ChinchillaHappyKind, number> = {
 };
 
 /** Ash hold — Floss rolls in ash-fine volcanic desk-dust. Not window-play DUST. Not a hedgehog curl. Not a cat loaf. Not a hamster nest. */
-export const ASH_HOLD = 13.6;
-export const RELEASE_S = 0.95;
+export const ASH_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 
 export const DUR: Record<ChinchillaTrickKind, number> = {
   ash: ASH_HOLD + RELEASE_S,
@@ -93,11 +93,9 @@ export function shouldAbort(state: TrickFlags | undefined) {
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: ChinchillaTrickKind) {
   const roll = rand == null ? Math.random() : rand;
   if (kind === "ash") return 40 + roll * 26;
-  if (kind === "bound") return 11 + roll * 8;
-  if (kind === "fluff" || kind === "chin") return 11 + roll * 8;
-  if (kind === "sift" || kind === "gnaw") return 10 + roll * 8;
-  if (kind === "ricochet") return 12 + roll * 9;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "bound" || kind === "ricochet" || kind === "sift") return 12.8 + roll * 9.4;
+  if (kind === "fluff" || kind === "chin" || kind === "gnaw") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 export function pickTrick(rand?: number, musicOn = false, lastKind?: ChinchillaTrickKind | null): ChinchillaTrickKind {
@@ -106,7 +104,7 @@ export function pickTrick(rand?: number, musicOn = false, lastKind?: ChinchillaT
   const pool = TRICKS.filter((k) => k !== lastKind);
   const list = pool.length ? pool : TRICKS.slice();
   const weights = list.map((k) =>
-    k === "ash" ? 0.55 : k === "bound" || k === "ricochet" || k === "sift" ? 1.15 : 1
+    k === "ash" ? 0.72 : k === "bound" || k === "ricochet" || k === "sift" ? 1.28 : k === "fluff" || k === "chin" ? 1.18 : 1.08
   );
   let total = 0;
   for (let i = 0; i < weights.length; i++) total += weights[i];
@@ -186,38 +184,38 @@ export function eepPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.eep));
   if (u < 0.16) {
     const s = u / 0.16;
-    return { lift: s * 4.2, rot: -s * 12, dx: 0, anim: "talk" as const };
+    return { lift: s * 5.0, rot: -s * 14.4, dx: 0, anim: "talk" as const };
   }
   if (u < 0.8) {
     return {
-      lift: 4.2 + Math.abs(Math.sin(t * 10)) * 3.2,
-      rot: -12 + Math.sin(t * 12) * 10,
-      dx: Math.sin(t * 8) * 1.6,
+      lift: 5.0 + Math.abs(Math.sin(t * 10)) * 3.8,
+      rot: -14.4 + Math.sin(t * 12) * 12,
+      dx: Math.sin(t * 8) * 1.9,
       anim: "talk" as const,
     };
   }
   const s = (u - 0.8) / 0.2;
-  return { lift: 4.2 * (1 - s), rot: -12 * (1 - s), dx: 0, anim: "sit" as const };
+  return { lift: 5.0 * (1 - s), rot: -14.4 * (1 - s), dx: 0, anim: "sit" as const };
 }
 
 export function cooPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.coo));
   if (u < 0.88) {
     return {
-      lift: Math.sin(u * Math.PI) * 3.4,
-      rot: 22 * (1 - Math.sin(u * Math.PI * 0.5)) + Math.sin(u * Math.PI * 2) * 7,
-      dx: Math.sin(u * Math.PI) * 2.2,
+      lift: Math.sin(u * Math.PI) * 4.1,
+      rot: 26.4 * (1 - Math.sin(u * Math.PI * 0.5)) + Math.sin(u * Math.PI * 2) * 8.4,
+      dx: Math.sin(u * Math.PI) * 2.6,
       anim: "sit" as const,
     };
   }
-  return { lift: 0, rot: Math.sin(((u - 0.88) / 0.12) * Math.PI) * 3, dx: 0, anim: "idle" as const };
+  return { lift: 0, rot: Math.sin(((u - 0.88) / 0.12) * Math.PI) * 3.6, dx: 0, anim: "idle" as const };
 }
 
 export function barkPose(t: number) {
   return {
-    lift: Math.abs(Math.sin(t * 9)) * 5.2,
-    rot: Math.sin(t * 11) * 16,
-    dx: Math.sin(t * 7) * 2.0,
+    lift: Math.abs(Math.sin(t * 9)) * 6.2,
+    rot: Math.sin(t * 11) * 19.2,
+    dx: Math.sin(t * 7) * 2.4,
     anim: "play" as const,
   };
 }
@@ -292,38 +290,38 @@ function smoothstep(t: number) {
 /** Ash — volcanic dust-bath roll on the desk. Not window-play DUST. Not a hedgehog curl. Not a cat loaf. Ethogram Chinchilla lanigera true. */
 export function ashPose(t: number) {
   return {
-    lift: 0.8 + Math.sin(t * 2.4) * 2.2 + Math.abs(Math.sin(t * 4.2)) * 1.4,
-    rot: 58 + Math.sin(t * 3.1) * 34 + Math.sin(t * 5.5) * 16,
+    lift: 1.0 + Math.sin(t * 2.4) * 2.6 + Math.abs(Math.sin(t * 4.2)) * 1.7,
+    rot: 69.6 + Math.sin(t * 3.1) * 40.8 + Math.sin(t * 5.5) * 19.2,
   };
 }
 
 /** Soft unflip — coat settles; ash stays out of the tub. Not window-play leave. */
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: (0.8 + 2.2) * (1 - Math.sin(u * Math.PI * 0.5)), rot: 58 * (1 - u) };
+  return { lift: (1.0 + 2.6) * (1 - Math.sin(u * Math.PI * 0.5)), rot: 69.6 * (1 - u) };
 }
 /** Bound — springy Andean hop across the wood. Not a dog zoom. Not a rabbit binky. Not a guinea-pig popcorn. Not a ferret romp. Ethogram hop true. */
 export function boundPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.bound));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 2.2, rot: -s * 12 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 2.6, rot: -s * 14.4 * facing, anim: "sit" as const };
   }
   if (u < 0.86) {
     const s = (u - 0.12) / 0.74;
     const hop = Math.sin(s * Math.PI * 2.2);
     return {
       x: fromX + facing * (22 * smoothstep(s) + Math.sin(s * Math.PI * 3) * 3.5),
-      lift: 2.2 + Math.abs(hop) * 11.5,
-      rot: facing * (-12 + hop * 20),
+      lift: 2.6 + Math.abs(hop) * 13.8,
+      rot: facing * (-14.4 + hop * 24),
       anim: "play" as const,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX + facing * 22,
-    lift: 2.2 * (1 - s),
-    rot: facing * -6 * (1 - s),
+    lift: 2.6 * (1 - s),
+    rot: facing * -7.2 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -333,22 +331,22 @@ export function fluffPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.fluff));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 4.6, rot: s * 10 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 5.5, rot: s * 12 * facing, anim: "sit" as const };
   }
   if (u < 0.86) {
     const s = (u - 0.14) / 0.72;
     return {
       x: fromX + facing * Math.sin(s * Math.PI) * 2.4,
-      lift: 4.6 + Math.sin(s * Math.PI * 2.5) * 2.8,
-      rot: facing * (10 + Math.sin(s * Math.PI * 3) * 14),
+      lift: 5.5 + Math.sin(s * Math.PI * 2.5) * 3.4,
+      rot: facing * (12 + Math.sin(s * Math.PI * 3) * 16.8),
       anim: "sit" as const,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX,
-    lift: 4.6 * (1 - s),
-    rot: facing * 5 * (1 - s),
+    lift: 5.5 * (1 - s),
+    rot: facing * 6 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -358,22 +356,22 @@ export function chinPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.chin));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: -s * 4.0, rot: s * 16 * facing, anim: "sit" as const };
+    return { x: fromX, lift: -s * 4.8, rot: s * 19.2 * facing, anim: "sit" as const };
   }
   if (u < 0.82) {
     const s = (u - 0.16) / 0.66;
     return {
       x: fromX + facing * Math.sin(s * Math.PI * 3) * 3.6,
-      lift: -4.0 + Math.abs(Math.sin(s * Math.PI * 4)) * 2.4,
-      rot: facing * (16 + Math.sin(s * Math.PI * 5) * 12),
+      lift: -4.8 + Math.abs(Math.sin(s * Math.PI * 4)) * 2.9,
+      rot: facing * (19.2 + Math.sin(s * Math.PI * 5) * 14.4),
       anim: "sit" as const,
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
     x: fromX,
-    lift: -4.0 * (1 - s),
-    rot: facing * 8 * (1 - s),
+    lift: -4.8 * (1 - s),
+    rot: facing * 9.6 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -385,8 +383,8 @@ export function siftPose(t: number, fromX: number, facing: 1 | -1) {
     const s = smoothstep(u / 0.1);
     return {
       x: fromX,
-      lift: s * 3.8,
-      rot: -s * 18 * facing,
+      lift: s * 4.6,
+      rot: -s * 21.6 * facing,
       anim: "sit" as const,
     };
   }
@@ -395,16 +393,16 @@ export function siftPose(t: number, fromX: number, facing: 1 | -1) {
     const shake = Math.sin(s * Math.PI * 7);
     return {
       x: fromX + facing * shake * 4.5,
-      lift: 3.8 + Math.abs(shake) * 4.2,
-      rot: facing * (-18 + shake * 32),
+      lift: 4.6 + Math.abs(shake) * 5.0,
+      rot: facing * (-21.6 + shake * 38.4),
       anim: "play" as const,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
   return {
     x: fromX,
-    lift: 3.8 * (1 - s),
-    rot: facing * -9 * (1 - s),
+    lift: 4.6 * (1 - s),
+    rot: facing * -10.8 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -414,7 +412,7 @@ export function ricochetPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.ricochet));
   if (u < 0.1) {
     const s = smoothstep(u / 0.1);
-    return { x: fromX, lift: s * 3.2, rot: -s * 14 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 3.8, rot: -s * 16.8 * facing, anim: "sit" as const };
   }
   if (u < 0.88) {
     const s = (u - 0.1) / 0.78;
@@ -422,16 +420,16 @@ export function ricochetPose(t: number, fromX: number, facing: 1 | -1) {
     const bank = Math.sin(s * Math.PI * 2.2);
     return {
       x: fromX + facing * (24 * smoothstep(s) + bank * 8),
-      lift: 3.2 + Math.abs(bounce) * 12.5,
-      rot: facing * (-14 + bounce * 28 + bank * 10),
+      lift: 3.8 + Math.abs(bounce) * 15.0,
+      rot: facing * (-16.8 + bounce * 33.6 + bank * 12),
       anim: "play" as const,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
   return {
     x: fromX + facing * 24,
-    lift: 3.2 * (1 - s),
-    rot: facing * -7 * (1 - s),
+    lift: 3.8 * (1 - s),
+    rot: facing * -8.4 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -441,23 +439,23 @@ export function gnawPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.gnaw));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: -s * 3.4, rot: s * 12 * facing, anim: "sit" as const };
+    return { x: fromX, lift: -s * 4.1, rot: s * 14.4 * facing, anim: "sit" as const };
   }
   if (u < 0.88) {
     const s = (u - 0.12) / 0.76;
     const chew = Math.sin(s * Math.PI * 8);
     return {
       x: fromX + facing * (6 * smoothstep(s) + chew * 2.2),
-      lift: -3.4 + Math.abs(chew) * 3.6,
-      rot: facing * (12 + chew * 14),
+      lift: -4.1 + Math.abs(chew) * 4.3,
+      rot: facing * (14.4 + chew * 16.8),
       anim: "sit" as const,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
   return {
     x: fromX + facing * 6,
-    lift: -3.4 * (1 - s),
-    rot: facing * 6 * (1 - s),
+    lift: -4.1 * (1 - s),
+    rot: facing * 7.2 * (1 - s),
     anim: "sit" as const,
   };
 }
