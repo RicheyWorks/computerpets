@@ -1032,8 +1032,8 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Ring Rui-dense ultra (TRAMETES_HOLD=11.2); next leftover Mane / lions_mane", () => {
-  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Mane / lions_mane.
+test("notes: Ring Rui-dense ultra (TRAMETES_HOLD=11.2); Mane now Rue-dense; next leftover Puff / puffball", () => {
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Puff / puffball.
   assert.equal(T.TRICK_KEY, "turkey_tail");
   assert.equal(T.wantsThankYou("ring"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
