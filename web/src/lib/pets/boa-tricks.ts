@@ -1,4 +1,4 @@
-/** Lula ground tricks while idle — ultra-polish pass. House boa constrictor — pour / heft / oxbow / slack / bank / anchor / meander personality (pour/weight blotter-river desk life). Pour rests a river of muscle across the blotter; heft presses mass into the desk; oxbow bends a slow river loop; slack loosens a long body wave; bank claims the blotter edge; anchor plants heavy constrictor sit-mass (not hold ethogram act, not Nori orb, not coil); meander walks a slow river bend across the blotter (not Lula window-play loop, not Sash creek, not oxbow). Window-play LOOP unchanged — never names `loop`. Ethogram keeps tongue + hold; adds pour/heft/oxbow/anchor/meander softs + freeze. Nori owns orb/nook/taste/inch/unroll/loom/weave and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon/blotter/pencil and clause/spice/cord; Bandit owns stripe/audit/verdict/plumb/raid/band/drawer and tribute/docket/seal; Jade owns bracelet/sway/jewel/heat/bough/liana/arbor and pendant/treaty/emerald; Bluff owns hood/feign/shovel/gape/encore/quiver/upright and aside/cue/ovation; Sash owns seam/rounds/moss/fork/lap/ribbon/creek and copy/brief/visa; hedgehog owns curl/ball; volt window-play owns coil; ferret owns noodle; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun; Coin owns flare; Thimble owns dig; Lula window-play owns loop; Echo window-play owns perch; Fox window-play owns scent; rosy_boa window-play owns stone. Guest slug Lula / key boa — accept "boa" and "lula". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via boa.wav. Thank-yous harbor / cradle / stay. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `boa-tricks.js`. True house-boa-constrictor desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids loop/patrol/stripe/hood/feign/shovel/gape/encore/quiver/upright/flip/saddle/drape/inspect/write/orb/nook/taste/inch/unroll/loom/weave/bun/ball/coil/curl/bask/loaf/potato/tuck/hide/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/blotter/pencil/clause/spice/cord/audit/verdict/plumb/raid/tribute/docket/seal/band/drawer/bracelet/sway/jewel/heat/bough/pendant/treaty/emerald/liana/arbor/aside/cue/ovation/seam/rounds/moss/fork/lap/copy/brief/visa/ribbon/creek/root/flare/dig/perch/hang/clasp/scent/stone/heave/lug/earth/bed/squeeze/delta name collisions. Bird ultra (Soot→Ember) + Miso→Sash done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Coral / milk_snake. No cry inventing beyond house boa.wav prefer. Never retouch Rui sprites. */
+/** Lula ground tricks while idle — ultra-polish pass. House boa constrictor — pour / heft / oxbow / slack / bank / anchor / meander personality (pour/weight blotter-river desk life). Pour rests a river of muscle across the blotter; heft presses mass into the desk; oxbow bends a slow river loop; slack loosens a long body wave; bank claims the blotter edge; anchor plants heavy constrictor sit-mass (not hold ethogram act, not Nori orb, not coil); meander walks a slow river bend across the blotter (not Lula window-play loop, not Sash creek, not oxbow). Window-play LOOP unchanged — never names `loop`. Ethogram keeps tongue + hold; adds pour/heft/oxbow/anchor/meander softs + freeze. Nori owns orb/nook/taste/inch/unroll/loom/weave and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon/blotter/pencil and clause/spice/cord; Bandit owns stripe/audit/verdict/plumb/raid/band/drawer and tribute/docket/seal; Jade owns bracelet/sway/jewel/heat/bough/liana/arbor and pendant/treaty/emerald; Bluff owns hood/feign/shovel/gape/encore/quiver/upright and aside/cue/ovation; Sash owns seam/rounds/moss/fork/lap/ribbon/creek and copy/brief/visa; hedgehog owns curl/ball; volt window-play owns coil; ferret owns noodle; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun; Coin owns flare; Thimble owns dig; Lula window-play owns loop; Echo window-play owns perch; Fox window-play owns scent; rosy_boa window-play owns stone. Guest slug Lula / key boa — accept "boa" and "lula". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via boa.wav. Thank-yous harbor / cradle / stay. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `boa-tricks.js`. True house-boa-constrictor desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids loop/patrol/stripe/hood/feign/shovel/gape/encore/quiver/upright/flip/saddle/drape/inspect/write/orb/nook/taste/inch/unroll/loom/weave/bun/ball/coil/curl/bask/loaf/potato/tuck/hide/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/blotter/pencil/clause/spice/cord/audit/verdict/plumb/raid/tribute/docket/seal/band/drawer/bracelet/sway/jewel/heat/bough/pendant/treaty/emerald/liana/arbor/aside/cue/ovation/seam/rounds/moss/fork/lap/copy/brief/visa/ribbon/creek/root/flare/dig/perch/hang/clasp/scent/stone/heave/lug/earth/bed/squeeze/delta name collisions. Bird ultra (Soot→Ember) + Miso→Sash done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Amplitudes raised toward Rui richness; denser waits/weights (POUR_HOLD=11.2 RELEASE_S=1.18). Next leftover Coral / milk_snake. No cry inventing beyond house boa.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "boa";
 export const TRICKS = ["pour", "heft", "oxbow", "slack", "bank", "anchor", "meander"] as const;
 export const HAPPY = ["harbor", "cradle", "stay"] as const;
@@ -51,8 +51,8 @@ export const HAPPY_DUR: Record<BoaHappyKind, number> = {
 };
 
 /** Pour hold — Lula pours a river of muscle across the blotter. Not window-play LOOP. Not Nori orb. */
-export const POUR_HOLD = 12.6;
-export const RELEASE_S = 0.88;
+export const POUR_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 
 export const DUR: Record<BoaTrickKind, number> = {
   pour: POUR_HOLD + RELEASE_S,
@@ -92,12 +92,12 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: BoaTrickKind) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "pour") return 38 + roll * 24;
-  if (kind === "anchor") return 12 + roll * 9;
-  if (kind === "oxbow" || kind === "meander") return 11 + roll * 8;
-  if (kind === "heft" || kind === "bank") return 10 + roll * 8;
-  if (kind === "slack") return 10 + roll * 7;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "pour") return 40 + roll * 26;
+  if (kind === "anchor") return 12.8 + roll * 9.4;
+  if (kind === "oxbow" || kind === "meander") return 12.8 + roll * 9.4;
+  if (kind === "heft" || kind === "bank") return 11.6 + roll * 8.5;
+  if (kind === "slack") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 export function pickTrick(rand?: number, musicOn = false, lastKind?: BoaTrickKind | null): BoaTrickKind {
@@ -106,7 +106,7 @@ export function pickTrick(rand?: number, musicOn = false, lastKind?: BoaTrickKin
   const pool = TRICKS.filter((k) => k !== lastKind);
   const list = pool.length ? pool : [...TRICKS];
   const weights = list.map((k) =>
-    k === "pour" ? 0.55 : k === "anchor" || k === "meander" || k === "oxbow" ? 1.15 : 1
+    k === "pour" ? 0.72 : k === "anchor" || k === "meander" || k === "oxbow" ? 1.28 : k === "heft" || k === "bank" ? 1.18 : 1.08
   );
   let total = 0;
   for (let i = 0; i < weights.length; i++) total += weights[i]!;
@@ -187,44 +187,44 @@ export function harborPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.harbor));
   if (u < 0.14) {
     const s = u / 0.14;
-    return { lift: s * 4.2, rot: s * -16, dx: 0, anim: "sit" as TrickAnim };
+    return { lift: s * 5.04, rot: s * -19.2, dx: 0, anim: "sit" as TrickAnim };
   }
   if (u < 0.8) {
     return {
-      lift: 4.2 + Math.abs(Math.sin(t * 4.6)) * 3.4,
-      rot: -16 + Math.sin(t * 3.4) * 14,
-      dx: Math.sin(t * 1.8) * 0.55,
+      lift: 5.04 + Math.abs(Math.sin(t * 4.6)) * 4.08,
+      rot: -19.2 + Math.sin(t * 3.4) * 16.8,
+      dx: Math.sin(t * 1.8) * 0.66,
       anim: "sit" as TrickAnim,
     };
   }
   const s = (u - 0.8) / 0.2;
-  return { lift: 4.2 * (1 - s), rot: -16 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  return { lift: 5.04 * (1 - s), rot: -19.2 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
 
 export function cradlePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.cradle));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 4.6, rot: s * 18, dx: 0, anim: "sit" as TrickAnim };
+    return { lift: s * 5.52, rot: s * 21.6, dx: 0, anim: "sit" as TrickAnim };
   }
   if (u < 0.78) {
     const rock = Math.sin(t * 3.2);
     return {
-      lift: 4.6 + Math.abs(rock) * 3.2,
-      rot: 18 + rock * 16,
-      dx: rock * 0.7,
+      lift: 5.52 + Math.abs(rock) * 3.84,
+      rot: 21.6 + rock * 19.2,
+      dx: rock * 0.84,
       anim: "sit" as TrickAnim,
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 4.6 * (1 - s), rot: 18 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  return { lift: 5.52 * (1 - s), rot: 21.6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function stayPose(t: number) {
   return {
-    lift: Math.abs(Math.sin(t * 3.4)) * 3.8 + 2.4,
-    rot: -16 + Math.sin(t * 2.8) * 14,
-    dx: Math.sin(t * 1.9) * 0.65,
+    lift: Math.abs(Math.sin(t * 3.4)) * 4.56 + 2.4,
+    rot: -19.2 + Math.sin(t * 2.8) * 16.8,
+    dx: Math.sin(t * 1.9) * 0.78,
     anim: "talk" as TrickAnim,
   };
 }
@@ -297,28 +297,28 @@ function smoothstep(t: number) {
 
 export function pourPose(t: number) {
   return {
-    lift: 2.4 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
-    rot: -22 + Math.sin(t * 2.4) * 18 + Math.sin(t * 4.6) * 10,
+    lift: 2.88 + Math.sin(t * 1.7) * 3.36 + Math.abs(Math.sin(t * 3.4)) * 1.92,
+    rot: -26.4 + Math.sin(t * 2.4) * 21.6 + Math.sin(t * 4.6) * 12,
   };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: (2.4 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)), rot: -22 * (1 - u) };
+  return { lift: (2.88 + 3.36) * (1 - Math.sin(u * Math.PI * 0.5)), rot: -26.4 * (1 - u) };
 }
 
 export function heftPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.heft));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 4.8, rot: s * 16 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 5.76, rot: s * 19.2 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.55) {
     const s = (u - 0.14) / 0.41;
     return {
-      x: fromX + facing * s * 1.2,
-      lift: 4.8 - smoothstep(s) * 3.6,
-      rot: facing * (16 - s * 28),
+      x: fromX + facing * s * 1.44,
+      lift: 5.76 - smoothstep(s) * 4.32,
+      rot: facing * (19.2 - s * 33.6),
       anim: "sit" as TrickAnim,
     };
   }
@@ -326,16 +326,16 @@ export function heftPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.55) / 0.27;
     const press = Math.abs(Math.sin(s * Math.PI * 2.2));
     return {
-      x: fromX + facing * 1.2,
-      lift: 1.0 + press * 1.4,
-      rot: facing * (-14 + press * 8),
+      x: fromX + facing * 1.44,
+      lift: 1.2 + press * 1.68,
+      rot: facing * (-16.8 + press * 9.6),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
-    x: fromX + facing * (1.2 * (1 - s)),
-    lift: 1.0 * (1 - s),
+    x: fromX + facing * (1.44 * (1 - s)),
+    lift: 1.44 * (1 - s),
     rot: facing * -4 * (1 - s),
     anim: "idle" as TrickAnim,
   };
@@ -345,31 +345,31 @@ export function oxbowPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.oxbow));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX + facing * s * 2.4, lift: s * 2.8, rot: s * 18 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX + facing * s * 2.88, lift: s * 3.36, rot: s * 21.6 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.48) {
     const s = (u - 0.12) / 0.36;
     return {
-      x: fromX + facing * (2.4 + smoothstep(s) * 7.2),
-      lift: 2.8 + Math.sin(s * Math.PI) * 2.6,
-      rot: facing * (18 + Math.sin(s * Math.PI) * 22),
+      x: fromX + facing * (2.88 + smoothstep(s) * 8.64),
+      lift: 3.36 + Math.sin(s * Math.PI) * 3.12,
+      rot: facing * (21.6 + Math.sin(s * Math.PI) * 26.4),
       anim: "walk" as TrickAnim,
     };
   }
   if (u < 0.78) {
     const s = (u - 0.48) / 0.3;
     return {
-      x: fromX + facing * (9.6 - smoothstep(s) * 4.2),
-      lift: 3.2 + Math.abs(Math.sin(s * Math.PI * 1.8)) * 2.0,
-      rot: facing * (28 - s * 34),
+      x: fromX + facing * (11.52 - smoothstep(s) * 5.04),
+      lift: 3.84 + Math.abs(Math.sin(s * Math.PI * 1.8)) * 2.4,
+      rot: facing * (33.6 - s * 40.8),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * (5.4 * (1 - s)),
-    lift: 2.6 * (1 - s),
-    rot: facing * (-4 * (1 - s)),
+    x: fromX + facing * (6.48 * (1 - s)),
+    lift: 3.12 * (1 - s),
+    rot: facing * (-4.8 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -378,23 +378,23 @@ export function slackPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.slack));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 5.2, rot: s * 28 * facing, anim: "talk" as TrickAnim };
+    return { x: fromX, lift: s * 6.24, rot: s * 33.6 * facing, anim: "talk" as TrickAnim };
   }
   if (u < 0.78) {
     const s = (u - 0.12) / 0.66;
     const ease = Math.sin(s * Math.PI * 2.4);
     return {
-      x: fromX + facing * ease * 0.9,
-      lift: 5.2 - s * 1.4 + Math.abs(ease) * 2.2,
-      rot: facing * (28 - s * 34 + ease * 12),
+      x: fromX + facing * ease * 1.08,
+      lift: 6.24 - s * 1.68 + Math.abs(ease) * 2.64,
+      rot: facing * (33.6 - s * 40.8 + ease * 14.4),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 3.2 * (1 - s),
-    rot: facing * (-4 * (1 - s)),
+    lift: 3.84 * (1 - s),
+    rot: facing * (-4.8 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -403,23 +403,23 @@ export function bankPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.bank));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX + facing * s * 3.2, lift: s * 2.6, rot: -s * 14 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX + facing * s * 3.84, lift: s * 3.12, rot: -s * 16.8 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.78) {
     const s = (u - 0.12) / 0.66;
     const nudge = Math.sin(s * Math.PI * 2.0);
     return {
-      x: fromX + facing * (3.2 + nudge * 1.1),
-      lift: 2.4 + Math.abs(nudge) * 2.0,
-      rot: facing * (-14 + nudge * 12),
+      x: fromX + facing * (3.84 + nudge * 1.32),
+      lift: 2.88 + Math.abs(nudge) * 2.4,
+      rot: facing * (-16.8 + nudge * 14.4),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * (3.2 * (1 - s)),
-    lift: 2.4 * (1 - s),
-    rot: facing * (-4 * (1 - s)),
+    x: fromX + facing * (3.84 * (1 - s)),
+    lift: 2.88 * (1 - s),
+    rot: facing * (-4.8 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -429,14 +429,14 @@ export function anchorPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.anchor));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 3.4, rot: s * -10 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 4.08, rot: s * -12 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.42) {
     const s = (u - 0.12) / 0.3;
     return {
-      x: fromX + facing * smoothstep(s) * 0.6,
-      lift: 3.4 - smoothstep(s) * 2.2,
-      rot: facing * (-10 + s * 6),
+      x: fromX + facing * smoothstep(s) * 0.72,
+      lift: 4.08 - smoothstep(s) * 2.64,
+      rot: facing * (-12 + s * 7.2),
       anim: "sit" as TrickAnim,
     };
   }
@@ -444,17 +444,17 @@ export function anchorPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.42) / 0.4;
     const settle = Math.abs(Math.sin(s * Math.PI * 1.6));
     return {
-      x: fromX + facing * 0.6,
-      lift: 1.0 + settle * 1.8,
-      rot: facing * (-8 + settle * 14),
+      x: fromX + facing * 0.72,
+      lift: 1.2 + settle * 2.16,
+      rot: facing * (-9.6 + settle * 16.8),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
-    x: fromX + facing * (0.6 * (1 - s)),
-    lift: 1.2 * (1 - s),
-    rot: facing * (-4 * (1 - s)),
+    x: fromX + facing * (0.72 * (1 - s)),
+    lift: 1.44 * (1 - s),
+    rot: facing * (-4.8 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -464,23 +464,23 @@ export function meanderPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.meander));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX + facing * s * 1.8, lift: s * 3.2, rot: s * 14 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX + facing * s * 2.16, lift: s * 3.84, rot: s * 16.8 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.78) {
     const s = (u - 0.12) / 0.66;
     const bend = Math.sin(s * Math.PI * 2.4);
     return {
-      x: fromX + facing * (1.8 + s * 6.4 + bend * 2.2),
-      lift: 3.2 + Math.abs(bend) * 2.8,
-      rot: facing * (14 + bend * 26),
+      x: fromX + facing * (2.16 + s * 7.68 + bend * 2.64),
+      lift: 3.84 + Math.abs(bend) * 3.36,
+      rot: facing * (16.8 + bend * 31.2),
       anim: "walk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * ((1.8 + 6.4) * (1 - s)),
-    lift: 3.2 * (1 - s),
-    rot: facing * (6 * (1 - s)),
+    x: fromX + facing * ((2.16 + 7.68) * (1 - s)),
+    lift: 3.84 * (1 - s),
+    rot: facing * (7.2 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
