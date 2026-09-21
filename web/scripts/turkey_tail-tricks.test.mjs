@@ -380,6 +380,11 @@ test("pore/bracket/band/leathery/trametes/concentric/tomentum are house-place-tr
   assert.equal(held.anim, "sit");
   assert.ok(held.rot !== 0 || held.lift > 0);
   const release = T.stepTrick(bole, T.TRAMETES_HOLD + 0.2, ground);
+  assert.equal(T.TRAMETES_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.equal(T.TRAMETES_HOLD, Overlay.TRAMETES_HOLD);
+  assert.equal(T.RELEASE_S, Overlay.RELEASE_S);
+  assert.ok(T.TRAMETES_HOLD <= 12);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
   const doneBole = T.stepTrick(bole, T.DUR.trametes + 0.1, ground);
@@ -580,7 +585,7 @@ test("pore/bracket/band/leathery/trametes/concentric/tomentum are house-place-tr
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -1027,7 +1032,8 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Ring ultra idle-life done; next house-order ultra is Flame / chicken_of_woods", () => {
+test("notes: Ring Rui-dense ultra (TRAMETES_HOLD=11.2); next leftover Mane / lions_mane", () => {
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Mane / lions_mane.
   assert.equal(T.TRICK_KEY, "turkey_tail");
   assert.equal(T.wantsThankYou("ring"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
