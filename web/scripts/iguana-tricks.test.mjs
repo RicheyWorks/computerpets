@@ -324,9 +324,9 @@ test("ground registry keeps prior guests gated; Sol selectable; no flatten/bask 
   assert.equal(Toucan.TRICK_KEY, "toucan");
   assert.equal(T.TRICK_KEY, "iguana");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...Relay.TRICKS], ["click", "latch", "arc", "buzz", "switch"]);
-  assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
-  assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
+  assert.deepEqual([...Relay.TRICKS], ["contactclick", "latchseat", "arcflick", "coilbuzz", "poleswitch", "armaturetap", "relayhush"]);
+  assert.deepEqual([...Fuse.TRICKS], ["railseat", "holdcurrent", "blowclear", "reseatsnap", "cartridgerattle", "bladeflash", "fusehush"]);
+  assert.deepEqual([...Earth.TRICKS], ["lugstrap", "earthseat", "heaveplate", "bedsettle", "soilgrip", "plateclamp", "groundhush"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
@@ -497,10 +497,15 @@ test("ultra-polish: Sol sun/dewlap/sneeze/lash lifts are Rui-visible (not micro 
   assert.equal(T.DUR.sneeze, Overlay.DUR.sneeze);
   assert.equal(T.DUR.lash, Overlay.DUR.lash);
   assert.equal(T.SUN_HOLD, Overlay.SUN_HOLD);
+  assert.equal(T.SUN_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "sun") > 39);
+  assert.ok(T.nextTrickWait(true, 0, "sun") < 80);
+  assert.ok(T.nextTrickWait(true, 0, "sun") > T.nextTrickWait(true, 0, "dewlap"));
   assert.equal(T.HAPPY_DUR.swell, Overlay.HAPPY_DUR.swell);
 });
 
-test("notes: Sol idle-life ultra done; Vesper / dragon + Nori / ball_python + Saffron / corn_snake + Bandit / kingsnake + Jade / green_tree_python + Bluff / hognose + Sash / garter ultra next-or-done; Lula / boa ultra next-or-done; following house-order ultra guest is Coral / milk_snake (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Sol Rui-dense ultra (SUN_HOLD=11.2); next house-order densify leftover after early house guests: Vesper / dragon then Ember / phoenix", () => {
   assert.deepEqual([...T.TRICKS], ["sun", "dewlap", "nod", "press", "flick", "sneeze", "lash"]);
   assert.equal(T.TRICK_KEY, "iguana");
   assert.equal(T.wantsThankYou("sol"), true);
