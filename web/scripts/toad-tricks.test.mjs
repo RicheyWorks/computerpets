@@ -1957,7 +1957,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Pebble Rui-dense ultra (BUFONID_HOLD=11.2); Eft now Rue-dense; Dapple now Rue-dense; Slip now Rue-dense; next leftover Pinch / crayfish", () => {
+test("notes: Pebble Rui-dense ultra (BUFONID_HOLD=11.2); Eft now Rue-dense; Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; next leftover Whorl / pond_snail", () => {
   assert.equal(T.TRICK_KEY, "toad");
   assert.deepEqual([...T.TRICKS], ["verruca", "burrow", "parotoid", "tubercle", "bufonid", "unken", "cranial"]);
   assert.deepEqual([...T.HAPPY], ["loam", "knurl", "plump"]);
@@ -2027,9 +2027,9 @@ test("notes: Pebble Rui-dense ultra (BUFONID_HOLD=11.2); Eft now Rue-dense; Dapp
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next leftover (do not implement): Pinch / crayfish.
-  assert.equal("crayfish", "crayfish");
-  assert.equal("Pinch", "Pinch");
+  // Recommend next leftover (do not implement): Whorl / pond_snail.
+  assert.equal("pond_snail", "pond_snail");
+  assert.equal("Whorl", "Whorl");
 });
 
 
