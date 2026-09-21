@@ -1998,7 +1998,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Eft Rui-dense ultra (CAUDATE_HOLD=11.2); Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; next leftover Boot / paramecium", () => {
+test("notes: Eft Rui-dense ultra (CAUDATE_HOLD=11.2); Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; next leftover Reach / amoeba", () => {
   assert.equal(T.TRICK_KEY, "newt");
   assert.deepEqual([...T.TRICKS], ["crest", "caudal", "filament", "costal", "caudate", "hedonic", "aposematic"]);
   assert.deepEqual([...T.HAPPY], ["vermilion", "eftish", "palmate"]);
@@ -2076,9 +2076,9 @@ test("notes: Eft Rui-dense ultra (CAUDATE_HOLD=11.2); Dapple now Rue-dense; Slip
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next leftover (do not implement): Boot / paramecium.
-  assert.equal("paramecium", "paramecium");
-  assert.equal("Boot", "Boot");
+  // Recommend next leftover (do not implement): Reach / amoeba.
+  assert.equal("amoeba", "amoeba");
+  assert.equal("Reach", "Reach");
 });
 
 
