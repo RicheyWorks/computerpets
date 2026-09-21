@@ -506,7 +506,7 @@ test("ground registry keeps prior guests gated; Ember selectable; no kindle/ash/
   assert.equal(OverlayGround.sleepHoldFrame("phoenix", 4), null);
 });
 
-test("notes: Ember Rui-dense ultra (CINDER_HOLD=11.2); Nori densified; Saffron densified; Bandit densified; Jade densified; Bluff densified; Sash densified; Lula densified; next leftover Coral / milk_snake", () => {
+test("notes: Ember Rui-dense ultra (CINDER_HOLD=11.2); Nori densified; Saffron densified; Bandit densified; Jade densified; Bluff densified; Sash densified; Lula densified; Coral densified; next leftover Blush / rosy_boa", () => {
   assert.equal(T.TRICK_KEY, "phoenix");
   assert.equal(T.wantsThankYou("ember"), true);
   assert.equal(OverlayGround.tricksFor("phoenix"), Overlay);
@@ -549,7 +549,7 @@ test("ultra-polish: Ember cinder/blaze/shed/reignite/hearth lifts are Rui-visibl
   assert.ok(T.nextTrickWait(true, 0, "cinder") > T.nextTrickWait(true, 0, "blaze"));
 });
 
-test("notes: Ember Rui-dense ultra (CINDER_HOLD=11.2); bird line densified through Ember; Nori densified; Saffron densified; Bandit densified; Jade densified; Bluff densified; Sash densified; Lula densified; next leftover Coral / milk_snake", () => {
+test("notes: Ember Rui-dense ultra (CINDER_HOLD=11.2); bird line densified through Ember; Nori densified; Saffron densified; Bandit densified; Jade densified; Bluff densified; Sash densified; Lula densified; Coral densified; next leftover Blush / rosy_boa", () => {
   assert.deepEqual([...T.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
   assert.equal(T.TRICKS.includes("kindle"), false);
   assert.equal(T.TRICKS.includes("ash"), false);

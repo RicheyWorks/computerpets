@@ -342,7 +342,7 @@ test("ultra-polish: Saffron scribble/gap/comma/blotter/pencil lifts are Rui-visi
   assert.equal(T.HAPPY_DUR.clause, Overlay.HAPPY_DUR.clause);
 });
 
-test("notes: Saffron Rui-dense ultra (COMMA_HOLD=11.2); Bandit densified; Jade densified; Bluff densified; Sash densified; Lula densified; next leftover Coral / milk_snake", () => {
+test("notes: Saffron Rui-dense ultra (COMMA_HOLD=11.2); Bandit densified; Jade densified; Bluff densified; Sash densified; Lula densified; Coral densified; next leftover Blush / rosy_boa", () => {
   assert.deepEqual([...T.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
   assert.equal(T.TRICK_KEY, "corn_snake");
   assert.equal(T.wantsThankYou("saffron"), true);
