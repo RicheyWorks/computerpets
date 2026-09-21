@@ -2151,7 +2151,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Spot Rui-dense ultra (EUGLENID_HOLD=11.2); Orb now Rue-dense; next leftover Pane / diatom", () => {
+test("notes: Spot Rui-dense ultra (EUGLENID_HOLD=11.2); Orb now Rue-dense; Pane now Rue-dense; next leftover Hold / kelp", () => {
   assert.equal(T.TRICK_KEY, "euglena");
   assert.deepEqual([...T.TRICKS], ["eyespot", "flagellum", "chloroplast", "phototaxis", "euglenid", "metaboly", "paramylon"]);
   assert.deepEqual([...T.HAPPY], ["viridis", "gracilis", "sanguinea"]);
@@ -2340,9 +2340,9 @@ test("notes: Spot Rui-dense ultra (EUGLENID_HOLD=11.2); Orb now Rue-dense; next 
   assert.equal(T.TRICKS.includes("dart"), false);
   assert.equal(Goldfish.TRICKS.includes("flare"), true);
   assert.equal(T.TRICKS.includes("flare"), false);
-  // Recommend next leftover (do not implement): Pane / diatom.
-  assert.equal("diatom", "diatom");
-  assert.equal("Pane", "Pane");
+  // Recommend next leftover (do not implement): Hold / kelp.
+  assert.equal("kelp", "kelp");
+  assert.equal("Hold", "Hold");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("chelate"), false);
   assert.equal(Salamander.TRICKS.includes("eyespot"), false);

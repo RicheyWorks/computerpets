@@ -2158,7 +2158,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Orb Rui-dense ultra (COENOBIUM_HOLD=11.2); next leftover Pane / diatom", () => {
+test("notes: Orb Rui-dense ultra (COENOBIUM_HOLD=11.2); Pane now Rue-dense; next leftover Hold / kelp", () => {
   assert.equal(T.TRICK_KEY, "volvox");
   assert.deepEqual([...T.TRICKS], ["colony", "inversion", "phialopore", "somatic", "coenobium", "daughter", "gonidia"]);
   assert.deepEqual([...T.HAPPY], ["aureus", "carteri", "globator"]);
@@ -2347,9 +2347,9 @@ test("notes: Orb Rui-dense ultra (COENOBIUM_HOLD=11.2); next leftover Pane / dia
   assert.equal(T.TRICKS.includes("dart"), false);
   assert.equal(Goldfish.TRICKS.includes("flare"), true);
   assert.equal(T.TRICKS.includes("flare"), false);
-  // Recommend next leftover (do not implement): Pane / diatom.
-  assert.equal("diatom", "diatom");
-  assert.equal("Pane", "Pane");
+  // Recommend next leftover (do not implement): Hold / kelp.
+  assert.equal("kelp", "kelp");
+  assert.equal("Hold", "Hold");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("chelate"), false);
   assert.equal(Salamander.TRICKS.includes("colony"), false);
