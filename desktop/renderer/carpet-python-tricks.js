@@ -1,4 +1,4 @@
-/** Atlas ground tricks while idle — ultra-polish pass. House carpet python — legend / rung / contour / runner / bearing / canopy / inset personality (map/carpet climb desk life; chart-shelf cartographer + jungle Morelia canopy, not Nori ball-bun or Jade lamp-arm jewelry or Blush desert pebble). Legend rests a desk map-legend carpet plate; rung climbs a blotter rung; contour traces a map contour S-curve; runner lays a carpet runner; bearing compass-orients true; canopy weaves a jungle canopy branch climb (species-true Morelia arboreal — not Jade bough/liana/arbor, not Echo perch, not rung desk-rung); inset settles a map inset plate (cartographer Atlas — not legend hold, not window-play CHART). Window-play CHART unchanged — never names `chart`. Ethogram keeps tongue + legend sit_hold; adds rung/contour/runner/canopy/inset softs + freeze (replaces thin drape-only). Nori owns orb/nook/taste/inch/unroll/loom/weave and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon/blotter/pencil and clause/spice/cord; Bandit owns stripe/audit/verdict/plumb/raid/band/drawer and tribute/docket/seal; Jade owns bracelet/sway/jewel/heat/bough/liana/arbor and pendant/treaty/emerald; Bluff owns hood/feign/shovel/gape/encore/quiver/upright and aside/cue/ovation; Sash owns seam/rounds/moss/fork/lap/ribbon/creek and copy/brief/visa; Lula owns pour/heft/oxbow/slack/bank/anchor/meander and harbor/cradle/stay; Coral owns rhyme/rumor/costume/frank/tile/cipher/verse and postmark/cachet/courtesy; Blush owns pebble/crevice/rosy/mesa/arroyo/dune/talus and climate/manners/corner; budgie owns mimic; parrot owns flash; hedgehog owns curl/root; turtle owns tuck; volt window-play owns coil; ferret owns noodle; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun; Coin owns flare; Thimble owns dig; Lula window-play owns loop; Echo window-play owns perch; Fox window-play owns scent; rosy_boa window-play owns stone; carpet_python window-play owns chart; hamster owns nest. Guest slug Atlas / key carpet_python — accept "carpet_python" and "atlas". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via carpet_python.wav. Thank-yous survey / gazette / shelf. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web `carpet-python-tricks.ts`. True house-carpet-python desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids chart/climb/unroll/drape/tongue/pebble/crevice/rosy/mesa/arroyo/dune/talus/climate/manners/corner/mosaic/loop/patrol/stripe/hood/feign/shovel/gape/encore/flip/saddle/inspect/write/orb/nook/taste/inch/bun/ball/coil/curl/bask/loaf/potato/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/clause/spice/cord/audit/verdict/plumb/raid/tribute/docket/seal/bracelet/sway/jewel/heat/bough/pendant/treaty/emerald/aside/cue/ovation/seam/rounds/moss/fork/lap/copy/brief/visa/mimic/flash/root/flare/dig/perch/hang/clasp/scent/heave/lug/earth/bed/nest/pour/heft/oxbow/slack/bank/harbor/cradle/stay/rhyme/rumor/costume/frank/tile/postmark/cachet/courtesy/tuck/hide/liana/arbor/loom/weave/azimuth/margin/rosette/wrap/branch/parcel/ridge/pit/diamond name collisions with prior guests and carpet_python window-play. Bird ultra (Soot→Ember) + Miso→Blush done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Cup / octopus. No cry inventing beyond house carpet_python.wav prefer. Never retouch Rui sprites. */
+/** Atlas ground tricks while idle — ultra-polish pass. House carpet python — legend / rung / contour / runner / bearing / canopy / inset personality (map/carpet climb desk life; chart-shelf cartographer + jungle Morelia canopy, not Nori ball-bun or Jade lamp-arm jewelry or Blush desert pebble). Legend rests a desk map-legend carpet plate; rung climbs a blotter rung; contour traces a map contour S-curve; runner lays a carpet runner; bearing compass-orients true; canopy weaves a jungle canopy branch climb (species-true Morelia arboreal — not Jade bough/liana/arbor, not Echo perch, not rung desk-rung); inset settles a map inset plate (cartographer Atlas — not legend hold, not window-play CHART). Window-play CHART unchanged — never names `chart`. Ethogram keeps tongue + legend sit_hold; adds rung/contour/runner/canopy/inset softs + freeze (replaces thin drape-only). Nori owns orb/nook/taste/inch/unroll/loom/weave and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon/blotter/pencil and clause/spice/cord; Bandit owns stripe/audit/verdict/plumb/raid/band/drawer and tribute/docket/seal; Jade owns bracelet/sway/jewel/heat/bough/liana/arbor and pendant/treaty/emerald; Bluff owns hood/feign/shovel/gape/encore/quiver/upright and aside/cue/ovation; Sash owns seam/rounds/moss/fork/lap/ribbon/creek and copy/brief/visa; Lula owns pour/heft/oxbow/slack/bank/anchor/meander and harbor/cradle/stay; Coral owns rhyme/rumor/costume/frank/tile/cipher/verse and postmark/cachet/courtesy; Blush owns pebble/crevice/rosy/mesa/arroyo/dune/talus and climate/manners/corner; budgie owns mimic; parrot owns flash; hedgehog owns curl/root; turtle owns tuck; volt window-play owns coil; ferret owns noodle; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun; Coin owns flare; Thimble owns dig; Lula window-play owns loop; Echo window-play owns perch; Fox window-play owns scent; rosy_boa window-play owns stone; carpet_python window-play owns chart; hamster owns nest. Guest slug Atlas / key carpet_python — accept "carpet_python" and "atlas". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via carpet_python.wav. Thank-yous survey / gazette / shelf. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web `carpet-python-tricks.ts`. True house-carpet-python desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids chart/climb/unroll/drape/tongue/pebble/crevice/rosy/mesa/arroyo/dune/talus/climate/manners/corner/mosaic/loop/patrol/stripe/hood/feign/shovel/gape/encore/flip/saddle/inspect/write/orb/nook/taste/inch/bun/ball/coil/curl/bask/loaf/potato/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/clause/spice/cord/audit/verdict/plumb/raid/tribute/docket/seal/bracelet/sway/jewel/heat/bough/pendant/treaty/emerald/aside/cue/ovation/seam/rounds/moss/fork/lap/copy/brief/visa/mimic/flash/root/flare/dig/perch/hang/clasp/scent/heave/lug/earth/bed/nest/pour/heft/oxbow/slack/bank/harbor/cradle/stay/rhyme/rumor/costume/frank/tile/postmark/cachet/courtesy/tuck/hide/liana/arbor/loom/weave/azimuth/margin/rosette/wrap/branch/parcel/ridge/pit/diamond name collisions with prior guests and carpet_python window-play. Bird ultra (Soot→Ember) + Miso→Blush done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Amplitudes raised toward Rui richness; denser waits/weights (LEGEND_HOLD=11.2 RELEASE_S=1.18). Next leftover Cup / octopus. No cry inventing beyond house carpet_python.wav prefer. Never retouch Rui sprites. */
 (function (root) {
   const TRICK_KEY = "carpet_python";
   const TRICKS = ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"];
@@ -9,8 +9,8 @@
       shelf: 1.58,
   };
   /** Legend hold — Atlas rests as a desk map-legend carpet plate. Not window-play CHART. Not Nori orb. */
-  const LEGEND_HOLD = 12.2;
-  const RELEASE_S = 0.82;
+  const LEGEND_HOLD = 11.2;
+  const RELEASE_S = 1.18;
   const DUR = {
       legend: LEGEND_HOLD + RELEASE_S,
       rung: 1.78,
@@ -51,14 +51,14 @@
   function nextTrickWait(justFinished, rand, kind) {
       const roll = rand == null ? Math.random() : rand;
       if (kind === "legend")
-          return 38 + roll * 24;
+          return 40 + roll * 26;
       if (kind === "canopy" || kind === "inset" || kind === "contour")
-          return 12 + roll * 9;
+          return 12.8 + roll * 9.4;
       if (kind === "rung" || kind === "runner")
-          return 11 + roll * 8;
+          return 12.8 + roll * 9.4;
       if (kind === "bearing")
-          return 10 + roll * 8;
-      return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+          return 11.6 + roll * 8.5;
+      return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
   function pickTrick(rand, musicOn = false, lastKind) {
       if (musicOn)
@@ -66,7 +66,7 @@
       const roll = rand == null ? Math.random() : rand;
       const pool = TRICKS.filter((k) => k !== lastKind);
       const list = pool.length ? pool : [...TRICKS];
-      const weights = list.map((k) => k === "legend" ? 0.55 : k === "canopy" || k === "inset" || k === "contour" ? 1.15 : 1);
+      const weights = list.map((k) => k === "legend" ? 0.72 : k === "canopy" || k === "inset" || k === "contour" ? 1.28 : k === "rung" || k === "runner" ? 1.18 : 1.08);
       let total = 0;
       for (let i = 0; i < weights.length; i++)
           total += weights[i];
@@ -141,43 +141,43 @@
       const u = Math.max(0, Math.min(1, t / HAPPY_DUR.survey));
       if (u < 0.14) {
           const s = u / 0.14;
-          return { lift: s * 4.2, rot: s * -16, dx: 0, anim: "sit" };
+          return { lift: s * 5.04, rot: s * -19.2, dx: 0, anim: "sit" };
       }
       if (u < 0.78) {
           const scan = Math.abs(Math.sin(t * 4.6));
           return {
-              lift: 4.2 + scan * 3.4,
-              rot: -16 + Math.sin(t * 3.4) * 14,
-              dx: Math.sin(t * 1.8) * 0.55,
+              lift: 5.04 + scan * 4.08,
+              rot: -19.2 + Math.sin(t * 3.4) * 16.8,
+              dx: Math.sin(t * 1.8) * 0.66,
               anim: "sit",
           };
       }
       const s = (u - 0.78) / 0.22;
-      return { lift: 4.2 * (1 - s), rot: -16 * (1 - s), dx: 0, anim: "idle" };
+      return { lift: 5.04 * (1 - s), rot: -19.2 * (1 - s), dx: 0, anim: "idle" };
   }
   function gazettePose(t) {
       const u = Math.max(0, Math.min(1, t / HAPPY_DUR.gazette));
       if (u < 0.12) {
           const s = u / 0.12;
-          return { lift: s * 4.6, rot: s * 18, dx: 0, anim: "sit" };
+          return { lift: s * 5.52, rot: s * 21.6, dx: 0, anim: "sit" };
       }
       if (u < 0.8) {
           const nod = Math.sin(t * 2.8);
           return {
-              lift: 4.6 + Math.abs(nod) * 3.2,
-              rot: 18 + nod * 16,
-              dx: nod * 0.7,
+              lift: 5.52 + Math.abs(nod) * 3.84,
+              rot: 21.6 + nod * 19.2,
+              dx: nod * 0.84,
               anim: "sit",
           };
       }
       const s = (u - 0.8) / 0.2;
-      return { lift: 4.6 * (1 - s), rot: 18 * (1 - s), dx: 0, anim: "sit" };
+      return { lift: 5.52 * (1 - s), rot: 21.6 * (1 - s), dx: 0, anim: "sit" };
   }
   function shelfPose(t) {
       return {
-          lift: Math.abs(Math.sin(t * 3.4)) * 3.8 + 2.4,
-          rot: -16 + Math.sin(t * 2.8) * 14,
-          dx: Math.sin(t * 1.9) * 0.7,
+          lift: Math.abs(Math.sin(t * 3.4)) * 4.56 + 2.88,
+          rot: -19.2 + Math.sin(t * 2.8) * 16.8,
+          dx: Math.sin(t * 1.9) * 0.84,
           anim: "talk",
       };
   }
@@ -248,32 +248,32 @@
   }
   function legendPose(t) {
       // Map-legend carpet breath — patterned plate on the blotter, not window chart.
-      const beat = Math.sin(t * 1.7) + 0.45 * Math.sin(t * 3.4);
+      const beat = Math.sin(t * 1.7) + 0.54 * Math.sin(t * 3.4);
       return {
-          lift: 2.4 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
-          rot: -22 + Math.sin(t * 2.4) * 18 + Math.sin(t * 4.6) * 10,
+          lift: 2.88 + Math.sin(t * 1.7) * 3.36 + Math.abs(Math.sin(t * 3.4)) * 1.92,
+          rot: -26.4 + Math.sin(t * 2.4) * 21.6 + Math.sin(t * 4.6) * 12,
       };
   }
   function releasePose(t) {
       const u = Math.max(0, Math.min(1, t / RELEASE_S));
       return {
-          lift: (2.4 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)),
-          rot: -22 * (1 - u),
+          lift: (2.88 + 3.36) * (1 - Math.sin(u * Math.PI * 0.5)),
+          rot: -26.4 * (1 - u),
       };
   }
   function rungPose(t, fromX, facing) {
       const u = Math.max(0, Math.min(1, t / DUR.rung));
       if (u < 0.12) {
           const s = smoothstep(u / 0.12);
-          return { x: fromX + facing * s * 1.6, lift: s * 3.6, rot: s * 18 * facing, anim: "walk" };
+          return { x: fromX + facing * s * 1.92, lift: s * 4.32, rot: s * 21.6 * facing, anim: "walk" };
       }
       if (u < 0.42) {
           const s = (u - 0.12) / 0.3;
           // Climb a desk rung — vertical lift, not Jade bracelet coil jewelry.
           return {
-              x: fromX + facing * (1.6 + smoothstep(s) * 1.2),
-              lift: 3.6 + smoothstep(s) * 4.8,
-              rot: facing * (18 - s * 10),
+              x: fromX + facing * (1.92 + smoothstep(s) * 1.44),
+              lift: 4.32 + smoothstep(s) * 5.76,
+              rot: facing * (21.6 - s * 12),
               anim: "play",
           };
       }
@@ -281,17 +281,17 @@
           const s = (u - 0.42) / 0.3;
           const sway = Math.sin(s * Math.PI * 2.6);
           return {
-              x: fromX + facing * (2.8 + sway * 0.55),
-              lift: 8.4 + Math.abs(sway) * 1.6,
-              rot: facing * (6 + sway * 14),
+              x: fromX + facing * (3.36 + sway * 0.66),
+              lift: 10.08 + Math.abs(sway) * 1.92,
+              rot: facing * (7.2 + sway * 16.8),
               anim: "sit",
           };
       }
       const s = smoothstep((u - 0.72) / 0.28);
       return {
-          x: fromX + facing * (2.8 * (1 - s)),
-          lift: 8.4 * (1 - s),
-          rot: facing * (4 * (1 - s)),
+          x: fromX + facing * (3.36 * (1 - s)),
+          lift: 10.08 * (1 - s),
+          rot: facing * (4.8 * (1 - s)),
           anim: "walk",
       };
   }
@@ -299,24 +299,24 @@
       const u = Math.max(0, Math.min(1, t / DUR.contour));
       if (u < 0.12) {
           const s = smoothstep(u / 0.12);
-          return { x: fromX + facing * s * 1.8, lift: s * 3.2, rot: s * 16 * facing, anim: "walk" };
+          return { x: fromX + facing * s * 2.16, lift: s * 3.84, rot: s * 19.2 * facing, anim: "walk" };
       }
       if (u < 0.7) {
-          const s = (u - 0.12) / 0.58;
+          const s = (u - 0.12) / 0.696;
           // Trace a map contour — soft S-curve, not Saffron pencil scribble.
           const wave = Math.sin(s * Math.PI * 2.8);
           return {
-              x: fromX + facing * (1.8 + s * 5.4),
-              lift: 3.2 + Math.abs(wave) * 2.8,
-              rot: facing * (16 + wave * 22),
+              x: fromX + facing * (2.16 + s * 6.48),
+              lift: 3.84 + Math.abs(wave) * 3.36,
+              rot: facing * (19.2 + wave * 26.4),
               anim: "walk",
           };
       }
       const s = smoothstep((u - 0.7) / 0.3);
       return {
-          x: fromX + facing * (7.2 * (1 - s)),
-          lift: 3.6 * (1 - s),
-          rot: facing * (8 * (1 - s)),
+          x: fromX + facing * (8.64 * (1 - s)),
+          lift: 4.32 * (1 - s),
+          rot: facing * (9.6 * (1 - s)),
           anim: "sit",
       };
   }
@@ -324,7 +324,7 @@
       const u = Math.max(0, Math.min(1, t / DUR.runner));
       if (u < 0.12) {
           const s = smoothstep(u / 0.12);
-          return { x: fromX + facing * s * 1.8, lift: s * 3.0, rot: s * 14 * facing, anim: "walk" };
+          return { x: fromX + facing * s * 2.16, lift: s * 3.6, rot: s * 16.8 * facing, anim: "walk" };
       }
       if (u < 0.48) {
           const s = (u - 0.12) / 0.36;
@@ -332,9 +332,9 @@
           const step = Math.floor(s * 3);
           const local = (s * 3) % 1;
           return {
-              x: fromX + facing * (1.8 + step * 2.0 + smoothstep(local) * 2.0),
-              lift: 3.0 + Math.sin(local * Math.PI) * 2.4,
-              rot: facing * (14 + Math.sin(local * Math.PI) * 20),
+              x: fromX + facing * (2.16 + step * 2.4 + smoothstep(local) * 2.4),
+              lift: 3.6 + Math.sin(local * Math.PI) * 2.88,
+              rot: facing * (16.8 + Math.sin(local * Math.PI) * 24),
               anim: "walk",
           };
       }
@@ -342,17 +342,17 @@
           const s = (u - 0.48) / 0.3;
           const nap = Math.abs(Math.sin(s * Math.PI * 2.0));
           return {
-              x: fromX + facing * 7.8,
-              lift: 1.4 + nap * 1.8,
-              rot: facing * (-12 + nap * 10),
+              x: fromX + facing * 9.36,
+              lift: 1.68 + nap * 2.16,
+              rot: facing * (-14.4 + nap * 12),
               anim: "sit",
           };
       }
       const s = smoothstep((u - 0.78) / 0.22);
       return {
-          x: fromX + facing * (7.8 * (1 - s)),
-          lift: 1.6 * (1 - s),
-          rot: facing * (-4 * (1 - s)),
+          x: fromX + facing * (9.36 * (1 - s)),
+          lift: 1.92 * (1 - s),
+          rot: facing * (-4.8 * (1 - s)),
           anim: "idle",
       };
   }
@@ -360,24 +360,24 @@
       const u = Math.max(0, Math.min(1, t / DUR.bearing));
       if (u < 0.14) {
           const s = smoothstep(u / 0.14);
-          return { x: fromX, lift: s * 5.0, rot: s * 26 * facing, anim: "sit" };
+          return { x: fromX, lift: s * 6, rot: s * 31.2 * facing, anim: "sit" };
       }
       if (u < 0.72) {
-          const s = (u - 0.14) / 0.58;
+          const s = (u - 0.14) / 0.696;
           // Compass-bearing orient — head points true, not Bandit stripe audit.
           const tick = Math.sin(s * Math.PI * 3.4);
           return {
-              x: fromX + facing * tick * 0.65,
-              lift: 5.0 - s * 1.2 + Math.abs(tick) * 2.0,
-              rot: facing * (26 - s * 34 + tick * 12),
+              x: fromX + facing * tick * 0.78,
+              lift: 6 - s * 1.44 + Math.abs(tick) * 2.4,
+              rot: facing * (31.2 - s * 40.8 + tick * 14.4),
               anim: "play",
           };
       }
       const s = smoothstep((u - 0.72) / 0.28);
       return {
           x: fromX,
-          lift: 3.6 * (1 - s),
-          rot: facing * (-6 * (1 - s)),
+          lift: 4.32 * (1 - s),
+          rot: facing * (-7.2 * (1 - s)),
           anim: "sit",
       };
   }
@@ -385,16 +385,16 @@
       const u = Math.max(0, Math.min(1, t / DUR.canopy));
       if (u < 0.12) {
           const s = smoothstep(u / 0.12);
-          return { x: fromX + facing * s * 1.4, lift: s * 4.2, rot: s * 20 * facing, anim: "walk" };
+          return { x: fromX + facing * s * 1.68, lift: s * 5.04, rot: s * 24 * facing, anim: "walk" };
       }
       if (u < 0.45) {
           const s = (u - 0.12) / 0.33;
           // Jungle canopy branch weave — Morelia arboreal, not Jade liana jewelry, not Echo perch.
           const weave = Math.sin(s * Math.PI * 3.0);
           return {
-              x: fromX + facing * (1.4 + smoothstep(s) * 2.4 + weave * 0.45),
-              lift: 4.2 + smoothstep(s) * 4.6 + Math.abs(weave) * 1.4,
-              rot: facing * (20 - s * 8 + weave * 16),
+              x: fromX + facing * (1.68 + smoothstep(s) * 2.88 + weave * 0.54),
+              lift: 5.04 + smoothstep(s) * 5.52 + Math.abs(weave) * 1.68,
+              rot: facing * (24 - s * 9.6 + weave * 19.2),
               anim: "play",
           };
       }
@@ -402,17 +402,17 @@
           const s = (u - 0.45) / 0.33;
           const hang = Math.abs(Math.sin(s * Math.PI * 2.2));
           return {
-              x: fromX + facing * (3.8 + hang * 0.35),
-              lift: 8.8 - s * 1.6 + hang * 1.8,
-              rot: facing * (8 + hang * 12),
+              x: fromX + facing * (4.56 + hang * 0.42),
+              lift: 10.56 - s * 1.92 + hang * 2.16,
+              rot: facing * (9.6 + hang * 14.4),
               anim: "sit",
           };
       }
       const s = smoothstep((u - 0.78) / 0.22);
       return {
-          x: fromX + facing * (3.8 * (1 - s)),
-          lift: 7.2 * (1 - s),
-          rot: facing * (6 * (1 - s)),
+          x: fromX + facing * (4.56 * (1 - s)),
+          lift: 8.64 * (1 - s),
+          rot: facing * (7.2 * (1 - s)),
           anim: "walk",
       };
   }
@@ -420,15 +420,15 @@
       const u = Math.max(0, Math.min(1, t / DUR.inset));
       if (u < 0.12) {
           const s = smoothstep(u / 0.12);
-          return { x: fromX, lift: s * 4.8, rot: s * -14 * facing, anim: "sit" };
+          return { x: fromX, lift: s * 5.76, rot: s * -16.8 * facing, anim: "sit" };
       }
       if (u < 0.42) {
           const s = (u - 0.12) / 0.3;
           // Settle into a map inset plate — cartographer Atlas, not legend breath, not CHART.
           return {
-              x: fromX + facing * smoothstep(s) * -1.6,
-              lift: 4.8 - smoothstep(s) * 2.8,
-              rot: facing * (-14 + s * 22),
+              x: fromX + facing * smoothstep(s) * -1.92,
+              lift: 5.76 - smoothstep(s) * 3.36,
+              rot: facing * (-16.8 + s * 26.4),
               anim: "sit",
           };
       }
@@ -436,17 +436,17 @@
           const s = (u - 0.42) / 0.36;
           const press = Math.abs(Math.sin(s * Math.PI * 2.4));
           return {
-              x: fromX + facing * -1.6,
-              lift: 1.8 + press * 2.2,
-              rot: facing * (10 + press * 12),
+              x: fromX + facing * -1.92,
+              lift: 2.16 + press * 2.64,
+              rot: facing * (12 + press * 14.4),
               anim: "play",
           };
       }
       const s = smoothstep((u - 0.78) / 0.22);
       return {
-          x: fromX + facing * (-1.6 * (1 - s)),
-          lift: 2.2 * (1 - s),
-          rot: facing * (4 * (1 - s)),
+          x: fromX + facing * (-1.92 * (1 - s)),
+          lift: 2.64 * (1 - s),
+          rot: facing * (4.8 * (1 - s)),
           anim: "sit",
       };
   }
