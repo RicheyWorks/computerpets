@@ -2165,7 +2165,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Pane Rui-dense ultra (NAVICULA_HOLD=11.2); Hold now Rue-dense; Spin now Rue-dense; next leftover Bell / stentor", () => {
+test("notes: Pane Rui-dense ultra (NAVICULA_HOLD=11.2); Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; next leftover Rod / coli", () => {
   assert.equal(T.TRICK_KEY, "diatom");
   assert.deepEqual([...T.TRICKS], ["frustule", "raphe", "girdle", "oilstore", "navicula", "pennate", "epitheca"]);
   assert.deepEqual([...T.HAPPY], ["bacillaris", "cryptocephala", "tripunctata"]);
@@ -2354,9 +2354,9 @@ test("notes: Pane Rui-dense ultra (NAVICULA_HOLD=11.2); Hold now Rue-dense; Spin
   assert.equal(T.TRICKS.includes("dart"), false);
   assert.equal(Goldfish.TRICKS.includes("flare"), true);
   assert.equal(T.TRICKS.includes("flare"), false);
-  // Recommend next leftover (do not implement): Bell / stentor.
-  assert.equal("stentor", "stentor");
-  assert.equal("Bell", "Bell");
+  // Recommend next leftover (do not implement): Rod / coli.
+  assert.equal("coli", "coli");
+  assert.equal("Rod", "Rod");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("chelate"), false);
   assert.equal(Salamander.TRICKS.includes("frustule"), false);
