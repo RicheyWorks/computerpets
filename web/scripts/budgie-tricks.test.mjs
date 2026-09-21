@@ -404,7 +404,7 @@ test("ultra-polish: Echo bobble/mimic/beakgrind/shellout lifts are Rui-visible (
   assert.ok(T.nextTrickWait(true, 0, "preen") > T.nextTrickWait(true, 0, "bobble"));
 });
 
-test("notes: Echo Rui-dense ultra (PREEN_HOLD=11.2); next leftover Peck / penguin", () => {
+test("notes: Echo Rui-dense ultra (PREEN_HOLD=11.2); Peck now Rue-dense; next leftover Quill / parrot", () => {
   assert.deepEqual([...T.TRICKS], ["preen", "bobble", "mimic", "sidle", "dangle", "beakgrind", "shellout"]);
   assert.equal(T.TRICKS.includes("perch"), false);
   assert.equal(T.TRICKS.includes("nectary"), false);
@@ -415,5 +415,5 @@ test("notes: Echo Rui-dense ultra (PREEN_HOLD=11.2); next leftover Peck / pengui
   assert.equal(T.TRICKS.includes("toboggan"), false);
   assert.equal(T.TRICKS.includes("quote"), false);
   assert.equal(T.TRICKS.includes("crack"), false);
-  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Peck / penguin.
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Quill / parrot.
 });
