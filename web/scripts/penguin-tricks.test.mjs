@@ -425,7 +425,7 @@ test("ultra-polish: Peck huddle/toboggan/trumpet/rockhop/ecstatic lifts are Rui-
   assert.ok(T.nextTrickWait(true, 0, "huddle") > T.nextTrickWait(true, 0, "waddle"));
 });
 
-test("notes: Peck Rui-dense ultra (HUDDLE_HOLD=11.2); Quill now Rue-dense; Brood now Rue-dense; next leftover Frill / oyster", () => {
+test("notes: Peck Rui-dense ultra (HUDDLE_HOLD=11.2); Quill now Rue-dense; Brood now Rue-dense; Frill now Rue-dense; next leftover Cap / fly_agaric", () => {
   assert.deepEqual([...T.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet", "rockhop", "ecstatic"]);
   assert.equal(T.TRICKS.includes("bow"), false);
   assert.equal(T.TRICKS.includes("preen"), false);
@@ -436,5 +436,5 @@ test("notes: Peck Rui-dense ultra (HUDDLE_HOLD=11.2); Quill now Rue-dense; Brood
   assert.equal(T.TRICKS.includes("strut"), false);
   assert.equal(T.TRICKS.includes("fan"), false);
   assert.equal(T.TRICKS.includes("flash"), false);
-  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Frill / oyster.
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Cap / fly_agaric.
 });
