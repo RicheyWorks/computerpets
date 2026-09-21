@@ -2138,7 +2138,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Boot Rui-dense ultra (CILIOPHORA_HOLD=11.2); Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; Drake now Rue-dense; Vee now Rue-dense; Drum now Rue-dense; Sip now Rue-dense; Echo now Rue-dense; Peck now Rue-dense; Quill now Rue-dense; Brood now Rue-dense; Frill now Rue-dense; Cap now Rue-dense; next leftover Lattice / morel", () => {
+test("notes: Boot Rui-dense ultra (CILIOPHORA_HOLD=11.2); Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; Drake now Rue-dense; Vee now Rue-dense; Drum now Rue-dense; Sip now Rue-dense; Echo now Rue-dense; Peck now Rue-dense; Quill now Rue-dense; Brood now Rue-dense; Frill now Rue-dense; Cap now Rue-dense; Lattice now Rue-dense; next leftover Horn / chanterelle", () => {
   assert.equal(T.TRICK_KEY, "paramecium");
   assert.deepEqual([...T.TRICKS], ["cilia", "pellicle", "cytostome", "vacuole", "ciliophora", "trichocyst", "avoiding"]);
   assert.deepEqual([...T.HAPPY], ["caudatum", "aurelia", "bursaria"]);
