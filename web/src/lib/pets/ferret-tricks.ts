@@ -1,4 +1,4 @@
-/** Wick ground tricks while idle — ultra-polish pass. House ferret — tube / romp / steal / puff / noodle / corkscrew / slink personality (soft Mustela desk life). Tube sock-tunnel hold without naming nest or den or loaf or potato or soak; romp war-bounce play without naming zoom or binky or popcorn; steal sock-thief dash without naming dig or cache or stash (fox); puff bottlebrush scare without naming flare (goldfish) or frill; noodle long-body weave without naming twist or spiral (taken); corkscrew weasel-war-dance spin without naming dance (Rui) or tumble; slink low weasel-belly creep without naming sneak-clone of dog or stalk (fox). Window-play THREAD unchanged — never names a trick `thread`. Guest slug Wick / key ferret — accept "ferret" and "wick". Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk (`ferret.wav`). Thank-yous dook / kiss / chuckle. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `ferret-tricks.js`. True house-ferret desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/hedgehog/chinchilla/axolotl/toucan/iguana/dragon/Vesper or *Dragon electrical clones. Bird ultra line (Soot→Ember) and Miso / Pip / Thimble / Clip / Whee / Ink / Coin / Rue already done; Echo/budgie + Peck/penguin + Quill/parrot skip (birds). Wick continues house-order ultra-polish. Next guest ultra is Burr / hedgehog. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites. */
+/** Wick ground tricks while idle — ultra-polish pass. House ferret — tube / romp / steal / puff / noodle / corkscrew / slink personality (soft Mustela desk life). Tube sock-tunnel hold without naming nest or den or loaf or potato or soak; romp war-bounce play without naming zoom or binky or popcorn; steal sock-thief dash without naming dig or cache or stash (fox); puff bottlebrush scare without naming flare (goldfish) or frill; noodle long-body weave without naming twist or spiral (taken); corkscrew weasel-war-dance spin without naming dance (Rui) or tumble; slink low weasel-belly creep without naming sneak-clone of dog or stalk (fox). Window-play THREAD unchanged — never names a trick `thread`. Guest slug Wick / key ferret — accept "ferret" and "wick". Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk (`ferret.wav`). Thank-yous dook / kiss / chuckle. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `ferret-tricks.js`. True house-ferret desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/hedgehog/chinchilla/axolotl/toucan/iguana/dragon/Vesper or *Dragon electrical clones. Bird ultra line (Soot→Ember) and Miso / Pip / Thimble / Clip / Whee / Ink / Coin / Rue already done; Echo/budgie + Peck/penguin + Quill/parrot skip (birds). Wick continues house-order ultra-polish. Next guest ultra is Burr / hedgehog. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites.  ferret.wav EXISTS so prefersHouseCry adds ferret. Amplitudes raised toward Rui richness; denser waits/weights (TUBE_HOLD=11.2 RELEASE_S=1.18). Catalog 221. */
 
 export const TRICK_KEY = "ferret";
 export const TRICKS = ["tube", "romp", "steal", "puff", "noodle", "corkscrew", "slink"] as const;
@@ -52,8 +52,8 @@ export const HAPPY_DUR: Record<FerretHappyKind, number> = {
 };
 
 /** Tube hold — Wick tunnels into an imaginary sock-tube on the desk. Not window-play thread. Not a fox den. Not a hamster nest. Not a cat loaf. */
-export const TUBE_HOLD = 14.4;
-export const RELEASE_S = 1.02;
+export const TUBE_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 
 export const DUR: Record<FerretTrickKind, number> = {
   tube: TUBE_HOLD + RELEASE_S,
@@ -93,12 +93,10 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: FerretTrickKind) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "tube") return 42 + roll * 28;
-  if (kind === "romp") return 12 + roll * 9;
-  if (kind === "corkscrew" || kind === "slink") return 11 + roll * 8;
-  if (kind === "steal" || kind === "puff") return 11 + roll * 8;
-  if (kind === "noodle") return 10 + roll * 8;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "tube") return 40 + roll * 26;
+  if (kind === "romp" || kind === "corkscrew" || kind === "slink") return 12.8 + roll * 9.4;
+  if (kind === "steal" || kind === "puff" || kind === "noodle") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 export function pickTrick(rand?: number, musicOn = false, lastKind?: FerretTrickKind | null): FerretTrickKind {
@@ -107,7 +105,7 @@ export function pickTrick(rand?: number, musicOn = false, lastKind?: FerretTrick
   const pool = TRICKS.filter((k) => k !== lastKind);
   const list = pool.length ? pool : TRICKS.slice();
   const weights = list.map((k) =>
-    k === "tube" ? 0.55 : k === "romp" || k === "corkscrew" || k === "slink" ? 1.15 : 1
+    k === "tube" ? 0.72 : k === "romp" || k === "corkscrew" || k === "slink" ? 1.28 : k === "steal" || k === "puff" ? 1.18 : 1.08
   );
   let total = 0;
   for (let i = 0; i < weights.length; i++) total += weights[i];
@@ -188,39 +186,39 @@ export function dookPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.dook));
   if (u < 0.16) {
     const s = u / 0.16;
-    return { lift: s * 8.5, rot: -s * 10, dx: 0, anim: "talk" as TrickAnim };
+    return { lift: s * 10.2, rot: -s * 12, dx: 0, anim: "talk" as TrickAnim };
   }
   if (u < 0.78) {
     return {
-      lift: 8.5 + Math.abs(Math.sin(t * 11)) * 3.8,
-      rot: -10 + Math.sin(t * 14) * 8,
-      dx: Math.sin(t * 10) * 1.6,
+      lift: 10.2 + Math.abs(Math.sin(t * 11)) * 4.6,
+      rot: -12 + Math.sin(t * 14) * 9.6,
+      dx: Math.sin(t * 10) * 1.9,
       anim: "talk" as TrickAnim,
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 8.5 * (1 - s), rot: -10 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  return { lift: 10.2 * (1 - s), rot: -12 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function kissPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.kiss));
   if (u < 0.86) {
     return {
-      lift: Math.sin(u * Math.PI) * 5.5,
-      rot: Math.sin(u * Math.PI * 4) * 10,
-      dx: Math.sin(u * Math.PI * 2) * 2.4,
+      lift: Math.sin(u * Math.PI) * 6.6,
+      rot: Math.sin(u * Math.PI * 4) * 12,
+      dx: Math.sin(u * Math.PI * 2) * 2.9,
       anim: "sit" as TrickAnim,
     };
   }
-  return { lift: 0, rot: Math.sin(((u - 0.86) / 0.14) * Math.PI) * 3, dx: 0, anim: "idle" as TrickAnim };
+  return { lift: 0, rot: Math.sin(((u - 0.86) / 0.14) * Math.PI) * 3.6, dx: 0, anim: "idle" as TrickAnim };
 }
 
 export function chucklePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.chuckle));
   return {
-    lift: Math.abs(Math.sin(t * 11)) * 5.8,
-    rot: Math.sin(t * 13) * 14,
-    dx: Math.sin(t * 8) * 2.2,
+    lift: Math.abs(Math.sin(t * 11)) * 7.0,
+    rot: Math.sin(t * 13) * 16.8,
+    dx: Math.sin(t * 8) * 2.6,
     anim: "play" as TrickAnim,
   };
 }
@@ -289,16 +287,16 @@ export function tubePose(t: number) {
   const soft = Math.sin(t * 1.7);
   const breath = Math.sin(t * 2.8);
   return {
-    lift: -4.2 + soft * 1.5 + Math.abs(breath) * 1.0,
-    rot: 16 + breath * 6 + Math.sin(t * 5.1) * 4,
+    lift: -5.0 + soft * 1.8 + Math.abs(breath) * 1.2,
+    rot: 19.2 + breath * 7.2 + Math.sin(t * 5.1) * 4.8,
   };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
   return {
-    lift: -4.2 * (1 - Math.sin(u * Math.PI * 0.5)) + Math.sin(u * Math.PI) * 6,
-    rot: 16 * (1 - u),
+    lift: -5.0 * (1 - Math.sin(u * Math.PI * 0.5)) + Math.sin(u * Math.PI) * 7.2,
+    rot: 19.2 * (1 - u),
   };
 }
 
@@ -306,7 +304,7 @@ export function rompPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.romp));
   if (u < 0.1) {
     const s = smoothstep(u / 0.1);
-    return { x: fromX, lift: s * 5, rot: -s * 18, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 6, rot: -s * 21.6, anim: "sit" as TrickAnim };
   }
   if (u < 0.88) {
     const s = (u - 0.1) / 0.78;
@@ -314,16 +312,16 @@ export function rompPose(t: number, fromX: number, facing: 1 | -1) {
     const side = Math.sin(s * Math.PI * 3);
     return {
       x: fromX + facing * (16 * smoothstep(s) + side * 6),
-      lift: 5 + Math.abs(hop) * 12,
-      rot: -18 + hop * 26 + side * 12,
+      lift: 6 + Math.abs(hop) * 14.4,
+      rot: -21.6 + hop * 31.2 + side * 14.4,
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
   return {
     x: fromX + facing * 16,
-    lift: 5 * (1 - s),
-    rot: -10 * (1 - s),
+    lift: 6 * (1 - s),
+    rot: -12 * (1 - s),
     anim: "sit" as TrickAnim,
   };
 }
@@ -332,14 +330,14 @@ export function stealPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.steal));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: -s * 3.5, rot: s * 8 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: -s * 4.2, rot: s * 9.6 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.5) {
     const s = smoothstep((u - 0.12) / 0.38);
     return {
       x: fromX + facing * 12 * s,
-      lift: -3.5 + Math.abs(Math.sin(s * Math.PI * 3)) * 4,
-      rot: facing * (8 + Math.sin(s * Math.PI * 4) * 7),
+      lift: -4.2 + Math.abs(Math.sin(s * Math.PI * 3)) * 4.8,
+      rot: facing * (9.6 + Math.sin(s * Math.PI * 4) * 8.4),
       anim: "walk" as TrickAnim,
     };
   }
@@ -348,16 +346,16 @@ export function stealPose(t: number, fromX: number, facing: 1 | -1) {
     const dash = Math.sin(s * Math.PI * 3);
     return {
       x: fromX + facing * (12 + 18 * smoothstep(s)),
-      lift: 3 + Math.abs(dash) * 6,
-      rot: facing * (6 + dash * 14),
+      lift: 3.6 + Math.abs(dash) * 7.2,
+      rot: facing * (7.2 + dash * 16.8),
       anim: "walk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
   return {
     x: fromX + facing * 30,
-    lift: 3 * (1 - s),
-    rot: facing * 4 * (1 - s),
+    lift: 3.6 * (1 - s),
+    rot: facing * 4.8 * (1 - s),
     anim: "sit" as TrickAnim,
   };
 }
@@ -366,22 +364,22 @@ export function puffPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.puff));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 4.5, rot: s * 16 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 5.4, rot: s * 19.2 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.78) {
     const s = (u - 0.16) / 0.62;
     return {
       x: fromX + facing * Math.sin(s * Math.PI) * 2.5,
-      lift: 4.5 + Math.sin(s * Math.PI) * 3.5,
-      rot: facing * (16 + Math.sin(s * Math.PI * 3) * 12),
+      lift: 5.4 + Math.sin(s * Math.PI) * 4.2,
+      rot: facing * (19.2 + Math.sin(s * Math.PI * 3) * 14.4),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 4.5 * (1 - s),
-    rot: facing * 8 * (1 - s),
+    lift: 5.4 * (1 - s),
+    rot: facing * 9.6 * (1 - s),
     anim: "sit" as TrickAnim,
   };
 }
@@ -392,24 +390,24 @@ export function noodlePose(t: number, fromX: number, facing: 1 | -1) {
     const s = smoothstep(u / 0.12);
     return {
       x: fromX,
-      lift: s * 3.5,
-      rot: -s * 26,
+      lift: s * 4.2,
+      rot: -s * 31.2,
       anim: "play" as TrickAnim,
     };
   }
   if (u < 0.86) {
     return {
       x: fromX + facing * Math.sin(t * 7) * 5.5,
-      lift: 3.5 + Math.abs(Math.sin(t * 9)) * 5.5,
-      rot: -26 + Math.sin(t * 8) * 32,
+      lift: 4.2 + Math.abs(Math.sin(t * 9)) * 6.6,
+      rot: -31.2 + Math.sin(t * 8) * 38.4,
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX,
-    lift: 3.5 * (1 - s),
-    rot: -26 * (1 - s),
+    lift: 4.2 * (1 - s),
+    rot: -31.2 * (1 - s),
     anim: "sit" as TrickAnim,
   };
 }
@@ -418,7 +416,7 @@ export function corkscrewPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.corkscrew));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 6, rot: -s * 20 * facing, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 7.2, rot: -s * 24 * facing, anim: "play" as TrickAnim };
   }
   if (u < 0.88) {
     const s = (u - 0.12) / 0.76;
@@ -426,16 +424,16 @@ export function corkscrewPose(t: number, fromX: number, facing: 1 | -1) {
     const hop = Math.abs(Math.sin(s * Math.PI * 4));
     return {
       x: fromX + facing * (Math.sin(s * Math.PI * 3) * 8),
-      lift: 6 + hop * 14,
-      rot: facing * (-20 + spin * 36),
+      lift: 7.2 + hop * 16.8,
+      rot: facing * (-24 + spin * 43.2),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
   return {
     x: fromX,
-    lift: 6 * (1 - s),
-    rot: facing * -10 * (1 - s),
+    lift: 7.2 * (1 - s),
+    rot: facing * -12 * (1 - s),
     anim: "sit" as TrickAnim,
   };
 }
@@ -444,23 +442,23 @@ export function slinkPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.slink));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: -s * 5.5, rot: s * 10 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: -s * 6.6, rot: s * 12 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.86) {
     const s = (u - 0.14) / 0.72;
     const creep = Math.sin(s * Math.PI * 5);
     return {
       x: fromX + facing * (22 * smoothstep(s)),
-      lift: -5.5 + Math.abs(creep) * 2.8,
-      rot: facing * (10 + creep * 8),
+      lift: -6.6 + Math.abs(creep) * 3.4,
+      rot: facing * (12 + creep * 9.6),
       anim: "walk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX + facing * 22,
-    lift: -5.5 * (1 - s),
-    rot: facing * 6 * (1 - s),
+    lift: -6.6 * (1 - s),
+    rot: facing * 7.2 * (1 - s),
     anim: "sit" as TrickAnim,
   };
 }
