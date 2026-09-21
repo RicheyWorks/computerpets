@@ -2179,7 +2179,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Spin Rui-dense ultra (PALMELLA_HOLD=11.2); Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; Drake now Rue-dense; Vee now Rue-dense; next leftover Drum / pileated", () => {
+test("notes: Spin Rui-dense ultra (PALMELLA_HOLD=11.2); Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; Drake now Rue-dense; Vee now Rue-dense; Drum now Rue-dense; next leftover Sip / hummingbird", () => {
   assert.equal(T.TRICK_KEY, "chlamydomonas");
   assert.deepEqual([...T.TRICKS], ["biflagellate", "cupplast", "stigma", "pyrenoid", "palmella", "cellwall", "wetplate"]);
   assert.deepEqual([...T.HAPPY], ["reinhardtii", "moewusii", "eugametos"]);
