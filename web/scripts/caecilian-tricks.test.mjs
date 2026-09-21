@@ -2085,7 +2085,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Slip Rui-dense ultra (GYMNOPHION_HOLD=11.2); Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; next leftover Rose / haloarchaea", () => {
+test("notes: Slip Rui-dense ultra (GYMNOPHION_HOLD=11.2); Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; next leftover Soot / crow", () => {
   assert.equal(T.TRICK_KEY, "caecilian");
   assert.deepEqual([...T.TRICKS], ["annulate", "fossorial", "tentacular", "hydrostatic", "gymnophion", "stegos", "dualjaw"]);
   assert.deepEqual([...T.HAPPY], ["annular", "silted", "glossed"]);
@@ -2171,9 +2171,9 @@ test("notes: Slip Rui-dense ultra (GYMNOPHION_HOLD=11.2); Pinch now Rue-dense; W
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next leftover (do not implement): Rose / haloarchaea.
-  assert.equal("haloarchaea", "haloarchaea");
-  assert.equal("Rose", "Rose");
+  // Recommend next leftover (do not implement): Soot / crow.
+  assert.equal("crow", "crow");
+  assert.equal("Soot", "Soot");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("annulate"), false);
   assert.equal(T.TRICKS.includes("maculate"), false);

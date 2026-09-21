@@ -2145,7 +2145,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Reach Rui-dense ultra (PROTEUS_HOLD=11.2); Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; next leftover Rose / haloarchaea", () => {
+test("notes: Reach Rui-dense ultra (PROTEUS_HOLD=11.2); Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; next leftover Soot / crow", () => {
   assert.equal(T.TRICK_KEY, "amoeba");
   assert.deepEqual([...T.TRICKS], ["pseudopod", "ectoplasm", "endoplasm", "foodcup", "proteus", "uroid", "streaming"]);
   assert.deepEqual([...T.HAPPY], ["chaos", "discoides", "dubia"]);
@@ -2324,9 +2324,9 @@ test("notes: Reach Rui-dense ultra (PROTEUS_HOLD=11.2); Spot now Rue-dense; Orb 
   assert.equal(T.TRICKS.includes("dart"), false);
   assert.equal(Goldfish.TRICKS.includes("flare"), true);
   assert.equal(T.TRICKS.includes("flare"), false);
-  // Recommend next leftover (do not implement): Rose / haloarchaea.
-  assert.equal("haloarchaea", "haloarchaea");
-  assert.equal("Rose", "Rose");
+  // Recommend next leftover (do not implement): Soot / crow.
+  assert.equal("crow", "crow");
+  assert.equal("Soot", "Soot");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("chelate"), false);
   assert.equal(Salamander.TRICKS.includes("pseudopod"), false);
