@@ -643,7 +643,7 @@ globalThis.PetWaterLilyTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Disk Rui-dense ultra (SHEEN_HOLD=11.2); Wax now Rue-dense; Reed now Rue-dense; Pebble now Rue-dense; Eft now Rue-dense; Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Soot now Rue-dense; next leftover Wedge / raven", () => {
+test("notes: Disk Rui-dense ultra (SHEEN_HOLD=11.2); Wax now Rue-dense; Reed now Rue-dense; Pebble now Rue-dense; Eft now Rue-dense; Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Wedge now Rue-dense; next leftover Heart / barn_owl", () => {
   assert.equal(T.TRICK_KEY, "water_lily");
   assert.equal(T.wantsThankYou("disk"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);

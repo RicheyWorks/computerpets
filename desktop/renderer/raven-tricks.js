@@ -1,11 +1,11 @@
-/** Wedge ground tricks while idle — ultra-polish pass. House neighborly Corvidae Common raven desk life — dihedral / billtap / tumble / cronk / invite / toeing / hackles personality (dihedral soaring wing-set posture without naming soar or glide or thermal or kettle or loft or hop or walk or strut or fan, billtap bill-tap stow gesture without naming cache or croak or caw or probe or dig or peck or bill or fossick, tumble blotter roll-play without naming barrel or roll or soar or aerobat or looping or hopwalk, cronk throat kronk gesture without naming croak or caw or call or cronk-cry or vocal, invite play-bow without naming play or bow-cry or hop or strut, toeing foot-object manipulate without naming grasp or cache or probe or dig or peck or claw, long hackles throat-ruff flare on the high rafter — never named wait or wake or still or hide or cover or croak or caw or cache or hop or walk or strut or fan or preen or probe or dig or peck or bill or roost or berry or juggle or peer or skip or quote or crack or flash or sidle or bobble or mimic or dangle or huddle or toboggan or waddle or porpoise or trumpet or hopwalk or monocle or fossick or anting or scrutinize or glean or corvid or spiggin or zigzag or spinous or fanning or gasterosteid or acetabulum or prostomium or looping or undulatory or hirudinean or lantern or jstroke or semaphore or elytra or photinus or plumose or lunule or silk or stream or actias; window-play CROAK owns croak; window-play CACHE owns cache; window-play SOAR owns soar; window-play BARREL owns barrel; Soot owns hopwalk/monocle/fossick/anting/scrutinize/glean/corvid; Budgie owns preen/sidle/bobble/mimic/dangle; Parrot owns quote/strut/fan/crack/flash; Toucan owns roost/berry/juggle/peer/skip; Penguin owns huddle/toboggan/waddle/porpoise/trumpet; Prickle owns spiggin/zigzag/spinous/fanning/gasterosteid/nuptial/pelvic; Latch owns acetabulum/prostomium/looping/undulatory/hirudinean/botryoidal/auricle; Ghost owns luna moth life; Spark owns firefly life; guest slug Wedge / key raven only for isKey matching — accept "raven" and "wedge"; do NOT name a trick "raven" or "wedge" or "croak" or "caw" or "cache" or "soar" or "barrel" or "hop" or "preen" or "probe" or "fan" or "strut" or "roost" or "hopwalk" or "monocle" or "fossick" or "anting" or "scrutinize" or "glean" or "corvid") — not Quill macaw life, not Echo budgie life, not Soot crow life, not Prickle stickleback life, not Latch leech life, not Ghost luna, not Spark firefly. Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk. dihedral wing-set on the blotter without naming soar, billtap stow-tap without naming cache, tumble roll-play without naming barrel, cronk throat gesture without naming croak, invite play-bow on the blotter, toeing foot-work without naming grasp, hackles long Corvus corax metabolic perch on the high rafter with principalis / sinuatus / cryptoleucus cousins in the thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play CROAK do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop/web raven-tricks. Window-play CROAK unchanged — never names croak. Window-play CACHE/SOAR/BARREL unchanged. True Corvidae Common raven desk life only — distinct from Quill macaw, Echo budgie, Soot crow, Prickle stickleback, Latch leech, Ghost luna, and Spark firefly. Heart owns the next seat. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites. */
+/** Wedge ground tricks while idle — ultra-polish pass. House neighborly Corvidae Common raven desk life — dihedral / billtap / tumble / cronk / invite / toeing / hackles personality (dihedral soaring wing-set posture without naming soar or glide or thermal or kettle or loft or hop or walk or strut or fan, billtap bill-tap stow gesture without naming cache or croak or caw or probe or dig or peck or bill or fossick, tumble blotter roll-play without naming barrel or roll or soar or aerobat or looping or hopwalk, cronk throat kronk gesture without naming croak or caw or call or cronk-cry or vocal, invite play-bow without naming play or bow-cry or hop or strut, toeing foot-object manipulate without naming grasp or cache or probe or dig or peck or claw, long hackles throat-ruff flare on the high rafter — never named wait or wake or still or hide or cover or croak or caw or cache or hop or walk or strut or fan or preen or probe or dig or peck or bill or roost or berry or juggle or peer or skip or quote or crack or flash or sidle or bobble or mimic or dangle or huddle or toboggan or waddle or porpoise or trumpet or hopwalk or monocle or fossick or anting or scrutinize or glean or corvid or spiggin or zigzag or spinous or fanning or gasterosteid or acetabulum or prostomium or looping or undulatory or hirudinean or lantern or jstroke or semaphore or elytra or photinus or plumose or lunule or silk or stream or actias; window-play CROAK owns croak; window-play CACHE owns cache; window-play SOAR owns soar; window-play BARREL owns barrel; Soot owns hopwalk/monocle/fossick/anting/scrutinize/glean/corvid; Budgie owns preen/sidle/bobble/mimic/dangle; Parrot owns quote/strut/fan/crack/flash; Toucan owns roost/berry/juggle/peer/skip; Penguin owns huddle/toboggan/waddle/porpoise/trumpet; Prickle owns spiggin/zigzag/spinous/fanning/gasterosteid/nuptial/pelvic; Latch owns acetabulum/prostomium/looping/undulatory/hirudinean/botryoidal/auricle; Ghost owns luna moth life; Spark owns firefly life; guest slug Wedge / key raven only for isKey matching — accept "raven" and "wedge"; do NOT name a trick "raven" or "wedge" or "croak" or "caw" or "cache" or "soar" or "barrel" or "hop" or "preen" or "probe" or "fan" or "strut" or "roost" or "hopwalk" or "monocle" or "fossick" or "anting" or "scrutinize" or "glean" or "corvid") — not Quill macaw life, not Echo budgie life, not Soot crow life, not Prickle stickleback life, not Latch leech life, not Ghost luna, not Spark firefly. Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk. dihedral wing-set on the blotter without naming soar, billtap stow-tap without naming cache, tumble roll-play without naming barrel, cronk throat gesture without naming croak, invite play-bow on the blotter, toeing foot-work without naming grasp, hackles long Corvus corax metabolic perch on the high rafter with principalis / sinuatus / cryptoleucus cousins in the thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play CROAK do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop/web raven-tricks. Window-play CROAK unchanged — never names croak. Window-play CACHE/SOAR/BARREL unchanged. True Corvidae Common raven desk life only — distinct from Quill macaw, Echo budgie, Soot crow, Prickle stickleback, Latch leech, Ghost luna, and Spark firefly. Heart owns the next leftover. No cry inventing — thank-yous are silent desk motion only; prefersHouseCry via raven.wav. Amplitudes raised toward Rui richness; denser waits/weights (HACKLES_HOLD=11.2 RELEASE_S=1.18). Ethogram softs + freeze — never names raven/wedge/croak/caw/cache as bare ethogram-only trick kinds. Window-play CROAK unchanged. Next leftover Heart / barn_owl. Catalog 221. Never retouch Rui sprites. */
 (function (root) {
   const TRICK_KEY = "raven";
   const TRICKS = ["dihedral", "billtap", "tumble", "cronk", "invite", "toeing", "hackles"];
   const HAPPY = ["principalis", "sinuatus", "cryptoleucus"];
   const HAPPY_DUR = { principalis: 1.66, sinuatus: 1.79, cryptoleucus: 1.71 };
-  const HACKLES_HOLD = 15.4;
-  const RELEASE_S = 1.12;
+  const HACKLES_HOLD = 11.2;
+  const RELEASE_S = 1.18;
   const DUR = {
     hackles: HACKLES_HOLD + RELEASE_S,
     dihedral: 2.48,
@@ -44,12 +44,9 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "hackles") return 44 + roll * 30;
-    if (kind === "cronk") return 13 + roll * 9;
-    if (kind === "tumble" || kind === "invite") return 12 + roll * 9;
-    if (kind === "dihedral" || kind === "toeing") return 11 + roll * 8;
-    if (kind === "billtap") return 11 + roll * 8;
-    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+    if (kind === "hackles") return 40 + roll * 26;
+    if (kind === "dihedral" || kind === "billtap" || kind === "tumble" || kind === "cronk" || kind === "invite" || kind === "toeing") return 12.8 + roll * 9.4;
+    return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
 
   function pickTrick(rand, musicOn, lastKind) {
@@ -58,7 +55,7 @@
     const pool = TRICKS.filter((k) => k !== lastKind);
     const list = pool.length ? pool : TRICKS.slice();
     // weight hackles lower so short acts dominate (Rui-dense feel)
-    const weights = list.map((k) => (k === "hackles" ? 0.55 : k === "invite" || k === "cronk" ? 1.15 : 1));
+    const weights = list.map((k) => (k === "hackles" ? 0.72 : k === "invite" || k === "cronk" ? 1.28 : k === "dihedral" || k === "tumble" || k === "toeing" ? 1.18 : 1.08));
     let total = 0;
     for (let i = 0; i < weights.length; i++) total += weights[i];
     let r = roll * total;
@@ -132,45 +129,45 @@
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.principalis));
     if (u < 0.15) {
       const s = u / 0.15;
-      return { lift: s * 7, rot: s * 11, dx: 0, anim: "sit" };
+      return { lift: s * 8.4, rot: s * 13.2, dx: 0, anim: "sit" };
     }
     if (u < 0.80) {
       const flash = Math.sin(t * 6.9) + 0.30 * Math.sin(t * 13.8);
       return {
-        lift: 7 + Math.abs(flash) * 5,
-        rot: 11 + flash * 9,
-        dx: flash * 2.4,
+        lift: 8.4 + Math.abs(flash) * 6,
+        rot: 13.2 + flash * 10.8,
+        dx: flash * 2.88,
         anim: "sit",
       };
     }
     const s = (u - 0.80) / 0.20;
-    return { lift: 4 * (1 - s), rot: 4 * (1 - s), dx: 0, anim: "idle" };
+    return { lift: 4.8 * (1 - s), rot: 4.8 * (1 - s), dx: 0, anim: "idle" };
   }
 
   function sinuatusPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.sinuatus));
     if (u < 0.13) {
       const s = u / 0.13;
-      return { lift: s * 15, rot: s * -13, dx: s * 3.2, anim: "play" };
+      return { lift: s * 18, rot: s * -15.6, dx: s * 3.84, anim: "play" };
     }
     if (u < 0.84) {
       const wriggle = Math.sin(t * 4.9) + 0.22 * Math.sin(t * 8.7);
       return {
-        lift: 13 + Math.abs(wriggle) * 10,
-        rot: -11 + wriggle * 15,
-        dx: wriggle * 4.2,
+        lift: 15.6 + Math.abs(wriggle) * 12,
+        rot: -13.2 + wriggle * 18,
+        dx: wriggle * 5.04,
         anim: "play",
       };
     }
     const s = (u - 0.84) / 0.16;
-    return { lift: 5 * (1 - s), rot: -4 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: 6 * (1 - s), rot: -4.8 * (1 - s), dx: 0, anim: "sit" };
   }
 
   function cryptoleucusPose(t) {
     return {
-      lift: 3 + Math.abs(Math.sin(t * 4.0)) * 8,
-      rot: Math.sin(t * 3.4) * 9,
-      dx: Math.sin(t * 2.6) * 3.2,
+      lift: 3.6 + Math.abs(Math.sin(t * 4.0)) * 9.6,
+      rot: Math.sin(t * 3.4) * 10.8,
+      dx: Math.sin(t * 2.6) * 3.84,
       anim: "sit",
     };
   }
@@ -232,14 +229,14 @@
     const breath = Math.sin(t * 0.55) + 0.18 * Math.sin(t * 1.4);
     const soft = Math.abs(Math.sin(t * 0.9));
     return {
-      lift: 2 + soft * 5 + Math.abs(breath) * 1.8,
-      rot: -2.5 + breath * 4.5,
+      lift: 2.4 + soft * 6 + Math.abs(breath) * 2.16,
+      rot: -3 + breath * 5.4,
     };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 3 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -3 * (1 - u) };
+    return { lift: 3.6 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -3.6 * (1 - u) };
   }
 
   function dihedralPose(t, fromX, facing) {
@@ -247,24 +244,24 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.10) {
       const s = smoothstep(u / 0.10);
-      return { x: fromX, lift: s * 10, rot: s * -8 * face, anim: "sit" };
+      return { x: fromX, lift: s * 12, rot: s * -9.6 * face, anim: "sit" };
     }
     if (u < 0.88) {
       const s = (u - 0.10) / 0.78;
       const breath = Math.sin(s * Math.PI * 1.6);
       const settle = Math.abs(Math.sin(s * Math.PI * 2.4));
       return {
-        x: fromX + face * (6 * s + breath * 2.4),
-        lift: 8 + settle * 8,
-        rot: (-8 + breath * 10) * face,
+        x: fromX + face * (6 * s + breath * 2.88),
+        lift: 9.6 + settle * 9.6,
+        rot: (-9.6 + breath * 12) * face,
         anim: "sit",
       };
     }
     const s = smoothstep((u - 0.88) / 0.12);
     return {
       x: fromX + face * 6 * (1 - s),
-      lift: 4 * (1 - s),
-      rot: -3 * (1 - s) * face,
+      lift: 4.8 * (1 - s),
+      rot: -3.6 * (1 - s) * face,
       anim: "idle",
     };
   }
@@ -274,23 +271,23 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 4, rot: s * -16 * face, anim: "sit" };
+      return { x: fromX, lift: s * 4.8, rot: s * -19.2 * face, anim: "sit" };
     }
     if (u < 0.78) {
       const tap = Math.sin(t * 8.4) + 0.22 * Math.sin(t * 16.8);
       const bite = tap > 0.4 ? 1.0 : tap < -0.4 ? -0.6 : tap * 0.45;
       return {
-        x: fromX + face * bite * 3.4,
-        lift: 3 + Math.abs(tap) * 7,
-        rot: (-16 + bite * 10) * face,
+        x: fromX + face * bite * 4.08,
+        lift: 3.6 + Math.abs(tap) * 8.4,
+        rot: (-19.2 + bite * 12) * face,
         anim: "sit",
       };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
       x: fromX,
-      lift: 2 * (1 - s),
-      rot: -4 * (1 - s) * face,
+      lift: 2.4 * (1 - s),
+      rot: -4.8 * (1 - s) * face,
       anim: "idle",
     };
   }
@@ -300,22 +297,22 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 12, rot: s * -14 * face, anim: "play" };
+      return { x: fromX, lift: s * 14.4, rot: s * -16.8 * face, anim: "play" };
     }
     if (u < 0.84) {
       const spin = Math.sin(t * 4.2) + 0.28 * Math.sin(t * 8.4);
       return {
-        x: fromX + face * spin * 7,
-        lift: 10 + Math.abs(spin) * 12,
-        rot: (-12 + spin * 18) * face,
+        x: fromX + face * spin * 8.4,
+        lift: 12 + Math.abs(spin) * 14.4,
+        rot: (-14.4 + spin * 21.6) * face,
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.84) / 0.16);
     return {
       x: fromX + face * 2 * (1 - s),
-      lift: 4 * (1 - s),
-      rot: -4 * (1 - s) * face,
+      lift: 4.8 * (1 - s),
+      rot: -4.8 * (1 - s) * face,
       anim: "idle",
     };
   }
@@ -325,19 +322,19 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.10) {
       const s = smoothstep(u / 0.10);
-      return { x: fromX, lift: s * 6, rot: s * 14 * face, anim: "talk" };
+      return { x: fromX, lift: s * 7.2, rot: s * 16.8 * face, anim: "talk" };
     }
     if (u < 0.88) {
       const pulse = Math.sin(t * 3.6) + 0.26 * Math.sin(t * 7.2);
       return {
-        x: fromX + face * pulse * 2.6,
-        lift: 5 + Math.abs(pulse) * 5,
-        rot: (14 + pulse * 7) * face,
+        x: fromX + face * pulse * 3.12,
+        lift: 6 + Math.abs(pulse) * 6,
+        rot: (16.8 + pulse * 8.4) * face,
         anim: "talk",
       };
     }
     const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX, lift: 2 * (1 - s), rot: 4 * (1 - s) * face, anim: "idle" };
+    return { x: fromX, lift: 2.4 * (1 - s), rot: 4.8 * (1 - s) * face, anim: "idle" };
   }
 
   function invitePose(t, fromX, facing) {
@@ -345,15 +342,15 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 4, rot: s * 18 * face, anim: "play" };
+      return { x: fromX, lift: s * 4.8, rot: s * 21.6 * face, anim: "play" };
     }
     if (u < 0.55) {
       const s = (u - 0.12) / 0.43;
       const dip = Math.sin(s * Math.PI);
       return {
-        x: fromX + face * dip * 3,
-        lift: 3 + dip * 6,
-        rot: (18 + dip * 6) * face,
+        x: fromX + face * dip * 3.6,
+        lift: 3.6 + dip * 7.2,
+        rot: (21.6 + dip * 7.2) * face,
         anim: "play",
       };
     }
@@ -361,14 +358,14 @@
       const s = (u - 0.55) / 0.33;
       const bob = Math.sin(s * Math.PI * 2.4);
       return {
-        x: fromX + face * bob * 2,
-        lift: 5 + Math.abs(bob) * 4,
-        rot: (12 + bob * 5) * face,
+        x: fromX + face * bob * 2.4,
+        lift: 6 + Math.abs(bob) * 4.8,
+        rot: (14.4 + bob * 6) * face,
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX, lift: 2 * (1 - s), rot: 4 * (1 - s) * face, anim: "idle" };
+    return { x: fromX, lift: 2.4 * (1 - s), rot: 4.8 * (1 - s) * face, anim: "idle" };
   }
 
   function toeingPose(t, fromX, facing) {
@@ -376,20 +373,20 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.10) {
       const s = smoothstep(u / 0.10);
-      return { x: fromX, lift: s * 8, rot: s * -10 * face, anim: "sit" };
+      return { x: fromX, lift: s * 9.6, rot: s * -12 * face, anim: "sit" };
     }
     if (u < 0.88) {
       const work = Math.sin(t * 5.6) + 0.28 * Math.sin(t * 11.2);
       const hop = Math.abs(Math.sin(t * 3.1));
       return {
-        x: fromX + face * (work * 4 + hop * 2),
-        lift: 6 + hop * 10 + Math.abs(work) * 3,
-        rot: (-10 + work * 12) * face,
+        x: fromX + face * (work * 4.8 + hop * 2.4),
+        lift: 7.2 + hop * 12 + Math.abs(work) * 3.6,
+        rot: (-12 + work * 14.4) * face,
         anim: "sit",
       };
     }
     const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX, lift: 3 * (1 - s), rot: -3 * (1 - s) * face, anim: "idle" };
+    return { x: fromX, lift: 3.6 * (1 - s), rot: -3.6 * (1 - s) * face, anim: "idle" };
   }
 
   function stepTrick(trick, dt, flags) {
