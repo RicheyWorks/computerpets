@@ -643,7 +643,7 @@ globalThis.PetWaterLilyTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Disk Rui-dense ultra (SHEEN_HOLD=11.2); Wax now Rue-dense; Reed now Rue-dense; Pebble now Rue-dense; next leftover Eft / newt", () => {
+test("notes: Disk Rui-dense ultra (SHEEN_HOLD=11.2); Wax now Rue-dense; Reed now Rue-dense; Pebble now Rue-dense; Eft now Rue-dense; next leftover Dapple / salamander", () => {
   assert.equal(T.TRICK_KEY, "water_lily");
   assert.equal(T.wantsThankYou("disk"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -734,8 +734,8 @@ test("notes: Disk Rui-dense ultra (SHEEN_HOLD=11.2); Wax now Rue-dense; Reed now
   assert.equal(OverlayGround.wantsThankYou("mast"), true);
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...OverlayOak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
-  assert.ok(OverlayGround.tricksFor("newt") == null);
-  assert.equal(OverlayGround.wantsThankYou("newt"), false);
-  assert.ok(OverlayGround.tricksFor("eft") == null);
-  assert.equal(OverlayGround.wantsThankYou("eft"), false);
+  assert.ok(OverlayGround.tricksFor("salamander") == null);
+  assert.equal(OverlayGround.wantsThankYou("salamander"), false);
+  assert.ok(OverlayGround.tricksFor("dapple") == null);
+  assert.equal(OverlayGround.wantsThankYou("dapple"), false);
 });

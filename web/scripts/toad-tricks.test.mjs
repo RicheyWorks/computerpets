@@ -1957,7 +1957,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Pebble Rui-dense ultra (BUFONID_HOLD=11.2); next leftover Eft / newt", () => {
+test("notes: Pebble Rui-dense ultra (BUFONID_HOLD=11.2); Eft now Rue-dense; next leftover Dapple / salamander", () => {
   assert.equal(T.TRICK_KEY, "toad");
   assert.deepEqual([...T.TRICKS], ["verruca", "burrow", "parotoid", "tubercle", "bufonid", "unken", "cranial"]);
   assert.deepEqual([...T.HAPPY], ["loam", "knurl", "plump"]);
@@ -2027,9 +2027,9 @@ test("notes: Pebble Rui-dense ultra (BUFONID_HOLD=11.2); next leftover Eft / new
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next leftover (do not implement): Eft / newt.
-  assert.equal("newt", "newt");
-  assert.equal("Eft", "Eft");
+  // Recommend next leftover (do not implement): Dapple / salamander.
+  assert.equal("salamander", "salamander");
+  assert.equal("Dapple", "Dapple");
 });
 
 
