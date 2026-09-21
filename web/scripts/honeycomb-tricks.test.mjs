@@ -935,7 +935,7 @@ globalThis.PetHoneycombTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Wax Rui-dense ultra (TESSERA_HOLD=11.2); next leftover Reed / frog", () => {
+test("notes: Wax Rui-dense ultra (TESSERA_HOLD=11.2); Reed now Rue-dense; next leftover Pebble / toad", () => {
   assert.equal(T.TRICK_KEY, "honeycomb");
   assert.equal(T.wantsThankYou("wax"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);

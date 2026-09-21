@@ -1291,7 +1291,7 @@ test("gular/nictitate/tympanum/iliac/lentic/toepad/webbing are anura-true, not c
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -1926,10 +1926,14 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(T.HAPPY.includes("velvet"), false);
   assert.equal(T.HAPPY.includes("meadow"), false);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
+  assert.equal(T.LENTIC_HOLD, Overlay.LENTIC_HOLD);
+  assert.equal(T.LENTIC_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "lentic") > 39);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Reed ultra idle-life done; next house-order ultra is Pinch / crayfish", () => {
+test("notes: Reed Rui-dense ultra (LENTIC_HOLD=11.2); next leftover Pebble / toad", () => {
   assert.equal(T.TRICK_KEY, "frog");
   assert.deepEqual([...T.TRICKS], ["gular", "nictitate", "tympanum", "iliac", "lentic", "toepad", "webbing"]);
   assert.deepEqual([...T.HAPPY], ["chorus", "rivulet", "spring"]);
@@ -1991,9 +1995,9 @@ test("notes: Reed ultra idle-life done; next house-order ultra is Pinch / crayfi
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next house-order ultra (do not implement): Pinch / crayfish.
-  assert.equal("crayfish", "crayfish");
-  assert.equal("Pinch", "Pinch");
+  // Recommend next leftover (do not implement): Pebble / toad.
+  assert.equal("toad", "toad");
+  assert.equal("Pebble", "Pebble");
 });
 
 
