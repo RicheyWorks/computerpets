@@ -935,7 +935,7 @@ globalThis.PetHoneycombTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Wax Rui-dense ultra (TESSERA_HOLD=11.2); Reed now Rue-dense; Pebble now Rue-dense; Eft now Rue-dense; Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; next leftover Bell / stentor", () => {
+test("notes: Wax Rui-dense ultra (TESSERA_HOLD=11.2); Reed now Rue-dense; Pebble now Rue-dense; Eft now Rue-dense; Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; next leftover Rod / coli", () => {
   assert.equal(T.TRICK_KEY, "honeycomb");
   assert.equal(T.wantsThankYou("wax"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
