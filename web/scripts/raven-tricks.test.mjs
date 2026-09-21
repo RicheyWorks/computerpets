@@ -1208,6 +1208,11 @@ test("dihedral/billtap/tumble/cronk/invite/toeing/hackles are Corvus-corax-true,
   const doneBole = T.stepTrick(bole, T.DUR.hackles + 0.1, ground);
   assert.equal(doneBole.phase, "done");
   assert.ok(T.nextTrickWait(true, 0, "hackles") > T.nextTrickWait(true, 0, "cronk"));
+  assert.equal(T.HACKLES_HOLD, Overlay.HACKLES_HOLD);
+  assert.equal(T.HACKLES_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "hackles") > 39);
+  assert.ok(T.HACKLES_HOLD <= 12);
   const acorn = T.beginTrick("dihedral", 80, 1);
   assert.equal(acorn.anim, "sit");
   const acornMid = T.stepTrick(acorn, 0.5, ground);
@@ -2131,7 +2136,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Wedge idle-life done; next house-order guest still lacking tricks is Heart / barn_owl", () => {
+test("notes: Wedge Rui-dense ultra (HACKLES_HOLD=11.2); next leftover Heart / barn_owl", () => {
 
   assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Crow.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
@@ -2318,7 +2323,7 @@ test("notes: Wedge idle-life done; next house-order guest still lacking tricks i
   assert.equal(T.TRICKS.includes("dart"), false);
   assert.equal(Goldfish.TRICKS.includes("flare"), true);
   assert.equal(T.TRICKS.includes("flare"), false);
-  // Recommend next house-order guest still lacking idle tricks (do not implement): Heart / barn_owl.
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Heart / barn_owl.
   assert.equal("raven", "raven");
   assert.equal("Wedge", "Wedge");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid"]);
