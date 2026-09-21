@@ -87,6 +87,11 @@ test("huddle/toboggan/waddle/porpoise/trumpet/rockhop/ecstatic are house-penguin
   assert.equal(held.anim, "sit");
   assert.ok(held.rot !== 0 || held.lift > 0);
   const release = T.stepTrick(huddle, T.HUDDLE_HOLD + 0.2, ground);
+  assert.equal(T.HUDDLE_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.equal(T.HUDDLE_HOLD, Overlay.HUDDLE_HOLD);
+  assert.equal(T.RELEASE_S, Overlay.RELEASE_S);
+  assert.ok(T.HUDDLE_HOLD <= 12);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
   const doneHuddle = T.stepTrick(huddle, T.DUR.huddle + 0.1, ground);
@@ -236,9 +241,9 @@ test("ground registry keeps prior guests gated; Peck selectable; no bow/preen/pa
   assert.equal(Fox.TRICK_KEY, "fox");
   assert.equal(T.TRICK_KEY, "penguin");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...Relay.TRICKS], ["click", "latch", "arc", "buzz", "switch"]);
-  assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
-  assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
+  assert.deepEqual([...Relay.TRICKS], ["contactclick", "latchseat", "arcflick", "coilbuzz", "poleswitch", "armaturetap", "relayhush"]);
+  assert.deepEqual([...Fuse.TRICKS], ["railseat", "holdcurrent", "blowclear", "reseatsnap", "cartridgerattle", "bladeflash", "fusehush"]);
+  assert.deepEqual([...Earth.TRICKS], ["lugstrap", "earthseat", "heaveplate", "bedsettle", "soilgrip", "plateclamp", "groundhush"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
@@ -420,7 +425,7 @@ test("ultra-polish: Peck huddle/toboggan/trumpet/rockhop/ecstatic lifts are Rui-
   assert.ok(T.nextTrickWait(true, 0, "huddle") > T.nextTrickWait(true, 0, "waddle"));
 });
 
-test("notes: Peck idle-life ultra done; Quill / parrot ultra follows; next after Quill is Keel / toucan (Loom still next for base idle-ground)", () => {
+test("notes: Peck Rui-dense ultra (HUDDLE_HOLD=11.2); next leftover Quill / parrot", () => {
   assert.deepEqual([...T.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet", "rockhop", "ecstatic"]);
   assert.equal(T.TRICKS.includes("bow"), false);
   assert.equal(T.TRICKS.includes("preen"), false);
@@ -431,4 +436,5 @@ test("notes: Peck idle-life ultra done; Quill / parrot ultra follows; next after
   assert.equal(T.TRICKS.includes("strut"), false);
   assert.equal(T.TRICKS.includes("fan"), false);
   assert.equal(T.TRICKS.includes("flash"), false);
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Quill / parrot.
 });
