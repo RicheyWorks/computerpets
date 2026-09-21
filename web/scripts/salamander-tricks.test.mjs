@@ -2044,7 +2044,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Dapple Rui-dense ultra (AMBYSTOMID_HOLD=11.2); Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; next leftover Bell / stentor", () => {
+test("notes: Dapple Rui-dense ultra (AMBYSTOMID_HOLD=11.2); Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; next leftover Rod / coli", () => {
   assert.equal(T.TRICK_KEY, "salamander");
   assert.deepEqual([...T.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.deepEqual([...T.HAPPY], ["mottled", "speckled", "blotched"]);
@@ -2128,9 +2128,9 @@ test("notes: Dapple Rui-dense ultra (AMBYSTOMID_HOLD=11.2); Slip now Rue-dense; 
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next leftover (do not implement): Bell / stentor.
-  assert.equal("stentor", "stentor");
-  assert.equal("Bell", "Bell");
+  // Recommend next leftover (do not implement): Rod / coli.
+  assert.equal("coli", "coli");
+  assert.equal("Rod", "Rod");
 });
 
 
