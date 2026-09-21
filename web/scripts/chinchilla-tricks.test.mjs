@@ -292,9 +292,9 @@ test("ground registry keeps prior guests gated; Floss selectable; no dust/curl/b
   assert.equal(Hedgehog.TRICK_KEY, "hedgehog");
   assert.equal(T.TRICK_KEY, "chinchilla");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...Relay.TRICKS], ["click", "latch", "arc", "buzz", "switch"]);
-  assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
-  assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
+  assert.deepEqual([...Relay.TRICKS], ["contactclick", "latchseat", "arcflick", "coilbuzz", "poleswitch", "armaturetap", "relayhush"]);
+  assert.deepEqual([...Fuse.TRICKS], ["railseat", "holdcurrent", "blowclear", "reseatsnap", "cartridgerattle", "bladeflash", "fusehush"]);
+  assert.deepEqual([...Earth.TRICKS], ["lugstrap", "earthseat", "heaveplate", "bedsettle", "soilgrip", "plateclamp", "groundhush"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
@@ -485,10 +485,13 @@ test("ultra-polish: Floss ash/bound/ricochet/gnaw lifts are Rui-visible (not mic
   assert.equal(T.DUR.ricochet, Overlay.DUR.ricochet);
   assert.equal(T.DUR.gnaw, Overlay.DUR.gnaw);
   assert.equal(T.ASH_HOLD, Overlay.ASH_HOLD);
+  assert.equal(T.ASH_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "ash") > 39);
   assert.equal(T.HAPPY_DUR.eep, Overlay.HAPPY_DUR.eep);
 });
 
-test("notes: Floss idle-life ultra done; Bloom / axolotl + Sol / iguana + Vesper / dragon ultra next-or-done; following house-order ultra guest is Nori / ball_python (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Floss Rui-dense ultra (ASH_HOLD=11.2); next house-order densify leftover after early house guests: Bloom / axolotl then Keel / toucan", () => {
   assert.deepEqual([...T.TRICKS], ["ash", "bound", "fluff", "chin", "sift", "ricochet", "gnaw"]);
   assert.equal(T.TRICK_KEY, "chinchilla");
   assert.equal(T.wantsThankYou("floss"), true);
