@@ -734,8 +734,8 @@ test("notes: Disk Rui-dense ultra (SHEEN_HOLD=11.2); Wax now Rue-dense; Reed now
   assert.equal(OverlayGround.wantsThankYou("mast"), true);
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...OverlayOak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
-  assert.ok(OverlayGround.tricksFor("toad") != null);
-  assert.equal(OverlayGround.wantsThankYou("toad"), true);
-  assert.ok(OverlayGround.tricksFor("pebble") != null);
-  assert.equal(OverlayGround.wantsThankYou("pebble"), true);
+  assert.ok(OverlayGround.tricksFor("toad") == null);
+  assert.equal(OverlayGround.wantsThankYou("toad"), false);
+  assert.ok(OverlayGround.tricksFor("pebble") == null);
+  assert.equal(OverlayGround.wantsThankYou("pebble"), false);
 });
