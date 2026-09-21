@@ -509,7 +509,7 @@ test("ultra-polish: Tenant withdraw/chela/bailer lifts are Rui-visible (not micr
   assert.ok(T.nextTrickWait(true, 0, "withdraw") > 39);
 });
 
-test("notes: Tenant Rui-dense ultra (WITHDRAW_HOLD=11.2); Ledger densified; next leftover Anchor / seahorse", () => {
+test("notes: Tenant Rui-dense ultra (WITHDRAW_HOLD=11.2); Ledger densified; Anchor densified; next leftover Kite / manta", () => {
   assert.equal(T.TRICK_KEY, "hermit_crab");
   assert.equal(T.wantsThankYou("tenant"), true);
   assert.equal(OverlayGround.tricksFor("hermit_crab"), Overlay);
