@@ -564,7 +564,7 @@ test("ultra-polish: Kite span/wing/breach/ram lifts are Rui-visible (not micro i
   assert.ok(T.nextTrickWait(true, 0, "span") > 39);
 });
 
-test("notes: Kite Rui-dense ultra (SPAN_HOLD=11.2); Door densified; Felt densified; Vein densified; Fan densified; next leftover Mast / oak", () => {
+test("notes: Kite Rui-dense ultra (SPAN_HOLD=11.2); Door densified; Felt densified; Vein densified; Fan densified; Mast densified; next leftover Disk / water_lily", () => {
   assert.equal(T.TRICK_KEY, "manta");
   assert.equal(T.wantsThankYou("kite"), true);
   assert.equal(OverlayGround.tricksFor("seahorse"), OverlaySeahorse);

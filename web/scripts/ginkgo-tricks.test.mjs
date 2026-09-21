@@ -627,7 +627,7 @@ test("ground registry keeps prior guests gated; Fan selectable; prior guests sti
   assert.equal(OverlayGround.tricksFor("fan"), Overlay);
 });
 
-test("notes: Fan Rui-dense ultra (AMBER_HOLD=11.2); next leftover Mast / oak", () => {
+test("notes: Fan Rui-dense ultra (AMBER_HOLD=11.2); Mast densified; next leftover Disk / water_lily", () => {
   assert.equal(T.TRICK_KEY, "ginkgo");
   assert.equal(T.wantsThankYou("fan"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -703,8 +703,8 @@ test("notes: Fan Rui-dense ultra (AMBER_HOLD=11.2); next leftover Mast / oak", (
   assert.equal(OverlayGround.tricksFor("fan"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("ginkgo"), true);
   assert.equal(OverlayGround.wantsThankYou("fan"), true);
-  assert.ok(OverlayGround.tricksFor("oak") == null);
-  assert.equal(OverlayGround.wantsThankYou("oak"), false);
-  assert.ok(OverlayGround.tricksFor("mast") == null);
-  assert.equal(OverlayGround.wantsThankYou("mast"), false);
+  assert.ok(OverlayGround.tricksFor("water_lily") == null);
+  assert.equal(OverlayGround.wantsThankYou("water_lily"), false);
+  assert.ok(OverlayGround.tricksFor("disk") == null);
+  assert.equal(OverlayGround.wantsThankYou("disk"), false);
 });

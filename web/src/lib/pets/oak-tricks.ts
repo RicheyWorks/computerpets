@@ -1,4 +1,4 @@
-/** Mast ground tricks while idle — ultra-polish pass. House oak — acorn / sinus / gall / taproot / bole / catkin / tyloses personality (acorn mast drop to the dish — never named drop (Fan owns drop) / dichotomy (Fan owns dichotomy) / petiole (Fan owns petiole) / seed (Mast window owns seed; Clip/hamster owns seed as a trick) / mast as fan-collision, lobed leaf sway as sinus — never named lobe (Kite owns lobe) / sway (Jade owns sway) / biloba (Fan owns biloba) / frond (Vein owns frond), gall curiosity tip inspect, deep taproot settle — never named root (Burr owns root) / dig (Rabbit owns dig), sturdy bole trunk calm desk life under the lamp, hanging male catkin tassel (species-true oak catkin — never named flutter (Fan owns flutter) / gold (Fan window owns gold) / drop (Fan owns drop)), white-oak tyloses vessel-plug (species-true Quercus alba watertight wood — never named barrel / cork (Velvet owns cork) / fossil (Ledger owns fossil) / vessel (stingless owns vessel)); not Fan biloba/notch/flutter/drop/amber/dichotomy/petiole, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest/seed, Bloom gill, parrot fan/flash, or snake guests Sash seam/moss/lap copies). Catkin is the species-true hanging male flower tassel (not Fan flutter/drop/gold). Tyloses is the iconic white-oak vessel plug that makes the wood watertight (not barrel, not Velvet cork, not Ledger fossil). Window-play SEED unchanged — never names seed as a trick. Ethogram keeps bole sit_hold; adds acorn/sinus/gall/taproot/catkin/tyloses softs + freeze (replaces thin lean/nod/still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via oak.wav. Thank-yous cupule / tannin / grove. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `oak-tricks.js`. True house-oak desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/sheet-moss/Felt/maidenhair/Vein/ginkgo/Fan or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids seed/gold/lean/nod/still/unfurl/fan/drop/dichotomy/petiole/biloba/flutter/frond/rachis/fiddle/pinna/saucer/sori/stipe/tuft/bead/spore/cushion/thatch/rhizoid/seta/lobe/sway/root/dig/fossil/cork/barrel/vessel/canopy name collisions. Bird ultra (Soot→Ember) + Miso→Fan done; skip Rui + birds. Next guest ultra is Moth / orchid. No cry inventing beyond house oak.wav prefer. Never retouch Rui sprites. */
+/** Mast ground tricks while idle — ultra-polish pass. House oak — acorn / sinus / gall / taproot / bole / catkin / tyloses personality (acorn mast drop to the dish — never named drop (Fan owns drop) / dichotomy (Fan owns dichotomy) / petiole (Fan owns petiole) / seed (Mast window owns seed; Clip/hamster owns seed as a trick) / mast as fan-collision, lobed leaf sway as sinus — never named lobe (Kite owns lobe) / sway (Jade owns sway) / biloba (Fan owns biloba) / frond (Vein owns frond), gall curiosity tip inspect, deep taproot settle — never named root (Burr owns root) / dig (Rabbit owns dig), sturdy bole trunk calm desk life under the lamp, hanging male catkin tassel (species-true oak catkin — never named flutter (Fan owns flutter) / gold (Fan window owns gold) / drop (Fan owns drop)), white-oak tyloses vessel-plug (species-true Quercus alba watertight wood — never named barrel / cork (Velvet owns cork) / fossil (Ledger owns fossil) / vessel (stingless owns vessel)); not Fan biloba/notch/flutter/drop/amber/dichotomy/petiole, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest/seed, Bloom gill, parrot fan/flash, or snake guests Sash seam/moss/lap copies). Catkin is the species-true hanging male flower tassel (not Fan flutter/drop/gold). Tyloses is the iconic white-oak vessel plug that makes the wood watertight (not barrel, not Velvet cork, not Ledger fossil). Window-play SEED unchanged — never names seed as a trick. Ethogram keeps bole sit_hold; adds acorn/sinus/gall/taproot/catkin/tyloses softs + freeze (replaces thin lean/nod/still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via oak.wav. Thank-yous cupule / tannin / grove. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `oak-tricks.js`. True house-oak desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/sheet-moss/Felt/maidenhair/Vein/ginkgo/Fan or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids seed/gold/lean/nod/still/unfurl/fan/drop/dichotomy/petiole/biloba/flutter/frond/rachis/fiddle/pinna/saucer/sori/stipe/tuft/bead/spore/cushion/thatch/rhizoid/seta/lobe/sway/root/dig/fossil/cork/barrel/vessel/canopy name collisions. Bird ultra (Soot→Ember) + Miso→Fan done; skip Rui + birds. Amplitudes raised toward Rui richness; denser waits/weights (BOLE_HOLD=11.2 RELEASE_S=1.18). Next leftover Disk / water_lily. No cry inventing beyond house oak.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "oak";
 export const TRICKS = ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"] as const;
 export const HAPPY = ["cupule", "tannin", "grove"] as const;
@@ -51,8 +51,8 @@ export const HAPPY_DUR: Record<OakHappyKind, number> = {
 };
 
 /** Bole hold — Mast parks sturdy trunk calm on the blotter. Not window-play SEED. */
-export const BOLE_HOLD = 10.8;
-export const RELEASE_S = 0.62;
+export const BOLE_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 
 export const DUR: Record<OakTrickKind, number> = {
   bole: BOLE_HOLD + RELEASE_S,
@@ -92,54 +92,28 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: OakTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "bole") return 38 + roll * 24;
-  if (kind === "catkin" || kind === "tyloses" || kind === "sinus") return 12 + roll * 9;
-  if (kind === "acorn" || kind === "gall" || kind === "taproot") return 11 + roll * 8;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "bole") return 40 + roll * 26;
+  if (kind === "catkin" || kind === "tyloses") return 12.8 + roll * 9.4;
+  if (kind === "acorn" || kind === "sinus" || kind === "gall" || kind === "taproot") return 12.8 + roll * 9.4;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: OakTrickKind | string | null) {
-  if (musicOn) return "bole" as const;
+export function pickTrick(rand?: number, musicOn = false, lastKind?: OakTrickKind | string | null): OakTrickKind {
+  if (musicOn) return "bole";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "bole") {
-    if (roll < 0.18) return "acorn" as const;
-    if (roll < 0.34) return "sinus" as const;
-    if (roll < 0.5) return "gall" as const;
-    if (roll < 0.66) return "taproot" as const;
-    if (roll < 0.83) return "catkin" as const;
-    return "tyloses" as const;
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...TRICKS];
+  const weights = list.map((k) =>
+    k === "bole" ? 0.72 : k === "catkin" || k === "tyloses" ? 1.28 : k === "acorn" || k === "sinus" || k === "gall" ? 1.18 : 1.08
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i]!;
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i]!;
+    if (r <= 0) return list[i]!;
   }
-  if (lastKind === "acorn") {
-    if (roll < 0.2) return "bole" as const;
-    if (roll < 0.36) return "sinus" as const;
-    if (roll < 0.52) return "gall" as const;
-    if (roll < 0.68) return "taproot" as const;
-    if (roll < 0.84) return "catkin" as const;
-    return "tyloses" as const;
-  }
-  if (lastKind === "sinus") {
-    if (roll < 0.18) return "bole" as const;
-    if (roll < 0.34) return "acorn" as const;
-    if (roll < 0.5) return "gall" as const;
-    if (roll < 0.66) return "taproot" as const;
-    if (roll < 0.83) return "catkin" as const;
-    return "tyloses" as const;
-  }
-  if (lastKind === "catkin" || lastKind === "tyloses") {
-    if (roll < 0.16) return "bole" as const;
-    if (roll < 0.32) return "acorn" as const;
-    if (roll < 0.48) return "sinus" as const;
-    if (roll < 0.64) return "gall" as const;
-    if (roll < 0.8) return "taproot" as const;
-    return lastKind === "catkin" ? ("tyloses" as const) : ("catkin" as const);
-  }
-  if (roll < 0.14) return "bole" as const;
-  if (roll < 0.28) return "acorn" as const;
-  if (roll < 0.42) return "sinus" as const;
-  if (roll < 0.56) return "gall" as const;
-  if (roll < 0.7) return "taproot" as const;
-  if (roll < 0.85) return "catkin" as const;
-  return "tyloses" as const;
+  return list[list.length - 1] || "acorn";
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -211,45 +185,45 @@ export function cupulePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.cupule));
   if (u < 0.2) {
     const s = u / 0.2;
-    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" as TrickAnim };
+    return { lift: s * 3.36, rot: s * 14.4, dx: 0, anim: "talk" as TrickAnim };
   }
   if (u < 0.76) {
     const cup = Math.sin(t * 1.72);
     return {
-      lift: 2.8 + Math.abs(cup) * 1.4,
-      rot: 12 + cup * 10,
-      dx: cup * 0.12,
+      lift: 3.36 + Math.abs(cup) * 1.68,
+      rot: 14.4 + cup * 12,
+      dx: cup * 0.144,
       anim: "talk" as TrickAnim,
     };
   }
   const s = (u - 0.76) / 0.24;
-  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  return { lift: 2.4 * (1 - s), rot: 7.2 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function tanninPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.tannin));
   if (u < 0.18) {
     const s = u / 0.18;
-    return { lift: s * 3.0, rot: s * -10, dx: 0, anim: "play" as TrickAnim };
+    return { lift: s * 3.6, rot: s * -12, dx: 0, anim: "play" as TrickAnim };
   }
   if (u < 0.78) {
     const warm = Math.sin(t * 2.05);
     return {
-      lift: 3.0 + Math.abs(warm) * 1.5,
-      rot: -10 + warm * 14,
-      dx: warm * 0.14,
+      lift: 3.6 + Math.abs(warm) * 1.8,
+      rot: -12 + warm * 16.8,
+      dx: warm * 0.168,
       anim: "play" as TrickAnim,
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 2.0 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  return { lift: 2.4 * (1 - s), rot: -7.2 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
 
 export function grovePose(t: number) {
   return {
-    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
-    rot: Math.sin(t * 0.72) * 8,
-    dx: Math.sin(t * 0.4) * -0.12,
+    lift: 2.64 + Math.abs(Math.sin(t * 0.696)) * 1.32,
+    rot: Math.sin(t * 0.864) * 9.6,
+    dx: Math.sin(t * 0.48) * -0.144,
     anim: "sit" as TrickAnim,
   };
 }
@@ -323,15 +297,15 @@ function smoothstep(t: number) {
 export function bolePose(t: number) {
   const breath = Math.sin(t * 0.42) + 0.06 * Math.sin(t * 1.15);
   return {
-    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
-    rot: 4 + breath * 6,
+    lift: 2.88 + Math.abs(Math.sin(t * 0.504)) * 1.44,
+    rot: 4.8 + breath * 7.2,
   };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
   const s = smoothstep(u);
-  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 4 * (1 - s) };
+  return { lift: 2.88 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 4.8 * (1 - s) };
 }
 
 /** Acorn — mast drop to the dish. Never named drop/seed. */
@@ -339,15 +313,15 @@ export function acornPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.acorn));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 3.2, rot: s * -8 * facing, anim: "talk" as TrickAnim };
+    return { x: fromX, lift: s * 3.84, rot: s * -9.6 * facing, anim: "talk" as TrickAnim };
   }
   if (u < 0.52) {
     const s = (u - 0.16) / 0.36;
     const hang = Math.sin(s * Math.PI * 1.8);
     return {
-      x: fromX + facing * hang * 0.35,
-      lift: 3.2 - s * 0.8 + Math.abs(hang) * 0.6,
-      rot: facing * (-8 + hang * 12),
+      x: fromX + facing * hang * 0.42,
+      lift: 3.84 - s * 0.96 + Math.abs(hang) * 0.72,
+      rot: facing * (-9.6 + hang * 14.4),
       anim: "talk" as TrickAnim,
     };
   }
@@ -355,17 +329,17 @@ export function acornPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.52) / 0.3;
     const land = smoothstep(s);
     return {
-      x: fromX + facing * (1 - land) * 0.4,
-      lift: 2.4 * (1 - land * 0.85),
-      rot: facing * (-4 + land * 8),
+      x: fromX + facing * (1 - land) * 0.48,
+      lift: 2.88 * (1 - land * 1.02),
+      rot: facing * (-4.8 + land * 9.6),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
     x: fromX,
-    lift: 0.8 * (1 - s),
-    rot: facing * (3 * (1 - s)),
+    lift: 0.96 * (1 - s),
+    rot: facing * (3.6 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -375,23 +349,23 @@ export function sinusPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.sinus));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 2.6, rot: s * -10 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 3.12, rot: s * -12 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.78) {
     const s = (u - 0.14) / 0.64;
     const wave = Math.sin(s * Math.PI * 2.4);
     return {
-      x: fromX + facing * wave * 0.4,
-      lift: 2.6 + Math.abs(wave) * 1.6,
-      rot: facing * (-10 + wave * 14),
+      x: fromX + facing * wave * 0.48,
+      lift: 3.12 + Math.abs(wave) * 1.92,
+      rot: facing * (-12 + wave * 16.8),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 1.8 * (1 - s),
-    rot: facing * (-6 * (1 - s)),
+    lift: 2.16 * (1 - s),
+    rot: facing * (-7.2 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -401,15 +375,15 @@ export function gallPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.gall));
   if (u < 0.18) {
     const s = smoothstep(u / 0.18);
-    return { x: fromX, lift: s * 2.4, rot: s * 14 * facing, anim: "talk" as TrickAnim };
+    return { x: fromX, lift: s * 2.88, rot: s * 16.8 * facing, anim: "talk" as TrickAnim };
   }
   if (u < 0.55) {
     const s = (u - 0.18) / 0.37;
     const tip = Math.sin(s * Math.PI * 3.4);
     return {
-      x: fromX + facing * tip * 0.4,
-      lift: 2.4 + Math.abs(tip) * 1.4,
-      rot: facing * (14 + tip * 12),
+      x: fromX + facing * tip * 0.48,
+      lift: 2.88 + Math.abs(tip) * 1.68,
+      rot: facing * (16.8 + tip * 14.4),
       anim: "talk" as TrickAnim,
     };
   }
@@ -417,17 +391,17 @@ export function gallPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.55) / 0.23;
     const settle = smoothstep(s);
     return {
-      x: fromX + facing * (1 - settle) * 0.5,
-      lift: 3.2 - settle * 1.2,
-      rot: facing * (14 - settle * 16),
+      x: fromX + facing * (1 - settle) * 0.6,
+      lift: 3.84 - settle * 1.44,
+      rot: facing * (16.8 - settle * 19.2),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 2.0 * (1 - s),
-    rot: facing * (-3 * (1 - s)),
+    lift: 2.4 * (1 - s),
+    rot: facing * (-3.6 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -437,15 +411,15 @@ export function taprootPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.taproot));
   if (u < 0.15) {
     const s = smoothstep(u / 0.15);
-    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 3.12, rot: s * 12 * facing, anim: "play" as TrickAnim };
   }
   if (u < 0.55) {
     const s = (u - 0.15) / 0.4;
     const press = smoothstep(s);
     return {
-      x: fromX + facing * Math.sin(s * Math.PI) * 0.25,
-      lift: 2.6 * (1 - press * 0.7),
-      rot: facing * (10 - press * 14),
+      x: fromX + facing * Math.sin(s * Math.PI) * 0.3,
+      lift: 3.12 * (1 - press * 0.84),
+      rot: facing * (12 - press * 16.8),
       anim: "play" as TrickAnim,
     };
   }
@@ -453,17 +427,17 @@ export function taprootPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.55) / 0.25;
     const dig = Math.sin(s * Math.PI * 3.2);
     return {
-      x: fromX + facing * dig * 0.2,
-      lift: 0.8 + Math.abs(dig) * 0.6,
-      rot: facing * (-4 + dig * 10),
+      x: fromX + facing * dig * 0.24,
+      lift: 0.96 + Math.abs(dig) * 0.72,
+      rot: facing * (-4.8 + dig * 12),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.8) / 0.2);
   return {
     x: fromX,
-    lift: 0.6 * (1 - s),
-    rot: facing * (-2 * (1 - s)),
+    lift: 0.72 * (1 - s),
+    rot: facing * (-2.4 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -473,15 +447,15 @@ export function catkinPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.catkin));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 1.8, rot: s * -8 * facing, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 2.16, rot: s * -9.6 * facing, anim: "play" as TrickAnim };
   }
   if (u < 0.55) {
     const s = (u - 0.16) / 0.39;
     const shimmer = Math.sin(s * Math.PI * 4.2);
     return {
-      x: fromX + facing * (s * 0.6 + shimmer * 0.2),
-      lift: 1.8 + Math.abs(shimmer) * 1.6,
-      rot: facing * (-8 + shimmer * 14),
+      x: fromX + facing * (s * 0.72 + shimmer * 0.24),
+      lift: 2.16 + Math.abs(shimmer) * 1.92,
+      rot: facing * (-9.6 + shimmer * 16.8),
       anim: "play" as TrickAnim,
     };
   }
@@ -489,17 +463,17 @@ export function catkinPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.55) / 0.23;
     const hang = Math.sin(s * Math.PI * 3.4);
     return {
-      x: fromX + facing * 0.6,
-      lift: 2.8 + Math.abs(hang) * 0.8,
-      rot: facing * (4 + hang * 10),
+      x: fromX + facing * 0.72,
+      lift: 3.36 + Math.abs(hang) * 0.96,
+      rot: facing * (4.8 + hang * 12),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * 0.6 * (1 - s),
-    lift: 1.8 * (1 - s) + s * 0.2,
-    rot: facing * (4 * (1 - s)),
+    x: fromX + facing * 0.72 * (1 - s),
+    lift: 2.16 * (1 - s) + s * 0.24,
+    rot: facing * (4.8 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -509,15 +483,15 @@ export function tylosesPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.tyloses));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" as TrickAnim };
+    return { x: fromX, lift: s * 3.12, rot: s * 12 * facing, anim: "talk" as TrickAnim };
   }
   if (u < 0.4) {
     const s = (u - 0.14) / 0.26;
     const plug = smoothstep(s);
     return {
-      x: fromX + facing * plug * 0.5,
-      lift: 2.6 + plug * 2.4,
-      rot: facing * (10 + plug * 8),
+      x: fromX + facing * plug * 0.6,
+      lift: 3.12 + plug * 2.88,
+      rot: facing * (12 + plug * 9.6),
       anim: "talk" as TrickAnim,
     };
   }
@@ -525,17 +499,17 @@ export function tylosesPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.4) / 0.38;
     const seal = Math.sin(s * Math.PI * 3.2);
     return {
-      x: fromX + facing * (0.5 + seal * 0.3),
-      lift: 4.8 + Math.abs(seal) * 0.8,
-      rot: facing * (6 + seal * 14),
+      x: fromX + facing * (0.6 + seal * 0.36),
+      lift: 5.76 + Math.abs(seal) * 0.96,
+      rot: facing * (7.2 + seal * 16.8),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * 0.5 * (1 - s),
-    lift: 2.6 * (1 - s),
-    rot: facing * (6 * (1 - s)),
+    x: fromX + facing * 0.6 * (1 - s),
+    lift: 3.12 * (1 - s),
+    rot: facing * (7.2 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
