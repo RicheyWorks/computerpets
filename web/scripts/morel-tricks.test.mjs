@@ -371,6 +371,11 @@ test("alveolus/ridge/ephemeral/sclerotium/morchella/costa/hymenium are house-pla
   assert.equal(held.anim, "sit");
   assert.ok(held.rot !== 0 || held.lift > 0);
   const release = T.stepTrick(bole, T.MORCHELLA_HOLD + 0.2, ground);
+  assert.equal(T.MORCHELLA_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.equal(T.MORCHELLA_HOLD, Overlay.MORCHELLA_HOLD);
+  assert.equal(T.RELEASE_S, Overlay.RELEASE_S);
+  assert.ok(T.MORCHELLA_HOLD <= 12);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
   const doneBole = T.stepTrick(bole, T.DUR.morchella + 0.1, ground);
@@ -571,7 +576,7 @@ test("alveolus/ridge/ephemeral/sclerotium/morchella/costa/hymenium are house-pla
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -1012,7 +1017,8 @@ globalThis.PetFlyAgaricTricks = OverlayFlyAgaric;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Lattice idle-life done; next house-order guest still lacking tricks is Flame / chicken_of_woods", () => {
+test("notes: Lattice Rui-dense ultra (MORCHELLA_HOLD=11.2); next leftover Horn / chanterelle", () => {
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Horn / chanterelle.
   assert.equal(T.TRICK_KEY, "morel");
   assert.equal(T.wantsThankYou("lattice"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
