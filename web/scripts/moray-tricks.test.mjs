@@ -269,7 +269,8 @@ test("hinge/pharynx/knot/lurk/jamb/mucus/sentry are house-moray-true, not copies
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("pulse"), false);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -331,7 +332,7 @@ test("Door feed-happy is its own sit: breath/vigil/recess, and two feeds are not
   assert.equal(T.HAPPY.includes("glow"), false);
   assert.equal(T.HAPPY.includes("tribute"), false);
   assert.equal(T.pickHappy("breath", 0), "vigil");
-  assert.notEqual(T.pickHappy("breath", 0.9), "ceil");
+  assert.notEqual(T.pickHappy("breath", 0.9), "breath");
   assert.equal(Overlay.pickHappy("vigil", 0) !== "vigil", true);
   assert.equal(T.happyCanStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.happyCanStart({ asleep: false, hidden: false, leaving: false, cmd: "idle", card: true }), true);
@@ -342,12 +343,12 @@ test("Door feed-happy is its own sit: breath/vigil/recess, and two feeds are not
   const breathH = T.beginHappy("breath", 80, 1);
   assert.equal(breathH.anim, "talk");
   const breathMid = T.stepHappy(breathH, 0.4, { cmd: "idle" });
-  assert.ok(breathMid.lift !== 0 || Math.abs(ceilMid.rot) > 0.5);
+  assert.ok(breathMid.lift !== 0 || Math.abs(breathMid.rot) > 0.5);
   assert.notEqual(breathMid.phase, "done");
   const vigilH = T.beginHappy("vigil", 80, 1);
   assert.equal(vigilH.anim, "play");
   const vigilMid = T.stepHappy(vigilH, 0.3, { cmd: "idle" });
-  assert.ok(vigilMid.lift > 0.2 || Math.abs(scoopMid.rot) > 0.5);
+  assert.ok(vigilMid.lift > 0.2 || Math.abs(vigilMid.rot) > 0.5);
   const recessH = T.beginHappy("recess", 80, 1);
   assert.equal(recessH.anim, "sit");
   const done = T.stepHappy(breathH, T.HAPPY_DUR.breath + 0.1, { cmd: "idle" });
@@ -379,7 +380,7 @@ test("Door feed-happy is its own sit: breath/vigil/recess, and two feeds are not
   assert.equal(T.wantsThankYou("axolotl"), false);
   const thanks = T.startThankYou("moray", "breath", 80, 1, { cmd: "idle", card: true, windowPlay: true });
   assert.ok(thanks);
-  assert.notEqual(thanks.kind, "ceil");
+  assert.notEqual(thanks.kind, "breath");
   assert.ok(thanks.happy.lift === 0);
   assert.notEqual(thanks.happy.anim, "eat");
   assert.notEqual(thanks.happy.anim, "idle");
@@ -582,9 +583,13 @@ test("ultra-polish: Door jamb/hinge/mucus/sentry lifts are Rui-visible (not micr
   assert.ok(s2.lift > 2 || Math.abs(s2.rot) > 4 || Math.abs(s2.x - 80) > 0.5, `sentry mid ${s2.lift}/${s2.rot}/${s2.x}`);
   assert.ok(Overlay.mucusPose && Overlay.sentryPose);
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.JAMB_HOLD, Overlay.JAMB_HOLD);
+  assert.equal(T.JAMB_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "jamb") > 39);
 });
 
-test("notes: Door idle-life ultra done; next house-order ultra guest is Felt / moss", () => {
+test("notes: Door Rui-dense ultra (JAMB_HOLD=11.2); next leftover Felt / moss", () => {
   assert.equal(T.TRICK_KEY, "moray");
   assert.equal(T.wantsThankYou("door"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
