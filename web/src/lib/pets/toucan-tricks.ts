@@ -1,4 +1,4 @@
-/** Keel ground tricks while idle — ultra-polish pass. House Ramphastos toucan desk-colony life — roost / berry / juggle / peer / skip / rattle / clatter personality (roost bill-keel wood rest without naming nest or loaf or perch or den or tuck, berry fruit tip-inspect without naming crack or gulp or seedhammer or nibble or chew, juggle fruit toss-catch on the blotter without naming toss or flash or porpoise or zoom, peer bill tip under the blotter edge without naming tilt or stalk or listen or glare, skip hop-skips across the grain without naming zoom or bound or waddle or hopwalk or rockhop, rattle rapid bill-rattle social without naming croak or chatter or trumpet or carol or squawk, clatter bill wood-clatter taps without naming bill or billtap or tap or drum or knock; window-play TOSS leaves toucan alone — never name a trick toss; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Echo/Peck/Quill own their tricks; guest slug Keel / key toucan — accept "toucan" and "keel"; do NOT name a trick toucan or keel or toss or bill or flash or fan or quote or strut or crack or preen or pineye or invert or rockhop or ecstatic). Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk. Thank-yous clack / yelp / tok. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop toucan-tricks.js. Window-play TOSS unchanged (already present — not thin). True toucan desk life — not parrot/penguin/budgie/hummingbird/woodpecker/goose/mallard/robin/chickadee/hawk/owl/crow/raven clones. Ember owns the next bird ultra seat. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites. */
+/** Keel ground tricks while idle — ultra-polish pass. House Ramphastos toucan desk-colony life — roost / berry / juggle / peer / skip / rattle / clatter personality (roost bill-keel wood rest without naming nest or loaf or perch or den or tuck, berry fruit tip-inspect without naming crack or gulp or seedhammer or nibble or chew, juggle fruit toss-catch on the blotter without naming toss or flash or porpoise or zoom, peer bill tip under the blotter edge without naming tilt or stalk or listen or glare, skip hop-skips across the grain without naming zoom or bound or waddle or hopwalk or rockhop, rattle rapid bill-rattle social without naming croak or chatter or trumpet or carol or squawk, clatter bill wood-clatter taps without naming bill or billtap or tap or drum or knock; window-play TOSS leaves toucan alone — never name a trick toss; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Echo/Peck/Quill own their tricks; guest slug Keel / key toucan — accept "toucan" and "keel"; do NOT name a trick toucan or keel or toss or bill or flash or fan or quote or strut or crack or preen or pineye or invert or rockhop or ecstatic). Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk. Thank-yous clack / yelp / tok. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop toucan-tricks.js. Window-play TOSS unchanged (already present — not thin). True toucan desk life — not parrot/penguin/budgie/hummingbird/woodpecker/goose/mallard/robin/chickadee/hawk/owl/crow/raven clones. Ember owns the next bird ultra seat. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites.  toucan.wav EXISTS so prefersHouseCry adds toucan. Amplitudes raised toward Rui richness; denser waits/weights (ROOST_HOLD=11.2 RELEASE_S=1.18). Catalog 221. */
 export const TRICK_KEY = "toucan";
 export const TRICKS = ["roost", "berry", "juggle", "peer", "skip", "rattle", "clatter"] as const;
 export const HAPPY = ["clack", "yelp", "tok"] as const;
@@ -48,8 +48,8 @@ export type ToucanHappy = {
   abort?: boolean;
 };
 export const HAPPY_DUR: Record<ToucanHappyKind, number> = { clack: 1.58, yelp: 1.66, tok: 1.72 };
-export const ROOST_HOLD = 14.4;
-export const RELEASE_S = 1.02;
+export const ROOST_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 export const DUR: Record<ToucanTrickKind, number> = {
   roost: ROOST_HOLD + RELEASE_S,
   berry: 2.36,
@@ -88,11 +88,10 @@ export function shouldAbort(state: TrickFlags | null | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "roost") return 42 + roll * 28;
-  if (kind === "berry" || kind === "juggle") return 12 + roll * 9;
-  if (kind === "peer" || kind === "rattle") return 11 + roll * 8;
-  if (kind === "skip" || kind === "clatter") return 10 + roll * 8;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "roost") return 40 + roll * 26;
+  if (kind === "berry" || kind === "juggle" || kind === "skip") return 12.8 + roll * 9.4;
+  if (kind === "peer" || kind === "rattle" || kind === "clatter") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 export function pickTrick(rand?: number, musicOn = false, lastKind?: string | null) {
@@ -101,7 +100,7 @@ export function pickTrick(rand?: number, musicOn = false, lastKind?: string | nu
   const pool = TRICKS.filter((k) => k !== lastKind);
   const list = pool.length ? pool : TRICKS.slice();
   const weights = list.map((k) =>
-    k === "roost" ? 0.55 : k === "berry" || k === "juggle" || k === "skip" ? 1.15 : 1
+    k === "roost" ? 0.72 : k === "berry" || k === "juggle" || k === "skip" ? 1.28 : k === "peer" || k === "rattle" ? 1.18 : 1.08
   );
   let total = 0;
   for (let i = 0; i < weights.length; i++) total += weights[i];
@@ -176,46 +175,46 @@ export function clackPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.clack));
   if (u < 0.14) {
     const s = u / 0.14;
-    return { lift: s * 5, rot: s * 14, dx: 0, anim: "sit" as TrickAnim };
+    return { lift: s * 6.0, rot: s * 16.8, dx: 0, anim: "sit" as TrickAnim };
   }
   if (u < 0.82) {
     const snap = Math.sin(t * 16) + 0.24 * Math.sin(t * 28);
     return {
-      lift: 5 + Math.abs(snap) * 3.5,
-      rot: 14 + snap * 12,
-      dx: snap * 1.4,
+      lift: 6.0 + Math.abs(snap) * 4.2,
+      rot: 16.8 + snap * 14.4,
+      dx: snap * 1.7,
       anim: "sit" as TrickAnim,
     };
   }
   const s = (u - 0.82) / 0.18;
-  return { lift: 3.5 * (1 - s), rot: 8 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  return { lift: 4.2 * (1 - s), rot: 9.6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
 
 export function yelpPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.yelp));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 6, rot: -s * 14, dx: 0, anim: "talk" as TrickAnim };
+    return { lift: s * 7.2, rot: -s * 16.8, dx: 0, anim: "talk" as TrickAnim };
   }
   if (u < 0.84) {
     const cry = Math.sin(t * 10) + 0.26 * Math.sin(t * 18);
     return {
-      lift: 6 + Math.abs(cry) * 4,
-      rot: -14 + cry * 9,
-      dx: cry * 1.8,
+      lift: 7.2 + Math.abs(cry) * 4.8,
+      rot: -16.8 + cry * 10.8,
+      dx: cry * 2.2,
       anim: "talk" as TrickAnim,
     };
   }
   const s = (u - 0.84) / 0.16;
-  return { lift: 4 * (1 - s), rot: -8 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  return { lift: 4.8 * (1 - s), rot: -9.6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function tokPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.tok));
   return {
-    lift: 4 + Math.abs(Math.sin(t * 8)) * 5,
-    rot: Math.sin(t * 11) * 16,
-    dx: Math.sin(t * 7) * 2.4,
+    lift: 4.8 + Math.abs(Math.sin(t * 8)) * 6.0,
+    rot: Math.sin(t * 11) * 19.2,
+    dx: Math.sin(t * 7) * 2.9,
     anim: "play" as TrickAnim,
   };
 }
@@ -273,12 +272,12 @@ export function smoothstep(t: number) {
 export function roostPose(t: number) {
   const soft = Math.sin(t * 1.6);
   const breath = Math.sin(t * 2.6);
-  return { lift: 4.5 + soft * 3.2 + Math.abs(breath) * 1.6, rot: 26 + breath * 5 + Math.sin(t * 4.8) * 5 };
+  return { lift: 5.4 + soft * 3.8 + Math.abs(breath) * 1.9, rot: 31.2 + breath * 6 + Math.sin(t * 4.8) * 6 };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 4.5 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 26 * (1 - u) };
+  return { lift: 5.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 31.2 * (1 - u) };
 }
 
 export function berryPose(t: number, fromX: number, facing: number) {
@@ -286,23 +285,23 @@ export function berryPose(t: number, fromX: number, facing: number) {
   const face = facing == null ? 1 : facing;
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: -s * 4.5, rot: s * 18 * face, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: -s * 5.4, rot: s * 21.6 * face, anim: "sit" as TrickAnim };
   }
   if (u < 0.86) {
     const s = (u - 0.12) / 0.74;
     const tip = Math.sin(s * Math.PI * 3.2);
     return {
-      x: fromX + face * Math.sin(s * Math.PI) * 2.4,
-      lift: -4.5 + Math.abs(tip) * 5.5,
-      rot: face * (18 + tip * 14),
+      x: fromX + face * Math.sin(s * Math.PI) * 2.9,
+      lift: -5.4 + Math.abs(tip) * 6.6,
+      rot: face * (21.6 + tip * 16.8),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX,
-    lift: -3 * (1 - s) * 0.2,
-    rot: face * 8 * (1 - s),
+    lift: -3.6 * (1 - s) * 0.2,
+    rot: face * 9.6 * (1 - s),
     anim: "sit" as TrickAnim,
   };
 }
@@ -312,23 +311,23 @@ export function jugglePose(t: number, fromX: number, facing: number) {
   const face = facing == null ? 1 : facing;
   if (u < 0.1) {
     const s = smoothstep(u / 0.1);
-    return { x: fromX, lift: s * 4, rot: -s * 12 * face, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 4.8, rot: -s * 14.4 * face, anim: "sit" as TrickAnim };
   }
   if (u < 0.9) {
     const s = (u - 0.1) / 0.8;
     const toss = Math.abs(Math.sin(s * Math.PI * 4.5));
     return {
-      x: fromX + face * Math.sin(s * Math.PI * 2.2) * 2.8,
-      lift: 4 + toss * 9,
-      rot: face * (-12 + toss * 22),
+      x: fromX + face * Math.sin(s * Math.PI * 2.2) * 3.4,
+      lift: 4.8 + toss * 10.8,
+      rot: face * (-14.4 + toss * 26.4),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.9) / 0.1);
   return {
     x: fromX,
-    lift: 3 * (1 - s),
-    rot: face * -6 * (1 - s),
+    lift: 3.6 * (1 - s),
+    rot: face * -7.2 * (1 - s),
     anim: "sit" as TrickAnim,
   };
 }
@@ -338,22 +337,22 @@ export function peerPose(t: number, fromX: number, facing: number) {
   const face = facing == null ? 1 : facing;
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 4, rot: s * 32 * face, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 4.8, rot: s * 38.4 * face, anim: "sit" as TrickAnim };
   }
   if (u < 0.84) {
     const s = (u - 0.14) / 0.7;
     return {
-      x: fromX + face * Math.sin(s * Math.PI) * 1.4,
-      lift: 4 + Math.sin(s * Math.PI * 1.8) * 2.2,
-      rot: face * (32 + Math.sin(s * Math.PI * 2.2) * 10),
+      x: fromX + face * Math.sin(s * Math.PI) * 1.7,
+      lift: 4.8 + Math.sin(s * Math.PI * 1.8) * 2.6,
+      rot: face * (38.4 + Math.sin(s * Math.PI * 2.2) * 12),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.84) / 0.16);
   return {
     x: fromX,
-    lift: 3 * (1 - s),
-    rot: face * 14 * (1 - s),
+    lift: 3.6 * (1 - s),
+    rot: face * 16.8 * (1 - s),
     anim: "sit" as TrickAnim,
   };
 }
@@ -363,23 +362,23 @@ export function skipPose(t: number, fromX: number, facing: number) {
   const face = facing == null ? 1 : facing;
   if (u < 0.08) {
     const s = smoothstep(u / 0.08);
-    return { x: fromX, lift: s * 3.5, rot: -s * 8 * face, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 4.2, rot: -s * 9.6 * face, anim: "sit" as TrickAnim };
   }
   if (u < 0.9) {
     const s = (u - 0.08) / 0.82;
     const hop = Math.abs(Math.sin(s * Math.PI * 3.5));
     return {
-      x: fromX + face * (28 * smoothstep(s) + Math.sin(s * Math.PI * 2) * 2.2),
-      lift: 3.5 + hop * 9,
-      rot: face * (-8 + hop * 18),
+      x: fromX + face * (28 * smoothstep(s) + Math.sin(s * Math.PI * 2) * 2.6),
+      lift: 4.2 + hop * 10.8,
+      rot: face * (-9.6 + hop * 21.6),
       anim: "walk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.9) / 0.1);
   return {
     x: fromX + face * 28,
-    lift: 2.5 * (1 - s),
-    rot: face * -3 * (1 - s),
+    lift: 3.0 * (1 - s),
+    rot: face * -3.6 * (1 - s),
     anim: "sit" as TrickAnim,
   };
 }
@@ -389,22 +388,22 @@ export function rattlePose(t: number, fromX: number, facing: number) {
   const face = facing == null ? 1 : facing;
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 5.5, rot: -s * 10 * face, anim: "talk" as TrickAnim };
+    return { x: fromX, lift: s * 6.6, rot: -s * 12 * face, anim: "talk" as TrickAnim };
   }
   if (u < 0.88) {
     const ratt = Math.sin(t * 22) + 0.3 * Math.sin(t * 38);
     return {
-      x: fromX + face * Math.sin(t * 9) * 1.6,
-      lift: 5.5 + Math.abs(ratt) * 3.5,
-      rot: face * (-10 + ratt * 20),
+      x: fromX + face * Math.sin(t * 9) * 1.9,
+      lift: 6.6 + Math.abs(ratt) * 4.2,
+      rot: face * (-12 + ratt * 24),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
   return {
     x: fromX,
-    lift: 3.5 * (1 - s),
-    rot: -5 * (1 - s) * face,
+    lift: 4.2 * (1 - s),
+    rot: -6 * (1 - s) * face,
     anim: "sit" as TrickAnim,
   };
 }
@@ -414,23 +413,23 @@ export function clatterPose(t: number, fromX: number, facing: number) {
   const face = facing == null ? 1 : facing;
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: -s * 3.5, rot: s * 14 * face, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: -s * 4.2, rot: s * 16.8 * face, anim: "sit" as TrickAnim };
   }
   if (u < 0.86) {
     const s = (u - 0.12) / 0.74;
     const knock = Math.sin(s * Math.PI * 7);
     return {
-      x: fromX + face * Math.abs(knock) * 2.2,
-      lift: -3.5 + Math.abs(knock) * 6.5,
-      rot: face * (14 + knock * 16),
+      x: fromX + face * Math.abs(knock) * 2.6,
+      lift: -4.2 + Math.abs(knock) * 7.8,
+      rot: face * (16.8 + knock * 19.2),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX,
-    lift: -2 * (1 - s),
-    rot: face * 6 * (1 - s),
+    lift: -2.4 * (1 - s),
+    rot: face * 7.2 * (1 - s),
     anim: "sit" as TrickAnim,
   };
 }
