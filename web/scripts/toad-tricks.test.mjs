@@ -1957,7 +1957,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Pebble Rui-dense ultra (BUFONID_HOLD=11.2); Eft now Rue-dense; Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; next leftover Orb / volvox", () => {
+test("notes: Pebble Rui-dense ultra (BUFONID_HOLD=11.2); Eft now Rue-dense; Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; Reach now Rue-dense; Spot now Rue-dense; Orb now Rue-dense; next leftover Pane / diatom", () => {
   assert.equal(T.TRICK_KEY, "toad");
   assert.deepEqual([...T.TRICKS], ["verruca", "burrow", "parotoid", "tubercle", "bufonid", "unken", "cranial"]);
   assert.deepEqual([...T.HAPPY], ["loam", "knurl", "plump"]);
@@ -2027,9 +2027,9 @@ test("notes: Pebble Rui-dense ultra (BUFONID_HOLD=11.2); Eft now Rue-dense; Dapp
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next leftover (do not implement): Orb / volvox.
-  assert.equal("volvox", "volvox");
-  assert.equal("Orb", "Orb");
+  // Recommend next leftover (do not implement): Pane / diatom.
+  assert.equal("diatom", "diatom");
+  assert.equal("Pane", "Pane");
 });
 
 
