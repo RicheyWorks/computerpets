@@ -437,10 +437,15 @@ test("ultra-polish: Lula pour/anchor/meander lifts are Rui-visible (not micro id
   assert.equal(T.DUR.anchor, Overlay.DUR.anchor);
   assert.equal(T.DUR.meander, Overlay.DUR.meander);
   assert.equal(T.POUR_HOLD, Overlay.POUR_HOLD);
+  assert.equal(T.POUR_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "pour") > 39);
+  assert.ok(T.nextTrickWait(true, 0, "pour") < 80);
   assert.ok(T.nextTrickWait(true, 0, "pour") > T.nextTrickWait(true, 0, "oxbow"));
+  assert.equal(T.HAPPY_DUR.harbor, Overlay.HAPPY_DUR.harbor);
 });
 
-test("notes: Lula idle-life ultra done; Coral / milk_snake ultra done; Blush / rosy_boa ultra done; Atlas / carpet_python ultra done; Cup / octopus ultra done; next house-order ultra guest is Sepia / cuttlefish (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Lula Rui-dense ultra (POUR_HOLD=11.2); next leftover Coral / milk_snake", () => {
   assert.equal(T.TRICK_KEY, "boa");
   assert.equal(T.wantsThankYou("lula"), true);
   assert.equal(OverlayGround.tricksFor("garter"), OverlayGarter);
