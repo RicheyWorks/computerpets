@@ -583,7 +583,7 @@ test("ground registry keeps prior guests gated; Felt selectable; prior guests st
   assert.ok(T.nextTrickWait(true, 0, "thatch") > 39);
 });
 
-test("notes: Felt Rui-dense ultra (THATCH_HOLD=11.2); Vein densified; next leftover Fan / ginkgo", () => {
+test("notes: Felt Rui-dense ultra (THATCH_HOLD=11.2); Vein densified; Fan densified; next leftover Mast / oak", () => {
   assert.equal(T.TRICK_KEY, "moss");
   assert.equal(T.wantsThankYou("felt"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -632,8 +632,8 @@ test("notes: Felt Rui-dense ultra (THATCH_HOLD=11.2); Vein densified; next lefto
   assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span", "breach", "ram"]);
   assert.equal(T.TRICKS.includes("moss"), false);
   assert.equal(T.TRICKS.includes("hinge"), false);
-  assert.ok(OverlayGround.tricksFor("ginkgo") == null);
-  assert.equal(OverlayGround.wantsThankYou("ginkgo"), false);
-  assert.ok(OverlayGround.tricksFor("fan") == null);
-  assert.equal(OverlayGround.wantsThankYou("fan"), false);
+  assert.ok(OverlayGround.tricksFor("oak") == null);
+  assert.equal(OverlayGround.wantsThankYou("oak"), false);
+  assert.ok(OverlayGround.tricksFor("mast") == null);
+  assert.equal(OverlayGround.wantsThankYou("mast"), false);
 });
