@@ -2098,6 +2098,8 @@ assert.equal(names("mining_bee").includes("still"), false);
   assert.ok(names("dragon").includes("freeze"));
   assert.ok(names("ball_python").includes("tongue"));
   assert.ok(names("ball_python").includes("orb"));
+  assert.ok(names("ball_python").includes("taste_soft"));
+  assert.ok(names("ball_python").includes("unroll_soft"));
   assert.ok(names("ball_python").includes("loom_soft"));
   assert.ok(names("ball_python").includes("weave_soft"));
   assert.ok(names("ball_python").includes("freeze"));

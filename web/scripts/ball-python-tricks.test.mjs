@@ -360,9 +360,9 @@ test("ground registry keeps prior guests gated; Nori selectable; no bun/ball/coi
   assert.equal(Iguana.TRICK_KEY, "iguana");
   assert.equal(T.TRICK_KEY, "ball_python");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...Relay.TRICKS], ["click", "latch", "arc", "buzz", "switch"]);
-  assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
-  assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
+  assert.deepEqual([...Relay.TRICKS], ["contactclick", "latchseat", "arcflick", "coilbuzz", "poleswitch", "armaturetap", "relayhush"]);
+  assert.deepEqual([...Fuse.TRICKS], ["railseat", "holdcurrent", "blowclear", "reseatsnap", "cartridgerattle", "bladeflash", "fusehush"]);
+  assert.deepEqual([...Earth.TRICKS], ["lugstrap", "earthseat", "heaveplate", "bedsettle", "soilgrip", "plateclamp", "groundhush"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
@@ -542,10 +542,15 @@ test("ultra-polish: Nori orb/nook/loom/weave lifts are Rui-visible (not micro id
   assert.equal(T.DUR.loom, Overlay.DUR.loom);
   assert.equal(T.DUR.weave, Overlay.DUR.weave);
   assert.equal(T.ORB_HOLD, Overlay.ORB_HOLD);
+  assert.equal(T.ORB_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "orb") > 39);
+  assert.ok(T.nextTrickWait(true, 0, "orb") < 80);
+  assert.ok(T.nextTrickWait(true, 0, "orb") > T.nextTrickWait(true, 0, "nook"));
   assert.equal(T.HAPPY_DUR.savor, Overlay.HAPPY_DUR.savor);
 });
 
-test("notes: Nori idle-life ultra done; Saffron / corn_snake + Bandit / kingsnake + Jade / green_tree_python + Bluff / hognose + Sash / garter ultra next-or-done; Lula / boa ultra next-or-done; following house-order ultra guest is Coral / milk_snake (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Nori Rui-dense ultra (ORB_HOLD=11.2); next leftover Saffron / corn_snake", () => {
   assert.deepEqual([...T.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.equal(T.TRICK_KEY, "ball_python");
   assert.equal(T.wantsThankYou("nori"), true);
