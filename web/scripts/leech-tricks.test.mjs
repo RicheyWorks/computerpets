@@ -2132,7 +2132,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Latch Rui-dense ultra (HIRUDINEAN_HOLD=11.2); Prickle now Rue-dense; next leftover Boot / paramecium", () => {
+test("notes: Latch Rui-dense ultra (HIRUDINEAN_HOLD=11.2); Prickle now Rue-dense; Boot now Rue-dense; next leftover Reach / amoeba", () => {
   assert.equal(T.TRICK_KEY, "leech");
   assert.deepEqual([...T.TRICKS], ["acetabulum", "prostomium", "looping", "undulatory", "hirudinean", "botryoidal", "auricle"]);
   assert.deepEqual([...T.HAPPY], ["sanguisuga", "haemopis", "erpobdella"]);
@@ -2280,9 +2280,9 @@ test("notes: Latch Rui-dense ultra (HIRUDINEAN_HOLD=11.2); Prickle now Rue-dense
   assert.equal(OverlayGround.tricksFor("latch"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("leech"), true);
   assert.equal(OverlayGround.wantsThankYou("latch"), true);
-  // Recommend next leftover (do not implement): Boot / paramecium.
-  assert.equal("paramecium", "paramecium");
-  assert.equal("Boot", "Boot");
+  // Recommend next leftover (do not implement): Reach / amoeba.
+  assert.equal("amoeba", "amoeba");
+  assert.equal("Reach", "Reach");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("chelate"), false);
   assert.equal(Salamander.TRICKS.includes("acetabulum"), false);
