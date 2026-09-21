@@ -318,7 +318,7 @@ test("Arca tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("frost"), false);
   assert.equal(T.TRICKS.includes("halo"), false);
   assert.equal(T.HAPPY.includes("halo"), false);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("holdcurrent"), true);
   assert.equal(Umbral.TRICKS.includes("silhouette"), true);
   assert.equal(Magneton.TRICKS.includes("lodestone"), true);
   assert.equal(Halovore.TRICKS.includes("halite"), true);
@@ -418,7 +418,7 @@ test("Arca tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("frost"), false);
   assert.equal(T.TRICKS.includes("halo"), false);
   assert.equal(T.HAPPY.includes("halo"), false);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("holdcurrent"), true);
   assert.equal(Magneton.TRICKS.includes("lodestone"), true);
   assert.equal(Halovore.TRICKS.includes("halite"), true);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
@@ -495,7 +495,7 @@ test("Arca tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("frost"), false);
   assert.equal(T.TRICKS.includes("halo"), false);
   assert.equal(T.HAPPY.includes("halo"), false);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("holdcurrent"), true);
   assert.equal(Halovore.TRICKS.includes("halite"), true);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.deepEqual([...Nexus.TRICKS], ["plexus", "splice", "braid", "weft", "mesh", "fascicle", "sennit"]);
@@ -1018,6 +1018,11 @@ test("lorica/tegument/ampoule/bradyzoite/cryptobiosis/sporocyst/tachyzoite are s
   assert.equal(held.anim, "sit");
   assert.ok(held.rot !== 0 || held.lift > 0);
   const release = T.stepTrick(bole, T.CRYPTOBIOSIS_HOLD + 0.2, ground);
+  assert.equal(T.CRYPTOBIOSIS_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.equal(T.CRYPTOBIOSIS_HOLD, Overlay.CRYPTOBIOSIS_HOLD);
+  assert.equal(T.RELEASE_S, Overlay.RELEASE_S);
+  assert.ok(T.CRYPTOBIOSIS_HOLD <= 12);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
   const doneBole = T.stepTrick(bole, T.DUR.cryptobiosis + 0.1, ground);
@@ -1222,7 +1227,7 @@ test("lorica/tegument/ampoule/bradyzoite/cryptobiosis/sporocyst/tachyzoite are s
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -1568,7 +1573,7 @@ globalThis.PetCystTricks = Overlay;
   assert.deepEqual([...OverlayNimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Nimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("holdcurrent"), true);
   assert.equal(T.TRICKS.includes("current"), false);
   assert.equal(Magneton.TRICKS.includes("lodestone"), true);
   assert.equal(T.TRICKS.includes("lodestone"), false);
@@ -1608,7 +1613,7 @@ globalThis.PetCystTricks = Overlay;
   assert.deepEqual([...OverlayNimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Nimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("holdcurrent"), true);
   assert.equal(T.TRICKS.includes("current"), false);
   assert.equal(Halovore.TRICKS.includes("halite"), true);
   assert.equal(T.TRICKS.includes("halite"), false);
@@ -1859,7 +1864,8 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Arca ultra idle-life done; next house-order ultra is Pinch / crayfish", () => {
+test("notes: Arca Rui-dense ultra (CRYPTOBIOSIS_HOLD=11.2); leftover idle densify queue empty", () => {
+  // Leftover idle densify queue is empty. Later guests are already HOLD=11.2.
   assert.equal(T.TRICK_KEY, "cyst");
   assert.deepEqual([...T.TRICKS], ["lorica", "tegument", "ampoule", "bradyzoite", "cryptobiosis", "sporocyst", "tachyzoite"]);
   assert.deepEqual([...T.HAPPY], ["excyst", "turgor", "trehalose"]);
@@ -1897,7 +1903,7 @@ test("notes: Arca ultra idle-life done; next house-order ultra is Pinch / crayfi
   assert.equal(OverlayGround.wantsThankYou("choir"), true);
   assert.equal(OverlayGround.tricksFor("gleam"), OverlayPhotovore);
   assert.equal(OverlayGround.tricksFor("pulse"), OverlayMoonJelly);
-  assert.equal(Fuse.TRICKS.includes("current"), true);
+  assert.equal(Fuse.TRICKS.includes("holdcurrent"), true);
   assert.equal(T.TRICKS.includes("current"), false);
   assert.equal(Umbral.TRICKS.includes("silhouette"), true);
   assert.equal(T.TRICKS.includes("silhouette"), false);
@@ -1909,9 +1915,8 @@ test("notes: Arca ultra idle-life done; next house-order ultra is Pinch / crayfi
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next house-order ultra (do not implement): Pinch / crayfish.
-  assert.equal("crayfish", "crayfish");
-  assert.equal("Pinch", "Pinch");
+  assert.equal(T.CRYPTOBIOSIS_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
 });
 
 
