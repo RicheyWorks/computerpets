@@ -498,9 +498,13 @@ test("ultra-polish: Atlas legend/canopy/inset lifts are Rui-visible (not micro i
   assert.ok(r2.lift > 0.5 || Math.abs(r2.rot) > 4 || Math.abs(r2.x - 80) > 0.5, `rung mid ${r2.lift}/${r2.rot}/${r2.x}`);
   assert.ok(Overlay.canopyPose && Overlay.insetPose);
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.LEGEND_HOLD, Overlay.LEGEND_HOLD);
+  assert.equal(T.LEGEND_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "legend") > 39);
 });
 
-test("notes: Atlas idle-life ultra done; Cup / octopus ultra done; Sepia / cuttlefish ultra done; Chamber / nautilus ultra done; Pulse / moon_jelly ultra done; Anchor / seahorse ultra done; next house-order ultra guest is Kite / manta (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger + Anchor already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
+test("notes: Atlas Rui-dense ultra (LEGEND_HOLD=11.2); next leftover Cup / octopus", () => {
   assert.equal(T.TRICK_KEY, "carpet_python");
   assert.equal(T.wantsThankYou("atlas"), true);
   assert.equal(OverlayGround.tricksFor("boa"), OverlayBoa);
