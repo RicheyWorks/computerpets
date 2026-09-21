@@ -449,7 +449,7 @@ test("ultra-polish: Ochre podia/madre/papula lifts are Rui-visible (not micro id
   assert.ok(T.nextTrickWait(true, 0, "podia") > 39);
 });
 
-test("notes: Ochre Rui-dense ultra (PODIA_HOLD=11.2); Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; Felt densified; Vein densified; Fan densified; Mast densified; next leftover Disk / water_lily", () => {
+test("notes: Ochre Rui-dense ultra (PODIA_HOLD=11.2); Tenant densified; Ledger densified; Anchor densified; Kite densified; Door densified; Felt densified; Vein densified; Fan densified; Mast densified; Disk densified; next leftover Wax / honeycomb", () => {
   assert.equal(T.TRICK_KEY, "sea_star");
   assert.equal(T.wantsThankYou("cling"), true);
   assert.equal(OverlayGround.tricksFor("sea_star"), Overlay);

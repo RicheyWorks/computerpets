@@ -589,7 +589,7 @@ test("ultra-polish: Door jamb/hinge/mucus/sentry lifts are Rui-visible (not micr
   assert.ok(T.nextTrickWait(true, 0, "jamb") > 39);
 });
 
-test("notes: Door Rui-dense ultra (JAMB_HOLD=11.2); Felt densified; Vein densified; Fan densified; Mast densified; next leftover Disk / water_lily", () => {
+test("notes: Door Rui-dense ultra (JAMB_HOLD=11.2); Felt densified; Vein densified; Fan densified; Mast densified; Disk densified; next leftover Wax / honeycomb", () => {
   assert.equal(T.TRICK_KEY, "moray");
   assert.equal(T.wantsThankYou("door"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -632,8 +632,8 @@ test("notes: Door Rui-dense ultra (JAMB_HOLD=11.2); Felt densified; Vein densifi
   assert.equal(OverlayGround.wantsThankYou("moray"), true);
   assert.equal(OverlayGround.tricksFor("door"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("door"), true);
-  assert.equal(OverlayGround.tricksFor("water_lily") == null, true);
-  assert.equal(OverlayGround.wantsThankYou("water_lily"), false);
-  assert.equal(OverlayGround.tricksFor("disk") == null, true);
-  assert.equal(OverlayGround.wantsThankYou("disk"), false);
+  assert.equal(OverlayGround.tricksFor("honeycomb") == null, true);
+  assert.equal(OverlayGround.wantsThankYou("honeycomb"), false);
+  assert.equal(OverlayGround.tricksFor("wax") == null, true);
+  assert.equal(OverlayGround.wantsThankYou("wax"), false);
 });
