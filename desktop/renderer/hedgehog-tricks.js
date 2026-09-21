@@ -1,4 +1,4 @@
-/** Burr ground tricks while idle — ultra-polish pass. House hedgehog — curl / snuffle / anoint / bristle / root / trundle / wheel personality (soft Atelerix desk life). Curl guarded pin-cushion hold without naming ball (window-play) or tuck (turtle) or loaf/nest; snuffle nose-down forage without naming dig or sniff-clone; anoint foam-and-spread without naming wash/preen; bristle quill lift without naming flare/puff; root litter shove without naming dig/steal; trundle slow rolling gait without naming waddle (penguin) or plod (turtle); wheel pet-hedgehog night-run without naming zoom/scurry/reel. Window-play BALL unchanged — never names a trick `ball`. Guest slug Burr / key hedgehog — accept "hedgehog" and "burr". Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk (`hedgehog.wav`). Thank-yous snort / soft / grunt. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web `hedgehog-tricks.ts`. True house-hedgehog desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/chinchilla/axolotl/toucan/iguana/dragon/Vesper clones. Bird ultra (Soot→Ember) + Miso/Pip/Thimble/Clip/Whee/Ink/Coin/Rue/Wick done; Echo/budgie + Peck/penguin + Quill/parrot skip birds; Keel/toucan skip if bird. Next guest ultra is Floss / chinchilla. No cry inventing — thank-yous silent desk motion only. Never retouch Rui sprites. */
+/** Burr ground tricks while idle — ultra-polish pass. House hedgehog — curl / snuffle / anoint / bristle / root / trundle / wheel personality (soft Atelerix desk life). Curl guarded pin-cushion hold without naming ball (window-play) or tuck (turtle) or loaf/nest; snuffle nose-down forage without naming dig or sniff-clone; anoint foam-and-spread without naming wash/preen; bristle quill lift without naming flare/puff; root litter shove without naming dig/steal; trundle slow rolling gait without naming waddle (penguin) or plod (turtle); wheel pet-hedgehog night-run without naming zoom/scurry/reel. Window-play BALL unchanged — never names a trick `ball`. Guest slug Burr / key hedgehog — accept "hedgehog" and "burr". Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk (`hedgehog.wav`). Thank-yous snort / soft / grunt. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web `hedgehog-tricks.ts`. True house-hedgehog desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/chinchilla/axolotl/toucan/iguana/dragon/Vesper clones. Bird ultra (Soot→Ember) + Miso/Pip/Thimble/Clip/Whee/Ink/Coin/Rue/Wick done; Echo/budgie + Peck/penguin + Quill/parrot skip birds; Keel/toucan skip if bird. Next guest ultra is Floss / chinchilla. No cry inventing — thank-yous silent desk motion only. Never retouch Rui sprites.  hedgehog.wav EXISTS so prefersHouseCry adds hedgehog. Amplitudes raised toward Rui richness; denser waits/weights (CURL_HOLD=11.2 RELEASE_S=1.18). Catalog 221. */
 
 (function (root) {
   const TRICK_KEY = "hedgehog";
@@ -12,8 +12,8 @@
   };
 
   /** Curl hold — Burr becomes a guarded pin-cushion ball on the desk. Not window-play ball. Not a turtle tuck. Not a cat loaf. Not a hamster nest. */
-  const CURL_HOLD = 13.6;
-  const RELEASE_S = 0.95;
+  const CURL_HOLD = 11.2;
+  const RELEASE_S = 1.18;
 
   const DUR = {
     curl: CURL_HOLD + RELEASE_S,
@@ -54,11 +54,9 @@
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
     if (kind === "curl") return 40 + roll * 26;
-    if (kind === "snuffle") return 11 + roll * 8;
-    if (kind === "anoint" || kind === "bristle") return 11 + roll * 8;
-    if (kind === "root" || kind === "trundle") return 10 + roll * 8;
-    if (kind === "wheel") return 12 + roll * 9;
-    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+    if (kind === "wheel" || kind === "snuffle" || kind === "trundle") return 12.8 + roll * 9.4;
+    if (kind === "anoint" || kind === "bristle" || kind === "root") return 11.6 + roll * 8.5;
+    return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
 
   function pickTrick(rand, musicOn, lastKind) {
@@ -68,7 +66,7 @@
     const pool = TRICKS.filter((k) => k !== lastKind);
     const list = pool.length ? pool : TRICKS.slice();
     const weights = list.map((k) =>
-      k === "curl" ? 0.55 : k === "snuffle" || k === "trundle" || k === "wheel" ? 1.15 : 1
+      k === "curl" ? 0.72 : k === "snuffle" || k === "trundle" || k === "wheel" ? 1.28 : k === "anoint" || k === "bristle" ? 1.18 : 1.08
     );
     let total = 0;
     for (let i = 0; i < weights.length; i++) total += weights[i];
@@ -144,38 +142,38 @@
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.snort));
     if (u < 0.16) {
       const s = u / 0.16;
-      return { lift: s * 4.2, rot: -s * 12, dx: 0, anim: "talk" };
+      return { lift: s * 5.0, rot: -s * 14.4, dx: 0, anim: "talk" };
     }
     if (u < 0.8) {
       return {
-        lift: 4.2 + Math.abs(Math.sin(t * 10)) * 3.2,
-        rot: -12 + Math.sin(t * 12) * 10,
-        dx: Math.sin(t * 8) * 1.6,
+        lift: 5.0 + Math.abs(Math.sin(t * 10)) * 3.8,
+        rot: -14.4 + Math.sin(t * 12) * 12,
+        dx: Math.sin(t * 8) * 1.9,
         anim: "talk",
       };
     }
     const s = (u - 0.8) / 0.2;
-    return { lift: 4.2 * (1 - s), rot: -12 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: 5.0 * (1 - s), rot: -14.4 * (1 - s), dx: 0, anim: "sit" };
   }
 
   function softPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.soft));
     if (u < 0.88) {
       return {
-        lift: Math.sin(u * Math.PI) * 3.4,
-        rot: 22 * (1 - Math.sin(u * Math.PI * 0.5)) + Math.sin(u * Math.PI * 2) * 7,
-        dx: Math.sin(u * Math.PI) * 2.2,
+        lift: Math.sin(u * Math.PI) * 4.1,
+        rot: 26.4 * (1 - Math.sin(u * Math.PI * 0.5)) + Math.sin(u * Math.PI * 2) * 8.4,
+        dx: Math.sin(u * Math.PI) * 2.6,
         anim: "sit",
       };
     }
-    return { lift: 0, rot: Math.sin(((u - 0.88) / 0.12) * Math.PI) * 3, dx: 0, anim: "idle" };
+    return { lift: 0, rot: Math.sin(((u - 0.88) / 0.12) * Math.PI) * 3.6, dx: 0, anim: "idle" };
   }
 
   function gruntPose(t) {
     return {
-      lift: Math.abs(Math.sin(t * 9)) * 5.2,
-      rot: Math.sin(t * 11) * 16,
-      dx: Math.sin(t * 7) * 2.0,
+      lift: Math.abs(Math.sin(t * 9)) * 6.2,
+      rot: Math.sin(t * 11) * 19.2,
+      dx: Math.sin(t * 7) * 2.4,
       anim: "play",
     };
   }
@@ -251,15 +249,15 @@
   /** Curl — guarded pin-cushion ball. Not window-play ball. Not a turtle tuck. Not a cat loaf. */
   function curlPose(t) {
     return {
-      lift: 0.8 + Math.sin(t * 1.3) * 0.7 + Math.abs(Math.sin(t * 2.4)) * 0.5,
-      rot: 28 + Math.sin(t * 1.6) * 5 + Math.sin(t * 2.8) * 3,
+      lift: 1.0 + Math.sin(t * 1.3) * 0.8 + Math.abs(Math.sin(t * 2.4)) * 0.6,
+      rot: 33.6 + Math.sin(t * 1.6) * 6 + Math.sin(t * 2.8) * 3.6,
     };
   }
 
   /** Soft uncurl — nose peeks; quills ease. Not window-play leave. */
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.8 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 28 * (1 - u) };
+    return { lift: 1.0 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 33.6 * (1 - u) };
   }
 
   /** Snuffle — nose-down forage along the wood. Not a dog sniff. Not a rabbit dig. Not a ferret steal. Ethogram hedgehog true. */
@@ -267,22 +265,22 @@
     const u = Math.max(0, Math.min(1, t / DUR.snuffle));
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: -s * 4.2, rot: s * 14 * facing, anim: "sit" };
+      return { x: fromX, lift: -s * 5.0, rot: s * 16.8 * facing, anim: "sit" };
     }
     if (u < 0.86) {
       const s = (u - 0.12) / 0.74;
       return {
         x: fromX + facing * (18 * smoothstep(s) + Math.sin(s * Math.PI * 4) * 4.5),
-        lift: -4.2 + Math.abs(Math.sin(s * Math.PI * 5)) * 3.2,
-        rot: facing * (14 + Math.sin(s * Math.PI * 6) * 11),
+        lift: -5.0 + Math.abs(Math.sin(s * Math.PI * 5)) * 3.8,
+        rot: facing * (16.8 + Math.sin(s * Math.PI * 6) * 13.2),
         anim: "walk",
       };
     }
     const s = smoothstep((u - 0.86) / 0.14);
     return {
       x: fromX + facing * 18,
-      lift: -4.2 * (1 - s),
-      rot: facing * 7 * (1 - s),
+      lift: -5.0 * (1 - s),
+      rot: facing * 8.4 * (1 - s),
       anim: "sit",
     };
   }
@@ -292,14 +290,14 @@
     const u = Math.max(0, Math.min(1, t / DUR.anoint));
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 3.2, rot: -s * 28 * facing, anim: "sit" };
+      return { x: fromX, lift: s * 3.8, rot: -s * 33.6 * facing, anim: "sit" };
     }
     if (u < 0.45) {
       const s = (u - 0.14) / 0.31;
       return {
         x: fromX + facing * Math.sin(s * Math.PI) * 2.4,
-        lift: 3.2 + Math.sin(s * Math.PI * 2) * 2.2,
-        rot: facing * (-28 + Math.sin(s * Math.PI * 3) * 14),
+        lift: 3.8 + Math.sin(s * Math.PI * 2) * 2.6,
+        rot: facing * (-33.6 + Math.sin(s * Math.PI * 3) * 16.8),
         anim: "sit",
       };
     }
@@ -307,16 +305,16 @@
       const s = (u - 0.45) / 0.41;
       return {
         x: fromX,
-        lift: 2.4 + Math.abs(Math.sin(s * Math.PI * 4)) * 4.6,
-        rot: facing * (18 + Math.sin(s * Math.PI * 5) * 26),
+        lift: 2.9 + Math.abs(Math.sin(s * Math.PI * 4)) * 5.5,
+        rot: facing * (21.6 + Math.sin(s * Math.PI * 5) * 31.2),
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.86) / 0.14);
     return {
       x: fromX,
-      lift: 2.4 * (1 - s),
-      rot: facing * 9 * (1 - s),
+      lift: 2.9 * (1 - s),
+      rot: facing * 10.8 * (1 - s),
       anim: "sit",
     };
   }
@@ -326,22 +324,22 @@
     const u = Math.max(0, Math.min(1, t / DUR.bristle));
     if (u < 0.18) {
       const s = smoothstep(u / 0.18);
-      return { x: fromX, lift: s * 5.8, rot: -s * 16, anim: "sit" };
+      return { x: fromX, lift: s * 7.0, rot: -s * 19.2, anim: "sit" };
     }
     if (u < 0.78) {
       const s = (u - 0.18) / 0.6;
       return {
         x: fromX + facing * Math.sin(s * Math.PI) * 1.6,
-        lift: 5.8 + Math.sin(s * Math.PI * 2) * 1.8,
-        rot: -16 + Math.sin(s * Math.PI * 3) * 9,
+        lift: 7.0 + Math.sin(s * Math.PI * 2) * 2.2,
+        rot: -19.2 + Math.sin(s * Math.PI * 3) * 10.8,
         anim: "sit",
       };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
       x: fromX,
-      lift: 5.8 * (1 - s),
-      rot: -8 * (1 - s),
+      lift: 7.0 * (1 - s),
+      rot: -9.6 * (1 - s),
       anim: "sit",
     };
   }
@@ -353,8 +351,8 @@
       const s = smoothstep(u / 0.1);
       return {
         x: fromX,
-        lift: -s * 3.6,
-        rot: s * 18 * facing,
+        lift: -s * 4.3,
+        rot: s * 21.6 * facing,
         anim: "sit",
       };
     }
@@ -363,16 +361,16 @@
       const shove = Math.sin(s * Math.PI * 4.5);
       return {
         x: fromX + facing * (14 * smoothstep(s) + shove * 5.5),
-        lift: -3.6 + Math.abs(shove) * 5.0,
-        rot: facing * (18 + shove * 22),
+        lift: -4.3 + Math.abs(shove) * 6.0,
+        rot: facing * (21.6 + shove * 26.4),
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.88) / 0.12);
     return {
       x: fromX + facing * 14,
-      lift: -3.6 * (1 - s),
-      rot: facing * 9 * (1 - s),
+      lift: -4.3 * (1 - s),
+      rot: facing * 10.8 * (1 - s),
       anim: "sit",
     };
   }
@@ -382,7 +380,7 @@
     const u = Math.max(0, Math.min(1, t / DUR.trundle));
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 2.2, rot: -s * 10 * facing, anim: "sit" };
+      return { x: fromX, lift: s * 2.6, rot: -s * 12 * facing, anim: "sit" };
     }
     if (u < 0.88) {
       const s = (u - 0.12) / 0.76;
@@ -390,16 +388,16 @@
       const sway = Math.sin(s * Math.PI * 3);
       return {
         x: fromX + facing * (20 * smoothstep(s)),
-        lift: 2.2 + Math.abs(bob) * 3.8,
-        rot: facing * (-10 + sway * 16 + bob * 8),
+        lift: 2.6 + Math.abs(bob) * 4.6,
+        rot: facing * (-12 + sway * 19.2 + bob * 9.6),
         anim: "walk",
       };
     }
     const s = smoothstep((u - 0.88) / 0.12);
     return {
       x: fromX + facing * 20,
-      lift: 2.2 * (1 - s),
-      rot: facing * -5 * (1 - s),
+      lift: 2.6 * (1 - s),
+      rot: facing * -6 * (1 - s),
       anim: "sit",
     };
   }
@@ -409,7 +407,7 @@
     const u = Math.max(0, Math.min(1, t / DUR.wheel));
     if (u < 0.1) {
       const s = smoothstep(u / 0.1);
-      return { x: fromX, lift: s * 5.5, rot: -s * 18, anim: "sit" };
+      return { x: fromX, lift: s * 6.6, rot: -s * 21.6, anim: "sit" };
     }
     if (u < 0.88) {
       const s = (u - 0.1) / 0.78;
@@ -417,16 +415,16 @@
       const hop = Math.abs(Math.sin(s * Math.PI * 5));
       return {
         x: fromX + facing * (Math.sin(s * Math.PI * 2) * 6),
-        lift: 5.5 + hop * 12,
-        rot: -18 + spin * 32 + facing * hop * 8,
+        lift: 6.6 + hop * 14.4,
+        rot: -21.6 + spin * 38.4 + facing * hop * 9.6,
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.88) / 0.12);
     return {
       x: fromX,
-      lift: 5.5 * (1 - s),
-      rot: -9 * (1 - s),
+      lift: 6.6 * (1 - s),
+      rot: -10.8 * (1 - s),
       anim: "sit",
     };
   }
