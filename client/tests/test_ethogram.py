@@ -521,6 +521,8 @@ def test_only_scratching_mammals_scratch():
     assert "freeze" in [a["name"] for a in acts_for("dragon")]
     assert "tongue" in [a["name"] for a in acts_for("ball_python")]
     assert "orb" in [a["name"] for a in acts_for("ball_python")]
+    assert "taste_soft" in [a["name"] for a in acts_for("ball_python")]
+    assert "unroll_soft" in [a["name"] for a in acts_for("ball_python")]
     assert "loom_soft" in [a["name"] for a in acts_for("ball_python")]
     assert "weave_soft" in [a["name"] for a in acts_for("ball_python")]
     assert "freeze" in [a["name"] for a in acts_for("ball_python")]
