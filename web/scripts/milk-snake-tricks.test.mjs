@@ -458,9 +458,13 @@ test("ultra-polish: Coral rhyme/cipher/verse lifts are Rui-visible (not micro id
   assert.ok(o2.lift > 0.5 || Math.abs(o2.rot) > 4 || Math.abs(o2.x - 80) > 0.5, `costume mid ${o2.lift}/${o2.rot}/${o2.x}`);
   assert.ok(Overlay.cipherPose && Overlay.versePose);
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.RHYME_HOLD, Overlay.RHYME_HOLD);
+  assert.equal(T.RHYME_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "rhyme") > 39);
 });
 
-test("notes: Coral idle-life ultra done; Blush / rosy_boa ultra done; Atlas / carpet_python ultra done; Cup / octopus ultra done; next house-order ultra guest is Sepia / cuttlefish (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Coral Rui-dense ultra (RHYME_HOLD=11.2); next leftover Blush / rosy_boa", () => {
   assert.equal(T.TRICK_KEY, "milk_snake");
   assert.equal(T.wantsThankYou("coral"), true);
   assert.equal(OverlayGround.tricksFor("boa"), OverlayBoa);
