@@ -1,4 +1,4 @@
-/** Pulse ground tricks while idle — ultra-polish pass. House moon jelly — bell / oral / lucent / trail / medusa / rhopalium / horseshoe personality (umbrella-bell contractions, four oral-arm drape, translucence shimmer, trailing tentacle sway, gentle medusa desk life, rhopalia sensory clubs, four horseshoe gonads through the bell; not Cup mantle dens, Sepia cuttlebone chromatophores, Chamber spiral chambers, or Coin bowl-drift). Bell rides soft umbrella pulses; oral drapes the four oral arms; lucent shimmers the gelatin; trail sways marginal tentacles; medusa glides desk-life; rhopalium tips the eight sensory clubs (species-true Aurelia aurita orientation/light sense — not trail tentacles, not lucent sheen, not window-play CHIME); horseshoe shows the four horseshoe gonads through the bell (species-true Aurelia diagnostic — not oral arms, not Chamber nacre, not Cup papilla). Window-play CHIME unchanged — never names `chime`. Ethogram keeps hide sit_hold; adds oral/lucent/trail/medusa/rhopalium/horseshoe softs + freeze (replaces thin pulse/drift). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via moon_jelly.wav. Thank-yous halo / lumen / gel. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web `moon_jelly-tricks.ts`. True house-moon-jelly desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids chime/flush/lid/rise/mantle/sucker/jet/veil/tinker/papilla/ooze/drift/gulp/flare/dart/soak/tuck/paddle/gill/amble/plume/legend/fan/flash/latch/puff/unfurl/chart/climb/probe/canyon/crawl/siphon/pulse/slink/den/cork/nest/savor/settle/survey/snatch/band/funnel/tentacle/loom/wave/buoy/bone/pupil/chroma/hover/blot/strike/zebra/spiral/siphuncle/nacre/pinhole/fringe/hyponome/aperture name collisions with prior guests and moon_jelly window-play. Bird ultra (Soot→Ember) + Miso→Chamber done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Ochre / sea_star ultra done; Tenant / hermit_crab ultra done; Ledger / horseshoe_crab ultra done; Anchor / seahorse ultra done; next guest ultra is Kite / manta. No cry inventing beyond house moon_jelly.wav prefer. Never retouch Rui sprites. */
+/** Pulse ground tricks while idle — ultra-polish pass. House moon jelly — bell / oral / lucent / trail / medusa / rhopalium / horseshoe personality (umbrella-bell contractions, four oral-arm drape, translucence shimmer, trailing tentacle sway, gentle medusa desk life, rhopalia sensory clubs, four horseshoe gonads through the bell; not Cup mantle dens, Sepia cuttlebone chromatophores, Chamber spiral chambers, or Coin bowl-drift). Bell rides soft umbrella pulses; oral drapes the four oral arms; lucent shimmers the gelatin; trail sways marginal tentacles; medusa glides desk-life; rhopalium tips the eight sensory clubs (species-true Aurelia aurita orientation/light sense — not trail tentacles, not lucent sheen, not window-play CHIME); horseshoe shows the four horseshoe gonads through the bell (species-true Aurelia diagnostic — not oral arms, not Chamber nacre, not Cup papilla). Window-play CHIME unchanged — never names `chime`. Ethogram keeps hide sit_hold; adds oral/lucent/trail/medusa/rhopalium/horseshoe softs + freeze (replaces thin pulse/drift). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via moon_jelly.wav. Thank-yous halo / lumen / gel. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web `moon_jelly-tricks.ts`. True house-moon-jelly desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids chime/flush/lid/rise/mantle/sucker/jet/veil/tinker/papilla/ooze/drift/gulp/flare/dart/soak/tuck/paddle/gill/amble/plume/legend/fan/flash/latch/puff/unfurl/chart/climb/probe/canyon/crawl/siphon/pulse/slink/den/cork/nest/savor/settle/survey/snatch/band/funnel/tentacle/loom/wave/buoy/bone/pupil/chroma/hover/blot/strike/zebra/spiral/siphuncle/nacre/pinhole/fringe/hyponome/aperture name collisions with prior guests and moon_jelly window-play. Bird ultra (Soot→Ember) + Miso→Chamber done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Ochre / sea_star ultra done; Tenant / hermit_crab ultra done; Ledger / horseshoe_crab ultra done; Anchor / seahorse ultra done; next guest ultra is Kite / manta. Amplitudes raised toward Rui richness; denser waits/weights (BELL_HOLD=11.2 RELEASE_S=1.18). Next leftover Ochre / sea_star. No cry inventing beyond house moon_jelly.wav prefer. Never retouch Rui sprites. */
 (function (root) {
 const TRICK_KEY = "moon_jelly";
 const TRICKS = ["bell", "oral", "lucent", "trail", "medusa", "rhopalium", "horseshoe"];
@@ -9,8 +9,8 @@ const HAPPY_DUR = {
     gel: 1.42,
 };
 /** Bell hold — Pulse rests in soft umbrella contractions. Not window-play CHIME. Not Coin drift. Not Chamber spiral. Not Cup mantle. */
-const BELL_HOLD = 10.6;
-const RELEASE_S = 0.6;
+const BELL_HOLD = 11.2;
+const RELEASE_S = 1.18;
 const DUR = {
     bell: BELL_HOLD + RELEASE_S,
     oral: 1.78,
@@ -47,12 +47,12 @@ function shouldAbort(state) {
 function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
     if (kind === "bell")
-        return 38 + roll * 24;
+        return 40 + roll * 26;
     if (kind === "rhopalium" || kind === "horseshoe" || kind === "trail")
-        return 12 + roll * 9;
+        return 12.8 + roll * 9.4;
     if (kind === "oral" || kind === "lucent" || kind === "medusa")
-        return 11 + roll * 8;
-    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+        return 12.8 + roll * 9.4;
+    return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 function pickTrick(rand, musicOn = false, lastKind) {
     if (musicOn)
@@ -60,7 +60,7 @@ function pickTrick(rand, musicOn = false, lastKind) {
     const roll = rand == null ? Math.random() : rand;
     const pool = TRICKS.filter((k) => k !== lastKind);
     const list = pool.length ? pool : [...TRICKS];
-    const weights = list.map((k) => k === "bell" ? 0.55 : k === "rhopalium" || k === "horseshoe" || k === "trail" ? 1.15 : 1);
+    const weights = list.map((k) => k === "bell" ? 0.72 : k === "rhopalium" || k === "horseshoe" || k === "trail" ? 1.28 : k === "oral" || k === "lucent" || k === "medusa" ? 1.18 : 1.08);
     let total = 0;
     for (let i = 0; i < weights.length; i++)
         total += weights[i];
@@ -78,7 +78,9 @@ function happyCanStart(state) {
     if (state.asleep || state.hidden || state.leaving)
         return false;
     const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide")
+    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest")
+        return false;
+    if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter")
         return false;
     return true;
 }
@@ -88,9 +90,14 @@ function happyShouldAbort(state) {
     if (state.asleep || state.hidden || state.leaving)
         return true;
     const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide")
-        return true;
-    return false;
+    return (cmd === "sleep" ||
+        cmd === "leave" ||
+        cmd === "hide" ||
+        cmd === "rest" ||
+        cmd === "seek" ||
+        cmd === "play" ||
+        cmd === "talk" ||
+        cmd === "enter");
 }
 function wantsThankYou(key) {
     return key === TRICK_KEY || key === "pulse";
@@ -128,43 +135,43 @@ function haloPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.halo));
     if (u < 0.16) {
         const s = u / 0.16;
-        return { lift: s * 3.2, rot: s * 14, dx: 0, anim: "sit" };
+        return { lift: s * 3.84, rot: s * 16.8, dx: 0, anim: "sit" };
     }
     if (u < 0.78) {
         const ring = Math.sin(t * 2.4);
         return {
-            lift: 3.2 + Math.abs(ring) * 1.8,
-            rot: 14 + ring * 12,
-            dx: ring * 0.45,
+            lift: 3.84 + Math.abs(ring) * 2.16,
+            rot: 16.8 + ring * 14.4,
+            dx: ring * 0.54,
             anim: "sit",
         };
     }
     const s = (u - 0.78) / 0.22;
-    return { lift: 2.4 * (1 - s), rot: 8 * (1 - s), dx: 0, anim: "idle" };
+    return { lift: 2.88 * (1 - s), rot: 9.6 * (1 - s), dx: 0, anim: "idle" };
 }
 function lumenPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.lumen));
     if (u < 0.12) {
         const s = u / 0.12;
-        return { lift: s * 2.6, rot: s * -18, dx: 0, anim: "talk" };
+        return { lift: s * 3.12, rot: s * -21.6, dx: 0, anim: "talk" };
     }
     if (u < 0.8) {
         const w = Math.sin(t * 2.6);
         return {
-            lift: 2.6 + Math.abs(w) * 1.4,
-            rot: -18 + w * 22,
-            dx: w * 0.35,
+            lift: 3.12 + Math.abs(w) * 1.68,
+            rot: -21.6 + w * 26.4,
+            dx: w * 0.42,
             anim: "talk",
         };
     }
     const s = (u - 0.8) / 0.2;
-    return { lift: 2.0 * (1 - s), rot: -12 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: 2.4 * (1 - s), rot: -14.4 * (1 - s), dx: 0, anim: "sit" };
 }
 function gelPose(t) {
     return {
-        lift: Math.abs(Math.sin(t * 2.1)) * 2.2 + 2.4,
-        rot: 8 + Math.sin(t * 2.8) * 14,
-        dx: Math.sin(t * 1.6) * 0.4,
+        lift: Math.abs(Math.sin(t * 2.1)) * 2.64 + 2.88,
+        rot: 9.6 + Math.sin(t * 2.8) * 16.8,
+        dx: Math.sin(t * 1.6) * 0.48,
         anim: "sit",
     };
 }
@@ -222,38 +229,38 @@ function smoothstep(t) {
     return x * x * (3 - 2 * x);
 }
 function bellPose(t) {
-    const beat = Math.sin(t * 1.7) + 0.45 * Math.sin(t * 3.4);
+    const beat = Math.sin(t * 1.7) + 0.54 * Math.sin(t * 3.4);
     return {
-        lift: 2.4 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
-        rot: -18 + Math.sin(t * 2.4) * 16 + beat * 8,
+        lift: 2.88 + Math.sin(t * 1.7) * 3.36 + Math.abs(Math.sin(t * 3.4)) * 1.92,
+        rot: -21.6 + Math.sin(t * 2.4) * 19.2 + beat * 9.6,
     };
 }
 function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: (2.4 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)), rot: -18 * (1 - u) };
+    return { lift: (2.88 + 3.36) * (1 - Math.sin(u * Math.PI * 0.5)), rot: -21.6 * (1 - u) };
 }
 function oralPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.oral));
     if (u < 0.12) {
         const s = smoothstep(u / 0.12);
-        return { x: fromX, lift: s * 3.6, rot: s * -16 * facing, anim: "talk" };
+        return { x: fromX, lift: s * 4.32, rot: s * -19.2 * facing, anim: "talk" };
     }
     if (u < 0.7) {
         const s = (u - 0.12) / 0.58;
         const arm = Math.sin(s * Math.PI * 3.2);
         const drape = Math.sin(s * Math.PI * 1.6);
         return {
-            x: fromX + facing * drape * 0.85,
-            lift: 3.6 + Math.abs(arm) * 1.8,
-            rot: facing * (-16 + arm * 18 + drape * 6),
+            x: fromX + facing * drape * 1.02,
+            lift: 4.32 + Math.abs(arm) * 2.16,
+            rot: facing * (-19.2 + arm * 21.6 + drape * 7.2),
             anim: "talk",
         };
     }
     const s = smoothstep((u - 0.7) / 0.3);
     return {
         x: fromX,
-        lift: 2.8 * (1 - s),
-        rot: facing * (-6 * (1 - s)),
+        lift: 3.36 * (1 - s),
+        rot: facing * (-7.2 * (1 - s)),
         anim: "sit",
     };
 }
@@ -261,23 +268,23 @@ function lucentPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.lucent));
     if (u < 0.14) {
         const s = smoothstep(u / 0.14);
-        return { x: fromX, lift: s * 3.2, rot: s * 10 * facing, anim: "sit" };
+        return { x: fromX, lift: s * 3.84, rot: s * 12 * facing, anim: "sit" };
     }
     if (u < 0.72) {
         const s = (u - 0.14) / 0.58;
         const sheen = Math.sin(s * Math.PI * 3.6);
         return {
-            x: fromX + facing * sheen * 0.55,
-            lift: 3.2 + Math.abs(sheen) * 2.0,
-            rot: facing * (10 + sheen * 14),
+            x: fromX + facing * sheen * 0.66,
+            lift: 3.84 + Math.abs(sheen) * 2.4,
+            rot: facing * (12 + sheen * 16.8),
             anim: "sit",
         };
     }
     const s = smoothstep((u - 0.72) / 0.28);
     return {
         x: fromX,
-        lift: 2.6 * (1 - s),
-        rot: facing * (5 * (1 - s)),
+        lift: 3.12 * (1 - s),
+        rot: facing * (6 * (1 - s)),
         anim: "idle",
     };
 }
@@ -285,24 +292,24 @@ function trailPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.trail));
     if (u < 0.1) {
         const s = smoothstep(u / 0.1);
-        return { x: fromX, lift: s * 3.4, rot: s * -12 * facing, anim: "play" };
+        return { x: fromX, lift: s * 4.08, rot: s * -14.4 * facing, anim: "play" };
     }
     if (u < 0.72) {
         const s = (u - 0.1) / 0.62;
         const wave = Math.sin(s * Math.PI * 5.2);
         const soft = Math.sin(s * Math.PI * 2.0);
         return {
-            x: fromX + facing * soft * 0.9,
-            lift: 3.4 + Math.abs(wave) * 2.2,
-            rot: facing * (-12 + wave * 18 + soft * 8),
+            x: fromX + facing * soft * 1.08,
+            lift: 4.08 + Math.abs(wave) * 2.64,
+            rot: facing * (-14.4 + wave * 21.6 + soft * 9.6),
             anim: "play",
         };
     }
     const s = smoothstep((u - 0.72) / 0.28);
     return {
         x: fromX,
-        lift: 2.8 * (1 - s),
-        rot: facing * (-6 * (1 - s)),
+        lift: 3.36 * (1 - s),
+        rot: facing * (-7.2 * (1 - s)),
         anim: "idle",
     };
 }
@@ -310,24 +317,24 @@ function medusaPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.medusa));
     if (u < 0.12) {
         const s = smoothstep(u / 0.12);
-        return { x: fromX, lift: s * 3.6, rot: s * 10 * facing, anim: "walk" };
+        return { x: fromX, lift: s * 4.32, rot: s * 12 * facing, anim: "walk" };
     }
     if (u < 0.7) {
         const s = (u - 0.12) / 0.58;
         const bob = Math.sin(s * Math.PI * 2.4);
         const glide = Math.sin(s * Math.PI * 1.2);
         return {
-            x: fromX + facing * glide * 1.1,
-            lift: 3.6 + bob * 1.8,
-            rot: facing * (10 + bob * 12 + glide * 6),
+            x: fromX + facing * glide * 1.32,
+            lift: 4.32 + bob * 2.16,
+            rot: facing * (12 + bob * 14.4 + glide * 7.2),
             anim: "walk",
         };
     }
     const s = smoothstep((u - 0.7) / 0.3);
     return {
         x: fromX,
-        lift: 2.8 * (1 - s),
-        rot: facing * (4 * (1 - s)),
+        lift: 3.36 * (1 - s),
+        rot: facing * (4.8 * (1 - s)),
         anim: "sit",
     };
 }
@@ -336,14 +343,14 @@ function rhopaliumPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.rhopalium));
     if (u < 0.12) {
         const s = smoothstep(u / 0.12);
-        return { x: fromX + facing * s * 0.6, lift: s * 2.4, rot: s * 8 * facing, anim: "talk" };
+        return { x: fromX + facing * s * 0.72, lift: s * 2.88, rot: s * 9.6 * facing, anim: "talk" };
     }
     if (u < 0.38) {
         const s = smoothstep((u - 0.12) / 0.26);
         return {
-            x: fromX + facing * (0.6 + s * 5.2),
-            lift: 2.4 + s * 1.6,
-            rot: facing * (8 - s * 4),
+            x: fromX + facing * (0.72 + s * 6.24),
+            lift: 2.88 + s * 1.92,
+            rot: facing * (9.6 - s * 4.8),
             anim: "talk",
         };
     }
@@ -351,17 +358,17 @@ function rhopaliumPose(t, fromX, facing) {
         const s = (u - 0.38) / 0.34;
         const tip = Math.sin(s * Math.PI * 2.8);
         return {
-            x: fromX + facing * (5.8 - s * 2.4 + tip * 0.45),
-            lift: 4.0 + Math.abs(tip) * 1.8,
-            rot: facing * (4 + tip * 14),
+            x: fromX + facing * (6.96 - s * 2.88 + tip * 0.54),
+            lift: 4.8 + Math.abs(tip) * 2.16,
+            rot: facing * (4.8 + tip * 16.8),
             anim: "talk",
         };
     }
     const s = smoothstep((u - 0.72) / 0.28);
     return {
-        x: fromX + facing * (3.4 * (1 - s)),
-        lift: 2.8 * (1 - s),
-        rot: facing * (4 * (1 - s)),
+        x: fromX + facing * (4.08 * (1 - s)),
+        lift: 3.36 * (1 - s),
+        rot: facing * (4.8 * (1 - s)),
         anim: "idle",
     };
 }
@@ -370,14 +377,14 @@ function horseshoePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.horseshoe));
     if (u < 0.12) {
         const s = smoothstep(u / 0.12);
-        return { x: fromX, lift: s * 3.2, rot: s * -14 * facing, anim: "play" };
+        return { x: fromX, lift: s * 3.84, rot: s * -16.8 * facing, anim: "play" };
     }
     if (u < 0.45) {
         const s = smoothstep((u - 0.12) / 0.33);
         return {
-            x: fromX + facing * s * 1.2,
-            lift: 3.2 + s * 1.4,
-            rot: facing * (-14 + s * 10),
+            x: fromX + facing * s * 1.44,
+            lift: 3.84 + s * 1.68,
+            rot: facing * (-16.8 + s * 12),
             anim: "play",
         };
     }
@@ -385,17 +392,17 @@ function horseshoePose(t, fromX, facing) {
         const s = (u - 0.45) / 0.27;
         const moon = Math.sin(s * Math.PI * 3.6);
         return {
-            x: fromX + facing * (1.2 - s * 0.6 + moon * 0.35),
-            lift: 4.6 + Math.abs(moon) * 1.6,
-            rot: facing * (-4 + moon * 16),
+            x: fromX + facing * (1.44 - s * 0.72 + moon * 0.42),
+            lift: 5.52 + Math.abs(moon) * 1.92,
+            rot: facing * (-4.8 + moon * 19.2),
             anim: "sit",
         };
     }
     const s = smoothstep((u - 0.72) / 0.28);
     return {
-        x: fromX + facing * (0.6 * (1 - s)),
-        lift: 3.0 * (1 - s),
-        rot: facing * (-6 * (1 - s)),
+        x: fromX + facing * (0.72 * (1 - s)),
+        lift: 3.6 * (1 - s),
+        rot: facing * (-7.2 * (1 - s)),
         anim: "idle",
     };
 }

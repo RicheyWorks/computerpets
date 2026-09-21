@@ -550,7 +550,7 @@ test("ultra-polish: Nori orb/nook/loom/weave lifts are Rui-visible (not micro id
   assert.equal(T.HAPPY_DUR.savor, Overlay.HAPPY_DUR.savor);
 });
 
-test("notes: Nori Rui-dense ultra (ORB_HOLD=11.2); Saffron densified; Bandit densified; Jade densified; Bluff densified; Sash densified; Lula densified; Coral densified; Blush densified; Atlas densified; Cup densified; Sepia densified; Chamber densified; next leftover Pulse / moon_jelly", () => {
+test("notes: Nori Rui-dense ultra (ORB_HOLD=11.2); Saffron densified; Bandit densified; Jade densified; Bluff densified; Sash densified; Lula densified; Coral densified; Blush densified; Atlas densified; Cup densified; Sepia densified; Chamber densified; Pulse densified; next leftover Ochre / sea_star", () => {
   assert.deepEqual([...T.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.equal(T.TRICK_KEY, "ball_python");
   assert.equal(T.wantsThankYou("nori"), true);
