@@ -788,8 +788,8 @@ globalThis.PetStickTricks = OverlayStick;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Brood Rui-dense ultra (MAGICICADA_HOLD=11.2); Frill now Rue-dense; Cap now Rue-dense; Lattice now Rue-dense; Horn now Rue-dense; Ring now Rue-dense; next leftover Mane / lions_mane", () => {
-  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Mane / lions_mane.
+test("notes: Brood Rui-dense ultra (MAGICICADA_HOLD=11.2); Frill now Rue-dense; Cap now Rue-dense; Lattice now Rue-dense; Horn now Rue-dense; Ring now Rue-dense; Mane now Rue-dense; next leftover Puff / puffball", () => {
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Puff / puffball.
   assert.equal(T.TRICK_KEY, "cicada");
   assert.equal(T.wantsThankYou("brood"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);

@@ -417,6 +417,11 @@ test("spine/icicle/cascade/wound/hericium/pompon/hydnoid are house-place-true, n
   assert.equal(held.anim, "sit");
   assert.ok(held.rot !== 0 || held.lift > 0);
   const release = T.stepTrick(bole, T.HERICIUM_HOLD + 0.2, ground);
+  assert.equal(T.HERICIUM_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.equal(T.HERICIUM_HOLD, Overlay.HERICIUM_HOLD);
+  assert.equal(T.RELEASE_S, Overlay.RELEASE_S);
+  assert.ok(T.HERICIUM_HOLD <= 12);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
   const doneBole = T.stepTrick(bole, T.DUR.hericium + 0.1, ground);
@@ -615,7 +620,7 @@ test("spine/icicle/cascade/wound/hericium/pompon/hydnoid are house-place-true, n
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -1062,7 +1067,8 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Mane ultra idle-life done; next house-order ultra is Flame / chicken_of_woods", () => {
+test("notes: Mane Rui-dense ultra (HERICIUM_HOLD=11.2); next leftover Puff / puffball", () => {
+  // Recommend next leftover guest still needing Rue-dense HOLD=11.2 (do not implement): Puff / puffball.
   assert.equal(T.TRICK_KEY, "lions_mane");
   assert.equal(T.wantsThankYou("mane"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
