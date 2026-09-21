@@ -2135,7 +2135,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Prickle Rui-dense ultra (GASTEROSTEID_HOLD=11.2); next leftover Boot / paramecium", () => {
+test("notes: Prickle Rui-dense ultra (GASTEROSTEID_HOLD=11.2); Boot now Rue-dense; next leftover Reach / amoeba", () => {
   assert.equal(T.TRICK_KEY, "stickleback");
   assert.deepEqual([...T.TRICKS], ["spiggin", "zigzag", "spinous", "fanning", "gasterosteid", "nuptial", "pelvic"]);
   assert.deepEqual([...T.HAPPY], ["aculeatus", "pungitius", "spinachia"]);
@@ -2300,9 +2300,9 @@ test("notes: Prickle Rui-dense ultra (GASTEROSTEID_HOLD=11.2); next leftover Boo
   assert.equal(T.TRICKS.includes("dart"), false);
   assert.equal(Goldfish.TRICKS.includes("flare"), true);
   assert.equal(T.TRICKS.includes("flare"), false);
-  // Recommend next leftover (do not implement): Boot / paramecium.
-  assert.equal("paramecium", "paramecium");
-  assert.equal("Boot", "Boot");
+  // Recommend next leftover (do not implement): Reach / amoeba.
+  assert.equal("amoeba", "amoeba");
+  assert.equal("Reach", "Reach");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("chelate"), false);
   assert.equal(Salamander.TRICKS.includes("spiggin"), false);

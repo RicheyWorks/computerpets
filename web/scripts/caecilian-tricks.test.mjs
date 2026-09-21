@@ -2085,7 +2085,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Slip Rui-dense ultra (GYMNOPHION_HOLD=11.2); Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; next leftover Boot / paramecium", () => {
+test("notes: Slip Rui-dense ultra (GYMNOPHION_HOLD=11.2); Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; Latch now Rue-dense; Prickle now Rue-dense; Boot now Rue-dense; next leftover Reach / amoeba", () => {
   assert.equal(T.TRICK_KEY, "caecilian");
   assert.deepEqual([...T.TRICKS], ["annulate", "fossorial", "tentacular", "hydrostatic", "gymnophion", "stegos", "dualjaw"]);
   assert.deepEqual([...T.HAPPY], ["annular", "silted", "glossed"]);
@@ -2171,9 +2171,9 @@ test("notes: Slip Rui-dense ultra (GYMNOPHION_HOLD=11.2); Pinch now Rue-dense; W
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next leftover (do not implement): Boot / paramecium.
-  assert.equal("paramecium", "paramecium");
-  assert.equal("Boot", "Boot");
+  // Recommend next leftover (do not implement): Reach / amoeba.
+  assert.equal("amoeba", "amoeba");
+  assert.equal("Reach", "Reach");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
   assert.equal(Salamander.TRICKS.includes("annulate"), false);
   assert.equal(T.TRICKS.includes("maculate"), false);
