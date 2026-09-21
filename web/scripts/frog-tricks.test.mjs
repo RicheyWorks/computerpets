@@ -1933,7 +1933,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Reed Rui-dense ultra (LENTIC_HOLD=11.2); Pebble now Rue-dense; Eft now Rue-dense; Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; next leftover Hinge / mussel", () => {
+test("notes: Reed Rui-dense ultra (LENTIC_HOLD=11.2); Pebble now Rue-dense; Eft now Rue-dense; Dapple now Rue-dense; Slip now Rue-dense; Pinch now Rue-dense; Whorl now Rue-dense; Hinge now Rue-dense; next leftover Latch / leech", () => {
   assert.equal(T.TRICK_KEY, "frog");
   assert.deepEqual([...T.TRICKS], ["gular", "nictitate", "tympanum", "iliac", "lentic", "toepad", "webbing"]);
   assert.deepEqual([...T.HAPPY], ["chorus", "rivulet", "spring"]);
@@ -1995,9 +1995,9 @@ test("notes: Reed Rui-dense ultra (LENTIC_HOLD=11.2); Pebble now Rue-dense; Eft 
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next leftover (do not implement): Hinge / mussel.
-  assert.equal("mussel", "mussel");
-  assert.equal("Hinge", "Hinge");
+  // Recommend next leftover (do not implement): Latch / leech.
+  assert.equal("leech", "leech");
+  assert.equal("Latch", "Latch");
 });
 
 
