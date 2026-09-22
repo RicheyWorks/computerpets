@@ -318,6 +318,73 @@ test("a posted apiKey is dropped before the house spends it", () => {
   assert.equal(parsed.mind.model, "grok-4.5");
 });
 
+test("desk talk drops a pasted secret model and keeps a normal model id", () => {
+  const token = "sk-test-PASTEDKEY0123456789";
+  const opaque = "AbCdEfGh1234567890IjKlMnOp1234567890";
+  const posted = P.talkBody({
+    message: "hello",
+    hunger: 70,
+    mood: 72,
+    energy: 68,
+    name: "Rui",
+    species: "red_panda",
+    mind: { plugin: "openai", model: token, baseUrl: "https://api.openai.com/v1" },
+  });
+  assert.equal(JSON.stringify(posted).includes(token), false);
+  assert.equal(posted.mind.model, undefined);
+  assert.equal(posted.mind.plugin, "openai");
+  assert.equal(posted.mind.baseUrl, "https://api.openai.com/v1");
+
+  const parsed = P.parseTalkBody({
+    message: "hello",
+    hunger: 70,
+    mood: 72,
+    energy: 68,
+    mind: {
+      plugin: "google",
+      model: `gemini-2.5-flash?api_key=${token}`,
+      baseUrl: "https://example.test/v1beta",
+    },
+  });
+  assert.equal(JSON.stringify(parsed).includes(token), false);
+  assert.equal(parsed.mind.model, undefined);
+  assert.equal(parsed.mind.baseUrl, "https://example.test/v1beta");
+
+  const kept = P.parseTalkBody({
+    message: "hello",
+    hunger: 70,
+    mood: 72,
+    energy: 68,
+    mind: {
+      plugin: "together",
+      model: "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo",
+      baseUrl: "https://api.together.xyz/v1",
+    },
+  });
+  assert.equal(kept.mind.model, "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo");
+  const ordinary = P.talkBody({
+    message: "hello",
+    hunger: 70,
+    mood: 72,
+    energy: 68,
+    name: "Rui",
+    species: "red_panda",
+    mind: { plugin: "anthropic", model: "claude-sonnet-4-5" },
+  });
+  assert.equal(ordinary.mind.model, "claude-sonnet-4-5");
+  const long = P.talkBody({
+    message: "hello",
+    hunger: 70,
+    mood: 72,
+    energy: 68,
+    name: "Rui",
+    species: "red_panda",
+    mind: { plugin: "openai", model: `key=${opaque}` },
+  });
+  assert.equal(JSON.stringify(long).includes(opaque), false);
+  assert.equal(long.mind.model, undefined);
+});
+
 test("desk and overlay talk do not put apiKey on a house body or query", () => {
   assert.match(postSrc, /delete copy\.apiKey/);
   assert.match(postSrc, /delete mindCopy\.apiKey/);

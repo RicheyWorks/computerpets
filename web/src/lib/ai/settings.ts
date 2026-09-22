@@ -1,5 +1,5 @@
 import { mindPreset } from "./catalog.ts";
-import { scrubSecretQueryString } from "./secret-query.mjs";
+import { scrubSecretModel, scrubSecretQueryString } from "./secret-query.mjs";
 import type { MindBinding, MindSettings, VoiceKind } from "./types";
 
 /**
@@ -9,6 +9,7 @@ import type { MindBinding, MindSettings, VoiceKind } from "./types";
  * localStorage and sessionStorage keep the prefs only.
  * A pasted secret on a base URL is dropped on save and on read:
  * the query, the userinfo, a token-shaped path segment, and a non-URL `key=` assignment.
+ * A pasted secret in the model field is dropped the same way. A normal model id stays.
  */
 
 export const MIND_STORAGE_KEY = "computerpets.mind.v1";
@@ -64,7 +65,11 @@ function bindingPrefs(raw: unknown, fallbackPlugin: string): MindBinding {
   const row = raw && typeof raw === "object" ? (raw as MindBinding) : {};
   const next: MindBinding = { plugin: fallbackPlugin };
   if (typeof row.plugin === "string" && row.plugin.trim()) next.plugin = row.plugin.trim().slice(0, 64);
-  if (typeof row.model === "string") next.model = row.model.slice(0, 200);
+  if (typeof row.model === "string") {
+    const model = scrubSecretModel(row.model);
+    if (model) next.model = model.slice(0, 200);
+    else if (row.model.trim()) next.model = "";
+  }
   if (typeof row.baseUrl === "string") next.baseUrl = scrubSecretQueryString(row.baseUrl).slice(0, 500);
   return next;
 }

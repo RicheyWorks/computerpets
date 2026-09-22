@@ -231,6 +231,48 @@ test("desk mind prefs drop a pasted key query on save and on read", async () => 
   assert.equal(textOf(leftover).includes("alt=sse"), true);
 });
 
+test("desk mind prefs drop a pasted secret model and keep a normal model id", async () => {
+  const token = "sk-test-PASTEDKEY0123456789";
+  const opaque = "AbCdEfGh1234567890IjKlMnOp1234567890";
+  const { local } = install();
+  await S.saveMindSettings({
+    default: { plugin: "openai", model: token, baseUrl: "https://api.openai.com/v1" },
+    voice: "browser",
+    pets: {
+      red_panda: { plugin: "google", model: `api_key=${token}` },
+      moth: { plugin: "anthropic", model: "claude-sonnet-4-5" },
+      fox: { plugin: "together", model: "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo" },
+    },
+  });
+  const disk = textOf(local);
+  assert.equal(disk.includes(token), false);
+  assert.equal(disk.includes("api_key="), false);
+  assert.equal(disk.includes("claude-sonnet-4-5"), true);
+  assert.equal(disk.includes("Meta-Llama-3.1-70B-Instruct-Turbo"), true);
+  const live = S.loadMindSettings();
+  assert.equal(live.default.model, "");
+  assert.equal(live.default.baseUrl, "https://api.openai.com/v1");
+  assert.equal(live.pets.red_panda.model, "");
+  assert.equal(live.pets.moth.model, "claude-sonnet-4-5");
+  assert.equal(live.pets.fox.model, "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo");
+
+  const leftover = memStore();
+  leftover.setItem(
+    KEY,
+    JSON.stringify({
+      default: { plugin: "openai", model: `key=${opaque}`, baseUrl: "https://api.openai.com/v1" },
+      voice: "browser",
+      pets: { red_panda: { plugin: "google", model: "gemini-2.5-flash" } },
+    }),
+  );
+  install({ local: leftover });
+  const opened = S.loadMindSettings();
+  assert.equal(opened.default.model, "");
+  assert.equal(opened.pets.red_panda.model, "gemini-2.5-flash");
+  assert.equal(textOf(leftover).includes(opaque), false);
+  assert.equal(textOf(leftover).includes("gpt-4o") || textOf(leftover).includes("gemini-2.5-flash"), true);
+});
+
 test("a desk save does not hand a pasted key query to the seal", async () => {
   let sent = null;
   const desk = {

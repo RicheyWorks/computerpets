@@ -3,8 +3,8 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { scrubSecretQueryString } from "../src/lib/ai/secret-query.mjs";
-import { assertSafeMindUrl, pluginRequestUrl } from "../src/lib/ai/safe-url.ts";
+import { isSecretModel, scrubSecretModel, scrubSecretQueryString } from "../src/lib/ai/secret-query.mjs";
+import { assertSafeMindUrl, pluginRequestUrl, sanitizeModel } from "../src/lib/ai/safe-url.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const repo = join(root, "..");
@@ -97,6 +97,56 @@ test("the plugin fetch drops userinfo and a path key before the call", () => {
   );
 });
 
+test("a pasted secret in the model field is dropped and a normal model id stays", () => {
+  const token = "AbCdEfGh1234567890IjKlMnOp1234567890";
+  const secrets = [
+    TOKEN,
+    `key=${TOKEN}`,
+    `api_key=${TOKEN}`,
+    `api-key=${MIXED}`,
+    `gemini-2.5-flash?key=${TOKEN}`,
+    `gpt-4o&token=${TOKEN}`,
+    `claude-sonnet-4-5%3Fkey%3D${TOKEN}`,
+    token,
+    `models/${TOKEN}`,
+  ];
+  for (const secret of secrets) {
+    assert.equal(isSecretModel(secret), true, secret);
+    assert.equal(scrubSecretModel(secret), "", secret);
+    assert.equal(scrubSecretModel(secret, "gemini-2.5-flash"), "gemini-2.5-flash", secret);
+    assert.equal(sanitizeModel(secret, "gemini-2.5-flash"), "gemini-2.5-flash", secret);
+    assert.equal(sanitizeModel(secret, "gpt-4.1-mini").includes(TOKEN), false, secret);
+  }
+  const kept = [
+    "gemini-2.5-flash",
+    "gpt-4o",
+    "gpt-4.1-mini",
+    "claude-sonnet-4-5",
+    "claude-haiku-4-5",
+    "claude-opus-4-5",
+    "grok-4.5",
+    "llama-3.3-70b-versatile",
+    "llama3.2",
+    "mistral-small-latest",
+    "deepseek-chat",
+    "local-model",
+    "default",
+    "x-ai/grok-4.5",
+    "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo",
+    "accounts/fireworks/models/llama-v3p1-70b-instruct",
+    "anthropic/claude-sonnet-4.5",
+    "qwen2.5",
+  ];
+  for (const model of kept) {
+    assert.equal(isSecretModel(model), false, model);
+    assert.equal(scrubSecretModel(model), model, model);
+    assert.equal(sanitizeModel(model, "gpt-4.1-mini"), model, model);
+  }
+  assert.equal(scrubSecretModel("  gemini-2.5-flash  "), "gemini-2.5-flash");
+  assert.equal(scrubSecretModel(""), "");
+  assert.equal(sanitizeModel(undefined, "gemini-2.5-flash"), "gemini-2.5-flash");
+});
+
 test("overlay and disk scrub stay in lockstep with the shared helper", () => {
   const shared = readFileSync(join(root, "src/lib/ai/secret-query.mjs"), "utf8");
   const disk = readFileSync(join(repo, "desktop/mind-secret.cjs"), "utf8");
@@ -104,7 +154,7 @@ test("overlay and disk scrub stay in lockstep with the shared helper", () => {
   const helper = (src) => {
     let start = src.indexOf("function secretNameSource");
     start = src.lastIndexOf("\n", start) + 1;
-    const endName = src.indexOf("function scrubSecretQueryString");
+    const endName = src.indexOf("function scrubSecretModel");
     const after = src.slice(endName);
     let depth = 0;
     let end = -1;
