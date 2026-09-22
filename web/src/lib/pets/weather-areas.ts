@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line says this computer's network address goes with the https request. Look up and the reverse lookup after Send the place wait until that same panel shows the line for the geocode host. Same map as desktop `weather-areas.js`. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line says this computer's network address goes with the https request. `readForecast` refuses that fetch when the painted forecast line is missing. Look up and the reverse lookup after Send the place wait until that same panel shows the line for the geocode host. `readGeocode` and `readReverse` refuse those fetches when that painted line is missing. Same map as desktop `weather-areas.js`. */
 import type { Weather } from "./weather";
 
 export const NO_AREA = "no area set";
@@ -485,6 +485,59 @@ export function geocodeHonesty(kind: unknown): string {
  */
 export function geocodeMaySend(kind: unknown, lineInView: boolean): boolean {
   return lineInView === true && geocodeHonesty(kind).includes(GEOCODE_NET);
+}
+
+/**
+ * A forecast leaves only when the painted line is a forecast send sentence.
+ * That sentence includes the forecast host line. The saved-place question,
+ * a bare network-address sentence, and the geocode sentence do not count.
+ * A missing line does not call fetch.
+ */
+export function forecastMayLeave(shown: unknown): boolean {
+  if (!FORECAST_NET || typeof shown !== "string") return false;
+  return shown.includes(TYPED_FORECAST) || shown.includes(SAVED_FORECAST_CONTINUE);
+}
+
+/**
+ * A typed look-up leaves only when the painted look-up line names the geocode host.
+ * The reverse sentence and the forecast sentence do not count.
+ */
+export function geocodeLookMayLeave(shown: unknown): boolean {
+  return GEOCODE_LOOK.length > 0 && typeof shown === "string" && shown.includes(GEOCODE_LOOK);
+}
+
+/**
+ * A reverse lookup leaves only when the painted reverse line names the geocode host.
+ * The look-up sentence and the forecast sentence do not count.
+ */
+export function geocodeReverseMayLeave(shown: unknown): boolean {
+  return GEOCODE_REVERSE.length > 0 && typeof shown === "string" && shown.includes(GEOCODE_REVERSE);
+}
+
+type JsonFetch = (url: string, init?: RequestInit) => Promise<{ json: () => Promise<unknown> }>;
+
+function readJson(url: string, fetchImpl: JsonFetch): Promise<unknown | null> {
+  return Promise.resolve(fetchImpl(url, { cache: "no-store" })).then((res) =>
+    res && typeof res.json === "function" ? res.json() : null,
+  );
+}
+
+/** The only forecast fetch. A miss resolves to null and does not call fetch. */
+export function readForecast(shown: unknown, url: string, fetchImpl: JsonFetch = fetch): Promise<unknown | null> {
+  if (!forecastMayLeave(shown) || !url) return Promise.resolve(null);
+  return readJson(url, fetchImpl);
+}
+
+/** The only geocode look-up fetch. A miss resolves to null and does not call fetch. */
+export function readGeocode(shown: unknown, url: string, fetchImpl: JsonFetch = fetch): Promise<unknown | null> {
+  if (!geocodeLookMayLeave(shown) || !url) return Promise.resolve(null);
+  return readJson(url, fetchImpl);
+}
+
+/** The only reverse-lookup fetch. A miss resolves to null and does not call fetch. */
+export function readReverse(shown: unknown, url: string, fetchImpl: JsonFetch = fetch): Promise<unknown | null> {
+  if (!geocodeReverseMayLeave(shown) || !url) return Promise.resolve(null);
+  return readJson(url, fetchImpl);
 }
 
 export function plateLine(

@@ -384,6 +384,8 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.match(sendBody, /geocodeMaySend\("reverse"/);
   assert.ok(sendBody.indexOf('geocodeHonesty("reverse")') < sendBody.indexOf("reverseUrl"));
   assert.ok(sendBody.indexOf('geocodeMaySend("reverse"') < sendBody.indexOf("reverseUrl"));
+  assert.ok(sendBody.indexOf("reverseUrl") < sendBody.indexOf("readReverse(shown"));
+  assert.doesNotMatch(sendBody, /fetch\(/);
   assert.doesNotMatch(sendBody, /latitude=\$\{fix|longitude=\$\{fix/);
   assert.equal(require("./weather-areas.js").HERE_SEND, "this click sends a place to the forecast host.");
   assert.equal(require("./weather-areas.js").HERE_YES, "Send the place");
@@ -409,6 +411,9 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.match(fetchBody, /forecastLineInView/);
   assert.ok(fetchBody.indexOf("forecastMaySend") < fetchBody.indexOf("forecastUrl"));
   assert.ok(fetchBody.indexOf("forecastHonesty") < fetchBody.indexOf("forecastUrl"));
+  assert.ok(fetchBody.indexOf("forecastUrl") < fetchBody.indexOf("readForecast(line"));
+  assert.match(fetchBody, /forecastMayLeave/);
+  assert.doesNotMatch(fetchBody, /fetch\(/);
   assert.doesNotMatch(fetchBody, /reverseUrl|readWeatherHere|armWeatherLocate|getCurrentPosition|noteWeatherLocateYes|geocodeUrl/);
   const beatAt = petSrc.indexOf("setInterval(readHeartbeat");
   assert.doesNotMatch(petSrc.slice(beatAt, beatAt + 80), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
@@ -426,6 +431,8 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.match(addBody, /geocodeMaySend\("look"/);
   assert.ok(addBody.indexOf('geocodeHonesty("look")') < addBody.indexOf("geocodeUrl"));
   assert.ok(addBody.indexOf('geocodeMaySend("look"') < addBody.indexOf("geocodeUrl"));
+  assert.ok(addBody.indexOf("geocodeUrl") < addBody.indexOf("readGeocode(shown"));
+  assert.doesNotMatch(addBody, /fetch\(/);
   assert.doesNotMatch(addBody, /reverseUrl|readWeatherHere|getCurrentPosition|noteWeatherLocateYes/);
   assert.equal(petSrc.split("geocodeUrl(").length - 1, 1);
   assert.equal(petSrc.split("reverseUrl(").length - 1, 1);

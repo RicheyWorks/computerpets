@@ -416,17 +416,17 @@ function fetchWeather() {
     paintWeather();
     return;
   }
+  const line = net ? net.textContent || "" : "";
   const url = A.forecastUrl(gate.area.lat, gate.area.lon);
-  if (!url) return;
+  if (!url || !A.readForecast || !A.forecastMayLeave(line)) return;
   liveSky = null;
   liveSkyKey = "";
   weatherUnread = false;
   paintHousePlates();
   paintWeather();
-  fetch(url, { cache: "no-store" })
-    .then((r) => r.json())
+  A.readForecast(line, url)
     .then((json) => {
-      if (gen !== weatherFetchGen) return;
+      if (gen !== weatherFetchGen || json == null) return;
       liveSky = A.parseForecast(json);
       liveSkyKey = liveSky ? key : "";
       weatherUnread = !liveSky;
@@ -3839,18 +3839,19 @@ if (weatherPlate) {
     if (!hits) return;
     const look = document.getElementById("weather-geocode-net");
     if (look && A.geocodeHonesty) look.textContent = A.geocodeHonesty("look");
+    const shown = look ? look.textContent || "" : "";
     if (!A.geocodeMaySend("look", geocodeLineInView("weather-geocode-net"))) {
       hits.innerHTML = `<li>${A.TYPE_A_CITY}</li>`;
       return;
     }
     const url = A.geocodeUrl(q && q.value);
-    if (!url) {
+    if (!url || !A.readGeocode) {
       hits.innerHTML = `<li>${A.TYPE_A_CITY}</li>`;
       return;
     }
-    fetch(url, { cache: "no-store" })
-      .then((r) => r.json())
+    A.readGeocode(shown, url)
       .then((json) => {
+        if (json == null) return;
         const found = A.parseGeocode(json);
         hits.replaceChildren();
         if (!found.length) {
@@ -3942,18 +3943,22 @@ if (weatherPlate) {
       }
       const rev = document.getElementById("weather-reverse-net");
       if (rev && A.geocodeHonesty) rev.textContent = A.geocodeHonesty("reverse");
+      const shown = rev ? rev.textContent || "" : "";
       if (!A.geocodeMaySend("reverse", geocodeLineInView("weather-reverse-net"))) {
         keepHere(unnamed(place.lat, place.lon));
         return;
       }
       const url = A.reverseUrl(place.lat, place.lon);
-      if (!url) {
+      if (!url || !A.readReverse) {
         keepHere(unnamed(place.lat, place.lon));
         return;
       }
-      fetch(url, { cache: "no-store" })
-        .then((r) => r.json())
+      A.readReverse(shown, url)
         .then((json) => {
+          if (json == null) {
+            keepHere(unnamed(place.lat, place.lon));
+            return;
+          }
           const named = A.parseReverse(json);
           keepHere(
             named
