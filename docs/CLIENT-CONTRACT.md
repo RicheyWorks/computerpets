@@ -317,7 +317,41 @@ and optional catalog metadata.
 
 ---
 
-## 8. What this contract does not include
+## 8. Advertised care paths
+
+The posters name three paths. Care (hunger, rest, bond) stays on the keeper
+machine — the blotter, the living desk, and the overlay. Java does not apply it.
+
+| Method | Path | Status |
+|--------|------|--------|
+| GET, POST, PUT, PATCH, DELETE | `/pet/feed` | **409** |
+| GET, POST, PUT, PATCH, DELETE | `/pet/play` | **409** |
+| GET, POST, PUT, PATCH, DELETE | `/pet/rest` | **409** |
+
+Unauthenticated. `Content-Type: application/problem+json`.
+
+```json
+{
+  "type": "about:blank",
+  "title": "Care is local",
+  "status": 409,
+  "detail": "Care is local. /pet/feed is not a door.",
+  "door": "local",
+  "performed": false,
+  "verb": "feed"
+}
+```
+
+`performed` is always `false`. A body on POST is ignored. **200 is not returned.**
+**401 is not returned** — a missing license is not why feed fails. Other `/pet/*`
+paths are not this contract.
+
+`GET /api/public/heartbeat` still reports `care.feed`, `care.play`, and
+`care.rest` as `false` and `care.door` as `local`. It does not list these paths.
+
+---
+
+## 9. What this contract does not include
 
 - An overlay protocol or asset pack layout (the PyQt blotter in `client/` and the Electron overlay in `desktop/` implement this handshake; they do not add endpoints)
 - Zip **contents** or an update protocol (`bundle.catalog` names version, platform, and sha256 when a row is configured; it does not describe what is inside the zip)

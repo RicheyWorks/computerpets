@@ -4,6 +4,7 @@
   const DESK_PORT = 8080;
   const HEARTBEAT_URL = "http://127.0.0.1:8081/api/public/heartbeat";
   const ADVERTISED_CARE = { feed: "/pet/feed", play: "/pet/play", rest: "/pet/rest" };
+  const CARE_DOOR_STATUS = 409;
   const KEEPER_CARE = [
     { id: "feed", label: "Feed" },
     { id: "snack", label: "Treat" },
@@ -67,6 +68,18 @@
     return "Care is local. /pet/feed is not a door.";
   }
 
+  function careDoorRefusal(verb) {
+    const path = ADVERTISED_CARE[verb] || "";
+    return {
+      status: CARE_DOOR_STATUS,
+      title: "Care is local",
+      detail: "Care is local. " + path + " is not a door.",
+      door: "local",
+      performed: false,
+      verb: verb,
+    };
+  }
+
   function bondTitle(bond) {
     if (bond >= 100) return "Soul";
     if (bond >= 75) return "Devoted";
@@ -107,6 +120,7 @@
     DESK_PORT,
     HEARTBEAT_URL,
     ADVERTISED_CARE,
+    CARE_DOOR_STATUS,
     KEEPER_CARE,
     HUD_WIDTH,
     HUD_WIDTH_COLLAPSED,
@@ -118,6 +132,7 @@
     formatUptime,
     heartbeatLine,
     careTruth,
+    careDoorRefusal,
     bondTitle,
     meters,
     poster,
