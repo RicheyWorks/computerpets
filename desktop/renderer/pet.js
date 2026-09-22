@@ -328,9 +328,10 @@ function lookupRadio(query, list, truth, music) {
   }
   const door = window.desk && window.desk.radioSearch;
   const work = door
-    ? door(q, area).then((res) => {
-        if (!res || res.ok === false) throw new Error("unread");
-        return Array.isArray(res.stations) ? res.stations : [];
+    ? door(q, area, line).then((res) => {
+        const row = fromDesk(res);
+        if (row.held) return null;
+        return Array.isArray(row.stations) ? row.stations : [];
       })
     : Promise.all(
         urls.map((url) =>
@@ -345,7 +346,10 @@ function lookupRadio(query, list, truth, music) {
         return M.rankStations ? M.rankStations(merged, q, area).slice(0, 16) : merged.slice(0, 16);
       });
   work
-    .then((stations) => fillRadioHits(list, truth, music, stations || []))
+    .then((stations) => {
+      if (stations == null) return;
+      fillRadioHits(list, truth, music, stations || []);
+    })
     .catch(() => {
       list.replaceChildren();
       truth.textContent = M.RADIO_CANT_REACH;
@@ -462,6 +466,12 @@ function plateLineInView(bodyId, lineId, need) {
   return (el.textContent || "").indexOf(need) !== -1;
 }
 
+function fromDesk(res) {
+  if (res && res.error === "unnamed") return { held: true };
+  if (!res || res.ok === false) throw new Error("unread");
+  return res;
+}
+
 function newsLineInView() {
   const N = window.PetNews;
   if (!N || !N.newsHonesty) return false;
@@ -497,41 +507,45 @@ function fetchNews() {
   if (tab === "popular") {
     const url = N.popularRssUrl();
     const work = door
-      ? door({ kind: "popular" }).then((res) => {
-          if (!res || res.ok === false) throw new Error("unread");
-          return Array.isArray(res.items) ? res.items : [];
+      ? door({ kind: "popular", line }).then((res) => {
+          const row = fromDesk(res);
+          if (row.held) return null;
+          return Array.isArray(row.items) ? row.items : [];
         })
       : fetch(url).then((r) => r.text()).then((xml) => N.parseRss(xml));
-    work.then(applyItems).catch(fail);
+    work.then((items) => { if (items == null) return; applyItems(items); }).catch(fail);
     return;
   }
   if (tab === "x") {
     const q = topic && topic.query ? topic.query : "news";
     const url = N.xTopicRssUrl(q);
     const work = door
-      ? door({ kind: "x", query: q }).then((res) => {
-          if (!res || res.ok === false) throw new Error("unread");
-          return Array.isArray(res.items) ? res.items : [];
+      ? door({ kind: "x", query: q, line }).then((res) => {
+          const row = fromDesk(res);
+          if (row.held) return null;
+          return Array.isArray(row.items) ? row.items : [];
         })
       : fetch(url).then((r) => r.text()).then((xml) => N.parseRss(xml));
-    work.then(applyItems).catch(fail);
+    work.then((items) => { if (items == null) return; applyItems(items); }).catch(fail);
     return;
   }
   if (topic && topic.id !== N.WORLD_ID && topic.query) {
     const url = N.topicRssUrl(topic.query);
     if (!url) return;
     const work = door
-      ? door({ kind: "topic", query: topic.query }).then((res) => {
-          if (!res || res.ok === false) throw new Error("unread");
-          return Array.isArray(res.items) ? res.items : [];
+      ? door({ kind: "topic", query: topic.query, line }).then((res) => {
+          const row = fromDesk(res);
+          if (row.held) return null;
+          return Array.isArray(row.items) ? row.items : [];
         })
       : legacyDoor
-        ? legacyDoor(topic.query).then((res) => {
-            if (!res || res.ok === false) throw new Error("unread");
-            return Array.isArray(res.items) ? res.items : [];
+        ? legacyDoor(topic.query, line).then((res) => {
+            const row = fromDesk(res);
+            if (row.held) return null;
+            return Array.isArray(row.items) ? row.items : [];
           })
         : fetch(url).then((r) => r.text()).then((xml) => N.parseRss(xml));
-    work.then(applyItems).catch(fail);
+    work.then((items) => { if (items == null) return; applyItems(items); }).catch(fail);
     return;
   }
   fetch(N.newsUrl())
@@ -584,14 +598,16 @@ function fetchMarket() {
   if (geckoIds.length) {
     const url = M.geckoManyUrl(geckoIds);
     const work = door && window.desk.marketQuotes
-      ? window.desk.marketQuotes(geckoIds).then((res) => {
-          if (!res || res.ok === false) throw new Error("unread");
-          return res.lives || {};
+      ? window.desk.marketQuotes(geckoIds, line).then((res) => {
+          const row = fromDesk(res);
+          if (row.held) return null;
+          return row.lives || {};
         })
       : fetch(url).then((r) => r.json()).then((json) => M.parseGeckoMany(json));
     jobs.push(
       work
         .then((lives) => {
+          if (lives == null) return;
           marketCoinLives = { ...marketCoinLives, ...lives };
           if (ticker && ticker.geckoId && lives[ticker.geckoId]) applyTickerLive(lives[ticker.geckoId]);
           else if (ticker && ticker.kind === "crypto" && !ticker.address) marketUnread = true;
@@ -605,9 +621,10 @@ function fetchMarket() {
   for (const row of contracts) {
     const url = M.terminalTokenUrl(row.platform || "solana", row.address);
     const work = door && window.desk.marketTerminal
-      ? window.desk.marketTerminal(row).then((res) => {
-          if (!res || res.ok === false) throw new Error("unread");
-          return res.live || null;
+      ? window.desk.marketTerminal(row, line).then((res) => {
+          const rowRes = fromDesk(res);
+          if (rowRes.held) return null;
+          return rowRes.live || null;
         })
       : fetch(url).then((r) => r.json()).then((json) => M.parseTerminalToken(json));
     jobs.push(
@@ -627,13 +644,17 @@ function fetchMarket() {
 
   if (ticker && ticker.kind === "stock") {
     const work = door
-      ? door(ticker).then((res) => {
-          if (!res || res.ok === false) throw new Error("unread");
-          return res.live || null;
+      ? door(ticker, line).then((res) => {
+          const row = fromDesk(res);
+          if (row.held) return { held: true };
+          return row.live || null;
         })
       : fetch(M.yahooUrl(ticker.symbol)).then((r) => r.json()).then((json) => M.parseYahoo(json));
     jobs.push(
-      work.then(applyTickerLive).catch(() => {
+      work.then((live) => {
+        if (live && live.held) return;
+        applyTickerLive(live);
+      }).catch(() => {
         marketUnread = !marketLive;
       }),
     );
@@ -641,14 +662,16 @@ function fetchMarket() {
 
   if (nft) {
     const work = nftDoor
-      ? nftDoor(nft).then((res) => {
-          if (!res || res.ok === false) throw new Error("unread");
-          return res.live || null;
+      ? nftDoor(nft, line).then((res) => {
+          const row = fromDesk(res);
+          if (row.held) return { held: true };
+          return row.live || null;
         })
       : fetch(M.nftUrl(nft.geckoId)).then((r) => r.json()).then((json) => M.parseNftLive(json));
     jobs.push(
       work
         .then((live) => {
+          if (live && live.held) return;
           if (live) nftLive = live;
           nftUnread = !live;
         })
@@ -4269,9 +4292,10 @@ if (marketPlate) {
       if (truth) truth.textContent = "looking up…";
       const door = window.desk && window.desk.marketSearch;
       const work = door
-        ? door(String(typed || "")).then((res) => {
-            if (!res || res.ok === false) throw new Error("unread");
-            return res;
+        ? door(String(typed || ""), lookLine).then((res) => {
+            const row = fromDesk(res);
+            if (row.held) return null;
+            return row;
           })
         : fetch(url).then((r) => r.json()).then((json) => ({
             coins: window.PetMarket.parseSearchCoins(json),
@@ -4279,6 +4303,7 @@ if (marketPlate) {
           }));
       work
         .then((res) => {
+          if (!res) return;
           const coins = res.coins || [];
           const best = window.PetMarket.pickBestSearchCoin
             ? window.PetMarket.pickBestSearchCoin(coins, typed)
@@ -4330,9 +4355,10 @@ if (marketPlate) {
       if (truth) truth.textContent = "looking up…";
       const door = window.desk && window.desk.marketSearch;
       const work = door
-        ? door(String(typed || "")).then((res) => {
-            if (!res || res.ok === false) throw new Error("unread");
-            return res;
+        ? door(String(typed || ""), lookLine).then((res) => {
+            const row = fromDesk(res);
+            if (row.held) return null;
+            return row;
           })
         : fetch(url).then((r) => r.json()).then((json) => ({
             coins: window.PetMarket.parseSearchCoins(json),
@@ -4340,6 +4366,7 @@ if (marketPlate) {
           }));
       work
         .then((res) => {
+          if (!res) return;
           const nfts = res.nfts || [];
           if (!nfts.length) {
             // fall back: treat typed text as gecko id
