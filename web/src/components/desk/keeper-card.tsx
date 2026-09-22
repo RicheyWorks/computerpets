@@ -14,6 +14,7 @@ import {
   parseHeartbeat,
   type Heartbeat,
 } from "@/lib/pets/keeper";
+import { UNREAD_GPU, gpuLine } from "@/lib/pets/gpu";
 import {
   applyFeedFor,
   applyPlay,
@@ -751,6 +752,9 @@ export function KeeperCard({
           </div>
           <p className="keeper-heartbeat" data-heartbeat={beat.status}>
             {heartbeatLine(beat)}
+          </p>
+          <p className="keeper-gpu" data-gpu={UNREAD_GPU.status}>
+            {gpuLine(UNREAD_GPU)}
           </p>
           <p className="keeper-truth">
             {careTruth()} Desk {DESK_PORT}. Not {ADVERTISED_CARE.feed}.

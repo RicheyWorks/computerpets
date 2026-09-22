@@ -164,6 +164,8 @@ def test_gaps_are_honest_and_accounted():
     assert "live.weather_forecast" in hole_ids
     assert "live.news_rss" in hole_ids
     assert "live.nft_floor" in hole_ids
+    assert "live.gpu_sense" in hole_ids
+    assert "card.gpu" not in hole_ids
     assert "live.cry_playback" in hole_ids
     assert "gui.overlay_paint" in hole_ids
     assert "gui.card_hud_paint" in hole_ids

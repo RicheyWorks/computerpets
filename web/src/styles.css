@@ -736,6 +736,18 @@
     color: var(--color-muted);
   }
 
+  .keeper-gpu {
+    margin: 0.25rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: #5c564e;
+  }
+
+  .keeper-gpu[data-gpu="read"] {
+    color: var(--color-muted);
+  }
+
   .keeper-heartbeat[data-heartbeat="UP"] {
     color: var(--color-uncommon);
   }

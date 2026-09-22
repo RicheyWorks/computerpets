@@ -48,4 +48,9 @@ contextBridge.exposeInMainWorld("desk", {
     ipcRenderer.on("windows", wrapped);
     return () => ipcRenderer.removeListener("windows", wrapped);
   },
+  onGpu: (fn) => {
+    const wrapped = (_e, sample) => fn(sample);
+    ipcRenderer.on("gpu", wrapped);
+    return () => ipcRenderer.removeListener("gpu", wrapped);
+  },
 });

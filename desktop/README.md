@@ -12,6 +12,8 @@ On a Mac the extra sits in the menu bar. A click opens care. It does not hide th
 
 On Linux the mark sits in the panel. A click opens care. It does not hide the desk. The floor sits in the work area, beside the panel and above the dock. They walk every workspace. A tap is a choice. A drag is a carry. A right-click tends. First click is a sit. The overlay is a toolbar.
 
+GPU load (temperature, utilization, memory, power) is read on Windows from nvidia-smi or GPU performance counters and painted on the keeper card. Mac and Linux say `mac-linux-gpu-sense` and stay dark. A missing, malformed, or stale reading stays unread — never a painted zero. This is not a DirectX 12 or Vulkan renderer. The overlay is still Electron/Chromium.
+
 ## Care
 
 A tap on the guest is a choice. They pick Rest, Walk or Sit, Talk, Treat, Play, Special, Hide or Call back, or Pick if a gift sits. Right-click or use the tray / the extra / the mark for the full care list:
