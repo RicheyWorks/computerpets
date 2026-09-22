@@ -223,30 +223,33 @@ The backend will start on **http://localhost:8081** by default. The desk keeps 8
 
 The living desk ledger is `/admin` (not in the house nav). Point it at this origin and paste `ADMIN_API_KEY`. The page keeps the key in the tab and signs every lookup and revoke. It does not send the key.
 
-Operator curl uses the same MAC. Canonical UTF-8 text is `computerpets-admin-v1`, the uppercase method, the path, the raw query or an empty line, the unix timestamp, and the lowercase hex SHA-256 of the raw body. Signature is HMAC-SHA256 with `ADMIN_API_KEY` (UTF-8), Base64 URL, no padding. Headers are `X-ComputerPets-Timestamp` and `X-ComputerPets-Signature`. A static `X-Admin-Key` is refused (**401** `application/problem+json`). Skew is 300 seconds. `ADMIN_API_KEY_PREVIOUS` still verifies during rotation.
+Operator curl uses the same MAC. Canonical UTF-8 text is `computerpets-admin-v1`, the uppercase method, the path, the raw query or an empty line, the unix timestamp, a single-use nonce (16–128 of `[A-Za-z0-9_-]`), and the lowercase hex SHA-256 of the raw body. Signature is HMAC-SHA256 with `ADMIN_API_KEY` (UTF-8), Base64 URL, no padding. Headers are `X-ComputerPets-Timestamp`, `X-ComputerPets-Nonce`, and `X-ComputerPets-Signature`. A static `X-Admin-Key` is refused (**401** `application/problem+json`). Replaying the same nonce inside 300 seconds is **401**. Skew is 300 seconds. `ADMIN_API_KEY_PREVIOUS` still verifies during rotation.
 
 ```bash
 TS=$(date +%s)
+NONCE=$(python3 -c 'import secrets; print(secrets.token_urlsafe(16))')
 BODY='{"jti":"YOUR-JTI"}'
-SIG=$(TS="$TS" BODY="$BODY" python3 -c '
+SIG=$(TS="$TS" NONCE="$NONCE" BODY="$BODY" python3 -c '
 import hashlib, hmac, os, base64
 key = os.environ["ADMIN_API_KEY"].encode()
 body = os.environ["BODY"].encode()
 ts = os.environ["TS"]
+nonce = os.environ["NONCE"]
 digest = hashlib.sha256(body).hexdigest()
-msg = "\n".join(["computerpets-admin-v1", "POST", "/api/admin/revoke", "", ts, digest]).encode()
+msg = "\n".join(["computerpets-admin-v1", "POST", "/api/admin/revoke", "", ts, nonce, digest]).encode()
 print(base64.urlsafe_b64encode(hmac.new(key, msg, hashlib.sha256).digest()).decode().rstrip("="))
 ')
 curl -sS -X POST "http://localhost:8081/api/admin/revoke" \
   -H "Content-Type: application/json" \
   -H "X-ComputerPets-Timestamp: $TS" \
+  -H "X-ComputerPets-Nonce: $NONCE" \
   -H "X-ComputerPets-Signature: $SIG" \
   --data-binary "$BODY"
 ```
 
-A list with no query signs an empty body and an empty query line (`GET`, path `/api/admin/licenses`). When `owner` is set, the query line is the raw query (`owner=` plus the encoding you actually send), not a decoded value.
+A list with no query signs an empty body and an empty query line (`GET`, path `/api/admin/licenses`). The nonce line is still required. When `owner` is set, the query line is the raw query (`owner=` plus the encoding you actually send), not a decoded value.
 
-Rate limits are Redis-backed (10/min on `/api/verify/`, 30/min on `/api/download/`, 60/min on `/api/pets` discovery — list/detail share one bucket — and 60/min on `GET /api/bundles/{petKey}` catalog reads, per client IP; [ADR 0068](adr/0068-discovery-rate-limit.md), [ADR 0069](adr/0069-bundle-catalog-rate-limit.md)). Signed `GET /api/bundles/{pet}/redeem` is not on the catalog bucket. The same Redis holds the jti deny-list: revoke soft-deletes in Postgres (`revokedAt` + `deletedAt`; ADR 0058) first, then writes `revoked:jti:{jti}` so every replica rejects immediately. Append-only `license_audit_events` records ISSUED / REVOKED / DOWNLOAD without secret values. It also holds one-time download grants (`download:grant:{jti}:{exp}`) issued by `POST /api/download` and redeemed at `GET /api/bundles/{pet}/redeem` (ADR 0055). `docker compose up` starts Redis and points the app at it (`REDIS_HOST=redis`). A local Maven run expects Redis on `localhost:6379`. If Redis is down, verify/download/pets/bundle-catalog reads return **503** with `Retry-After` and `application/problem+json` — the rate limit is not lifted. Download issue and redeem also fail closed when the grant store is down. `LicenseService.validate` itself falls back to the Postgres ledger (it will not accept a revoked or soft-deleted license). For a single-process local run without Redis:
+Rate limits are Redis-backed (10/min on `/api/verify/`, 30/min on `/api/download/`, 60/min on `/api/pets` discovery — list/detail share one bucket — and 60/min on `GET /api/bundles/{petKey}` catalog reads, per client IP; [ADR 0068](adr/0068-discovery-rate-limit.md), [ADR 0069](adr/0069-bundle-catalog-rate-limit.md)). Signed `GET /api/bundles/{pet}/redeem` is not on the catalog bucket. The same Redis holds the jti deny-list: revoke soft-deletes in Postgres (`revokedAt` + `deletedAt`; ADR 0058) first, then writes `revoked:jti:{jti}` so every replica rejects immediately. Append-only `license_audit_events` records ISSUED / REVOKED / DOWNLOAD without secret values. It also holds one-time download grants (`download:grant:{jti}:{exp}`) issued by `POST /api/download` and redeemed at `GET /api/bundles/{pet}/redeem` (ADR 0055), and single-use admin/machine nonces (`replay:nonce:{admin|machine}:{nonce}`, 300 seconds, ADR 0072). A down nonce store returns **503** on those signed doors. `docker compose up` starts Redis and points the app at it (`REDIS_HOST=redis`). A local Maven run expects Redis on `localhost:6379`. If Redis is down, verify/download/pets/bundle-catalog reads return **503** with `Retry-After` and `application/problem+json` — the rate limit is not lifted. Download issue and redeem also fail closed when the grant store is down. `LicenseService.validate` itself falls back to the Postgres ledger (it will not accept a revoked or soft-deleted license). For a single-process local run without Redis:
 
 ```bash
 export RATE_LIMIT_BACKEND=memory

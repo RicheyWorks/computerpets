@@ -2,6 +2,7 @@ package testsupport;
 
 import com.enterprisepet.config.AdminRequestSignatureFilter;
 import com.enterprisepet.security.AdminRequestSignature;
+import com.enterprisepet.security.RequestNonce;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +31,13 @@ public class AdminRequestTestSignerAutoConfiguration {
                 String path = request.getURI().getRawPath();
                 String query = request.getURI().getRawQuery();
                 String ts = Long.toString(Instant.now().getEpochSecond());
-                String sig = AdminRequestSignature.sign(key, request.getMethod().name(), path, query, ts, bytes);
+                String nonce = request.getHeaders().getFirst(RequestNonce.HEADER);
+                if (nonce == null || nonce.isBlank()) {
+                    nonce = RequestNonce.random();
+                    request.getHeaders().set(RequestNonce.HEADER, nonce);
+                }
+                String sig = AdminRequestSignature.sign(
+                        key, request.getMethod().name(), path, query, ts, nonce, bytes);
                 request.getHeaders().set(AdminRequestSignature.TIMESTAMP_HEADER, ts);
                 request.getHeaders().set(AdminRequestSignature.SIGNATURE_HEADER, sig);
             }

@@ -90,6 +90,7 @@ address, or an API that is not on `main`.
 | [0069](0069-bundle-catalog-rate-limit.md) | Bundle catalog rate limit on `GET /api/bundles/{petKey}` (fail-closed) | Accepted |
 | [0070](0070-machine-request-signature.md) | Signed machine verify requests (fail-closed HMAC, license key) | Accepted |
 | [0071](0071-admin-request-signature.md) | Signed admin requests (fail-closed HMAC, admin key) | Accepted |
+| [0072](0072-signed-request-nonce.md) | Single-use nonce for signed admin and machine requests | Accepted |
 
 ## How to add one
 

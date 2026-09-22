@@ -69,7 +69,7 @@ The verbs that already exist on the living desk and fit this cut. Treat uses the
 
 **Unlock…** → Steam is the first real provider shape (`steamId`, `appId`, `petType`, `hwid`):
 
-1. `POST /api/verify/steam` signed with `LICENSE_SECRET_KEY` (`X-ComputerPets-Timestamp`, `X-ComputerPets-Signature`, 300 second skew)
+1. `POST /api/verify/steam` signed with `LICENSE_SECRET_KEY` (`X-ComputerPets-Timestamp`, `X-ComputerPets-Nonce`, `X-ComputerPets-Signature`, 300 second skew, single-use nonce)
 2. AES-256-GCM decrypt (32-byte `LICENSE_SECRET_KEY`, **no KDF**, 12-byte IV, 16-byte tag appended, standard Base64)
 3. Device `hwid` on verify and, when bound, on download
 4. `POST /api/download/{pet}` with Bearer JWT, then GET of the HMAC-signed URL (`petKey|owner|jti|exp`)

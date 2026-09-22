@@ -2,6 +2,8 @@ package com.enterprisepet.config;
 
 import com.enterprisepet.security.MachineRequestSignature;
 import com.enterprisepet.security.MachineRequestSignature.Decision;
+import com.enterprisepet.security.RequestReplayStore;
+import com.enterprisepet.security.RequestReplayStore.Claim;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletException;
@@ -32,7 +34,8 @@ import java.time.Instant;
  * redeem stays the URL MAC. The house {@code /admin} ledger is a separate
  * HMAC (ADR 0071). Human Unlock still receives a license and uses that
  * JWT; the overlay and blotter sign this POST with the license key they
- * already hold (ADR 0070).
+ * already hold (ADR 0070). The nonce is single-use for
+ * {@link MachineRequestSignature#SKEW_SECONDS} seconds (ADR 0072).
  */
 @Component
 @Order(200)
@@ -42,12 +45,15 @@ public class MachineRequestSignatureFilter extends OncePerRequestFilter {
 
     private final String currentKey;
     private final String previousKey;
+    private final RequestReplayStore replayStore;
 
     public MachineRequestSignatureFilter(
             @Value("${license.secret-key:}") String currentKey,
-            @Value("${license.secret-key-previous:}") String previousKey) {
+            @Value("${license.secret-key-previous:}") String previousKey,
+            RequestReplayStore replayStore) {
         this.currentKey = currentKey == null ? "" : currentKey;
         this.previousKey = previousKey == null ? "" : previousKey;
+        this.replayStore = replayStore;
     }
 
     @Override
@@ -68,6 +74,7 @@ public class MachineRequestSignatureFilter extends OncePerRequestFilter {
             return;
         }
 
+        String nonce = req.getHeader(MachineRequestSignature.NONCE_HEADER);
         Decision decision = MachineRequestSignature.verify(
                 currentKey,
                 previousKey,
@@ -75,6 +82,7 @@ public class MachineRequestSignatureFilter extends OncePerRequestFilter {
                 path,
                 req.getQueryString(),
                 req.getHeader(MachineRequestSignature.TIMESTAMP_HEADER),
+                nonce,
                 req.getHeader(MachineRequestSignature.SIGNATURE_HEADER),
                 body,
                 Instant.now().getEpochSecond());
@@ -82,6 +90,20 @@ public class MachineRequestSignatureFilter extends OncePerRequestFilter {
         if (decision != Decision.OK) {
             log.warn("Machine verify refused path={} reason={}", path, decision);
             writeUnauthorized(res, detail(decision));
+            return;
+        }
+
+        Claim claim;
+        try {
+            claim = replayStore.claim(RequestReplayStore.SURFACE_MACHINE, nonce);
+        } catch (RuntimeException e) {
+            log.warn("Machine nonce store unavailable path={}", path, e);
+            writeUnavailable(res, "Machine nonce store unavailable.");
+            return;
+        }
+        if (claim != Claim.FRESH) {
+            log.warn("Machine request replayed path={}", path);
+            writeUnauthorized(res, "Machine request replayed.");
             return;
         }
 
@@ -121,16 +143,27 @@ public class MachineRequestSignatureFilter extends OncePerRequestFilter {
         return switch (decision) {
             case SKEW -> "Machine request outside the 300 second window.";
             case INVALID -> "Machine signature invalid.";
+            case NONCE_MISSING -> "Machine nonce required.";
+            case NONCE_INVALID -> "Machine nonce invalid.";
             case MISSING, OK -> "Machine signature required.";
         };
     }
 
     private static void writeUnauthorized(HttpServletResponse res, String detail) throws IOException {
-        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        writeProblem(res, HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized", detail);
+    }
+
+    private static void writeUnavailable(HttpServletResponse res, String detail) throws IOException {
+        writeProblem(res, HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Service Unavailable", detail);
+    }
+
+    private static void writeProblem(HttpServletResponse res, int status, String title, String detail)
+            throws IOException {
+        res.setStatus(status);
         res.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
         res.getWriter().write(
-                "{\"type\":\"about:blank\",\"title\":\"Unauthorized\",\"status\":401,\"detail\":\""
-                        + detail + "\"}");
+                "{\"type\":\"about:blank\",\"title\":\"" + title + "\",\"status\":" + status
+                        + ",\"detail\":\"" + detail + "\"}");
     }
 
     private static final class CachedBodyRequest extends HttpServletRequestWrapper {
