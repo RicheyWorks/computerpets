@@ -71,7 +71,12 @@
     if (!A || !line) return;
     const areas = A.parseAreas(card);
     const tab = areas.tab || "current";
-    line.textContent = A.plateLine(areas, live, unread);
+    const held = A.forecastGate && A.forecastGate(card, card.hereForecastAck).act === "hold";
+    line.textContent = A.plateLine(areas, live, unread, held);
+    const savedAsk = $("weather-saved-ask");
+    if (savedAsk) savedAsk.hidden = !held;
+    const savedAskLine = $("weather-saved-ask-line");
+    if (savedAskLine && A.SAVED_HERE_ASK) savedAskLine.textContent = A.SAVED_HERE_ASK;
     if (!body) return;
     const tabs = $("weather-tabs");
     if (tabs) {
@@ -105,9 +110,10 @@
     const area = A.currentArea(areas);
     const liveBits = [];
     if (!area) liveBits.push(`<p>${A.NO_AREA}</p>`);
+    else if (held) liveBits.push(`<p>${area.name} · ${A.SAVED_HERE_WAIT}</p>`);
     else if (unread) liveBits.push(`<p>${area.name} · unread</p>`);
     else if (live) liveBits.push(`<p>${area.name}. ${live.label}. Open-Meteo.</p>`);
-    if (live && live.daily) {
+    if (live && live.daily && !held) {
       liveBits.push("<ul>");
       for (const d of live.daily) {
         liveBits.push(`<li>${d.day} · ${d.sky}${d.maxC != null ? ` · ${Math.round(d.maxC)}°` : ""}</li>`);

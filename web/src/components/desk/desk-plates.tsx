@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { ipPlace, readWeatherHere } from "@/lib/pets/presence";
 import {
+  ackSavedHere,
   addArea,
   currentArea,
   favoriteAreas,
+  forecastGate,
   forecastUrl,
   geocodeUrl,
   AREA_LABEL,
@@ -24,6 +26,11 @@ import {
   NO_AREA,
   parseAreas,
   parseForecast,
+  SAVED_HERE_ASK,
+  SAVED_HERE_HELD,
+  SAVED_HERE_NO,
+  SAVED_HERE_SENT,
+  SAVED_HERE_YES,
   parseGeocode,
   parseReverse,
   pickArea,
@@ -33,6 +40,7 @@ import {
   renameArea,
   reverseUrl,
   sharePlace,
+  stickHereForecastAck,
   toCardPatch,
   toggleFavorite,
   TYPE_A_CITY,
@@ -276,6 +284,7 @@ export function DeskWeatherPlate({
   const [looking, setLooking] = useState(false);
   const [hereLine, setHereLine] = useState("");
   const [hereAsk, setHereAsk] = useState(false);
+  const [savedLine, setSavedLine] = useState("");
   const [lookLine, setLookLine] = useState("");
   const areas = useMemo(() => parseAreas(card), [card]);
   const area = currentArea(areas);
@@ -283,7 +292,9 @@ export function DeskWeatherPlate({
   const chrome = usePlateChrome("weather");
 
   function keepAreas(house: ReturnType<typeof parseAreas>) {
-    setCard(writeCard(toCardPatch(house)));
+    const ack = stickHereForecastAck(house, card.hereForecastAck);
+    if (house.currentId !== areas.currentId) setSavedLine("");
+    setCard(writeCard({ ...toCardPatch(house), hereForecastAck: ack }));
   }
 
   useEffect(() => {
@@ -317,13 +328,15 @@ export function DeskWeatherPlate({
   }, [onBounds, open]);
 
   useEffect(() => {
-    if (!area) {
+    const gate = forecastGate(areas, card.hereForecastAck);
+    if (gate.act !== "send" || !gate.area) {
       setLive(null);
+      setUnread(false);
       onSky?.(null);
       return;
     }
     let cancelled = false;
-    const url = forecastUrl(area.lat, area.lon);
+    const url = forecastUrl(gate.area.lat, gate.area.lon);
     if (!url) return;
     void fetch(url)
       .then((r) => r.json())
@@ -343,7 +356,7 @@ export function DeskWeatherPlate({
     return () => {
       cancelled = true;
     };
-  }, [area?.id, area?.lat, area?.lon, onSky]);
+  }, [areas, card.hereForecastAck, onSky]);
 
   async function search() {
     const url = geocodeUrl(query);
@@ -391,7 +404,11 @@ export function DeskWeatherPlate({
     }
     setHereAsk(false);
     function keep(next: WeatherArea) {
-      add(next);
+      const house = addArea(areas, next);
+      const ack = ackSavedHere(house);
+      setCard(writeCard({ ...toCardPatch(house), hereForecastAck: ack }));
+      setHits([]);
+      setQuery("");
       setHereLine(HERE_SENT);
     }
     function unnamed(lat: number, lon: number): WeatherArea {
@@ -434,6 +451,19 @@ export function DeskWeatherPlate({
     setHereLine(HERE_HELD);
   }
 
+  function confirmSavedHere() {
+    const gate = forecastGate(areas, card.hereForecastAck);
+    if (gate.act !== "hold") return;
+    const ack = ackSavedHere(areas);
+    if (!ack) return;
+    setCard(writeCard({ hereForecastAck: ack }));
+    setSavedLine(SAVED_HERE_SENT);
+  }
+
+  function declineSavedHere() {
+    setSavedLine(SAVED_HERE_HELD);
+  }
+
   function add(hit: WeatherArea) {
     keepAreas(addArea(areas, hit));
     setHits([]);
@@ -466,7 +496,7 @@ export function DeskWeatherPlate({
         onClick={() => chrome.toggleOpen(setOpen)}
       >
         <span className="text-[10px] uppercase tracking-[0.16em] text-subtle">Weather area</span>
-        <span className="truncate text-sm text-ink">{plateLine(areas, live, unread)}</span>
+        <span className="truncate text-sm text-ink">{plateLine(areas, live, unread, forecastGate(areas, card.hereForecastAck).act === "hold")}</span>
       </button>
       {open ? (
         <div className="border-t border-border/40 px-3 py-2 text-sm">
@@ -504,6 +534,22 @@ export function DeskWeatherPlate({
             )
           ) : (
             <>
+              {forecastGate(areas, card.hereForecastAck).act === "hold" ? (
+                <div id="weather-saved-ask" className="mb-2">
+                  <p className="text-[10px] uppercase tracking-[0.16em] text-subtle">{SAVED_HERE_ASK}</p>
+                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                    <button type="button" onClick={confirmSavedHere}>
+                      {SAVED_HERE_YES}
+                    </button>
+                    <button type="button" onClick={declineSavedHere}>
+                      {SAVED_HERE_NO}
+                    </button>
+                  </div>
+                  {savedLine ? <p className="mt-1 text-subtle">{savedLine}</p> : null}
+                </div>
+              ) : savedLine ? (
+                <p className="mb-2 text-subtle">{savedLine}</p>
+              ) : null}
               {!area ? <p className="text-subtle">{NO_AREA}</p> : null}
               {area && live ? (
                 <p>

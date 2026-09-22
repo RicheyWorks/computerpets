@@ -164,6 +164,7 @@ let card = window.PetCard ? window.PetCard.load() : { collapsed: true, color: "i
 let offArmed = false;
 let voicesReady = [];
 let liveSky = null;
+let weatherFetchGen = 0;
 let weatherUnread = false;
 let newsItems = [];
 let newsUnread = false;
@@ -369,25 +370,32 @@ function paintHousePlates() {
 function fetchWeather() {
   const A = window.PetWeatherAreas;
   if (!A) return;
-  const area = A.currentArea(A.parseAreas(card));
-  if (!area) {
+  const gen = ++weatherFetchGen;
+  const gate = A.forecastGate(card, card.hereForecastAck);
+  if (!gate || gate.act !== "send" || !gate.area) {
     liveSky = null;
     weatherUnread = false;
     paintHousePlates();
     paintWeather();
     return;
   }
-  const url = A.forecastUrl(area.lat, area.lon);
+  const url = A.forecastUrl(gate.area.lat, gate.area.lon);
   if (!url) return;
+  liveSky = null;
+  weatherUnread = false;
+  paintHousePlates();
+  paintWeather();
   fetch(url, { cache: "no-store" })
     .then((r) => r.json())
     .then((json) => {
+      if (gen !== weatherFetchGen) return;
       liveSky = A.parseForecast(json);
       weatherUnread = !liveSky;
       paintHousePlates();
       paintWeather();
     })
     .catch(() => {
+      if (gen !== weatherFetchGen) return;
       liveSky = null;
       weatherUnread = true;
       paintHousePlates();
@@ -3603,8 +3611,13 @@ if (weatherPlate) {
     persistCard();
   }
   function applyWeatherHouse(house) {
-    Object.assign(card, window.PetWeatherAreas.toCardPatch(house));
+    const A = window.PetWeatherAreas;
+    const ack = A.stickHereForecastAck(house, card.hereForecastAck);
+    Object.assign(card, A.toCardPatch(house));
+    card.hereForecastAck = ack;
     persistCard();
+    const savedTruth = document.getElementById("weather-saved-truth");
+    if (savedTruth) savedTruth.textContent = "";
     fetchWeather();
   }
   weatherPlate.addEventListener("click", (e) => {
@@ -3711,7 +3724,9 @@ if (weatherPlate) {
     const truth = document.getElementById("weather-here-truth");
     if (!A) return;
     function keepHere(area) {
-      applyWeatherHouse(A.addArea(card, area));
+      const house = A.addArea(card, area);
+      card.hereForecastAck = A.ackSavedHere(house);
+      applyWeatherHouse(house);
       if (truth) truth.textContent = A.HERE_SENT;
     }
     function failHere(line) {
@@ -3763,6 +3778,32 @@ if (weatherPlate) {
           );
         })
         .catch(() => keepHere(unnamed(place.lat, place.lon)));
+    });
+  }
+  const savedYes = document.getElementById("weather-saved-yes");
+  if (savedYes) {
+    savedYes.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const A = window.PetWeatherAreas;
+      if (!A) return;
+      const gate = A.forecastGate(card, card.hereForecastAck);
+      if (gate.act !== "hold") return;
+      const ack = A.ackSavedHere(card);
+      if (!ack) return;
+      card.hereForecastAck = ack;
+      persistCard();
+      const truth = document.getElementById("weather-saved-truth");
+      if (truth) truth.textContent = A.SAVED_HERE_SENT;
+      fetchWeather();
+    });
+  }
+  const savedNo = document.getElementById("weather-saved-no");
+  if (savedNo) {
+    savedNo.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const A = window.PetWeatherAreas;
+      const truth = document.getElementById("weather-saved-truth");
+      if (truth && A) truth.textContent = A.SAVED_HERE_HELD;
     });
   }
   const hereBtn = document.getElementById("weather-here");

@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A stored live pin is rounded on load. Same map as desktop `weather-areas.js`. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. Same map as desktop `weather-areas.js`. */
 import type { Weather } from "./weather";
 
 export const NO_AREA = "no area set";
@@ -14,6 +14,12 @@ export const HERE_NO = "Don't send";
 export const HERE_HELD = "the place was not sent";
 export const HERE_KEPT = "keeping the saved place";
 export const HERE_SENT = "a place was sent to the forecast host";
+export const SAVED_HERE_ASK = "use this saved computer place for the forecast? this sends the saved place. it does not locate again.";
+export const SAVED_HERE_YES = "Use this saved place";
+export const SAVED_HERE_NO = "Don't send";
+export const SAVED_HERE_HELD = "the saved place was not sent";
+export const SAVED_HERE_SENT = "the saved place was sent to the forecast host";
+export const SAVED_HERE_WAIT = "saved place not sent";
 /** A tenth of a degree is about 11 km. Rounding is not anonymity. */
 export const PLACE_STEP = 0.1;
 export const CANT_REACH = "can't reach";
@@ -374,9 +380,67 @@ export function parseForecast(json: unknown): LiveSky | null {
   };
 }
 
-export function plateLine(areas: WeatherAreas | undefined, live: LiveSky | null | undefined, unread = false) {
+export type HereForecastAck = { lat: number; lon: number };
+
+export type ForecastGate =
+  | { act: "none"; area: null; ack: null; locate: false }
+  | { act: "send"; area: WeatherArea; ack: HereForecastAck | null; locate: false }
+  | { act: "hold"; area: WeatherArea; ack: null; locate: false };
+
+/**
+ * A stored yes for one saved live pin. Digits must already be a tenth of a degree.
+ * A precise ack is not kept. This is not a locate and not a browser grant.
+ */
+export function hereForecastAckOf(raw: unknown): HereForecastAck | null {
+  if (!raw || typeof raw !== "object") return null;
+  const o = raw as Record<string, unknown>;
+  const lat = num(o.lat);
+  const lon = num(o.lon);
+  if (lat == null || lon == null) return null;
+  const place = sharePlace(lat, lon);
+  if (!place) return null;
+  if (place.lat !== lat || place.lon !== lon) return null;
+  return { lat: place.lat, lon: place.lon };
+}
+
+/**
+ * A typed city may go to the forecast host. A saved live pin does not,
+ * until the keeper has acknowledged that exact place. The ack sticks for
+ * that pin. It is not a geolocation arm and not a reverse lookup.
+ * The same ack still sends on a later read. That is not a new question.
+ */
+export function forecastGate(areas: unknown, ack?: unknown): ForecastGate {
+  const area = currentArea(parseAreas(areas));
+  if (!area) return { act: "none", area: null, ack: null, locate: false };
+  if (!isLiveFix(area)) return { act: "send", area, ack: null, locate: false };
+  const pin = sharePlace(area.lat, area.lon);
+  const saved = hereForecastAckOf(ack);
+  if (pin && saved && pin.lat === saved.lat && pin.lon === saved.lon) {
+    return { act: "send", area, ack: saved, locate: false };
+  }
+  return { act: "hold", area, ack: null, locate: false };
+}
+
+/** The rounded place of the current live pin, for the keeper's forecast yes. */
+export function ackSavedHere(areas: unknown): HereForecastAck | null {
+  const area = currentArea(parseAreas(areas));
+  if (!area || !isLiveFix(area)) return null;
+  return sharePlace(area.lat, area.lon);
+}
+
+/**
+ * Keep an ack only while the current area is still that live pin.
+ * Clearing the pin or picking another area drops it.
+ */
+export function stickHereForecastAck(areas: unknown, ack?: unknown): HereForecastAck | null {
+  const gate = forecastGate(areas, ack);
+  return gate.act === "send" && gate.ack ? gate.ack : null;
+}
+
+export function plateLine(areas: WeatherAreas | undefined, live: LiveSky | null | undefined, unread = false, held = false) {
   const area = currentArea(areas);
   if (!area) return NO_AREA;
+  if (held) return `${area.name} · ${SAVED_HERE_WAIT}`;
   if (unread) return `${area.name} · unread`;
   if (!live) return `${area.name} · looking up`;
   return `${area.name} · ${live.label}`;

@@ -11,7 +11,8 @@ HOUSE_FILES = ("card.json", "mind.json")
 # IP place service, and does not send a place to a forecast host. Weather
 # is the civil-day clock. There is no watcher and no silent re-query.
 # A cached origin grant is a desk limit. This process does not locate, so
-# it has no in-app locate confirm and no live pin to round.
+# it has no in-app locate confirm, no live pin to round, and no saved
+# computer place to send to a forecast host.
 WEATHER_LOCATE_MS = 120_000
 _weather_locate_until = 0
 

@@ -87,6 +87,46 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.equal(Overlay.locateGate(A.blankAreas(), false).act, "ask");
   assert.equal(Overlay.locateGate(A.blankAreas(), true).act, "locate");
   assert.equal(Overlay.locateGate(typed, true).act, "keep");
+  assert.equal(A.SAVED_HERE_ASK, "use this saved computer place for the forecast? this sends the saved place. it does not locate again.");
+  assert.equal(A.SAVED_HERE_YES, "Use this saved place");
+  assert.equal(A.SAVED_HERE_NO, "Don't send");
+  assert.equal(A.SAVED_HERE_HELD, "the saved place was not sent");
+  assert.equal(A.SAVED_HERE_SENT, "the saved place was sent to the forecast host");
+  assert.equal(A.SAVED_HERE_WAIT, "saved place not sent");
+  assert.equal(Overlay.SAVED_HERE_ASK, A.SAVED_HERE_ASK);
+  assert.equal(Overlay.SAVED_HERE_YES, A.SAVED_HERE_YES);
+  assert.equal(Overlay.SAVED_HERE_HELD, A.SAVED_HERE_HELD);
+  const savedHere = A.addArea(A.blankAreas(), { id: "here", name: "This computer", query: "this computer", lat: 47.6, lon: -122.3 });
+  assert.equal(A.forecastGate(savedHere, null).act, "hold");
+  assert.equal(A.forecastGate(savedHere, null).locate, false);
+  assert.equal(A.forecastGate(savedHere, { lat: 47.606, lon: -122.332 }).act, "hold");
+  assert.equal(A.hereForecastAckOf({ lat: 47.606, lon: -122.332 }), null);
+  const savedAck = A.ackSavedHere(savedHere);
+  assert.deepEqual(savedAck, { lat: 47.6, lon: -122.3 });
+  assert.equal(A.forecastGate(savedHere, savedAck).act, "send");
+  assert.equal(A.forecastGate(savedHere, savedAck).locate, false);
+  assert.deepEqual(A.forecastGate(savedHere, savedAck).ack, savedAck);
+  assert.equal(A.forecastGate(savedHere, savedAck).act, "send");
+  assert.equal(Overlay.forecastGate(savedHere, null).act, "hold");
+  assert.equal(Overlay.forecastGate(savedHere, savedAck).act, "send");
+  assert.equal(Overlay.forecastGate(savedHere, savedAck).locate, false);
+  assert.equal(A.forecastGate(typed, null).act, "send");
+  assert.equal(A.forecastGate(typed, savedAck).ack, null);
+  assert.equal(A.forecastGate(typed, null).locate, false);
+  assert.equal(A.stickHereForecastAck(typed, savedAck), null);
+  const savedBack = A.pickArea(
+    A.addArea(typed, { id: "here", name: "This computer", query: "this computer", lat: 47.6, lon: -122.3 }),
+    "here",
+  );
+  assert.equal(A.forecastGate(savedBack, null).act, "hold");
+  assert.equal(A.stickHereForecastAck(A.pickArea(savedBack, typed.areas[0].id), savedAck), null);
+  assert.equal(A.forecastGate(A.pickArea(savedBack, typed.areas[0].id), null).act, "send");
+  assert.deepEqual(A.stickHereForecastAck(savedHere, savedAck), savedAck);
+  assert.equal(A.stickHereForecastAck(A.removeArea(savedHere, "here"), savedAck), null);
+  assert.equal(A.ackSavedHere(typed), null);
+  assert.equal(A.plateLine(savedHere, null, false, true), "This computer · saved place not sent");
+  assert.equal(A.plateLine(typed, null, false, false), "Portland · looking up");
+  assert.equal(Overlay.plateLine(savedHere, null, false, true), A.plateLine(savedHere, null, false, true));
   const preciseHere = {
     weatherAreas: [{ id: "here", name: "This computer", query: "this computer", lat: 47.60621, lon: -122.33207 }],
     currentAreaId: "here",
@@ -208,6 +248,31 @@ test("loading the desk card rounds a stored live pin and keeps a typed place", (
   const typed = Card.loadCard();
   assert.equal(typed.weatherAreas[0].lat, 45.5231);
   assert.equal(mem[Card.CARD_STORE], before);
+  mem[Card.CARD_STORE] = JSON.stringify({
+    weatherAreas: [{ id: "here", name: "This computer", query: "this computer", lat: 47.6, lon: -122.3 }],
+    currentAreaId: "here",
+    hereForecastAck: { lat: 47.6, lon: -122.3 },
+  });
+  const acked = Card.loadCard();
+  assert.deepEqual(acked.hereForecastAck, { lat: 47.6, lon: -122.3 });
+  mem[Card.CARD_STORE] = JSON.stringify({
+    weatherAreas: [{ id: "here", name: "This computer", query: "this computer", lat: 47.6, lon: -122.3 }],
+    currentAreaId: "here",
+    hereForecastAck: { lat: 47.60621, lon: -122.33207 },
+  });
+  const preciseAck = Card.loadCard();
+  assert.equal(preciseAck.hereForecastAck, null);
+  mem[Card.CARD_STORE] = JSON.stringify({
+    weatherAreas: [
+      { id: "here", name: "This computer", query: "this computer", lat: 47.6, lon: -122.3 },
+      { id: "a-pdx", name: "Portland", query: "Portland", lat: 45.5, lon: -122.6 },
+    ],
+    currentAreaId: "a-pdx",
+    hereForecastAck: { lat: 47.6, lon: -122.3 },
+  });
+  const moved = Card.loadCard();
+  assert.equal(moved.currentAreaId, "a-pdx");
+  assert.equal(moved.hereForecastAck, null);
   if (prev === undefined) delete globalThis.window;
   else globalThis.window = prev;
 });
