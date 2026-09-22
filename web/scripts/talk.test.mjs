@@ -5,11 +5,17 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const repo = join(root, "..");
 const T = await import(join(root, "src/lib/pets/talk-spend.ts"));
+const P = await import(join(root, "src/lib/pets/talk-post.ts"));
 const C = await import(join(root, "src/lib/pets/care.ts"));
 
 const talkSrc = readFileSync(join(root, "src/lib/pets/talk.ts"), "utf8");
 const spendSrc = readFileSync(join(root, "src/lib/pets/talk-spend.ts"), "utf8");
+const postSrc = readFileSync(join(root, "src/lib/pets/talk-post.ts"), "utf8");
+const mindPageSrc = readFileSync(join(root, "src/routes/mind.tsx"), "utf8");
+const overlayMind = readFileSync(join(repo, "desktop/renderer/mind.js"), "utf8");
+const overlayPet = readFileSync(join(repo, "desktop/renderer/pet.js"), "utf8");
 const speciesSrc = readFileSync(join(root, "src/lib/pets/catalog.ts"), "utf8");
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 const deskSrc = readFileSync(join(root, "src/components/desk/desk-stage.tsx"), "utf8");
@@ -104,6 +110,89 @@ test("unsigned talk does not read process.env house keys", () => {
     if (prevO === undefined) delete process.env.OPENAI_API_KEY;
     else process.env.OPENAI_API_KEY = prevO;
   }
+});
+
+const SECRET = "sk-talk-post-secret";
+
+test("house talk body never carries apiKey", () => {
+  const body = P.talkBody({
+    message: "hello",
+    hunger: 70,
+    mood: 72,
+    energy: 68,
+    hygiene: 80,
+    name: "Rui",
+    species: "red_panda",
+    speak: false,
+    mind: {
+      plugin: "xai",
+      model: "grok-4.5",
+      baseUrl: "https://api.x.ai/v1",
+      apiKey: SECRET,
+    },
+    voice: "none",
+  });
+  const wire = JSON.stringify(body);
+  assert.equal(wire.includes(SECRET), false);
+  assert.equal(wire.includes("apiKey"), false);
+  assert.equal(Object.hasOwn(body, "apiKey"), false);
+  assert.equal(Object.hasOwn(body.mind, "apiKey"), false);
+  assert.deepEqual(body.mind, {
+    plugin: "xai",
+    model: "grok-4.5",
+    baseUrl: "https://api.x.ai/v1",
+  });
+  assert.deepEqual(Object.keys(P.mindForHouse({ plugin: "openai", apiKey: SECRET })).sort(), ["plugin"]);
+});
+
+test("a posted apiKey is dropped before the house spends it", () => {
+  const parsed = P.parseTalkBody({
+    apiKey: SECRET,
+    message: "hello",
+    hunger: 70,
+    mood: 72,
+    energy: 68,
+    mind: { plugin: "xai", model: "grok-4.5", apiKey: SECRET },
+    voice: "xai",
+  });
+  const wire = JSON.stringify(parsed);
+  assert.equal(wire.includes(SECRET), false);
+  assert.equal(wire.includes("apiKey"), false);
+  assert.equal(Object.hasOwn(parsed, "apiKey"), false);
+  assert.equal(Object.hasOwn(parsed.mind, "apiKey"), false);
+  assert.equal(parsed.mind.plugin, "xai");
+  assert.equal(parsed.mind.model, "grok-4.5");
+});
+
+test("desk and overlay talk do not put apiKey on a house body or query", () => {
+  assert.match(postSrc, /delete copy\.apiKey/);
+  assert.match(postSrc, /delete mindCopy\.apiKey/);
+  assert.doesNotMatch(postSrc, /apiKey:\s*z\./);
+  assert.doesNotMatch(postSrc, /URLSearchParams/);
+  assert.doesNotMatch(postSrc, /searchParams/);
+  assert.doesNotMatch(talkSrc, /apiKey:\s*z\./);
+  assert.match(talkSrc, /parseTalkBody/);
+
+  for (const [label, src] of [
+    ["desk", roomSrc],
+    ["mind", mindPageSrc],
+  ]) {
+    const calls = src.split("converseWithPet(").slice(1);
+    assert.ok(calls.length >= 1, label);
+    for (const call of calls) {
+      const head = call.slice(0, 220);
+      assert.match(head, /data:\s*talkBody\(/, label);
+      assert.doesNotMatch(head, /apiKey/, label);
+    }
+  }
+
+  const ask = overlayPet.slice(overlayPet.indexOf("async function askMind"), overlayPet.indexOf("function gaitProfile"));
+  assert.doesNotMatch(ask, /apiKey/);
+  assert.doesNotMatch(ask, /converseWithPet/);
+  assert.doesNotMatch(overlayMind, /converseWithPet/);
+  assert.doesNotMatch(overlayMind, /localhost:8080/);
+  assert.doesNotMatch(overlayMind, /\/api\/pets/);
+  assert.doesNotMatch(overlayMind, /body:\s*JSON\.stringify\(\{[^}]*apiKey/);
 });
 
 test("talk peeks for a keeper and binds spend; the desk still talks", () => {
