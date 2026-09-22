@@ -355,6 +355,19 @@ ConfigMap overlay example. Local verify does not need a cloud account:
 
 A real `terraform apply` is the keeper's AWS account — not CI.
 
+### CDN edge redeem
+
+Before zip bytes leave the CDN, associate `deploy/cdn/edge-redeem.js`
+([ADR 0063](adr/0063-cdn-edge-redeem-verification.md)). Set `HOUSE_API_BASE`
+to the public house origin. Local verify (no AWS):
+
+```bash
+node deploy/cdn/edge-redeem.test.cjs
+```
+
+The edge does not hold `BUNDLE_SIGNING_KEY`; it calls house redeem and
+forwards the viewer address as `X-Forwarded-For`.
+
 ---
 
 ## Provider Configuration

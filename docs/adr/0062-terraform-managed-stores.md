@@ -30,4 +30,4 @@ This slice closes that named gap without storefront work, without DirectX 12 / V
 - Operators with an AWS account can plan/apply, populate secret shells out of band, point ConfigMap at outputs (`configmap-managed.example.yaml`), and drop in-cluster Postgres/Redis.
 - In-cluster manifests remain the default local/cluster scaffolding until a keeper applies managed stores.
 - Pulumi / Crossplane stay non-goals for this slice (same gap class; Terraform was the named next item).
-- Next non-storefront / non-DX12 maturity item: a real keeper apply of this root (or CDN edge redeem verification) — see ROADMAP / ARCHITECTURE remaining gaps.
+- Next non-storefront / non-DX12 maturity item after the CDN stub: CDN edge redeem verification — see [0063](0063-cdn-edge-redeem-verification.md).
