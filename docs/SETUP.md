@@ -290,6 +290,18 @@ The Electron overlay is still `cd desktop && npm start`.
 | `SPRING_DATASOURCE_URL` | `staging` / `prod` | H2 in default/`dev` | Postgres JDBC URL. Required when those profiles are active. |
 | `SPRING_DATASOURCE_USERNAME` | `staging` / `prod` | `sa` (H2) | Postgres user. |
 | `SPRING_DATASOURCE_PASSWORD` | `staging` / `prod` | empty (H2) | Postgres password. |
+| `SPRING_DATASOURCE_REPLICA_URL` | No | empty | Optional Postgres **read** replica JDBC URL. Blank = primary only. Must differ from the primary URL. Do not invent a cloud replica. Writes never route here (ADR 0059). |
+| `SPRING_DATASOURCE_REPLICA_USERNAME` | No | inherits primary | Optional replica user. |
+| `SPRING_DATASOURCE_REPLICA_PASSWORD` | No | inherits primary | Optional replica password. |
+| `HIKARI_MAXIMUM_POOL_SIZE` | No | 10 | Primary Hikari pool size. |
+| `HIKARI_MINIMUM_IDLE` | No | 2 | Primary Hikari minimum idle connections. |
+| `HIKARI_CONNECTION_TIMEOUT` | No | 3000 (ms) | Hikari wait for a free connection before failing. |
+| `HIKARI_VALIDATION_TIMEOUT` | No | 1000 (ms) | Hikari connection validation timeout. |
+| `HIKARI_IDLE_TIMEOUT` | No | 600000 (ms) | Idle connection eviction. |
+| `HIKARI_MAX_LIFETIME` | No | 1800000 (ms) | Max connection lifetime. |
+| `HIKARI_LEAK_DETECTION_THRESHOLD` | No | 0; `60000` in staging/prod | Log borrowed-connection leaks after this many ms. |
+| `HIKARI_REPLICA_MAXIMUM_POOL_SIZE` | No | 10 | Replica pool size when `SPRING_DATASOURCE_REPLICA_URL` is set. |
+| `HIKARI_REPLICA_MINIMUM_IDLE` | No | 2 | Replica minimum idle when a replica URL is set. |
 
 ---
 

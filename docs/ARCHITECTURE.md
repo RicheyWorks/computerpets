@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-22 (Shared ownership Resilience4j time limiter denies on wall exceed. RestClient still owns the 10s hop. Not DX12/Vulkan. Catalog 221.) |
+| **Last Updated** | 2026-09-22 (Hikari pool defaults + optional deny-safe read replica — ADR 0059. Not DX12/Vulkan. Catalog 221.) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -159,11 +159,11 @@ The diagram shows the plugin boundary clearly: adding a new platform (Gumroad, S
 The service runs as a Spring Boot executable JAR or the multi-stage `Dockerfile` image:
 
 - One JVM process listening on port 8081 (configurable via `server.port`). The living desk keeps 8080.
-- Spring profiles (`dev` / `staging` / `prod`) overlay the same `application.yml` keys. Default and `dev` keep H2 unless `SPRING_DATASOURCE_*` is set (`docker-compose.yml` already points `dev` at Postgres). `staging` and `prod` require Postgres and have no H2 fallback.
-- Redis-backed Bucket4j rate limiter (Lettuce / `bucket4j-redis`) shared across replicas. If Redis is down, verify/download fail closed with HTTP 503. `prod` refuses `RATE_LIMIT_BACKEND=memory`.
+- Spring profiles (`dev` / `staging` / `prod`) overlay the same `application.yml` keys. Default and `dev` keep H2 unless `SPRING_DATASOURCE_*` is set (`docker-compose.yml` already points `dev` at Postgres). `staging` and `prod` require Postgres and have no H2 fallback. HikariCP defaults are explicit (pool 10 / idle 2 / 3s connect / leak detection off locally, 60s in staging/prod). Optional `SPRING_DATASOURCE_REPLICA_URL` enables read-only routing for Spring Data reads; blank keeps a single primary pool ([0059](adr/0059-hikari-pool-and-read-replica.md)).
+- Redis-backed Bucket4j rate limiter (Lettuce / `bucket4j-redis`) shared across replicas. If Redis is down, verify/download fail closed with HTTP 503. `prod` refuses `RATE_LIMIT_BACKEND=memory`. Redis uses a single Lettuce connection keyed by `REDIS_TIMEOUT` (not a second Hikari-style pool).
 - Redis-backed jti deny-list (`RevocationIndex`) shared across replicas. Postgres `IssuedLicense.revokedAt` / `deletedAt` remains the ledger (soft-delete on revoke; [0058](adr/0058-license-soft-delete-and-audit.md)); Redis is a fast deny so a replica that has not seen the row still rejects. If Redis is down, `LicenseService.validate` falls back to the ledger (it does not accept a revoked or soft-deleted license). HTTP download may still 503 from the rate-limit filter.
 - Critical secrets (`LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, `ADMIN_API_KEY`) load from environment variables or `NAME_FILE` mounts (`SecretFileEnvironmentPostProcessor`) with strict `@PostConstruct` startup validation that refuses to run on missing or placeholder values. Production operators use Docker secrets, Kubernetes External Secrets, or Vault agent templates — [ADR 0056](adr/0056-house-secrets-from-file-mounts.md). Secret values are never logged.
-- `ProductionProfileGuard` (`@Profile("prod")`) refuses Microsoft Store `dev-mode`, an in-memory rate-limit store, and an H2 JDBC URL even when environment variables try to override `application-prod.yml`.
+- `ProductionProfileGuard` (`@Profile("prod")`) refuses Microsoft Store `dev-mode`, an in-memory rate-limit store, an H2 JDBC URL, and a misconfigured read-replica URL (same as primary / non-Postgres) even when environment variables try to override `application-prod.yml`.
 - `Dockerfile` + GitHub Actions GHCR publish + `deploy/k8s/` (Deployment/Service, in-cluster Postgres/Redis scaffolding, optional Ingress). Blue/green is two Deployments and a Service `color` selector — not a service mesh.
 - External dependencies (Alchemy, Microsoft Collections, Steam Web API, itch.io, Epic, future CDN) are called directly; Resilience4j circuit breakers, retries, and a shared ownership time limiter wrap the store providers.
 - The living desk (`web/`) and Electron overlay (`desktop/`) talk to this backend.
@@ -645,7 +645,7 @@ Goal: Prepare for horizontal scaling and real production traffic.
   - [x] Move short-lived revocation / jti blacklists to Redis
 
 - **3.2 Database & Persistence Maturity**
-  - Add read replicas strategy and connection pooling tuning
+  - [x] Hikari pool defaults + optional deny-safe read replica (`SPRING_DATASOURCE_REPLICA_URL`; writes never route to replica; [0059](adr/0059-hikari-pool-and-read-replica.md))
   - [x] Soft deletion + audit logging for licenses (`deletedAt` on revoke; `license_audit_events` for ISSUED / REVOKED / DOWNLOAD; [0058](adr/0058-license-soft-delete-and-audit.md))
 
 - **3.3 Advanced Observability**

@@ -13,7 +13,8 @@ import java.util.Locale;
  * Fail-hard checks that only run when {@code spring.profiles.active} includes
  * {@code prod}. Environment variables outrank {@code application-prod.yml}, so
  * this guard exists to catch {@code MICROSOFT_DEV_MODE=true},
- * {@code RATE_LIMIT_BACKEND=memory}, or an H2 {@code SPRING_DATASOURCE_URL}.
+ * {@code RATE_LIMIT_BACKEND=memory}, an H2 {@code SPRING_DATASOURCE_URL},
+ * or a misconfigured {@code SPRING_DATASOURCE_REPLICA_URL}.
  */
 @Component
 @Profile("prod")
@@ -24,14 +25,17 @@ public class ProductionProfileGuard {
     private final boolean microsoftDevMode;
     private final String rateLimitBackend;
     private final String datasourceUrl;
+    private final String replicaDatasourceUrl;
 
     public ProductionProfileGuard(
             @Value("${microsoft.dev-mode:false}") boolean microsoftDevMode,
             @Value("${rate-limit.backend:redis}") String rateLimitBackend,
-            @Value("${spring.datasource.url}") String datasourceUrl) {
+            @Value("${spring.datasource.url}") String datasourceUrl,
+            @Value("${spring.datasource.replica.url:}") String replicaDatasourceUrl) {
         this.microsoftDevMode = microsoftDevMode;
         this.rateLimitBackend = rateLimitBackend;
         this.datasourceUrl = datasourceUrl;
+        this.replicaDatasourceUrl = replicaDatasourceUrl;
     }
 
     @PostConstruct
@@ -52,6 +56,14 @@ public class ProductionProfileGuard {
             throw new IllegalStateException(
                 "spring.datasource.url must be PostgreSQL when spring.profiles.active=prod. "
                 + "Set SPRING_DATASOURCE_URL (jdbc:postgresql://...). H2 is not allowed.");
+        }
+        if (ReplicaRoutingSupport.isConfigured(replicaDatasourceUrl)) {
+            ReplicaRoutingSupport.validateDenySafe(datasourceUrl, replicaDatasourceUrl);
+            if (!replicaDatasourceUrl.toLowerCase(Locale.ROOT).contains("jdbc:postgresql:")) {
+                throw new IllegalStateException(
+                    "spring.datasource.replica.url must be PostgreSQL when spring.profiles.active=prod. "
+                    + "Unset SPRING_DATASOURCE_REPLICA_URL or point it at a Postgres read replica.");
+            }
         }
         log.info("Production profile guard passed (Postgres, Redis, microsoft.dev-mode=false).");
     }
