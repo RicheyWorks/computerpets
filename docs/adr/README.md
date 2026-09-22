@@ -31,6 +31,7 @@ address, or an API that is not on `main`.
 | [0010](0010-presence-does-not-open-files.md) | Desk presence does not open a dropped keeper file | Accepted |
 | [0011](0011-presence-does-not-list-folders.md) | Desk presence does not list user folders or read window titles | Accepted |
 | [0012](0012-presence-does-not-log-keys.md) | Desk presence does not log keys outside a focused field | Accepted |
+| [0013](0013-weather-locate-is-not-a-process-grant.md) | Weather location is a click, not a process grant | Accepted |
 
 ## How to add one
 

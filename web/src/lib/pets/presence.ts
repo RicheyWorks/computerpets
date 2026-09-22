@@ -2,14 +2,117 @@
 
 export const HOUSE_FILES = ["card.json", "mind.json"] as const;
 
-const ALLOWED_PERMISSIONS = new Set(["geolocation"]);
+/**
+ * Geolocation is not a standing grant. It opens only for one weather-button
+ * locate, then closes. A browser may keep an origin grant after that click;
+ * this page cannot revoke it. Callers do not watch and do not re-query.
+ */
+export const WEATHER_LOCATE_MS = 120_000;
+
+let weatherLocateUntil = 0;
 
 export function allowNavigation(_url?: string): boolean {
   return false;
 }
 
-export function allowPermission(permission: string): boolean {
-  return ALLOWED_PERMISSIONS.has(String(permission || ""));
+export function armWeatherLocate(now = Date.now()): number {
+  const at = Number(now);
+  const base = Number.isFinite(at) ? at : Date.now();
+  weatherLocateUntil = base + WEATHER_LOCATE_MS;
+  return weatherLocateUntil;
+}
+
+export function clearWeatherLocate(): void {
+  weatherLocateUntil = 0;
+}
+
+export function weatherLocateOpen(now = Date.now()): boolean {
+  const at = Number(now);
+  const base = Number.isFinite(at) ? at : Date.now();
+  return weatherLocateUntil > base;
+}
+
+export function allowPermission(permission: string, now = Date.now()): boolean {
+  if (String(permission || "") !== "geolocation") return false;
+  return weatherLocateOpen(now);
+}
+
+export function weatherLocateOptions(): { maximumAge: 0; timeout: number; enableHighAccuracy: false } {
+  return { maximumAge: 0, timeout: WEATHER_LOCATE_MS, enableHighAccuracy: false };
+}
+
+type GeoLike = {
+  getCurrentPosition: Geolocation["getCurrentPosition"];
+} | null;
+
+export type WeatherLocateHooks = {
+  arm?: () => unknown;
+  clear?: () => unknown;
+};
+
+function closeWeatherLocate(hooks?: WeatherLocateHooks | null): Promise<void> {
+  clearWeatherLocate();
+  if (!hooks || typeof hooks.clear !== "function") return Promise.resolve();
+  try {
+    return Promise.resolve(hooks.clear()).then(
+      () => {},
+      () => {},
+    );
+  } catch {
+    return Promise.resolve();
+  }
+}
+
+function requestWeatherFix(geo: GeoLike | undefined, opts: ReturnType<typeof weatherLocateOptions>): Promise<{ lat: number; lon: number } | null> {
+  return new Promise((resolve) => {
+    if (!geo || typeof geo.getCurrentPosition !== "function") {
+      resolve(null);
+      return;
+    }
+    let settled = false;
+    const done = (value: { lat: number; lon: number } | null) => {
+      if (settled) return;
+      settled = true;
+      resolve(value);
+    };
+    try {
+      geo.getCurrentPosition(
+        (pos) => {
+          const lat = Number(pos.coords.latitude);
+          const lon = Number(pos.coords.longitude);
+          done(Number.isFinite(lat) && Number.isFinite(lon) ? { lat, lon } : null);
+        },
+        () => done(null),
+        opts,
+      );
+    } catch {
+      done(null);
+    }
+  });
+}
+
+/** One weather-button fix. Arms geolocation, asks once, then clears. Does not watch. */
+export function readWeatherHere(
+  geo?: GeoLike,
+  hooks?: WeatherLocateHooks | null,
+): Promise<{ lat: number; lon: number } | null> {
+  armWeatherLocate();
+  let pending: Promise<unknown> = Promise.resolve();
+  if (hooks && typeof hooks.arm === "function") {
+    try {
+      pending = Promise.resolve(hooks.arm());
+    } catch (err) {
+      pending = Promise.reject(err);
+    }
+  }
+  const opts = weatherLocateOptions();
+  return pending.then(() => requestWeatherFix(geo, opts)).then(
+    (fix) => closeWeatherLocate(hooks).then(() => fix),
+    (err) =>
+      closeWeatherLocate(hooks).then(() => {
+        throw err;
+      }),
+  );
 }
 
 export function houseFile(userDataDir: string, name: string): string | null {

@@ -8,6 +8,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const P = await import(join(root, "src/lib/pets/presence.ts"));
 const room = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 const demo = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "utf8");
+const plates = readFileSync(join(root, "src/components/desk/desk-plates.tsx"), "utf8");
 
 test("desk presence refuses navigation and host paths", () => {
   assert.equal(P.allowNavigation("file:///home/keeper/homework.html"), false);
@@ -18,11 +19,42 @@ test("desk presence refuses navigation and host paths", () => {
   assert.equal(P.houseFile("/house", "hwid.txt"), null);
 });
 
-test("clipboard and file-system grants stay denied", () => {
-  assert.equal(P.allowPermission("geolocation"), true);
+test("clipboard and file-system grants stay denied; geolocation is not a standing grant", async () => {
+  P.clearWeatherLocate();
+  assert.equal(P.allowPermission("geolocation", 1_000), false);
+  assert.equal(P.armWeatherLocate(1_000), 1_000 + P.WEATHER_LOCATE_MS);
+  assert.equal(P.allowPermission("geolocation", 1_000), true);
+  assert.equal(P.allowPermission("geolocation", 1_000 + P.WEATHER_LOCATE_MS), false);
+  P.clearWeatherLocate();
+  assert.equal(P.allowPermission("geolocation", 1_500), false);
   assert.equal(P.allowPermission("clipboard-read"), false);
   assert.equal(P.allowPermission("display-capture"), false);
   assert.equal(P.allowPermission("fileSystem"), false);
+
+  let watched = 0;
+  const seen = [];
+  const fix = await P.readWeatherHere(
+    {
+      getCurrentPosition(ok, _err, opts) {
+        seen.push(opts);
+        assert.equal(P.allowPermission("geolocation"), true);
+        ok({ coords: { latitude: 47.6, longitude: -122.3 } });
+      },
+      watchPosition() {
+        watched += 1;
+      },
+    },
+  );
+  assert.deepEqual(fix, { lat: 47.6, lon: -122.3 });
+  assert.equal(seen[0].maximumAge, 0);
+  assert.equal(seen[0].enableHighAccuracy, false);
+  assert.equal(watched, 0);
+  assert.equal(P.allowPermission("geolocation"), false);
+  assert.equal(await P.readWeatherHere(undefined), null);
+  assert.match(plates, /readWeatherHere/);
+  assert.doesNotMatch(plates, /getCurrentPosition|watchPosition|maximumAge:\s*600/);
+  const src = readFileSync(join(root, "src/lib/pets/presence.ts"), "utf8");
+  assert.doesNotMatch(src, /watchPosition/);
 });
 
 test("a dropped file is not a gift and is not read", () => {
