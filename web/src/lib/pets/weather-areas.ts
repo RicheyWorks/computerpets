@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. Same map as desktop `weather-areas.js`. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. Same map as desktop `weather-areas.js`. */
 import type { Weather } from "./weather";
 
 export const NO_AREA = "no area set";
@@ -7,6 +7,11 @@ export const AREA_PLACEHOLDER = "A city or place — weather, not radio";
 export const AREA_TRUTH = "Weather area. Named places you add. Not the radio station.";
 export const TYPE_A_CITY = "type a city";
 export const HERE_FAIL = "this computer did not share a place";
+export const HERE_SEND = "this click sends a place to the forecast host.";
+export const HERE_KEPT = "keeping the saved place";
+export const HERE_SENT = "a place was sent to the forecast host";
+/** A tenth of a degree is about 11 km. Rounding is not anonymity. */
+export const PLACE_STEP = 0.1;
 export const CANT_REACH = "can't reach";
 export const FAVORITES_EMPTY = "No favorites yet — star a place.";
 export const GEOCODE_HOST = "geocoding-api.open-meteo.com";
@@ -175,6 +180,52 @@ export function tabLabel(tab: unknown) {
   return parseTab(tab) === "favorites" ? "Favorites" : "Current";
 }
 
+function isLiveFix(area: { id?: string; query?: string } | null | undefined) {
+  if (!area) return false;
+  return area.id === "here" || area.query === "this computer";
+}
+
+/**
+ * Round a fix to a place before it can leave. A tenth of a degree.
+ * This is not anonymity. The forecast host still receives a place.
+ */
+export function sharePlace(lat: number, lon: number): { lat: number; lon: number } | null {
+  const la = num(lat);
+  const lo = num(lon);
+  if (la == null || lo == null) return null;
+  if (la < -90 || la > 90 || lo < -180 || lo > 180) return null;
+  const places = Math.round(1 / PLACE_STEP);
+  const round = (v: number) => {
+    const n = Number((Math.round(v * places) / places).toFixed(1));
+    return Object.is(n, -0) ? 0 : n;
+  };
+  let latR = round(la);
+  let lonR = round(lo);
+  if (latR > 90) latR = 90;
+  if (latR < -90) latR = -90;
+  if (lonR > 180) lonR = 180;
+  if (lonR < -180) lonR = -180;
+  return { lat: latR, lon: lonR };
+}
+
+/** A place the keeper typed. A live "here" fix is not one. */
+export function typedArea(areas: unknown): WeatherArea | null {
+  const house = parseAreas(areas);
+  const typed = house.areas.filter((a) => !isLiveFix(a));
+  if (!typed.length) return null;
+  return typed.find((a) => a.id === house.currentId) || typed[0] || null;
+}
+
+/**
+ * Prefer a saved typed area. Do not start a live locate when one is present.
+ * A cached geolocation grant is not consulted on that path.
+ */
+export function locateChoice(areas: unknown): { locate: false; area: WeatherArea } | { locate: true; area: null } {
+  const saved = typedArea(areas);
+  if (saved) return { locate: false, area: saved };
+  return { locate: true, area: null };
+}
+
 export function geocodeUrl(query: string) {
   const q = clipName(query);
   if (!q) return "";
@@ -182,10 +233,9 @@ export function geocodeUrl(query: string) {
 }
 
 export function reverseUrl(lat: number, lon: number) {
-  const la = num(lat);
-  const lo = num(lon);
-  if (la == null || lo == null) return "";
-  return `https://${GEOCODE_HOST}/v1/reverse?latitude=${la}&longitude=${lo}&language=en&format=json`;
+  const place = sharePlace(lat, lon);
+  if (!place) return "";
+  return `https://${GEOCODE_HOST}/v1/reverse?latitude=${place.lat.toFixed(1)}&longitude=${place.lon.toFixed(1)}&language=en&format=json`;
 }
 
 export function parseReverse(json: unknown): WeatherArea | null {
@@ -196,10 +246,9 @@ export function parseReverse(json: unknown): WeatherArea | null {
 }
 
 export function forecastUrl(lat: number, lon: number) {
-  const la = num(lat);
-  const lo = num(lon);
-  if (la == null || lo == null) return "";
-  return `https://${FORECAST_HOST}/v1/forecast?latitude=${la}&longitude=${lo}&current=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=3&timezone=auto`;
+  const place = sharePlace(lat, lon);
+  if (!place) return "";
+  return `https://${FORECAST_HOST}/v1/forecast?latitude=${place.lat.toFixed(1)}&longitude=${place.lon.toFixed(1)}&current=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=3&timezone=auto`;
 }
 
 export function parseGeocode(json: unknown): WeatherArea[] {

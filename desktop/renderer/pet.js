@@ -3695,13 +3695,20 @@ if (weatherPlate) {
       if (!A) return;
       function keepHere(area) {
         applyWeatherHouse(A.addArea(card, area));
-        if (truth) truth.textContent = "";
+        if (truth) truth.textContent = A.HERE_SENT;
       }
       function failHere(line) {
         if (truth) truth.textContent = line;
       }
       function unnamed(lat, lon) {
         return { id: "here", name: "This computer", query: "this computer", lat, lon };
+      }
+      const choice = A.locateChoice(card);
+      if (!choice.locate) {
+        if (truth) truth.textContent = A.HERE_KEPT;
+        const current = A.currentArea(card);
+        if (!current || current.id !== choice.area.id) applyWeatherHouse(A.pickArea(card, choice.area.id));
+        return;
       }
       if (window.PetPresence && typeof window.PetPresence.ipPlace === "function" && window.PetPresence.ipPlace() != null) {
         failHere(A.HERE_FAIL);
@@ -3725,18 +3732,27 @@ if (weatherPlate) {
           failHere(A.HERE_FAIL);
           return;
         }
-        const url = A.reverseUrl(fix.lat, fix.lon);
+        const place = A.sharePlace(fix.lat, fix.lon);
+        if (!place) {
+          failHere(A.HERE_FAIL);
+          return;
+        }
+        const url = A.reverseUrl(place.lat, place.lon);
         if (!url) {
-          keepHere(unnamed(fix.lat, fix.lon));
+          keepHere(unnamed(place.lat, place.lon));
           return;
         }
         fetch(url, { cache: "no-store" })
           .then((r) => r.json())
           .then((json) => {
             const named = A.parseReverse(json);
-            keepHere(named || unnamed(fix.lat, fix.lon));
+            keepHere(
+              named
+                ? { id: "here", name: named.name, query: "this computer", lat: place.lat, lon: place.lon }
+                : unnamed(place.lat, place.lon),
+            );
           })
-          .catch(() => keepHere(unnamed(fix.lat, fix.lon)));
+          .catch(() => keepHere(unnamed(place.lat, place.lon)));
       });
     });
   }
