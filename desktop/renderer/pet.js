@@ -548,11 +548,11 @@ function fetchNews() {
     work.then((items) => { if (items == null) return; applyItems(items); }).catch(fail);
     return;
   }
-  fetch(N.newsUrl())
-    .then((r) => r.json())
+  if (!N.readFeatured) return;
+  N.readFeatured(line)
     .then((json) => {
-      const next = N.parseNews(json);
-      applyItems(next);
+      if (json == null) return;
+      applyItems(N.parseNews(json));
     })
     .catch(fail);
 }

@@ -64,11 +64,11 @@ import {
   newsHonesty,
   newsLine,
   newsMaySend,
-  newsUrl,
   NO_HEADLINES,
   parseNews,
   parseNewsPrefs,
   parseRss,
+  readFeatured,
   pickTab,
   pickTopic,
   popularRssUrl,
@@ -761,8 +761,8 @@ export function DeskNewsPlate() {
           setUnread(!next.length);
           return;
         }
-        const json = await (await fetch(newsUrl())).json();
-        if (cancelled) return;
+        const json = await readFeatured(line);
+        if (json == null || cancelled) return;
         const next = parseNews(json);
         if (next.length) setItems(next);
         setUnread(!next.length);

@@ -457,6 +457,8 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   const newsBody = petSrc.slice(newsFnAt, marketFnAt);
   assert.ok(newsBody.indexOf("newsMaySend") < newsBody.indexOf("popularRssUrl"));
   assert.ok(newsBody.indexOf("newsLineInView") < newsBody.indexOf("popularRssUrl"));
+  assert.ok(newsBody.indexOf("newsMaySend") < newsBody.indexOf("readFeatured(line)"));
+  assert.doesNotMatch(newsBody, /fetch\(N\.newsUrl\(/);
   const marketBody = petSrc.slice(marketFnAt, petSrc.indexOf("function sitSleepAid"));
   assert.ok(marketBody.indexOf("quoteMaySend") < marketBody.indexOf("geckoManyUrl"));
   const radioBody = petSrc.slice(petSrc.indexOf("function lookupRadio"), petSrc.indexOf("function skyLabel"));
