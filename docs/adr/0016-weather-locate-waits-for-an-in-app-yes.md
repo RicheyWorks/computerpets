@@ -32,6 +32,6 @@ This slice asks in the app before a live locate, and rounds a stored live pin wh
 - Rounding is about 11 km. It is not anonymity.
 - Many desktop sessions have no GNSS fix. After the yes, the line says the computer did not share a place.
 - License `hwid` still reads machine-id or MachineGuid. That is the license door, not presence.
-- The keeper's plugin key still sits in `mind.json`. It stays off the card.
+- The overlay plugin key is not plain text in `mind.json`. [0018](0018-mind-key-is-not-plain-text.md). It stays off the card.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.
 - DirectX 12 / Vulkan is still open. This slice is not that engine.

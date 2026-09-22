@@ -33,6 +33,6 @@ This slice holds a forecast of the current saved live pin until the keeper ackno
 - A typed city lookup and an acknowledged forecast still show the client address to the forecast host. The house does not ask the host to turn that address into a city. Rounding to a tenth of a degree is about 11 km. It is not anonymity.
 - An ack with digits finer than a tenth is dropped. It cannot keep a precise pin on the card.
 - License `hwid` still reads machine-id or MachineGuid. That is the license door, not presence.
-- The keeper's plugin key still sits in `mind.json`. It stays off the card.
+- The overlay plugin key is not plain text in `mind.json`. [0018](0018-mind-key-is-not-plain-text.md). It stays off the card.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.
 - DirectX 12 / Vulkan is still open. This slice is not that engine.
