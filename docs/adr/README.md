@@ -87,6 +87,7 @@ address, or an API that is not on `main`.
 | [0066](0066-provider-verify-field-bounds.md) | Provider verify fields fail closed on length and charset | Accepted |
 | [0067](0067-trusted-proxy-client-address.md) | Trusted-proxy client address (fail-closed XFF / Forwarded) | Accepted |
 | [0068](0068-discovery-rate-limit.md) | Discovery rate limit on `/api/pets` (fail-closed) | Accepted |
+| [0069](0069-bundle-catalog-rate-limit.md) | Bundle catalog rate limit on `GET /api/bundles/{petKey}` (fail-closed) | Accepted |
 
 ## How to add one
 

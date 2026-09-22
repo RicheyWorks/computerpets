@@ -23,12 +23,14 @@ import java.util.concurrent.TimeUnit;
  * {@code application/problem+json} body.
  *
  * <p>Default store is Redis ({@code bucket4j-redis} + Lettuce) so replicas share
- * the same 10/min verify, 30/min download, and 60/min discovery budgets. If Redis
- * is unreachable the filter fail-closes with {@code 503 Service Unavailable} and
- * {@code Retry-After} — it does not fall back to a per-instance memory bucket,
- * which would silently lift the shared limit.
+ * the same 10/min verify, 30/min download, 60/min discovery, and 60/min bundle
+ * catalog budgets. If Redis is unreachable the filter fail-closes with
+ * {@code 503 Service Unavailable} and {@code Retry-After} — it does not fall
+ * back to a per-instance memory bucket, which would silently lift the shared limit.
  *
  * <p>Client identity is {@link ClientAddress} (trusted-proxy CIDRs only; ADR 0067).
+ * {@code GET /api/bundles/{petKey}/redeem} is not a catalog read: signed grant
+ * redeem stays outside the bundles bucket (ADR 0069).
  */
 @Component
 public class RateLimitingFilter extends OncePerRequestFilter {
@@ -39,11 +41,15 @@ public class RateLimitingFilter extends OncePerRequestFilter {
      * Buckets are namespaced by {@code clientId + "|" + rule.bucketKey}.
      * Capacity is generous — these limits are abuse-prevention, not metering.
      * Discovery uses prefix {@code /api/pets} (covers list, by-rarity, and detail).
+     * Bundle catalog uses prefix {@code /api/bundles/} (one pet segment, and any
+     * other non-redeem path under that prefix). Signed redeem is excluded in
+     * {@link #ruleFor(String)}.
      */
     static final List<Rule> RULES = List.of(
         new Rule("/api/verify/",   "verify",    10, Duration.ofMinutes(1)),
         new Rule("/api/download/", "download",  30, Duration.ofMinutes(1)),
-        new Rule("/api/pets",      "discovery", 60, Duration.ofMinutes(1))
+        new Rule("/api/pets",      "discovery", 60, Duration.ofMinutes(1)),
+        new Rule("/api/bundles/",  "bundles",   60, Duration.ofMinutes(1))
     );
 
     private final RateLimitBackend backend;
@@ -109,11 +115,42 @@ public class RateLimitingFilter extends OncePerRequestFilter {
             title, status, detail, retryAfterSeconds));
     }
 
-    private static Rule ruleFor(String path) {
+    static Rule ruleFor(String path) {
+        if (path == null) {
+            return null;
+        }
+        int query = path.indexOf('?');
+        if (query >= 0) {
+            path = path.substring(0, query);
+        }
+        if (isSignedBundleRedeem(path)) {
+            return null;
+        }
         for (Rule r : RULES) {
             if (path.startsWith(r.pathPrefix)) return r;
         }
         return null;
+    }
+
+    /**
+     * {@code GET /api/bundles/{petKey}/redeem} (optional trailing slash).
+     * One pet segment, then {@code redeem}. Catalog reads such as
+     * {@code /api/bundles/{petKey}} are not redeem.
+     */
+    static boolean isSignedBundleRedeem(String path) {
+        if (path == null || !path.startsWith("/api/bundles/")) {
+            return false;
+        }
+        String rest = path.substring("/api/bundles/".length());
+        int slash = rest.indexOf('/');
+        if (slash <= 0) {
+            return false;
+        }
+        String tail = rest.substring(slash + 1);
+        if (tail.endsWith("/")) {
+            tail = tail.substring(0, tail.length() - 1);
+        }
+        return "redeem".equals(tail);
     }
 
     /** Path prefix → (capacity, refill window). */

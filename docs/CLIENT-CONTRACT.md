@@ -32,11 +32,15 @@ Discovery endpoints (`/api/verify/**`, `/api/pets/**`, `/api/bundles/**`) are un
 
 Rate limits (per client IP, Redis-backed, shared across app instances):
 **10/min** on `/api/verify/`, **30/min** on `/api/download/`, **60/min**
-on `/api/pets` (list, by-rarity, and detail share one discovery bucket).
-Exceeding them returns **429** with `Retry-After` and
+on `/api/pets` (list, by-rarity, and detail share one discovery bucket),
+**60/min** on `GET /api/bundles/{petKey}` catalog reads (own `bundles`
+bucket). Exceeding them returns **429** with `Retry-After` and
 `application/problem+json`. If Redis is unreachable the server fail-closes
 with **503** (same media type and `Retry-After`) instead of lifting the
-limit ([ADR 0068](adr/0068-discovery-rate-limit.md)). Client IP uses
+limit ([ADR 0068](adr/0068-discovery-rate-limit.md),
+[ADR 0069](adr/0069-bundle-catalog-rate-limit.md)).
+`GET /api/bundles/{petKey}/redeem` is not on the catalog bucket.
+Client IP uses
 `remoteAddr` unless the peer matches `trusted-proxies.cidrs`, in which
 case the first `X-Forwarded-For` hop (else RFC 7239 `Forwarded` `for=`)
 is used ([ADR 0067](adr/0067-trusted-proxy-client-address.md)).
@@ -322,7 +326,10 @@ or no row matches. `sha256` is never invented.
 
 `GET /api/bundles/{petKey}` (unauthenticated, like `/api/pets`) lists
 the configured rows. Unknown pet → **404**. Known pet with nothing
-published → `{ "artifacts": [] }`.
+published → `{ "artifacts": [] }`. This read is **60/min** per client IP
+([ADR 0069](adr/0069-bundle-catalog-rate-limit.md)): over the budget is
+**429**, and an unreachable rate-limit store is **503**. That budget does
+not apply to signed redeem.
 
 Unknown `petKey` values, placeholder / short / non-hex `sha256`, and
 duplicate `petKey`+`platform` rows fail process startup. The house
@@ -403,6 +410,9 @@ calls:
 `{petKey}` is the catalog pet key (the HMAC input / `pet=` query), not
 necessarily the object filename. Unauthenticated — the signature is the
 gate. The query fields stay; they are not scrubbed for presence theater.
+This path is not charged to the 60/min catalog bucket. Grant issue remains
+**30/min** on `POST /api/download/{petKey}`. HMAC, one-time consume, and
+IP binding are unchanged.
 
 Reference edge: `deploy/cdn/edge-redeem.js` (Lambda@Edge / Cloudflare Worker).
 Missing `HOUSE_API_BASE`, redeem network errors, and non-allow house
