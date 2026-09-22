@@ -22,9 +22,10 @@ import java.util.Optional;
  *
  * <p>In production the actual {@code .zip} would live on S3 / CloudFront / R2 and the URL
  * would be a presigned download. Here we emit a stable URL pattern plus an HMAC-SHA256
- * token over {@code petKey|owner|jti|exp}, which an edge worker (or this same backend's
- * download proxy) can verify before serving bytes. This keeps the master key off the
- * client and bounds replay to {@link #DOWNLOAD_URL_TTL}.
+ * token over {@code petKey|owner|jti|exp}, which an edge worker calls house redeem to
+ * verify before serving bytes ({@code deploy/cdn/edge-redeem.js}; ADR 0063). The URL
+ * also carries {@code pet=} so redeem works when the object key is a catalog path.
+ * This keeps the master key off the client and bounds replay to {@link #DOWNLOAD_URL_TTL}.
  *
  * <p>When {@link BundleCatalog} has a matching row the manifest also carries
  * {@code version}, {@code platform}, and {@code sha256}. Those fields are omitted
