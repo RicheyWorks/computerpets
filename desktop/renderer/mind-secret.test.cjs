@@ -123,6 +123,99 @@ describe("mind secret", () => {
   });
 });
 
+const PASTED = "pasted-key-VALUE-should-not-ride";
+const PASTED_API = "pasted-api-key-VALUE-should-not-ride";
+
+describe("mind.json base URL", () => {
+  it("drops a pasted key query on save and does not put it in the seal", () => {
+    const clean = Secret.writeMindRecord(mindWithKey(), xorCodec(), null);
+    const dirty = mindWithKey();
+    dirty.default.baseUrl = `https://api.x.ai/v1?key=${PASTED}&api_key=${PASTED_API}&alt=sse`;
+    dirty.pets.red_panda.baseUrl = `https://api.example.test/v1?api-key=${PASTED}#token=${PASTED_API}`;
+    const written = Secret.writeMindRecord(dirty, xorCodec(), null);
+    const disk = JSON.stringify(written.file);
+    assert.equal(written.kept, "os");
+    assert.equal(written.file.default.baseUrl, "https://api.x.ai/v1?alt=sse");
+    assert.equal(written.file.pets.red_panda.baseUrl, "https://api.example.test/v1");
+    assert.equal(disk.includes(PASTED), false);
+    assert.equal(disk.includes(PASTED_API), false);
+    assert.equal(disk.includes("key="), false);
+    assert.equal(disk.includes("api_key="), false);
+    assert.equal(disk.includes("api-key="), false);
+    assert.equal(disk.includes("alt=sse"), true);
+    assert.equal(written.file.sealedKeys, clean.file.sealedKeys);
+    assert.equal(disk.includes(SECRET), false);
+    assert.equal(disk.includes(PET_SECRET), false);
+  });
+
+  it("rewrites a leftover dirty base URL on read and keeps the same seal", () => {
+    const sealed = Secret.writeMindRecord(mindWithKey(), xorCodec(), null).file;
+    const prior = sealed.sealedKeys;
+    sealed.default.baseUrl = `https://api.x.ai/v1?key=${PASTED}&alt=sse`;
+    sealed.pets.red_panda.baseUrl = `https://api.example.test/v1?api_key=${PASTED_API}`;
+    const opened = Secret.readMindRecord(sealed, xorCodec());
+    const disk = JSON.stringify(opened.file);
+    assert.equal(opened.rewrite, true);
+    assert.equal(opened.kept, "os");
+    assert.equal(opened.file.sealedKeys, prior);
+    assert.equal(opened.mind.default.apiKey, SECRET);
+    assert.equal(opened.mind.pets.red_panda.apiKey, PET_SECRET);
+    assert.equal(opened.mind.default.baseUrl, "https://api.x.ai/v1?alt=sse");
+    assert.equal(opened.file.default.baseUrl, "https://api.x.ai/v1?alt=sse");
+    assert.equal(opened.mind.pets.red_panda.baseUrl, "https://api.example.test/v1");
+    assert.equal(disk.includes(PASTED), false);
+    assert.equal(disk.includes(PASTED_API), false);
+    assert.equal(disk.includes(SECRET), false);
+  });
+
+  it("rewrites a locked file's dirty base URL without opening or replacing the seal", () => {
+    const sealed = Secret.writeMindRecord(mindWithKey(), xorCodec(), null).file;
+    const prior = sealed.sealedKeys;
+    sealed.default.baseUrl = `https://api.x.ai/v1?key=${PASTED}`;
+    const opened = Secret.readMindRecord(sealed, null);
+    assert.equal(opened.rewrite, true);
+    assert.equal(opened.kept, "locked");
+    assert.equal(opened.file.sealedKeys, prior);
+    assert.equal(opened.mind.default.apiKey, undefined);
+    assert.equal(opened.file.default.baseUrl, "https://api.x.ai/v1");
+    assert.equal(JSON.stringify(opened.file).includes(PASTED), false);
+    assert.equal(JSON.stringify(opened.mind).includes(SECRET), false);
+  });
+
+  it("does not rewrite a clean base URL and leaves a non-URL as typed", () => {
+    const sealed = Secret.writeMindRecord(mindWithKey(), xorCodec(), null).file;
+    const opened = Secret.readMindRecord(JSON.parse(JSON.stringify(sealed)), xorCodec());
+    assert.equal(opened.rewrite, false);
+    assert.equal(opened.file.sealedKeys, sealed.sealedKeys);
+    const odd = {
+      default: { plugin: "custom", baseUrl: `not a url?key=${PASTED}` },
+      voice: "browser",
+      pets: {},
+    };
+    const written = Secret.writeMindRecord(odd, null, null);
+    assert.equal(written.file.default.baseUrl, `not a url?key=${PASTED}`);
+    const read = Secret.readMindRecord(written.file, null);
+    assert.equal(read.rewrite, false);
+    assert.equal(read.mind.default.baseUrl, `not a url?key=${PASTED}`);
+  });
+
+  it("keeps the secret-query names in lockstep with the web module and the overlay", () => {
+    const secretQuerySrc = fs.readFileSync(path.join(__dirname, "..", "..", "web/src/lib/ai/secret-query.mjs"), "utf8");
+    const overlay = fs.readFileSync(path.join(__dirname, "mind.js"), "utf8");
+    const disk = fs.readFileSync(path.join(__dirname, "..", "mind-secret.cjs"), "utf8");
+    const namesOf = (src) => {
+      const block = src.slice(src.indexOf("SECRET_QUERY_NAMES"), src.indexOf("function isSecretQueryName"));
+      return [...block.matchAll(/"([a-z_]+)"/g)].map((m) => m[1]);
+    };
+    const shared = namesOf(secretQuerySrc);
+    assert.deepEqual(namesOf(overlay), shared);
+    assert.deepEqual(namesOf(disk), shared);
+    assert.match(disk, /scrubSecretQueryString/);
+    assert.match(overlay, /scrubSecretQueryString/);
+    assert.match(disk, /baseUrlsNeedRewrite/);
+  });
+});
+
 describe("overlay mind.js local store", () => {
   it("does not copy the plugin key into localStorage when the desk bridge is up", async () => {
     const store = new Map();
@@ -224,6 +317,111 @@ describe("overlay mind.js local store", () => {
     assert.equal(local.get("computerpets.mind.v1").includes(SECRET), false);
     assert.equal(local.get("computerpets.mind.v1").includes("apiKey"), false);
     assert.equal(window.PetMind.load().default.apiKey, PET_SECRET);
+  });
+
+  it("drops a pasted key query from the browser copy and from the loaded mind", async () => {
+    const dirty = `https://example.test/v1beta?key=${PASTED}&api_key=${PASTED_API}&alt=sse`;
+    const local = new Map();
+    local.set(
+      "computerpets.mind.v1",
+      JSON.stringify({
+        default: { plugin: "google", baseUrl: dirty, apiKey: SECRET },
+        voice: "browser",
+        pets: { red_panda: { plugin: "openai", baseUrl: `https://api.example.test/v1?api_key=${PASTED_API}` } },
+      }),
+    );
+    const window = {
+      localStorage: {
+        getItem: (key) => (local.has(key) ? local.get(key) : null),
+        setItem: (key, value) => {
+          local.set(key, String(value));
+        },
+        removeItem: (key) => {
+          local.delete(key);
+        },
+      },
+      URL,
+      URLSearchParams,
+    };
+    window.window = window;
+    vm.runInContext(fs.readFileSync(path.join(__dirname, "mind.js"), "utf8"), vm.createContext(window));
+    const loaded = window.PetMind.load();
+    assert.equal(loaded.default.baseUrl, "https://example.test/v1beta?alt=sse");
+    assert.equal(loaded.pets.red_panda.baseUrl, "https://api.example.test/v1");
+    assert.equal(loaded.default.apiKey, SECRET);
+    const disk = local.get("computerpets.mind.v1");
+    assert.equal(disk.includes(PASTED), false);
+    assert.equal(disk.includes(PASTED_API), false);
+    assert.equal(disk.includes("apiKey"), false);
+    assert.equal(disk.includes("alt=sse"), true);
+    const saved = await window.PetMind.save({
+      default: { plugin: "google", baseUrl: `https://example.test/v1?api-key=${PASTED}&alt=sse`, apiKey: PET_SECRET },
+      voice: "browser",
+      pets: {},
+    });
+    assert.equal(saved.kept, "none");
+    assert.equal(window.PetMind.load().default.baseUrl, "https://example.test/v1?alt=sse");
+    assert.equal(local.get("computerpets.mind.v1").includes(PASTED), false);
+    assert.equal(local.get("computerpets.mind.v1").includes(PET_SECRET), false);
+  });
+
+  it("does not hand a pasted key query to the desk bridge or the browser copy", async () => {
+    const local = new Map();
+    local.set(
+      "computerpets.mind.v1",
+      JSON.stringify({
+        default: { plugin: "google", baseUrl: `https://example.test/v1?key=${PASTED}` },
+        voice: "browser",
+        pets: {},
+      }),
+    );
+    let sent = null;
+    const window = {
+      localStorage: {
+        getItem: (key) => (local.has(key) ? local.get(key) : null),
+        setItem: (key, value) => {
+          local.set(key, String(value));
+        },
+        removeItem: (key) => {
+          local.delete(key);
+        },
+      },
+      URL,
+      URLSearchParams,
+      desk: {
+        mindGet() {
+          return {
+            default: { plugin: "google", baseUrl: `https://example.test/v1?api_key=${PASTED_API}&alt=sse`, apiKey: SECRET },
+            voice: "browser",
+            pets: { red_panda: { plugin: "openai", baseUrl: `https://api.example.test/v1?token=${PASTED}` } },
+            keyKept: "os",
+          };
+        },
+        mindSet(data) {
+          sent = data;
+          return Promise.resolve({ kept: "os" });
+        },
+      },
+    };
+    window.window = window;
+    vm.runInContext(fs.readFileSync(path.join(__dirname, "mind.js"), "utf8"), vm.createContext(window));
+    const loaded = window.PetMind.load();
+    assert.equal(loaded.default.baseUrl, "https://example.test/v1?alt=sse");
+    assert.equal(loaded.pets.red_panda.baseUrl, "https://api.example.test/v1");
+    assert.equal(loaded.default.apiKey, SECRET);
+    assert.equal(local.get("computerpets.mind.v1").includes(PASTED), false);
+    const kept = await window.PetMind.save({
+      default: { plugin: "google", baseUrl: `https://example.test/v1?key=${PASTED}&alt=sse`, apiKey: SECRET },
+      voice: "browser",
+      pets: {},
+      keyKept: "os",
+    });
+    assert.equal(kept.kept, "os");
+    assert.equal(sent.default.baseUrl, "https://example.test/v1?alt=sse");
+    assert.equal(sent.default.apiKey, SECRET);
+    assert.equal(JSON.stringify(sent).includes(PASTED), false);
+    assert.equal(local.get("computerpets.mind.v1").includes(PASTED), false);
+    assert.equal(local.get("computerpets.mind.v1").includes(SECRET), false);
   });
 });
 

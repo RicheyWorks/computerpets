@@ -26,13 +26,13 @@
       const next = {};
       if (typeof row.plugin === "string") next.plugin = row.plugin;
       if (typeof row.model === "string") next.model = row.model;
-      if (typeof row.baseUrl === "string") next.baseUrl = row.baseUrl;
+      if (typeof row.baseUrl === "string") next.baseUrl = scrubSecretQueryString(row.baseUrl);
       pets[name] = next;
     });
     const def = src.default && typeof src.default === "object" ? src.default : {};
     const defaults = { plugin: typeof def.plugin === "string" && def.plugin ? def.plugin : "local" };
     if (typeof def.model === "string") defaults.model = def.model;
-    if (typeof def.baseUrl === "string") defaults.baseUrl = def.baseUrl;
+    if (typeof def.baseUrl === "string") defaults.baseUrl = scrubSecretQueryString(def.baseUrl);
     return {
       default: defaults,
       voice: typeof src.voice === "string" ? src.voice : "browser",
@@ -99,12 +99,27 @@
     }
   }
 
+  function scrubBindingUrl(row) {
+    if (!row || typeof row !== "object" || typeof row.baseUrl !== "string") return;
+    row.baseUrl = scrubSecretQueryString(row.baseUrl);
+  }
+
+  function scrubMindBaseUrls(mind) {
+    if (!mind || typeof mind !== "object") return mind;
+    scrubBindingUrl(mind.default);
+    const pets = mind.pets;
+    if (pets && typeof pets === "object") {
+      Object.keys(pets).forEach((name) => scrubBindingUrl(pets[name]));
+    }
+    return mind;
+  }
+
   function load() {
     if (window.desk?.mindGet) {
       try {
         scrubBrowser();
         pageMind = null;
-        return window.desk.mindGet() || { default: { plugin: "local" }, voice: "browser", pets: {} };
+        return scrubMindBaseUrls(window.desk.mindGet() || { default: { plugin: "local" }, voice: "browser", pets: {} });
       } catch {
         /* fall through */
       }
@@ -114,16 +129,19 @@
     const sessionRaw = readStore(typeof sessionStorage !== "undefined" ? sessionStorage : null);
     const source = localRaw || sessionRaw || { default: { plugin: "local" }, voice: "browser", pets: {} };
     scrubBrowser();
-    pageMind = source;
+    pageMind = scrubMindBaseUrls(source);
     if (!pageMind.keyKept) pageMind.keyKept = plainKey(source) ? "none" : "empty";
     return pageMind;
   }
 
   function save(next) {
+    const mind = scrubMindBaseUrls(
+      next && typeof next === "object" ? next : { default: { plugin: "local" }, voice: "browser", pets: {} },
+    );
     if (window.desk?.mindSet) {
       pageMind = null;
       try {
-        localStorage.setItem(KEY, JSON.stringify(browserCopy(next)));
+        localStorage.setItem(KEY, JSON.stringify(browserCopy(mind)));
       } catch {
         /* ignore */
       }
@@ -132,12 +150,12 @@
       } catch {
         /* ignore */
       }
-      return Promise.resolve(window.desk.mindSet(next)).then(
+      return Promise.resolve(window.desk.mindSet(mind)).then(
         (result) => (result && typeof result === "object" ? result : { kept: "os" }),
         () => ({ kept: "none" }),
       );
     }
-    pageMind = next && typeof next === "object" ? next : { default: { plugin: "local" }, voice: "browser", pets: {} };
+    pageMind = mind;
     const kept = plainKey(pageMind) ? "none" : "empty";
     pageMind.keyKept = kept;
     try {
@@ -193,6 +211,21 @@
       if (isSecretQueryName(name)) url.searchParams.delete(name);
     });
     if (hashCarriesSecretQuery(url.hash)) url.hash = "";
+  }
+
+  function scrubSecretQueryString(raw) {
+    const trimmed = String(raw || "").trim();
+    if (!trimmed) return trimmed;
+    let url;
+    try {
+      url = new URL(trimmed);
+    } catch {
+      return trimmed;
+    }
+    const before = url.toString();
+    stripSecretQuery(url);
+    const after = url.toString();
+    return after === before ? trimmed : after;
   }
 
   function sanitizeModel(raw, fallback) {
