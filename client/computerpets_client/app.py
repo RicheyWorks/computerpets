@@ -6,9 +6,10 @@ import argparse
 import os
 import random
 import sys
+import threading
 from typing import Any
 
-from PyQt6.QtCore import QRectF, Qt, QTimer
+from PyQt6.QtCore import QObject, QRectF, Qt, QTimer, pyqtSignal
 from PyQt6.QtGui import QColor, QFont, QPainter
 from PyQt6.QtWidgets import (
     QApplication,
@@ -28,6 +29,7 @@ from PyQt6.QtWidgets import (
 from .blotter import DayWash, DeskBackground, WeatherLayer, attach_gpu_viewport
 from .choice import guest_marks, guest_pick, guest_tap, walking_cmd
 from .gift import gift_line, leave_gift, pick_gift
+from .gpu import gpu_line, initial_sample, ink, read_local
 from .guide import plaque_for
 from .hive import colony_of, colony_word, is_hive_place
 from .hours import (
@@ -105,6 +107,10 @@ class BlotterView(QGraphicsView):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.fitInView(QRectF(0, 0, SCENE_W, SCENE_H), Qt.AspectRatioMode.KeepAspectRatio)
+
+
+class _GpuBridge(QObject):
+    arrived = pyqtSignal(object)
 
 
 class DeskWindow(QMainWindow):
@@ -254,6 +260,14 @@ class DeskWindow(QMainWindow):
         layout.addWidget(self.choice_bar)
         layout.addWidget(self.plaque)
         layout.addWidget(self.vital_label)
+        self.gpu_label = QLabel("GPU unread")
+        self.gpu_label.setObjectName("gpuSense")
+        self._gpu_bridge = _GpuBridge(self)
+        self._gpu_bridge.arrived.connect(self._apply_gpu)
+        self._gpu_busy = False
+        self._gpu_timer: QTimer | None = None
+        self._apply_gpu(initial_sample())
+        layout.addWidget(self.gpu_label)
         self.setCentralWidget(root)
 
         status = QStatusBar()
@@ -351,6 +365,31 @@ class DeskWindow(QMainWindow):
             err = status.get("error")
             extra = f" ({err['message']})" if err else ""
             self.license_label.setText(f"Locked. Pet still lives on the blotter.{extra}")
+
+    def start_gpu_sense(self) -> None:
+        """Poll the keeper machine. Tests that only construct the window do not spawn."""
+        if self._gpu_timer is not None:
+            return
+        self._gpu_timer = QTimer(self)
+        self._gpu_timer.setInterval(5000)
+        self._gpu_timer.timeout.connect(self._kick_gpu)
+        self._gpu_timer.start()
+        self._kick_gpu()
+
+    def _kick_gpu(self) -> None:
+        if self._gpu_busy:
+            return
+        self._gpu_busy = True
+
+        def work() -> None:
+            self._gpu_bridge.arrived.emit(read_local())
+
+        threading.Thread(target=work, daemon=True).start()
+
+    def _apply_gpu(self, sample) -> None:
+        self._gpu_busy = False
+        self.gpu_label.setText(gpu_line(sample))
+        self.gpu_label.setStyleSheet(f"color: {ink(sample)}; font-size: 11px;")
 
     def _refresh_vitals(self) -> None:
         s = self.care
@@ -801,6 +840,8 @@ def main(argv: list[str] | None = None) -> int:
 
     window = DeskWindow()
     window.show()
+    if not args.check:
+        window.start_gpu_sense()
 
     if args.check:
         if window.pet is None or window.scene.items() == []:
@@ -839,6 +880,7 @@ def main(argv: list[str] | None = None) -> int:
         well = "unwell" if window.care.sick else "well"
         print(f"ok: {window.species.name} is {well}")
         print(window.renderer_label)
+        print(f"ok: gpu sense {window.gpu_label.text()}")
         QTimer.singleShot(250, app.quit)
     return app.exec()
 

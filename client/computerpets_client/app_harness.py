@@ -1178,6 +1178,18 @@ def _desk_rows() -> list[Affordance]:
             fate="excluded",
             exclude_reason="True live network. Offline parseNftLive path is driven as desk.nft.resolve; pass --live to attempt HTTP.",
         ),
+        Affordance(
+            "live.gpu_sense",
+            "desk",
+            "Windows keeper GPU probe",
+            "gpu.py read_local",
+            mode="live",
+            fate="excluded",
+            exclude_reason=(
+                "Reads the keeper machine. Offline contract is card.gpu. "
+                "Pass --live to probe. Mac/Linux stay mac-linux-gpu-sense. Never invents numbers."
+            ),
+        ),
     ]
 
 
@@ -1356,6 +1368,16 @@ def _card_rows() -> list[Affordance]:
                 "live speakers stay live.cry_playback."
             ),
         ),
+        Affordance(
+            "card.gpu",
+            "card",
+            "Honest GPU sense contract",
+            "gpu.py / gpu.js / gpu.ts",
+            notes=(
+                "Offline: valid, missing, malformed, stale, and Mac/Linux unsupported readings. "
+                "No invented zeros. Live Windows probe stays live.gpu_sense."
+            ),
+        ),
     ]
 
 
@@ -1430,6 +1452,51 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
             detail=f"desk={desk.detail}; web={web.detail}",
             extras={"desk": desk.extras, "web": web.extras},
             trace=[*list(desk.trace), *list(web.trace)],
+        )
+    if local_id == "gpu":
+        from .gpu import (
+            LATER_DOOR,
+            STALE_MS,
+            gpu_line,
+            later_door,
+            parse_sample,
+            present,
+            sample_from_probe,
+            senses_on,
+        )
+
+        now = 1_700_000_000_000
+        csv = "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5"
+        valid = sample_from_probe({"nvidiaCsv": csv}, platform="win32", now_ms=now)
+        missing = sample_from_probe(
+            {"nvidiaCsv": None, "engines": None, "adapterMemory": None},
+            platform="win32",
+            now_ms=now,
+        )
+        malformed = parse_sample(0)
+        stale = present(valid, now + STALE_MS + 1)
+        linux = sample_from_probe({"nvidiaCsv": csv}, platform="linux", now_ms=now)
+        darwin = sample_from_probe({"nvidiaCsv": csv}, platform="darwin", now_ms=now)
+        overlay = _read("desktop/renderer/index.html")
+        card = _read("web/src/components/desk/keeper-card.tsx")
+        checks = {
+            "valid": valid["status"] == "read" and valid["tempC"] == 62 and valid["utilPercent"] == 14,
+            "missing": missing["status"] == "unread" and missing["utilPercent"] is None and "0%" not in gpu_line(missing),
+            "malformed": malformed["status"] == "malformed" and malformed["utilPercent"] is None and "0%" not in gpu_line(malformed),
+            "stale": stale["status"] == "stale" and stale["tempC"] is None and "62" not in gpu_line(stale),
+            "linux": linux["status"] == "unsupported" and linux["tempC"] is None and later_door("linux") == LATER_DOOR,
+            "darwin": darwin["status"] == "unsupported" and later_door("darwin") == LATER_DOOR and senses_on("win32"),
+            "surfaces": 'id="hud-gpu"' in overlay and "keeper-gpu" in card and "data-gpu" in card,
+        }
+        failed = [name for name, ok in checks.items() if not ok]
+        return InvokeResult(
+            aid,
+            "card",
+            not failed,
+            detail="gpu " + ",".join(checks),
+            extras=checks,
+            trace=[f"gpu.{name}={'ok' if ok else 'fail'}" for name, ok in checks.items()],
+            error=None if not failed else f"gpu sense drifted: {', '.join(failed)}",
         )
     return InvokeResult(aid, "card", False, error=f"unknown card id {local_id!r}")
 
@@ -2207,6 +2274,40 @@ def _invoke_live_network(action_id: str) -> InvokeResult:
             extras={"bytes": len(body), "url": url},
             trace=[f"GET {url}", f"bytes={len(body)}"],
             error=None if has else f"live.nft_floor: nft JSON unexpected from {url}",
+        )
+    if action_id == "live.gpu_sense":
+        import sys
+
+        from .gpu import METRIC_KEYS, read_local
+
+        sample = read_local()
+        metrics = [sample.get(key) for key in METRIC_KEYS]
+        invented = sample["status"] != "read" and any(value is not None for value in metrics)
+        if invented:
+            return InvokeResult(
+                action_id, "desk", False,
+                error="live.gpu_sense painted a number while unread",
+                detail=str(sample.get("status")),
+                trace=["gpu.invented"],
+            )
+        if sys.platform != "win32":
+            ok = sample["status"] == "unsupported" and sample.get("reason") == "mac-linux-gpu-sense"
+            return InvokeResult(
+                action_id, "desk", ok,
+                detail=f"status={sample['status']}",
+                extras={"status": sample["status"], "platform": sys.platform},
+                trace=[f"gpu.{sample['status']}", "platform=" + sys.platform],
+                error=None if ok else "non-Windows GPU sense must stay unsupported",
+            )
+        ok = sample["status"] in {"read", "unread", "malformed"}
+        if sample["status"] == "read":
+            ok = any(value is not None for value in metrics)
+        return InvokeResult(
+            action_id, "desk", ok,
+            detail=f"status={sample['status']}",
+            extras={"status": sample["status"], "platform": sys.platform},
+            trace=[f"gpu.{sample['status']}"],
+            error=None if ok else "Windows GPU probe returned an unusable sample",
         )
     if action_id == "live.cry_playback":
         return InvokeResult(
