@@ -94,3 +94,25 @@ test("Favorites persist and empty honestly", () => {
   assert.equal(again.favorites.length, 2);
   assert.equal(Overlay.toggleFavorite(Overlay.blankNewsPrefs(), { kind: "headline", title: "A", url: "https://a" }).favorites.length, 1);
 });
+
+test("news names the network address and waits until that line is in view", () => {
+  const rss = "this news send reads the rss feed. this computer's network address goes with the https request to the news host, as any client.";
+  const wiki = "this news send reads the featured page. this computer's network address goes with the https request to the wikipedia host, as any client.";
+  assert.equal(N.newsHonesty(N.blankNewsPrefs()), rss);
+  assert.equal(Overlay.newsHonesty(Overlay.blankNewsPrefs()), rss);
+  assert.equal(N.newsMaySend(N.blankNewsPrefs(), false), false);
+  assert.equal(N.newsMaySend(N.blankNewsPrefs(), true), true);
+  assert.equal(Overlay.newsMaySend(Overlay.blankNewsPrefs(), false), false);
+  const world = N.pickTab(N.blankNewsPrefs(), "topics");
+  assert.equal(N.newsSendKind(world), "wiki");
+  assert.equal(N.newsHonesty(world), wiki);
+  assert.equal(Overlay.newsHonesty(Overlay.pickTab(Overlay.blankNewsPrefs(), "topics")), wiki);
+  assert.equal(N.newsMaySend(world, false), false);
+  assert.equal(N.newsMaySend(world, true), true);
+  const named = N.addTopic(N.blankNewsPrefs(), { name: "Halo", query: "Halo" });
+  assert.equal(N.newsSendKind(named), "rss");
+  const fav = N.pickTab(N.blankNewsPrefs(), "favorites");
+  assert.equal(N.newsHonesty(fav), "");
+  assert.equal(N.newsMaySend(fav, true), false);
+  assert.equal(Overlay.newsMaySend(Overlay.pickTab(Overlay.blankNewsPrefs(), "favorites"), true), false);
+});

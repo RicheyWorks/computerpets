@@ -452,6 +452,21 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.doesNotMatch(enumSrc, /GetWindowText|desktopCapturer|PrintWindow|BitBlt|GetDC/);
   assert.doesNotMatch(enumSrc, /Get-ChildItem|Directory\.GetFiles|Environment\.GetFolderPath|SpecialFolder|KnownFolder|cls\.Replace/);
   assert.match(enumSrc, /shell \? "1" : "0"/);
+  const newsFnAt = petSrc.indexOf("function fetchNews");
+  const marketFnAt = petSrc.indexOf("function fetchMarket");
+  const newsBody = petSrc.slice(newsFnAt, marketFnAt);
+  assert.ok(newsBody.indexOf("newsMaySend") < newsBody.indexOf("popularRssUrl"));
+  assert.ok(newsBody.indexOf("newsLineInView") < newsBody.indexOf("popularRssUrl"));
+  const marketBody = petSrc.slice(marketFnAt, petSrc.indexOf("function sitSleepAid"));
+  assert.ok(marketBody.indexOf("quoteMaySend") < marketBody.indexOf("geckoManyUrl"));
+  const radioBody = petSrc.slice(petSrc.indexOf("function lookupRadio"), petSrc.indexOf("function skyLabel"));
+  assert.ok(radioBody.indexOf("radioMaySend") < radioBody.indexOf("radioSearchUrls"));
+  assert.match(htmlSrc, /id="news-net"/);
+  assert.match(htmlSrc, /id="market-net"/);
+  assert.match(htmlSrc, /id="hud-radio-net"/);
+  assert.match(htmlSrc, /this find sends the station look-up\. this computer's network address goes with the https request to the radio host, as any client\./);
+  const refreshAt = petSrc.lastIndexOf("fetchNews();\n  fetchMarket();");
+  assert.doesNotMatch(petSrc.slice(refreshAt - 180, refreshAt + 40), /popularRssUrl|geckoManyUrl|newsUrl\(/);
 });
 
 test("desk, demo, and blotter share the same refusal", () => {

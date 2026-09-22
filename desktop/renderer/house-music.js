@@ -1,4 +1,4 @@
-/** Free music + radio for Rui. Same plugin store shape as the mind bus. */
+/** Free music + radio for Rui. Same plugin store shape as the mind bus. Find waits until the radio form shows this computer's network address on that https request. */
 (function (root) {
   const MUSIC_PLUGINS = [
     { id: "off", name: "Quiet", blurb: "No music.", license: "" },
@@ -330,6 +330,31 @@
     return music.stationUrl || "";
   }
 
+  function sharedNet(host) {
+    let areas = root.PetWeatherAreas;
+    if (!areas && typeof module !== "undefined" && module.exports) {
+      try {
+        areas = require("./weather-areas.js");
+        root.PetWeatherAreas = areas;
+      } catch (err) {
+        areas = null;
+      }
+    }
+    if (!areas || typeof areas.clientNetLine !== "function") return "";
+    return areas.clientNetLine(host);
+  }
+
+  const RADIO_NET = sharedNet("the radio host");
+  const RADIO_FIND = RADIO_NET ? `this find sends the station look-up. ${RADIO_NET}` : "";
+
+  function radioHonesty() {
+    return RADIO_FIND;
+  }
+
+  function radioMaySend(lineInView) {
+    return lineInView === true && !!RADIO_NET && RADIO_FIND.indexOf(RADIO_NET) !== -1;
+  }
+
   function overlayPlaySrc(music) {
     if (!music || !music.playing || music.plugin === "off") return "";
     if (music.plugin === "house") return overlayHouseLoopSrc();
@@ -365,6 +390,10 @@
     overlayHouseLoopSrc,
     playSrc,
     overlayPlaySrc,
+    RADIO_NET,
+    RADIO_FIND,
+    radioHonesty,
+    radioMaySend,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetHouseMusic = api;

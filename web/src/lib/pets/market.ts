@@ -1,4 +1,5 @@
-/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. Same map as desktop market.js. No invented key. */
+/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. A quote waits until the open quotes plate shows this computer's network address on that https request. Same map as desktop market.js. No invented key. */
+import { clientNetLine } from "./weather-areas.ts";
 
 export const MARKET_LABEL = "Quotes";
 export const COIN_LABEL = "Coins";
@@ -235,6 +236,59 @@ export function currentNft(market: MarketPrefs | undefined | null): NftCollectio
   const house = market && Array.isArray(market.nfts) ? market : parseMarket(market);
   if (!house.nfts.length) return null;
   return house.nfts.find((n) => n.id === house.currentNftId) || house.nfts[0] || null;
+}
+
+export const QUOTE_HOST_NAME = "the quote host";
+export const TERMINAL_HOST_NAME = "the terminal host";
+export const STOCK_HOST_NAME = "the stock host";
+
+/** A parsed plate already lists tickers. Parsing it again would refill a cleared list. */
+function asMarket(market: unknown): MarketPrefs {
+  if (market && typeof market === "object" && Array.isArray((market as MarketPrefs).tickers) && Array.isArray((market as MarketPrefs).nfts)) {
+    return market as MarketPrefs;
+  }
+  return parseMarket(market);
+}
+
+/** Hosts this quote refresh will actually call. CoinGecko prices and floors share one name. */
+export function quoteHostPhrase(market: unknown): string {
+  const house = asMarket(market);
+  const names: string[] = [];
+  const hasQuote = house.tickers.some((row) => row.kind === "crypto" && !!row.geckoId && !row.address) || !!currentNft(house);
+  const hasTerminal = house.tickers.some((row) => row.kind === "crypto" && !!row.address);
+  const ticker = currentTicker(house);
+  const hasStock = !!ticker && ticker.kind === "stock";
+  if (hasQuote) names.push(QUOTE_HOST_NAME);
+  if (hasTerminal) names.push(TERMINAL_HOST_NAME);
+  if (hasStock) names.push(STOCK_HOST_NAME);
+  if (!names.length) return "";
+  if (names.length === 1) return names[0]!;
+  if (names.length === 2) return `${names[0]} and ${names[1]}`;
+  return `${names.slice(0, -1).join(", ")}, and ${names[names.length - 1]}`;
+}
+
+export function quoteHonesty(market: unknown): string {
+  const host = quoteHostPhrase(market);
+  if (!host) return "";
+  return `this quote sends the saved list. ${clientNetLine(host)}`;
+}
+
+/**
+ * Quote hosts are called only while the keeper can see that line.
+ * A closed plate and a load are not that view. This does not add a tracker.
+ */
+export function quoteMaySend(market: unknown, lineInView: boolean): boolean {
+  const host = quoteHostPhrase(market);
+  const line = quoteHonesty(market);
+  if (!host || !line || lineInView !== true) return false;
+  return line.includes(clientNetLine(host));
+}
+
+export const QUOTE_LOOK = `this look-up sends the typed name. ${clientNetLine(QUOTE_HOST_NAME)}`;
+
+/** A typed coin or collection look-up uses the quote host. It waits for that line. */
+export function quoteLookMaySend(lineInView: boolean): boolean {
+  return lineInView === true && QUOTE_LOOK.includes(clientNetLine(QUOTE_HOST_NAME));
 }
 export function addTicker(market: unknown, raw: unknown): MarketPrefs {
   const house = parseMarket(market);

@@ -61,7 +61,9 @@ import {
   isFavorite,
   moveTopic,
   NEWS_TABS,
+  newsHonesty,
   newsLine,
+  newsMaySend,
   newsUrl,
   NO_HEADLINES,
   parseNews,
@@ -121,6 +123,10 @@ import {
   parseTerminalToken,
   parseTicker,
   parseYahoo,
+  QUOTE_LOOK,
+  quoteHonesty,
+  quoteLookMaySend,
+  quoteMaySend,
   pickNft,
   pickTicker,
   plateLine as marketLine,
@@ -715,8 +721,17 @@ export function DeskNewsPlate() {
   }
 
   useEffect(() => {
+    if (!open) return;
+    const line = newsHonesty(prefs);
+    if (!line) {
+      if (tab === "favorites") setUnread(false);
+      return;
+    }
     let cancelled = false;
     async function load() {
+      const el = document.getElementById("news-net");
+      const shown = !!el && (el.textContent || "").includes(line);
+      if (!newsMaySend(prefs, shown)) return;
       try {
         if (tab === "favorites") {
           if (!cancelled) setUnread(false);
@@ -761,7 +776,7 @@ export function DeskNewsPlate() {
       cancelled = true;
       window.clearInterval(id);
     };
-  }, [topic.id, topic.query, tab]);
+  }, [open, prefs, tab, topic.id, topic.query]);
 
   return (
     <article
@@ -798,6 +813,11 @@ export function DeskNewsPlate() {
               </button>
             ))}
           </div>
+          {newsHonesty(prefs) ? (
+            <p id="news-net" className="text-[10px] uppercase tracking-[0.16em] text-subtle">
+              {newsHonesty(prefs)}
+            </p>
+          ) : null}
           <p className="text-[10px] uppercase tracking-[0.16em] text-subtle">{sourceLine(topic, tab)}</p>
           {tab === "favorites" ? (
             prefs.favorites.length ? (
@@ -955,6 +975,21 @@ export function DeskMarketPlate() {
   }, []);
 
   useEffect(() => {
+    if (!open) return;
+    const line = quoteHonesty(house);
+    const el = document.getElementById("market-net");
+    const shown = !!line && !!el && (el.textContent || "").includes(line);
+    if (!quoteMaySend(house, shown)) {
+      if (!house.tickers.length) {
+        setLive(null);
+        setUnread(false);
+      }
+      if (!nft) {
+        setNftLive(null);
+        setNftUnread(false);
+      }
+      return;
+    }
     let cancelled = false;
     const geckoIds = house.tickers.filter((r) => r.kind === "crypto" && r.geckoId && !r.address).map((r) => r.geckoId);
     const contracts = house.tickers.filter((r) => r.kind === "crypto" && r.address);
@@ -1054,7 +1089,7 @@ export function DeskMarketPlate() {
     return () => {
       cancelled = true;
     };
-  }, [house.tickers, house.nfts, ticker?.id, nft?.id]);
+  }, [open, house, house.tickers, house.nfts, ticker?.id, nft?.id]);
 
   async function lookupCoins() {
     const typed = query;
@@ -1079,6 +1114,9 @@ export function DeskMarketPlate() {
       return;
     }
     // Free-typed new tickers: CoinGecko search → best match → crypto watch list.
+    const look = document.getElementById("market-look-net");
+    const lookShown = !!look && (look.textContent || "").includes(QUOTE_LOOK);
+    if (!quoteLookMaySend(lookShown)) return;
     const url = searchUrl(typed);
     if (!url) {
       setTruth("type a coin, ticker, or contract");
@@ -1106,6 +1144,9 @@ export function DeskMarketPlate() {
 
   async function lookupNfts() {
     const typed = nftQuery;
+    const look = document.getElementById("market-look-net");
+    const lookShown = !!look && (look.textContent || "").includes(QUOTE_LOOK);
+    if (!quoteLookMaySend(lookShown)) return;
     const url = searchUrl(typed);
     if (!url) {
       setNftTruth("type a collection name");
@@ -1152,6 +1193,14 @@ export function DeskMarketPlate() {
       </button>
       {open ? (
         <div className="border-t border-border/40 px-3 py-2 text-sm">
+          {quoteHonesty(house) ? (
+            <p id="market-net" className="text-[10px] uppercase tracking-[0.16em] text-subtle">
+              {quoteHonesty(house)}
+            </p>
+          ) : null}
+          <p id="market-look-net" className="text-[10px] uppercase tracking-[0.16em] text-subtle">
+            {QUOTE_LOOK}
+          </p>
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             <section className="rounded-sm border border-border/40 p-2" aria-label="Coins" style={{ background: "color-mix(in srgb, var(--plate-bg, #161412) 70%, transparent)" }}>
               <h3 className="text-[10px] uppercase tracking-[0.16em] text-subtle">Coins</h3>
