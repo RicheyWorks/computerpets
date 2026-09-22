@@ -340,6 +340,21 @@ Optional `ingress.yaml` is not in the kustomization; apply it only if
 you have an Ingress controller. Optional Kyverno image-signature policy:
 `deploy/k8s/image-signature-policy.example.yaml` (not in kustomization).
 
+### Managed stores (Terraform)
+
+For production, prefer managed Postgres / Redis / secrets / CDN / WAF over
+the in-cluster scaffolding. The reference root lives in
+`deploy/terraform/` ([ADR 0062](adr/0062-terraform-managed-stores.md)):
+deny-safe defaults (no public DBs; house crypto not in tfvars/state),
+Secrets Manager shells matching `external-secret.example.yaml`, and a
+ConfigMap overlay example. Local verify does not need a cloud account:
+
+```bash
+./deploy/terraform/check-managed-stores.sh
+```
+
+A real `terraform apply` is the keeper's AWS account — not CI.
+
 ---
 
 ## Provider Configuration

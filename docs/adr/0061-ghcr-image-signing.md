@@ -28,4 +28,4 @@ This slice closes GHCR image signing without storefront work, without DirectX 12
 
 - Images published before this ADR remain unsigned; prod path must pin a digest that CI signed after this lands (or refuse).
 - Tag-only refs (`:main`, `:local`) are rejected by the verify script — blue/green docs pin digest after verify.
-- Terraform for managed stores remains the next non-storefront / non-DX12 maturity item ([0006](0006-spring-profiles-and-kubernetes-manifests.md)).
+- Managed-store Terraform lands in [0062](0062-terraform-managed-stores.md) (cross-link only — this ADR does not reopen signing).

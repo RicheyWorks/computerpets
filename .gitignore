@@ -13,6 +13,15 @@ backups/
 # Environment
 .env
 
+# Terraform local state / plans (keepers choose a remote backend)
+deploy/terraform/.terraform/
+deploy/terraform/terraform.tfvars
+deploy/terraform/*.tfstate
+deploy/terraform/*.tfstate.*
+deploy/terraform/crash.log
+deploy/terraform/crash.*.log
+# Keep .terraform.lock.hcl tracked for reproducible provider versions.
+
 # Operator-mounted Docker secret files (keep secrets/README.md)
 secrets/*
 !secrets/README.md

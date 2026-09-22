@@ -49,6 +49,9 @@ an Ingress controller.
 In-cluster Postgres and Redis are scaffolding, the same as compose. A
 real production cluster should point `SPRING_DATASOURCE_URL` and
 `REDIS_HOST` at managed services and drop those two Deployments.
+Reference Terraform: `deploy/terraform/` ([ADR 0062](../../docs/adr/0062-terraform-managed-stores.md))
+— Secrets Manager shells match `external-secret.example.yaml`; see
+`configmap-managed.example.yaml` for the ConfigMap overlay.
 
 ## Required secrets
 
