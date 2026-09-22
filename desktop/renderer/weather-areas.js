@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line says this computer's network address goes with the https request. Look up and the reverse lookup after Send the place wait until that same panel shows the line for the geocode host. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line says this computer's network address goes with the https request. readForecast refuses that fetch when the painted forecast line is missing. Look up and the reverse lookup after Send the place wait until that same panel shows the line for the geocode host. readGeocode and readReverse refuse those fetches when that painted line is missing. */
 (function (root) {
   const NO_AREA = "no area set";
   const AREA_LABEL = "Weather area";
@@ -423,6 +423,54 @@
     return lineInView === true && geocodeHonesty(kind).indexOf(GEOCODE_NET) !== -1;
   }
 
+  /**
+   * A forecast leaves only when the painted line is a forecast send sentence.
+   * That sentence includes the forecast host line. The saved-place question,
+   * a bare network-address sentence, and the geocode sentence do not count.
+   * A missing line does not call fetch.
+   */
+  function forecastMayLeave(shown) {
+    if (!FORECAST_NET || typeof shown !== "string") return false;
+    return shown.indexOf(TYPED_FORECAST) !== -1 || shown.indexOf(SAVED_FORECAST_CONTINUE) !== -1;
+  }
+
+  /** A typed look-up leaves only when the painted look-up line names the geocode host. */
+  function geocodeLookMayLeave(shown) {
+    if (!GEOCODE_LOOK) return false;
+    return typeof shown === "string" && shown.indexOf(GEOCODE_LOOK) !== -1;
+  }
+
+  /** A reverse lookup leaves only when the painted reverse line names the geocode host. */
+  function geocodeReverseMayLeave(shown) {
+    if (!GEOCODE_REVERSE) return false;
+    return typeof shown === "string" && shown.indexOf(GEOCODE_REVERSE) !== -1;
+  }
+
+  function readJson(url, fetchImpl) {
+    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
+    return Promise.resolve(go(url, { cache: "no-store" })).then(function (res) {
+      return res && typeof res.json === "function" ? res.json() : null;
+    });
+  }
+
+  /** The only forecast fetch. A miss resolves to null and does not call fetch. */
+  function readForecast(shown, url, fetchImpl) {
+    if (!forecastMayLeave(shown) || !url) return Promise.resolve(null);
+    return readJson(url, fetchImpl);
+  }
+
+  /** The only geocode look-up fetch. A miss resolves to null and does not call fetch. */
+  function readGeocode(shown, url, fetchImpl) {
+    if (!geocodeLookMayLeave(shown) || !url) return Promise.resolve(null);
+    return readJson(url, fetchImpl);
+  }
+
+  /** The only reverse-lookup fetch. A miss resolves to null and does not call fetch. */
+  function readReverse(shown, url, fetchImpl) {
+    if (!geocodeReverseMayLeave(shown) || !url) return Promise.resolve(null);
+    return readJson(url, fetchImpl);
+  }
+
   function plateLine(areas, live, unread, held, waiting) {
     const area = currentArea(areas);
     if (!area) return NO_AREA;
@@ -491,8 +539,14 @@
     forecastGate,
     forecastMaySend,
     forecastHonesty,
+    forecastMayLeave,
+    readForecast,
     geocodeHonesty,
     geocodeMaySend,
+    geocodeLookMayLeave,
+    geocodeReverseMayLeave,
+    readGeocode,
+    readReverse,
     ackSavedHere,
     stickHereForecastAck,
     storedLivePinNeedsFuzz,

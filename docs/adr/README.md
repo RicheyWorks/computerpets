@@ -61,6 +61,7 @@ address, or an API that is not on `main`.
 | [0040](0040-news-quotes-and-radio-wait-for-the-line-in-main.md) | News, quotes, and Radio Find wait for the painted line in main | Accepted |
 | [0041](0041-featured-page-waits-for-the-wikipedia-line.md) | The featured page waits for the wikipedia line | Accepted |
 | [0042](0042-desk-and-overlay-fetches-wait-for-the-painted-line.md) | Desk and overlay plate fetches wait for the painted line | Accepted |
+| [0043](0043-forecast-and-geocode-wait-for-the-painted-line.md) | A forecast and a geocode look-up wait for the painted line | Accepted |
 
 ## How to add one
 
