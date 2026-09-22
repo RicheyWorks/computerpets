@@ -122,7 +122,10 @@ test("Exit and Close dismiss the options overlay; Esc matches Close", () => {
   assert.match(roomSrc, /id === "close"/);
   assert.match(roomSrc, /id === "exit"/);
   assert.match(roomSrc, /setCardOpen\(false\)/);
-  assert.match(roomSrc, /Escape/);
+  assert.match(roomSrc, /classifyKey\(e\)/);
+  assert.match(roomSrc, /note\.toggle !== "dismiss"/);
+  assert.match(roomSrc, /setChoiceOpen\(false\)/);
+  assert.doesNotMatch(roomSrc, /e\.key/);
   assert.match(overlayPetSrc, /picked === "close"/);
   assert.match(overlayPetSrc, /picked === "exit"/);
   assert.match(overlayPetSrc, /collapseKeeperCard/);

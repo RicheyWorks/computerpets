@@ -16,7 +16,7 @@ Opens the desk. Guests get Rui immediately. Signed-in keepers can hatch and care
 
 Optional talk voice uses `XAI_API_KEY` (Grok chat + TTS) for a signed-in keeper. A guest still hears house lines. Without a house key, Rui still answers from local lines and the browser speech synthesizer. The keeper card says who is listening. Guests stay `Listening · House lines`. A signed-in cloud name appears only when that house env key exists. The key is not on the card. Until the read returns, the line is `Listening · unread`.
 
-The living desk, including `/demo`, does not list Desktop, Documents, or Downloads. A dropped file is not opened. Window glass on the overlay is rects only. This page has no host folder and no window title to read. A path is omitted unless the keeper has already consented, and this desk has no such control.
+The living desk, including `/demo`, does not list Desktop, Documents, or Downloads. A dropped file is not opened. Window glass on the overlay is rects only. This page has no host folder and no window title to read. A path is omitted unless the keeper has already consented, and this desk has no such control. Typing in a card field stays in that field. A key outside it is not logged. Escape may dismiss the guest menu. The key text is not stored.
 
 ## Layout
 
