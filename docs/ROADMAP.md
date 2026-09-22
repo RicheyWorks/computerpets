@@ -61,7 +61,7 @@ All critical items required before any public or limited production exposure hav
 - **2.1 Download Authorization Hardening**
   - [x] jti-bound signed download URLs (signature now `pet|owner|jti|exp`)
   - [x] Usage recording (`lastUsedAt` on IssuedLicense) on every successful download via /api/download
-  - One-time-use + IP binding can now be layered on the jti foundation
+  - [x] One-time-use + IP binding on the jti foundation (`DownloadGrantIndex`; `GET /api/bundles/{pet}/redeem`; deny-safe second use and address mismatch; ADR 0055)
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload

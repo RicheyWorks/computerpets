@@ -99,6 +99,17 @@ class PetBundleServiceTest {
     }
 
     @Test
+    @DisplayName("signatureMatches accepts the URL sig and rejects a tampered one")
+    void signatureMatches_roundTrip() {
+        var manifest = service.manifestFor(PetType.RED_PANDA, "steam:owner", "jti-xyz");
+        String sig = queryParam(URI.create(manifest.downloadUrl()).getRawQuery(), "sig");
+        assertThat(service.signatureMatches(
+            "red_panda", "steam:owner", "jti-xyz", manifest.expEpochSeconds(), sig)).isTrue();
+        assertThat(service.signatureMatches(
+            "red_panda", "steam:owner", "jti-xyz", manifest.expEpochSeconds(), sig + "x")).isFalse();
+    }
+
+    @Test
     @DisplayName("no matching catalog platform keeps {petKey}.zip and does not claim sha256")
     void manifestFor_noMatchingPlatform_omitsHash() {
         String testSha = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
