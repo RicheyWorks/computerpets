@@ -23,5 +23,6 @@ This slice shows the same network-address sentence, with the CDN host named, bef
 
 - A remote CDN sees this computer's network address, as any client. The signed query (`owner`, `jti`, `exp`, `sig`) still rides that GET. The license hash does not. The house does not ask the CDN to turn the address into a city. The shared sentence still says "https request", including when the bundle URL is http.
 - Opening the house does not fetch a bundle.
+- An unbound download POST names the backend host before it leaves. [0039](0039-unbound-download-names-the-backend-host.md).
 - News, quotes, a later forecast, a geocode look-up, a station stream, cloud talk, and cloud voice keep their gates.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.
