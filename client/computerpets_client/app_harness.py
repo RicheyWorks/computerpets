@@ -1137,6 +1137,8 @@ def _desk_rows() -> list[Affordance]:
                 "Offline: Desktop, Documents, Downloads, and any other host folder stay unlistable. "
                 "Window captions stay empty. A path is omitted unless consent is already true. "
                 "The enum pipe carries a shell bit, not a class name, title, or path. "
+                "The enumerator does not copy a keeper window class. "
+                "The taskbar and the desktop host are known shell handles. "
                 "A focused field keeps its keys. A key outside that field is not logged. "
                 "Escape may dismiss a menu. The key text is not stored. "
                 "A live locate waits for an in-app yes. A stored live pin is rounded on load. "
@@ -1355,9 +1357,13 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
             "consent": shown == row["path"],
             "enum": (
                 "GetWindowText" not in enum_src
+                and "GetClassName" not in enum_src
+                and "StringBuilder" not in enum_src
                 and "Get-ChildItem" not in enum_src
                 and "cls.Replace" not in enum_src
                 and 'shell ? "1" : "0"' in enum_src
+                and "GetShellWindow" in enum_src
+                and "FindWindowEx(IntPtr.Zero, prev, name, null)" in enum_src
             ),
             "parse": "className: p.slice" not in win_js and "className: p.slice" not in win_ts,
             "surfaces": (

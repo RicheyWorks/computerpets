@@ -133,7 +133,12 @@ test("the overlay asks main for window rects; it does not capture pixels", () =>
   assert.match(htmlSrc, /window-play\.js/);
   assert.match(enumSrc, /GetWindowRect/);
   assert.match(enumSrc, /IsIconic/);
-  assert.doesNotMatch(enumSrc, /desktopCapturer|PrintWindow|BitBlt|GetDC|GetWindowText/);
+  assert.match(enumSrc, /GetShellWindow/);
+  assert.match(enumSrc, /FindWindowEx\(IntPtr\.Zero, prev, name, null\)/);
+  for (const name of ["Shell_TrayWnd", "Shell_SecondaryTrayWnd", "NotifyIconOverflowWindow", "Progman", "WorkerW"]) {
+    assert.match(enumSrc, new RegExp(name));
+  }
+  assert.doesNotMatch(enumSrc, /desktopCapturer|PrintWindow|BitBlt|GetDC|GetWindowText|GetClassName|StringBuilder/);
   assert.doesNotMatch(enumSrc, /cls\.Replace/);
   assert.doesNotMatch(mainSrc, /desktopCapturer/);
   assert.doesNotMatch(petSrc, /desktopCapturer/);
