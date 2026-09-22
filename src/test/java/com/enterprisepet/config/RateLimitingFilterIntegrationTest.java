@@ -20,7 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * HTTP contract for the in-memory store used by other @SpringBootTest classes:
- * 10/min verify, 60/min discovery, 429 + Retry-After + application/problem+json.
+ * 10/min verify, 60/min discovery, 60/min bundle catalog,
+ * 429 + Retry-After + application/problem+json.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
@@ -82,5 +83,33 @@ class RateLimitingFilterIntegrationTest {
         assertThat(limited.getBody()).isNotNull();
         assertThat(limited.getBody().get("status")).isEqualTo(429);
         assertThat((String) limited.getBody().get("detail")).contains("Rate limit exceeded for discovery");
+    }
+
+    @Test
+    @DisplayName("61st bundle catalog read is 429; signed redeem is not on that bucket")
+    void sixtyFirstBundleCatalog_is429_redeemNotLimited() {
+        ResponseEntity<String> lastAllowed = null;
+        for (int i = 0; i < 60; i++) {
+            lastAllowed = restTemplate.getForEntity("/api/bundles/red_panda", String.class);
+            assertThat(lastAllowed.getStatusCode())
+                .as("bundle catalog request %d should be allowed", i + 1)
+                .isEqualTo(HttpStatus.OK);
+        }
+        assertThat(lastAllowed.getHeaders().getFirst("X-RateLimit-Remaining")).isEqualTo("0");
+
+        ResponseEntity<Map> limited = restTemplate.getForEntity("/api/bundles/cat", Map.class);
+        assertThat(limited.getStatusCode()).isEqualTo(HttpStatus.TOO_MANY_REQUESTS);
+        assertThat(limited.getHeaders().getFirst(HttpHeaders.RETRY_AFTER)).isNotBlank();
+        assertThat(limited.getHeaders().getContentType()).isNotNull();
+        assertThat(limited.getHeaders().getContentType().isCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON)).isTrue();
+        assertThat(limited.getBody()).isNotNull();
+        assertThat(limited.getBody().get("status")).isEqualTo(429);
+        assertThat((String) limited.getBody().get("detail")).contains("Rate limit exceeded for bundles");
+
+        ResponseEntity<String> redeem = restTemplate.getForEntity(
+            "/api/bundles/red_panda/redeem?owner=keeper&jti=not-a-grant&exp=1&sig=nope",
+            String.class);
+        assertThat(redeem.getStatusCode()).isNotEqualTo(HttpStatus.TOO_MANY_REQUESTS);
+        assertThat(redeem.getBody()).doesNotContain("Rate limit exceeded for bundles");
     }
 }

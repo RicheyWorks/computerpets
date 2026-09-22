@@ -23,6 +23,10 @@ import java.util.Map;
  * Public discovery of configured bundle artifacts, plus one-time redeem of a
  * signed download grant. Unauthenticated, like {@code /api/pets}. Does not
  * serve zip bytes; an edge worker calls redeem before serving them.
+ *
+ * <p>Catalog reads ({@code GET /{petKey}}) share a 60/min per-IP bucket
+ * (ADR 0069). Redeem is not on that bucket: HMAC, one-time consume, and
+ * IP binding keep their own status codes.
  */
 @RestController
 @RequestMapping("/api/bundles")
@@ -51,7 +55,11 @@ public class BundleController {
                     @ApiResponse(responseCode = "200", description = "Catalog rows (possibly empty)",
                             content = @Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "404", description = "Unknown pet key",
-                            content = @Content(mediaType = "application/json"))
+                            content = @Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "429", description = "Bundle catalog rate limit exceeded",
+                            content = @Content(mediaType = "application/problem+json")),
+                    @ApiResponse(responseCode = "503", description = "Rate limiter unavailable (fail-closed)",
+                            content = @Content(mediaType = "application/problem+json"))
             }
     )
     @GetMapping("/{petKey}")

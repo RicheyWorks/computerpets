@@ -214,6 +214,9 @@ admin:
 # the rate-limit filter fail-closes with HTTP 503 + Retry-After — it does
 # not silently lift the limit. License validate then falls back to Postgres.
 # Set RATE_LIMIT_BACKEND=memory only for tests or a single local process.
+# Per-IP defaults live in RateLimitingFilter (not env-tunable capacities):
+#   verify 10/min, download 30/min (grant issue), discovery 60/min on /api/pets,
+#   bundles 60/min on GET /api/bundles/{petKey}. Signed /redeem is excluded (ADR 0069).
 rate-limit:
   backend: ${RATE_LIMIT_BACKEND:redis}
   fail-closed-retry-after-seconds: ${RATE_LIMIT_FAIL_CLOSED_RETRY_AFTER:5}

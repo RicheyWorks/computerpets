@@ -100,6 +100,7 @@ All critical items required before any public or limited production exposure hav
 - **3.1 Distributed State**
   - [x] Redis-backed rate limiting (replace in-memory Bucket4j)
   - [x] Distributed revocation / jti blacklist
+  - [x] Bundle catalog reads (`GET /api/bundles/{petKey}`) 60/min fail-closed; signed redeem excluded (ADR 0069)
 
 - **3.2 Observability Maturity**
   - [x] Distributed tracing (Micrometer + OpenTelemetry)
