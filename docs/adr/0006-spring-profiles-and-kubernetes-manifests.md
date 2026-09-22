@@ -44,8 +44,9 @@ No mesh.
   ([0061](0061-ghcr-image-signing.md)). Managed stores are Terraform in
   `deploy/terraform/` ([0062](0062-terraform-managed-stores.md)); in-cluster
   Postgres/Redis remain scaffolding until a keeper applies that root.
-  Secret *injection* is env, Docker `*_FILE` mounts, or External Secrets /
-  Vault agent into the existing Opaque Secret ([0056](0056-house-secrets-from-file-mounts.md)).
+  Secret *injection* is Docker `*_FILE` mounts or External Secrets /
+  Vault agent into the existing Opaque Secret ([0056](0056-house-secrets-from-file-mounts.md));
+  prod refuses plain env without attestation ([0064](0064-secret-operator-prod-refuses-plain-env.md)).
   A hosted Vault cluster is still the keeper's infrastructure.
 - Helm values and a service mesh are non-goals until the app outgrows
   one Deployment and a selector flip.

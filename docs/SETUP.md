@@ -104,13 +104,15 @@ export ADMIN_API_KEY=$(openssl rand -base64 32)
 
 ### Secret management
 
-Phase 2.4 — three operator shapes, one deny-safe contract ([ADR 0056](adr/0056-house-secrets-from-file-mounts.md)):
+Phase 2.4 / ADR 0064 — three operator shapes, one deny-safe contract ([ADR 0056](adr/0056-house-secrets-from-file-mounts.md), [ADR 0064](adr/0064-secret-operator-prod-refuses-plain-env.md)):
 
 | Shape | How | When |
 |-------|-----|------|
 | **Local-dev** | Env vars or `.env` from `.env.example` | `mvn spring-boot:run`, plain `docker compose up` |
 | **Docker secrets** | Files under `./secrets/` + `docker-compose.secrets.yml` sets `NAME_FILE=/run/secrets/…` | Compose bring-up without putting keys in `environment:` |
-| **Kubernetes** | Opaque Secret `computerpets-secrets` via `envFrom`, filled by hand, External Secrets Operator (`deploy/k8s/external-secret.example.yaml`), or Vault Agent templates | Cluster / prod |
+| **Kubernetes (prod)** | External Secrets Operator (`deploy/k8s/external-secret.example.yaml`) or file mounts (`deployment-secrets-file.example.yaml`) + `COMPUTERPETS_SECRETS_SOURCE=external-secrets\|file\|vault-agent` | Cluster / prod — plain hand-filled `secret.yaml` is refused |
+
+**Prod attestation:** `ProductionProfileGuard` refuses to start on `prod` unless `COMPUTERPETS_SECRETS_SOURCE` is set (or local-only `COMPUTERPETS_ALLOW_PLAIN_SECRET=1`). When source is `file`, the four critical `*_FILE` paths are required. Deploy gate: `./deploy/k8s/verify-secret-operator.sh`.
 
 **Precedence:** non-blank `NAME` wins over `NAME_FILE`. If `NAME_FILE` is set and the path is missing or unreadable, the process **refuses to start**. Optional storefront keys (`STEAM_API_KEY`, `ITCH_API_KEY`, `EPIC_*`, `ETHEREUM_RPC_URL`) may use the same `*_FILE` pattern; blank or placeholder still **fails closed** at verify (no invented entitlement).
 
@@ -312,8 +314,11 @@ stack as compose: app + Postgres 16 + Redis 7, with
 `SPRING_PROFILES_ACTIVE=prod` and the existing Actuator probes.
 
 ```bash
-# 1. Put real keys in deploy/k8s/secret.yaml (see table above)
-# 2. Apply
+# Prod path: External Secrets or *_FILE mounts + attestation (ADR 0064).
+# Scaffolding secret.yaml alone will not boot under prod without
+# COMPUTERPETS_ALLOW_PLAIN_SECRET=1 (local only).
+./deploy/k8s/verify-secret-operator.sh
+# Apply ESO (or file-mount example), set COMPUTERPETS_SECRETS_SOURCE, then:
 kubectl apply -k deploy/k8s
 ```
 
@@ -325,7 +330,8 @@ Redis has no password setting in the app — only `REDIS_HOST` /
 Prefer External Secrets Operator or Vault Agent to fill
 `computerpets-secrets` rather than committing values into `secret.yaml`.
 Example CR: `deploy/k8s/external-secret.example.yaml` (not in
-kustomization). File mounts + `NAME_FILE` are also supported — see
+kustomization). File mounts + `NAME_FILE`: `deployment-secrets-file.example.yaml`.
+Set `COMPUTERPETS_SECRETS_SOURCE=external-secrets|file|vault-agent` —
 [Secret management](#secret-management).
 
 Blue/green is two Deployments (`computerpets-blue` live,

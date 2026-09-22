@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-22 (CDN edge redeem — ADR 0063. Not DX12/Vulkan. Catalog 221.) |
+| **Last Updated** | 2026-09-22 (Secret-operator hardening — ADR 0064. Not DX12/Vulkan. Catalog 221.) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -163,7 +163,7 @@ The service runs as a Spring Boot executable JAR or the multi-stage `Dockerfile`
 - Redis-backed Bucket4j rate limiter (Lettuce / `bucket4j-redis`) shared across replicas. If Redis is down, verify/download fail closed with HTTP 503. `prod` refuses `RATE_LIMIT_BACKEND=memory`. Redis uses a single Lettuce connection keyed by `REDIS_TIMEOUT` (not a second Hikari-style pool).
 - Redis-backed jti deny-list (`RevocationIndex`) shared across replicas. Postgres `IssuedLicense.revokedAt` / `deletedAt` remains the ledger (soft-delete on revoke; [0058](adr/0058-license-soft-delete-and-audit.md)); Redis is a fast deny so a replica that has not seen the row still rejects. If Redis is down, `LicenseService.validate` falls back to the ledger (it does not accept a revoked or soft-deleted license). HTTP download may still 503 from the rate-limit filter.
 - Critical secrets (`LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, `ADMIN_API_KEY`) load from environment variables or `NAME_FILE` mounts (`SecretFileEnvironmentPostProcessor`) with strict `@PostConstruct` startup validation that refuses to run on missing or placeholder values. Production operators use Docker secrets, Kubernetes External Secrets, or Vault agent templates — [ADR 0056](adr/0056-house-secrets-from-file-mounts.md). Secret values are never logged.
-- `ProductionProfileGuard` (`@Profile("prod")`) refuses Microsoft Store `dev-mode`, an in-memory rate-limit store, an H2 JDBC URL, and a misconfigured read-replica URL (same as primary / non-Postgres) even when environment variables try to override `application-prod.yml`.
+- `ProductionProfileGuard` (`@Profile("prod")`) refuses Microsoft Store `dev-mode`, an in-memory rate-limit store, an H2 JDBC URL, a misconfigured read-replica URL (same as primary / non-Postgres), and **plain env / hand-filled Opaque Secret** unless `COMPUTERPETS_SECRETS_SOURCE` is `external-secrets`, `file`, or `vault-agent` ([ADR 0064](adr/0064-secret-operator-prod-refuses-plain-env.md)). Local scaffolding may set `COMPUTERPETS_ALLOW_PLAIN_SECRET=1` (never on the real prod path).
 - `Dockerfile` + GitHub Actions GHCR publish with keyless cosign (Sigstore) + `deploy/k8s/` (Deployment/Service, in-cluster Postgres/Redis scaffolding, optional Ingress). Prod deploy verifies the image digest or refuses ([0061](adr/0061-ghcr-image-signing.md)). Blue/green is two Deployments and a Service `color` selector — not a service mesh.
 - External dependencies (Alchemy, Microsoft Collections, Steam Web API, itch.io, Epic, future CDN) are called directly; Resilience4j circuit breakers, retries, and a shared ownership time limiter wrap the store providers.
 - The living desk (`web/`) and Electron overlay (`desktop/`) talk to this backend.
@@ -177,7 +177,7 @@ For any non-trivial user base or multi-region deployment, the following producti
   - Distributed token-bucket rate limits (`bucket4j-redis` or equivalent).
   - Shared jti deny-list (`revoked:jti:{jti}`, TTL ≥ remaining license life + 1h skew) so a revoked license is rejected immediately across all replicas. Postgres remains the ledger.
   - Optional short-TTL caching of expensive external provider responses (e.g., recent NFT ownership checks).
-- **External secret management** (HashiCorp Vault, AWS Secrets Manager, Azure Key Vault, or Kubernetes `ExternalSecrets` operator) instead of plain environment variables for the long-lived cryptographic keys. The house contract is env, `NAME_FILE` mounts, or sync into Opaque Secret `computerpets-secrets` ([ADR 0056](adr/0056-house-secrets-from-file-mounts.md)). Secrets should be rotated on a schedule and never appear in logs or committed specs.
+  - **External secret management** (HashiCorp Vault, AWS Secrets Manager, Azure Key Vault, or Kubernetes `ExternalSecrets` operator) instead of plain environment variables for the long-lived cryptographic keys. The house contract is `NAME_FILE` mounts or External Secrets / Vault sync into Opaque Secret `computerpets-secrets` ([ADR 0056](adr/0056-house-secrets-from-file-mounts.md)); prod refuses plain env without operator attestation ([ADR 0064](adr/0064-secret-operator-prod-refuses-plain-env.md)). Secrets should be rotated on a schedule and never appear in logs or committed specs. Local-dev may still use env / `.env`.
 - **CDN / Object Storage** (Amazon CloudFront + S3, Cloudflare R2, Google Cloud CDN, etc.) as the authoritative source for the actual pet `.zip` bundles. The backend only generates short-lived HMAC-signed URLs; it never serves the binary assets itself.
 - **Health/readiness/liveness probes** exposed via Spring Boot Actuator (`/actuator/health`, `/actuator/health/readiness`) so the orchestrator can safely perform rolling updates and drain traffic.
 - Optional but recommended: WAF / API Gateway / cloud load balancer rules in front for L7 bot mitigation, additional rate limiting, and IP reputation filtering.
@@ -250,7 +250,7 @@ flowchart TB
   - ~~Actuator is not enabled.~~ Probes are `/actuator/health/liveness` and `/readiness` (permitted without a JWT).
   - ~~No Terraform/Pulumi/Crossplane definitions for the surrounding infrastructure (managed Postgres, Redis, secrets, CDN, WAF).~~ Terraform root in `deploy/terraform/` for managed Postgres, Redis, Secrets Manager shells (External Secrets contract), CDN, and WAF stubs ([0062](adr/0062-terraform-managed-stores.md)). Pulumi / Crossplane remain non-goals. A live cloud apply is still the keeper's account.
   - ~~CDN edge assumed to verify HMAC / redeem without a shipped worker.~~ Fail-closed edge redeem in `deploy/cdn/edge-redeem.js` calls house `GET /api/bundles/{pet}/redeem` before bytes ([0063](adr/0063-cdn-edge-redeem-verification.md)). Keeper associates the function on apply.
-  - Secrets are still accepted via plain environment variables / a Kubernetes `Secret` (acceptable only behind a proper secrets operator). Prefer External Secrets + Terraform-created shells.
+  - ~~Secrets are still accepted via plain environment variables / a Kubernetes `Secret`.~~ Prod refuses plain env / hand-filled Opaque Secret without `COMPUTERPETS_SECRETS_SOURCE` ∈ {`external-secrets`, `file`, `vault-agent`}; `verify-secret-operator.sh` is the deploy gate ([0064](adr/0064-secret-operator-prod-refuses-plain-env.md)). Local-dev keeps env / scaffolding `secret.yaml`.
 
 This deployment view directly addresses the multi-instance and rate-limiting concerns already called out in the README and `AUDIT.md`.
 
@@ -415,7 +415,7 @@ sequenceDiagram
 | Persistence (scaffolded) | Spring Data JPA + Hibernate + H2 / Postgres | —        | Standard; H2 for fast local dev, Postgres for production durability/audit. Currently unused. |
 | Steam Integration        | Spring RestClient + Steam Web API       | —           | `SteamService` calls `IPlayerService/GetOwnedGames` via RestClient. steam-condenser was unused and has been removed. |
 | Build                    | Maven + Spring Boot Maven Plugin        | —           | Universal, works in restricted environments; explicit Java 21 compiler config. |
-| Config & Secrets         | Spring @Value + env / `NAME_FILE` mounts + @PostConstruct guards | — | Fail-fast on missing/placeholder keys; Docker secrets + External Secrets operator contract (ADR 0056). |
+| Config & Secrets         | Spring @Value + env / `NAME_FILE` mounts + @PostConstruct guards | — | Fail-fast on missing/placeholder keys; Docker secrets + External Secrets (ADR 0056); prod refuses plain env Secret without attestation (ADR 0064). |
 | Metrics                  | Micrometer + Prometheus registry                      | BOM | `/actuator/prometheus` scrape. `enterprisepet.verify` timer tagged `provider`/`outcome` for success rate and latency. `enterprisepet.license.issue` tagged `provider`/`pet`/`outcome` for issuance rate. |
 | Tracing                  | Micrometer Tracing + OpenTelemetry + OTLP/HTTP        | BOM | `micrometer-tracing-bridge-otel` + `opentelemetry-exporter-otlp`. Export off unless `OTEL_EXPORTER_OTLP_ENDPOINT` is set. |
 
@@ -638,6 +638,7 @@ Goal: Significantly reduce blast radius and improve defense-in-depth.
 
 - **2.4 Secret Management**
   - [x] File-mounted Docker secrets via `NAME_FILE` (`SecretFileEnvironmentPostProcessor`); External Secrets / Vault agent templates into existing Opaque Secret `computerpets-secrets`; local-dev keeps env / `.env.example`. Deny-safe. [0056](adr/0056-house-secrets-from-file-mounts.md). Not a hosted Vault deploy.
+  - [x] Prod refuse plain env / hand-filled Opaque Secret — `COMPUTERPETS_SECRETS_SOURCE` + `verify-secret-operator.sh` ([0064](adr/0064-secret-operator-prod-refuses-plain-env.md)).
 
 #### Phase 3: Scalability & Operational Maturity
 Goal: Prepare for horizontal scaling and real production traffic.
@@ -662,6 +663,7 @@ Goal: Prepare for horizontal scaling and real production traffic.
   - [x] GHCR image signing: keyless cosign on `main` publish + fail-closed digest verify ([0061](adr/0061-ghcr-image-signing.md))
   - [x] Terraform for managed Postgres / Redis / secrets / CDN / WAF stubs (`deploy/terraform/`; [0062](adr/0062-terraform-managed-stores.md))
   - [x] CDN edge redeem verification — fail-closed house redeem before zip bytes (`deploy/cdn/edge-redeem.js`; [0063](adr/0063-cdn-edge-redeem-verification.md))
+  - [x] Secret-operator hardening — prod refuses plain env Secret without ESO / `*_FILE` / Vault attestation ([0064](adr/0064-secret-operator-prod-refuses-plain-env.md))
 
 #### Phase 4: Client & Ecosystem Integration
 Goal: Deliver a complete, usable platform.

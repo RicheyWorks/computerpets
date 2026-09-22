@@ -26,5 +26,5 @@ This slice closes that named gap without storefront work, without DirectX 12 / V
 ## Consequences
 
 - A CloudFront (or Worker) distribution that has not associated this function can still serve an object if the bucket policy allows it — keepers must wire the edge for production honesty.
-- Secret-operator hardening (refuse plain env `Secret` on the prod path) remains the next non-storefront / non-DX12 gap after this cross-link.
+- Secret-operator hardening (refuse plain env `Secret` on the prod path) lands in [0064](0064-secret-operator-prod-refuses-plain-env.md).
 - Terraform CDN module is not reopened beyond the ADR 0063 comment on the distribution.

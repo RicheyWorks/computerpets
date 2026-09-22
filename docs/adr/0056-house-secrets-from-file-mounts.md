@@ -32,3 +32,4 @@ Catalog stays 221. DirectX 12 / Vulkan is not started. Presence / CSP and downlo
 - Operators can keep secrets out of process environment listings by using file mounts; ESO / Vault still sync into the existing Secret name the Deployments already consume.
 - A live HashiCorp Vault cluster, AWS Secrets Manager account, or ESO install is still the keeper's infrastructure — this repo ships the contract and hooks, not a hosted Vault.
 - Image signing lands in [0061](0061-ghcr-image-signing.md). Managed-store Terraform (Secrets Manager shells matching this External Secrets contract) lands in [0062](0062-terraform-managed-stores.md).
+- Prod refuse of plain env / hand-filled Opaque Secret (require `COMPUTERPETS_SECRETS_SOURCE`) lands in [0064](0064-secret-operator-prod-refuses-plain-env.md). Local-dev env / `.env` stays.

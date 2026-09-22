@@ -7,6 +7,8 @@
 #
 # Secrets still come from computerpets-secrets via External Secrets
 # (deploy/k8s/external-secret.example.yaml) — not from this ConfigMap.
+# COMPUTERPETS_SECRETS_SOURCE=external-secrets is required on prod
+# (ADR 0064); plain hand-filled secret.yaml is refused.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -14,6 +16,7 @@ metadata:
   namespace: computerpets
 data:
   SPRING_PROFILES_ACTIVE: prod
+  COMPUTERPETS_SECRETS_SOURCE: external-secrets
   SPRING_DATASOURCE_URL: jdbc:postgresql://REPLACE_WITH_TF_OUTPUT:5432/computerpets
   REDIS_HOST: REPLACE_WITH_TF_OUTPUT
   REDIS_PORT: "6379"

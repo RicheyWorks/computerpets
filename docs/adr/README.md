@@ -82,6 +82,7 @@ address, or an API that is not on `main`.
 | [0061](0061-ghcr-image-signing.md) | GHCR image signing with keyless cosign (fail-closed verify) | Accepted |
 | [0062](0062-terraform-managed-stores.md) | Terraform for managed Postgres, Redis, secrets, CDN, and WAF stubs | Accepted |
 | [0063](0063-cdn-edge-redeem-verification.md) | CDN edge redeem verification (fail-closed house redeem) | Accepted |
+| [0064](0064-secret-operator-prod-refuses-plain-env.md) | Secret-operator hardening — prod refuses plain env Secret | Accepted |
 
 ## How to add one
 

@@ -77,6 +77,7 @@ All critical items required before any public or limited production exposure hav
   - [x] All critical secrets use the same strict fail-hard placeholder pattern (`LICENSE_SECRET_KEY`, `JWT_*`, `BUNDLE_*`, `ADMIN_API_KEY`)
   - [x] docker-compose and application.yml carry the admin key
   - [x] Production path: Docker `*_FILE` mounts + Kubernetes External Secrets / Vault agent templates into the existing Opaque Secret (ADR 0056, `SecretFileEnvironmentPostProcessor`, `docker-compose.secrets.yml`, `deploy/k8s/external-secret.example.yaml`). Local-dev keeps env / `.env.example`. Deny-safe: missing file → refuse start; missing optional storefront key → refuse the feature; never invent a production secret; never log secret values. Not a hosted Vault deploy.
+  - [x] Prod refuse plain env Secret — `COMPUTERPETS_SECRETS_SOURCE` + `verify-secret-operator.sh` (ADR 0064).
 
 - **Admin Tooling (new)**
   - [x] `POST /api/admin/revoke` — revokes any license by jti using the existing persistence layer. Protected by `X-Admin-Key` header.
@@ -115,6 +116,7 @@ All critical items required before any public or limited production exposure hav
   - [x] GHCR image signing — keyless cosign (Sigstore Fulcio) on `main` publish; fail-closed digest verify for prod deploy (`deploy/k8s/verify-image-signature.sh`; ADR 0061)
   - [x] Terraform for managed stores — Postgres / Redis / Secrets Manager shells / CDN / WAF stubs (`deploy/terraform/`; deny-safe defaults; ADR 0062)
   - [x] CDN edge redeem verification — fail-closed call to house `GET /api/bundles/{pet}/redeem` before zip bytes (`deploy/cdn/edge-redeem.js`; `pet=` on signed URLs; ADR 0063)
+  - [x] Secret-operator hardening — prod refuses plain env / hand-filled Opaque Secret without `COMPUTERPETS_SECRETS_SOURCE` ∈ {`external-secrets`, `file`, `vault-agent`}; `verify-secret-operator.sh` deploy gate (ADR 0064). Local-dev keeps env / scaffolding `secret.yaml`.
 
 ---
 

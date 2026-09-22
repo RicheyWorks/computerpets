@@ -76,6 +76,7 @@ done
 echo "== ConfigMap wiring contract =="
 need_grep "$TF/configmap-managed.example.yaml" 'SPRING_DATASOURCE_URL' "managed configmap has SPRING_DATASOURCE_URL"
 need_grep "$TF/configmap-managed.example.yaml" 'REDIS_HOST' "managed configmap has REDIS_HOST"
+need_grep "$TF/configmap-managed.example.yaml" 'COMPUTERPETS_SECRETS_SOURCE: external-secrets' "managed configmap attests external-secrets (ADR 0064)"
 need_grep "$TF/outputs.tf" 'spring_datasource_url' "root output spring_datasource_url"
 need_grep "$TF/outputs.tf" 'redis_host' "root output redis_host"
 need_grep "$TF/outputs.tf" 'bundle_base_url' "root output bundle_base_url"
