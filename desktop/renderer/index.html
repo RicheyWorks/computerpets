@@ -33,6 +33,7 @@
             <p id="weather-saved-truth" class="keeper-truth"></p>
             <p id="weather-forecast-net" class="keeper-truth"></p>
             <p class="keeper-truth">Weather area. Named places you add. Not the radio station.</p>
+            <p id="weather-geocode-net" class="keeper-truth">this look-up sends the typed name. this computer's network address goes with the https request to the geocode host, as any client.</p>
             <form id="weather-add" data-hit>
               <label>Weather area
                 <input data-hit id="weather-q" type="text" autocomplete="off" spellcheck="false" placeholder="A city or place — weather, not radio" aria-label="Weather area" />
@@ -41,6 +42,7 @@
             </form>
             <button type="button" data-hit id="weather-here" aria-describedby="weather-here-send">Use this computer's location</button>
             <p id="weather-here-send" class="keeper-truth">this click sends a place to the forecast host.</p>
+            <p id="weather-reverse-net" class="keeper-truth">this reverse lookup sends the rounded place. this computer's network address goes with the https request to the geocode host, as any client.</p>
             <div id="weather-here-ask" hidden>
               <p id="weather-here-ask-line" class="keeper-truth">send a place from this computer? a prior browser allow can satisfy the next locate without a new os or browser prompt. the house still asks in the app. this house cannot revoke that grant.</p>
               <button type="button" data-hit id="weather-here-yes">Send the place</button>

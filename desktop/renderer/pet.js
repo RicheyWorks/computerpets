@@ -377,6 +377,16 @@ function forecastLineInView() {
   return (areas.tab || "current") === "current";
 }
 
+function geocodeLineInView(id) {
+  if (!forecastLineInView()) return false;
+  const el = document.getElementById(id);
+  if (!el || el.hidden) return false;
+  const A = window.PetWeatherAreas;
+  const need = A && A.GEOCODE_NET;
+  if (!need) return false;
+  return (el.textContent || "").indexOf(need) !== -1;
+}
+
 function fetchWeather() {
   const A = window.PetWeatherAreas;
   if (!A) return;
@@ -3691,6 +3701,12 @@ if (weatherPlate) {
     const q = document.getElementById("weather-q");
     const hits = document.getElementById("weather-hits");
     if (!hits) return;
+    const look = document.getElementById("weather-geocode-net");
+    if (look && A.geocodeHonesty) look.textContent = A.geocodeHonesty("look");
+    if (!A.geocodeMaySend("look", geocodeLineInView("weather-geocode-net"))) {
+      hits.innerHTML = `<li>${A.TYPE_A_CITY}</li>`;
+      return;
+    }
     const url = A.geocodeUrl(q && q.value);
     if (!url) {
       hits.innerHTML = `<li>${A.TYPE_A_CITY}</li>`;
@@ -3786,6 +3802,12 @@ if (weatherPlate) {
       const place = A.sharePlace(fix.lat, fix.lon);
       if (!place) {
         failHere(A.HERE_FAIL);
+        return;
+      }
+      const rev = document.getElementById("weather-reverse-net");
+      if (rev && A.geocodeHonesty) rev.textContent = A.geocodeHonesty("reverse");
+      if (!A.geocodeMaySend("reverse", geocodeLineInView("weather-reverse-net"))) {
+        keepHere(unnamed(place.lat, place.lon));
         return;
       }
       const url = A.reverseUrl(place.lat, place.lon);

@@ -380,6 +380,10 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   const sendBody = petSrc.slice(sendAt, hereAt);
   assert.match(sendBody, /readWeatherHere/);
   assert.ok(sendBody.indexOf("sharePlace") < sendBody.indexOf("reverseUrl"));
+  assert.match(sendBody, /geocodeHonesty\("reverse"\)/);
+  assert.match(sendBody, /geocodeMaySend\("reverse"/);
+  assert.ok(sendBody.indexOf('geocodeHonesty("reverse")') < sendBody.indexOf("reverseUrl"));
+  assert.ok(sendBody.indexOf('geocodeMaySend("reverse"') < sendBody.indexOf("reverseUrl"));
   assert.doesNotMatch(sendBody, /latitude=\$\{fix|longitude=\$\{fix/);
   assert.equal(require("./weather-areas.js").HERE_SEND, "this click sends a place to the forecast host.");
   assert.equal(require("./weather-areas.js").HERE_YES, "Send the place");
@@ -389,6 +393,10 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.match(htmlSrc, /id="weather-saved-no"/);
   assert.match(htmlSrc, /use this saved computer place for the forecast\? this sends the saved place\. this computer's network address goes with the https request, as any client\. it does not locate again\./);
   assert.match(htmlSrc, /id="weather-forecast-net"/);
+  assert.match(htmlSrc, /id="weather-geocode-net"/);
+  assert.match(htmlSrc, /id="weather-reverse-net"/);
+  assert.match(htmlSrc, /this look-up sends the typed name\. this computer's network address goes with the https request to the geocode host, as any client\./);
+  assert.match(htmlSrc, /this reverse lookup sends the rounded place\. this computer's network address goes with the https request to the geocode host, as any client\./);
   const bodyAt = htmlSrc.indexOf('id="weather-body"');
   const savedAskAt = htmlSrc.indexOf('id="weather-saved-ask"');
   const newsAt = htmlSrc.indexOf('id="news-plate"');
@@ -401,7 +409,7 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.match(fetchBody, /forecastLineInView/);
   assert.ok(fetchBody.indexOf("forecastMaySend") < fetchBody.indexOf("forecastUrl"));
   assert.ok(fetchBody.indexOf("forecastHonesty") < fetchBody.indexOf("forecastUrl"));
-  assert.doesNotMatch(fetchBody, /reverseUrl|readWeatherHere|armWeatherLocate|getCurrentPosition|noteWeatherLocateYes/);
+  assert.doesNotMatch(fetchBody, /reverseUrl|readWeatherHere|armWeatherLocate|getCurrentPosition|noteWeatherLocateYes|geocodeUrl/);
   const beatAt = petSrc.indexOf("setInterval(readHeartbeat");
   assert.doesNotMatch(petSrc.slice(beatAt, beatAt + 80), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
   const gpuAt = petSrc.indexOf("setInterval(() => {\n  if (!window.PetGpu");
@@ -410,6 +418,17 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.ok(lifeAt > petSrc.indexOf("function sendLiveFix"));
   assert.doesNotMatch(petSrc.slice(lifeAt), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
   assert.doesNotMatch(petSrc.slice(lifeAt), /forecastUrl\(/);
+  assert.doesNotMatch(petSrc.slice(lifeAt), /geocodeUrl\(|reverseUrl\(/);
+  const addAt = petSrc.indexOf('e.target.id !== "weather-add"');
+  const showAskAt = petSrc.indexOf("function showHereAsk");
+  const addBody = petSrc.slice(addAt, showAskAt);
+  assert.match(addBody, /geocodeHonesty\("look"\)/);
+  assert.match(addBody, /geocodeMaySend\("look"/);
+  assert.ok(addBody.indexOf('geocodeHonesty("look")') < addBody.indexOf("geocodeUrl"));
+  assert.ok(addBody.indexOf('geocodeMaySend("look"') < addBody.indexOf("geocodeUrl"));
+  assert.doesNotMatch(addBody, /reverseUrl|readWeatherHere|getCurrentPosition|noteWeatherLocateYes/);
+  assert.equal(petSrc.split("geocodeUrl(").length - 1, 1);
+  assert.equal(petSrc.split("reverseUrl(").length - 1, 1);
   const savedYesAt = petSrc.indexOf('getElementById("weather-saved-yes")');
   const savedYesBody = petSrc.slice(savedYesAt, savedYesAt + 700);
   assert.match(savedYesBody, /forecastGate\(card, card\.hereForecastAck\)/);

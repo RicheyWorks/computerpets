@@ -82,6 +82,10 @@
       net.textContent = A.forecastHonesty(gate);
       net.hidden = !net.textContent;
     }
+    const lookNet = $("weather-geocode-net");
+    if (lookNet && A.geocodeHonesty) lookNet.textContent = A.geocodeHonesty("look");
+    const revNet = $("weather-reverse-net");
+    if (revNet && A.geocodeHonesty) revNet.textContent = A.geocodeHonesty("reverse");
     const savedAsk = $("weather-saved-ask");
     if (savedAsk) savedAsk.hidden = !held;
     const savedAskLine = $("weather-saved-ask-line");
