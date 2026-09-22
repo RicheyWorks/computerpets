@@ -144,8 +144,14 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.ok(forecastEffect.indexOf("forecastMaySend") < forecastEffect.indexOf("forecastUrl"));
   assert.ok(forecastEffect.indexOf("forecastUrl") < forecastEffect.indexOf("readForecast(line"));
   assert.match(forecastEffect, /forecastMayLeave/);
+  assert.match(forecastEffect, /json == null/);
+  assert.match(forecastEffect, /setUnread\(true\)/);
   assert.doesNotMatch(forecastEffect, /fetch\(/);
   assert.match(plates, /forecastHonesty/);
+  const areasFile = readFileSync(join(root, "src/lib/pets/weather-areas.ts"), "utf8");
+  assert.match(areasFile, /WEATHER_TIMEOUT_MS/);
+  assert.match(areasFile, /AbortController/);
+  assert.match(areasFile, /WeatherTimeout/);
   assert.match(plates, /id="weather-forecast-net"/);
   assert.match(plates, /id="weather-geocode-net"/);
   assert.match(plates, /id="weather-reverse-net"/);
@@ -156,6 +162,8 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.match(searchBody, /geocodeMaySend\("look"/);
   assert.ok(searchBody.indexOf('geocodeMaySend("look"') < searchBody.indexOf("geocodeUrl("));
   assert.ok(searchBody.indexOf("geocodeUrl(") < searchBody.indexOf("readGeocode(shown"));
+  assert.match(searchBody, /json == null/);
+  assert.match(searchBody, /WEATHER_CANT_REACH/);
   assert.doesNotMatch(searchBody, /fetch\(/);
   assert.doesNotMatch(searchBody, /readWeatherHere|reverseUrl|noteWeatherLocateYes|getCurrentPosition/);
   assert.equal(plates.split("geocodeUrl(").length - 1, 1);
