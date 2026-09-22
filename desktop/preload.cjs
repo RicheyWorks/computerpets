@@ -33,7 +33,7 @@ contextBridge.exposeInMainWorld("desk", {
   nftQuote: (nft) => ipcRenderer.invoke("nft-quote", nft),
   licenseStatus: () => ipcRenderer.invoke("license-status"),
   licenseUnlock: (input) => ipcRenderer.invoke("license-unlock", input),
-  licenseDownload: () => ipcRenderer.invoke("license-download"),
+  licenseDownload: (input) => ipcRenderer.invoke("license-download", input),
   licenseClear: () => ipcRenderer.invoke("license-clear"),
   onCommand: (fn) => {
     const wrapped = (_e, cmd) => fn(cmd);

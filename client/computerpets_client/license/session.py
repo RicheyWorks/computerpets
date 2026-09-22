@@ -67,13 +67,18 @@ def create_license_session(
         maker(str(Path(store_file).parent))
         writer(store_file, json.dumps(data, indent=2))
 
-    def device_mark(allow_read: bool) -> dict[str, Any]:
+    def device_mark(allow_read: bool, allow_weak: bool = False) -> dict[str, Any]:
         if isinstance(hwid, str) and hwid:
             return {"id": assert_hwid(hwid), "source": "caller", "read": "caller", "rawLeavesMachine": False}
         peeked = peek_hwid(user_data_dir=user_data_dir, read_file=reader)
         if not allow_read or peeked["read"] == "stored":
             return peeked
-        return resolve_hwid_detail(user_data_dir=user_data_dir, read_file=reader, write_file=writer)
+        return resolve_hwid_detail(
+            user_data_dir=user_data_dir,
+            read_file=reader,
+            write_file=writer,
+            allow_weak_fallback=allow_weak is True,
+        )
 
     def decrypt_stored(store: dict[str, Any]) -> dict[str, Any] | None:
         license_body = store.get("license") or {}
@@ -138,13 +143,14 @@ def create_license_session(
         payload_arg: dict[str, Any] | None = None,
         device_id_arg: str | None = None,
         secret_arg: str | None = None,
+        allow_weak_fallback: bool = False,
     ) -> dict[str, Any]:
         store = store_arg if store_arg is not None else load()
         secret = secret_arg if secret_arg is not None else license_secret(env)
         kwargs = {"now": now_fn} if now_fn else {}
         payload = payload_arg or decrypt_license(store["license"]["ciphertext"], store["license"]["iv"], secret, **kwargs)
         bound = bool(payload.get("hwid"))
-        current = device_id_arg or (device_mark(True)["id"] if bound else "")
+        current = device_id_arg or (device_mark(True, allow_weak_fallback is True)["id"] if bound else "")
         backend_url = normalize_backend_url(store.get("backendUrl") or default_backend_url(env))
 
         if bound and payload.get("hwid") != current:
@@ -187,7 +193,8 @@ def create_license_session(
             input_fields.get("backendUrl") or store.get("backendUrl") or default_backend_url(env)
         )
         provider = input_fields.get("provider") if isinstance(input_fields.get("provider"), str) and input_fields.get("provider") else "steam"
-        current = device_mark(True)["id"]
+        allow_weak = input_fields.get("allowWeakFallback") is True
+        current = device_mark(True, allow_weak)["id"]
         secret = license_secret(env)
         if not secret:
             raise LicenseError("missing_secret", "LICENSE_SECRET_KEY is missing; cannot decrypt the issued license")
@@ -237,8 +244,9 @@ def create_license_session(
         downloaded = request_download(next_store, payload, current, secret)
         return {**public_status(), "download": downloaded}
 
-    def download() -> dict[str, Any]:
-        return request_download()
+    def download(input_fields: dict[str, Any] | None = None) -> dict[str, Any]:
+        allow = bool(input_fields and input_fields.get("allowWeakFallback") is True)
+        return request_download(allow_weak_fallback=allow)
 
     def clear() -> dict[str, Any]:
         save({})

@@ -291,3 +291,51 @@ def test_status_does_not_read_the_os_machine_id():
     machine_reads = [item for item in reads if "machine-id" in item]
     session["status"]()
     assert [item for item in reads if "machine-id" in item] == machine_reads
+
+
+def test_missing_os_id_does_not_mint_until_yes():
+    files: dict[str, str] = {}
+
+    def read(path: str) -> str:
+        if path not in files:
+            raise FileNotFoundError(path)
+        return files[path]
+
+    def write(path: str, data: str) -> None:
+        files[path] = data
+
+    backend = create_contract_test_double(license_secret=SECRET, signing_key=SIGNING)
+    session = create_license_session(
+        user_data_dir="/tmp/cp-license-weak",
+        env={
+            "LICENSE_SECRET_KEY": SECRET,
+            "BUNDLE_SIGNING_KEY": SIGNING,
+            "COMPUTERPETS_BACKEND_URL": "http://127.0.0.1:8080",
+        },
+        fetch_impl=backend["fetch_impl"],
+        read_file=read,
+        write_file=write,
+        mkdir=lambda _path: None,
+    )
+    with pytest.raises(LicenseError) as caught:
+        session["unlock"](
+            {"steamId": "76561198000000000", "appId": "123456", "petType": "red_panda", "provider": "steam"}
+        )
+    assert caught.value.code == "hwid_needs_fallback_yes"
+    assert "computer name" in str(caught.value)
+    assert "random id" in str(caught.value)
+    assert backend["calls"] == []
+    assert not any(path.endswith("hwid.txt") for path in files)
+
+    session["unlock"](
+        {
+            "steamId": "76561198000000000",
+            "appId": "123456",
+            "petType": "red_panda",
+            "provider": "steam",
+            "allowWeakFallback": True,
+        }
+    )
+    verify = next(call for call in backend["calls"] if call["path"] == "/api/verify/steam")
+    assert len(verify["body"]["hwid"]) == 64
+    assert any(path.endswith("hwid.txt") for path in files)

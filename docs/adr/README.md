@@ -48,6 +48,7 @@ address, or an API that is not on `main`.
 | [0027](0027-base-url-drops-userinfo-and-a-path-key.md) | A base URL drops userinfo, a path key, and a non-URL key assignment | Accepted |
 | [0028](0028-model-field-drops-a-pasted-secret.md) | A model field drops a pasted secret | Accepted |
 | [0029](0029-enumerator-does-not-read-a-window-class.md) | The window enumerator does not read a keeper window class | Accepted |
+| [0030](0030-missing-os-id-waits-for-a-yes.md) | A missing OS id waits for a yes before a weaker license mark | Accepted |
 
 ## How to add one
 
