@@ -199,6 +199,8 @@ let houseBooted = false;
 let autoMeetWait = 4.5;
 let musicNode = null;
 let streamAsked = false;
+let talkAsked = false;
+let pendingTalk = null;
 let sleepNode = null;
 let lureDrag = null;
 
@@ -664,6 +666,39 @@ function sitSleepAid() {
   const S = window.PetHouseSleep;
   if (!S) return;
   sleepNode = S.applySleepAid(sleepNode, card.sleepAid, card.mutes, cardGuest().volume / 100);
+}
+
+function talkBind() {
+  if (!window.PetMind || !kind) return { plugin: "local" };
+  return window.PetMind.binding(kind.key) || { plugin: "local" };
+}
+
+function paintTalkNet() {
+  const el = document.getElementById("hud-talk-net");
+  if (!el) return;
+  const M = window.PetMind;
+  const line = talkAsked && M && M.talkHonesty ? M.talkHonesty(talkBind()) : "";
+  el.textContent = line || "";
+  el.hidden = !line;
+}
+
+function talkLineInView() {
+  const el = document.getElementById("hud-talk-net");
+  if (!el || el.hidden || !talkAsked) return false;
+  const M = window.PetMind;
+  const line = M && M.talkHonesty ? M.talkHonesty(talkBind()) : "";
+  if (!line) return false;
+  return (el.textContent || "").indexOf(line) !== -1;
+}
+
+function flushTalk() {
+  if (!pendingTalk) return;
+  const M = window.PetMind;
+  const bind = talkBind();
+  if (M && M.talkMaySend && !M.talkMaySend(bind, talkLineInView())) return;
+  const result = pendingTalk;
+  pendingTalk = null;
+  void askMind(result);
 }
 
 function streamLineInView() {
@@ -1642,6 +1677,8 @@ function paintCard() {
     mute.textContent = S.SLEEP_AID_MUTE_TRUTH;
     hudSleep.appendChild(mute);
   }
+  paintTalkNet();
+  flushTalk();
   sitMusic();
   sitSleepAid();
   if (hudLines) {
@@ -2543,7 +2580,16 @@ function handle(cmd) {
   const result = window.PetLife.act(life, trait, cmd, Date.now(), kind.key);
   persist();
   if (cmd === "talk") {
-    void askMind(result);
+    const M = window.PetMind;
+    const bind = M && kind ? M.binding(kind.key) : { plugin: "local" };
+    const cloud = M && M.talkHonesty ? M.talkHonesty(bind) : "";
+    if (!cloud) {
+      void askMind(result);
+      return;
+    }
+    talkAsked = true;
+    pendingTalk = result;
+    paintHud();
     return;
   }
   if (cmd === "call") {
@@ -2579,6 +2625,7 @@ async function askMind(result) {
       energy: life.energy,
       message: undefined,
       fallback,
+      lineInView: talkLineInView(),
     });
     say(reply.text);
   } catch {

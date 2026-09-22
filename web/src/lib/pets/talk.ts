@@ -2,10 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 import { optionalAuthMiddleware } from "@/lib/auth/middleware";
 import { livingByKey } from "./living";
 import { normalizeCare } from "./care";
-import { runMind } from "@/lib/ai/complete";
+import { localMind, runMind } from "@/lib/ai/complete";
 import { speakWithPlugin } from "@/lib/ai/voice";
 import { bindTalkSpend } from "./talk-spend";
 import { parseTalkBody } from "./talk-post";
+import { talkHonesty, talkMaySend, voiceHonesty, voiceMaySend } from "./talk-net";
 
 export type TalkResult = {
   text: string;
@@ -30,22 +31,24 @@ export const converseWithPet = createServerFn({ method: "POST" })
       signedIn: Boolean(context.userId),
     });
 
-    const reply = await runMind(
-      {
-        name: data.name,
-        species: data.species,
-        speciesLabel: kind.speciesLabel,
-        systemPrompt: kind.systemPrompt,
-        hunger: stats.hunger,
-        mood: stats.mood,
-        energy: stats.energy,
-        hygiene: stats.hygiene,
-        message: data.message,
-      },
-      spend.mind,
-    );
+    const turn = {
+      name: data.name,
+      species: data.species,
+      speciesLabel: kind.speciesLabel,
+      systemPrompt: kind.systemPrompt,
+      hunger: stats.hunger,
+      mood: stats.mood,
+      energy: stats.energy,
+      hygiene: stats.hygiene,
+      message: data.message,
+    };
+    const reply = talkMaySend(spend.mind, data.talkLine === talkHonesty(spend.mind))
+      ? await runMind(turn, spend.mind)
+      : localMind(turn);
 
     const audio =
-      data.speak === false ? undefined : await speakWithPlugin(reply.text, spend.voice, kind.voice, spend.voiceKey);
+      data.speak === false || !voiceMaySend(spend.voice, data.voiceLine === voiceHonesty(spend.voice))
+        ? undefined
+        : await speakWithPlugin(reply.text, spend.voice, kind.voice, spend.voiceKey);
     return { text: reply.text, audio, source: reply.source };
   });

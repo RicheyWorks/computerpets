@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { MIND_PRESETS, VOICE_PRESETS, mindPreset } from "@/lib/ai/catalog";
@@ -7,6 +7,8 @@ import { refreshMindSettings, useMindSettings } from "@/lib/ai/use-mind";
 import { LIVING_KINDS } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { talkBody } from "@/lib/pets/talk-post";
+import { talkHonesty } from "@/lib/pets/talk-net";
+import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import type { MindBinding, MindSettings, VoiceKind } from "@/lib/ai/types";
 
 export const Route = createFileRoute("/mind")({
@@ -28,8 +30,14 @@ function MindPage() {
   const [petKey, setPetKey] = useState(LIVING_KINDS[0]!.key);
   const [testLine, setTestLine] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [talkAsked, setTalkAsked] = useState(false);
+  const pendingTest = useRef(false);
+  const [talkTick, setTalkTick] = useState(0);
+  const { user, isPending } = useCurrentUserState();
+  const signedIn = !isPending && user != null;
   const selected = mindPreset(draft.default.plugin);
   const petBind = draft.pets[petKey] ?? draft.default;
+  const talkLine = signedIn ? talkHonesty(petBind) : "";
 
   const counts = useMemo(() => {
     const used = new Set<string>([draft.default.plugin, ...Object.values(draft.pets).map((b) => b.plugin)]);
@@ -75,7 +83,13 @@ function MindPage() {
     write({ ...draft, pets });
   }
 
-  async function test() {
+  function talkLineInView() {
+    if (!talkLine) return true;
+    const el = document.getElementById("mind-talk-net");
+    return talkAsked && !!el && !el.hidden && (el.textContent || "").includes(talkLine);
+  }
+
+  async function runTest() {
     setBusy(true);
     setTestLine(null);
     try {
@@ -91,6 +105,7 @@ function MindPage() {
           speak: false,
           mind: petBind,
           voice: "none",
+          ...(talkLine ? { talkLine } : {}),
         }),
       });
       setTestLine(`${res.source}: ${res.text}`);
@@ -100,6 +115,28 @@ function MindPage() {
       setBusy(false);
     }
   }
+
+  function test() {
+    if (busy || pendingTest.current) return;
+    if (talkLine) {
+      setTalkAsked(true);
+      if (!talkLineInView()) {
+        pendingTest.current = true;
+        setTalkTick((n) => n + 1);
+        return;
+      }
+    }
+    void runTest();
+  }
+
+  useEffect(() => {
+    if (!pendingTest.current) return;
+    if (!talkLineInView()) return;
+    pendingTest.current = false;
+    void runTest();
+    // The line has to be painted before the test post. A load does not test.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [talkTick, talkAsked, talkLine]);
 
   return (
     <main className="space-y-10 pb-16 pt-20">
@@ -241,9 +278,12 @@ function MindPage() {
             <p className="text-sm text-muted">Using the house default.</p>
           )}
           <div className="flex flex-wrap gap-2">
-            <Button disabled={busy} onClick={() => void test()}>
+            <Button disabled={busy} onClick={() => test()}>
               Test this mind
             </Button>
+            <p id="mind-talk-net" className="text-sm text-muted" hidden={!talkAsked || !talkLine}>
+              {talkAsked ? talkLine : ""}
+            </p>
             <Button asChild variant="secondary">
               <Link to="/" search={{ pet: petKey }}>
                 Open desk
