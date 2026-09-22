@@ -106,7 +106,7 @@ All critical items required before any public or limited production exposure hav
 
 - **3.2b Database & Persistence Maturity**
   - [x] Soft deletion + audit logging for licenses (`deletedAt` on revoke; `license_audit_events` ISSUED / REVOKED / DOWNLOAD; ADR 0058)
-  - [ ] Read replicas strategy and connection pooling tuning
+  - [x] Hikari pool defaults + optional deny-safe read replica (`SPRING_DATASOURCE_REPLICA_URL`; ADR 0059)
 
 - **3.3 Deployment & Environments**
   - [x] Proper Spring profiles (`dev` / `staging` / `prod`)
@@ -618,6 +618,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-09-22 (License soft-delete + audit ledger — ADR 0058 / Flyway V3. DX12/Vulkan was not started. Catalog 221.)
+**Last Updated:** 2026-09-22 (Hikari pool defaults + optional deny-safe read replica — ADR 0059. DX12/Vulkan was not started. Catalog 221.)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.
