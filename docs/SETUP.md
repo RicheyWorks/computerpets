@@ -277,7 +277,7 @@ The Electron overlay is still `cd desktop && npm start`.
 | `EPIC_SANDBOX_ID`         | No       | empty   | Optional official Epic sandbox allowlist (do not invent one) |
 | `EPIC_CATALOG_ITEM_ID`    | No       | empty   | Optional official catalog item allowlist (do not invent one) |
 | `BUNDLE_BASE_URL`         | No       | CDN placeholder | Base URL used when generating signed download links |
-| *(yaml)* `bundle.catalog` | No       | `[]`    | Optional artifact rows (`petKey`, `version`, `platform`, `sha256`, `path`). Empty until a zip exists; unknown keys and placeholder hashes fail startup. Do not invent sha256 values. |
+| *(yaml)* `bundle.catalog` | No       | `[]`    | Optional artifact rows (`petKey`, `version`, `platform`, `sha256`, `path`). Empty until a zip exists; unknown keys and placeholder hashes fail startup. Do not invent sha256 values. A published zip must be `computerpets.bundle/v1` (CLIENT-CONTRACT §8 / ADR 0060). |
 | `REDIS_HOST`              | No       | localhost | Redis hostname for shared verify/download rate limits, the jti deny-list, and download grants |
 | `REDIS_PORT`              | No       | 6379 | Redis port |
 | `REDIS_TIMEOUT`           | No       | 200ms | Lettuce command/connect timeout for the rate-limit store |
