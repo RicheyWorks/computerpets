@@ -38,6 +38,37 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.equal(A.geocodeUrl("   "), "");
   assert.equal(A.TYPE_A_CITY, "type a city");
   assert.equal(A.HERE_FAIL, "this computer did not share a place");
+  assert.equal(A.HERE_SEND, "this click sends a place to the forecast host.");
+  assert.equal(A.HERE_KEPT, "keeping the saved place");
+  assert.equal(A.HERE_SENT, "a place was sent to the forecast host");
+  assert.equal(Overlay.HERE_SEND, A.HERE_SEND);
+  assert.equal(Overlay.HERE_KEPT, A.HERE_KEPT);
+  assert.equal(Overlay.PLACE_STEP, 0.1);
+  assert.deepEqual(A.sharePlace(47.60621, -122.33207), { lat: 47.6, lon: -122.3 });
+  assert.deepEqual(Overlay.sharePlace(47.60621, -122.33207), A.sharePlace(47.60621, -122.33207));
+  assert.deepEqual(A.sharePlace(-33.8688, 151.2093), { lat: -33.9, lon: 151.2 });
+  assert.equal(A.sharePlace(91, 0), null);
+  const reverse = A.reverseUrl(47.60621, -122.33207);
+  assert.match(reverse, /latitude=47\.6&longitude=-122\.3/);
+  assert.doesNotMatch(reverse, /47\.606|122\.332/);
+  const forecast = A.forecastUrl(37.7749, -122.4194);
+  assert.match(forecast, /latitude=37\.8&longitude=-122\.4/);
+  assert.doesNotMatch(forecast, /37\.7749|122\.4194/);
+  assert.equal(Overlay.forecastUrl(37.7749, -122.4194), forecast);
+  const typed = A.addArea(A.blankAreas(), { name: "Portland", query: "Portland", lat: 45.52, lon: -122.67 });
+  assert.equal(A.locateChoice(typed).locate, false);
+  assert.equal(A.locateChoice(typed).area?.name, "Portland");
+  const hereOnly = A.addArea(A.blankAreas(), { id: "here", name: "This computer", query: "this computer", lat: 47.606, lon: -122.332 });
+  assert.equal(A.locateChoice(hereOnly).locate, true);
+  assert.equal(A.locateChoice(A.blankAreas()).locate, true);
+  const both = A.pickArea(
+    A.addArea(typed, { id: "here", name: "This computer", query: "this computer", lat: 47.6, lon: -122.3 }),
+    "here",
+  );
+  assert.equal(A.currentArea(both)?.id, "here");
+  assert.equal(A.locateChoice(both).locate, false);
+  assert.equal(A.locateChoice(both).area?.name, "Portland");
+  assert.equal(Overlay.locateChoice(both).locate, false);
   assert.equal("ipPlaceUrl" in A, false);
   assert.equal("parseIpPlace" in A, false);
   assert.equal("IP_PLACE_HOST" in A, false);

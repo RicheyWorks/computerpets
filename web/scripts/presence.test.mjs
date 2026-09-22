@@ -55,6 +55,15 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.equal(P.ipPlace(true), null);
   assert.match(plates, /readWeatherHere/);
   assert.match(plates, /ipPlace\(/);
+  assert.match(plates, /HERE_SEND/);
+  assert.match(plates, /locateChoice/);
+  assert.match(plates, /sharePlace/);
+  const useAt = plates.indexOf("async function useHere");
+  const useBody = plates.slice(useAt, useAt + 1600);
+  assert.ok(useBody.indexOf("locateChoice") >= 0);
+  assert.ok(useBody.indexOf("locateChoice") < useBody.indexOf("readWeatherHere"));
+  assert.ok(useBody.indexOf("sharePlace") < useBody.indexOf("reverseUrl"));
+  assert.doesNotMatch(useBody, /latitude=\$\{fix|longitude=\$\{fix/);
   assert.doesNotMatch(plates, /getCurrentPosition|watchPosition|maximumAge:\s*600/);
   assert.doesNotMatch(plates, /ipwho\.is|ip-api\.com|ipinfo\.io|ipapi\.co|ipPlaceUrl|parseIpPlace/);
   const src = readFileSync(join(root, "src/lib/pets/presence.ts"), "utf8");

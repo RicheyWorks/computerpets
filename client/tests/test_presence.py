@@ -56,6 +56,8 @@ def test_navigation_and_capture_stay_refused():
         assert "ipwho" not in text
         assert "ip-api.com" not in text
         assert "ipinfo.io" not in text
+        assert "open-meteo" not in text
+        assert "getCurrentPosition" not in text
 
 
 def test_user_folders_are_not_listed_and_titles_are_not_read():

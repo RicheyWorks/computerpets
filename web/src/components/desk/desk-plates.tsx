@@ -12,7 +12,11 @@ import {
   CANT_REACH as WEATHER_CANT_REACH,
   FAVORITES_EMPTY as WEATHER_FAVORITES_EMPTY,
   HERE_FAIL,
+  HERE_KEPT,
+  HERE_SEND,
+  HERE_SENT,
   isFavorite,
+  locateChoice,
   NO_AREA,
   parseAreas,
   parseForecast,
@@ -24,6 +28,7 @@ import {
   removeArea,
   renameArea,
   reverseUrl,
+  sharePlace,
   toCardPatch,
   toggleFavorite,
   TYPE_A_CITY,
@@ -355,9 +360,15 @@ export function DeskWeatherPlate({
 
   async function useHere() {
     setHereLine("");
-    function keep(area: WeatherArea) {
-      add(area);
-      setHereLine("");
+    const choice = locateChoice(areas);
+    if (!choice.locate) {
+      setHereLine(HERE_KEPT);
+      if (!area || area.id !== choice.area.id) keepAreas(pickArea(areas, choice.area.id));
+      return;
+    }
+    function keep(next: WeatherArea) {
+      add(next);
+      setHereLine(HERE_SENT);
     }
     function unnamed(lat: number, lon: number): WeatherArea {
       return { id: "here", name: "This computer", query: "this computer", lat, lon };
@@ -371,17 +382,26 @@ export function DeskWeatherPlate({
       setHereLine(HERE_FAIL);
       return;
     }
-    const url = reverseUrl(fix.lat, fix.lon);
+    const place = sharePlace(fix.lat, fix.lon);
+    if (!place) {
+      setHereLine(HERE_FAIL);
+      return;
+    }
+    const url = reverseUrl(place.lat, place.lon);
     if (!url) {
-      keep(unnamed(fix.lat, fix.lon));
+      keep(unnamed(place.lat, place.lon));
       return;
     }
     try {
       const json = await (await fetch(url)).json();
       const named = parseReverse(json);
-      keep(named || unnamed(fix.lat, fix.lon));
+      keep(
+        named
+          ? { id: "here", name: named.name, query: "this computer", lat: place.lat, lon: place.lon }
+          : unnamed(place.lat, place.lon),
+      );
     } catch {
-      keep(unnamed(fix.lat, fix.lon));
+      keep(unnamed(place.lat, place.lon));
     }
   }
 
@@ -530,9 +550,12 @@ export function DeskWeatherPlate({
               ) : lookLine ? (
                 <p className="mt-2 text-subtle">{lookLine}</p>
               ) : null}
-              <button type="button" className="mt-2" onClick={() => void useHere()}>
+              <button type="button" className="mt-2" aria-describedby="weather-here-send" onClick={() => void useHere()}>
                 Use this computer&apos;s location
               </button>
+              <p id="weather-here-send" className="mt-1 text-[10px] uppercase tracking-[0.16em] text-subtle">
+                {HERE_SEND}
+              </p>
               {hereLine ? <p className="mt-1 text-subtle">{hereLine}</p> : null}
             </>
           )}

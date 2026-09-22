@@ -26,7 +26,7 @@ This slice drops the IP place fallback. It does not start DirectX 12 or Vulkan. 
 
 - Electron 35 `PermissionManager::ResetPermission` is empty. A geolocation grant Chromium already cached in the renderer cannot be revoked mid-session. The check handler denies the next status query once the locate closes. A reload is the only flush of that cache. Dropping the IP lookup does not change that limit.
 - A browser origin grant can outlive the click. The next click may return a fix without a new prompt. It is still one `getCurrentPosition` from the weather control. There is no background watcher. Many desktop sessions have no GNSS fix. The button then says the computer did not share a place. It does not invent a city from the address.
-- A granted fix's coordinates are still sent to Open-Meteo to name the place and to read the forecast. That is the click's fix, not an IP place service.
+- A granted fix used to leave at full precision. [0015](0015-weather-locate-sends-a-rounded-place.md) rounds it to a tenth of a degree and keeps a saved typed area instead of starting a new locate. That is still the click's fix, not an IP place service. A cached origin grant can still answer the click without a new prompt.
 - A saved area on the card is still sent to the forecast.
 - License `hwid` still reads machine-id or MachineGuid. That is the license door, not presence.
 - The keeper's plugin key still sits in `mind.json`. It stays off the card.
