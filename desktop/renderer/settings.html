@@ -41,6 +41,7 @@
       <label>Backend URL</label>
       <input id="backend" placeholder="http://127.0.0.1:8081" />
       <p class="lead" id="licenseNet">this unlock stays on this computer. the license hash does not leave.</p>
+      <p class="lead" id="bundleNet">a signed bundle is not fetched until this line names the host.</p>
       <label>Provider</label>
       <select id="provider"><option value="steam">Steam</option></select>
       <label>Steam ID</label>
@@ -139,6 +140,55 @@
         node.textContent = parts.join(" ");
       }
 
+      function bundleUrlOf(status) {
+        if (!status) return "";
+        if (status.download && typeof status.download.downloadUrl === "string") return status.download.downloadUrl;
+        if (status.lastDownload && typeof status.lastDownload.downloadUrl === "string") return status.lastDownload.downloadUrl;
+        return typeof status.downloadUrl === "string" ? status.downloadUrl : "";
+      }
+
+      function bundleOf(status) {
+        if (!status) return null;
+        if (status.download && status.download.bundle) return status.download.bundle;
+        if (status.lastDownload && status.lastDownload.bundle) return status.lastDownload.bundle;
+        return status.bundle || null;
+      }
+
+      function paintBundleNet(downloadUrl) {
+        const node = document.getElementById("bundleNet");
+        const Net = window.LicenseNet;
+        if (!node || !Net) return;
+        if (!downloadUrl) {
+          node.textContent = Net.BUNDLE_IDLE;
+          return;
+        }
+        node.textContent = Net.bundleHonesty(downloadUrl) || Net.BUNDLE_LOCAL;
+      }
+
+      function shownBundleLine() {
+        const node = document.getElementById("bundleNet");
+        return node ? node.textContent || "" : "";
+      }
+
+      async function finishBundle(status) {
+        if (!status || status.ok === false) return status;
+        const url = bundleUrlOf(status);
+        paintBundleNet(url);
+        const bundle = bundleOf(status);
+        if (!url || !bundle || bundle.held !== true) return status;
+        const line = shownBundleLine();
+        if (!window.LicenseNet || !window.LicenseNet.bundleMayFetch(url, line)) {
+          licenseErr.textContent = "the signed bundle was not fetched. name the host before it leaves.";
+          return status;
+        }
+        if (!window.desk?.licenseFetchBundle) return status;
+        const fetched = await window.desk.licenseFetchBundle({ cdnLine: line });
+        if (fetched && fetched.ok === false) {
+          licenseErr.textContent = fetched.error ? fetched.error.message : "the signed bundle was not fetched.";
+        }
+        return fetched || status;
+      }
+
       function shownLicenseLine() {
         const node = document.getElementById("licenseNet");
         return node ? node.textContent || "" : "";
@@ -153,12 +203,15 @@
           licenseOk.textContent = "Locked. Pets on the desk still work.";
           return null;
         }
+        const cdnLine = shownBundleLine();
         if (which === "download") {
           if (!window.desk?.licenseDownload) return null;
-          return window.desk.licenseDownload({
+          const status = await window.desk.licenseDownload({
             allowWeakFallback: !!(extra && extra.allowWeakFallback === true),
             licenseLine: line,
+            cdnLine,
           });
+          return finishBundle(status);
         }
         if (!window.desk?.licenseUnlock) {
           licenseErr.textContent = "Unlock is only available in the desktop app.";
@@ -166,7 +219,8 @@
         }
         licenseErr.textContent = "";
         licenseOk.textContent = "Talking to the backend…";
-        return window.desk.licenseUnlock({ ...licenseFields(), ...(extra || {}), licenseLine: line });
+        const status = await window.desk.licenseUnlock({ ...licenseFields(), ...(extra || {}), licenseLine: line, cdnLine });
+        return finishBundle(status);
       }
 
       function fillPetTypes(rows) {
@@ -233,6 +287,7 @@
         if (typeof status.backendUrl === "string") licenseBackend = status.backendUrl;
         if (status.backendUrl && !backend.value) backend.value = status.backendUrl;
         paintLicenseNet();
+        paintBundleNet(bundleUrlOf(status));
         if (status.fields) {
           if (status.fields.steamId) steamId.value = status.fields.steamId;
           if (status.fields.appId) appId.value = status.fields.appId;
@@ -268,15 +323,19 @@
 
       backend.addEventListener("input", paintLicenseNet);
       paintLicenseNet();
+      paintBundleNet("");
 
       document.getElementById("unlock").addEventListener("click", async () => {
         hideWeakYes();
         const status = await sendLicense("unlock");
         if (!status) return;
-        showLicense(status);
-        if (status && status.ok === false && status.error && status.error.code === "hwid_needs_fallback_yes") {
-          showWeakYes("unlock");
+        if (status.ok === false) {
+          showLicense(status);
+          if (status.error && status.error.code === "hwid_needs_fallback_yes") showWeakYes("unlock");
+          return;
         }
+        if (window.desk?.licenseStatus) showLicense(await window.desk.licenseStatus());
+        else showLicense(status);
       });
 
       document.getElementById("redownload").addEventListener("click", async () => {
@@ -315,10 +374,13 @@
         }
         const status = await sendLicense("unlock", { allowWeakFallback: true });
         if (!status) return;
-        showLicense(status);
-        if (status && status.ok === false && status.error && status.error.code === "hwid_needs_fallback_yes") {
-          showWeakYes("unlock");
+        if (status.ok === false) {
+          showLicense(status);
+          if (status.error && status.error.code === "hwid_needs_fallback_yes") showWeakYes("unlock");
+          return;
         }
+        if (window.desk?.licenseStatus) showLicense(await window.desk.licenseStatus());
+        else showLicense(status);
       });
     </script>
   </body>
