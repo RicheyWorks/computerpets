@@ -9,15 +9,112 @@ const path = require("path");
  */
 const HOUSE_FILES = Object.freeze(["card.json", "mind.json"]);
 
-/** The weather button is the one machine grant. Everything else stays denied. */
-const ALLOWED_PERMISSIONS = new Set(["geolocation"]);
+/**
+ * Geolocation is not a standing grant. It opens only for one weather-button
+ * locate, then closes. Electron 35's PermissionManager::ResetPermission is
+ * empty, so a grant Chromium already cached in the renderer cannot be
+ * revoked mid-session. This flag is the live check: false once the locate
+ * ends or WEATHER_LOCATE_MS passes. Callers do not watch and do not re-query.
+ */
+const WEATHER_LOCATE_MS = 120_000;
+let weatherLocateUntil = 0;
 
 function allowNavigation() {
   return false;
 }
 
-function allowPermission(permission) {
-  return ALLOWED_PERMISSIONS.has(String(permission || ""));
+function armWeatherLocate(now = Date.now()) {
+  const at = Number(now);
+  const base = Number.isFinite(at) ? at : Date.now();
+  weatherLocateUntil = base + WEATHER_LOCATE_MS;
+  return weatherLocateUntil;
+}
+
+function clearWeatherLocate() {
+  weatherLocateUntil = 0;
+}
+
+function weatherLocateOpen(now = Date.now()) {
+  const at = Number(now);
+  const base = Number.isFinite(at) ? at : Date.now();
+  return weatherLocateUntil > base;
+}
+
+function allowPermission(permission, now = Date.now()) {
+  if (String(permission || "") !== "geolocation") return false;
+  return weatherLocateOpen(now);
+}
+
+function weatherLocateOptions() {
+  return { maximumAge: 0, timeout: WEATHER_LOCATE_MS, enableHighAccuracy: false };
+}
+
+function closeWeatherLocate(hooks) {
+  clearWeatherLocate();
+  if (!hooks || typeof hooks.clear !== "function") return Promise.resolve();
+  try {
+    return Promise.resolve(hooks.clear()).then(
+      () => {},
+      () => {},
+    );
+  } catch {
+    return Promise.resolve();
+  }
+}
+
+function requestWeatherFix(geo, opts) {
+  return new Promise((resolve) => {
+    if (!geo || typeof geo.getCurrentPosition !== "function") {
+      resolve(null);
+      return;
+    }
+    let settled = false;
+    const done = (value) => {
+      if (settled) return;
+      settled = true;
+      resolve(value);
+    };
+    try {
+      geo.getCurrentPosition(
+        (pos) => {
+          const coords = pos && pos.coords;
+          const lat = coords ? Number(coords.latitude) : NaN;
+          const lon = coords ? Number(coords.longitude) : NaN;
+          done(Number.isFinite(lat) && Number.isFinite(lon) ? { lat, lon } : null);
+        },
+        () => done(null),
+        opts,
+      );
+    } catch {
+      done(null);
+    }
+  });
+}
+
+/**
+ * One weather-button fix. Arms geolocation, asks once, then clears.
+ * Does not call watchPosition. maximumAge is 0, so a cached fix is not a silent re-read.
+ * `hooks.arm` / `hooks.clear` are how the overlay tells the Electron session.
+ * @param {{ getCurrentPosition?: Function } | null | undefined} geo
+ * @param {{ arm?: Function, clear?: Function } | null | undefined} [hooks]
+ */
+function readWeatherHere(geo, hooks) {
+  armWeatherLocate();
+  let pending = Promise.resolve();
+  if (hooks && typeof hooks.arm === "function") {
+    try {
+      pending = Promise.resolve(hooks.arm());
+    } catch (err) {
+      pending = Promise.reject(err);
+    }
+  }
+  const opts = weatherLocateOptions();
+  return pending.then(() => requestWeatherFix(geo, opts)).then(
+    (fix) => closeWeatherLocate(hooks).then(() => fix),
+    (err) => closeWeatherLocate(hooks).then(() => {
+      throw err;
+    }),
+  );
 }
 
 /**
@@ -170,9 +267,14 @@ function refuseFileDrop(transfer) {
 
 module.exports = {
   HOUSE_FILES,
-  ALLOWED_PERMISSIONS,
+  WEATHER_LOCATE_MS,
   allowNavigation,
   allowPermission,
+  armWeatherLocate,
+  clearWeatherLocate,
+  weatherLocateOpen,
+  weatherLocateOptions,
+  readWeatherHere,
   houseFile,
   scrubWindow,
   scrubWindows,

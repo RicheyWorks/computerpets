@@ -21,6 +21,8 @@ contextBridge.exposeInMainWorld("desk", {
   cardSet: (data) => ipcRenderer.send("card-set", data),
   quit: () => ipcRenderer.send("quit-desk"),
   roster: () => ipcRenderer.invoke("roster-get"),
+  armWeatherLocate: () => ipcRenderer.invoke("weather-locate-arm"),
+  clearWeatherLocate: () => ipcRenderer.invoke("weather-locate-clear"),
   radioSearch: (query, area) => ipcRenderer.invoke("radio-search", query, area),
   newsTopic: (query) => ipcRenderer.invoke("news-topic", query),
   newsFeed: (opts) => ipcRenderer.invoke("news-feed", opts),

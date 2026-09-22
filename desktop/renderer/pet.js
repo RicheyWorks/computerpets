@@ -3713,28 +3713,37 @@ if (weatherPlate) {
           })
           .catch(() => failHere(A.CANT_REACH));
       }
-      if (!navigator.geolocation) {
+      const reader = window.PetPresence && window.PetPresence.readWeatherHere;
+      const deskApi = window.desk;
+      if (!navigator.geolocation || typeof reader !== "function") {
         fromIp();
         return;
       }
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const url = A.reverseUrl(pos.coords.latitude, pos.coords.longitude);
-          if (!url) {
-            keepHere({ id: "here", name: "This computer", query: "this computer", lat: pos.coords.latitude, lon: pos.coords.longitude });
-            return;
-          }
-          fetch(url, { cache: "no-store" })
-            .then((r) => r.json())
-            .then((json) => {
-              const named = A.parseReverse(json);
-              keepHere(named || { id: "here", name: "This computer", query: "this computer", lat: pos.coords.latitude, lon: pos.coords.longitude });
-            })
-            .catch(() => fromIp());
+      reader(navigator.geolocation, {
+        arm() {
+          return deskApi && deskApi.armWeatherLocate ? deskApi.armWeatherLocate() : undefined;
         },
-        () => fromIp(),
-        { maximumAge: 600_000 },
-      );
+        clear() {
+          return deskApi && deskApi.clearWeatherLocate ? deskApi.clearWeatherLocate() : undefined;
+        },
+      }).then((fix) => {
+        if (!fix) {
+          fromIp();
+          return;
+        }
+        const url = A.reverseUrl(fix.lat, fix.lon);
+        if (!url) {
+          keepHere({ id: "here", name: "This computer", query: "this computer", lat: fix.lat, lon: fix.lon });
+          return;
+        }
+        fetch(url, { cache: "no-store" })
+          .then((r) => r.json())
+          .then((json) => {
+            const named = A.parseReverse(json);
+            keepHere(named || { id: "here", name: "This computer", query: "this computer", lat: fix.lat, lon: fix.lon });
+          })
+          .catch(() => fromIp());
+      });
     });
   }
 }

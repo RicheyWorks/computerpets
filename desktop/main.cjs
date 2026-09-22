@@ -152,6 +152,30 @@ function sealDeskContents(contents) {
   }
 }
 
+/** The weather control on the overlay glass. The minds window is not that control. */
+function weatherLocateSender(event) {
+  try {
+    const url = event && event.sender ? String(event.sender.getURL() || "") : "";
+    return url.endsWith("/index.html") || url.endsWith("\\index.html");
+  } catch {
+    return false;
+  }
+}
+
+/** The weather control opens one locate. Nothing else may arm geolocation. */
+function registerWeatherLocate(ipc) {
+  ipc.handle("weather-locate-arm", (event) => {
+    if (!weatherLocateSender(event)) return { open: false };
+    return { open: true, until: Presence.armWeatherLocate() };
+  });
+  ipc.handle("weather-locate-clear", () => {
+    Presence.clearWeatherLocate();
+    return { open: false };
+  });
+}
+
+registerWeatherLocate(ipcMain);
+
 function iconImage() {
   return nativeImage.createFromPath(path.join(__dirname, "renderer", "icon.png"));
 }

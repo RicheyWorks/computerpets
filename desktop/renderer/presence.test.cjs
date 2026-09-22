@@ -36,11 +36,79 @@ test("in-page navigation is refused, including a dropped file URL", () => {
   assert.equal(Presence.allowNavigation("https://evil.example/exfil"), false);
 });
 
-test("clipboard, screen capture, and the file system stay denied; geolocation is the weather button", () => {
-  assert.equal(Presence.allowPermission("geolocation"), true);
+test("clipboard, screen capture, and the file system stay denied; geolocation is not a standing grant", () => {
+  Presence.clearWeatherLocate();
+  assert.equal(Presence.allowPermission("geolocation", 1_000), false);
+  assert.equal(Presence.armWeatherLocate(1_000), 1_000 + Presence.WEATHER_LOCATE_MS);
+  assert.equal(Presence.allowPermission("geolocation", 1_000), true);
+  assert.equal(Presence.allowPermission("clipboard-read", 1_000), false);
+  assert.equal(Presence.allowPermission("geolocation", 1_000 + Presence.WEATHER_LOCATE_MS), false);
+  Presence.clearWeatherLocate();
+  assert.equal(Presence.allowPermission("geolocation", 1_500), false);
   for (const name of ["clipboard-read", "clipboard-sanitized-write", "display-capture", "media", "keyboardLock", "fileSystem", "midi", ""]) {
-    assert.equal(Presence.allowPermission(name), false, name);
+    assert.equal(Presence.allowPermission(name, 1_000), false, name);
   }
+});
+
+test("a weather read asks once, then the grant closes, and it does not watch", async () => {
+  Presence.clearWeatherLocate();
+  let watched = 0;
+  const seen = [];
+  const geo = {
+    getCurrentPosition(ok, _err, opts) {
+      seen.push(opts);
+      assert.equal(Presence.allowPermission("geolocation"), true);
+      ok({ coords: { latitude: 47.6, longitude: -122.3 } });
+    },
+    watchPosition() {
+      watched += 1;
+    },
+  };
+  const log = [];
+  const fix = await Presence.readWeatherHere(geo, {
+    arm() {
+      log.push("arm");
+    },
+    clear() {
+      log.push("clear");
+    },
+  });
+  assert.deepEqual(fix, { lat: 47.6, lon: -122.3 });
+  assert.deepEqual(log, ["arm", "clear"]);
+  assert.equal(seen.length, 1);
+  assert.equal(seen[0].maximumAge, 0);
+  assert.equal(seen[0].enableHighAccuracy, false);
+  assert.equal(watched, 0);
+  assert.equal(Presence.allowPermission("geolocation"), false);
+
+  const missed = await Presence.readWeatherHere(null);
+  assert.equal(missed, null);
+  assert.equal(Presence.allowPermission("geolocation"), false);
+
+  const pageOpts = [];
+  const page = await Guard.readWeatherHere(
+    {
+      getCurrentPosition(ok, _err, opts) {
+        pageOpts.push(opts);
+        ok({ coords: { latitude: 1, longitude: 2 } });
+      },
+      watchPosition() {
+        watched += 1;
+      },
+    },
+    {
+      arm() {
+        log.push("page-arm");
+      },
+      clear() {
+        log.push("page-clear");
+      },
+    },
+  );
+  assert.deepEqual(page, { lat: 1, lon: 2 });
+  assert.equal(pageOpts[0].maximumAge, 0);
+  assert.equal(watched, 0);
+  assert.deepEqual(log.slice(-2), ["page-arm", "page-clear"]);
 });
 
 test("window payloads stay rects — titles and paths are dropped", () => {
@@ -190,6 +258,17 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.match(mainSrc, /setPermissionRequestHandler/);
   assert.match(mainSrc, /setPermissionCheckHandler/);
   assert.match(mainSrc, /Presence\.allowPermission/);
+  assert.match(mainSrc, /weather-locate-arm/);
+  assert.match(mainSrc, /weather-locate-clear/);
+  assert.match(mainSrc, /weatherLocateSender/);
+  assert.match(preloadSrc, /armWeatherLocate/);
+  assert.match(preloadSrc, /clearWeatherLocate/);
+  assert.match(petSrc, /readWeatherHere/);
+  assert.match(petSrc, /armWeatherLocate/);
+  assert.doesNotMatch(petSrc, /getCurrentPosition|watchPosition|maximumAge:\s*600/);
+  assert.doesNotMatch(guardSrc, /watchPosition/);
+  assert.match(guardSrc, /maximumAge: 0/);
+  assert.doesNotMatch(settingsSrc, /armWeatherLocate|getCurrentPosition|watchPosition/);
   assert.match(mainSrc, /Presence\.scrubWindows/);
   assert.match(mainSrc, /Presence\.houseFile/);
   assert.doesNotMatch(mainSrc, /clipboard|globalShortcut|desktopCapturer|getPathForFile|showOpenDialog|SetWindowsHook|uiohook|before-input-event/);
