@@ -481,7 +481,8 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.match(htmlSrc, /this find sends the station look-up\. this computer's network address goes with the https request to the radio host, as any client\./);
   const sitAt = petSrc.indexOf("function sitMusic");
   const sitBody = petSrc.slice(sitAt, petSrc.indexOf("function ruiSleepBout"));
-  assert.ok(sitBody.indexOf("streamMaySend") < sitBody.indexOf("new Audio"));
+  assert.ok(sitBody.indexOf("streamMaySend") < sitBody.indexOf("openStationStream"));
+  assert.ok(sitBody.indexOf("openStationStream") < sitBody.indexOf("new Audio"));
   const playAt = petSrc.indexOf("hudMusicPlay.addEventListener");
   const playBody = petSrc.slice(playAt, playAt + 900);
   assert.ok(playBody.indexOf("streamAsked = true") < playBody.indexOf("persistCard"));

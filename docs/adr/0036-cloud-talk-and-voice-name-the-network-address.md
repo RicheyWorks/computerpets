@@ -1,6 +1,6 @@
 # 0036. Cloud talk and cloud voice name the network address
 
-- **Status:** Accepted
+- **Status:** Accepted (the request itself waits in [0044](0044-station-stream-and-cloud-talk-wait-for-the-painted-line.md))
 - **Date:** 2026-09-22
 - **Code:** `desktop/renderer/mind.js`, `desktop/renderer/pet.js`, `desktop/renderer/index.html`, `web/src/lib/pets/talk-net.ts`, `web/src/lib/pets/talk.ts`, `web/src/components/desk/companion-room.tsx`, `web/src/routes/mind.tsx`, `client/computerpets_client/presence.py`
 
@@ -24,7 +24,7 @@ This slice shows the same network-address sentence, with the host named, before 
 
 ## Consequences
 
-- The talk host and the voice host see this computer's network address, as any client. The house does not ask them to turn that address into a city. The shared sentence still says "https request".
+- The talk host and the voice host see this computer's network address, as any client. The house does not ask them to turn that address into a city. The shared sentence still says "https request". The request leaves only inside `readTalk` or `readVoice`. A missing line does not call the host and does not say "can't reach". [0044](0044-station-stream-and-cloud-talk-wait-for-the-painted-line.md).
 - A station stream still waits for its own line. [0035](0035-station-stream-names-the-network-address.md). News, quotes, a later forecast, and a geocode look-up keep their gates.
 - Desk talk still does not post the plugin key. The overlay still calls the plugin directly.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.

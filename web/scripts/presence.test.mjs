@@ -224,13 +224,15 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.doesNotMatch(keeper.slice(radioFn, radioFn + 900), /fetch\(url,/);
   assert.match(keeper, /id="hud-radio-net"/);
   const musicEffect = keeper.slice(keeper.indexOf("const src = playSrc(music)"), keeper.indexOf("const src = sleepPlaySrc"));
-  assert.ok(musicEffect.indexOf("streamMaySend") < musicEffect.indexOf("new Audio"));
+  assert.ok(musicEffect.indexOf("streamMaySend") < musicEffect.indexOf("openStationStream"));
+  assert.ok(musicEffect.indexOf("openStationStream") < musicEffect.indexOf("new Audio"));
   assert.match(keeper, /const \[streamAsked, setStreamAsked\] = useState\(false\)/);
   assert.ok(keeper.indexOf("setStreamAsked(true)") < keeper.indexOf("writeMusic(next, ask"));
   assert.match(keeper, /id="hud-stream-net"/);
   const sitAt = pet.indexOf("function sitMusic");
   const sitBody = pet.slice(sitAt, pet.indexOf("function ruiSleepBout"));
-  assert.ok(sitBody.indexOf("streamMaySend") < sitBody.indexOf("new Audio"));
+  assert.ok(sitBody.indexOf("streamMaySend") < sitBody.indexOf("openStationStream"));
+  assert.ok(sitBody.indexOf("openStationStream") < sitBody.indexOf("new Audio"));
   const playAt = pet.indexOf("hudMusicPlay.addEventListener");
   const playBody = pet.slice(playAt, playAt + 900);
   assert.ok(playBody.indexOf("streamAsked = true") < playBody.indexOf("persistCard"));
