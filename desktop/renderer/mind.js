@@ -17,9 +17,43 @@
     { id: "custom", name: "Custom webhook", kind: "custom", base: "http://127.0.0.1:8787/mind", model: "default" },
   ];
 
+  function browserCopy(mind) {
+    const src = mind && typeof mind === "object" ? mind : {};
+    const petsIn = src.pets && typeof src.pets === "object" ? src.pets : {};
+    const pets = {};
+    Object.keys(petsIn).forEach((name) => {
+      const row = petsIn[name] && typeof petsIn[name] === "object" ? petsIn[name] : {};
+      const next = {};
+      if (typeof row.plugin === "string") next.plugin = row.plugin;
+      if (typeof row.model === "string") next.model = row.model;
+      if (typeof row.baseUrl === "string") next.baseUrl = row.baseUrl;
+      pets[name] = next;
+    });
+    const def = src.default && typeof src.default === "object" ? src.default : {};
+    const defaults = { plugin: typeof def.plugin === "string" && def.plugin ? def.plugin : "local" };
+    if (typeof def.model === "string") defaults.model = def.model;
+    if (typeof def.baseUrl === "string") defaults.baseUrl = def.baseUrl;
+    return {
+      default: defaults,
+      voice: typeof src.voice === "string" ? src.voice : "browser",
+      pets,
+    };
+  }
+
+  function scrubBrowser() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(KEY) || "null");
+      if (!raw || typeof raw !== "object") return;
+      localStorage.setItem(KEY, JSON.stringify(browserCopy(raw)));
+    } catch {
+      /* ignore */
+    }
+  }
+
   function load() {
     if (window.desk?.mindGet) {
       try {
+        scrubBrowser();
         return window.desk.mindGet() || { default: { plugin: "local" }, voice: "browser", pets: {} };
       } catch {
         /* fall through */
@@ -34,12 +68,23 @@
   }
 
   function save(next) {
-    if (window.desk?.mindSet) window.desk.mindSet(next);
+    if (window.desk?.mindSet) {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(browserCopy(next)));
+      } catch {
+        /* ignore */
+      }
+      return Promise.resolve(window.desk.mindSet(next)).then(
+        (result) => (result && typeof result === "object" ? result : { kept: "os" }),
+        () => ({ kept: "none" }),
+      );
+    }
     try {
       localStorage.setItem(KEY, JSON.stringify(next));
     } catch {
       /* ignore */
     }
+    return Promise.resolve({ kept: "browser" });
   }
 
   function safeUrl(raw, id) {

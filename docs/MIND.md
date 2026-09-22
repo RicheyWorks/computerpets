@@ -50,7 +50,7 @@ The keeper card names the plugin that will actually be asked.
 
 | Door | Line |
 |---|---|
-| Overlay | `Listening · House lines` unless the keeper saved a key for a cloud plugin, or chose Ollama, LM Studio, or a custom webhook with a safe URL. The key stays in `mind.json`. It is not on the card. |
+| Overlay | `Listening · House lines` unless the keeper saved a key for a cloud plugin, or chose Ollama, LM Studio, or a custom webhook with a safe URL. The key is sealed in the OS secret store when that store exists, and is not written in plain text in `mind.json`. It is not on the card. If this computer has no secret store, the key is not written to disk. |
 | Desk, `/demo`, Live, Meet | Guests are House lines, even when `/mind` still shows a cloud default. A signed-in keeper sees a cloud name only when that house env key exists. The card says `Listening · unread` until the read returns. The browser does not send the key. |
 | Blotter | House lines. There is no plugin bus on the blotter. |
 
@@ -58,4 +58,4 @@ An unknown plugin, a missing key, or an unsafe URL stays House lines. The line n
 
 ## Desktop
 
-Tray → **Minds**. Same roster of plugins. The overlay calls the chosen mind directly (CSP allows `https:` and localhost).
+Tray → **Minds**. Same roster of plugins. The overlay calls the chosen mind directly (CSP allows `https:` and localhost). The plugin key is sealed with Electron `safeStorage` when the OS secret store is available. `mind.json` keeps the prefs and the seal, not the plain key.

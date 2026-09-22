@@ -6,6 +6,7 @@ const path = require("path");
  * Presence files that may live under the overlay userData directory.
  * Not the keeper's Desktop, Documents, or any other host path.
  * License hwid is a separate door and is not on this list.
+ * mind.json may hold mind prefs. A plugin key is not stored there in plain text.
  */
 const HOUSE_FILES = Object.freeze(["card.json", "mind.json"]);
 
