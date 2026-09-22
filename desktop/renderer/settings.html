@@ -182,13 +182,18 @@
         const bundle = bundleOf(status);
         if (!url || !bundle || bundle.held !== true) return status;
         const line = shownBundleLine();
-        if (!window.LicenseNet || !window.LicenseNet.bundleMayFetch(url, line)) {
+        const Net = window.LicenseNet;
+        if (!Net) return status;
+        const fetched = await Net.getSignedBundle(line, url, function () {
+          if (!window.desk?.licenseFetchBundle) return null;
+          return window.desk.licenseFetchBundle({ cdnLine: line });
+        });
+        if (fetched && fetched.held === true) {
           licenseErr.textContent = "the signed bundle was not fetched. name the host before it leaves.";
           return status;
         }
-        if (!window.desk?.licenseFetchBundle) return status;
-        const fetched = await window.desk.licenseFetchBundle({ cdnLine: line });
-        if (fetched && fetched.ok === false) {
+        if (!fetched) return status;
+        if (fetched.ok === false) {
           licenseErr.textContent = fetched.error ? fetched.error.message : "the signed bundle was not fetched.";
         }
         return fetched || status;
@@ -204,35 +209,44 @@
         const line = shownLicenseLine();
         const url = which === "download" ? downloadTarget() : unlockTarget();
         const unboundDownload = which === "download" && licenseUnbound;
-        if (unboundDownload) {
-          if (!window.LicenseNet || !window.LicenseNet.downloadMayPost(url, line)) {
-            licenseErr.textContent = "this download was not sent. name the host before it leaves.";
-            licenseOk.textContent = "Locked. Pets on the desk still work.";
-            return null;
-          }
-        } else if (!window.LicenseNet || !window.LicenseNet.licenseMaySend(url, line)) {
-          licenseErr.textContent = "the license hash was not sent. name the host before it leaves.";
+        const cdnLine = shownBundleLine();
+        const Net = window.LicenseNet;
+        if (!Net) return null;
+        const sent = unboundDownload
+          ? await Net.postUnboundDownload(line, url, function () {
+              if (!window.desk?.licenseDownload) return { desk: false };
+              return window.desk.licenseDownload({
+                allowWeakFallback: !!(extra && extra.allowWeakFallback === true),
+                licenseLine: line,
+                cdnLine,
+              });
+            })
+          : await Net.postLicenseHash(line, url, function () {
+              if (which === "download") {
+                if (!window.desk?.licenseDownload) return { desk: false };
+                return window.desk.licenseDownload({
+                  allowWeakFallback: !!(extra && extra.allowWeakFallback === true),
+                  licenseLine: line,
+                  cdnLine,
+                });
+              }
+              if (!window.desk?.licenseUnlock) {
+                licenseErr.textContent = "Unlock is only available in the desktop app.";
+                return { desk: false };
+              }
+              licenseErr.textContent = "";
+              licenseOk.textContent = "Talking to the backend…";
+              return window.desk.licenseUnlock({ ...licenseFields(), ...(extra || {}), licenseLine: line, cdnLine });
+            });
+        if (sent && sent.held === true) {
+          licenseErr.textContent = unboundDownload
+            ? "this download was not sent. name the host before it leaves."
+            : "the license hash was not sent. name the host before it leaves.";
           licenseOk.textContent = "Locked. Pets on the desk still work.";
           return null;
         }
-        const cdnLine = shownBundleLine();
-        if (which === "download") {
-          if (!window.desk?.licenseDownload) return null;
-          const status = await window.desk.licenseDownload({
-            allowWeakFallback: !!(extra && extra.allowWeakFallback === true),
-            licenseLine: line,
-            cdnLine,
-          });
-          return finishBundle(status);
-        }
-        if (!window.desk?.licenseUnlock) {
-          licenseErr.textContent = "Unlock is only available in the desktop app.";
-          return null;
-        }
-        licenseErr.textContent = "";
-        licenseOk.textContent = "Talking to the backend…";
-        const status = await window.desk.licenseUnlock({ ...licenseFields(), ...(extra || {}), licenseLine: line, cdnLine });
-        return finishBundle(status);
+        if (!sent || sent.desk === false) return null;
+        return finishBundle(sent);
       }
 
       function fillPetTypes(rows) {

@@ -25,13 +25,13 @@ from .license.license_net import (
     BUNDLE_LOCAL,
     DOWNLOAD_LOCAL,
     bundle_honesty,
-    bundle_may_fetch,
-    download_may_post,
     download_talk_honesty,
+    get_signed_bundle,
     LOCAL_STAYS,
     license_honesty,
     license_host_name,
-    license_may_send,
+    post_license_hash,
+    post_unbound_download,
 )
 from .species import CATALOG_KEYS, SPECIES
 
@@ -224,35 +224,33 @@ class UnlockDialog(QDialog):
             return
         self.bundle.setText(bundle_honesty(download_url) or BUNDLE_LOCAL)
 
+    def _named_hold(self, err: LicenseError) -> bool:
+        if err.code == "license_net_unnamed":
+            self.ok.setText("Locked. The pet on the blotter still works.")
+            self.err.setText("the license hash was not sent. name the host before it leaves.")
+            return True
+        if err.code == "download_net_unnamed":
+            self.ok.setText("Locked. The pet on the blotter still works.")
+            self.err.setText("this download was not sent. name the host before it leaves.")
+            return True
+        if err.code == "cdn_net_unnamed":
+            self.err.setText("the signed bundle was not fetched. name the host before it leaves.")
+            return True
+        return False
+
     def _fetch_if_held(self, status: dict[str, Any]) -> None:
         url = self._bundle_url(status)
         self._paint_bundle(url)
         bundle = self._bundle_body(status)
         if not url or bundle.get("held") is not True:
             return
-        if not bundle_may_fetch(url, self._shown_bundle_line()):
-            self.err.setText("the signed bundle was not fetched. name the host before it leaves.")
-            return
+        line = self._shown_bundle_line()
         try:
-            self.session["fetch_signed"]({"cdnLine": self._shown_bundle_line()})
+            get_signed_bundle(line, url, lambda: self.session["fetch_signed"]({"cdnLine": line}), True)
         except LicenseError as err:
+            if self._named_hold(err):
+                return
             self.err.setText(f"{err.code}: {err}")
-
-    def _hash_may_leave(self, url: str) -> bool:
-        self._paint_net()
-        if license_may_send(url, self._shown_line()):
-            return True
-        self.ok.setText("Locked. The pet on the blotter still works.")
-        self.err.setText("the license hash was not sent. name the host before it leaves.")
-        return False
-
-    def _download_may_leave(self, url: str) -> bool:
-        self._paint_net()
-        if download_may_post(url, self._shown_line()):
-            return True
-        self.ok.setText("Locked. The pet on the blotter still works.")
-        self.err.setText("this download was not sent. name the host before it leaves.")
-        return False
 
     def _paint_status(self, status: dict[str, Any]) -> None:
         self._license_unbound = _license_is_unbound(status)
@@ -296,9 +294,7 @@ class UnlockDialog(QDialog):
         )
         return answer == QMessageBox.StandardButton.Yes
 
-    def _unlock(self, allow_weak: bool = False) -> None:
-        if not self._hash_may_leave(self._unlock_target()):
-            return
+    def _begin_unlock(self, allow_weak: bool) -> bool:
         self._unlock_allowed_weak = allow_weak
         self.err.setText("")
         self.ok.setText("Talking to the backend…")
@@ -321,6 +317,16 @@ class UnlockDialog(QDialog):
         self._worker.finished.connect(self._thread.quit)
         self._worker.failed.connect(self._thread.quit)
         self._thread.start()
+        return True
+
+    def _unlock(self, allow_weak: bool = False) -> None:
+        self._paint_net()
+        try:
+            post_license_hash(self._shown_line(), self._unlock_target(), lambda: self._begin_unlock(allow_weak))
+        except LicenseError as err:
+            if self._named_hold(err):
+                return
+            raise
 
     def _on_ok(self, status: object) -> None:
         if isinstance(status, dict):
@@ -331,6 +337,8 @@ class UnlockDialog(QDialog):
     def _on_fail(self, err: object) -> None:
         message = str(err)
         code = getattr(err, "code", "denied")
+        if isinstance(err, LicenseError) and self._named_hold(err):
+            return
         self.ok.setText("Locked. The pet on the blotter still works.")
         self.err.setText(f"{code}: {message}")
         if code == "hwid_needs_fallback_yes" and not self._unlock_allowed_weak:
@@ -340,28 +348,34 @@ class UnlockDialog(QDialog):
         QMessageBox.warning(self, "Unlock failed", f"{code}: {message}")
 
     def _download(self, allow_weak: bool = False) -> None:
-        if self._license_unbound:
-            if not self._download_may_leave(self._download_target()):
-                return
-        elif not self._hash_may_leave(self._download_target()):
-            return
-        try:
-            downloaded = self.session["download"](
+        self._paint_net()
+        line = self._shown_line()
+        url = self._download_target()
+
+        def go() -> Any:
+            return self.session["download"](
                 {
                     "allowWeakFallback": True if allow_weak else False,
-                    "licenseLine": self._shown_line(),
+                    "licenseLine": line,
                     "cdnLine": self._shown_bundle_line(),
                 }
             )
-            if isinstance(downloaded, dict):
-                self._fetch_if_held({"download": downloaded})
-            self._paint_status(self.session["status"]())
+
+        try:
+            poster = post_unbound_download if self._license_unbound else post_license_hash
+            downloaded = poster(line, url, go)
         except LicenseError as err:
+            if self._named_hold(err):
+                return
             self.err.setText(f"{err.code}: {err}")
             if err.code == "hwid_needs_fallback_yes" and not allow_weak and self._ask_weak(str(err)):
                 self._download(allow_weak=True)
                 return
             QMessageBox.warning(self, "Download failed", f"{err.code}: {err}")
+            return
+        if isinstance(downloaded, dict):
+            self._fetch_if_held({"download": downloaded})
+        self._paint_status(self.session["status"]())
 
     def _clear(self) -> None:
         self._paint_status(self.session["clear"]())
