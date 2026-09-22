@@ -130,6 +130,22 @@ test("a pasted key query on the saved listener base URL is not in the posted bod
   });
   assert.equal(clean.baseUrl, "https://api.x.ai/v1?alt=sse#room");
   assert.equal(clean.plugin, "xai");
+
+  const token = "sk-test-PASTEDKEY0123456789";
+  const userinfo = post.listenerReadBody({
+    plugin: "openai",
+    baseUrl: `https://user:${token}@api.example.test/v1/key/${token}?alt=sse`,
+  });
+  assert.equal(JSON.stringify(userinfo).includes(token), false);
+  assert.equal(userinfo.baseUrl, "https://api.example.test/v1?alt=sse");
+  const loose = post.listenerReadBody({ plugin: "custom", baseUrl: `not a url?api_key=${token}` });
+  assert.equal(JSON.stringify(loose).includes(token), false);
+  assert.equal(loose.baseUrl, "not a url");
+  const modelPath = post.listenerReadBody({
+    plugin: "google",
+    baseUrl: "https://generativelanguage.googleapis.com/v1beta",
+  });
+  assert.equal(modelPath.baseUrl, "https://generativelanguage.googleapis.com/v1beta");
 });
 
 test("a pasted key query that still arrives is dropped before the house keeps the listener body", () => {

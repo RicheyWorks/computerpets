@@ -8,7 +8,7 @@ import { parseListenerRead } from "./listener-post";
  * Who the desk will actually ask. Guests are House lines.
  * A signed-in cloud name requires the house env key. The key is not returned.
  * `apiKey` is rejected by the validator.
- * A pasted secret query on `baseUrl` is dropped before the house keeps the body.
+ * A pasted secret on `baseUrl` is dropped before the house keeps the body.
  */
 export const readMindListener = createServerFn({ method: "POST" })
   .middleware([optionalAuthMiddleware])

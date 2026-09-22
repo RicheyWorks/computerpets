@@ -242,6 +242,38 @@ test("a pasted key query on the base URL is not in the posted talk body", () => 
   });
   assert.equal(clean.mind.baseUrl, "https://api.x.ai/v1?alt=sse#room");
   assert.equal(clean.mind.model, "grok-4.5");
+
+  const token = "sk-test-PASTEDKEY0123456789";
+  const userinfo = P.talkBody({
+    hunger: 1,
+    mood: 2,
+    energy: 3,
+    name: "Rui",
+    species: "red_panda",
+    mind: { plugin: "openai", baseUrl: `https://user:${token}@api.example.test/v1/key/${token}` },
+  });
+  assert.equal(JSON.stringify(userinfo).includes(token), false);
+  assert.equal(userinfo.mind.baseUrl, "https://api.example.test/v1");
+  const loose = P.talkBody({
+    hunger: 1,
+    mood: 2,
+    energy: 3,
+    name: "Rui",
+    species: "red_panda",
+    mind: { plugin: "custom", baseUrl: `not a url?key=${token}&alt=sse` },
+  });
+  assert.equal(JSON.stringify(loose).includes(token), false);
+  assert.equal(loose.mind.baseUrl, "not a url?alt=sse");
+  const modelPath = P.talkBody({
+    hunger: 1,
+    mood: 2,
+    energy: 3,
+    name: "Rui",
+    species: "red_panda",
+    mind: { plugin: "google", model: "gemini-2.5-flash", baseUrl: "https://example.test/v1beta/models/gemini-2.5-flash" },
+  });
+  assert.equal(modelPath.mind.baseUrl, "https://example.test/v1beta/models/gemini-2.5-flash");
+  assert.equal(modelPath.mind.model, "gemini-2.5-flash");
 });
 
 test("a pasted key query that still arrives is dropped before the house keeps the talk body", () => {
