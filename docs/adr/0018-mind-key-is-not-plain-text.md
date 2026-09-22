@@ -30,7 +30,7 @@ This slice takes the plugin key out of plain text in `mind.json`. It does not st
 
 - License `hwid` still reads machine-id or MachineGuid. That read is hashed locally and the raw id is not a new telemetry field. Existing `hwid.txt` values are left alone. That door is not this one.
 - The desk `/mind` key is not stored in the browser. [0020](0020-desk-mind-key-is-not-in-the-browser.md). That store is not `mind.json`.
-- A pasted secret query on a base URL is dropped when `mind.json` is saved and when it is read. That rewrite keeps the same seal. [0026](0026-mind-json-drops-a-pasted-key-query.md).
+- A pasted secret query on a base URL is dropped when `mind.json` is saved and when it is read. That rewrite keeps the same seal. [0026](0026-mind-json-drops-a-pasted-key-query.md). Userinfo, a path key, and a non-URL `key=` assignment are dropped by the same scrub. [0027](0027-base-url-drops-userinfo-and-a-path-key.md).
 - If this computer has no secret store, a key that used to be in `mind.json` is removed from the file and is not there after quit.
 - The overlay process still holds the key in memory while it is calling the plugin. That is not a copy on disk and not a line on the card.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.

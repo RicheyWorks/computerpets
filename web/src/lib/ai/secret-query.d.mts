@@ -2,11 +2,12 @@ export const SECRET_QUERY_NAMES: ReadonlySet<string>;
 
 export function isSecretQueryName(name: string): boolean;
 
-/** Drop a pasted `key` / `api_key` (and the same kind of secret) from a URL. */
+/** Drop userinfo, a pasted key path, and a pasted `key` / `api_key` query from a URL. */
 export function stripSecretQuery(url: URL): void;
 
 /**
- * Same drop, on a base URL string the desk is about to post.
- * A URL with no secret query is returned as typed. A string that is not a URL is left as typed.
+ * Same drop, on a base URL string the desk is about to store or post.
+ * A URL with nothing to drop is returned as typed.
+ * A non-URL loses `key=` / `api_key=` (and the same secret-name family) and is otherwise left as typed.
  */
 export function scrubSecretQueryString(raw: string): string;
