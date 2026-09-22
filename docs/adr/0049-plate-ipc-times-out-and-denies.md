@@ -24,5 +24,5 @@ An overlay news, quote, or radio read from main gives up after twelve seconds. T
 
 - The overlay plate no longer waits forever on those IPC reads. "can't reach" means the host did not answer. It does not mean the search found nothing.
 - Desk and `/demo` news, quote, and radio page wrappers time out. [0051](0051-news-quote-radio-page-times-out-and-denies.md). Cloud talk and cloud voice page wrappers time out. [0052](0052-cloud-talk-and-voice-page-times-out-and-denies.md). Weather forecast and geocode page wrappers time out. [0050](0050-weather-page-times-out-and-denies.md).
-- Steam's RestClient times out. [0052](0052-cloud-talk-and-voice-page-times-out-and-denies.md). Microsoft and NFT already time out. Resilience4j still has no time limiter. Those stay Phase 2.
+- Steam's RestClient times out. [0052](0052-cloud-talk-and-voice-page-times-out-and-denies.md). Itch and Epic RestClients time out. [0053](0053-itch-and-epic-restclient-times-out-and-denies.md). Microsoft and NFT already time out. Resilience4j still has no time limiter. Those stay Phase 2.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.

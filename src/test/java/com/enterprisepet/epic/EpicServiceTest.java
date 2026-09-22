@@ -455,6 +455,12 @@ class EpicServiceTest {
         assertThat(result.reason()).isEqualTo("Epic Games Store ownership not found");
     }
 
+    @Test
+    @DisplayName("Epic RestClient uses a ten-second connect and read deadline")
+    void epicTimeoutMatchesSteam() {
+        assertThat(EpicService.EPIC_TIMEOUT).isEqualTo(java.time.Duration.ofSeconds(10));
+    }
+
     private void expectTokenThenOwnership(String ownershipJson) {
         expectToken();
         mockServer.expect(requestTo(org.hamcrest.Matchers.containsString("/ownership")))
