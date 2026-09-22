@@ -7,8 +7,9 @@ import time
 HOUSE_FILES = ("card.json", "mind.json")
 
 # Geolocation is not a standing grant. It opens only for one weather locate,
-# then closes. The blotter does not read machine location; weather is the
-# civil-day clock. There is no watcher and no silent re-query.
+# then closes. The blotter does not read machine location and does not ask
+# an IP place service. Weather is the civil-day clock. There is no watcher
+# and no silent re-query.
 WEATHER_LOCATE_MS = 120_000
 _weather_locate_until = 0
 
@@ -50,6 +51,11 @@ def allow_permission(permission: str, now: int = 0) -> bool:
 def read_weather_here() -> None:
     """The blotter does not read the machine location."""
     clear_weather_locate()
+    return None
+
+
+def ip_place(*_ignored: object) -> None:
+    """No IP place service. A consent flag does not open one."""
     return None
 
 

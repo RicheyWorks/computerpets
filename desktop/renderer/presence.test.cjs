@@ -12,6 +12,7 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const settingsSrc = readFileSync(join(__dirname, "settings.html"), "utf8");
 const enumSrc = readFileSync(join(__dirname, "..", "windows-enum.cjs"), "utf8");
 const guardSrc = readFileSync(join(__dirname, "presence.js"), "utf8");
+const areasSrc = readFileSync(join(__dirname, "weather-areas.js"), "utf8");
 const webSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "presence.ts"), "utf8");
 const roomSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "companion-room.tsx"), "utf8");
 const pySrc = readFileSync(join(__dirname, "..", "..", "client", "computerpets_client", "presence.py"), "utf8");
@@ -80,6 +81,10 @@ test("a weather read asks once, then the grant closes, and it does not watch", a
   assert.equal(seen[0].enableHighAccuracy, false);
   assert.equal(watched, 0);
   assert.equal(Presence.allowPermission("geolocation"), false);
+  assert.equal(Presence.ipPlace(), null);
+  assert.equal(Presence.ipPlace(true), null);
+  assert.equal(Guard.ipPlace(), null);
+  assert.equal(Guard.ipPlace(true), null);
 
   const missed = await Presence.readWeatherHere(null);
   assert.equal(missed, null);
@@ -265,7 +270,12 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.match(preloadSrc, /clearWeatherLocate/);
   assert.match(petSrc, /readWeatherHere/);
   assert.match(petSrc, /armWeatherLocate/);
+  assert.match(petSrc, /ipPlace\(/);
   assert.doesNotMatch(petSrc, /getCurrentPosition|watchPosition|maximumAge:\s*600/);
+  assert.doesNotMatch(petSrc, /ipwho\.is|ip-api\.com|ipinfo\.io|ipapi\.co|ipPlaceUrl|parseIpPlace/);
+  assert.doesNotMatch(areasSrc, /ipwho\.is|ip-api\.com|ipinfo\.io|ipapi\.co|ipPlaceUrl|parseIpPlace/);
+  assert.doesNotMatch(guardSrc, /ipwho\.is|ip-api\.com|ipinfo\.io|fetch\(/);
+  assert.match(guardSrc, /function ipPlace/);
   assert.doesNotMatch(guardSrc, /watchPosition/);
   assert.match(guardSrc, /maximumAge: 0/);
   assert.doesNotMatch(settingsSrc, /armWeatherLocate|getCurrentPosition|watchPosition/);
@@ -284,11 +294,16 @@ test("desk, demo, and blotter share the same refusal", () => {
   assert.match(webSrc, /mind\.json/);
   assert.match(webSrc, /return false/);
   assert.match(webSrc, /geolocation/);
+  assert.match(webSrc, /function ipPlace/);
+  assert.doesNotMatch(webSrc, /ipwho\.is|ip-api\.com|ipinfo\.io|fetch\(/);
   assert.match(webSrc, /installFileDropGuard/);
   assert.match(roomSrc, /installFileDropGuard/);
   assert.match(pySrc, /card\.json/);
   assert.match(pySrc, /def allow_navigation/);
+  assert.match(pySrc, /def ip_place/);
   assert.match(pySrc, /return False/);
+  assert.doesNotMatch(pySrc, /ipwho|ip-api|ipinfo|urllib|requests/);
+  assert.match(appSrc, /ip_place\(/);
   assert.match(appSrc, /seal_widget/);
   assert.match(appSrc, /def dragEnterEvent/);
   assert.match(appSrc, /def dropEvent/);

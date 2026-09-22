@@ -38,6 +38,7 @@ from .presence import (
     classify_key,
     clear_weather_locate,
     host_path_label,
+    ip_place,
     list_host_folder,
     read_weather_here,
     record_keystroke,
@@ -1014,6 +1015,9 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         if read_weather_here() is not None or allow_permission("geolocation", 1_000):
             print("check failed: blotter read a machine location", file=sys.stderr)
+            return 1
+        if ip_place() is not None or ip_place(True) is not None:
+            print("check failed: blotter asked an IP place", file=sys.stderr)
             return 1
         arm_weather_locate(1_000)
         if not allow_permission("geolocation", 1_000):

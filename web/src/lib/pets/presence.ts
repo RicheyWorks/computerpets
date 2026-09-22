@@ -91,6 +91,23 @@ function requestWeatherFix(geo: GeoLike | undefined, opts: ReturnType<typeof wea
   });
 }
 
+export type IpPlace = {
+  id: string;
+  name: string;
+  query: string;
+  lat: number;
+  lon: number;
+};
+
+/**
+ * IP place is not a location grant. There is no keeper control that asks
+ * to use the network's city, so this returns nothing. A consent argument
+ * does not open a lookup. Callers must not fetch a network city.
+ */
+export function ipPlace(..._ignored: unknown[]): IpPlace | null {
+  return null;
+}
+
 /** One weather-button fix. Arms geolocation, asks once, then clears. Does not watch. */
 export function readWeatherHere(
   geo?: GeoLike,
