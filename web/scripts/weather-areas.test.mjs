@@ -423,3 +423,77 @@ test("forecast and geocode refuse a fetch until the painted host line is present
   assert.match(String(reversedOver.url), /\/v1\/reverse/);
   assert.equal(calls, 6);
 });
+
+test("forecast and geocode time out and deny a silent host", async () => {
+  assert.equal(A.WEATHER_TIMEOUT_MS, 12_000);
+  assert.equal(Overlay.WEATHER_TIMEOUT_MS, 12_000);
+  assert.equal(A.WeatherTimeout.name, "WeatherTimeout");
+  assert.equal(Overlay.WeatherTimeout.name, "WeatherTimeout");
+  const typed = A.TYPED_FORECAST;
+  const look = A.GEOCODE_LOOK;
+  const reverse = A.GEOCODE_REVERSE;
+  const forecast = A.forecastUrl(47.6, -122.3);
+  const geo = A.geocodeUrl("Oslo");
+  const rev = A.reverseUrl(47.6, -122.3);
+  const hang = () => new Promise(() => {});
+  const calls = [];
+  await assert.rejects(
+    () => A.readForecast(typed, forecast, (url) => (calls.push(url), hang()), 30),
+    (err) => err instanceof A.WeatherTimeout && err.name === "WeatherTimeout",
+  );
+  await assert.rejects(
+    () => Overlay.readForecast(typed, forecast, (url) => (calls.push(url), hang()), 30),
+    (err) => err instanceof Overlay.WeatherTimeout && err.name === "WeatherTimeout",
+  );
+  await assert.rejects(
+    () => A.readGeocode(look, geo, () => hang(), 30),
+    (err) => err instanceof A.WeatherTimeout,
+  );
+  await assert.rejects(
+    () => Overlay.readGeocode(look, geo, () => hang(), 30),
+    (err) => err instanceof Overlay.WeatherTimeout,
+  );
+  await assert.rejects(
+    () => A.readReverse(reverse, rev, () => hang(), 30),
+    (err) => err instanceof A.WeatherTimeout,
+  );
+  await assert.rejects(
+    () => Overlay.readReverse(reverse, rev, () => hang(), 30),
+    (err) => err instanceof Overlay.WeatherTimeout,
+  );
+  assert.deepEqual(calls, [forecast, forecast]);
+
+  let fulfilled = null;
+  const late = A.readForecast(
+    typed,
+    forecast,
+    () =>
+      new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            json: async () => ({ current: { temperature_2m: 99, weather_code: 0, wind_speed_10m: 1 } }),
+          });
+        }, 80);
+      }),
+    20,
+  ).then(
+    (body) => {
+      fulfilled = body;
+      return body;
+    },
+    (err) => {
+      fulfilled = err;
+      throw err;
+    },
+  );
+  await assert.rejects(() => late, (err) => err instanceof A.WeatherTimeout);
+  await new Promise((r) => setTimeout(r, 120));
+  assert.ok(fulfilled instanceof A.WeatherTimeout);
+  assert.equal(fulfilled.name, "WeatherTimeout");
+
+  const answered = await A.readForecast(typed, forecast, async () => ({
+    json: async () => ({ current: { temperature_2m: 3, weather_code: 0, wind_speed_10m: 2 } }),
+  }), 200);
+  assert.equal(answered.current.temperature_2m, 3);
+  assert.equal(A.parseForecast(answered).tempC, 3);
+});
