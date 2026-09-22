@@ -44,6 +44,8 @@ export const talkBodySchema = z.preprocess(
     speak: z.boolean().optional(),
     mind: houseMind.optional(),
     voice: z.enum(["browser", "xai", "openai", "none"]).optional(),
+    talkLine: z.string().max(400).optional(),
+    voiceLine: z.string().max(400).optional(),
   }),
 );
 
@@ -80,6 +82,8 @@ export type TalkPostInput = {
   speak?: boolean;
   mind?: MindBinding | null;
   voice?: VoiceKind;
+  talkLine?: string;
+  voiceLine?: string;
 };
 
 /**
@@ -100,5 +104,7 @@ export function talkBody(input: TalkPostInput) {
     ...(input.speak !== undefined ? { speak: input.speak } : {}),
     mind: mindForHouse(input.mind),
     ...(input.voice !== undefined ? { voice: input.voice } : {}),
+    ...(input.talkLine ? { talkLine: input.talkLine } : {}),
+    ...(input.voiceLine ? { voiceLine: input.voiceLine } : {}),
   };
 }

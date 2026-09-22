@@ -480,6 +480,13 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.doesNotMatch(bootBody, /streamAsked = true/);
   assert.match(htmlSrc, /id="hud-stream-net"/);
   assert.match(petSrc, /let streamAsked = false/);
+  assert.match(petSrc, /let talkAsked = false/);
+  assert.match(htmlSrc, /id="hud-talk-net"/);
+  const talkAt = petSrc.indexOf('if (cmd === "talk")');
+  const talkBody = petSrc.slice(talkAt, talkAt + 500);
+  assert.ok(talkBody.indexOf("talkHonesty") < talkBody.indexOf("askMind"));
+  assert.doesNotMatch(bootBody, /talkAsked = true/);
+  assert.doesNotMatch(bootBody, /askMind\(/);
   const refreshAt = petSrc.lastIndexOf("fetchNews();\n  fetchMarket();");
   assert.doesNotMatch(petSrc.slice(refreshAt - 180, refreshAt + 40), /popularRssUrl|geckoManyUrl|newsUrl\(/);
 });

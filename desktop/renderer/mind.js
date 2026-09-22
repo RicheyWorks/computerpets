@@ -450,6 +450,55 @@
     }`;
   }
 
+  const TALK_HOST_NAME = "the talk host";
+
+  function weatherNet(host) {
+    const root = typeof window !== "undefined" ? window : globalThis;
+    const areas = root.PetWeatherAreas;
+    if (!areas || typeof areas.clientNetLine !== "function") return "";
+    return areas.clientNetLine(host);
+  }
+
+  function talkHostName(raw) {
+    try {
+      return new URL(String(raw || "")).hostname.replace(/^\[|\]$/g, "") || "";
+    } catch (err) {
+      return "";
+    }
+  }
+
+  function isLoopbackHost(host) {
+    const name = String(host || "").toLowerCase();
+    return name === "127.0.0.1" || name === "localhost" || name === "::1";
+  }
+
+  function talkTarget(bind) {
+    const row = bind && typeof bind === "object" ? bind : {};
+    const p = preset(row.plugin);
+    if (!p || p.kind === "local") return null;
+    const base = safeUrl(row.baseUrl || p.base || "", p.id);
+    if (!base) return null;
+    const host = talkHostName(base);
+    return { local: isLoopbackHost(host), label: host || TALK_HOST_NAME };
+  }
+
+  function talkHonesty(bind) {
+    const target = talkTarget(bind);
+    if (!target || target.local) return "";
+    const net = weatherNet(target.label);
+    if (!net) return "";
+    return `this talk sends the keeper line. ${net}`;
+  }
+
+  function talkMaySend(bind, lineInView) {
+    const target = talkTarget(bind);
+    if (!target || target.local) return true;
+    const net = weatherNet(target.label);
+    const line = talkHonesty(bind);
+    if (!net || !line || lineInView !== true) return false;
+    return line.indexOf(net) !== -1;
+  }
+
   async function run(ctx) {
     const bind = binding(ctx.species);
     const p = preset(bind.plugin);
@@ -457,6 +506,7 @@
     const model = sanitizeModel(bind.model, p.model);
     const key = bind.apiKey || "";
     if (p.kind === "local") return { text: ctx.fallback, source: "local" };
+    if (!talkMaySend(bind, !!(ctx && ctx.lineInView === true))) return { text: ctx.fallback, source: "local" };
     if (!base && p.kind !== "local") return { text: ctx.fallback, source: "local" };
     try {
       if (p.kind === "openai") {
@@ -549,5 +599,17 @@
     return { text: ctx.fallback, source: "local" };
   }
 
-  window.PetMind = { PRESETS, load, save, preset, binding, run };
+  window.PetMind = {
+    PRESETS,
+    load,
+    save,
+    preset,
+    binding,
+    run,
+    TALK_HOST_NAME,
+    talkHostName,
+    talkTarget,
+    talkHonesty,
+    talkMaySend,
+  };
 })();
