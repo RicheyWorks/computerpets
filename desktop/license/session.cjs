@@ -6,6 +6,7 @@ const { LicenseError } = require("./errors.cjs");
 const { decryptLicense } = require("./decrypt.cjs");
 const { resolveHwidDetail, peekHwid, assertHwid } = require("./hwid.cjs");
 const { createLicenseClient, normalizeBackendUrl } = require("./client.cjs");
+const { licenseHostName, licenseMaySend } = require("./license-net.cjs");
 
 const STORE_NAME = "license.json";
 const DEFAULT_BACKEND = "http://127.0.0.1:8081";
@@ -31,6 +32,19 @@ function defaultBackendUrl(env) {
 
 function licenseSecret(env) {
   return env.LICENSE_SECRET_KEY || env.COMPUTERPETS_LICENSE_SECRET_KEY || "";
+}
+
+function shownLicenseLine(input) {
+  return input && typeof input.licenseLine === "string" ? input.licenseLine : "";
+}
+
+function assertHashNamed(backendUrl, shown) {
+  if (licenseMaySend(backendUrl, shown)) return;
+  const host = licenseHostName(backendUrl) || "the license host";
+  throw new LicenseError(
+    "license_net_unnamed",
+    `the license hash was not sent to ${host}. name that host before it leaves.`
+  );
 }
 
 /**
@@ -147,6 +161,7 @@ function createLicenseSession(opts) {
   async function unlock(input = {}) {
     const store = load();
     const backendUrl = normalizeBackendUrl(input.backendUrl || store.backendUrl || defaultBackendUrl(env));
+    assertHashNamed(backendUrl, shownLicenseLine(input));
     const provider = typeof input.provider === "string" && input.provider ? input.provider : "steam";
     const deviceId = deviceMark(true, input.allowWeakFallback === true).id;
     const secret = licenseSecret(env);
@@ -195,17 +210,18 @@ function createLicenseSession(opts) {
     };
     save(next);
 
-    const downloaded = await requestDownload(next, payload, deviceId, secret);
+    const downloaded = await requestDownload(next, payload, deviceId, secret, input.allowWeakFallback === true, shownLicenseLine(input));
     return { ...publicStatus(), download: downloaded };
   }
 
-  async function requestDownload(storeArg, payloadArg, deviceIdArg, secretArg, allowWeakFallback) {
+  async function requestDownload(storeArg, payloadArg, deviceIdArg, secretArg, allowWeakFallback, shownLine) {
     const store = storeArg || load();
     const secret = secretArg || licenseSecret(env);
     const payload = payloadArg || decryptLicense(store.license.ciphertext, store.license.iv, secret, { now });
     const bound = Boolean(payload.hwid);
-    const deviceId = deviceIdArg || (bound ? deviceMark(true, allowWeakFallback === true).id : "");
     const backendUrl = normalizeBackendUrl(store.backendUrl || defaultBackendUrl(env));
+    if (bound) assertHashNamed(backendUrl, typeof shownLine === "string" ? shownLine : "");
+    const deviceId = deviceIdArg || (bound ? deviceMark(true, allowWeakFallback === true).id : "");
 
     if (bound && payload.hwid !== deviceId) {
       throw new LicenseError("hwid_mismatch", "hardware binding mismatch");
@@ -248,7 +264,7 @@ function createLicenseSession(opts) {
 
   async function download(input = {}) {
     const allow = input && input.allowWeakFallback === true;
-    return requestDownload(null, null, null, null, allow);
+    return requestDownload(null, null, null, null, allow, shownLicenseLine(input));
   }
 
   function clear() {

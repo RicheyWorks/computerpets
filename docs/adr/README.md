@@ -55,6 +55,7 @@ address, or an API that is not on `main`.
 | [0034](0034-news-quotes-and-radio-name-the-network-address.md) | News, quotes, and Radio Find name the network address | Accepted |
 | [0035](0035-station-stream-names-the-network-address.md) | A station stream names the network address when Play is pressed | Accepted |
 | [0036](0036-cloud-talk-and-voice-name-the-network-address.md) | Cloud talk and cloud voice name the network address | Accepted |
+| [0037](0037-license-hash-names-the-network-address.md) | Unlock names the host before the license hash leaves | Accepted |
 
 ## How to add one
 
