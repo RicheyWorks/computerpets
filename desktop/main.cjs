@@ -12,6 +12,7 @@ const HouseMusic = require("./renderer/house-music.js");
 const PetNews = require("./renderer/news.js");
 const PetMarket = require("./renderer/market.js");
 const Presence = require("./presence.cjs");
+const MindSecret = require("./mind-secret.cjs");
 
 /** Buffffff opt-in: COMPUTERPETS_GUI_HARNESS=1 runs Electron smokes then quits. */
 const GUI_HARNESS = process.env.COMPUTERPETS_GUI_HARNESS === "1";
@@ -99,31 +100,61 @@ function writeCard(data) {
   }
 }
 
+function mindCodec() {
+  try {
+    const { safeStorage } = require("electron");
+    if (!safeStorage || typeof safeStorage.isEncryptionAvailable !== "function") return null;
+    if (!safeStorage.isEncryptionAvailable()) return null;
+    return {
+      encrypt(text) {
+        return safeStorage.encryptString(String(text)).toString("base64");
+      },
+      decrypt(payload) {
+        return safeStorage.decryptString(Buffer.from(String(payload), "base64"));
+      },
+    };
+  } catch {
+    return null;
+  }
+}
+
 function readMind() {
   const file = mindFile();
-  if (!file) return { default: { plugin: "local" }, voice: "browser", pets: {} };
-  try {
-    const parsed = JSON.parse(fs.readFileSync(file, "utf8"));
-    if (!parsed || typeof parsed !== "object") return { default: { plugin: "local" }, voice: "browser", pets: {} };
-    return parsed;
-  } catch {
-    return { default: { plugin: "local" }, voice: "browser", pets: {} };
+  let parsed = null;
+  if (file) {
+    try {
+      parsed = JSON.parse(fs.readFileSync(file, "utf8"));
+    } catch {
+      parsed = null;
+    }
   }
+  const result = MindSecret.readMindRecord(parsed, mindCodec());
+  if (result.rewrite && file) {
+    try {
+      fs.writeFileSync(file, JSON.stringify(result.file));
+    } catch {
+      if (MindSecret.fileHasPlainKey(parsed)) result.mind.keyKept = "plain";
+    }
+  }
+  return result.mind;
 }
 
 function writeMind(data) {
   const file = mindFile();
-  if (!file || !data || typeof data !== "object") return;
-  const next = {
-    default: data.default && typeof data.default === "object" ? data.default : { plugin: "local" },
-    voice: typeof data.voice === "string" ? data.voice : "browser",
-    pets: data.pets && typeof data.pets === "object" ? data.pets : {},
-  };
+  if (!file || !data || typeof data !== "object") return { kept: "none" };
+  let previous = null;
   try {
-    fs.writeFileSync(file, JSON.stringify(next));
+    previous = JSON.parse(fs.readFileSync(file, "utf8"));
   } catch {
-    /* ignore */
+    previous = null;
   }
+  const result = MindSecret.writeMindRecord(data, mindCodec(), previous);
+  try {
+    fs.writeFileSync(file, JSON.stringify(result.file));
+  } catch {
+    return { kept: MindSecret.fileHasPlainKey(previous) ? "plain" : "none" };
+  }
+  return { kept: result.kept };
 }
 
 const sealedContents = new WeakSet();
@@ -679,9 +710,7 @@ ipcMain.on("mind-get", (e) => {
   e.returnValue = readMind();
 });
 
-ipcMain.on("mind-set", (_e, data) => {
-  writeMind(data);
-});
+ipcMain.handle("mind-set", (_e, data) => writeMind(data));
 
 ipcMain.on("card-get", (e) => {
   e.returnValue = readCard();

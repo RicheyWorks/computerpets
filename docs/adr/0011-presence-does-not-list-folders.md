@@ -26,7 +26,7 @@ This slice closes those two leftovers. It does not log keys. It does not start D
 
 - Logging keys outside a focused field closed in [0012](0012-presence-does-not-log-keys.md). Do not add a key log in a later guest.
 - License `hwid` still reads machine-id or MachineGuid. That is the license door, not presence.
-- The keeper's plugin key still sits in `mind.json`. It stays off the card.
+- The overlay plugin key is not plain text in `mind.json`. [0018](0018-mind-key-is-not-plain-text.md). It stays off the card.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.
 - The class string is read and discarded inside the enumerator. It is not a title, not a document name, and not a folder list.
 - DirectX 12 / Vulkan is still open. This slice is not that engine.
