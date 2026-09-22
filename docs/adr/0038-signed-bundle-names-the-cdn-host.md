@@ -1,6 +1,6 @@
 # 0038. A signed bundle names the CDN host before the GET leaves
 
-- **Status:** Accepted
+- **Status:** Accepted (the GET itself waits in [0045](0045-license-requests-wait-for-the-painted-line.md))
 - **Date:** 2026-09-22
 - **Code:** `desktop/license/license-net.cjs`, `desktop/license/session.cjs`, `desktop/renderer/license-net.js`, `desktop/renderer/settings.html`, `client/computerpets_client/license/license_net.py`, `client/computerpets_client/license/session.py`, `client/computerpets_client/unlock_dialog.py`
 
@@ -21,7 +21,7 @@ This slice shows the same network-address sentence, with the CDN host named, bef
 
 ## Consequences
 
-- A remote CDN sees this computer's network address, as any client. The signed query (`owner`, `jti`, `exp`, `sig`) still rides that GET. The license hash does not. The house does not ask the CDN to turn the address into a city. The shared sentence still says "https request", including when the bundle URL is http.
+- A remote CDN sees this computer's network address, as any client. The signed query (`owner`, `jti`, `exp`, `sig`) still rides that GET. The license hash does not. The house does not ask the CDN to turn the address into a city. The shared sentence still says "https request", including when the bundle URL is http. The GET leaves only inside `getSignedBundle`. A missing line does not fetch and does not say "can't reach". [0045](0045-license-requests-wait-for-the-painted-line.md).
 - Opening the house does not fetch a bundle.
 - An unbound download POST names the backend host before it leaves. [0039](0039-unbound-download-names-the-backend-host.md).
 - News, quotes, a later forecast, a geocode look-up, a station stream, cloud talk, and cloud voice keep their gates.

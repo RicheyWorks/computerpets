@@ -1,6 +1,6 @@
 # 0037. Unlock names the host before the license hash leaves
 
-- **Status:** Accepted
+- **Status:** Accepted (the POST itself waits in [0045](0045-license-requests-wait-for-the-painted-line.md))
 - **Date:** 2026-09-22
 - **Code:** `desktop/license/license-net.cjs`, `desktop/license/session.cjs`, `desktop/renderer/license-net.js`, `desktop/renderer/settings.html`, `client/computerpets_client/license/license_net.py`, `client/computerpets_client/license/session.py`, `client/computerpets_client/unlock_dialog.py`
 
@@ -23,7 +23,7 @@ This slice shows the same network-address sentence, with the backend host named,
 
 ## Consequences
 
-- A remote license host sees this computer's network address, as any client, and it receives the hash. The house does not ask that host to turn the address into a city. The shared sentence still says "https request", including when the backend URL is http.
+- A remote license host sees this computer's network address, as any client, and it receives the hash. The house does not ask that host to turn the address into a city. The shared sentence still says "https request", including when the backend URL is http. The hash POST leaves only inside `postLicenseHash`. A missing line does not post, does not read the operating-system id, and does not say "can't reach". [0045](0045-license-requests-wait-for-the-painted-line.md).
 - The hash is still a fingerprint. Hashing is not anonymity. The raw id is still not sent.
 - The signed bundle GET names that CDN host before it leaves. [0038](0038-signed-bundle-names-the-cdn-host.md).
 - An unbound download names that backend host before the POST leaves. [0039](0039-unbound-download-names-the-backend-host.md).

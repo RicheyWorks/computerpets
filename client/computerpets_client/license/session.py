@@ -12,7 +12,7 @@ from .decrypt import decrypt_license
 from .errors import LicenseError
 from .http_client import FetchImpl, create_license_client, normalize_backend_url
 from .hwid import assert_hwid, peek_hwid, resolve_hwid_detail
-from .license_net import bundle_host_name, bundle_may_fetch, download_may_post, license_host_name, license_may_send
+from .license_net import get_signed_bundle, post_license_hash, post_unbound_download
 
 STORE_NAME = "license.json"
 DEFAULT_BACKEND = "http://127.0.0.1:8081"
@@ -32,36 +32,6 @@ def _shown_license_line(fields: dict[str, Any] | None) -> str:
 def _shown_cdn_line(fields: dict[str, Any] | None) -> str:
     raw = (fields or {}).get("cdnLine")
     return raw if isinstance(raw, str) else ""
-
-
-def _assert_hash_named(backend_url: str, shown: str) -> None:
-    if license_may_send(backend_url, shown):
-        return
-    host = license_host_name(backend_url) or "the license host"
-    raise LicenseError(
-        "license_net_unnamed",
-        f"the license hash was not sent to {host}. name that host before it leaves.",
-    )
-
-
-def _assert_download_named(backend_url: str, shown: str) -> None:
-    if download_may_post(backend_url, shown):
-        return
-    host = license_host_name(backend_url) or "the license host"
-    raise LicenseError(
-        "download_net_unnamed",
-        f"this download was not sent to {host}. name that host before it leaves.",
-    )
-
-
-def _assert_bundle_named(download_url: str, shown: str) -> None:
-    if bundle_may_fetch(download_url, shown):
-        return
-    host = bundle_host_name(download_url) or "the bundle host"
-    raise LicenseError(
-        "cdn_net_unnamed",
-        f"the signed bundle was not fetched from {host}. name that host before it leaves.",
-    )
 
 
 def license_secret(env: dict[str, str] | None = None) -> str:
@@ -195,26 +165,24 @@ def create_license_session(
         bound = bool(payload.get("hwid"))
         backend_url = normalize_backend_url(store.get("backendUrl") or default_backend_url(env))
         shown = license_line if isinstance(license_line, str) else ""
-        if bound:
-            _assert_hash_named(backend_url, shown)
-        else:
-            _assert_download_named(backend_url, shown)
-        current = device_id_arg or (device_mark(True, allow_weak_fallback is True)["id"] if bound else "")
 
-        if bound and payload.get("hwid") != current:
-            raise LicenseError("hwid_mismatch", "hardware binding mismatch")
+        def post() -> dict[str, Any]:
+            current = device_id_arg or (device_mark(True, allow_weak_fallback is True)["id"] if bound else "")
+            if bound and payload.get("hwid") != current:
+                raise LicenseError("hwid_mismatch", "hardware binding mismatch")
+            return client["download"](
+                backend_url=backend_url,
+                pet_key=payload["pet"],
+                ciphertext=store["license"]["ciphertext"],
+                iv=store["license"]["iv"],
+                hwid=current if payload.get("hwid") else None,
+                token=(store.get("auth") or {}).get("token"),
+                expect={"jti": payload["jti"], "petKey": payload["pet"], "owner": payload["owner"]},
+                signing_key=env.get("BUNDLE_SIGNING_KEY") or None,
+            )
 
-        manifest = client["download"](
-            backend_url=backend_url,
-            pet_key=payload["pet"],
-            ciphertext=store["license"]["ciphertext"],
-            iv=store["license"]["iv"],
-            hwid=current if payload.get("hwid") else None,
-            token=(store.get("auth") or {}).get("token"),
-            expect={"jti": payload["jti"], "petKey": payload["pet"], "owner": payload["owner"]},
-            signing_key=env.get("BUNDLE_SIGNING_KEY") or None,
-        )
-
+        poster = post_license_hash if bound else post_unbound_download
+        manifest = poster(shown, backend_url, post)
         bundle = _read_bundle(manifest["downloadUrl"], cdn_line if isinstance(cdn_line, str) else "")
 
         last_download = {
@@ -228,18 +196,19 @@ def create_license_session(
         save({**store, "lastDownload": last_download})
         return last_download
 
-    def _read_bundle(download_url: str, shown: str) -> dict[str, Any]:
-        if not bundle_may_fetch(download_url, shown):
-            return {"ok": False, "status": 0, "bytes": 0, "held": True}
-        try:
-            bundle = client["fetch_bundle"](download_url)
-        except LicenseError as err:
-            return {"ok": False, "status": 0, "bytes": 0, "held": False, "error": str(err)}
-        except Exception as err:
-            return {"ok": False, "status": 0, "bytes": 0, "held": False, "error": str(err)}
-        if isinstance(bundle, dict):
-            return {**bundle, "held": False}
-        return {"ok": False, "status": 0, "bytes": 0, "held": False}
+    def _read_bundle(download_url: str, shown: str, strict: bool = False) -> dict[str, Any]:
+        def fetch() -> dict[str, Any]:
+            try:
+                bundle = client["fetch_bundle"](download_url)
+            except LicenseError as err:
+                return {"ok": False, "status": 0, "bytes": 0, "held": False, "error": str(err)}
+            except Exception as err:
+                return {"ok": False, "status": 0, "bytes": 0, "held": False, "error": str(err)}
+            if isinstance(bundle, dict):
+                return {**bundle, "held": False}
+            return {"ok": False, "status": 0, "bytes": 0, "held": False}
+
+        return get_signed_bundle(shown, download_url, fetch, strict)
 
     def unlock(input_fields: dict[str, Any] | None = None) -> dict[str, Any]:
         input_fields = input_fields or {}
@@ -249,28 +218,34 @@ def create_license_session(
         )
         provider = input_fields.get("provider") if isinstance(input_fields.get("provider"), str) and input_fields.get("provider") else "steam"
         allow_weak = input_fields.get("allowWeakFallback") is True
-        _assert_hash_named(backend_url, _shown_license_line(input_fields))
-        current = device_mark(True, allow_weak)["id"]
-        secret = license_secret(env)
-        if not secret:
-            raise LicenseError("missing_secret", "LICENSE_SECRET_KEY is missing; cannot decrypt the issued license")
 
-        fields: dict[str, str] = {
-            "petType": input_fields["petType"] if isinstance(input_fields.get("petType"), str) and input_fields.get("petType") else "red_panda",
-            "hwid": current,
-        }
-        if provider == "steam":
-            if not input_fields.get("steamId") or not input_fields.get("appId"):
-                raise LicenseError("denied", "steamId and appId are required")
-            fields["steamId"] = str(input_fields["steamId"])
-            fields["appId"] = str(input_fields["appId"])
-        elif isinstance(input_fields.get("fields"), dict):
-            fields.update({k: str(v) for k, v in input_fields["fields"].items() if v is not None})
-            fields["hwid"] = current
-        else:
-            raise LicenseError("denied", f"unsupported provider {provider}")
+        def open_hash() -> dict[str, Any]:
+            current_id = device_mark(True, allow_weak)["id"]
+            secret_key = license_secret(env)
+            if not secret_key:
+                raise LicenseError("missing_secret", "LICENSE_SECRET_KEY is missing; cannot decrypt the issued license")
+            fields_out: dict[str, str] = {
+                "petType": input_fields["petType"] if isinstance(input_fields.get("petType"), str) and input_fields.get("petType") else "red_panda",
+                "hwid": current_id,
+            }
+            if provider == "steam":
+                if not input_fields.get("steamId") or not input_fields.get("appId"):
+                    raise LicenseError("denied", "steamId and appId are required")
+                fields_out["steamId"] = str(input_fields["steamId"])
+                fields_out["appId"] = str(input_fields["appId"])
+            elif isinstance(input_fields.get("fields"), dict):
+                fields_out.update({k: str(v) for k, v in input_fields["fields"].items() if v is not None})
+                fields_out["hwid"] = current_id
+            else:
+                raise LicenseError("denied", f"unsupported provider {provider}")
+            verified_body = client["verify"](backend_url=backend_url, provider=provider, fields=fields_out)
+            return {"current": current_id, "secret": secret_key, "fields": fields_out, "verified": verified_body}
 
-        verified = client["verify"](backend_url=backend_url, provider=provider, fields=fields)
+        opened = post_license_hash(_shown_license_line(input_fields), backend_url, open_hash)
+        current = opened["current"]
+        secret = opened["secret"]
+        fields = opened["fields"]
+        verified = opened["verified"]
         kwargs = {"now": now_fn} if now_fn else {}
         payload = decrypt_license(verified["license"]["ciphertext"], verified["license"]["iv"], secret, **kwargs)
 
@@ -323,8 +298,7 @@ def create_license_session(
         if not download_url:
             raise LicenseError("signed_url_invalid", "downloadUrl missing")
         shown = _shown_cdn_line(input_fields)
-        _assert_bundle_named(download_url, shown)
-        bundle = _read_bundle(download_url, shown)
+        bundle = _read_bundle(download_url, shown, True)
         next_download = {**last, "bundle": bundle}
         save({**store, "lastDownload": next_download})
         return next_download
