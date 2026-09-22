@@ -1,0 +1,44 @@
+# Kyverno ClusterPolicy example (not applied by kustomization)
+#
+# ADR 0061 — cluster-enforced fail-closed verify for ghcr.io/richeyworks/computerpets.
+# Install Kyverno first, then apply a copy. This file is documentation scaffolding
+# and is NOT in kustomization.yaml (same pattern as external-secret.example.yaml).
+#
+# Operator gate without Kyverno: run deploy/k8s/verify-image-signature.sh against
+# an immutable digest before kubectl set image (see deploy/k8s/README.md).
+#
+# Keyless identity matches CI: .github/workflows/ci.yml on refs/heads/main.
+# Do not invent a second signing identity here.
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: computerpets-require-ghcr-signature
+  annotations:
+    policies.kyverno.io/title: ComputerPets GHCR image must be cosign-signed
+    policies.kyverno.io/category: Supply Chain
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/description: >-
+      Refuse Pods/Deployments that pull ghcr.io/richeyworks/computerpets without
+      a Sigstore keyless signature from the house CI workflow.
+spec:
+  validationFailureAction: Enforce
+  background: false
+  rules:
+    - name: verify-computerpets-ghcr
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+                - Deployment
+      verifyImages:
+        - imageReferences:
+            - "ghcr.io/richeyworks/computerpets*"
+          attestors:
+            - entries:
+                - keyless:
+                    subject: "https://github.com/RicheyWorks/computerpets/.github/workflows/ci.yml@refs/heads/main"
+                    issuer: "https://token.actions.githubusercontent.com"
+          mutateDigest: true
+          verifyDigest: true
+          required: true

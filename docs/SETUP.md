@@ -330,11 +330,15 @@ kustomization). File mounts + `NAME_FILE` are also supported — see
 
 Blue/green is two Deployments (`computerpets-blue` live,
 `computerpets-green` at 0 replicas) and a Service selector
-`color=blue`. Flip the selector after green is Ready. Full commands
-are in [deploy/k8s/README.md](../deploy/k8s/README.md).
+`color=blue`. **Verify the GHCR digest signature first**
+(`./deploy/k8s/verify-image-signature.sh ghcr.io/richeyworks/computerpets@sha256:…`)
+then flip the selector after green is Ready. Unsigned or tag-only refs are
+refused on the prod path ([ADR 0061](adr/0061-ghcr-image-signing.md)). Full
+commands are in [deploy/k8s/README.md](../deploy/k8s/README.md).
 
 Optional `ingress.yaml` is not in the kustomization; apply it only if
-you have an Ingress controller.
+you have an Ingress controller. Optional Kyverno image-signature policy:
+`deploy/k8s/image-signature-policy.example.yaml` (not in kustomization).
 
 ---
 

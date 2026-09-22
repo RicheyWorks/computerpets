@@ -31,4 +31,4 @@ Catalog stays 221. DirectX 12 / Vulkan is not started. Presence / CSP and downlo
 
 - Operators can keep secrets out of process environment listings by using file mounts; ESO / Vault still sync into the existing Secret name the Deployments already consume.
 - A live HashiCorp Vault cluster, AWS Secrets Manager account, or ESO install is still the keeper's infrastructure — this repo ships the contract and hooks, not a hosted Vault.
-- Image signing and Terraform for managed stores remain open ([0006](0006-spring-profiles-and-kubernetes-manifests.md)).
+- Image signing lands in [0061](0061-ghcr-image-signing.md). Terraform for managed stores remains open ([0006](0006-spring-profiles-and-kubernetes-manifests.md)).

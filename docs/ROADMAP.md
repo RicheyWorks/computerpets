@@ -112,6 +112,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Proper Spring profiles (`dev` / `staging` / `prod`)
   - [x] Kubernetes manifests (`deploy/k8s/`, not Helm)
   - [x] Blue/green via two Deployments + Service `color` selector (no mesh)
+  - [x] GHCR image signing — keyless cosign (Sigstore Fulcio) on `main` publish; fail-closed digest verify for prod deploy (`deploy/k8s/verify-image-signature.sh`; ADR 0061)
 
 ---
 
