@@ -1,4 +1,4 @@
-/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows this computer's network address on that https request. No invented keys or headlines. */
+/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows this computer's network address on that https request. The featured page also refuses inside readFeatured when that wikipedia line is missing. No invented keys or headlines. */
 (function (root) {
   const NEWS_SOURCE = "Wikipedia In the news";
   const TOPIC_SOURCE = "Google News";
@@ -332,6 +332,19 @@
     return lineInView === true && !!net && line.indexOf(net) !== -1;
   }
 
+  function featuredMayLeave(shown) {
+    if (!NEWS_WIKI_HONESTY) return false;
+    return typeof shown === "string" && shown.indexOf(NEWS_WIKI_HONESTY) !== -1;
+  }
+
+  function readFeatured(shown, fetchImpl) {
+    if (!featuredMayLeave(shown)) return Promise.resolve(null);
+    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
+    return Promise.resolve(go(newsUrl())).then(function (res) {
+      return res && typeof res.json === "function" ? res.json() : null;
+    });
+  }
+
   function sourceLine(topic, tab) {
     const mode = tab == null || tab === "" ? "topics" : parseTab(tab);
     if (mode === "popular") return POPULAR_SOURCE;
@@ -396,6 +409,8 @@
     newsSendKind,
     newsHonesty,
     newsMaySend,
+    featuredMayLeave,
+    readFeatured,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetNews = api;

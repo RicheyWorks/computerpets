@@ -116,3 +116,29 @@ test("news names the network address and waits until that line is in view", () =
   assert.equal(N.newsMaySend(fav, true), false);
   assert.equal(Overlay.newsMaySend(Overlay.pickTab(Overlay.blankNewsPrefs(), "favorites"), true), false);
 });
+
+test("featured page refuses a fetch until the wikipedia line is present", async () => {
+  const wiki = N.NEWS_WIKI_HONESTY;
+  assert.equal(wiki, Overlay.NEWS_WIKI_HONESTY);
+  assert.match(wiki, /the wikipedia host/);
+  assert.equal(N.featuredMayLeave(""), false);
+  assert.equal(N.featuredMayLeave(N.NEWS_RSS_HONESTY), false);
+  assert.equal(N.featuredMayLeave(wiki), true);
+  assert.equal(Overlay.featuredMayLeave(""), false);
+  assert.equal(Overlay.featuredMayLeave(N.NEWS_RSS_HONESTY), false);
+  assert.equal(Overlay.featuredMayLeave(wiki), true);
+  let calls = 0;
+  const fake = async (url) => {
+    calls += 1;
+    assert.match(String(url), /en\.wikipedia\.org\/api\/rest_v1\/feed\/featured\//);
+    return { json: async () => ({ news: [] }) };
+  };
+  assert.equal(await N.readFeatured("", fake), null);
+  assert.equal(await N.readFeatured(N.NEWS_RSS_HONESTY, fake), null);
+  assert.equal(await Overlay.readFeatured("", fake), null);
+  assert.equal(calls, 0);
+  assert.deepEqual(await N.readFeatured(wiki, fake), { news: [] });
+  assert.equal(calls, 1);
+  assert.deepEqual(await Overlay.readFeatured(wiki, fake), { news: [] });
+  assert.equal(calls, 2);
+});

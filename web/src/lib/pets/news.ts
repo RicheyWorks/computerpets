@@ -1,4 +1,4 @@
-/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows this computer's network address on that https request. Same map as desktop `news.js`. */
+/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows this computer's network address on that https request. The featured page also refuses inside `readFeatured` when that wikipedia line is missing. Same map as desktop `news.js`. */
 import { clientNetLine } from "./weather-areas.ts";
 
 export const NEWS_SOURCE = "Wikipedia In the news";
@@ -361,6 +361,21 @@ export function newsMaySend(prefs: unknown, lineInView: boolean): boolean {
   const kind = newsSendKind(prefs);
   const net = kind === "rss" ? NEWS_RSS_NET : kind === "wiki" ? NEWS_WIKI_NET : "";
   return lineInView === true && net.length > 0 && line.includes(net);
+}
+
+/**
+ * The featured page leaves only when the painted line names the wikipedia host.
+ * A missing line, the rss sentence, and a closed plate do not call fetch.
+ */
+export function featuredMayLeave(shown: unknown): boolean {
+  return NEWS_WIKI_HONESTY.length > 0 && typeof shown === "string" && shown.includes(NEWS_WIKI_HONESTY);
+}
+
+type FeaturedFetch = (url: string) => Promise<{ json: () => Promise<unknown> }>;
+
+export function readFeatured(shown: unknown, fetchImpl: FeaturedFetch = fetch): Promise<unknown | null> {
+  if (!featuredMayLeave(shown)) return Promise.resolve(null);
+  return Promise.resolve(fetchImpl(newsUrl())).then((res) => res.json());
 }
 
 export function sourceLine(topic?: NewsTopic | null, tab?: unknown) {
