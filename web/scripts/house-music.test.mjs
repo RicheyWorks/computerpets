@@ -74,6 +74,17 @@ test("typed city and call-sign look-ups use name or city, never tag-as-city or j
   assert.notEqual(seattle[0].name, "Smooth Jazz All Night");
 });
 
+test("radio find names the network address before the search", () => {
+  const line = "this find sends the station look-up. this computer's network address goes with the https request to the radio host, as any client.";
+  assert.equal(M.RADIO_FIND, line);
+  assert.equal(Overlay.RADIO_FIND, line);
+  assert.equal(M.radioHonesty(), Overlay.radioHonesty());
+  assert.equal(M.radioMaySend(false), false);
+  assert.equal(M.radioMaySend(true), true);
+  assert.equal(Overlay.radioMaySend(false), false);
+  assert.equal(Overlay.radioMaySend(true), true);
+});
+
 test("Radio Browser can return a station for a typed look-up", async (t) => {
   const url = M.radioSearchUrl("KEXP");
   try {

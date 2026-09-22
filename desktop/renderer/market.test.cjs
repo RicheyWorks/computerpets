@@ -3,6 +3,42 @@ const { test } = require("node:test");
 const M = require("./market.js");
 const P = require("./desk-plates.js");
 
+test("quotes name the network address and wait until that line is in view", () => {
+  const house = M.parseMarket({});
+  const line = "this quote sends the saved list. this computer's network address goes with the https request to the quote host, as any client.";
+  assert.equal(M.quoteHostPhrase(house), "the quote host");
+  assert.equal(M.quoteHonesty(house), line);
+  assert.equal(M.quoteMaySend(house, false), false);
+  assert.equal(M.quoteMaySend(house, true), true);
+  const empty = M.parseMarket({ marketTickers: [], marketCustomized: true, nftCollections: [], nftCustomized: true });
+  assert.equal(M.quoteHonesty(empty), "");
+  assert.equal(M.quoteMaySend(empty, true), false);
+  const mixed = M.parseMarket({
+    marketTickers: [
+      { symbol: "ETH", kind: "crypto", geckoId: "ethereum", name: "Ethereum" },
+      { symbol: "PUMP", kind: "crypto", name: "Pump", platform: "solana", address: "So11111111111111111111111111111111111111112" },
+    ],
+    nftCollections: [],
+    nftCustomized: true,
+  });
+  assert.equal(M.quoteHostPhrase(mixed), "the quote host and the terminal host");
+  assert.match(M.quoteHonesty(mixed), /to the quote host and the terminal host, as any client/);
+  let stock = M.parseMarket({
+    marketTickers: [
+      { symbol: "ETH", kind: "crypto", geckoId: "ethereum", name: "Ethereum" },
+      { symbol: "AAPL", kind: "stock", name: "AAPL" },
+    ],
+    nftCollections: [],
+    nftCustomized: true,
+  });
+  const aapl = stock.tickers.find((row) => row.symbol === "AAPL");
+  stock = M.pickTicker(stock, aapl.id);
+  assert.equal(M.quoteHostPhrase(stock), "the quote host and the stock host");
+  assert.equal(M.quoteLookMaySend(false), false);
+  assert.equal(M.quoteLookMaySend(true), true);
+  assert.match(M.QUOTE_LOOK, /this look-up sends the typed name\. this computer's network address goes with the https request to the quote host, as any client\./);
+});
+
 test("Quotes defaults seed ETH DOGE XLM plus majors", () => {
   const house = M.parseMarket({});
   const symbols = house.tickers.map((t) => t.symbol);

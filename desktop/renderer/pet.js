@@ -295,9 +295,24 @@ function fillRadioHits(list, truth, music, stations) {
   }
 }
 
+function radioLineInView() {
+  const form = document.getElementById("hud-radio-form");
+  if (!form || form.hidden) return false;
+  const el = document.getElementById("hud-radio-net");
+  if (!el || el.hidden) return false;
+  const M = window.PetHouseMusic;
+  const need = M && M.radioHonesty ? M.radioHonesty() : "";
+  if (!need) return false;
+  return (el.textContent || "").indexOf(need) !== -1;
+}
+
 function lookupRadio(query, list, truth, music) {
   const M = window.PetHouseMusic;
   if (!M) return;
+  const net = document.getElementById("hud-radio-net");
+  const line = M.radioHonesty ? M.radioHonesty() : "";
+  if (net && line) net.textContent = line;
+  if (!M.radioMaySend || !M.radioMaySend(radioLineInView())) return;
   const area = radioArea();
   const q = String(query || "");
   const urls = M.radioSearchUrls ? M.radioSearchUrls(q, area) : [];
@@ -432,17 +447,36 @@ function fetchWeather() {
     });
 }
 
+function plateLineInView(bodyId, lineId, need) {
+  const body = document.getElementById(bodyId);
+  if (!body || body.hidden) return false;
+  const el = document.getElementById(lineId);
+  if (!el || el.hidden) return false;
+  if (!need) return false;
+  return (el.textContent || "").indexOf(need) !== -1;
+}
+
+function newsLineInView() {
+  const N = window.PetNews;
+  if (!N || !N.newsHonesty) return false;
+  return plateLineInView("news-body", "news-net", N.newsHonesty(N.parseNewsPrefs(card)));
+}
+
 function fetchNews() {
   const N = window.PetNews;
   if (!N) return;
   const prefs = N.parseNewsPrefs(card);
   const topic = N.currentTopic(prefs);
   const tab = prefs.tab || "popular";
+  const net = document.getElementById("news-net");
+  const line = N.newsHonesty ? N.newsHonesty(prefs) : "";
+  if (net) net.textContent = line;
   if (tab === "favorites") {
     newsUnread = false;
     paintHousePlates();
     return;
   }
+  if (!N.newsMaySend || !N.newsMaySend(prefs, newsLineInView())) return;
   const door = window.desk && window.desk.newsFeed;
   const legacyDoor = window.desk && window.desk.newsTopic;
   function applyItems(items) {
@@ -523,6 +557,10 @@ function fetchMarket() {
     paintHousePlates();
     return;
   }
+  const net = document.getElementById("market-net");
+  const line = M.quoteHonesty ? M.quoteHonesty(house) : "";
+  if (net) net.textContent = line;
+  if (!M.quoteMaySend || !M.quoteMaySend(house, plateLineInView("market-body", "market-net", line))) return;
   const door = window.desk && window.desk.marketQuote;
   const searchDoor = window.desk && window.desk.marketSearch;
   const nftDoor = window.desk && window.desk.nftQuote;
@@ -4136,6 +4174,10 @@ if (marketPlate) {
         return;
       }
       // Free-typed new tickers (PEPE / WIF / …): CoinGecko search → best match → crypto watch list.
+      const look = document.getElementById("market-look-net");
+      const lookLine = window.PetMarket.QUOTE_LOOK || "";
+      if (look && lookLine) look.textContent = lookLine;
+      if (!window.PetMarket.quoteLookMaySend || !window.PetMarket.quoteLookMaySend(plateLineInView("market-body", "market-look-net", lookLine))) return;
       const url = window.PetMarket.searchUrl(typed);
       if (!url) {
         if (truth) truth.textContent = "type a coin, ticker, or contract";
@@ -4193,6 +4235,10 @@ if (marketPlate) {
       const truth = document.getElementById("nft-truth");
       const hits = document.getElementById("nft-hits");
       const typed = q && q.value;
+      const look = document.getElementById("market-look-net");
+      const lookLine = window.PetMarket.QUOTE_LOOK || "";
+      if (look && lookLine) look.textContent = lookLine;
+      if (!window.PetMarket.quoteLookMaySend || !window.PetMarket.quoteLookMaySend(plateLineInView("market-body", "market-look-net", lookLine))) return;
       const url = window.PetMarket.searchUrl(typed);
       if (!url) {
         if (truth) truth.textContent = "type a collection name";

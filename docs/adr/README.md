@@ -52,6 +52,7 @@ address, or an API that is not on `main`.
 | [0031](0031-later-locate-still-asks-in-the-app.md) | A later weather locate still asks in the app | Accepted |
 | [0032](0032-later-forecast-names-the-network-address.md) | A later forecast names the network address | Accepted |
 | [0033](0033-geocode-names-the-network-address.md) | A geocode look-up names the network address | Accepted |
+| [0034](0034-news-quotes-and-radio-name-the-network-address.md) | News, quotes, and Radio Find name the network address | Accepted |
 
 ## How to add one
 
