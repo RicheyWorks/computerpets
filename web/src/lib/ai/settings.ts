@@ -7,7 +7,8 @@ import type { MindBinding, MindSettings, VoiceKind } from "./types";
  * When `window.desk` can reach the overlay seal, the key goes there.
  * Otherwise it stays in this page's memory until the keeper leaves.
  * localStorage and sessionStorage keep the prefs only.
- * A pasted secret query on a base URL is dropped on save and on read.
+ * A pasted secret on a base URL is dropped on save and on read:
+ * the query, the userinfo, a token-shaped path segment, and a non-URL `key=` assignment.
  */
 
 export const MIND_STORAGE_KEY = "computerpets.mind.v1";

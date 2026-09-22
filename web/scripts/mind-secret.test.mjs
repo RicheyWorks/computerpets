@@ -259,6 +259,20 @@ test("a desk save does not hand a pasted key query to the seal", async () => {
   assert.equal(JSON.stringify(sent).includes(PASTED_API), false);
   assert.equal(JSON.stringify(sent).includes("api_key="), false);
   assert.equal(textOf(local).includes(PASTED_API), false);
+
+  const token = "sk-test-PASTEDKEY0123456789";
+  await S.saveMindSettings({
+    default: { plugin: "openai", baseUrl: `https://user:${token}@api.example.test/v1/key/${token}?alt=sse` },
+    voice: "browser",
+    pets: { red_panda: { plugin: "custom", baseUrl: `not a url?key=${token}` } },
+  });
+  const again = textOf(local);
+  assert.equal(again.includes(token), false);
+  assert.equal(again.includes("alt=sse"), true);
+  const kept = S.loadMindSettings();
+  assert.equal(kept.default.baseUrl, "https://api.example.test/v1?alt=sse");
+  assert.equal(kept.pets.red_panda.baseUrl, "not a url");
+  assert.equal(kept.default.model, "grok-4.5");
 });
 
 test("the desk page does not say the key stays in the browser", () => {
