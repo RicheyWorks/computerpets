@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line says this computer's network address goes with the https request. */
 (function (root) {
   const NO_AREA = "no area set";
   const AREA_LABEL = "Weather area";
@@ -13,12 +13,17 @@
   const HERE_HELD = "the place was not sent";
   const HERE_KEPT = "keeping the saved place";
   const HERE_SENT = "a place was sent to the forecast host";
-  const SAVED_HERE_ASK = "use this saved computer place for the forecast? this sends the saved place. it does not locate again.";
+  // Any HTTPS client shows its network address to the host. This is not a city lookup.
+  const FORECAST_NET = "this computer's network address goes with the https request, as any client.";
+  const SAVED_HERE_ASK = `use this saved computer place for the forecast? this sends the saved place. ${FORECAST_NET} it does not locate again.`;
   const SAVED_HERE_YES = "Use this saved place";
   const SAVED_HERE_NO = "Don't send";
   const SAVED_HERE_HELD = "the saved place was not sent";
   const SAVED_HERE_SENT = "the saved place was sent to the forecast host";
   const SAVED_HERE_WAIT = "saved place not sent";
+  const TYPED_FORECAST = `this forecast sends the named place. ${FORECAST_NET}`;
+  const SAVED_FORECAST_CONTINUE = `this forecast continues the saved place you already allowed. ${FORECAST_NET} it does not locate again.`;
+  const FORECAST_WAITS = "forecast waits";
   // A tenth of a degree is about 11 km. Rounding is not anonymity.
   const PLACE_STEP = 0.1;
   const CANT_REACH = "can't reach";
@@ -346,7 +351,10 @@
    * A typed city may go to the forecast host. A saved live pin does not,
    * until the keeper has acknowledged that exact place. The ack sticks for
    * that pin. It is not a geolocation arm and not a reverse lookup.
-   * The same ack still sends on a later read. That is not a new question.
+   * The same ack still allows a later forecast. That is not a new question.
+   * The page calls forecastMaySend before the request, so a later read
+   * waits until the weather panel is open. forecastHonesty names the
+   * network address on that send. There is no forecast timer.
    */
   function forecastGate(areas, ack) {
     const area = currentArea(parseAreas(areas));
@@ -376,12 +384,27 @@
     return gate.act === "send" && gate.ack ? gate.ack : null;
   }
 
-  function plateLine(areas, live, unread, held) {
+  /**
+   * The forecast host is called only while the keeper can see the honesty line.
+   * A closed plate, a load, and the favorites tab are not that view.
+   * This does not ask again and does not locate.
+   */
+  function forecastMaySend(gate, panelOpen) {
+    return panelOpen === true && !!gate && gate.act === "send" && !!gate.area;
+  }
+
+  /** The line in the open weather panel for a typed city or an acknowledged pin. */
+  function forecastHonesty(gate) {
+    if (!gate || gate.act !== "send" || !gate.area) return "";
+    return gate.ack ? SAVED_FORECAST_CONTINUE : TYPED_FORECAST;
+  }
+
+  function plateLine(areas, live, unread, held, waiting) {
     const area = currentArea(areas);
     if (!area) return NO_AREA;
     if (held) return `${area.name} · ${SAVED_HERE_WAIT}`;
     if (unread) return `${area.name} · unread`;
-    if (!live) return `${area.name} · looking up`;
+    if (!live) return waiting ? `${area.name} · ${FORECAST_WAITS}` : `${area.name} · looking up`;
     return `${area.name} · ${live.label}`;
   }
 
@@ -399,12 +422,16 @@
     HERE_HELD,
     HERE_KEPT,
     HERE_SENT,
+    FORECAST_NET,
     SAVED_HERE_ASK,
     SAVED_HERE_YES,
     SAVED_HERE_NO,
     SAVED_HERE_HELD,
     SAVED_HERE_SENT,
     SAVED_HERE_WAIT,
+    TYPED_FORECAST,
+    SAVED_FORECAST_CONTINUE,
+    FORECAST_WAITS,
     PLACE_STEP,
     CANT_REACH,
     FAVORITES_EMPTY,
@@ -434,6 +461,8 @@
     locateGate,
     hereForecastAckOf,
     forecastGate,
+    forecastMaySend,
+    forecastHonesty,
     ackSavedHere,
     stickHereForecastAck,
     storedLivePinNeedsFuzz,
