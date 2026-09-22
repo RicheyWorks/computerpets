@@ -1,5 +1,5 @@
 /** Keeper-card desk controls. Same truth as the overlay card. Persist on the machine. */
-import { parseAreas } from "./weather-areas.ts";
+import { parseAreas, storedLivePinNeedsFuzz } from "./weather-areas.ts";
 import { parseNewsPrefs } from "./news.ts";
 import { parseMarket } from "./market.ts";
 import { parseStep } from "./house-sounds.ts";
@@ -418,7 +418,9 @@ export function loadCard(): CardPrefs {
   if (typeof window === "undefined") return blankCard();
   try {
     const raw = JSON.parse(window.localStorage.getItem(CARD_STORE) || "null");
-    return parseCard(raw);
+    const card = parseCard(raw);
+    if (raw && storedLivePinNeedsFuzz(raw)) return saveCard(card);
+    return card;
   } catch {
     return blankCard();
   }

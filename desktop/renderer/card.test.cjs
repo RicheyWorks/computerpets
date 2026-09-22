@@ -43,6 +43,45 @@ test("the card law is the same house on overlay and desk", () => {
   assert.doesNotMatch(htmlSrc, /id="hud"[^>]*data-hit/);
 });
 
+test("a stored live pin is rounded when the card loads", () => {
+  const mem = {};
+  const prevStore = global.localStorage;
+  const prevDesk = global.desk;
+  global.desk = undefined;
+  global.localStorage = {
+    getItem(k) {
+      return Object.prototype.hasOwnProperty.call(mem, k) ? mem[k] : null;
+    },
+    setItem(k, v) {
+      mem[k] = String(v);
+    },
+  };
+  mem[C.STORE] = JSON.stringify({
+    weatherAreas: [{ id: "here", name: "This computer", query: "this computer", lat: 47.60621, lon: -122.33207 }],
+    currentAreaId: "here",
+  });
+  const card = C.load();
+  assert.equal(card.weatherAreas[0].id, "here");
+  assert.equal(card.weatherAreas[0].lat, 47.6);
+  assert.equal(card.weatherAreas[0].lon, -122.3);
+  const saved = JSON.parse(mem[C.STORE]);
+  assert.equal(saved.weatherAreas[0].lat, 47.6);
+  assert.equal(saved.weatherAreas[0].lon, -122.3);
+  mem[C.STORE] = JSON.stringify({
+    weatherAreas: [{ id: "a-pdx", name: "Portland", query: "Portland", lat: 45.5231, lon: -122.6765 }],
+    currentAreaId: "a-pdx",
+  });
+  const beforeTyped = mem[C.STORE];
+  const typed = C.load();
+  assert.equal(typed.weatherAreas[0].lat, 45.5231);
+  assert.equal(typed.weatherAreas[0].lon, -122.6765);
+  assert.equal(mem[C.STORE], beforeTyped);
+  if (prevStore === undefined) delete global.localStorage;
+  else global.localStorage = prevStore;
+  if (prevDesk === undefined) delete global.desk;
+  else global.desk = prevDesk;
+});
+
 test("saved lines, alarm, and timer persist honestly", () => {
   let card = C.addLine(C.blankCard(), "red_panda", "A ribbon I was keeping.", "say");
   const guest = C.guestOf(card, "red_panda");

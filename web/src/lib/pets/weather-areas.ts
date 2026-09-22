@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. Same map as desktop `weather-areas.js`. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A stored live pin is rounded on load. Same map as desktop `weather-areas.js`. */
 import type { Weather } from "./weather";
 
 export const NO_AREA = "no area set";
@@ -8,6 +8,10 @@ export const AREA_TRUTH = "Weather area. Named places you add. Not the radio sta
 export const TYPE_A_CITY = "type a city";
 export const HERE_FAIL = "this computer did not share a place";
 export const HERE_SEND = "this click sends a place to the forecast host.";
+export const HERE_ASK = "send a place from this computer? a saved browser grant can answer without a new prompt. this house cannot revoke that grant.";
+export const HERE_YES = "Send the place";
+export const HERE_NO = "Don't send";
+export const HERE_HELD = "the place was not sent";
 export const HERE_KEPT = "keeping the saved place";
 export const HERE_SENT = "a place was sent to the forecast host";
 /** A tenth of a degree is about 11 km. Rounding is not anonymity. */
@@ -84,7 +88,13 @@ export function parseArea(raw: unknown): WeatherArea | null {
   const name = clipName(o.name) || query;
   if (!name) return null;
   const id = typeof o.id === "string" && o.id ? o.id : `a-${hash(`${name}|${lat}|${lon}`)}`;
-  return { id, name, query: query || name, lat, lon };
+  const area = { id, name, query: query || name, lat, lon };
+  if (!isLiveFix(area)) return area;
+  const place = sharePlace(lat, lon);
+  if (!place) return area;
+  area.lat = place.lat;
+  area.lon = place.lon;
+  return area;
 }
 
 export function parseAreas(raw: unknown): WeatherAreas {
@@ -224,6 +234,42 @@ export function locateChoice(areas: unknown): { locate: false; area: WeatherArea
   const saved = typedArea(areas);
   if (saved) return { locate: false, area: saved };
   return { locate: true, area: null };
+}
+
+export type LocateGate =
+  | { act: "keep"; area: WeatherArea }
+  | { act: "ask"; area: null }
+  | { act: "locate"; area: null };
+
+/**
+ * A live locate needs a fresh in-app yes before geolocation is armed.
+ * A saved typed area does not. A cached origin grant is not that yes.
+ * confirmed must be the boolean true from the keeper's Send button.
+ */
+export function locateGate(areas: unknown, confirmed?: unknown): LocateGate {
+  const choice = locateChoice(areas);
+  if (!choice.locate) return { act: "keep", area: choice.area };
+  if (confirmed === true) return { act: "locate", area: null };
+  return { act: "ask", area: null };
+}
+
+/** A stored live pin still has digits finer than a tenth of a degree. */
+export function storedLivePinNeedsFuzz(raw: unknown): boolean {
+  if (!raw || typeof raw !== "object") return false;
+  const o = raw as Record<string, unknown>;
+  const list = Array.isArray(o.weatherAreas) ? o.weatherAreas : Array.isArray(o.areas) ? o.areas : [];
+  for (const row of list) {
+    if (!row || typeof row !== "object") continue;
+    const item = row as Record<string, unknown>;
+    const query = clipName(item.query || "");
+    if (item.id !== "here" && query !== "this computer") continue;
+    const lat = num(item.lat);
+    const lon = num(item.lon);
+    const place = lat != null && lon != null ? sharePlace(lat, lon) : null;
+    if (!place) continue;
+    if (place.lat !== lat || place.lon !== lon) return true;
+  }
+  return false;
 }
 
 export function geocodeUrl(query: string) {
