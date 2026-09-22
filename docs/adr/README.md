@@ -37,6 +37,7 @@ address, or an API that is not on `main`.
 | [0016](0016-weather-locate-waits-for-an-in-app-yes.md) | A live weather locate waits for an in-app yes | Accepted |
 | [0017](0017-saved-computer-place-waits-for-a-forecast-yes.md) | A saved computer place waits for a forecast yes | Accepted |
 | [0018](0018-mind-key-is-not-plain-text.md) | The overlay plugin key is not plain text in mind.json | Accepted |
+| [0019](0019-license-mark-is-a-local-hash.md) | A license mark is a local hash of a named machine id | Accepted |
 
 ## How to add one
 

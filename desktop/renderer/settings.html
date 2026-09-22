@@ -37,6 +37,7 @@
       <hr />
       <h2>Unlock</h2>
       <p class="lead">Prove Steam ownership against the house backend. The desk pets still live here either way — this is the published license contract, not a second overlay.</p>
+      <p class="lead" id="licenseMark">Opening this window does not read the operating-system machine id. The first Unlock reads Linux machine-id, Windows MachineGuid, or the Mac platform UUID, hashes it, and stores that hash in hwid.txt. A hash already stored is reused, so an existing license stays bound. The raw id is not sent. The house receives only the hash, and only for unlock or a bound download. That hash is a device fingerprint.</p>
       <label>Backend URL</label>
       <input id="backend" placeholder="http://127.0.0.1:8081" />
       <label>Provider</label>
@@ -143,8 +144,20 @@
         fallbackPetType();
       }
 
+      function paintMark(status) {
+        const mark = status && status.hwidMark;
+        const node = document.getElementById("licenseMark");
+        if (!node || !mark) return;
+        if (mark.read === "stored") {
+          node.textContent = "A license hash is already stored in hwid.txt. Unlock reuses it and does not read the operating-system id again. The raw id is not sent. That hash is still a device fingerprint.";
+          return;
+        }
+        node.textContent = "Opening this window did not read the operating-system machine id. The first Unlock reads Linux machine-id, Windows MachineGuid, or the Mac platform UUID, hashes it, and stores that hash in hwid.txt. The raw id is not sent. The house receives only the hash, and only for unlock or a bound download. That hash is a device fingerprint.";
+      }
+
       function showLicense(status) {
         if (!status) return;
+        paintMark(status);
         if (status.backendUrl && !backend.value) backend.value = status.backendUrl;
         if (status.fields) {
           if (status.fields.steamId) steamId.value = status.fields.steamId;
