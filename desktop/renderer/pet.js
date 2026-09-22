@@ -3722,7 +3722,10 @@ if (weatherPlate) {
   function sendLiveFix() {
     const A = window.PetWeatherAreas;
     const truth = document.getElementById("weather-here-truth");
-    if (!A) return;
+    if (!A) {
+      if (window.PetPresence && window.PetPresence.holdWeatherLocate) window.PetPresence.holdWeatherLocate();
+      return;
+    }
     function keepHere(area) {
       const house = A.addArea(card, area);
       card.hereForecastAck = A.ackSavedHere(house);
@@ -3736,12 +3739,14 @@ if (weatherPlate) {
       return { id: "here", name: "This computer", query: "this computer", lat, lon };
     }
     if (window.PetPresence && typeof window.PetPresence.ipPlace === "function" && window.PetPresence.ipPlace() != null) {
+      if (window.PetPresence.holdWeatherLocate) window.PetPresence.holdWeatherLocate();
       failHere(A.HERE_FAIL);
       return;
     }
     const reader = window.PetPresence && window.PetPresence.readWeatherHere;
     const deskApi = window.desk;
     if (!navigator.geolocation || typeof reader !== "function") {
+      if (window.PetPresence && window.PetPresence.holdWeatherLocate) window.PetPresence.holdWeatherLocate();
       failHere(A.HERE_FAIL);
       return;
     }
@@ -3830,11 +3835,13 @@ if (weatherPlate) {
       if (!A) return;
       const gate = A.locateGate(card, true);
       if (gate.act !== "locate") {
+        if (window.PetPresence && window.PetPresence.holdWeatherLocate) window.PetPresence.holdWeatherLocate();
         if (gate.act === "keep") keepTyped(gate);
         else showHereAsk(false);
         return;
       }
       showHereAsk(false);
+      if (window.PetPresence && window.PetPresence.noteWeatherLocateYes) window.PetPresence.noteWeatherLocateYes();
       sendLiveFix();
     });
   }
@@ -3844,6 +3851,7 @@ if (weatherPlate) {
       e.stopPropagation();
       const A = window.PetWeatherAreas;
       const truth = document.getElementById("weather-here-truth");
+      if (window.PetPresence && window.PetPresence.holdWeatherLocate) window.PetPresence.holdWeatherLocate();
       showHereAsk(false);
       if (truth && A) truth.textContent = A.HERE_HELD;
     });

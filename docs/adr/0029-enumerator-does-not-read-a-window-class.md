@@ -28,5 +28,5 @@ This slice closes that leftover. It does not start DirectX 12 or Vulkan. It does
 - License `hwid` still reads a named machine id only when a bind needs it, and only when `hwid.txt` is empty. A stored hash is reused. The raw id is not sent. The hash is still a fingerprint. When that read fails, a computer-name or random mark waits for an in-app yes. [0030](0030-missing-os-id-waits-for-a-yes.md).
 - The overlay plugin key still goes out as a header on the direct plugin call. Gemini uses `x-goog-api-key`. That header is the call. [0022](0022-gemini-key-stays-off-the-query.md).
 - A raw token in a URL fragment that is not a secret query can still ride on a base URL. A secret in the hostname can still ride. Those stay documented. This slice does not chase them. [0028](0028-model-field-drops-a-pasted-secret.md).
-- Geolocation is not a standing process grant. Electron cannot revoke a grant Chromium already cached in the renderer. An in-app yes is not that revoke. [0013](0013-weather-locate-is-not-a-process-grant.md).
+- Geolocation is not a standing process grant. Electron cannot revoke a grant Chromium already cached in the renderer. An in-app yes is not that revoke. A later locate still waits for a fresh in-app yes. [0031](0031-later-locate-still-asks-in-the-app.md).
 - DirectX 12 / Vulkan is still open. This slice is not that engine.
