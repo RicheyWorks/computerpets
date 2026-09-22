@@ -29,7 +29,7 @@ This slice does not send a later forecast on load or while the weather panel is 
 
 - Electron 35 still cannot revoke a geolocation grant Chromium already cached in the renderer. This slice does not call `getCurrentPosition` and does not arm that grant. A later locate still waits for a fresh in-app yes. [0031](0031-later-locate-still-asks-in-the-app.md). This slice does not change that latch.
 - The saved-pin yes is not a new question on each open. Opening the current panel again sends once more, with the same line in view. That is the continuing send. It is not a timer and not a dialog.
-- A typed city and an acknowledged pin share that network-address line. Look up still sends the typed name to the geocode host on that click. This slice is the forecast.
+- A typed city and an acknowledged pin share that network-address line. Look up and the reverse lookup after Send the place name that same address before they leave for the geocode host. [0033](0033-geocode-names-the-network-address.md). This slice is the forecast.
 - Rounding to a tenth of a degree is about 11 km. It is not anonymity. The house does not ask the host to turn the client address into a city.
 - License `hwid` still reads a named machine id only when a bind needs it. A missing OS id still waits for its own yes. [0030](0030-missing-os-id-waits-for-a-yes.md). This slice does not change that door.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.

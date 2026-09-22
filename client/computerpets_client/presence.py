@@ -13,7 +13,8 @@ HOUSE_FILES = ("card.json", "mind.json")
 # A cached origin grant is a desk limit. This process does not locate, so
 # it has no in-app locate confirm, no live pin to round, and no saved
 # computer place to send to a forecast host. Noting a locate yes still
-# does not call for a place. Electron 35 cannot revoke a Chromium grant.
+# does not call for a place. It does not call a geocode host. Electron 35
+# cannot revoke a Chromium grant.
 WEATHER_LOCATE_MS = 120_000
 _weather_locate_until = 0
 _weather_locate_yes = False
