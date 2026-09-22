@@ -33,6 +33,7 @@ import {
 } from "@/lib/pets/care";
 import { saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
+import { talkBody } from "@/lib/pets/talk-post";
 import { playDeskSound, unlockDeskAudio } from "@/lib/pets/desk-audio";
 import { loadCard, saveCard, wanderWhileAsleep, isMuted, pickSystemVoice, speakOpts, guestOf, prefersHouseCry } from "@/lib/pets/card";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
@@ -464,7 +465,7 @@ export function CompanionRoom({
     issue("talk");
     try {
       const res = await converseWithPet({
-        data: {
+        data: talkBody({
           message,
           hunger: stats.hunger,
           mood: stats.mood,
@@ -475,7 +476,7 @@ export function CompanionRoom({
           speak: mindSettings.voice !== "none",
           mind,
           voice: mindSettings.voice,
-        },
+        }),
       });
       say(res.text, Math.min(9000, 2200 + res.text.length * 55));
       await playVoice(res.audio, res.text);
