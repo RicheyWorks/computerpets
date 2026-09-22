@@ -83,7 +83,16 @@ public class LicenseService {
     @Value("${license.secret-key}")
     private String masterKeyBase64;
 
+    /**
+     * Optional previous AES-256 key kept during a rotation window so licenses
+     * issued under the old key still decrypt on download. Issue always uses
+     * {@link #masterKeyBase64}. Blank = no dual-key. See ADR 0065.
+     */
+    @Value("${license.secret-key-previous:}")
+    private String previousMasterKeyBase64;
+
     private byte[] masterKey;
+    private byte[] previousMasterKey;
 
     private final ObjectMapper json = new ObjectMapper();
     private final SecureRandom secureRandom = new SecureRandom();
@@ -100,20 +109,8 @@ public class LicenseService {
                 "license.secret-key is not configured. Set LICENSE_SECRET_KEY to a "
                 + "base64-encoded 32-byte key (openssl rand -base64 32).");
         }
-        byte[] decoded;
-        try {
-            decoded = Base64.getDecoder().decode(masterKeyBase64);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalStateException(
-                "license.secret-key is not valid base64. Generate one with "
-                + "`openssl rand -base64 32`.", e);
-        }
-        if (decoded.length != AES_KEY_LENGTH_BYTES) {
-            throw new IllegalStateException(
-                "license.secret-key must decode to " + AES_KEY_LENGTH_BYTES
-                + " bytes (AES-256). Got " + decoded.length + " bytes.");
-        }
-        this.masterKey = decoded;
+        this.masterKey = decodeAesKey(masterKeyBase64, "license.secret-key");
+        this.previousMasterKey = decodeOptionalPrevious(previousMasterKeyBase64);
 
         if (COMMITTED_DEFAULT_KEY.equals(masterKeyBase64)) {
             // Check if we are running under a test profile
@@ -131,6 +128,42 @@ public class LicenseService {
                     "(generate with: openssl rand -base64 32).");
             }
         }
+        if (previousMasterKey != null) {
+            log.info("LicenseService ready with dual-key decrypt (previous LICENSE_SECRET_KEY present).");
+        }
+    }
+
+    private byte[] decodeOptionalPrevious(String previousB64) {
+        if (previousB64 == null || previousB64.isBlank()) {
+            return null;
+        }
+        if (previousB64.equals(masterKeyBase64)) {
+            throw new IllegalStateException(
+                    "license.secret-key-previous must differ from license.secret-key. "
+                            + "A no-op rotation leaves only one key mid-flight (ADR 0065).");
+        }
+        if (COMMITTED_DEFAULT_KEY.equals(previousB64)) {
+            throw new IllegalStateException(
+                    "license.secret-key-previous must not be the committed default key (ADR 0065).");
+        }
+        return decodeAesKey(previousB64, "license.secret-key-previous");
+    }
+
+    private static byte[] decodeAesKey(String base64, String label) {
+        byte[] decoded;
+        try {
+            decoded = Base64.getDecoder().decode(base64);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException(
+                    label + " is not valid base64. Generate one with "
+                            + "`openssl rand -base64 32`.", e);
+        }
+        if (decoded.length != AES_KEY_LENGTH_BYTES) {
+            throw new IllegalStateException(
+                    label + " must decode to " + AES_KEY_LENGTH_BYTES
+                            + " bytes (AES-256). Got " + decoded.length + " bytes.");
+        }
+        return decoded;
     }
 
     /**
@@ -209,7 +242,7 @@ public class LicenseService {
             byte[] ciphertext = Base64.getDecoder().decode(ciphertextB64);
             byte[] iv         = Base64.getDecoder().decode(ivB64);
 
-            byte[] plaintext = decrypt(ciphertext, masterKey, iv);
+            byte[] plaintext = decryptWithRotation(ciphertext, iv);
             LicensePayload payload = json.readValue(plaintext, LicensePayload.class);
 
             Instant validUntil = Instant.parse(payload.validUntil());
@@ -366,6 +399,21 @@ public class LicenseService {
         int len = cipher.processBytes(plaintext, 0, plaintext.length, output, 0);
         cipher.doFinal(output, len);
         return output;
+    }
+
+    /**
+     * Decrypt with the current master key; on GCM auth failure try the previous
+     * key when a rotation window is open. Fail closed when neither key authenticates.
+     */
+    private byte[] decryptWithRotation(byte[] ciphertext, byte[] iv) throws Exception {
+        try {
+            return decrypt(ciphertext, masterKey, iv);
+        } catch (Exception currentFailed) {
+            if (previousMasterKey == null) {
+                throw currentFailed;
+            }
+            return decrypt(ciphertext, previousMasterKey, iv);
+        }
     }
 
     private byte[] decrypt(byte[] ciphertext, byte[] key, byte[] iv) throws Exception {

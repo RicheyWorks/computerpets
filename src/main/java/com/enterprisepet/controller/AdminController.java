@@ -42,11 +42,14 @@ public class AdminController {
 
     private final LicenseService licenseService;
     private final String adminApiKey;
+    private final String previousAdminApiKey;
 
     public AdminController(LicenseService licenseService,
-                           @Value("${admin.api-key:}") String adminApiKey) {
+                           @Value("${admin.api-key:}") String adminApiKey,
+                           @Value("${admin.api-key-previous:}") String previousAdminApiKey) {
         this.licenseService = licenseService;
         this.adminApiKey = adminApiKey;
+        this.previousAdminApiKey = previousAdminApiKey == null ? "" : previousAdminApiKey;
     }
 
     @PostConstruct
@@ -62,7 +65,21 @@ public class AdminController {
                     "admin.api-key looks like a placeholder. Set a real secret via ADMIN_API_KEY env var.");
             }
         }
-        log.info("AdminController ready (protected by X-Admin-Key).");
+        if (!previousAdminApiKey.isBlank()) {
+            for (String p : PLACEHOLDER_KEYS) {
+                if (p.equals(previousAdminApiKey)) {
+                    throw new IllegalStateException(
+                            "admin.api-key-previous looks like a placeholder. Unset or set a real previous key (ADR 0065).");
+                }
+            }
+            if (previousAdminApiKey.equals(adminApiKey)) {
+                throw new IllegalStateException(
+                        "admin.api-key-previous must differ from admin.api-key (ADR 0065).");
+            }
+        }
+        log.info(
+                "AdminController ready (protected by X-Admin-Key; previousKey={}).",
+                previousAdminApiKey.isBlank() ? "no" : "yes");
     }
 
     @Operation(
@@ -164,8 +181,15 @@ public class AdminController {
 
     private boolean adminKeyValid(String providedKey) {
         if (providedKey == null || adminApiKey == null) return false;
-        byte[] expected = adminApiKey.getBytes(StandardCharsets.UTF_8);
         byte[] actual = providedKey.getBytes(StandardCharsets.UTF_8);
-        return MessageDigest.isEqual(expected, actual);
+        byte[] expected = adminApiKey.getBytes(StandardCharsets.UTF_8);
+        if (MessageDigest.isEqual(expected, actual)) {
+            return true;
+        }
+        if (previousAdminApiKey.isBlank()) {
+            return false;
+        }
+        byte[] previous = previousAdminApiKey.getBytes(StandardCharsets.UTF_8);
+        return MessageDigest.isEqual(previous, actual);
     }
 }

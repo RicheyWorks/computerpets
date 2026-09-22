@@ -1,8 +1,9 @@
 # Fail-hard production shape. Same keys as staging; ProductionProfileGuard
 # then refuses to start if env overrides turn Microsoft dev-mode on, switch
-# the rate-limit store to memory, point the datasource at H2, or inject
+# the rate-limit store to memory, point the datasource at H2, inject
 # house crypto via plain env Secret without COMPUTERPETS_SECRETS_SOURCE
-# (external-secrets | file | vault-agent). See ADR 0064.
+# (external-secrets | file | vault-agent), or leave a set
+# COMPUTERPETS_KEYS_ROTATED_AT stamp older than 400 days. See ADR 0064 / 0065.
 # Missing SPRING_DATASOURCE_* fails placeholder resolution before the guard.
 spring:
   datasource:

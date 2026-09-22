@@ -76,8 +76,10 @@ spring:
 #
 # It is strongly recommended to always provide this via environment variable,
 # even during local development.
+# secret-key-previous is optional dual-key decrypt material during rotation (ADR 0065).
 license:
   secret-key: "${LICENSE_SECRET_KEY:}"
+  secret-key-previous: "${LICENSE_SECRET_KEY_PREVIOUS:}"
 
 steam:
   api-key: "YOUR_STEAM_WEB_API_KEY"
@@ -169,14 +171,18 @@ microsoft:
 
 # JWT auth — short-lived bearer token issued alongside the encrypted license.
 # secret-key is REQUIRED; no default. Generate with: openssl rand -base64 48
+# secret-key-previous is optional dual-key verify material during rotation (ADR 0065).
 jwt:
   secret-key: "${JWT_SECRET_KEY:}"
+  secret-key-previous: "${JWT_SECRET_KEY_PREVIOUS:}"
   issuer: "enterprisepet-backend"
   ttl-minutes: 30
 
 bundle:
   base-url: "${BUNDLE_BASE_URL:https://cdn.enterprisepet.example/bundles}"
   signing-key: "${BUNDLE_SIGNING_KEY:}"
+  # Optional previous HMAC during a rotation window (ADR 0065). Sign uses signing-key only.
+  signing-key-previous: "${BUNDLE_SIGNING_KEY_PREVIOUS:}"
   # Platform used when POST /api/download omits `platform` (or sends an
   # unsupported value). win | mac | linux | any
   default-platform: win
@@ -195,8 +201,10 @@ bundle:
 
 # Admin API key for /api/admin/* endpoints (Phase 2 internal tooling).
 # Must be a strong random value. Generate: openssl rand -base64 32
+# api-key-previous accepts the prior key during a rotation window (ADR 0065).
 admin:
   api-key: "${ADMIN_API_KEY:}"
+  api-key-previous: "${ADMIN_API_KEY_PREVIOUS:}"
 
 # -----------------------------------------------------------------------------
 # Rate limiting (Phase 3.1)

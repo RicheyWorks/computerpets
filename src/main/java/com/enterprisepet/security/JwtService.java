@@ -39,6 +39,14 @@ public class JwtService {
     @Value("${jwt.secret-key:}")
     private String secret;
 
+    /**
+     * Optional previous HS256 key kept during a rotation window so outstanding
+     * JWTs still verify. Issue always uses {@link #secret}. Blank = no dual-key.
+     * See ADR 0065.
+     */
+    @Value("${jwt.secret-key-previous:}")
+    private String previousSecret;
+
     @Value("${jwt.issuer:enterprisepet-backend}")
     private String issuer;
 
@@ -46,6 +54,7 @@ public class JwtService {
     private long ttlMinutes;
 
     private SecretKey signingKey;
+    private SecretKey previousSigningKey;
     private Duration ttl;
 
     @PostConstruct
@@ -62,11 +71,35 @@ public class JwtService {
                 "jwt.secret-key is too short for HS256. Must be at least 32 bytes; "
                 + "use `openssl rand -base64 48`.", e);
         }
+        this.previousSigningKey = decodePrevious(previousSecret);
         if (ttlMinutes <= 0) {
             throw new IllegalStateException("jwt.ttl-minutes must be positive; got " + ttlMinutes);
         }
         this.ttl = Duration.ofMinutes(ttlMinutes);
-        log.info("JwtService ready. issuer={} ttl={}m", issuer, ttlMinutes);
+        log.info(
+                "JwtService ready. issuer={} ttl={}m previousKey={}",
+                issuer,
+                ttlMinutes,
+                previousSigningKey != null ? "yes" : "no");
+    }
+
+    private SecretKey decodePrevious(String previous) {
+        if (previous == null || previous.isBlank()) {
+            return null;
+        }
+        if (previous.equals(secret)) {
+            throw new IllegalStateException(
+                    "jwt.secret-key-previous must differ from jwt.secret-key. "
+                            + "A no-op rotation leaves no verify window (ADR 0065).");
+        }
+        try {
+            return Keys.hmacShaKeyFor(previous.getBytes(StandardCharsets.UTF_8));
+        } catch (WeakKeyException e) {
+            throw new IllegalStateException(
+                    "jwt.secret-key-previous is too short for HS256. Must be at least 32 bytes; "
+                            + "use `openssl rand -base64 48`.",
+                    e);
+        }
     }
 
     /**
@@ -97,9 +130,20 @@ public class JwtService {
     public Optional<Claims> parse(String bearer) {
         if (bearer == null || bearer.isBlank()) return Optional.empty();
         String token = bearer.startsWith("Bearer ") ? bearer.substring(7).trim() : bearer.trim();
+        Optional<Claims> withCurrent = parseWith(token, signingKey);
+        if (withCurrent.isPresent()) {
+            return withCurrent;
+        }
+        if (previousSigningKey == null) {
+            return Optional.empty();
+        }
+        return parseWith(token, previousSigningKey);
+    }
+
+    private Optional<Claims> parseWith(String token, SecretKey key) {
         try {
             Jws<Claims> jws = Jwts.parser()
-                .verifyWith(signingKey)
+                .verifyWith(key)
                 .requireIssuer(issuer)
                 .build()
                 .parseSignedClaims(token);
