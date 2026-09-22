@@ -7,12 +7,29 @@ export const DESK_PORT = 8080;
 /** Quiet public door. Not /actuator rooms. Not /pet/feed. */
 export const HEARTBEAT_URL = `http://127.0.0.1:${JAVA_PORT}/api/public/heartbeat`;
 
-/** Advertised X-ad routes. They are the contract to grow into, not doors we ship. */
+/** Advertised X-ad routes. Java answers 409. Care stays on this machine. */
 export const ADVERTISED_CARE = {
   feed: "/pet/feed",
   play: "/pet/play",
   rest: "/pet/rest",
 } as const;
+
+/** Conflict. Not 200, and not 401. A missing license is not why feed fails. */
+export const CARE_DOOR_STATUS = 409;
+
+export type CareVerb = keyof typeof ADVERTISED_CARE;
+
+export function careDoorRefusal(verb: CareVerb) {
+  const path = ADVERTISED_CARE[verb];
+  return {
+    status: CARE_DOOR_STATUS,
+    title: "Care is local",
+    detail: `Care is local. ${path} is not a door.`,
+    door: "local" as const,
+    performed: false,
+    verb,
+  };
+}
 
 export const KEEPER_CARE = [
   { id: "feed" as const, label: "Feed" },
