@@ -223,6 +223,13 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.doesNotMatch(bootBody, /streamAsked = true/);
   assert.match(html, /id="hud-stream-net"/);
   assert.match(pet, /let streamAsked = false/);
+  assert.match(pet, /let talkAsked = false/);
+  assert.match(html, /id="hud-talk-net"/);
+  const talkAt = pet.indexOf('if (cmd === "talk")');
+  const talkBody = pet.slice(talkAt, talkAt + 500);
+  assert.ok(talkBody.indexOf("talkHonesty") < talkBody.indexOf("askMind"));
+  assert.doesNotMatch(bootBody, /talkAsked = true/);
+  assert.doesNotMatch(bootBody, /askMind\(/);
 });
 
 test("a dropped file is not a gift and is not read", () => {
