@@ -174,6 +174,8 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   const newsBody = pet.slice(newsAt, marketAt);
   assert.ok(newsBody.indexOf("newsHonesty") < newsBody.indexOf("newsMaySend"));
   assert.ok(newsBody.indexOf("newsMaySend") < newsBody.indexOf("popularRssUrl"));
+  assert.ok(newsBody.indexOf("newsMaySend") < newsBody.indexOf("readFeatured(line)"));
+  assert.doesNotMatch(newsBody, /fetch\(N\.newsUrl\(/);
   const marketBody = pet.slice(marketAt, pet.indexOf("function sitSleepAid"));
   assert.ok(marketBody.indexOf("quoteHonesty") < marketBody.indexOf("quoteMaySend"));
   assert.ok(marketBody.indexOf("quoteMaySend") < marketBody.indexOf("geckoManyUrl"));
@@ -196,6 +198,8 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   const popAt = plates.indexOf("popularRssUrl()");
   assert.ok(plates.lastIndexOf("if (!open) return", popAt) < popAt);
   assert.ok(plates.indexOf("if (!newsMaySend") < popAt);
+  assert.ok(plates.indexOf("if (!newsMaySend") < plates.indexOf("readFeatured(line)"));
+  assert.doesNotMatch(plates, /fetch\(newsUrl\(\)\)/);
   assert.match(plates, /quoteMaySend/);
   assert.ok(plates.indexOf("if (!quoteMaySend") < plates.indexOf("geckoManyUrl("));
   assert.ok(plates.indexOf("if (!quoteLookMaySend") < plates.indexOf("searchUrl(typed)"));
