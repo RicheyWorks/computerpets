@@ -29,7 +29,7 @@ This slice names the read, limits when it happens, and keeps every stored mark. 
 
 - A keeper who already has `hwid.txt` is not asked to unlock again. Deleting that file and unlocking again recomputes the same hash only when the OS id and the platform token are the same as before.
 - The hash that leaves on unlock is still a stable fingerprint of this computer. Hashing is not anonymity. There is no new phone-home of the raw id.
-- The desk `/mind` key still stays in the browser. That store is not `hwid.txt`.
+- The desk `/mind` key is not this door. [0020](0020-desk-mind-key-is-not-in-the-browser.md) keeps it out of browser storage. That store is not `hwid.txt`.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.
 - The enumerator still reads a window class inside its own process to set the shell bit. That string does not leave the process.
 - Geolocation is not a standing process grant. [0013](0013-weather-locate-is-not-a-process-grant.md) opens it for the weather control and closes it after that locate. Electron cannot revoke a grant Chromium already cached in the renderer. An IP place lookup is not a fallback. [0014](0014-weather-does-not-ask-an-ip-place.md) drops it. A live fix is rounded before it leaves, and a saved typed area is kept. [0015](0015-weather-locate-sends-a-rounded-place.md). A live locate waits for an in-app yes, and a stored live pin is rounded on load. [0016](0016-weather-locate-waits-for-an-in-app-yes.md). A saved live pin does not forecast until the keeper says to use that place. [0017](0017-saved-computer-place-waits-for-a-forecast-yes.md). Electron 35 still cannot revoke the cached grant.

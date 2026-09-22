@@ -24,12 +24,12 @@ This slice takes the plugin key out of plain text in `mind.json`. It does not st
 - When a seal is present and the store does not open, the seal stays. The form does not invent a key, and saving an empty field does not throw the seal away.
 - Clearing the key and saving removes the seal.
 - With the desk bridge up, the overlay `localStorage` copy is prefs only. The plain key is scrubbed from that copy on load.
-- The desk `/mind` page is unchanged. Its key stays in the browser. The blotter has no plugin bus.
+- The desk `/mind` page in this record still kept its key in the browser. [0020](0020-desk-mind-key-is-not-in-the-browser.md) is the later decision for that page. The blotter has no plugin bus.
 
 ## Consequences
 
 - License `hwid` still reads machine-id or MachineGuid. That read is hashed locally and the raw id is not a new telemetry field. Existing `hwid.txt` values are left alone. That door is not this one.
-- The desk `/mind` key still stays in the browser. That store is not `mind.json`.
+- The desk `/mind` key is not stored in the browser. [0020](0020-desk-mind-key-is-not-in-the-browser.md). That store is not `mind.json`.
 - If this computer has no secret store, a key that used to be in `mind.json` is removed from the file and is not there after quit.
 - The overlay process still holds the key in memory while it is calling the plugin. That is not a copy on disk and not a line on the card.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.

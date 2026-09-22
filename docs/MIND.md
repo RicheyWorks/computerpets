@@ -23,7 +23,7 @@ The pet engine talks through a **plugin bus**. House lines are always the fallba
 
 Voice plugins: browser `speechSynthesis`, xAI TTS, OpenAI TTS, silent.
 
-Assign a house default or override per animal on `/mind`. Keys stay in the browser. Server env vars (`XAI_API_KEY`, `OPENAI_API_KEY`, …) fill in if the field is empty.
+Assign a house default or override per animal on `/mind`. The plugin key is not stored in this browser. When the desk bridge can seal it, the key goes to the OS secret store. Otherwise it stays on the page until you leave, and the page says so. Server env vars (`XAI_API_KEY`, `OPENAI_API_KEY`, …) fill in if the field is empty.
 
 ## Custom webhook
 
