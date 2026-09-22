@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-22 (A later weather locate in the same session waits for a fresh in-app yes. Electron 35 cannot revoke a cached Chromium grant. Not DX12/Vulkan. Catalog 221.) |
+| **Last Updated** | 2026-09-22 (A later forecast waits until the weather panel is open, and the line says this computer's network address goes with the https request. Not DX12/Vulkan. Catalog 221.) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
