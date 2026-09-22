@@ -34,6 +34,8 @@ import {
 import { saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { talkBody } from "@/lib/pets/talk-post";
+import { talkHonesty, voiceHonesty } from "@/lib/pets/talk-net";
+import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { playDeskSound, unlockDeskAudio } from "@/lib/pets/desk-audio";
 import { loadCard, saveCard, wanderWhileAsleep, isMuted, pickSystemVoice, speakOpts, guestOf, prefersHouseCry } from "@/lib/pets/card";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
@@ -148,6 +150,14 @@ export function CompanionRoom({
   const displayName = name ?? kind.name;
   const mind = useMindBinding(kind.key);
   const mindSettings = useMindSettings();
+  const { user, isPending } = useCurrentUserState();
+  const signedIn = !isPending && user != null;
+  const talkLine = signedIn ? talkHonesty(mind) : "";
+  const voiceLine = signedIn ? voiceHonesty(mindSettings.voice) : "";
+  const [talkAsked, setTalkAsked] = useState(false);
+  const [voiceAsked, setVoiceAsked] = useState(false);
+  const pendingTalk = useRef<{ message?: string } | null>(null);
+  const [talkTick, setTalkTick] = useState(0);
   const trait = traitFor(kind.key);
   const [stats, setStats] = useState<CareStats>(() => liveDeskCare(kind, persistLocal, seed));
   const [speech, setSpeech] = useState<string | null>(null);
@@ -456,11 +466,20 @@ export function CompanionRoom({
     }
   }
 
-  async function talk(message?: string) {
+  function cloudLinesInView() {
+    if (talkLine) {
+      const el = document.getElementById("hud-talk-net");
+      if (!talkAsked || !el || el.hidden || !(el.textContent || "").includes(talkLine)) return false;
+    }
+    if (voiceLine) {
+      const el = document.getElementById("hud-voice-net");
+      if (!voiceAsked || !el || el.hidden || !(el.textContent || "").includes(voiceLine)) return false;
+    }
+    return true;
+  }
+
+  async function sendTalk(message?: string) {
     if (busy) return;
-    acted.current = true;
-    unlockDeskAudio();
-    setStats((s) => ({ ...s, asleep: false }));
     setBusy(true);
     issue("talk");
     try {
@@ -476,6 +495,8 @@ export function CompanionRoom({
           speak: mindSettings.voice !== "none",
           mind,
           voice: mindSettings.voice,
+          ...(talkLine ? { talkLine } : {}),
+          ...(voiceLine ? { voiceLine } : {}),
         }),
       });
       say(res.text, Math.min(9000, 2200 + res.text.length * 55));
@@ -486,6 +507,33 @@ export function CompanionRoom({
       setBusy(false);
     }
   }
+
+  async function talk(message?: string) {
+    if (busy || pendingTalk.current) return;
+    acted.current = true;
+    unlockDeskAudio();
+    setStats((s) => ({ ...s, asleep: false }));
+    if (talkLine || voiceLine) {
+      setTalkAsked(!!talkLine);
+      setVoiceAsked(!!voiceLine);
+      if (!cloudLinesInView()) {
+        pendingTalk.current = { message };
+        setTalkTick((n) => n + 1);
+        return;
+      }
+    }
+    await sendTalk(message);
+  }
+
+  useEffect(() => {
+    if (pendingTalk.current == null) return;
+    if (!cloudLinesInView()) return;
+    const message = pendingTalk.current.message;
+    pendingTalk.current = null;
+    void sendTalk(message);
+    // The line has to be painted before the post. A load does not talk.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [talkTick, talkAsked, voiceAsked, talkLine, voiceLine]);
 
   function dropTreatAt(x: number) {
     if (busy || stats.hidden || leaving) return;
@@ -1037,6 +1085,12 @@ export function CompanionRoom({
         }
       >
         <div className="pointer-events-auto" ref={careRef}>
+          <p id="hud-talk-net" className="keeper-truth" hidden={!talkAsked || !talkLine}>
+            {talkAsked ? talkLine : ""}
+          </p>
+          <p id="hud-voice-net" className="keeper-truth" hidden={!voiceAsked || !voiceLine}>
+            {voiceAsked ? voiceLine : ""}
+          </p>
           <BlotterCare
             className={hand ? "blotter-care-phone" : pad ? "blotter-care-tablet" : undefined}
             marks={[

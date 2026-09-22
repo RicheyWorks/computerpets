@@ -13,6 +13,7 @@ const MIND_SRC = fs.readFileSync(path.join(__dirname, "mind.js"), "utf8");
 function loadMind() {
   const calls = [];
   const window = {
+    PetWeatherAreas: require("./weather-areas.js"),
     localStorage: {
       getItem: () => null,
       setItem: () => {},
@@ -53,6 +54,7 @@ function ctx(species) {
     system: "Be small.",
     message: "hello",
     fallback: "house line",
+    lineInView: true,
   };
 }
 
@@ -327,6 +329,7 @@ describe("overlay drops a pasted secret model before the direct call", () => {
     const stored = [];
     const calls = [];
     const window = {
+      PetWeatherAreas: require("./weather-areas.js"),
       localStorage: {
         getItem: () => null,
         setItem: (_key, value) => {
@@ -380,5 +383,62 @@ describe("overlay drops a pasted secret model before the direct call", () => {
     assert.equal(loaded.default.model, "");
     assert.equal(loaded.pets.moth.model, "claude-sonnet-4-5");
     assert.equal(loaded.pets.red_panda.model, "");
+  });
+});
+
+describe("overlay cloud talk names the host before the fetch", () => {
+  it("names api.x.ai and does not fetch until that line is in view", async () => {
+    const { window, calls } = loadMind();
+    const line = window.PetMind.talkHonesty({ plugin: "xai" });
+    assert.match(line, /this talk sends the keeper line\. /);
+    assert.match(line, /api\.x\.ai/);
+    assert.equal(line.includes("/v1"), false);
+    assert.equal(line.includes("?"), false);
+    assert.equal(window.PetMind.talkMaySend({ plugin: "xai" }, false), false);
+    assert.equal(window.PetMind.talkMaySend({ plugin: "xai" }, true), true);
+    await window.PetMind.save({
+      default: { plugin: "xai", apiKey: "sk-not-on-the-line" },
+      voice: "browser",
+      pets: {},
+    });
+    const held = await window.PetMind.run({ ...ctx("red_panda"), lineInView: false });
+    assert.equal(calls.length, 0);
+    assert.equal(held.source, "local");
+    assert.equal(line.includes("sk-not-on-the-line"), false);
+    const sent = await window.PetMind.run(ctx("red_panda"));
+    assert.equal(calls.length, 1);
+    assert.equal(new URL(calls[0].url).hostname, "api.x.ai");
+    assert.equal(sent.source, "xai");
+  });
+
+  it("names a custom host and keeps the path off the line", () => {
+    const { window } = loadMind();
+    const line = window.PetMind.talkHonesty({
+      plugin: "custom",
+      baseUrl: "https://mind.example.test/hook?alt=sse#room",
+    });
+    assert.match(line, /to mind\.example\.test, as any client\./);
+    assert.equal(line.includes("/hook"), false);
+    assert.equal(line.includes("alt="), false);
+    assert.equal(line.includes("#room"), false);
+    assert.equal(window.PetMind.talkHonesty({ plugin: "local" }), "");
+    assert.equal(
+      window.PetMind.talkHonesty({ plugin: "ollama", baseUrl: "http://127.0.0.1:11434" }),
+      "",
+    );
+    assert.equal(window.PetMind.talkMaySend({ plugin: "ollama" }, false), true);
+  });
+
+  it("does not fetch a remote custom mind without the line", async () => {
+    const { window, calls } = loadMind();
+    await window.PetMind.save({
+      default: { plugin: "custom", baseUrl: "https://mind.example.test/mind" },
+      voice: "browser",
+      pets: {},
+    });
+    const held = await window.PetMind.run({ ...ctx("red_panda"), lineInView: false });
+    assert.equal(calls.length, 0);
+    assert.equal(held.source, "local");
+    assert.equal(held.text, "house line");
   });
 });
