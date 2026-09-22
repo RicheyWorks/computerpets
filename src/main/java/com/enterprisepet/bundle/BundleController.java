@@ -32,11 +32,14 @@ public class BundleController {
     private final BundleCatalog catalog;
     private final PetCatalog pets;
     private final DownloadGrantService grantService;
+    private final ClientAddress clientAddress;
 
-    public BundleController(BundleCatalog catalog, PetCatalog pets, DownloadGrantService grantService) {
+    public BundleController(BundleCatalog catalog, PetCatalog pets, DownloadGrantService grantService,
+                            ClientAddress clientAddress) {
         this.catalog = catalog;
         this.pets = pets;
         this.grantService = grantService;
+        this.clientAddress = clientAddress;
     }
 
     @Operation(
@@ -106,7 +109,7 @@ public class BundleController {
 
         DownloadGrantService.RedeemOutcome outcome;
         try {
-            outcome = grantService.redeem(petKey, owner, jti, exp, sig, ClientAddress.from(request));
+            outcome = grantService.redeem(petKey, owner, jti, exp, sig, clientAddress.from(request));
         } catch (DownloadGrantUnavailableException e) {
             return ResponseEntity.status(503).body(Map.of(
                     "error", "download grant store unavailable",

@@ -30,3 +30,7 @@ microsoft:
 
 rate-limit:
   backend: redis
+
+# Fail-closed unless the operator lists LB / ingress CIDRs (ADR 0067).
+trusted-proxies:
+  cidrs: ${TRUSTED_PROXY_CIDRS:}

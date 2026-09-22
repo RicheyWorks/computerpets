@@ -44,10 +44,13 @@ public class RateLimitingFilter extends OncePerRequestFilter {
 
     private final RateLimitBackend backend;
     private final RateLimitProperties properties;
+    private final ClientAddress clientAddress;
 
-    public RateLimitingFilter(RateLimitBackend backend, RateLimitProperties properties) {
+    public RateLimitingFilter(RateLimitBackend backend, RateLimitProperties properties,
+                              ClientAddress clientAddress) {
         this.backend = backend;
         this.properties = properties;
+        this.clientAddress = clientAddress;
     }
 
     @Override
@@ -60,7 +63,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
             return;
         }
 
-        String client = clientId(req);
+        String client = clientAddress.from(req);
         String bucketKey = client + "|" + rule.bucketKey;
         RateLimitBackend.Probe probe;
         try {
@@ -107,15 +110,6 @@ public class RateLimitingFilter extends OncePerRequestFilter {
             if (path.startsWith(r.pathPrefix)) return r;
         }
         return null;
-    }
-
-    /**
-     * Trusts X-Forwarded-For when present (typical when behind an ALB/CloudFront). For
-     * direct exposure, this should be disabled or restricted to a known proxy IP set
-     * to prevent spoofing.
-     */
-    static String clientId(HttpServletRequest req) {
-        return ClientAddress.from(req);
     }
 
     /** Path prefix → (capacity, refill window). */

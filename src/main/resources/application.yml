@@ -225,6 +225,16 @@ rate-limit:
     timeout: ${REDIS_TIMEOUT:200ms}
 
 # -----------------------------------------------------------------------------
+# Trusted proxies (client IP / X-Forwarded-For)
+# -----------------------------------------------------------------------------
+# Fail-closed: X-Forwarded-For and Forwarded are honoured only when remoteAddr
+# matches one of these CIDRs. Empty = always use remoteAddr (spoof-safe).
+# Local/dev profile defaults to loopback; prod stays empty until the operator
+# lists the load balancer / ingress ranges (TRUSTED_PROXY_CIDRS). See ADR 0067.
+trusted-proxies:
+  cidrs: ${TRUSTED_PROXY_CIDRS:}
+
+# -----------------------------------------------------------------------------
 # Observability (Phase 1 + 3.2)
 # -----------------------------------------------------------------------------
 # Tracing uses Micrometer Observation + the OpenTelemetry bridge (Spring Boot 3.3).

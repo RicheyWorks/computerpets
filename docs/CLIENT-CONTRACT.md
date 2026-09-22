@@ -34,7 +34,10 @@ Rate limits (per client IP, Redis-backed, shared across app instances):
 **10/min** on `/api/verify/`, **30/min** on `/api/download/`. Exceeding
 them returns **429** with `Retry-After` and `application/problem+json`.
 If Redis is unreachable the server fail-closes with **503** (same media
-type and `Retry-After`) instead of lifting the limit.
+type and `Retry-After`) instead of lifting the limit. Client IP uses
+`remoteAddr` unless the peer matches `trusted-proxies.cidrs`, in which
+case the first `X-Forwarded-For` hop (else RFC 7239 `Forwarded` `for=`)
+is used ([ADR 0067](adr/0067-trusted-proxy-client-address.md)).
 
 ---
 
@@ -424,9 +427,11 @@ A second redeem of the **same** grant denies. The house does not silently
 re-open it. A fresh `POST /api/download/{petKey}` issues a new `exp` and a
 new grant.
 
-IP binding uses the same client-address rule as rate limits (first
-`X-Forwarded-For` hop, else remote address). An edge that calls redeem must
-forward the keeper's requesting address. Shared NAT / CGNAT is a known
+IP binding uses the same client-address rule as rate limits: `remoteAddr`,
+or — only when the peer is a configured trusted proxy — the first
+`X-Forwarded-For` hop (else `Forwarded` `for=`). An edge that calls redeem
+must forward the keeper's requesting address and the house must list that
+edge's CIDR in `TRUSTED_PROXY_CIDRS`. Shared NAT / CGNAT is a known
 limit. Geolocation is not invented.
 
 If the grant store is down at issue time, `POST /api/download` returns
