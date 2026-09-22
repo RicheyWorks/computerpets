@@ -66,6 +66,7 @@ import { colonyOf, colonyWord, isHivePlace, stampColony } from "@/lib/pets/hive"
 import { isPhone, isTablet, readSit, tabletOrient, type TabletOrient } from "@/lib/pets/tablet-desk";
 import { phoneOrient, type PhoneOrient } from "@/lib/pets/phone-desk";
 import { guestMarks, guestPick, guestTap, type GuestChoiceId } from "@/lib/pets/guest-choice";
+import { installFileDropGuard } from "@/lib/pets/presence";
 
 type DeskCare = "rest" | "clean" | "medicine" | "bath" | "praise";
 
@@ -189,6 +190,8 @@ export function CompanionRoom({
   const skyNow = (): Weather => weatherOf(new Date(), currentArea({ areas: loadCard().weatherAreas || [], currentId: loadCard().currentAreaId ?? null }) ? liveSky?.sky ?? null : null);
   const pad = tablet || (!phone && autoTablet);
   const hand = phone || (!pad && autoPhone);
+
+  useEffect(() => installFileDropGuard(window), []);
 
   useEffect(() => {
     function measure() {
