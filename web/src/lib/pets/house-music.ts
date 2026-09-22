@@ -1,4 +1,4 @@
-/** Free music + radio for Rui. Same plugin store shape as the mind bus. Find waits until the radio form shows this computer's network address on that https request. Same map as desktop `house-music.js`. */
+/** Free music + radio for Rui. Same plugin store shape as the mind bus. Find waits until the radio form shows this computer's network address on that https request. `readRadioSearch` also refuses when that painted line is missing. Same map as desktop `house-music.js`. */
 import { clientNetLine } from "./weather-areas.ts";
 
 export const MUSIC_PLUGINS = [
@@ -256,6 +256,45 @@ export function radioHonesty(): string {
  */
 export function radioMaySend(lineInView: boolean): boolean {
   return lineInView === true && RADIO_FIND.includes(RADIO_NET);
+}
+
+/**
+ * Radio Browser Find/Local leaves only when the painted line names the radio host.
+ * A missing line does not call fetch.
+ */
+export function radioSearchMayLeave(shown: unknown): boolean {
+  return RADIO_FIND.length > 0 && typeof shown === "string" && shown.includes(RADIO_FIND);
+}
+
+type RadioFetch = (url: string, init?: RequestInit) => Promise<{ json: () => Promise<unknown> }>;
+
+/**
+ * The only Radio Browser search. A miss resolves to null and does not call fetch.
+ * An empty URL list resolves to []. A total unread throws so the plate can say can't reach.
+ */
+export function readRadioSearch(
+  shown: unknown,
+  query = "",
+  area?: RadioArea | null,
+  fetchImpl: RadioFetch = fetch,
+): Promise<RadioStation[] | null> {
+  if (!radioSearchMayLeave(shown)) return Promise.resolve(null);
+  const urls = radioSearchUrls(query, area);
+  if (!urls.length) return Promise.resolve([]);
+  return Promise.all(
+    urls.map((url) =>
+      Promise.resolve(
+        fetchImpl(url, { cache: "no-store", headers: { Accept: "application/json" } }),
+      )
+        .then((r) => r.json())
+        .then((json) => parseStations(json))
+        .catch(() => null),
+    ),
+  ).then((batches) => {
+    if (batches.every((b) => b == null)) throw new Error("unread");
+    const merged = mergeStations(batches.filter((b): b is RadioStation[] => !!b));
+    return rankStations(merged, query, area).slice(0, 16);
+  });
 }
 
 export const STREAM_HOST_NAME = "the station stream host";

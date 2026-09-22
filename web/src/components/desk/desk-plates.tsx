@@ -69,6 +69,7 @@ import {
   parseNewsPrefs,
   parseRss,
   readFeatured,
+  readRss,
   pickTab,
   pickTopic,
   popularRssUrl,
@@ -101,7 +102,6 @@ import {
   formatPrice,
   isFavoriteNft,
   isFavoriteTicker,
-  geckoManyUrl,
   MARKET_LABEL,
   MARKET_PLACEHOLDER,
   MARKET_TRUTH,
@@ -131,16 +131,18 @@ import {
   pickTicker,
   plateLine as marketLine,
   nftLine,
+  readGeckoMany,
+  readNft,
+  readQuoteSearch,
+  readTerminal,
+  readYahoo,
   removeMarketplace,
   removeNft,
   removeTicker,
   searchUrl,
-  terminalTokenUrl,
   toCardPatch,
   toggleFavoriteNft,
   toggleFavoriteTicker,
-  yahooUrl,
-  nftUrl,
   type MarketLive,
   type NftLive,
   CANT_REACH as MARKET_CANT_REACH,
@@ -738,24 +740,24 @@ export function DeskNewsPlate() {
           return;
         }
         if (tab === "popular") {
-          const xml = await (await fetch(popularRssUrl())).text();
-          if (cancelled) return;
+          const xml = await readRss(line, popularRssUrl());
+          if (xml == null || cancelled) return;
           const next = parseRss(xml);
           if (next.length) setItems(next);
           setUnread(!next.length);
           return;
         }
         if (tab === "x") {
-          const xml = await (await fetch(xTopicRssUrl(topic.query || "news"))).text();
-          if (cancelled) return;
+          const xml = await readRss(line, xTopicRssUrl(topic.query || "news"));
+          if (xml == null || cancelled) return;
           const next = parseRss(xml);
           if (next.length) setItems(next);
           setUnread(!next.length);
           return;
         }
         if (topic.id !== WORLD_ID && topic.query) {
-          const xml = await (await fetch(topicRssUrl(topic.query))).text();
-          if (cancelled) return;
+          const xml = await readRss(line, topicRssUrl(topic.query));
+          if (xml == null || cancelled) return;
           const next = parseRss(xml);
           if (next.length) setItems(next);
           setUnread(!next.length);
@@ -996,35 +998,28 @@ export function DeskMarketPlate() {
     const jobs: Promise<void>[] = [];
 
     if (geckoIds.length) {
-      const url = geckoManyUrl(geckoIds);
-      if (url) {
-        jobs.push(
-          fetch(url)
-            .then((r) => r.json())
-            .then((json) => {
-              if (cancelled) return;
-              const lives = parseGeckoMany(json);
-              setCoinLives((prev) => ({ ...prev, ...lives }));
-              if (ticker?.geckoId && lives[ticker.geckoId]) {
-                setLive(lives[ticker.geckoId]!);
-                setUnread(false);
-              }
-            })
-            .catch(() => {
-              if (!cancelled) setUnread(true);
-            }),
-        );
-      }
+      jobs.push(
+        readGeckoMany(line, geckoIds)
+          .then((json) => {
+            if (json == null || cancelled) return;
+            const lives = parseGeckoMany(json);
+            setCoinLives((prev) => ({ ...prev, ...lives }));
+            if (ticker?.geckoId && lives[ticker.geckoId]) {
+              setLive(lives[ticker.geckoId]!);
+              setUnread(false);
+            }
+          })
+          .catch(() => {
+            if (!cancelled) setUnread(true);
+          }),
+      );
     }
 
     for (const row of contracts) {
-      const url = terminalTokenUrl(row.platform || "solana", row.address);
-      if (!url) continue;
       jobs.push(
-        fetch(url)
-          .then((r) => r.json())
+        readTerminal(line, row.platform || "solana", row.address)
           .then((json) => {
-            if (cancelled) return;
+            if (json == null || cancelled) return;
             const next = parseTerminalToken(json);
             if (!next) return;
             setCoinLives((prev) => ({ ...prev, [row.platform + ":" + row.address]: next, [row.address]: next }));
@@ -1040,41 +1035,33 @@ export function DeskMarketPlate() {
     }
 
     if (ticker?.kind === "stock") {
-      const url = yahooUrl(ticker.symbol);
-      if (url) {
-        jobs.push(
-          fetch(url)
-            .then((r) => r.json())
-            .then((json) => {
-              if (cancelled) return;
-              const next = parseYahoo(json);
-              if (next) setLive(next);
-              setUnread(!next);
-            })
-            .catch(() => {
-              if (!cancelled) setUnread(true);
-            }),
-        );
-      }
+      jobs.push(
+        readYahoo(line, ticker.symbol)
+          .then((json) => {
+            if (json == null || cancelled) return;
+            const next = parseYahoo(json);
+            if (next) setLive(next);
+            setUnread(!next);
+          })
+          .catch(() => {
+            if (!cancelled) setUnread(true);
+          }),
+      );
     }
 
     if (nft) {
-      const url = nftUrl(nft.geckoId);
-      if (url) {
-        jobs.push(
-          fetch(url)
-            .then((r) => r.json())
-            .then((json) => {
-              if (cancelled) return;
-              const next = parseNftLive(json);
-              if (next) setNftLive(next);
-              setNftUnread(!next);
-            })
-            .catch(() => {
-              if (!cancelled) setNftUnread(true);
-            }),
-        );
-      }
+      jobs.push(
+        readNft(line, nft.geckoId)
+          .then((json) => {
+            if (json == null || cancelled) return;
+            const next = parseNftLive(json);
+            if (next) setNftLive(next);
+            setNftUnread(!next);
+          })
+          .catch(() => {
+            if (!cancelled) setNftUnread(true);
+          }),
+      );
     }
 
     if (!house.tickers.length) {
@@ -1117,14 +1104,14 @@ export function DeskMarketPlate() {
     const look = document.getElementById("market-look-net");
     const lookShown = !!look && (look.textContent || "").includes(QUOTE_LOOK);
     if (!quoteLookMaySend(lookShown)) return;
-    const url = searchUrl(typed);
-    if (!url) {
+    if (!searchUrl(typed)) {
       setTruth("type a coin, ticker, or contract");
       return;
     }
     setTruth("looking up…");
     try {
-      const json = await (await fetch(url)).json();
+      const json = await readQuoteSearch(QUOTE_LOOK, typed);
+      if (json == null) return;
       const coins = parseSearchCoins(json);
       const best = pickBestSearchCoin(coins, typed);
       if (!best) {
@@ -1147,14 +1134,14 @@ export function DeskMarketPlate() {
     const look = document.getElementById("market-look-net");
     const lookShown = !!look && (look.textContent || "").includes(QUOTE_LOOK);
     if (!quoteLookMaySend(lookShown)) return;
-    const url = searchUrl(typed);
-    if (!url) {
+    if (!searchUrl(typed)) {
       setNftTruth("type a collection name");
       return;
     }
     setNftTruth("looking up…");
     try {
-      const json = await (await fetch(url)).json();
+      const json = await readQuoteSearch(QUOTE_LOOK, typed);
+      if (json == null) return;
       const found = parseSearchNfts(json);
       setNftHits(found);
       setNftTruth(found.length ? "" : "no collection from that look-up");
