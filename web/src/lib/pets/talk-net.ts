@@ -1,4 +1,4 @@
-/** Cloud talk and cloud voice name the host before the request leaves. `readTalk` and `readVoice` refuse a remote request when that painted host line is missing. A loopback mind and on-device speech stay local. Same sentence as News and Radio (`clientNetLine`). */
+/** Cloud talk and cloud voice name the host before the request leaves. `readTalk` and `readVoice` refuse a remote request when that painted host line is missing. A loopback mind and on-device speech stay local. Same sentence as News and Radio (`clientNetLine`). Overlay connect-src names these hosts. ADR 0048. */
 import { mindPreset } from "../ai/catalog.ts";
 import { assertSafeMindUrl } from "../ai/safe-url.ts";
 import type { MindBinding, VoiceKind } from "../ai/types.ts";
