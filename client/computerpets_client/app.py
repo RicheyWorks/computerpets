@@ -37,9 +37,11 @@ from .presence import (
     arm_weather_locate,
     classify_key,
     clear_weather_locate,
+    hold_weather_locate,
     host_path_label,
     ip_place,
     list_host_folder,
+    note_weather_locate_yes,
     read_weather_here,
     record_keystroke,
     refuse_file_drop,
@@ -1013,8 +1015,13 @@ def main(argv: list[str] | None = None) -> int:
         if allow_permission("geolocation", 1_000):
             print("check failed: geolocation is a standing grant", file=sys.stderr)
             return 1
+        note_weather_locate_yes()
         if read_weather_here() is not None or allow_permission("geolocation", 1_000):
             print("check failed: blotter read a machine location", file=sys.stderr)
+            return 1
+        hold_weather_locate()
+        if read_weather_here() is not None:
+            print("check failed: blotter read a machine location after don't send", file=sys.stderr)
             return 1
         if ip_place() is not None or ip_place(True) is not None:
             print("check failed: blotter asked an IP place", file=sys.stderr)

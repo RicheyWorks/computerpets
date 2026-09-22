@@ -23,9 +23,24 @@ const HOUSE_FILES = Object.freeze(["card.json", "mind.json"]);
  * without a new browser prompt. Electron 35 cannot revoke that cache.
  * An in-app yes is not a revoke. Callers arm only after that yes, and
  * only when no typed area is saved. A saved typed area does not arm this grant.
+ * One yes covers one read. After that locate, or after Don't send, the next
+ * getCurrentPosition waits for a fresh in-app yes. A timer or a panel reopen
+ * does not note that yes. A prior browser allow can still satisfy the next
+ * locate without a new OS or browser prompt. This does not revoke the grant.
  */
 const WEATHER_LOCATE_MS = 120_000;
 let weatherLocateUntil = 0;
+let weatherLocateYes = false;
+
+/** The Send the place button. A cached Chromium grant is not this yes. */
+function noteWeatherLocateYes() {
+  weatherLocateYes = true;
+}
+
+/** Don't send, and any path that must not leave a yes armed. */
+function holdWeatherLocate() {
+  weatherLocateYes = false;
+}
 
 function allowNavigation() {
   return false;
@@ -118,14 +133,17 @@ function readMachineMark() {
 }
 
 /**
- * One weather-button fix. Arms geolocation, asks once, then clears.
+ * One weather-button fix. Arms geolocation only after noteWeatherLocateYes, asks once, then clears.
+ * A second call in the same session does not call getCurrentPosition until that yes is noted again.
  * Does not call watchPosition. maximumAge is 0, so a cached position is not a silent re-read.
- * A cached origin grant can still satisfy the prompt. This does not revoke it.
+ * A cached origin grant can still satisfy the call after the fresh yes. This does not revoke it.
  * `hooks.arm` / `hooks.clear` are how the overlay tells the Electron session.
  * @param {{ getCurrentPosition?: Function } | null | undefined} geo
  * @param {{ arm?: Function, clear?: Function } | null | undefined} [hooks]
  */
 function readWeatherHere(geo, hooks) {
+  if (!weatherLocateYes) return Promise.resolve(null);
+  weatherLocateYes = false;
   armWeatherLocate();
   let pending = Promise.resolve();
   if (hooks && typeof hooks.arm === "function") {
@@ -299,6 +317,8 @@ module.exports = {
   allowPermission,
   armWeatherLocate,
   clearWeatherLocate,
+  noteWeatherLocateYes,
+  holdWeatherLocate,
   weatherLocateOpen,
   weatherLocateOptions,
   ipPlace,

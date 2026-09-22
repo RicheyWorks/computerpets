@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
-import { ipPlace, readWeatherHere } from "@/lib/pets/presence";
+import { holdWeatherLocate, ipPlace, noteWeatherLocateYes, readWeatherHere } from "@/lib/pets/presence";
 import {
   ackSavedHere,
   addArea,
@@ -395,6 +395,7 @@ export function DeskWeatherPlate({
   async function confirmHere() {
     const gate = locateGate(areas, true);
     if (gate.act !== "locate") {
+      holdWeatherLocate();
       setHereAsk(false);
       if (gate.act === "keep") {
         setHereLine(HERE_KEPT);
@@ -415,9 +416,11 @@ export function DeskWeatherPlate({
       return { id: "here", name: "This computer", query: "this computer", lat, lon };
     }
     if (ipPlace() != null) {
+      holdWeatherLocate();
       setHereLine(HERE_FAIL);
       return;
     }
+    noteWeatherLocateYes();
     const fix = await readWeatherHere(typeof navigator === "undefined" ? undefined : navigator.geolocation);
     if (!fix) {
       setHereLine(HERE_FAIL);
@@ -447,6 +450,7 @@ export function DeskWeatherPlate({
   }
 
   function declineHere() {
+    holdWeatherLocate();
     setHereAsk(false);
     setHereLine(HERE_HELD);
   }

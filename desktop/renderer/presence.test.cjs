@@ -55,6 +55,7 @@ test("clipboard, screen capture, and the file system stay denied; geolocation is
 
 test("a weather read asks once, then the grant closes, and it does not watch", async () => {
   Presence.clearWeatherLocate();
+  Presence.holdWeatherLocate();
   let watched = 0;
   const seen = [];
   const geo = {
@@ -68,6 +69,15 @@ test("a weather read asks once, then the grant closes, and it does not watch", a
     },
   };
   const log = [];
+  const silent = await Presence.readWeatherHere(geo, {
+    arm() {
+      log.push("arm");
+    },
+  });
+  assert.equal(silent, null);
+  assert.equal(seen.length, 0);
+  assert.deepEqual(log, []);
+  Presence.noteWeatherLocateYes();
   const fix = await Presence.readWeatherHere(geo, {
     arm() {
       log.push("arm");
@@ -93,6 +103,11 @@ test("a weather read asks once, then the grant closes, and it does not watch", a
   assert.equal(Presence.allowPermission("geolocation"), false);
 
   const pageOpts = [];
+  Guard.holdWeatherLocate();
+  const pageSilent = await Guard.readWeatherHere(geo);
+  assert.equal(pageSilent, null);
+  assert.equal(seen.length, 1);
+  Guard.noteWeatherLocateYes();
   const page = await Guard.readWeatherHere(
     {
       getCurrentPosition(ok, _err, opts) {
@@ -116,6 +131,67 @@ test("a weather read asks once, then the grant closes, and it does not watch", a
   assert.equal(pageOpts[0].maximumAge, 0);
   assert.equal(watched, 0);
   assert.deepEqual(log.slice(-2), ["page-arm", "page-clear"]);
+});
+
+test("a second locate in the session needs a fresh in-app yes", async () => {
+  Presence.holdWeatherLocate();
+  Guard.holdWeatherLocate();
+  let calls = 0;
+  let armed = 0;
+  const geo = {
+    getCurrentPosition(ok) {
+      calls += 1;
+      ok({ coords: { latitude: 47.61, longitude: -122.33 } });
+    },
+  };
+  const hooks = {
+    arm() {
+      armed += 1;
+    },
+    clear() {},
+  };
+  assert.equal(await Presence.readWeatherHere(geo, hooks), null);
+  assert.equal(calls, 0);
+  assert.equal(armed, 0);
+  assert.equal(Presence.allowPermission("geolocation"), false);
+
+  Presence.noteWeatherLocateYes();
+  const first = await Presence.readWeatherHere(geo, hooks);
+  assert.deepEqual(first, { lat: 47.61, lon: -122.33 });
+  assert.equal(calls, 1);
+  assert.equal(armed, 1);
+  assert.equal(Presence.allowPermission("geolocation"), false);
+
+  assert.equal(await Presence.readWeatherHere(geo, hooks), null);
+  assert.equal(calls, 1);
+  assert.equal(armed, 1);
+
+  Presence.noteWeatherLocateYes();
+  Presence.holdWeatherLocate();
+  assert.equal(await Presence.readWeatherHere(geo, hooks), null);
+  assert.equal(calls, 1);
+
+  Presence.noteWeatherLocateYes();
+  const second = await Presence.readWeatherHere(geo, hooks);
+  assert.deepEqual(second, { lat: 47.61, lon: -122.33 });
+  assert.equal(calls, 2);
+  assert.equal(armed, 2);
+
+  Guard.noteWeatherLocateYes();
+  let pageCalls = 0;
+  const page = await Guard.readWeatherHere({
+    getCurrentPosition(ok) {
+      pageCalls += 1;
+      ok({ coords: { latitude: 1, longitude: 2 } });
+    },
+  });
+  assert.deepEqual(page, { lat: 1, lon: 2 });
+  assert.equal(await Guard.readWeatherHere(geo), null);
+  assert.equal(pageCalls, 1);
+  Guard.noteWeatherLocateYes();
+  Guard.holdWeatherLocate();
+  assert.equal(await Guard.readWeatherHere(geo), null);
+  assert.equal(pageCalls, 1);
 });
 
 test("window payloads stay rects — titles and paths are dropped", () => {
@@ -281,16 +357,25 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.match(htmlSrc, /id="weather-here-ask"/);
   assert.match(htmlSrc, /id="weather-here-yes"/);
   assert.match(htmlSrc, /id="weather-here-no"/);
-  assert.match(htmlSrc, /send a place from this computer\? a saved browser grant can answer without a new prompt\. this house cannot revoke that grant\./);
+  assert.match(htmlSrc, /send a place from this computer\? a prior browser allow can satisfy the next locate without a new os or browser prompt\. the house still asks in the app\. this house cannot revoke that grant\./);
   const hereAt = petSrc.indexOf('getElementById("weather-here");');
   const yesAt = petSrc.indexOf('getElementById("weather-here-yes")');
   const hereBody = petSrc.slice(hereAt, yesAt);
   assert.match(hereBody, /locateGate\(card, false\)/);
   assert.doesNotMatch(hereBody, /readWeatherHere|armWeatherLocate|reverseUrl/);
-  const yesBody = petSrc.slice(yesAt, yesAt + 700);
+  const yesBody = petSrc.slice(yesAt, yesAt + 1100);
   assert.match(yesBody, /locateGate\(card, true\)/);
-  assert.ok(yesBody.indexOf("locateGate") < yesBody.indexOf("sendLiveFix"));
+  assert.match(yesBody, /noteWeatherLocateYes/);
+  assert.ok(yesBody.indexOf("locateGate") < yesBody.indexOf("noteWeatherLocateYes"));
+  assert.ok(yesBody.indexOf("noteWeatherLocateYes") < yesBody.indexOf("sendLiveFix"));
   assert.doesNotMatch(yesBody, /readWeatherHere/);
+  const noAt = petSrc.indexOf('getElementById("weather-here-no")');
+  const noBody = petSrc.slice(noAt, noAt + 450);
+  assert.match(noBody, /holdWeatherLocate/);
+  assert.doesNotMatch(noBody, /readWeatherHere|noteWeatherLocateYes|getCurrentPosition/);
+  const toggleAt = petSrc.indexOf('closest("#weather-toggle")');
+  const toggleBody = petSrc.slice(toggleAt, toggleAt + 550);
+  assert.doesNotMatch(toggleBody, /noteWeatherLocateYes|holdWeatherLocate|readWeatherHere|getCurrentPosition|armWeatherLocate/);
   const sendAt = petSrc.indexOf("function sendLiveFix");
   const sendBody = petSrc.slice(sendAt, hereAt);
   assert.match(sendBody, /readWeatherHere/);
@@ -311,7 +396,14 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   const fetchBody = petSrc.slice(fetchAt, fetchAt + 1600);
   assert.match(fetchBody, /forecastGate\(card, card\.hereForecastAck\)/);
   assert.ok(fetchBody.indexOf("forecastGate") < fetchBody.indexOf("forecastUrl"));
-  assert.doesNotMatch(fetchBody, /reverseUrl|readWeatherHere|armWeatherLocate|getCurrentPosition/);
+  assert.doesNotMatch(fetchBody, /reverseUrl|readWeatherHere|armWeatherLocate|getCurrentPosition|noteWeatherLocateYes/);
+  const beatAt = petSrc.indexOf("setInterval(readHeartbeat");
+  assert.doesNotMatch(petSrc.slice(beatAt, beatAt + 80), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
+  const gpuAt = petSrc.indexOf("setInterval(() => {\n  if (!window.PetGpu");
+  assert.doesNotMatch(petSrc.slice(gpuAt, gpuAt + 500), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
+  const lifeAt = petSrc.indexOf("setInterval(() => {\n  if (document.hidden || !kind || !life)");
+  assert.ok(lifeAt > petSrc.indexOf("function sendLiveFix"));
+  assert.doesNotMatch(petSrc.slice(lifeAt), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
   const savedYesAt = petSrc.indexOf('getElementById("weather-saved-yes")');
   const savedYesBody = petSrc.slice(savedYesAt, savedYesAt + 700);
   assert.match(savedYesBody, /forecastGate\(card, card\.hereForecastAck\)/);

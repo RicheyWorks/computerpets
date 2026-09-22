@@ -49,6 +49,7 @@ address, or an API that is not on `main`.
 | [0028](0028-model-field-drops-a-pasted-secret.md) | A model field drops a pasted secret | Accepted |
 | [0029](0029-enumerator-does-not-read-a-window-class.md) | The window enumerator does not read a keeper window class | Accepted |
 | [0030](0030-missing-os-id-waits-for-a-yes.md) | A missing OS id waits for a yes before a weaker license mark | Accepted |
+| [0031](0031-later-locate-still-asks-in-the-app.md) | A later weather locate still asks in the app | Accepted |
 
 ## How to add one
 
