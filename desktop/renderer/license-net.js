@@ -49,6 +49,15 @@
     return shown.indexOf(line) !== -1 && shown.indexOf(net) !== -1;
   }
 
+  /**
+   * The only unlock-hash POST from this page, including a bound download.
+   * A miss resolves to a hold and does not call `request`. A loopback backend still calls it.
+   */
+  function postLicenseHash(shown, backendUrl, request) {
+    if (!licenseMaySend(backendUrl, shown)) return Promise.resolve({ held: true });
+    return Promise.resolve().then(request);
+  }
+
   function downloadTalkHonesty(backendUrl) {
     const target = licenseTarget(backendUrl);
     if (!target || target.local) return "";
@@ -64,6 +73,12 @@
     const net = clientNetLine(target.label);
     if (!line || !net || typeof shown !== "string") return false;
     return shown.indexOf(line) !== -1 && shown.indexOf(net) !== -1;
+  }
+
+  /** The only unbound download POST from this page. A miss does not call `request`. */
+  function postUnboundDownload(shown, backendUrl, request) {
+    if (!downloadMayPost(backendUrl, shown)) return Promise.resolve({ held: true });
+    return Promise.resolve().then(request);
   }
 
   function bundleUrl(raw) {
@@ -107,6 +122,12 @@
     return shown.indexOf(line) !== -1 && shown.indexOf(net) !== -1;
   }
 
+  /** The only signed-bundle GET from this page. A miss does not call `request` and does not scrub the query. */
+  function getSignedBundle(shown, downloadUrl, request) {
+    if (!bundleMayFetch(downloadUrl, shown)) return Promise.resolve({ ok: false, status: 0, bytes: 0, held: true });
+    return Promise.resolve().then(request);
+  }
+
   const api = {
     LICENSE_HOST_NAME,
     LOCAL_STAYS,
@@ -118,12 +139,15 @@
     licenseTarget,
     licenseHonesty,
     licenseMaySend,
+    postLicenseHash,
     downloadTalkHonesty,
     downloadMayPost,
+    postUnboundDownload,
     bundleHostName,
     bundleTarget,
     bundleHonesty,
     bundleMayFetch,
+    getSignedBundle,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.LicenseNet = api;

@@ -55,14 +55,15 @@ address, or an API that is not on `main`.
 | [0034](0034-news-quotes-and-radio-name-the-network-address.md) | News, quotes, and Radio Find name the network address | Accepted |
 | [0035](0035-station-stream-names-the-network-address.md) | A station stream names the network address when Play is pressed | Accepted (the open itself waits in 0044) |
 | [0036](0036-cloud-talk-and-voice-name-the-network-address.md) | Cloud talk and cloud voice name the network address | Accepted (the request itself waits in 0044) |
-| [0037](0037-license-hash-names-the-network-address.md) | Unlock names the host before the license hash leaves | Accepted |
-| [0038](0038-signed-bundle-names-the-cdn-host.md) | A signed bundle names the CDN host before the GET leaves | Accepted |
-| [0039](0039-unbound-download-names-the-backend-host.md) | An unbound download names the backend host before the POST leaves | Accepted |
+| [0037](0037-license-hash-names-the-network-address.md) | Unlock names the host before the license hash leaves | Accepted (the POST itself waits in 0045) |
+| [0038](0038-signed-bundle-names-the-cdn-host.md) | A signed bundle names the CDN host before the GET leaves | Accepted (the GET itself waits in 0045) |
+| [0039](0039-unbound-download-names-the-backend-host.md) | An unbound download names the backend host before the POST leaves | Accepted (the POST itself waits in 0045) |
 | [0040](0040-news-quotes-and-radio-wait-for-the-line-in-main.md) | News, quotes, and Radio Find wait for the painted line in main | Accepted |
 | [0041](0041-featured-page-waits-for-the-wikipedia-line.md) | The featured page waits for the wikipedia line | Accepted |
 | [0042](0042-desk-and-overlay-fetches-wait-for-the-painted-line.md) | Desk and overlay plate fetches wait for the painted line | Accepted |
 | [0043](0043-forecast-and-geocode-wait-for-the-painted-line.md) | A forecast and a geocode look-up wait for the painted line | Accepted |
 | [0044](0044-station-stream-and-cloud-talk-wait-for-the-painted-line.md) | A station stream and cloud talk wait for the painted line | Accepted |
+| [0045](0045-license-requests-wait-for-the-painted-line.md) | License requests wait for the painted line | Accepted |
 
 ## How to add one
 
