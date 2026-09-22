@@ -3,7 +3,8 @@
 Spring Boot is not the pet's GPU. There is no ``/metrics/gpu`` door.
 Temperature, utilization, memory, and power come from nvidia-smi or Windows
 GPU performance counters. A missing, malformed, stale, or non-Windows reading
-stays unread. A real zero from the hardware is kept.
+stays unread. A real zero from the hardware is kept. The sparkline is a trail of
+those read samples and stays empty until two fresh utilization points exist.
 """
 
 from __future__ import annotations
@@ -231,8 +232,126 @@ def gpu_line(sample) -> str:
     )
 
 
+READ_INK = "#9a9288"
+UNREAD_INK = "#5c564e"
+SPARK_W = 72
+SPARK_H = 14
+SPARK_PAD = 1
+SPARK_MAX = 24
+
+
 def ink(sample) -> str:
-    return "#9a9288" if parse_sample(sample)["status"] == "read" else "#5c564e"
+    return READ_INK if parse_sample(sample)["status"] == "read" else UNREAD_INK
+
+
+def empty_history() -> list:
+    return []
+
+
+def _fmt_tenths(n: float) -> str:
+    tenths = int(math.floor(n * 10 + 0.5))
+    whole = tenths // 10
+    frac = abs(tenths % 10)
+    if frac == 0:
+        return str(whole)
+    return f"{whole}.{frac}"
+
+
+def _fresh_stamp(read_at_ms, now_ms) -> bool:
+    if isinstance(read_at_ms, bool) or not isinstance(read_at_ms, (int, float)) or not math.isfinite(read_at_ms):
+        return False
+    if isinstance(now_ms, bool) or not isinstance(now_ms, (int, float)) or not math.isfinite(now_ms):
+        return False
+    age = now_ms - read_at_ms
+    return age >= -5000 and age <= STALE_MS
+
+
+def _point_from(sample: dict) -> dict:
+    return {
+        "readAtMs": sample["readAtMs"],
+        "tempC": sample["tempC"],
+        "utilPercent": sample["utilPercent"],
+        "memoryUsedBytes": sample["memoryUsedBytes"],
+        "memoryTotalBytes": sample["memoryTotalBytes"],
+        "powerWatts": sample["powerWatts"],
+    }
+
+
+def _clean_point(row) -> dict | None:
+    if not isinstance(row, dict):
+        return None
+    read_at = _stamp(row.get("readAtMs"))
+    if read_at is None:
+        return None
+    temp = _finite_in(row.get("tempC"), -40, 125)
+    util = _finite_in(row.get("utilPercent"), 0, 100)
+    used = _finite_in(row.get("memoryUsedBytes"), 0, 2**48)
+    total = _finite_in(row.get("memoryTotalBytes"), 0, 2**48)
+    power = _finite_in(row.get("powerWatts"), 0, 2000)
+    if used is not None and total is not None and used > total:
+        used = None
+        total = None
+    point = {
+        "readAtMs": read_at,
+        "tempC": None if temp is None else round1(temp),
+        "utilPercent": None if util is None else round1(util),
+        "memoryUsedBytes": None if used is None else round_int(used),
+        "memoryTotalBytes": None if total is None else round_int(total),
+        "powerWatts": None if power is None else round1(power),
+    }
+    if not any(point[key] is not None for key in METRIC_KEYS):
+        return None
+    return point
+
+
+def _trim_history(history, now_ms) -> list:
+    if isinstance(now_ms, bool) or not isinstance(now_ms, (int, float)) or not math.isfinite(now_ms):
+        return []
+    rows = history if isinstance(history, list) else []
+    kept = []
+    for row in rows:
+        point = _clean_point(row)
+        if point is None or not _fresh_stamp(point["readAtMs"], now_ms):
+            continue
+        kept.append(point)
+    kept.sort(key=lambda point: point["readAtMs"])
+    if len(kept) > SPARK_MAX:
+        return kept[-SPARK_MAX:]
+    return kept
+
+
+def remember(history, sample, now_ms) -> list:
+    kept = _trim_history(history, now_ms)
+    clean = present(sample, now_ms)
+    if clean["status"] != "read" or not _fresh_stamp(clean["readAtMs"], now_ms):
+        return kept
+    next_points = [point for point in kept if point["readAtMs"] != clean["readAtMs"]]
+    next_points.append(_point_from(clean))
+    next_points.sort(key=lambda point: point["readAtMs"])
+    if len(next_points) > SPARK_MAX:
+        return next_points[-SPARK_MAX:]
+    return next_points
+
+
+def _spark_coord(index: int, count: int, util: float) -> dict:
+    span = SPARK_W - SPARK_PAD * 2
+    x = round1(SPARK_PAD + (index * span) / (count - 1))
+    y = round1(SPARK_PAD + ((100 - util) * (SPARK_H - SPARK_PAD * 2)) / 100)
+    return {"x": x, "y": y}
+
+
+def sparkline(history, sample, now_ms) -> dict:
+    shown = present(sample, now_ms)
+    fresh = _trim_history(history, now_ms) if shown["status"] == "read" else []
+    util_points = [point for point in fresh if isinstance(point["utilPercent"], (int, float)) and not isinstance(point["utilPercent"], bool)]
+    if shown["status"] != "read" or len(util_points) < 2:
+        return {"empty": True, "ink": UNREAD_INK, "history": fresh, "points": [], "path": "", "coords": []}
+    coords = [_spark_coord(index, len(util_points), point["utilPercent"]) for index, point in enumerate(util_points)]
+    path = "".join(
+        f"{'M' if index == 0 else ' L'}{_fmt_tenths(coord['x'])} {_fmt_tenths(coord['y'])}"
+        for index, coord in enumerate(coords)
+    )
+    return {"empty": False, "ink": READ_INK, "history": fresh, "points": util_points, "path": path, "coords": coords}
 
 
 def _metric_token(token):

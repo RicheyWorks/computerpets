@@ -205,6 +205,113 @@ test("one NVIDIA GPU may fill only its blank fields from the one counter row", (
   assert.equal(sample.powerWatts, null);
 });
 
+function at(util, when) {
+  return G.sampleFromProbe(
+    { nvidiaCsv: `NVIDIA GeForce RTX 4070, 62, ${util}, 3200, 12288, 48.5` },
+    { platform: "win32", nowMs: when },
+  );
+}
+
+const TRAIL = "M1 11.3 L71 8.2";
+
+test("a sparkline grows only from fresh read samples", () => {
+  const first = at(14, NOW);
+  let history = G.remember(G.emptyHistory(), first, NOW);
+  assert.equal(history.length, 1);
+  assert.equal(history[0].utilPercent, 14);
+  let spark = G.sparkline(history, first, NOW);
+  assert.equal(spark.empty, true);
+  assert.equal(spark.path, "");
+  assert.equal(spark.coords.length, 0);
+  assert.equal(spark.ink, G.UNREAD_INK);
+  assert.equal(spark.history.length, 1);
+
+  const second = at(40, NOW + 1000);
+  history = G.remember(history, second, NOW + 1000);
+  assert.equal(history.length, 2);
+  assert.equal(history[1].utilPercent, 40);
+  spark = G.sparkline(history, second, NOW + 1000);
+  assert.equal(spark.empty, false);
+  assert.equal(spark.path, TRAIL);
+  assert.equal(spark.ink, G.READ_INK);
+  assert.equal(spark.points.length, 2);
+  assert.equal(spark.history.length, 2);
+  assert.equal(spark.coords.length, 2);
+
+  const lied = { ...second, history: [{ readAtMs: NOW, utilPercent: 100 }, { readAtMs: NOW + 1, utilPercent: 1 }] };
+  const once = G.remember([], lied, NOW + 1000);
+  assert.equal(once.length, 1);
+  assert.equal(once[0].utilPercent, 40);
+  assert.equal(G.remember(history, second, NOW + 1000).length, 2);
+
+  const idleA = at(0, NOW);
+  const idleB = at(0, NOW + 1000);
+  const idleHistory = G.remember(G.remember([], idleA, NOW), idleB, NOW + 1000);
+  const idleSpark = G.sparkline(idleHistory, idleB, NOW + 1000);
+  assert.equal(idleSpark.path, "M1 13 L71 13");
+  assert.equal(idleHistory[0].utilPercent, 0);
+});
+
+test("unread, malformed, and unsupported sparklines stay empty", () => {
+  const unread = G.sampleFromProbe(
+    { nvidiaCsv: null, engines: null, adapterMemory: null },
+    { platform: "win32", nowMs: NOW },
+  );
+  const unreadHistory = G.remember([], unread, NOW);
+  const unreadSpark = G.sparkline(unreadHistory, unread, NOW);
+  assert.deepEqual(unreadHistory, []);
+  assert.equal(unreadSpark.empty, true);
+  assert.equal(unreadSpark.path, "");
+  assert.deepEqual(unreadSpark.history, []);
+  assert.deepEqual(unreadSpark.points, []);
+  assert.equal(unreadSpark.ink, G.UNREAD_INK);
+
+  const prior = G.remember(G.remember([], at(14, NOW), NOW), at(40, NOW + 1000), NOW + 1000);
+  const held = G.remember(prior, unread, NOW + 2000);
+  assert.equal(held.length, 2);
+  const hidden = G.sparkline(held, unread, NOW + 2000);
+  assert.equal(hidden.path, "");
+  assert.deepEqual(hidden.history, []);
+  assert.equal(hidden.ink, G.UNREAD_INK);
+
+  const malformed = G.parseSample(0);
+  assert.deepEqual(G.remember([], malformed, NOW), []);
+  assert.equal(G.sparkline([], malformed, NOW).path, "");
+  assert.equal(G.sparkline(prior, malformed, NOW + 2000).empty, true);
+  assert.equal(G.sparkline(prior, malformed, NOW + 2000).path, "");
+
+  for (const platform of ["darwin", "linux"]) {
+    const sample = G.sampleFromProbe(
+      { nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5" },
+      { platform, nowMs: NOW },
+    );
+    assert.equal(sample.status, "unsupported");
+    assert.deepEqual(G.remember([], sample, NOW), []);
+    const spark = G.sparkline([], sample, NOW);
+    assert.equal(spark.empty, true);
+    assert.equal(spark.path, "");
+    assert.equal(spark.ink, G.UNREAD_INK);
+    assert.deepEqual(spark.history, []);
+  }
+});
+
+test("stale samples clear the sparkline", () => {
+  let history = G.remember([], at(14, NOW), NOW);
+  history = G.remember(history, at(40, NOW + 1000), NOW + 1000);
+  assert.equal(G.sparkline(history, at(40, NOW + 1000), NOW + 1000).path, TRAIL);
+  const later = NOW + 1000 + G.STALE_MS + 1;
+  const stale = G.present(at(40, NOW + 1000), later);
+  assert.equal(stale.status, "stale");
+  history = G.remember(history, stale, later);
+  assert.deepEqual(history, []);
+  const spark = G.sparkline(history, stale, later);
+  assert.equal(spark.empty, true);
+  assert.equal(spark.path, "");
+  assert.deepEqual(spark.history, []);
+  assert.deepEqual(spark.coords, []);
+  assert.equal(spark.ink, G.UNREAD_INK);
+});
+
 test("the probe script never plants a zero, and the HUD stays lockstep", () => {
   assert.match(probeSrc, /nvidia-smi/);
   assert.match(probeSrc, /GPU Engine\(\*\)\\Utilization Percentage/);
@@ -215,22 +322,38 @@ test("the probe script never plants a zero, and the HUD stays lockstep", () => {
   assert.doesNotMatch(probeSrc, /utilPercent\s*=\s*0/);
   assert.match(htmlSrc, /id="hud-gpu"/);
   assert.match(htmlSrc, /data-gpu="unread"/);
+  assert.match(htmlSrc, /id="hud-gpu-spark"/);
+  assert.match(htmlSrc, /data-spark="empty"/);
   assert.match(htmlSrc, /GPU unread/);
   assert.match(petSrc, /PetGpu/);
   assert.match(petSrc, /hudGpu/);
+  assert.match(petSrc, /remember/);
+  assert.match(petSrc, /sparkline/);
   assert.match(styleSrc, /#hud-gpu\[data-gpu="read"\]/);
   assert.match(styleSrc, /#5c564e/);
+  assert.match(styleSrc, /\.gpu-spark\[data-spark="empty"\]/);
   assert.doesNotMatch(styleSrc, /#hud-gpu\[data-gpu="read"\][\s\S]*#8fa08a/);
+  assert.doesNotMatch(styleSrc, /\.gpu-spark[\s\S]{0,400}#8fa08a/);
   assert.match(preloadSrc, /onGpu/);
   assert.match(mainSrc, /gpu-sense/);
   const webGpu = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "gpu.ts"), "utf8");
   const cardSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "keeper-card.tsx"), "utf8");
   const pySrc = readFileSync(join(__dirname, "..", "..", "client", "computerpets_client", "gpu.py"), "utf8");
+  const appSrc = readFileSync(join(__dirname, "..", "..", "client", "computerpets_client", "app.py"), "utf8");
   assert.match(webGpu, /mac-linux-gpu-sense/);
   assert.match(webGpu, /STALE_MS = 20000/);
+  assert.match(webGpu, /export function remember/);
+  assert.match(webGpu, /export function sparkline/);
   assert.match(cardSrc, /keeper-gpu/);
   assert.match(cardSrc, /data-gpu=/);
+  assert.match(cardSrc, /sparkline\(\[\], UNREAD_GPU, 0\)/);
+  assert.match(cardSrc, /data-spark=/);
+  assert.doesNotMatch(cardSrc, /M1 11\.3/);
   assert.match(pySrc, /mac-linux-gpu-sense/);
   assert.match(pySrc, /STALE_MS = 20000/);
+  assert.match(pySrc, /def remember/);
+  assert.match(pySrc, /def sparkline/);
+  assert.match(appSrc, /gpu_spark/);
+  assert.match(appSrc, /sparkline/);
   assert.match(VALID_LINE, /48\.5 W/);
 });

@@ -22,7 +22,7 @@ GPU load is a desktop-local sense.
 
 ## Consequences
 
-- Sparkline stays later. A single sample is not a trail, and a flat stroke would look healthy.
-- A real GPU render path (DirectX 12, Vulkan, or an honest Chromium path that still feels like the poster) stays later. Sensing did not build that engine.
+- The sparkline is a trail of real `read` samples from this sense, kept for the same 20 seconds. It draws only when two or more of those points include utilization. One sample is not a stroke. Unread, unsupported, stale, and malformed readings leave the strip empty in the unread ink. The original decision left the sparkline for later; it landed on 2026-09-22 without inventing samples.
+- A real GPU render path (DirectX 12, Vulkan, or an honest Chromium path that still feels like the poster) stays later. Sensing did not build that engine. The sparkline is not that engine.
 - Non-English Windows may leave counter fields unread when the English counter path does not resolve. That is unread, not a guessed number.
 - AMD and Intel temperature and power stay unread unless a later probe reads those vendors for real.

@@ -5,16 +5,21 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import {
   LATER_DOOR,
+  READ_INK,
   STALE_MS,
   UNREAD_GPU,
+  UNREAD_INK,
+  emptyHistory,
   gpuLine,
   isLinux,
   isMac,
   laterDoor,
   parseSample,
   present,
+  remember,
   sampleFromProbe,
   sensesOn,
+  sparkline,
 } from "../src/lib/pets/gpu.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -84,15 +89,90 @@ test("the browser contract matches the overlay: valid, missing, malformed, stale
   assert.equal(linux.powerWatts, null);
 });
 
+function at(util, when) {
+  return sampleFromProbe(
+    { nvidiaCsv: `NVIDIA GeForce RTX 4070, 62, ${util}, 3200, 12288, 48.5` },
+    { platform: "win32", nowMs: when },
+  );
+}
+
+const TRAIL = "M1 11.3 L71 8.2";
+
+test("a sparkline grows only from fresh read samples and stays empty otherwise", () => {
+  const first = at(14, NOW);
+  let history = remember(emptyHistory(), first, NOW);
+  assert.equal(history.length, 1);
+  assert.equal(history[0].utilPercent, 14);
+  let spark = sparkline(history, first, NOW);
+  assert.equal(spark.empty, true);
+  assert.equal(spark.path, "");
+  assert.equal(spark.ink, UNREAD_INK);
+
+  const second = at(40, NOW + 1000);
+  history = remember(history, second, NOW + 1000);
+  spark = sparkline(history, second, NOW + 1000);
+  assert.equal(history.length, 2);
+  assert.equal(spark.empty, false);
+  assert.equal(spark.path, TRAIL);
+  assert.equal(spark.ink, READ_INK);
+  assert.equal(spark.points.length, 2);
+
+  const unread = sampleFromProbe(
+    { nvidiaCsv: null, engines: null, adapterMemory: null },
+    { platform: "win32", nowMs: NOW },
+  );
+  assert.deepEqual(remember([], unread, NOW), []);
+  const unreadSpark = sparkline([], UNREAD_GPU, 0);
+  assert.equal(unreadSpark.empty, true);
+  assert.equal(unreadSpark.path, "");
+  assert.deepEqual(unreadSpark.history, []);
+  assert.equal(unreadSpark.ink, UNREAD_INK);
+  assert.equal(sparkline(history, unread, NOW + 2000).path, "");
+
+  const malformed = parseSample(0);
+  assert.deepEqual(remember([], malformed, NOW), []);
+  assert.equal(sparkline([], malformed, NOW).path, "");
+  assert.equal(sparkline(history, malformed, NOW + 2000).empty, true);
+
+  const mac = sampleFromProbe(
+    { nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5" },
+    { platform: "darwin", nowMs: NOW },
+  );
+  assert.deepEqual(remember([], mac, NOW), []);
+  assert.equal(sparkline([], mac, NOW).path, "");
+  assert.equal(sparkline([], mac, NOW).ink, UNREAD_INK);
+
+  const later = NOW + 1000 + STALE_MS + 1;
+  const stale = present(second, later);
+  assert.equal(stale.status, "stale");
+  assert.deepEqual(remember(history, stale, later), []);
+  const cleared = sparkline(history, stale, later);
+  assert.equal(cleared.empty, true);
+  assert.equal(cleared.path, "");
+  assert.deepEqual(cleared.history, []);
+});
+
 test("demo and overlay keeper surfaces share the unread GPU row", () => {
   const card = readFileSync(join(root, "web/src/components/desk/keeper-card.tsx"), "utf8");
   const overlay = readFileSync(join(root, "desktop/renderer/index.html"), "utf8");
   const blotter = readFileSync(join(root, "client/computerpets_client/app.py"), "utf8");
+  const deskGpu = readFileSync(join(root, "desktop/renderer/gpu.js"), "utf8");
+  const blotterGpu = readFileSync(join(root, "client/computerpets_client/gpu.py"), "utf8");
   assert.match(card, /keeper-gpu/);
   assert.match(card, /gpuLine\(UNREAD_GPU\)/);
+  assert.match(card, /sparkline\(\[\], UNREAD_GPU, 0\)/);
+  assert.match(card, /data-spark=/);
+  assert.doesNotMatch(card, /M1 11\.3/);
   assert.match(overlay, /id="hud-gpu"/);
   assert.match(overlay, /data-gpu="unread"/);
+  assert.match(overlay, /data-spark="empty"/);
   assert.match(blotter, /gpu_label/);
+  assert.match(blotter, /gpu_spark/);
   assert.match(blotter, /start_gpu_sense/);
+  assert.match(blotter, /sparkline/);
+  assert.match(deskGpu, /function remember/);
+  assert.match(deskGpu, /function sparkline/);
+  assert.match(blotterGpu, /def remember/);
+  assert.match(blotterGpu, /def sparkline/);
   assert.doesNotMatch(card, /\/metrics\/gpu/);
 });

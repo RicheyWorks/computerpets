@@ -1375,6 +1375,7 @@ def _card_rows() -> list[Affordance]:
             "gpu.py / gpu.js / gpu.ts",
             notes=(
                 "Offline: valid, missing, malformed, stale, and Mac/Linux unsupported readings. "
+                "Sparkline history grows only from fresh read samples and stays empty otherwise. "
                 "No invented zeros. Live Windows probe stays live.gpu_sense."
             ),
         ),
@@ -1457,12 +1458,15 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
         from .gpu import (
             LATER_DOOR,
             STALE_MS,
+            UNREAD_INK,
             gpu_line,
             later_door,
             parse_sample,
             present,
+            remember,
             sample_from_probe,
             senses_on,
+            sparkline,
         )
 
         now = 1_700_000_000_000
@@ -1479,6 +1483,18 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
         darwin = sample_from_probe({"nvidiaCsv": csv}, platform="darwin", now_ms=now)
         overlay = _read("desktop/renderer/index.html")
         card = _read("web/src/components/desk/keeper-card.tsx")
+        desk = _read("desktop/renderer/gpu.js")
+        web = _read("web/src/lib/pets/gpu.ts")
+        blotter = _read("client/computerpets_client/app.py")
+        second = sample_from_probe(
+            {"nvidiaCsv": "NVIDIA GeForce RTX 4070, 62, 40, 3200, 12288, 48.5"},
+            platform="win32",
+            now_ms=now + 1000,
+        )
+        history = remember(remember([], valid, now), second, now + 1000)
+        trail = sparkline(history, second, now + 1000)
+        later = now + 1000 + STALE_MS + 1
+        stale_history = remember(history, present(second, later), later)
         checks = {
             "valid": valid["status"] == "read" and valid["tempC"] == 62 and valid["utilPercent"] == 14,
             "missing": missing["status"] == "unread" and missing["utilPercent"] is None and "0%" not in gpu_line(missing),
@@ -1486,7 +1502,23 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
             "stale": stale["status"] == "stale" and stale["tempC"] is None and "62" not in gpu_line(stale),
             "linux": linux["status"] == "unsupported" and linux["tempC"] is None and later_door("linux") == LATER_DOOR,
             "darwin": darwin["status"] == "unsupported" and later_door("darwin") == LATER_DOOR and senses_on("win32"),
-            "surfaces": 'id="hud-gpu"' in overlay and "keeper-gpu" in card and "data-gpu" in card,
+            "history": len(history) == 2 and history[0]["utilPercent"] == 14 and history[1]["utilPercent"] == 40 and trail["path"] == "M1 11.3 L71 8.2" and trail["empty"] is False,
+            "unread_spark": remember([], missing, now) == [] and sparkline([], missing, now)["path"] == "" and sparkline([], missing, now)["ink"] == UNREAD_INK,
+            "stale_spark": stale_history == [] and sparkline(history, present(second, later), later)["path"] == "",
+            "malformed_spark": remember([], malformed, now) == [] and sparkline([], malformed, now)["path"] == "",
+            "unsupported_spark": remember([], linux, now) == [] and sparkline([], darwin, now)["path"] == "" and sparkline([], linux, now)["history"] == [],
+            "surfaces": (
+                'id="hud-gpu"' in overlay
+                and 'data-spark="empty"' in overlay
+                and "keeper-gpu" in card
+                and "data-gpu" in card
+                and "sparkline([], UNREAD_GPU, 0)" in card
+                and "function remember" in desk
+                and "function sparkline" in desk
+                and "export function sparkline" in web
+                and "gpu_spark" in blotter
+                and "def sparkline" in _read("client/computerpets_client/gpu.py")
+            ),
         }
         failed = [name for name, ok in checks.items() if not ok]
         return InvokeResult(

@@ -1,9 +1,14 @@
 """Honest GPU sense: valid, missing, malformed, stale, unsupported."""
 
+from pathlib import Path
+
 from computerpets_client.gpu import (
     LATER_DOOR,
+    READ_INK,
     STALE_MS,
     UNREAD,
+    UNREAD_INK,
+    empty_history,
     gpu_line,
     initial_sample,
     is_linux,
@@ -12,8 +17,10 @@ from computerpets_client.gpu import (
     parse_sample,
     present,
     read_local,
+    remember,
     sample_from_probe,
     senses_on,
+    sparkline,
 )
 
 NOW = 1_700_000_000_000
@@ -136,6 +143,121 @@ def test_mac_and_linux_are_explicit_and_ignore_numbers():
     initial = initial_sample(platform="linux", now_ms=NOW)
     assert initial["status"] == "unsupported"
     assert "0%" not in gpu_line(initial)
+
+
+TRAIL = "M1 11.3 L71 8.2"
+
+
+def _at(util: int, when: int) -> dict:
+    return sample_from_probe(
+        {"nvidiaCsv": f"NVIDIA GeForce RTX 4070, 62, {util}, 3200, 12288, 48.5"},
+        platform="win32",
+        now_ms=when,
+    )
+
+
+def test_sparkline_grows_only_from_fresh_reads():
+    first = _at(14, NOW)
+    history = remember(empty_history(), first, NOW)
+    assert len(history) == 1
+    assert history[0]["utilPercent"] == 14
+    one = sparkline(history, first, NOW)
+    assert one["empty"] is True
+    assert one["path"] == ""
+    assert one["ink"] == UNREAD_INK
+    assert len(one["history"]) == 1
+
+    second = _at(40, NOW + 1000)
+    history = remember(history, second, NOW + 1000)
+    spark = sparkline(history, second, NOW + 1000)
+    assert len(history) == 2
+    assert history[1]["utilPercent"] == 40
+    assert spark["empty"] is False
+    assert spark["path"] == TRAIL
+    assert spark["ink"] == READ_INK
+    assert len(spark["points"]) == 2
+    assert spark["coords"][0]["y"] == 11.3
+
+    lied = dict(second)
+    lied["history"] = [{"readAtMs": NOW, "utilPercent": 100}, {"readAtMs": NOW + 1, "utilPercent": 1}]
+    once = remember([], lied, NOW + 1000)
+    assert len(once) == 1
+    assert once[0]["utilPercent"] == 40
+    assert len(remember(history, second, NOW + 1000)) == 2
+
+
+def test_unread_malformed_and_unsupported_sparklines_stay_empty():
+    unread = sample_from_probe(
+        {"nvidiaCsv": None, "engines": None, "adapterMemory": None},
+        platform="win32",
+        now_ms=NOW,
+    )
+    assert remember([], unread, NOW) == []
+    blank = sparkline([], unread, NOW)
+    assert blank["empty"] is True
+    assert blank["path"] == ""
+    assert blank["history"] == []
+    assert blank["points"] == []
+    assert blank["ink"] == UNREAD_INK
+    assert sparkline([], UNREAD, NOW)["path"] == ""
+
+    prior = remember(remember([], _at(14, NOW), NOW), _at(40, NOW + 1000), NOW + 1000)
+    assert len(remember(prior, unread, NOW + 2000)) == 2
+    hidden = sparkline(prior, unread, NOW + 2000)
+    assert hidden["path"] == ""
+    assert hidden["history"] == []
+
+    malformed = parse_sample(0)
+    assert remember([], malformed, NOW) == []
+    assert sparkline([], malformed, NOW)["path"] == ""
+    assert sparkline(prior, malformed, NOW + 2000)["empty"] is True
+
+    for platform in ("darwin", "linux"):
+        sample = sample_from_probe(
+            {"nvidiaCsv": "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5"},
+            platform=platform,
+            now_ms=NOW,
+        )
+        assert sample["status"] == "unsupported"
+        assert remember([], sample, NOW) == []
+        spark = sparkline([], sample, NOW)
+        assert spark["empty"] is True
+        assert spark["path"] == ""
+        assert spark["ink"] == UNREAD_INK
+        assert spark["history"] == []
+
+
+def test_stale_samples_clear_the_sparkline():
+    history = remember(remember([], _at(14, NOW), NOW), _at(40, NOW + 1000), NOW + 1000)
+    assert sparkline(history, _at(40, NOW + 1000), NOW + 1000)["path"] == TRAIL
+    later = NOW + 1000 + STALE_MS + 1
+    stale = present(_at(40, NOW + 1000), later)
+    assert stale["status"] == "stale"
+    assert remember(history, stale, later) == []
+    cleared = sparkline(history, stale, later)
+    assert cleared["empty"] is True
+    assert cleared["path"] == ""
+    assert cleared["history"] == []
+    assert cleared["coords"] == []
+    assert cleared["ink"] == UNREAD_INK
+
+
+def test_sparkline_contract_is_lockstep():
+    root = Path(__file__).resolve().parents[2]
+    overlay = (root / "desktop/renderer/index.html").read_text(encoding="utf-8")
+    desk = (root / "desktop/renderer/gpu.js").read_text(encoding="utf-8")
+    card = (root / "web/src/components/desk/keeper-card.tsx").read_text(encoding="utf-8")
+    web = (root / "web/src/lib/pets/gpu.ts").read_text(encoding="utf-8")
+    blotter = (root / "client/computerpets_client/app.py").read_text(encoding="utf-8")
+    assert 'data-spark="empty"' in overlay
+    assert "function remember" in desk and "function sparkline" in desk
+    assert "export function remember" in web and "export function sparkline" in web
+    assert "sparkline([], UNREAD_GPU, 0)" in card
+    assert "M1 11.3" not in card
+    assert "gpu_spark" in blotter and "sparkline" in blotter
+    assert sparkline(remember(remember([], _at(14, NOW), NOW), _at(40, NOW + 1000), NOW + 1000), _at(40, NOW + 1000), NOW + 1000)["path"] == TRAIL
+    assert sparkline([], UNREAD, NOW)["ink"] == UNREAD_INK
+    assert READ_INK == "#9a9288"
 
 
 def test_counters_do_not_sum_engines():

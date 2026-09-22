@@ -1,4 +1,4 @@
-/** Desktop-local GPU sense. Real Windows readings only. Mac/Linux stay dark. */
+/** Desktop-local GPU sense. Real Windows readings only. Mac/Linux stay dark. Sparkline is real samples only. */
 (function (root) {
   const STALE_MS = 20000;
   const LATER_DOOR = "mac-linux-gpu-sense";
@@ -493,14 +493,123 @@
     return { nvidiaCsv, engines, adapterMemory, malformed: false };
   }
 
+  const READ_INK = "#9a9288";
+  const UNREAD_INK = "#5c564e";
+  const SPARK_W = 72;
+  const SPARK_H = 14;
+  const SPARK_PAD = 1;
+  const SPARK_MAX = 24;
+
   function ink(sample) {
-    return parseSample(sample).status === "read" ? "#9a9288" : "#5c564e";
+    return parseSample(sample).status === "read" ? READ_INK : UNREAD_INK;
+  }
+
+  function emptyHistory() {
+    return [];
+  }
+
+  function fmtTenths(n) {
+    const tenths = Math.floor(n * 10 + 0.5);
+    const whole = Math.trunc(tenths / 10);
+    const frac = Math.abs(tenths % 10);
+    if (frac === 0) return String(whole);
+    return `${whole}.${frac}`;
+  }
+
+  function freshStamp(readAtMs, nowMs) {
+    if (typeof readAtMs !== "number" || !Number.isFinite(readAtMs)) return false;
+    if (typeof nowMs !== "number" || !Number.isFinite(nowMs)) return false;
+    const age = nowMs - readAtMs;
+    return age >= -5000 && age <= STALE_MS;
+  }
+
+  function pointFrom(sample) {
+    return {
+      readAtMs: sample.readAtMs,
+      tempC: sample.tempC,
+      utilPercent: sample.utilPercent,
+      memoryUsedBytes: sample.memoryUsedBytes,
+      memoryTotalBytes: sample.memoryTotalBytes,
+      powerWatts: sample.powerWatts,
+    };
+  }
+
+  function cleanPoint(row) {
+    if (!row || typeof row !== "object" || Array.isArray(row)) return null;
+    const readAtMs = stamp(row.readAtMs);
+    if (readAtMs == null) return null;
+    const temp = finiteIn(row.tempC, -40, 125);
+    const util = finiteIn(row.utilPercent, 0, 100);
+    let used = finiteIn(row.memoryUsedBytes, 0, 2 ** 48);
+    let total = finiteIn(row.memoryTotalBytes, 0, 2 ** 48);
+    const power = finiteIn(row.powerWatts, 0, 2000);
+    if (used != null && total != null && used > total) {
+      used = null;
+      total = null;
+    }
+    const point = {
+      readAtMs,
+      tempC: temp == null ? null : round1(temp),
+      utilPercent: util == null ? null : round1(util),
+      memoryUsedBytes: used == null ? null : roundInt(used),
+      memoryTotalBytes: total == null ? null : roundInt(total),
+      powerWatts: power == null ? null : round1(power),
+    };
+    if (!METRIC_KEYS.some((key) => point[key] != null)) return null;
+    return point;
+  }
+
+  function trimHistory(history, nowMs) {
+    if (typeof nowMs !== "number" || !Number.isFinite(nowMs)) return [];
+    const rows = Array.isArray(history) ? history : [];
+    const kept = [];
+    rows.forEach((row) => {
+      const point = cleanPoint(row);
+      if (!point || !freshStamp(point.readAtMs, nowMs)) return;
+      kept.push(point);
+    });
+    kept.sort((a, b) => a.readAtMs - b.readAtMs);
+    return kept.length > SPARK_MAX ? kept.slice(kept.length - SPARK_MAX) : kept;
+  }
+
+  function remember(history, sample, nowMs) {
+    const kept = trimHistory(history, nowMs);
+    const clean = present(sample, nowMs);
+    if (clean.status !== "read" || !freshStamp(clean.readAtMs, nowMs)) return kept;
+    const next = kept.filter((point) => point.readAtMs !== clean.readAtMs);
+    next.push(pointFrom(clean));
+    next.sort((a, b) => a.readAtMs - b.readAtMs);
+    return next.length > SPARK_MAX ? next.slice(next.length - SPARK_MAX) : next;
+  }
+
+  function sparkCoord(i, n, util) {
+    const span = SPARK_W - SPARK_PAD * 2;
+    const x = round1(SPARK_PAD + (i * span) / (n - 1));
+    const y = round1(SPARK_PAD + ((100 - util) * (SPARK_H - SPARK_PAD * 2)) / 100);
+    return { x, y };
+  }
+
+  function sparkline(history, sample, nowMs) {
+    const shown = present(sample, nowMs);
+    const fresh = shown.status === "read" ? trimHistory(history, nowMs) : [];
+    const utilPoints = fresh.filter((point) => typeof point.utilPercent === "number");
+    if (shown.status !== "read" || utilPoints.length < 2) {
+      return { empty: true, ink: UNREAD_INK, history: fresh, points: [], path: "", coords: [] };
+    }
+    const coords = utilPoints.map((point, i) => sparkCoord(i, utilPoints.length, point.utilPercent));
+    const path = coords.map((coord, i) => `${i === 0 ? "M" : " L"}${fmtTenths(coord.x)} ${fmtTenths(coord.y)}`).join("");
+    return { empty: false, ink: READ_INK, history: fresh, points: utilPoints, path, coords };
   }
 
   const api = {
     STALE_MS,
     LATER_DOOR,
     UNREAD,
+    READ_INK,
+    UNREAD_INK,
+    SPARK_W,
+    SPARK_H,
+    SPARK_MAX,
     sensesOn,
     isMac,
     isLinux,
@@ -509,6 +618,9 @@
     present,
     gpuLine,
     ink,
+    emptyHistory,
+    remember,
+    sparkline,
     parseNvidiaCsv,
     reducePdh,
     sampleFromProbe,
