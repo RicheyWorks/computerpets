@@ -21,7 +21,14 @@ test("the overlay keeper card tells the same truth as the desk", () => {
   assert.equal(K.VOICE_TRUTH, "Rui, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Echo, Peck, Quill, Keel, Ember, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Rue, Wick, Burr, Floss, Bloom, Vesper, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Ochre, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Well, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Wax, Frill, Cap, Lattice, Horn, Ring, Mane, Puff, Flame, Starter, Pact, Gleam, Choir, Drift, Shard, Dusk, Knot, Brine, Beacon, Hush, Arca, Reed, Pebble, Eft, Dapple, Slip, Pinch, Whorl, Hinge, Latch, Prickle, Boot, Reach, Spot, Orb, Pane, Hold, Loom, and Leap talk with house cry first; system speech is the backup.");
   assert.equal(K.HEARTBEAT_URL, "http://127.0.0.1:8081/api/public/heartbeat");
   assert.equal(K.ADVERTISED_CARE.feed, "/pet/feed");
+  assert.equal(K.ADVERTISED_CARE.play, "/pet/play");
+  assert.equal(K.ADVERTISED_CARE.rest, "/pet/rest");
+  assert.equal(K.CARE_DOOR_STATUS, 409);
+  assert.equal(K.careDoorRefusal("feed").detail, "Care is local. /pet/feed is not a door.");
+  assert.equal(K.careDoorRefusal("play").performed, false);
+  assert.equal(K.careDoorRefusal("rest").status, 409);
   assert.equal(K.careTruth(), "Care is local. /pet/feed is not a door.");
+  assert.match(webKeeper, /CARE_DOOR_STATUS = 409/);
   assert.deepEqual(K.KEEPER_CARE.map((m) => m.id), ["feed", "snack", "play", "rest", "talk", "hide", "call", "clean", "bath", "medicine", "praise", "special", "shed"]);
   assert.match(webKeeper, /JAVA_PORT = 8081/);
   assert.match(webKeeper, /DESK_PORT = 8080/);
