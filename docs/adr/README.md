@@ -29,7 +29,7 @@ address, or an API that is not on `main`.
 | [0008](0008-desktop-local-gpu-sense.md) | GPU load is desktop-local on the keeper machine, not `/metrics/gpu` | Accepted |
 | [0009](0009-mind-listener-name.md) | The keeper HUD names who is listening; it does not show the key | Accepted |
 | [0010](0010-presence-does-not-open-files.md) | Desk presence does not open a dropped keeper file | Accepted |
-| [0011](0011-presence-does-not-list-folders.md) | Desk presence does not list user folders or read window titles | Accepted |
+| [0011](0011-presence-does-not-list-folders.md) | Desk presence does not list user folders or read window titles | Accepted (class read superseded by 0029) |
 | [0012](0012-presence-does-not-log-keys.md) | Desk presence does not log keys outside a focused field | Accepted |
 | [0013](0013-weather-locate-is-not-a-process-grant.md) | Weather location is a click, not a process grant | Accepted |
 | [0014](0014-weather-does-not-ask-an-ip-place.md) | Weather does not ask an IP place service | Accepted |
@@ -47,6 +47,7 @@ address, or an API that is not on `main`.
 | [0026](0026-mind-json-drops-a-pasted-key-query.md) | mind.json drops a pasted key query on save and on read | Accepted |
 | [0027](0027-base-url-drops-userinfo-and-a-path-key.md) | A base URL drops userinfo, a path key, and a non-URL key assignment | Accepted |
 | [0028](0028-model-field-drops-a-pasted-secret.md) | A model field drops a pasted secret | Accepted |
+| [0029](0029-enumerator-does-not-read-a-window-class.md) | The window enumerator does not read a keeper window class | Accepted |
 
 ## How to add one
 

@@ -1,6 +1,6 @@
 # 0011. Desk presence does not list user folders or read window titles
 
-- **Status:** Accepted
+- **Status:** Accepted (the in-process `GetClassName` clause is superseded by [0029](0029-enumerator-does-not-read-a-window-class.md))
 - **Date:** 2026-09-22
 - **Code:** `desktop/windows-enum.cjs`, `desktop/renderer/windows.js`, `desktop/presence.cjs`, `web/src/lib/pets/windows.ts`, `web/src/lib/pets/presence.ts`, `client/computerpets_client/presence.py`
 
@@ -16,7 +16,7 @@ Nothing in the overlay, the desk, or the blotter listed a user folder. The contr
 
 This slice closes those two leftovers. It does not log keys. It does not start DirectX 12 or Vulkan.
 
-- The enumerator still calls `GetClassName` inside its own process, only to set a shell bit for `Shell_TrayWnd`, `Shell_SecondaryTrayWnd`, `NotifyIconOverflowWindow`, `Progman`, and `WorkerW`. The class string is not written on the pipe. `GetWindowText` is not called. No folder API is called.
+- The class string is not written on the pipe. `GetWindowText` is not called. No folder API is called. The in-process class read closed in [0029](0029-enumerator-does-not-read-a-window-class.md): shell windows are known handles.
 - `parseEnumText` keeps `id` and the rect flags plus `shell`. A legacy class token can still set the shell bit. It is not stored. Extra columns (a title, a document name, a path) are ignored.
 - `takeRects` and the glass payload stay `{ id, x, y, width, height }`. A caption that is not null, or a path label that is not empty, drops the row.
 - `listHostFolder` returns `{ listed: false, names: [] }` for Desktop, Documents, Downloads, and any other name. It does not touch the disk. The desk, `/demo`, and the blotter share that function.
@@ -28,5 +28,5 @@ This slice closes those two leftovers. It does not log keys. It does not start D
 - License `hwid` still reads machine-id or MachineGuid. That is the license door, not presence.
 - The overlay plugin key is not plain text in `mind.json`. [0018](0018-mind-key-is-not-plain-text.md). It stays off the card.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.
-- The class string is read and discarded inside the enumerator. It is not a title, not a document name, and not a folder list.
+- A keeper window's class is not copied. [0029](0029-enumerator-does-not-read-a-window-class.md). It is not a title, not a document name, and not a folder list.
 - DirectX 12 / Vulkan is still open. This slice is not that engine.
