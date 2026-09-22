@@ -141,6 +141,7 @@ def test_client_posts_steam_wire_shape_then_downloads_with_bearer_and_jti():
     verified = client["verify"](
         backend_url="http://127.0.0.1:8080",
         provider="steam",
+        license_secret=SECRET,
         fields={"steamId": "76561198000000000", "appId": "123456", "petType": "red_panda", "hwid": "device-abc-123"},
     )
     assert verified["status"] == "success"
@@ -150,6 +151,8 @@ def test_client_posts_steam_wire_shape_then_downloads_with_bearer_and_jti():
     verify_call = backend["calls"][0]
     assert verify_call["method"] == "POST"
     assert verify_call["path"] == "/api/verify/steam"
+    assert verify_call["headers"]["X-ComputerPets-Timestamp"]
+    assert verify_call["headers"]["X-ComputerPets-Signature"]
     assert verify_call["body"] == {
         "steamId": "76561198000000000",
         "appId": "123456",
@@ -181,6 +184,24 @@ def test_client_posts_steam_wire_shape_then_downloads_with_bearer_and_jti():
     assert bundle["bytes"] > 0
 
 
+def test_fails_closed_when_license_key_missing_before_verify_leaves():
+    called = {"n": 0}
+
+    def fetch_impl(*_a, **_k):
+        called["n"] += 1
+        raise AssertionError("verify must not leave without a license key")
+
+    client = create_license_client(fetch_impl=fetch_impl)
+    with pytest.raises(LicenseError) as caught:
+        client["verify"](
+            backend_url="http://127.0.0.1:8080",
+            provider="steam",
+            fields={"steamId": "1", "appId": "2", "hwid": "dev"},
+        )
+    assert caught.value.code == "missing_secret"
+    assert called["n"] == 0
+
+
 def test_fails_closed_when_backend_is_missing():
     def boom(*_a, **_k):
         raise ConnectionError("ECONNREFUSED")
@@ -190,6 +211,7 @@ def test_fails_closed_when_backend_is_missing():
         client["verify"](
             backend_url="http://127.0.0.1:9",
             provider="steam",
+            license_secret=SECRET,
             fields={"steamId": "1", "appId": "2", "hwid": "dev"},
         )
     assert caught.value.code == "unreachable"
@@ -209,6 +231,7 @@ def test_fails_closed_when_steam_denies_ownership():
         client["verify"](
             backend_url="http://127.0.0.1:8080",
             provider="steam",
+            license_secret=SECRET,
             fields={"steamId": "76561198000000000", "appId": "123456", "hwid": "dev"},
         )
     assert caught.value.code == "denied"
@@ -220,6 +243,7 @@ def test_fails_closed_on_revoked_jti_at_download():
     verified = client["verify"](
         backend_url="http://127.0.0.1:8080",
         provider="steam",
+        license_secret=SECRET,
         fields={"steamId": "1", "appId": "2", "petType": "red_panda", "hwid": "dev"},
     )
     jti = verified["auth"]["token"][len("test.") :]
@@ -243,6 +267,7 @@ def test_fails_closed_when_download_hwid_does_not_match():
     verified = client["verify"](
         backend_url="http://127.0.0.1:8080",
         provider="steam",
+        license_secret=SECRET,
         fields={"steamId": "1", "appId": "2", "petType": "red_panda", "hwid": "device-abc-123"},
     )
     with pytest.raises(LicenseError) as caught:

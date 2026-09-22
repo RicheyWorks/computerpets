@@ -62,6 +62,7 @@ All critical items required before any public or limited production exposure hav
   - [x] jti-bound signed download URLs (signature now `pet|owner|jti|exp`)
   - [x] Usage recording (`lastUsedAt` on IssuedLicense) on every successful download via /api/download
   - [x] One-time-use + IP binding on the jti foundation (`DownloadGrantIndex`; `GET /api/bundles/{pet}/redeem`; deny-safe second use and address mismatch; ADR 0055)
+  - [x] Signed machine verify — `POST /api/verify/{provider}` requires HMAC-SHA256 (`X-ComputerPets-Timestamp`, `X-ComputerPets-Signature`, 300s skew, `LICENSE_SECRET_KEY`). Download stays the license JWT. Redeem stays the URL HMAC. Admin stays `X-Admin-Key` (ADR 0070). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload

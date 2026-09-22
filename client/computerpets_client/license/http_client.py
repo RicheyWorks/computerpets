@@ -11,6 +11,7 @@ from urllib.request import Request, urlopen
 
 from .errors import LicenseError
 from .hwid import assert_hwid
+from .machine_sign import SIGNATURE_HEADER, TIMESTAMP_HEADER, sign_machine_request
 from .signed_url import verify_signed_download_url
 from .bundle_zip import accept_bundle_bytes
 
@@ -98,7 +99,13 @@ def create_license_client(
                 str(err),
             ) from err
 
-    def verify(*, backend_url: str, provider: str, fields: dict[str, Any]) -> dict[str, Any]:
+    def verify(
+        *,
+        backend_url: str,
+        provider: str,
+        fields: dict[str, Any],
+        license_secret: str | None = None,
+    ) -> dict[str, Any]:
         base = normalize_backend_url(backend_url)
         if not isinstance(provider, str) or not _PROVIDER_RE.match(provider):
             raise LicenseError("unknown_provider", "provider key is invalid")
@@ -115,11 +122,25 @@ def create_license_client(
         if isinstance(body.get("hwid"), str):
             assert_hwid(body["hwid"])
 
-        res = request(
-            f"{base}/api/verify/{provider}",
+        path = f"/api/verify/{provider}"
+        raw = json.dumps(body).encode("utf-8")
+        signed = sign_machine_request(
+            key=license_secret or "",
             method="POST",
-            headers={"Accept": "application/json", "Content-Type": "application/json"},
-            body=json.dumps(body).encode("utf-8"),
+            path=path,
+            query="",
+            body=raw,
+        )
+        res = request(
+            f"{base}{path}",
+            method="POST",
+            headers={
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                TIMESTAMP_HEADER: signed[TIMESTAMP_HEADER],
+                SIGNATURE_HEADER: signed[SIGNATURE_HEADER],
+            },
+            body=raw,
         )
         payload = res.json()
 

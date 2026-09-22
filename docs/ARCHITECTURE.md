@@ -77,6 +77,7 @@ The system is currently a modular monolith with scaffolding for persistence (JPA
 - **ProviderRegistry** discovers `OwnershipProvider` beans at startup and routes `/api/verify/{key}` calls.
 - **LicenseService** is the cryptographic source of truth for entitlements (AES-GCM).
 - **JwtService + JwtAuthenticationFilter** protect the download phase only.
+- **MachineRequestSignatureFilter** requires HMAC-SHA256 on writes to `/api/verify` (300s skew, `LICENSE_SECRET_KEY`; [0070](adr/0070-machine-request-signature.md)). Download stays the license JWT. Redeem stays the URL HMAC.
 - **PetBundleService** authorizes access to external storage without serving bytes itself. A config-driven `bundle.catalog` may attach version, platform, and sha256 to the signed manifest; empty catalog keeps today's URL-only contract. Published zips follow `computerpets.bundle/v1` (`BundleZipContract`); clients fail closed on bad/missing catalog digest (ADR 0060).
 - External dependencies are called synchronously during verification (Web3 RPC, Microsoft Collections API, Steam Web API, itch.io API, and EOS Auth + Ecom).
 
@@ -321,7 +322,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 #### 4.1 Ownership Verification & License Issuance
 1. Client discovers available platforms: `GET /api/verify/providers`.
 2. Client optionally explores catalog: `GET /api/pets?rarity=RARE` or `/api/pets/by-rarity`.
-3. Client calls `POST /api/verify/{provider}` with provider-specific fields + optional `petType`.
+3. Client calls `POST /api/verify/{provider}` with provider-specific fields + optional `petType`, plus `X-ComputerPets-Timestamp` and `X-ComputerPets-Signature` (HMAC over method, path, query, time, and body; [0070](adr/0070-machine-request-signature.md)). GET provider discovery stays unsigned.
 4. `VerifyController` resolves the provider, calls `OwnershipProvider.verify(Map)`, and on success:
    - Invokes `LicenseService.issueLicense(...)` → produces `EncryptedLicense` (base64 ciphertext + IV + expiry).
    - Invokes `JwtService.issue(...)` → produces short-lived bearer token scoped to `(owner, pet, provider)`.
@@ -562,7 +563,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 ### Security Considerations
 - **Good foundations**: AEAD encryption, short-lived tokens, claim binding, startup secret hygiene, no secrets in JWT bodies.
 - **Attack surface**: Public verify endpoints are the primary target. A compromised master key is catastrophic (full license forgery). CDN signature key compromise allows bundle theft for 15 min windows.
-- **Missing controls**: Real ownership verifiers, hardware binding, replay/revocation store, WAF in front of rate limiter, signed requests for machine clients. (Secret rotation / HSM story → [ADR 0065](adr/0065-secret-rotation-cadence-and-hsm.md). Input length/charset on provider verify fields → [ADR 0066](adr/0066-provider-verify-field-bounds.md). Trusted-proxy XFF → [ADR 0067](adr/0067-trusted-proxy-client-address.md). `/api/pets` discovery rate limit → [ADR 0068](adr/0068-discovery-rate-limit.md). Bundle catalog rate limit → [ADR 0069](adr/0069-bundle-catalog-rate-limit.md).)
+- **Missing controls**: Real ownership verifiers, hardware binding, replay/revocation store, WAF in front of rate limiter. (Secret rotation / HSM story → [ADR 0065](adr/0065-secret-rotation-cadence-and-hsm.md). Input length/charset on provider verify fields → [ADR 0066](adr/0066-provider-verify-field-bounds.md). Trusted-proxy XFF → [ADR 0067](adr/0067-trusted-proxy-client-address.md). `/api/pets` discovery rate limit → [ADR 0068](adr/0068-discovery-rate-limit.md). Bundle catalog rate limit → [ADR 0069](adr/0069-bundle-catalog-rate-limit.md). Signed machine verify → [ADR 0070](adr/0070-machine-request-signature.md). Admin hooks remain a static `X-Admin-Key`.)
 - **Client trust model**: The desktop app must be considered semi-trusted for license decryption (the Python client is expected to hold the same `LICENSE_SECRET_KEY`). The architecture comment "never trust the desktop client" refers to not letting the client *generate* licenses.
 
 ### Extensibility & Future Refactoring Areas
