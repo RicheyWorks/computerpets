@@ -1,6 +1,6 @@
 # 0019. A license mark is a local hash of a named machine id
 
-- **Status:** Accepted
+- **Status:** Accepted (the silent computer-name and random fallback is superseded by [0030](0030-missing-os-id-waits-for-a-yes.md))
 - **Date:** 2026-09-22
 - **Code:** `desktop/license/hwid.cjs`, `desktop/license/session.cjs`, `desktop/renderer/settings.html`, `client/computerpets_client/license/hwid.py`, `client/computerpets_client/license/session.py`, `client/computerpets_client/unlock_dialog.py`
 
@@ -21,7 +21,7 @@ This slice names the read, limits when it happens, and keeps every stored mark. 
 - The digest recipe is unchanged: SHA-256 of `computerpets:` + the platform token + `:` + the raw id, hex, 64 characters. The overlay token is Node's platform (`win32` on Windows). The blotter token is `platform.system().lower()` (`windows` on Windows). Each client keeps its own `hwid.txt`. The recipe is not unified, because unifying it would change a hash for a keeper who lost the file.
 - A non-empty `hwid.txt` is the binding, including a value that is not a fresh digest. It is not rewritten and not re-hashed. An existing license keeps the string it was issued with. The server still wants exact equality. This client does not invent a second id for one license.
 - The raw id is not written, not logged, and not sent. The house receives only the hash, and only on unlock or a bound download. An unbound download does not read the OS id and does not send a mark.
-- When the named OS read fails, Windows uses the computer name, and other platforms with no named mark do too. That name is hashed the same way. It is still a fingerprint, and a rename changes it. If there is no name and no fallback, a random id is hashed. That random id is not stable if `hwid.txt` is deleted.
+- When the named OS read fails, Unlock does not mint a computer-name or random mark until the keeper says yes. [0030](0030-missing-os-id-waits-for-a-yes.md). A stored `hwid.txt` is still reused. The overlay salt stays `win32` and the blotter salt stays `windows`.
 - The Unlock screen says what is read, when, and that the hash is a device fingerprint. It does not print the hash or the raw id.
 - Desk presence does not read a machine id. `hwid.txt` is not a presence house file. The browser desk does not read one.
 

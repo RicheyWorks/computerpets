@@ -51,15 +51,22 @@ MACHINE_MARKS: tuple[dict[str, str], ...] = (
         "source": "hostname",
         "kind": "hostname",
         "where": "the computer name",
-        "why": "Used only when the named OS mark cannot be read. The name is still a fingerprint, and a rename changes it.",
+        "why": "Used only after an in-app yes, when the named OS mark cannot be read. The name is still a fingerprint, and a rename changes it.",
     },
     {
         "platform": "random",
         "source": "random",
         "kind": "uuid",
         "where": "a local random id",
-        "why": "Used when no OS mark and no fallback exist. Not stable if hwid.txt is deleted.",
+        "why": "Used only after that same yes, when there is no computer name. Not stable if hwid.txt is deleted.",
     },
+)
+
+# Shown when Unlock would otherwise mint a computer-name or random mark.
+WEAK_FALLBACK_MESSAGE = (
+    "This computer has no stable operating-system id. Unlock waits until you say yes before it hashes the computer name. "
+    "If this computer has no name, that yes hashes a random id. A rename changes the computer-name hash. "
+    "Deleting hwid.txt makes a random id a different mark."
 )
 
 
@@ -145,9 +152,11 @@ def _read_machine_source(
     plat: str | None,
     read_file: Callable[[str], str],
     exec_cmd: Callable[[str], str] | None,
-    hostname: str | None,
 ) -> tuple[str | None, str | None]:
-    """Read one named OS mark. The raw string must not be logged, stored, or sent."""
+    """Read one named OS mark. The raw string must not be logged, stored, or sent.
+
+    A miss does not read the computer name.
+    """
     system = (plat or platform.system()).lower()
     if system in ("linux",):
         for source, path in (
@@ -177,8 +186,7 @@ def _read_machine_source(
         try:
             out = runner(f"reg query {_where('machine-guid')} /v {_value('machine-guid')}")
         except (OSError, subprocess.SubprocessError):
-            name = _host_name(hostname)
-            return (name, "hostname") if name else (None, None)
+            return None, None
         for line in out.splitlines():
             if "MachineGuid" in line:
                 parts = line.split()
@@ -186,8 +194,24 @@ def _read_machine_source(
                     return parts[-1], "machine-guid"
         return None, None
 
-    name = _host_name(hostname)
-    return (name, "hostname") if name else (None, None)
+    return None, None
+
+
+def _weak_material(hostname: str | None, fallback_id: str | None) -> tuple[str, str]:
+    """Computer name, then a caller fallback, then a random id. Only after a yes.
+
+    An explicit empty hostname means this computer has no name.
+    """
+    if isinstance(hostname, str):
+        if hostname:
+            return hostname, "hostname"
+    else:
+        name = _host_name(None)
+        if name:
+            return name, "hostname"
+    if fallback_id:
+        return str(fallback_id), "fallback"
+    return str(uuid.uuid4()), "random"
 
 
 def _default_exec(cmd: str) -> str:
@@ -203,6 +227,7 @@ def resolve_hwid_detail(
     exec_cmd: Callable[[str], str] | None = None,
     fallback_id: str | None = None,
     hostname: str | None = None,
+    allow_weak_fallback: bool = False,
 ) -> dict[str, object]:
     """Stable license mark. A stored hwid.txt wins and is not rewritten.
 
@@ -210,6 +235,7 @@ def resolve_hwid_detail(
     The digest recipe is unchanged: sha256("computerpets:" + platform token + ":" + raw).
     The platform token is plat, or platform.system().lower() when plat is omitted.
     That token is "windows" here and "win32" in the overlay. Each client keeps its own file.
+    A missing named id does not hash the computer name or a random id until allow_weak_fallback.
     """
     stored = peek_hwid(user_data_dir=user_data_dir, read_file=read_file)
     if stored["read"] == "stored":
@@ -217,14 +243,11 @@ def resolve_hwid_detail(
 
     reader = read_file or (lambda p: Path(p).read_text(encoding="utf-8"))
     writer = write_file or (lambda p, data: Path(p).write_text(data, encoding="utf-8"))
-    raw, source = _read_machine_source(plat, reader, exec_cmd, hostname)
+    raw, source = _read_machine_source(plat, reader, exec_cmd)
     if not raw:
-        if fallback_id:
-            raw = str(fallback_id)
-            source = "fallback"
-        else:
-            raw = str(uuid.uuid4())
-            source = "random"
+        if not allow_weak_fallback:
+            raise LicenseError("hwid_needs_fallback_yes", WEAK_FALLBACK_MESSAGE)
+        raw, source = _weak_material(hostname, fallback_id)
     plat_token = plat or platform.system().lower()
     digest = _hash_mark(raw, plat_token)
     assert_hwid(digest)
@@ -248,6 +271,7 @@ def resolve_hwid(
     exec_cmd: Callable[[str], str] | None = None,
     fallback_id: str | None = None,
     hostname: str | None = None,
+    allow_weak_fallback: bool = False,
 ) -> str:
     detail = resolve_hwid_detail(
         user_data_dir=user_data_dir,
@@ -257,5 +281,6 @@ def resolve_hwid(
         exec_cmd=exec_cmd,
         fallback_id=fallback_id,
         hostname=hostname,
+        allow_weak_fallback=allow_weak_fallback,
     )
     return str(detail["id"])

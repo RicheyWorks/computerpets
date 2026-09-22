@@ -68,13 +68,18 @@ function createLicenseSession(opts) {
     writeStore(storeFile, data, writeFile, mkdir);
   }
 
-  function deviceMark(allowRead) {
+  function deviceMark(allowRead, allowWeakFallback) {
     if (typeof opts.hwid === "string" && opts.hwid) {
       return { id: assertHwid(opts.hwid), source: "caller", read: "caller", rawLeavesMachine: false };
     }
     const peeked = peekHwid({ userDataDir: opts.userDataDir, readFile });
     if (!allowRead || peeked.read === "stored") return peeked;
-    return resolveHwidDetail({ userDataDir: opts.userDataDir, readFile, writeFile });
+    return resolveHwidDetail({
+      userDataDir: opts.userDataDir,
+      readFile,
+      writeFile,
+      allowWeakFallback: allowWeakFallback === true,
+    });
   }
 
   function decryptStored(store) {
@@ -143,7 +148,7 @@ function createLicenseSession(opts) {
     const store = load();
     const backendUrl = normalizeBackendUrl(input.backendUrl || store.backendUrl || defaultBackendUrl(env));
     const provider = typeof input.provider === "string" && input.provider ? input.provider : "steam";
-    const deviceId = deviceMark(true).id;
+    const deviceId = deviceMark(true, input.allowWeakFallback === true).id;
     const secret = licenseSecret(env);
     if (!secret) {
       throw new LicenseError("missing_secret", "LICENSE_SECRET_KEY is missing; cannot decrypt the issued license");
@@ -194,12 +199,12 @@ function createLicenseSession(opts) {
     return { ...publicStatus(), download: downloaded };
   }
 
-  async function requestDownload(storeArg, payloadArg, deviceIdArg, secretArg) {
+  async function requestDownload(storeArg, payloadArg, deviceIdArg, secretArg, allowWeakFallback) {
     const store = storeArg || load();
     const secret = secretArg || licenseSecret(env);
     const payload = payloadArg || decryptLicense(store.license.ciphertext, store.license.iv, secret, { now });
     const bound = Boolean(payload.hwid);
-    const deviceId = deviceIdArg || (bound ? deviceMark(true).id : "");
+    const deviceId = deviceIdArg || (bound ? deviceMark(true, allowWeakFallback === true).id : "");
     const backendUrl = normalizeBackendUrl(store.backendUrl || defaultBackendUrl(env));
 
     if (bound && payload.hwid !== deviceId) {
@@ -241,8 +246,9 @@ function createLicenseSession(opts) {
     return lastDownload;
   }
 
-  async function download() {
-    return requestDownload();
+  async function download(input = {}) {
+    const allow = input && input.allowWeakFallback === true;
+    return requestDownload(null, null, null, null, allow);
   }
 
   function clear() {

@@ -19,7 +19,10 @@ from PyQt6.QtWidgets import (
 )
 
 from .license.errors import LicenseError
+from .license.hwid import WEAK_FALLBACK_MESSAGE
 from .species import CATALOG_KEYS, SPECIES
+
+WEAK_FALLBACK_YES = "Use the computer name, or a random id if there is no name"
 
 
 class UnlockWorker(QObject):
@@ -48,6 +51,7 @@ class UnlockDialog(QDialog):
         self.setMinimumWidth(420)
         self._thread: QThread | None = None
         self._worker: UnlockWorker | None = None
+        self._unlock_allowed_weak = False
 
         status = session["status"]()
         lead = QLabel(
@@ -128,7 +132,8 @@ class UnlockDialog(QDialog):
             "The first Unlock reads Linux machine-id, Windows MachineGuid, or the Mac platform UUID, "
             "hashes it, and stores that hash in hwid.txt. A hash already stored is reused, so an "
             "existing license stays bound. The raw id is not sent. The house receives only the hash, "
-            "and only for unlock or a bound download. That hash is a device fingerprint."
+            "and only for unlock or a bound download. That hash is a device fingerprint. "
+            "If that named read fails. " + WEAK_FALLBACK_MESSAGE
         )
 
     def _paint_status(self, status: dict[str, Any]) -> None:
@@ -156,7 +161,18 @@ class UnlockDialog(QDialog):
             text = text.split(" — ", 1)[0].strip()
         return text or "red_panda"
 
-    def _unlock(self) -> None:
+    def _ask_weak(self, message: str) -> bool:
+        answer = QMessageBox.question(
+            self,
+            "No stable operating-system id",
+            message + "\n\n" + WEAK_FALLBACK_YES + "?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        )
+        return answer == QMessageBox.StandardButton.Yes
+
+    def _unlock(self, allow_weak: bool = False) -> None:
+        self._unlock_allowed_weak = allow_weak
         self.err.setText("")
         self.ok.setText("Talking to the backend…")
         fields = {
@@ -165,6 +181,7 @@ class UnlockDialog(QDialog):
             "steamId": self.steam_id.text().strip(),
             "appId": self.app_id.text().strip(),
             "petType": self._pet_key(),
+            "allowWeakFallback": True if allow_weak else False,
         }
         self._thread = QThread(self)
         self._worker = UnlockWorker(self.session, fields)
@@ -186,14 +203,21 @@ class UnlockDialog(QDialog):
         code = getattr(err, "code", "denied")
         self.ok.setText("Locked. The pet on the blotter still works.")
         self.err.setText(f"{code}: {message}")
+        if code == "hwid_needs_fallback_yes" and not self._unlock_allowed_weak:
+            if self._ask_weak(message):
+                self._unlock(allow_weak=True)
+            return
         QMessageBox.warning(self, "Unlock failed", f"{code}: {message}")
 
-    def _download(self) -> None:
+    def _download(self, allow_weak: bool = False) -> None:
         try:
-            self.session["download"]()
+            self.session["download"]({"allowWeakFallback": True} if allow_weak else {})
             self._paint_status(self.session["status"]())
         except LicenseError as err:
             self.err.setText(f"{err.code}: {err}")
+            if err.code == "hwid_needs_fallback_yes" and not allow_weak and self._ask_weak(str(err)):
+                self._download(allow_weak=True)
+                return
             QMessageBox.warning(self, "Download failed", f"{err.code}: {err}")
 
     def _clear(self) -> None:
