@@ -26,5 +26,11 @@ describe("overlay license line matches the main-process gate", () => {
     assert.equal(page.BUNDLE_IDLE, main.BUNDLE_IDLE);
     assert.equal(page.bundleHonesty(bundle).includes("raw-id"), false);
     assert.equal(page.licenseHonesty(url), main.licenseHonesty(url));
+    assert.equal(page.downloadTalkHonesty(url), main.downloadTalkHonesty(url));
+    assert.equal(page.downloadMayPost(url, page.downloadTalkHonesty(url)), true);
+    assert.equal(page.downloadMayPost(url, page.licenseHonesty(url)), false);
+    assert.equal(page.downloadTalkHonesty("http://127.0.0.1:8081"), "");
+    assert.equal(page.DOWNLOAD_LOCAL, main.DOWNLOAD_LOCAL);
+    assert.equal(page.downloadTalkHonesty(url).includes("sends the license hash"), false);
   });
 });

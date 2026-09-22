@@ -6,7 +6,7 @@ const { LicenseError } = require("./errors.cjs");
 const { decryptLicense } = require("./decrypt.cjs");
 const { resolveHwidDetail, peekHwid, assertHwid } = require("./hwid.cjs");
 const { createLicenseClient, normalizeBackendUrl } = require("./client.cjs");
-const { bundleHostName, bundleMayFetch, licenseHostName, licenseMaySend } = require("./license-net.cjs");
+const { bundleHostName, bundleMayFetch, downloadMayPost, licenseHostName, licenseMaySend } = require("./license-net.cjs");
 
 const STORE_NAME = "license.json";
 const DEFAULT_BACKEND = "http://127.0.0.1:8081";
@@ -48,6 +48,15 @@ function assertHashNamed(backendUrl, shown) {
   throw new LicenseError(
     "license_net_unnamed",
     `the license hash was not sent to ${host}. name that host before it leaves.`
+  );
+}
+
+function assertDownloadNamed(backendUrl, shown) {
+  if (downloadMayPost(backendUrl, shown)) return;
+  const host = licenseHostName(backendUrl) || "the license host";
+  throw new LicenseError(
+    "download_net_unnamed",
+    `this download was not sent to ${host}. name that host before it leaves.`
   );
 }
 
@@ -259,7 +268,9 @@ function createLicenseSession(opts) {
     const payload = payloadArg || decryptLicense(store.license.ciphertext, store.license.iv, secret, { now });
     const bound = Boolean(payload.hwid);
     const backendUrl = normalizeBackendUrl(store.backendUrl || defaultBackendUrl(env));
-    if (bound) assertHashNamed(backendUrl, typeof shownLine === "string" ? shownLine : "");
+    const shown = typeof shownLine === "string" ? shownLine : "";
+    if (bound) assertHashNamed(backendUrl, shown);
+    else assertDownloadNamed(backendUrl, shown);
     const deviceId = deviceIdArg || (bound ? deviceMark(true, allowWeakFallback === true).id : "");
 
     if (bound && payload.hwid !== deviceId) {

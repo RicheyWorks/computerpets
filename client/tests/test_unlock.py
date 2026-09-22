@@ -11,7 +11,7 @@ import pytest
 from computerpets_client.license.contract_double import create_contract_test_double
 from computerpets_client.license.errors import LicenseError
 from computerpets_client.license.http_client import HttpResponse, create_license_client
-from computerpets_client.license.license_net import bundle_honesty, license_honesty
+from computerpets_client.license.license_net import bundle_honesty, download_talk_honesty, license_honesty
 from computerpets_client.license.session import create_license_session
 
 SECRET = base64.b64encode(bytes([7] * 32)).decode("ascii")
@@ -499,10 +499,23 @@ def test_bound_download_names_the_host_and_an_unbound_download_sends_no_hash():
         write_file=disk.write,
         mkdir=disk.mkdir,
     )
-    with pytest.raises(LicenseError) as unbound_err:
+    with pytest.raises(LicenseError) as unnamed:
         session["download"]()
+    assert unnamed.value.code == "download_net_unnamed"
+    assert "license.example.test" in str(unnamed.value)
+    assert "secret" not in str(unnamed.value)
+    assert posts == []
+    with pytest.raises(LicenseError) as hash_line:
+        session["download"]({"licenseLine": license_honesty("https://license.example.test")})
+    assert hash_line.value.code == "download_net_unnamed"
+    assert posts == []
+    talk = download_talk_honesty("https://user:secret@license.example.test/api?hwid=raw-id#frag")
+    assert "sends the license hash" not in talk
+    with pytest.raises(LicenseError) as unbound_err:
+        session["download"]({"licenseLine": talk})
     assert unbound_err.value.code == "download_failed"
     assert posts and "hwid" not in posts[0]
+    assert "ciphertext" in posts[0]
 
     bound = encrypt_license(
         {

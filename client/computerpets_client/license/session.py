@@ -12,7 +12,7 @@ from .decrypt import decrypt_license
 from .errors import LicenseError
 from .http_client import FetchImpl, create_license_client, normalize_backend_url
 from .hwid import assert_hwid, peek_hwid, resolve_hwid_detail
-from .license_net import bundle_host_name, bundle_may_fetch, license_host_name, license_may_send
+from .license_net import bundle_host_name, bundle_may_fetch, download_may_post, license_host_name, license_may_send
 
 STORE_NAME = "license.json"
 DEFAULT_BACKEND = "http://127.0.0.1:8081"
@@ -41,6 +41,16 @@ def _assert_hash_named(backend_url: str, shown: str) -> None:
     raise LicenseError(
         "license_net_unnamed",
         f"the license hash was not sent to {host}. name that host before it leaves.",
+    )
+
+
+def _assert_download_named(backend_url: str, shown: str) -> None:
+    if download_may_post(backend_url, shown):
+        return
+    host = license_host_name(backend_url) or "the license host"
+    raise LicenseError(
+        "download_net_unnamed",
+        f"this download was not sent to {host}. name that host before it leaves.",
     )
 
 
@@ -184,8 +194,11 @@ def create_license_session(
         payload = payload_arg or decrypt_license(store["license"]["ciphertext"], store["license"]["iv"], secret, **kwargs)
         bound = bool(payload.get("hwid"))
         backend_url = normalize_backend_url(store.get("backendUrl") or default_backend_url(env))
+        shown = license_line if isinstance(license_line, str) else ""
         if bound:
-            _assert_hash_named(backend_url, license_line if isinstance(license_line, str) else "")
+            _assert_hash_named(backend_url, shown)
+        else:
+            _assert_download_named(backend_url, shown)
         current = device_id_arg or (device_mark(True, allow_weak_fallback is True)["id"] if bound else "")
 
         if bound and payload.get("hwid") != current:
