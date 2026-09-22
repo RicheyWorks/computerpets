@@ -23,7 +23,7 @@ The pet engine talks through a **plugin bus**. House lines are always the fallba
 
 Voice plugins: browser `speechSynthesis`, xAI TTS, OpenAI TTS, silent.
 
-Assign a house default or override per animal on `/mind`. The plugin key is not stored in this browser. When the desk bridge can seal it, the key goes to the OS secret store. Otherwise it stays on the page until you leave, and the page says so. Server env vars (`XAI_API_KEY`, `OPENAI_API_KEY`, …) fill in if the field is empty.
+Assign a house default or override per animal on `/mind`. The plugin key is not stored in this browser. When the desk bridge can seal it, the key goes to the OS secret store. Otherwise it stays on the page until you leave, and the page says so. Server env vars (`XAI_API_KEY`, `OPENAI_API_KEY`, …) fill in for a signed-in keeper. Desk talk does not post the plugin key. The house drops that field if it arrives and does not spend it.
 
 ## Custom webhook
 
@@ -51,7 +51,7 @@ The keeper card names the plugin that will actually be asked.
 | Door | Line |
 |---|---|
 | Overlay | `Listening · House lines` unless the keeper saved a key for a cloud plugin, or chose Ollama, LM Studio, or a custom webhook with a safe URL. The key is sealed in the OS secret store when that store exists, and is not written in plain text in `mind.json`. It is not on the card. If this computer has no secret store, the key is not written to disk. |
-| Desk, `/demo`, Live, Meet | Guests are House lines, even when `/mind` still shows a cloud default. A signed-in keeper sees a cloud name only when that house env key exists. The card says `Listening · unread` until the read returns. The browser does not send the key. |
+| Desk, `/demo`, Live, Meet | Guests are House lines, even when `/mind` still shows a cloud default. A signed-in keeper sees a cloud name only when that house env key exists. The card says `Listening · unread` until the read returns. The browser does not send the key on that read, or on talk. |
 | Blotter | House lines. There is no plugin bus on the blotter. |
 
 An unknown plugin, a missing key, or an unsafe URL stays House lines. The line never includes a key, a URL, or a model.

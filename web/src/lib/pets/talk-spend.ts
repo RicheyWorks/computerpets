@@ -47,7 +47,8 @@ export function houseKeyFlags(env: EnvMap = process.env): Record<string, boolean
  * Who may spend a house key.
  *
  * A guest (demo, meet, a desk with no session) gets house lines only.
- * Client `apiKey` is stripped. It never unlocks `XAI_API_KEY` / `OPENAI_API_KEY`.
+ * The talk post does not carry a client key. Client `apiKey` is stripped if one
+ * still arrives. It never unlocks `XAI_API_KEY` / `OPENAI_API_KEY`.
  * A signed-in keeper may use the env key for the mind they asked for, and for
  * house voice. The key stays on the server.
  */

@@ -39,6 +39,7 @@ address, or an API that is not on `main`.
 | [0018](0018-mind-key-is-not-plain-text.md) | The overlay plugin key is not plain text in mind.json | Accepted |
 | [0019](0019-license-mark-is-a-local-hash.md) | A license mark is a local hash of a named machine id | Accepted |
 | [0020](0020-desk-mind-key-is-not-in-the-browser.md) | The desk `/mind` key is not stored in the browser | Accepted |
+| [0021](0021-desk-talk-does-not-send-the-key.md) | Desk talk does not send the plugin key to the house | Accepted |
 
 ## How to add one
 
