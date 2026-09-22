@@ -19,12 +19,17 @@ const startSrc = readFileSync(join(root, "../docs/START-HERE.md"), "utf8");
 const WORK = { x: 0, y: 40, width: 1600, height: 900 };
 
 test("web and overlay parse the same window TSV", () => {
-  const text = "88\t200\t120\t900\t700\t0\t0\t0\tChrome_WidgetWin_1\n";
+  const text =
+    "88\t200\t120\t900\t700\t0\t0\t0\t0\thomework.docx — Notepad\tC:\\Users\\keeper\\Documents\\notes.txt\n";
   const web = W.parseEnumText(text);
   const desk = Overlay.parseEnumText(text);
   assert.deepEqual(web, desk);
+  assert.equal(web[0].shell, false);
+  assert.equal(JSON.stringify(web).includes("homework"), false);
+  assert.equal(JSON.stringify(web).includes("Documents"), false);
   const taken = W.takeRects(web, { workArea: WORK, scaleFactor: 1 });
   assert.equal(taken[0].y, 80);
+  assert.deepEqual(Object.keys(taken[0]).sort(), ["height", "id", "width", "x", "y"]);
   assert.equal(Overlay.laterDoor("darwin"), W.LATER_DOOR);
   assert.equal(W.enumeratesOn("win32"), true);
   assert.equal(W.laterDoor("linux"), "mac-linux-window-play");
@@ -50,5 +55,5 @@ test("the demo draws a window plate; the overlay keeps real rects", () => {
   assert.match(livingSrc, /window-play/);
   assert.match(livingSrc, /beginPlay/);
   assert.doesNotMatch(plateSrc, /desktopCapturer|GetDC|BitBlt/);
-  assert.match(startSrc, /220/);
+  assert.match(startSrc, /221/);
 });

@@ -60,6 +60,7 @@ CROSS_DOMAIN = {
     "desk.plates.style",
     "desk.plants.place",
     "desk.windows.perch",
+    "desk.presence",
     "desk.market.tickers",
     "desk.news.x",
     "visit.todays",
@@ -203,6 +204,7 @@ def test_gaps_are_honest_and_accounted():
     assert "desk.plates.style" in driven_ids
     assert "desk.plants.place" in driven_ids
     assert "desk.windows.perch" in driven_ids
+    assert "desk.presence" in driven_ids
     assert "card.notify_open" in driven_ids
     assert "card.needs_persist" in driven_ids
     assert "card.speak_opts" in driven_ids
@@ -244,6 +246,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "desk.plates.style",
         "desk.plants.place",
         "desk.windows.perch",
+        "desk.presence",
         "desk.market.tickers",
         "desk.news.x",
         "visit.todays",

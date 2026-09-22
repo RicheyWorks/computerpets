@@ -361,7 +361,7 @@ paths are not this contract.
 - Client-side JWT verification (optional; download already checks it)
 - A `/metrics/gpu` route. GPU temperature, utilization, memory, and power are desktop-local on the keeper machine (`desktop/gpu-probe.ps1`, blotter `gpu.py`). The sparkline is a local history of those `read` samples, not a server series. Spring Boot does not see that GPU. Mac and Linux stay unread (`mac-linux-gpu-sense`). The browser has no sensor, so its strip stays empty.
 - A route that returns a mind API key. The keeper card may name who is listening. It does not receive the key. Guests stay on house lines.
-- A presence file API. Guests, gifts, and place marks do not read or write the keeper's files. A dropped file is not opened. Clipboard read, screen capture, and the File System Access API stay denied. Overlay card and mind prefs stay `card.json` and `mind.json` under the app user-data directory. Listing Desktop or Documents is not this contract.
+- A presence file API. Guests, gifts, and place marks do not read or write the keeper's files. A dropped file is not opened. Clipboard read, screen capture, and the File System Access API stay denied. Overlay card and mind prefs stay `card.json` and `mind.json` under the app user-data directory. Listing Desktop, Documents, Downloads, or any other host folder is not this contract. Window titles, document names, and host paths are not returned. A path is omitted unless the keeper has already consented.
 
 Admin revocation (`POST /api/admin/revoke` with `X-Admin-Key`) and license
 audit (`GET /api/admin/licenses`, `GET /api/admin/licenses/{jti}`) are

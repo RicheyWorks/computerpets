@@ -24,7 +24,7 @@ This slice refuses the drop and the silent grants. It does not list the desktop.
 
 ## Consequences
 
-- Listing Desktop or Documents, reading window titles or document names, and logging keys outside a focused field are still open. Do not add them in a later guest.
+- Listing Desktop or Documents, and reading window titles or document names, closed in [0011](0011-presence-does-not-list-folders.md). Logging keys outside a focused field is still open. Do not add a key log in a later guest.
 - License `hwid` still reads machine-id or MachineGuid. That is the license door, not presence.
 - The keeper's plugin key still sits in `mind.json`. It stays off the card.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.
