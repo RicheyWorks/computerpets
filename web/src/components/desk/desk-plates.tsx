@@ -6,6 +6,8 @@ import {
   currentArea,
   favoriteAreas,
   forecastGate,
+  forecastHonesty,
+  forecastMaySend,
   forecastUrl,
   geocodeUrl,
   AREA_LABEL,
@@ -286,10 +288,15 @@ export function DeskWeatherPlate({
   const [hereAsk, setHereAsk] = useState(false);
   const [savedLine, setSavedLine] = useState("");
   const [lookLine, setLookLine] = useState("");
+  const liveKey = useRef("");
   const areas = useMemo(() => parseAreas(card), [card]);
   const area = currentArea(areas);
   const tab = areas.tab;
   const chrome = usePlateChrome("weather");
+  const shownGate = forecastGate(areas, card.hereForecastAck);
+  const lineInView = open && tab === "current";
+  const honesty = forecastHonesty(shownGate);
+  const forecastWaiting = !live && shownGate.act === "send" && !lineInView;
 
   function keepAreas(house: ReturnType<typeof parseAreas>) {
     const ack = stickHereForecastAck(house, card.hereForecastAck);
@@ -329,26 +336,35 @@ export function DeskWeatherPlate({
 
   useEffect(() => {
     const gate = forecastGate(areas, card.hereForecastAck);
-    if (gate.act !== "send" || !gate.area) {
-      setLive(null);
-      setUnread(false);
-      onSky?.(null);
+    const key = gate.area ? `${gate.area.id}:${gate.area.lat}:${gate.area.lon}` : "";
+    if (!forecastMaySend(gate, open && tab === "current") || gate.act !== "send" || !gate.area) {
+      if (gate.act !== "send" || liveKey.current !== key) {
+        liveKey.current = "";
+        setLive(null);
+        setUnread(false);
+        onSky?.(null);
+      }
       return;
     }
     let cancelled = false;
     const url = forecastUrl(gate.area.lat, gate.area.lon);
     if (!url) return;
+    liveKey.current = "";
+    setLive(null);
+    setUnread(false);
     void fetch(url)
       .then((r) => r.json())
       .then((json) => {
         if (cancelled) return;
         const next = parseForecast(json);
+        liveKey.current = next ? key : "";
         setUnread(!next);
         setLive(next);
         onSky?.(next);
       })
       .catch(() => {
         if (cancelled) return;
+        liveKey.current = "";
         setUnread(true);
         setLive(null);
         onSky?.(null);
@@ -356,7 +372,7 @@ export function DeskWeatherPlate({
     return () => {
       cancelled = true;
     };
-  }, [areas, card.hereForecastAck, onSky]);
+  }, [areas, card.hereForecastAck, onSky, open, tab]);
 
   async function search() {
     const url = geocodeUrl(query);
@@ -500,7 +516,7 @@ export function DeskWeatherPlate({
         onClick={() => chrome.toggleOpen(setOpen)}
       >
         <span className="text-[10px] uppercase tracking-[0.16em] text-subtle">Weather area</span>
-        <span className="truncate text-sm text-ink">{plateLine(areas, live, unread, forecastGate(areas, card.hereForecastAck).act === "hold")}</span>
+        <span className="truncate text-sm text-ink">{plateLine(areas, live, unread, shownGate.act === "hold", forecastWaiting)}</span>
       </button>
       {open ? (
         <div className="border-t border-border/40 px-3 py-2 text-sm">
@@ -538,7 +554,7 @@ export function DeskWeatherPlate({
             )
           ) : (
             <>
-              {forecastGate(areas, card.hereForecastAck).act === "hold" ? (
+              {shownGate.act === "hold" ? (
                 <div id="weather-saved-ask" className="mb-2">
                   <p className="text-[10px] uppercase tracking-[0.16em] text-subtle">{SAVED_HERE_ASK}</p>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -551,9 +567,12 @@ export function DeskWeatherPlate({
                   </div>
                   {savedLine ? <p className="mt-1 text-subtle">{savedLine}</p> : null}
                 </div>
-              ) : savedLine ? (
-                <p className="mb-2 text-subtle">{savedLine}</p>
+              ) : honesty ? (
+                <p id="weather-forecast-net" className="mb-2 text-[10px] uppercase tracking-[0.16em] text-subtle">
+                  {honesty}
+                </p>
               ) : null}
+              {savedLine && shownGate.act !== "hold" ? <p className="mb-2 text-subtle">{savedLine}</p> : null}
               {!area ? <p className="text-subtle">{NO_AREA}</p> : null}
               {area && live ? (
                 <p>
