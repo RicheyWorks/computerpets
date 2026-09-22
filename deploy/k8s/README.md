@@ -9,21 +9,29 @@ the jti deny-list, fail-hard secrets, and the Actuator probes already in
 kubectl apply -k deploy/k8s
 ```
 
-Fill `secret.yaml` **before** apply, or replace it with External Secrets /
+Fill `secret.yaml` **only for local scaffolding**, or replace it with External Secrets /
 Vault Agent so real values never sit in git. Empty or placeholder keys will not
 boot — `LicenseService`, `JwtService`, `PetBundleService`, and
 `AdminController` refuse to start, and `ProductionProfileGuard` refuses
-H2, `RATE_LIMIT_BACKEND=memory`, and `MICROSOFT_DEV_MODE=true`.
+H2, `RATE_LIMIT_BACKEND=memory`, `MICROSOFT_DEV_MODE=true`, and plain env
+Secret without `COMPUTERPETS_SECRETS_SOURCE` (ADR 0064).
 
-## Secret management (Phase 2.4)
+## Secret management (Phase 2.4 / ADR 0064)
 
-Three shapes; same deny-safe contract ([ADR 0056](../../docs/adr/0056-house-secrets-from-file-mounts.md)):
+Three shapes; same deny-safe contract ([ADR 0056](../../docs/adr/0056-house-secrets-from-file-mounts.md)).
+**Prod path is fail-closed** ([ADR 0064](../../docs/adr/0064-secret-operator-prod-refuses-plain-env.md)):
 
 | Shape | Mechanism |
 |-------|-----------|
-| **Opaque Secret + envFrom** (default manifests) | Edit `secret.yaml` or let External Secrets sync into `computerpets-secrets` |
-| **External Secrets Operator** | Example CR: `external-secret.example.yaml` (**not** in kustomization). Point `secretStoreRef` at your Vault / AWS / GCP / Azure store. |
-| **File mounts + `NAME_FILE`** | Project Secret keys as files; set `LICENSE_SECRET_KEY_FILE=/var/run/secrets/…` (and the same for JWT / BUNDLE / ADMIN). `SecretFileEnvironmentPostProcessor` loads them. Missing path → refuse start. |
+| **Opaque Secret + envFrom** (scaffolding only) | Edit `secret.yaml` + `COMPUTERPETS_ALLOW_PLAIN_SECRET=1` for laptop experiments — **not** the prod path |
+| **External Secrets Operator** | Example CR: `external-secret.example.yaml` (**not** in kustomization). Set `COMPUTERPETS_SECRETS_SOURCE=external-secrets`. Point `secretStoreRef` at your Vault / AWS / GCP / Azure store. |
+| **File mounts + `NAME_FILE`** | Example: `deployment-secrets-file.example.yaml`. Set `COMPUTERPETS_SECRETS_SOURCE=file` and `LICENSE_SECRET_KEY_FILE=…` (JWT / BUNDLE / ADMIN). `SecretFileEnvironmentPostProcessor` loads them. Missing path → refuse start. |
+
+```bash
+# Before prod roll out — repo contract + optional rendered manifests
+./deploy/k8s/verify-secret-operator.sh
+./deploy/k8s/verify-secret-operator.sh deploy/k8s/external-secret.example.yaml
+```
 
 Optional storefront keys may use `STEAM_API_KEY_FILE` / `ITCH_API_KEY_FILE` / `EPIC_*_FILE` / `ETHEREUM_RPC_URL_FILE`. Blank still fails closed at verify.
 
@@ -55,7 +63,8 @@ Reference Terraform: `deploy/terraform/` ([ADR 0062](../../docs/adr/0062-terrafo
 
 ## Required secrets
 
-Create or edit `secret.yaml`. Generate values the same way as [SETUP](../../docs/SETUP.md):
+Create or edit `secret.yaml` **only for scaffolding**. Prefer External Secrets
+or file mounts for prod (see above). Generate values the same way as [SETUP](../../docs/SETUP.md):
 
 ```bash
 openssl rand -base64 32   # LICENSE_SECRET_KEY, ADMIN_API_KEY
@@ -164,4 +173,6 @@ wrong signature must stop at step 1 — do not set image.
 
 The ConfigMap sets it. That loads `application-prod.yml` (Postgres, no
 H2 console, `show-sql: false`, Redis, `microsoft.dev-mode: false`) and
-activates `ProductionProfileGuard`.
+activates `ProductionProfileGuard`. Operators must also set
+`COMPUTERPETS_SECRETS_SOURCE` (`external-secrets`, `file`, or `vault-agent`)
+before the house will boot — see ADR 0064.

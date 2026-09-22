@@ -2,91 +2,242 @@ package com.enterprisepet.config;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.mock.env.MockEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ProductionProfileGuardTest {
 
-    @Test
-    @DisplayName("prod accepts Postgres + Redis + microsoft.dev-mode=false")
-    void safeProductionSettings_pass() {
-        ProductionProfileGuard guard = new ProductionProfileGuard(
-            false, "redis", "jdbc:postgresql://computerpets-postgres:5432/computerpets", "");
+    private static ProductionProfileGuard guard(
+            boolean microsoftDevMode,
+            String rateLimitBackend,
+            String datasourceUrl,
+            String replicaDatasourceUrl,
+            String secretsSource,
+            String allowPlainSecret,
+            MockEnvironment environment) {
+        return new ProductionProfileGuard(
+                microsoftDevMode,
+                rateLimitBackend,
+                datasourceUrl,
+                replicaDatasourceUrl,
+                secretsSource,
+                allowPlainSecret,
+                environment);
+    }
 
-        assertThatCode(guard::rejectUnsafeProductionSettings).doesNotThrowAnyException();
+    private static MockEnvironment envWithFileMounts() {
+        MockEnvironment env = new MockEnvironment();
+        env.setProperty("LICENSE_SECRET_KEY_FILE", "/run/secrets/license_secret_key");
+        env.setProperty("JWT_SECRET_KEY_FILE", "/run/secrets/jwt_secret_key");
+        env.setProperty("BUNDLE_SIGNING_KEY_FILE", "/run/secrets/bundle_signing_key");
+        env.setProperty("ADMIN_API_KEY_FILE", "/run/secrets/admin_api_key");
+        return env;
+    }
+
+    @Test
+    @DisplayName("prod accepts Postgres + Redis + external-secrets attestation")
+    void safeProductionSettings_pass() {
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://computerpets-postgres:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                new MockEnvironment());
+
+        assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
     }
 
     @Test
     @DisplayName("prod accepts a distinct Postgres read replica URL")
     void distinctReplica_passes() {
-        ProductionProfileGuard guard = new ProductionProfileGuard(
-            false,
-            "redis",
-            "jdbc:postgresql://primary:5432/computerpets",
-            "jdbc:postgresql://replica:5432/computerpets");
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://primary:5432/computerpets",
+                "jdbc:postgresql://replica:5432/computerpets",
+                "vault-agent",
+                "false",
+                new MockEnvironment());
 
-        assertThatCode(guard::rejectUnsafeProductionSettings).doesNotThrowAnyException();
+        assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("prod accepts file source when all critical *_FILE mounts are set")
+    void fileSourceWithMounts_passes() {
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "file",
+                "false",
+                envWithFileMounts());
+
+        assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
     }
 
     @Test
     @DisplayName("prod refuses Microsoft Store dev-mode")
     void microsoftDevMode_failsHard() {
-        ProductionProfileGuard guard = new ProductionProfileGuard(
-            true, "redis", "jdbc:postgresql://db:5432/computerpets", "");
+        ProductionProfileGuard g = guard(
+                true,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                new MockEnvironment());
 
-        assertThatThrownBy(guard::rejectUnsafeProductionSettings)
-            .isInstanceOf(IllegalStateException.class)
-            .hasMessageContaining("microsoft.dev-mode");
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("microsoft.dev-mode");
     }
 
     @Test
     @DisplayName("prod refuses the in-memory rate-limit store")
     void memoryRateLimit_failsHard() {
-        ProductionProfileGuard guard = new ProductionProfileGuard(
-            false, "memory", "jdbc:postgresql://db:5432/computerpets", "");
+        ProductionProfileGuard g = guard(
+                false,
+                "memory",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                new MockEnvironment());
 
-        assertThatThrownBy(guard::rejectUnsafeProductionSettings)
-            .isInstanceOf(IllegalStateException.class)
-            .hasMessageContaining("rate-limit.backend");
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("rate-limit.backend");
     }
 
     @Test
     @DisplayName("prod refuses an H2 datasource URL")
     void h2Datasource_failsHard() {
-        ProductionProfileGuard guard = new ProductionProfileGuard(
-            false, "redis", "jdbc:h2:mem:enterprisepet", "");
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:h2:mem:enterprisepet",
+                "",
+                "external-secrets",
+                "false",
+                new MockEnvironment());
 
-        assertThatThrownBy(guard::rejectUnsafeProductionSettings)
-            .isInstanceOf(IllegalStateException.class)
-            .hasMessageContaining("PostgreSQL");
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("PostgreSQL");
     }
 
     @Test
     @DisplayName("prod refuses a replica URL that matches the primary")
     void sameReplicaUrl_failsHard() {
-        ProductionProfileGuard guard = new ProductionProfileGuard(
-            false,
-            "redis",
-            "jdbc:postgresql://db:5432/computerpets",
-            "jdbc:postgresql://db:5432/computerpets");
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "jdbc:postgresql://db:5432/computerpets",
+                "external-secrets",
+                "false",
+                new MockEnvironment());
 
-        assertThatThrownBy(guard::rejectUnsafeProductionSettings)
-            .isInstanceOf(IllegalStateException.class)
-            .hasMessageContaining("must not equal");
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("must not equal");
     }
 
     @Test
     @DisplayName("prod refuses a non-Postgres replica URL")
     void nonPostgresReplica_failsHard() {
-        ProductionProfileGuard guard = new ProductionProfileGuard(
-            false,
-            "redis",
-            "jdbc:postgresql://db:5432/computerpets",
-            "jdbc:mysql://replica:3306/computerpets");
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "jdbc:mysql://replica:3306/computerpets",
+                "external-secrets",
+                "false",
+                new MockEnvironment());
 
-        assertThatThrownBy(guard::rejectUnsafeProductionSettings)
-            .isInstanceOf(IllegalStateException.class)
-            .hasMessageContaining("replica.url must be PostgreSQL");
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("replica.url must be PostgreSQL");
+    }
+
+    @Test
+    @DisplayName("prod refuses unset COMPUTERPETS_SECRETS_SOURCE (plain env Secret)")
+    void unsetSecretsSource_failsHard() {
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "",
+                "false",
+                new MockEnvironment());
+
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("COMPUTERPETS_SECRETS_SOURCE")
+                .hasMessageContaining("Plain env Secret");
+    }
+
+    @Test
+    @DisplayName("prod refuses unknown COMPUTERPETS_SECRETS_SOURCE values")
+    void unknownSecretsSource_failsHard() {
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "env",
+                "false",
+                new MockEnvironment());
+
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("not allowed")
+                .hasMessageContaining("external-secrets");
+    }
+
+    @Test
+    @DisplayName("prod refuses file source when a critical *_FILE mount is missing")
+    void fileSourceMissingMount_failsHard() {
+        MockEnvironment env = new MockEnvironment();
+        env.setProperty("LICENSE_SECRET_KEY_FILE", "/run/secrets/license_secret_key");
+        env.setProperty("JWT_SECRET_KEY_FILE", "/run/secrets/jwt_secret_key");
+        env.setProperty("BUNDLE_SIGNING_KEY_FILE", "/run/secrets/bundle_signing_key");
+        // ADMIN_API_KEY_FILE intentionally absent
+
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "file",
+                "false",
+                env);
+
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("ADMIN_API_KEY_FILE")
+                .hasMessageContaining("COMPUTERPETS_SECRETS_SOURCE=file");
+    }
+
+    @Test
+    @DisplayName("COMPUTERPETS_ALLOW_PLAIN_SECRET=1 skips operator attestation (local only)")
+    void allowPlainSecret_skipsAttestation() {
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "",
+                "1",
+                new MockEnvironment());
+
+        assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
     }
 }

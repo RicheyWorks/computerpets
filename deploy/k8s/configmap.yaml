@@ -1,3 +1,7 @@
+# Prod profile ConfigMap. Do NOT set COMPUTERPETS_SECRETS_SOURCE here —
+# operators attest on apply (external-secrets / file / vault-agent).
+# Do NOT set COMPUTERPETS_ALLOW_PLAIN_SECRET (local scaffolding escape only).
+# See ADR 0064 and deploy/k8s/verify-secret-operator.sh.
 apiVersion: v1
 kind: ConfigMap
 metadata:
