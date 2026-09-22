@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-22 (Weather forecast and geocode page reads time out and return unread. A late body is not parsed. Not DX12/Vulkan. Catalog 221.) |
+| **Last Updated** | 2026-09-22 (Itch and Epic RestClient reads time out and deny. Resilience4j time limiter still open. Not DX12/Vulkan. Catalog 221.) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -628,7 +628,7 @@ Goal: Significantly reduce blast radius and improve defense-in-depth.
 
 - **2.3 Resilience Patterns**
   - Add circuit breakers + retries (Resilience4j) around external provider calls (Steam, Microsoft, Web3)
-  - Implement proper timeouts and fallback behavior (in progress — overlay news, quote, and radio IPC reads time out at twelve seconds and return unread with an empty plate; a radio timeout does not call the next directory host. Weather forecast and geocode page wrappers time out the same way and flip unread / can't reach. Desk and overlay news, quote, and radio page wrappers time out the same way. Cloud talk and cloud voice page wrappers time out the same way and keep the house line or silence. Steam's RestClient times out at ten seconds and denies. Itch and Epic RestClient deadlines, and Resilience4j time limiters, still open. Fallbacks deny. [0049](adr/0049-plate-ipc-times-out-and-denies.md). [0050](adr/0050-weather-page-times-out-and-denies.md). [0051](adr/0051-news-quote-radio-page-times-out-and-denies.md). [0052](adr/0052-cloud-talk-and-voice-page-times-out-and-denies.md))
+  - Implement proper timeouts and fallback behavior (in progress — overlay news, quote, and radio IPC reads time out at twelve seconds and return unread with an empty plate; a radio timeout does not call the next directory host. Weather forecast and geocode page wrappers time out the same way and flip unread / can't reach. Desk and overlay news, quote, and radio page wrappers time out the same way. Cloud talk and cloud voice page wrappers time out the same way and keep the house line or silence. Steam, Itch, and Epic RestClients time out at ten seconds and deny. Microsoft and NFT already time out. Resilience4j time limiters still open. Fallbacks deny. [0049](adr/0049-plate-ipc-times-out-and-denies.md). [0050](adr/0050-weather-page-times-out-and-denies.md). [0051](adr/0051-news-quote-radio-page-times-out-and-denies.md). [0052](adr/0052-cloud-talk-and-voice-page-times-out-and-denies.md). [0053](adr/0053-itch-and-epic-restclient-times-out-and-denies.md))
 
 - **2.4 Secret Management**
   - Move away from raw environment variables for production
