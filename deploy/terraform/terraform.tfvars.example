@@ -1,0 +1,25 @@
+# Example tfvars — copy to terraform.tfvars (gitignored) for a real plan/apply.
+# Do NOT put LICENSE_SECRET_KEY, JWT_SECRET_KEY, BUNDLE_SIGNING_KEY, or
+# ADMIN_API_KEY here. Those stay in Secrets Manager / Vault for External Secrets.
+
+project_name = "computerpets"
+environment  = "prod"
+aws_region   = "us-east-1"
+
+# Required before Postgres/Redis resources are created:
+# vpc_id             = "vpc-xxxxxxxx"
+# private_subnet_ids = ["subnet-aaa", "subnet-bbb"]
+# app_cidr_blocks    = ["10.0.0.0/16"]   # private app/pod CIDRs only
+
+# Deny-safe — leave false:
+postgres_publicly_accessible = false
+write_house_secret_values    = false
+
+enable_postgres = true
+enable_redis    = true
+enable_secrets  = true
+enable_cdn      = true
+enable_waf      = true
+
+# Optional WAF association once an ALB exists:
+# waf_associate_alb_arn = "arn:aws:elasticloadbalancing:…"
