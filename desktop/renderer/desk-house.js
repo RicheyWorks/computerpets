@@ -71,8 +71,17 @@
     if (!A || !line) return;
     const areas = A.parseAreas(card);
     const tab = areas.tab || "current";
-    const held = A.forecastGate && A.forecastGate(card, card.hereForecastAck).act === "hold";
-    line.textContent = A.plateLine(areas, live, unread, held);
+    const gate = A.forecastGate ? A.forecastGate(card, card.hereForecastAck) : { act: "none", area: null };
+    const held = gate.act === "hold";
+    const panelOpen = Boolean(body && !body.hidden);
+    const lineInView = panelOpen && tab === "current";
+    const waiting = !live && gate.act === "send" && !lineInView;
+    line.textContent = A.plateLine(areas, live, unread, held, waiting);
+    const net = $("weather-forecast-net");
+    if (net && A.forecastHonesty) {
+      net.textContent = A.forecastHonesty(gate);
+      net.hidden = !net.textContent;
+    }
     const savedAsk = $("weather-saved-ask");
     if (savedAsk) savedAsk.hidden = !held;
     const savedAskLine = $("weather-saved-ask-line");
