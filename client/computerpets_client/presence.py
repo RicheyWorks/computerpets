@@ -62,6 +62,14 @@ def ip_place(*_ignored: object) -> None:
     return None
 
 
+def read_machine_mark(*_ignored: object) -> dict[str, object]:
+    """Presence does not read a machine id. License binding is license/hwid.py.
+
+    This does not open machine-id, MachineGuid, or the Mac platform UUID.
+    """
+    return {"read": False, "raw": None, "id": ""}
+
+
 def house_file(user_data_dir: str, name: str) -> str | None:
     if not isinstance(user_data_dir, str) or not user_data_dir.strip():
         return None

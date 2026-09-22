@@ -5,7 +5,8 @@ const path = require("path");
 /**
  * Presence files that may live under the overlay userData directory.
  * Not the keeper's Desktop, Documents, or any other host path.
- * License hwid is a separate door and is not on this list.
+ * A license machine id is not a presence read and is not on this list.
+ * Unlock reads that id only when hwid.txt has no hash.
  * mind.json may hold mind prefs. A plugin key is not stored there in plain text.
  */
 const HOUSE_FILES = Object.freeze(["card.json", "mind.json"]);
@@ -106,6 +107,14 @@ function requestWeatherFix(geo, opts) {
  */
 function ipPlace() {
   return null;
+}
+
+/**
+ * Presence does not read a machine id. License binding is desktop/license/hwid.cjs.
+ * This does not open machine-id, MachineGuid, or the Mac platform UUID.
+ */
+function readMachineMark() {
+  return { read: false, raw: null, id: "" };
 }
 
 /**
@@ -293,6 +302,7 @@ module.exports = {
   weatherLocateOpen,
   weatherLocateOptions,
   ipPlace,
+  readMachineMark,
   readWeatherHere,
   houseFile,
   scrubWindow,

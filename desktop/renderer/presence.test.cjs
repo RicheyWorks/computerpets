@@ -27,6 +27,8 @@ test("presence writes stay inside userData house files", () => {
   assert.equal(Presence.houseFile("/tmp/computerpets-user", "/etc/passwd"), null);
   assert.equal(Presence.houseFile("/tmp/computerpets-user", "Desktop/homework.txt"), null);
   assert.equal(Presence.houseFile("/tmp/computerpets-user", "hwid.txt"), null);
+  assert.deepEqual(Presence.readMachineMark(), { read: false, raw: null, id: "" });
+  assert.deepEqual(Guard.readMachineMark(), { read: false, raw: null, id: "" });
   assert.equal(Presence.houseFile("", "card.json"), null);
   assert.equal(Presence.houseFile("/tmp/computerpets-user", "card.json/../../x"), null);
 });

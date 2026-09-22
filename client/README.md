@@ -76,6 +76,8 @@ The verbs that already exist on the living desk and fit this cut. Treat uses the
 
 Bad ciphertext, an expired payload, a revoked `jti`, a hardware mismatch, or a missing backend all fail closed. The blotter pet still lives.
 
+The first Unlock reads Linux `machine-id`, Windows `MachineGuid`, or the Mac platform UUID, hashes it, and stores the hash in `hwid.txt`. A hash already stored is reused, so an existing license stays bound. The raw id is not sent. The house receives only the hash, and only for unlock or a bound download. Opening Unlock does not read the id until you press Unlock and no hash is stored. That hash is still a device fingerprint. The blotter does not read a machine id for presence.
+
 | Variable | Required | Meaning |
 |----------|----------|---------|
 | `COMPUTERPETS_BACKEND_URL` | yes* | Backend origin, no trailing slash. Default `http://127.0.0.1:8081` if unset. |
