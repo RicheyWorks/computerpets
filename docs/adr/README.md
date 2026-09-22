@@ -29,6 +29,7 @@ address, or an API that is not on `main`.
 | [0008](0008-desktop-local-gpu-sense.md) | GPU load is desktop-local on the keeper machine, not `/metrics/gpu` | Accepted |
 | [0009](0009-mind-listener-name.md) | The keeper HUD names who is listening; it does not show the key | Accepted |
 | [0010](0010-presence-does-not-open-files.md) | Desk presence does not open a dropped keeper file | Accepted |
+| [0011](0011-presence-does-not-list-folders.md) | Desk presence does not list user folders or read window titles | Accepted |
 
 ## How to add one
 

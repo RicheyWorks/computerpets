@@ -1,4 +1,8 @@
-/** Windows 10/11 top-level window bounds. Rects only. Mac/Linux stay a later door. */
+/** Windows 10/11 top-level window bounds. Rects only. Mac/Linux stay a later door.
+ * GetClassName stays inside this process so the taskbar and the desktop host
+ * can be a shell bit. The class string is not written on the pipe.
+ * Window text is not read. No folder is listed.
+ */
 const { spawn } = require("child_process");
 const Windows = require("./renderer/windows.js");
 
@@ -38,7 +42,8 @@ public static class DeskWins {
       RECT r;
       if (!GetWindowRect(h, out r)) return true;
       ulong id = unchecked((ulong)h.ToInt64());
-      rows.Add(id + "\\t" + r.Left + "\\t" + r.Top + "\\t" + r.Right + "\\t" + r.Bottom + "\\t" + (mini ? "1" : "0") + "\\t" + (tool ? "1" : "0") + "\\t" + (cloaked != 0 ? "1" : "0") + "\\t" + cls.Replace("\\t", " "));
+      bool shell = cls == "Shell_TrayWnd" || cls == "Shell_SecondaryTrayWnd" || cls == "NotifyIconOverflowWindow" || cls == "Progman" || cls == "WorkerW";
+      rows.Add(id + "\\t" + r.Left + "\\t" + r.Top + "\\t" + r.Right + "\\t" + r.Bottom + "\\t" + (mini ? "1" : "0") + "\\t" + (tool ? "1" : "0") + "\\t" + (cloaked != 0 ? "1" : "0") + "\\t" + (shell ? "1" : "0"));
       return true;
     }, IntPtr.Zero);
     return rows;

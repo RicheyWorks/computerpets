@@ -47,7 +47,41 @@ function scrubWindow(row) {
   const width = Number(row.width);
   const height = Number(row.height);
   if (!id || ![x, y, width, height].every(Number.isFinite)) return null;
+  if (windowCaption(row) != null) return null;
+  if (hostPathLabel(row.path, false) !== "") return null;
   return { id, x, y, width, height };
+}
+
+/**
+ * Presence does not list a host folder. Desktop, Documents, Downloads,
+ * and every other path return an empty list. This does not touch the disk.
+ * @param {string} [_name]
+ * @returns {{ listed: false, names: [] }}
+ */
+function listHostFolder(_name) {
+  return { listed: false, names: [] };
+}
+
+/**
+ * Window glass has no title and no document name.
+ * @param {object | null | undefined} [_row]
+ * @returns {null}
+ */
+function windowCaption(_row) {
+  return null;
+}
+
+/**
+ * A host path is omitted unless the keeper has already consented.
+ * There is no consent control on the glass, the desk, or the blotter.
+ * @param {unknown} value
+ * @param {boolean} consent
+ * @returns {string}
+ */
+function hostPathLabel(value, consent) {
+  if (consent !== true) return "";
+  if (typeof value !== "string") return "";
+  return value.trim();
 }
 
 function scrubWindows(list) {
@@ -93,4 +127,7 @@ module.exports = {
   scrubWindow,
   scrubWindows,
   refuseFileDrop,
+  listHostFolder,
+  windowCaption,
+  hostPathLabel,
 };

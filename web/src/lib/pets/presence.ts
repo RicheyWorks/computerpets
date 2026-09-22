@@ -46,6 +46,26 @@ export function refuseFileDrop(transfer: DropTransfer): { accept: false; read: f
   return { accept: false, read: false, files };
 }
 
+/** Presence does not list a host folder. This does not touch the disk. */
+export function listHostFolder(_name?: string): { listed: false; names: [] } {
+  return { listed: false, names: [] };
+}
+
+/** Window glass has no title and no document name. */
+export function windowCaption(_row?: object | null): null {
+  return null;
+}
+
+/**
+ * A host path is omitted unless the keeper has already consented.
+ * There is no consent control on the desk.
+ */
+export function hostPathLabel(value: unknown, consent?: boolean): string {
+  if (consent !== true) return "";
+  if (typeof value !== "string") return "";
+  return value.trim();
+}
+
 export function installFileDropGuard(target: EventTarget): () => void {
   const onDrag = (event: Event) => {
     const drag = event as DragEvent;
