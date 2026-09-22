@@ -1,7 +1,7 @@
 package com.enterprisepet.config;
 
-import com.enterprisepet.security.MachineRequestSignature;
-import com.enterprisepet.security.MachineRequestSignature.Decision;
+import com.enterprisepet.security.AdminRequestSignature;
+import com.enterprisepet.security.AdminRequestSignature.Decision;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletException;
@@ -25,27 +25,24 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 
 /**
- * Fail-closed HMAC on machine writes to {@code /api/verify}.
+ * Fail-closed HMAC on every method under {@code /api/admin} except OPTIONS.
  *
- * <p>GET discovery ({@code /providers}, {@code /nft/collections}) stays
- * unsigned. {@code POST /api/download} stays the license JWT. Signed bundle
- * redeem stays the URL MAC. The house {@code /admin} ledger is a separate
- * HMAC (ADR 0071). Human Unlock still receives a license and uses that
- * JWT; the overlay and blotter sign this POST with the license key they
- * already hold (ADR 0070).
+ * <p>A static {@code X-Admin-Key} is not accepted. The MAC key is
+ * {@code ADMIN_API_KEY} (current, then previous during rotation). Machine
+ * verify stays a different canonical version and a different key (ADR 0070).
  */
 @Component
-@Order(200)
-public class MachineRequestSignatureFilter extends OncePerRequestFilter {
+@Order(210)
+public class AdminRequestSignatureFilter extends OncePerRequestFilter {
 
-    private static final Logger log = LoggerFactory.getLogger(MachineRequestSignatureFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(AdminRequestSignatureFilter.class);
 
     private final String currentKey;
     private final String previousKey;
 
-    public MachineRequestSignatureFilter(
-            @Value("${license.secret-key:}") String currentKey,
-            @Value("${license.secret-key-previous:}") String previousKey) {
+    public AdminRequestSignatureFilter(
+            @Value("${admin.api-key:}") String currentKey,
+            @Value("${admin.api-key-previous:}") String previousKey) {
         this.currentKey = currentKey == null ? "" : currentKey;
         this.previousKey = previousKey == null ? "" : previousKey;
     }
@@ -63,24 +60,24 @@ public class MachineRequestSignatureFilter extends OncePerRequestFilter {
         try {
             body = req.getInputStream().readAllBytes();
         } catch (IOException e) {
-            log.warn("Machine verify body unreadable path={}", path);
-            writeUnauthorized(res, "Machine signature invalid.");
+            log.warn("Admin body unreadable path={}", path);
+            writeUnauthorized(res, "Admin signature invalid.");
             return;
         }
 
-        Decision decision = MachineRequestSignature.verify(
+        Decision decision = AdminRequestSignature.verify(
                 currentKey,
                 previousKey,
                 req.getMethod(),
                 path,
                 req.getQueryString(),
-                req.getHeader(MachineRequestSignature.TIMESTAMP_HEADER),
-                req.getHeader(MachineRequestSignature.SIGNATURE_HEADER),
+                req.getHeader(AdminRequestSignature.TIMESTAMP_HEADER),
+                req.getHeader(AdminRequestSignature.SIGNATURE_HEADER),
                 body,
                 Instant.now().getEpochSecond());
 
         if (decision != Decision.OK) {
-            log.warn("Machine verify refused path={} reason={}", path, decision);
+            log.warn("Admin request refused path={} reason={}", path, decision);
             writeUnauthorized(res, detail(decision));
             return;
         }
@@ -89,20 +86,17 @@ public class MachineRequestSignatureFilter extends OncePerRequestFilter {
     }
 
     /**
-     * Writes under {@code /api/verify}. Reads (provider list, NFT catalog)
-     * are not machine commands.
+     * Every method under {@code /api/admin}, including GET audit reads.
+     * OPTIONS is the browser preflight and carries no MAC.
      */
     public static boolean requiresSignature(String method, String path) {
         if (method == null || path == null) {
             return false;
         }
-        if (!"POST".equalsIgnoreCase(method)
-                && !"PUT".equalsIgnoreCase(method)
-                && !"PATCH".equalsIgnoreCase(method)
-                && !"DELETE".equalsIgnoreCase(method)) {
+        if ("OPTIONS".equalsIgnoreCase(method)) {
             return false;
         }
-        return "/api/verify".equals(path) || path.startsWith("/api/verify/");
+        return "/api/admin".equals(path) || path.startsWith("/api/admin/");
     }
 
     static String pathOf(HttpServletRequest req) {
@@ -119,9 +113,9 @@ public class MachineRequestSignatureFilter extends OncePerRequestFilter {
 
     private static String detail(Decision decision) {
         return switch (decision) {
-            case SKEW -> "Machine request outside the 300 second window.";
-            case INVALID -> "Machine signature invalid.";
-            case MISSING, OK -> "Machine signature required.";
+            case SKEW -> "Admin request outside the 300 second window.";
+            case INVALID -> "Admin signature invalid.";
+            case MISSING, OK -> "Admin signature required.";
         };
     }
 
@@ -157,7 +151,7 @@ public class MachineRequestSignatureFilter extends OncePerRequestFilter {
 
                 @Override
                 public void setReadListener(ReadListener readListener) {
-                    // Synchronous verify bodies only.
+                    // Synchronous admin bodies only.
                 }
 
                 @Override

@@ -77,7 +77,7 @@ openssl rand -base64 24   # SPRING_DATASOURCE_PASSWORD (also POSTGRES_PASSWORD)
 | `LICENSE_SECRET_KEY` | Yes | AES-256-GCM licenses (32 bytes, base64) |
 | `JWT_SECRET_KEY` | Yes | Download JWTs (48+ bytes, base64) |
 | `BUNDLE_SIGNING_KEY` | Yes | HMAC download URLs |
-| `ADMIN_API_KEY` | Yes | `/api/admin/*` and house `/admin` (`X-Admin-Key`) |
+| `ADMIN_API_KEY` | Yes | HMAC key for `/api/admin/**` and house `/admin` ([ADR 0071](../../docs/adr/0071-admin-request-signature.md)) |
 | `JWT_SECRET_KEY_PREVIOUS` / `BUNDLE_SIGNING_KEY_PREVIOUS` / `LICENSE_SECRET_KEY_PREVIOUS` / `ADMIN_API_KEY_PREVIOUS` | No | Dual-key window during rotation ([ADR 0065](../../docs/adr/0065-secret-rotation-cadence-and-hsm.md)). Unset after the window. |
 | `COMPUTERPETS_KEYS_ROTATED_AT` | No | Optional ISO-8601 stamp; when set on prod, max age 400 days |
 | `SPRING_DATASOURCE_USERNAME` | Yes | JDBC (must match `POSTGRES_USER`) |
