@@ -23,6 +23,6 @@ An overlay news, quote, or radio read from main gives up after twelve seconds. T
 ## Consequences
 
 - The overlay plate no longer waits forever on those IPC reads. "can't reach" means the host did not answer. It does not mean the search found nothing.
-- Desk and `/demo` page wrappers for news, quotes, radio, cloud talk, and cloud voice still have no deadline. A hang there still sits on "looking up" or never returns the house line. Weather forecast and geocode page wrappers time out. [0050](0050-weather-page-times-out-and-denies.md). The featured Wikipedia fetch is still a renderer read with no deadline.
+- Desk and `/demo` news, quote, and radio page wrappers time out. [0051](0051-news-quote-radio-page-times-out-and-denies.md). Cloud talk and cloud voice page wrappers still have no deadline. A hang there still sits on "looking up" or never returns the house line. Weather forecast and geocode page wrappers time out. [0050](0050-weather-page-times-out-and-denies.md).
 - Steam's RestClient still has no read deadline. Microsoft and NFT already time out. Resilience4j still has no time limiter. Those stay Phase 2.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.

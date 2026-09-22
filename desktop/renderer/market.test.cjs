@@ -82,6 +82,59 @@ test("quote wrappers refuse a fetch until the painted host line is present", asy
   assert.equal(calls, 5);
 });
 
+test("quote wrappers time out and deny a silent host", async () => {
+  assert.equal(M.QUOTE_TIMEOUT_MS, 12_000);
+  assert.equal(M.QuoteTimeout.name, "QuoteTimeout");
+  const quote = "this quote sends the saved list. this computer's network address goes with the https request to the quote host, as any client.";
+  const hang = () => new Promise(() => {});
+  const calls = [];
+  await assert.rejects(
+    () => M.readGeckoMany(quote, ["bitcoin"], (url) => (calls.push(url), hang()), 30),
+    (err) => err instanceof M.QuoteTimeout && err.name === "QuoteTimeout",
+  );
+  await assert.rejects(
+    () => M.readQuoteSearch(M.QUOTE_LOOK, "pepe", () => hang(), 30),
+    (err) => err instanceof M.QuoteTimeout,
+  );
+  await assert.rejects(
+    () => M.readYahoo("this quote sends the saved list. this computer's network address goes with the https request to the stock host, as any client.", "AAPL", () => hang(), 30),
+    (err) => err instanceof M.QuoteTimeout,
+  );
+  assert.equal(calls.length, 1);
+
+  let fulfilled = null;
+  const late = M.readGeckoMany(
+    quote,
+    ["bitcoin"],
+    () =>
+      new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ json: async () => ({ bitcoin: { usd: 1 } }) });
+        }, 80);
+      }),
+    20,
+  ).then(
+    (body) => {
+      fulfilled = body;
+      return body;
+    },
+    (err) => {
+      fulfilled = err;
+      throw err;
+    },
+  );
+  await assert.rejects(() => late, (err) => err instanceof M.QuoteTimeout);
+  await new Promise((r) => setTimeout(r, 120));
+  assert.ok(fulfilled instanceof M.QuoteTimeout);
+  assert.equal(fulfilled.name, "QuoteTimeout");
+
+  const answered = await M.readGeckoMany(quote, ["bitcoin"], async () => ({
+    json: async () => ({ bitcoin: { usd: 3 } }),
+  }), 200);
+  assert.equal(answered.bitcoin.usd, 3);
+  assert.equal(await M.readGeckoMany("", ["bitcoin"], () => hang(), 30), null);
+});
+
 test("Quotes defaults seed ETH DOGE XLM plus majors", () => {
   const house = M.parseMarket({});
   const symbols = house.tickers.map((t) => t.symbol);

@@ -152,6 +152,18 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.match(areasFile, /WEATHER_TIMEOUT_MS/);
   assert.match(areasFile, /AbortController/);
   assert.match(areasFile, /WeatherTimeout/);
+  const newsFile = readFileSync(join(root, "src/lib/pets/news.ts"), "utf8");
+  assert.match(newsFile, /NEWS_TIMEOUT_MS/);
+  assert.match(newsFile, /AbortController/);
+  assert.match(newsFile, /NewsTimeout/);
+  const marketFile = readFileSync(join(root, "src/lib/pets/market.ts"), "utf8");
+  assert.match(marketFile, /QUOTE_TIMEOUT_MS/);
+  assert.match(marketFile, /AbortController/);
+  assert.match(marketFile, /QuoteTimeout/);
+  const radioFile = readFileSync(join(root, "src/lib/pets/house-music.ts"), "utf8");
+  assert.match(radioFile, /RADIO_TIMEOUT_MS/);
+  assert.match(radioFile, /AbortController/);
+  assert.match(radioFile, /RadioTimeout/);
   assert.match(plates, /id="weather-forecast-net"/);
   assert.match(plates, /id="weather-geocode-net"/);
   assert.match(plates, /id="weather-reverse-net"/);

@@ -167,6 +167,68 @@ test("radio search refuses a fetch until the radio-host line is present", async 
   assert.equal(again[0].name, stations[0].name);
 });
 
+test("radio search times out and denies a silent host", async () => {
+  assert.equal(M.RADIO_TIMEOUT_MS, 12_000);
+  assert.equal(Overlay.RADIO_TIMEOUT_MS, 12_000);
+  assert.equal(M.RadioTimeout.name, "RadioTimeout");
+  assert.equal(Overlay.RadioTimeout.name, "RadioTimeout");
+  const line = M.RADIO_FIND;
+  const hang = () => new Promise(() => {});
+  const calls = [];
+  await assert.rejects(
+    () => M.readRadioSearch(line, "KEXP", null, (url) => (calls.push(url), hang()), 30),
+    (err) => err instanceof M.RadioTimeout && err.name === "RadioTimeout",
+  );
+  await assert.rejects(
+    () => Overlay.readRadioSearch(line, "KEXP", null, () => hang(), 30),
+    (err) => err instanceof Overlay.RadioTimeout,
+  );
+  assert.ok(calls.length >= 1);
+  assert.ok(calls.every((u) => /de1\.api\.radio-browser\.info/.test(u)));
+  assert.ok(!calls.some((u) => /de2\.|fi1\./.test(u)));
+
+  let fulfilled = null;
+  const late = M.readRadioSearch(
+    line,
+    "KEXP",
+    null,
+    () =>
+      new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            json: async () => [{ name: "late", url_resolved: "https://example.test/late", stationuuid: "late1" }],
+          });
+        }, 80);
+      }),
+    20,
+  ).then(
+    (body) => {
+      fulfilled = body;
+      return body;
+    },
+    (err) => {
+      fulfilled = err;
+      throw err;
+    },
+  );
+  await assert.rejects(() => late, (err) => err instanceof M.RadioTimeout);
+  await new Promise((r) => setTimeout(r, 120));
+  assert.ok(fulfilled instanceof M.RadioTimeout);
+  assert.equal(fulfilled.name, "RadioTimeout");
+
+  const answered = await M.readRadioSearch(
+    line,
+    "KEXP",
+    null,
+    async () => ({
+      json: async () => [{ name: "KEXP", url_resolved: "https://example.test/kexp", stationuuid: "k1" }],
+    }),
+    200,
+  );
+  assert.match(answered[0].name, /KEXP/);
+  assert.equal(await M.readRadioSearch("", "KEXP", null, () => hang(), 30), null);
+});
+
 test("Radio Browser can return a station for a typed look-up", async (t) => {
   const url = M.radioSearchUrl("KEXP");
   try {
