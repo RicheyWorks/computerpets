@@ -118,6 +118,8 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.match(declineBody, /holdWeatherLocate/);
   assert.doesNotMatch(declineBody, /readWeatherHere|noteWeatherLocateYes|getCurrentPosition/);
   assert.ok(confirmBody.indexOf("sharePlace") < confirmBody.indexOf("reverseUrl"));
+  assert.match(confirmBody, /geocodeMaySend\("reverse"/);
+  assert.ok(confirmBody.indexOf('geocodeMaySend("reverse"') < confirmBody.indexOf("reverseUrl"));
   const forecastEffect = plates.slice(plates.indexOf("const gate = forecastGate"), plates.indexOf("async function search"));
   assert.doesNotMatch(forecastEffect, /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
   const openToggle = plates.slice(plates.indexOf("onClick={() => chrome.toggleOpen"), plates.indexOf("onClick={() => chrome.toggleOpen") + 80);
@@ -140,6 +142,18 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.ok(forecastEffect.indexOf("forecastMaySend") < forecastEffect.indexOf("forecastUrl"));
   assert.match(plates, /forecastHonesty/);
   assert.match(plates, /id="weather-forecast-net"/);
+  assert.match(plates, /id="weather-geocode-net"/);
+  assert.match(plates, /id="weather-reverse-net"/);
+  assert.match(plates, /geocodeHonesty\("look"\)/);
+  assert.match(plates, /geocodeHonesty\("reverse"\)/);
+  const searchAt = plates.indexOf("async function search");
+  const searchBody = plates.slice(searchAt, plates.indexOf("function useHere"));
+  assert.match(searchBody, /geocodeMaySend\("look"/);
+  assert.ok(searchBody.indexOf('geocodeMaySend("look"') < searchBody.indexOf("geocodeUrl("));
+  assert.doesNotMatch(searchBody, /readWeatherHere|reverseUrl|noteWeatherLocateYes|getCurrentPosition/);
+  assert.equal(plates.split("geocodeUrl(").length - 1, 1);
+  assert.equal(plates.split("reverseUrl(").length - 1, 1);
+  assert.doesNotMatch(forecastEffect, /geocodeUrl\(|reverseUrl\(/);
   const openAt = plates.indexOf("{open ? (");
   const askAt = plates.indexOf('id="weather-saved-ask"');
   assert.ok(openAt > 0 && askAt > openAt);

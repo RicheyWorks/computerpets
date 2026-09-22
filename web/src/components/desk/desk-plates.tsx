@@ -9,6 +9,9 @@ import {
   forecastHonesty,
   forecastMaySend,
   forecastUrl,
+  GEOCODE_NET,
+  geocodeHonesty,
+  geocodeMaySend,
   geocodeUrl,
   AREA_LABEL,
   AREA_PLACEHOLDER,
@@ -374,7 +377,18 @@ export function DeskWeatherPlate({
     };
   }, [areas, card.hereForecastAck, onSky, open, tab]);
 
+  function geocodeLineShown(id: string) {
+    if (typeof document === "undefined") return false;
+    const el = document.getElementById(id);
+    if (!el) return false;
+    return (el.textContent || "").includes(GEOCODE_NET);
+  }
+
   async function search() {
+    if (!geocodeMaySend("look", geocodeLineShown("weather-geocode-net"))) {
+      setHits([]);
+      return;
+    }
     const url = geocodeUrl(query);
     if (!url) {
       setLookLine(TYPE_A_CITY);
@@ -445,6 +459,10 @@ export function DeskWeatherPlate({
     const place = sharePlace(fix.lat, fix.lon);
     if (!place) {
       setHereLine(HERE_FAIL);
+      return;
+    }
+    if (!geocodeMaySend("reverse", geocodeLineShown("weather-reverse-net"))) {
+      keep(unnamed(place.lat, place.lon));
       return;
     }
     const url = reverseUrl(place.lat, place.lon);
@@ -614,6 +632,9 @@ export function DeskWeatherPlate({
                 ))}
               </ul>
               <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">{AREA_TRUTH}</p>
+              <p id="weather-geocode-net" className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">
+                {geocodeHonesty("look")}
+              </p>
               <form
                 className="mt-2 flex gap-2"
                 onSubmit={(e) => {
@@ -653,6 +674,9 @@ export function DeskWeatherPlate({
               </button>
               <p id="weather-here-send" className="mt-1 text-[10px] uppercase tracking-[0.16em] text-subtle">
                 {HERE_SEND}
+              </p>
+              <p id="weather-reverse-net" className="mt-1 text-[10px] uppercase tracking-[0.16em] text-subtle">
+                {geocodeHonesty("reverse")}
               </p>
               {hereAsk ? (
                 <div id="weather-here-ask" className="mt-2 flex flex-wrap items-center gap-2">
