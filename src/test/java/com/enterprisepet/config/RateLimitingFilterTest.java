@@ -59,6 +59,79 @@ class RateLimitingFilterTest {
     }
 
     @Test
+    @DisplayName("bundle catalog reads consume the bundles bucket; redeem does not")
+    void bundleCatalog_usesBundlesBucket_redeemExcluded() throws Exception {
+        AtomicInteger seen = new AtomicInteger();
+        RateLimitingFilter filter = new RateLimitingFilter((key, cap, period) -> {
+            assertThat(key).endsWith("|bundles");
+            assertThat(cap).isEqualTo(60L);
+            assertThat(period).isEqualTo(java.time.Duration.ofMinutes(1));
+            seen.incrementAndGet();
+            return RateLimitBackend.Probe.allowed(59);
+        }, properties, trustNone);
+
+        filter.doFilter(new MockHttpServletRequest("GET", "/api/bundles/red_panda"),
+            new MockHttpServletResponse(), (request, response) -> {});
+        filter.doFilter(new MockHttpServletRequest("GET", "/api/bundles/redeem"),
+            new MockHttpServletResponse(), (request, response) -> {});
+
+        AtomicInteger redeemChain = new AtomicInteger();
+        filter.doFilter(new MockHttpServletRequest("GET", "/api/bundles/red_panda/redeem"),
+            new MockHttpServletResponse(), (request, response) -> redeemChain.incrementAndGet());
+        filter.doFilter(new MockHttpServletRequest("GET", "/api/bundles/red_panda/redeem/"),
+            new MockHttpServletResponse(), (request, response) -> redeemChain.incrementAndGet());
+        filter.doFilter(new MockHttpServletRequest("GET", "/api/bundles/red_panda/redeem?owner=a&jti=b&exp=1&sig=c"),
+            new MockHttpServletResponse(), (request, response) -> redeemChain.incrementAndGet());
+
+        assertThat(seen.get()).isEqualTo(2);
+        assertThat(redeemChain.get()).isEqualTo(3);
+        assertThat(RateLimitingFilter.isSignedBundleRedeem("/api/bundles/red_panda")).isFalse();
+        assertThat(RateLimitingFilter.ruleFor("/api/bundles/red_panda/redeem")).isNull();
+    }
+
+    @Test
+    @DisplayName("exhausted bundle catalog bucket returns 429 problem+json")
+    void bundleCatalogDeny_returns429() throws Exception {
+        AtomicInteger chainCalls = new AtomicInteger();
+        RateLimitingFilter filter = new RateLimitingFilter(
+            (key, cap, period) -> {
+                assertThat(key).endsWith("|bundles");
+                return RateLimitBackend.Probe.denied(TimeUnit.SECONDS.toNanos(8));
+            },
+            properties, trustNone);
+        MockHttpServletResponse res = new MockHttpServletResponse();
+
+        filter.doFilter(new MockHttpServletRequest("GET", "/api/bundles/red_panda"), res,
+            (request, response) -> chainCalls.incrementAndGet());
+
+        assertThat(chainCalls.get()).isZero();
+        assertThat(res.getStatus()).isEqualTo(429);
+        assertThat(res.getHeader(HttpHeaders.RETRY_AFTER)).isEqualTo("9");
+        assertThat(res.getContentType()).isEqualTo(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
+        assertThat(res.getContentAsString())
+            .contains("Rate limit exceeded for bundles")
+            .contains("\"status\":429");
+    }
+
+    @Test
+    @DisplayName("trusted proxy: bundle catalog bucket uses ClientAddress")
+    void bundleCatalog_trustedProxy_usesClientAddress() throws Exception {
+        AtomicInteger seen = new AtomicInteger();
+        RateLimitingFilter filter = new RateLimitingFilter((key, cap, period) -> {
+            assertThat(key).isEqualTo("203.0.113.9|bundles");
+            seen.incrementAndGet();
+            return RateLimitBackend.Probe.allowed(59);
+        }, properties, trustLoopback);
+        MockHttpServletRequest req = new MockHttpServletRequest("GET", "/api/bundles/red_panda");
+        req.setRemoteAddr("127.0.0.1");
+        req.addHeader("X-Forwarded-For", "203.0.113.9, 10.0.0.1");
+
+        filter.doFilter(req, new MockHttpServletResponse(), (request, response) -> {});
+
+        assertThat(seen.get()).isEqualTo(1);
+    }
+
+    @Test
     @DisplayName("exhausted discovery bucket returns 429 problem+json")
     void discoveryDeny_returns429() throws Exception {
         AtomicInteger chainCalls = new AtomicInteger();

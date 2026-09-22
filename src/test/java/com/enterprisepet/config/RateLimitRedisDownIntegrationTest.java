@@ -80,4 +80,28 @@ class RateLimitRedisDownIntegrationTest {
         assertThat(response.getBody().get("status")).isEqualTo(503);
         assertThat((String) response.getBody().get("detail")).contains("Rate limiter unavailable");
     }
+
+    @Test
+    @DisplayName("Redis down does not lift the limit — bundle catalog returns 503 problem+json")
+    void redisDown_bundleCatalogIs503() {
+        ResponseEntity<Map> response = restTemplate.getForEntity("/api/bundles/red_panda", Map.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
+        assertThat(response.getHeaders().getFirst(HttpHeaders.RETRY_AFTER)).isEqualTo("5");
+        assertThat(response.getHeaders().getContentType()).isNotNull();
+        assertThat(response.getHeaders().getContentType().isCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON)).isTrue();
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().get("status")).isEqualTo(503);
+        assertThat((String) response.getBody().get("detail")).contains("Rate limiter unavailable");
+    }
+
+    @Test
+    @DisplayName("Redis down does not replace signed redeem with the rate-limiter 503")
+    void redisDown_redeemIsNotRateLimiter503() {
+        ResponseEntity<String> redeem = restTemplate.getForEntity(
+            "/api/bundles/red_panda/redeem", String.class);
+
+        assertThat(redeem.getStatusCode()).isNotEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
+        assertThat(redeem.getBody()).doesNotContain("Rate limiter unavailable");
+    }
 }
