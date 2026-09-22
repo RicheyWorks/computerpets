@@ -52,6 +52,8 @@ Body is a flat JSON object of strings. Provider-specific fields plus:
 | `petType` | no | Catalog key (e.g. `red_panda`). Default `red_panda` if omitted/blank **and** the provider does not return its own pet key. |
 | `hwid` | no | Opaque device binding. See [§5](#5-hardware-id-hwid). |
 
+Provider fields are fail-closed on **max length and allowed charset** before any RestClient / RPC call ([ADR 0066](adr/0066-provider-verify-field-bounds.md)). Bad shape is **400**, not a silent truncate and not a fake ownership deny. Steam: numeric `steamId` / `appId`. Itch: numeric `gameId` plus download-key charset. Epic: 32-hex `accountId`, catalog-token sandbox/item, letter `platform`. Microsoft: printable XSTS / alphanumeric product id (optional hash, account, signature, store id, sku bounded). NFT: checksum addresses, decimal `tokenId`, bounded printable `message` and 65-byte hex `signature`.
+
 Itch.io (`itch`) also requires `gameId` (numeric) and `downloadKey` (the
 purchase receipt). A placeholder `ITCH_API_KEY` fails closed.
 
@@ -88,7 +90,7 @@ ciphertext as opaque until you decrypt it (or just send it back on download).
 
 | Status | When |
 |--------|------|
-| 400 | Unknown `petType`, or `hwid` longer than 128 characters |
+| 400 | Unknown `petType`, `hwid` longer than 128 characters, or provider field fails length/charset (before any outbound store call; [ADR 0066](adr/0066-provider-verify-field-bounds.md)) |
 | 403 | Provider denied ownership |
 | 404 | Unknown provider (`validProviders` lists the keys) |
 | 502 | Upstream provider call failed |

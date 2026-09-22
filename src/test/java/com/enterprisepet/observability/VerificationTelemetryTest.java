@@ -59,6 +59,19 @@ class VerificationTelemetryTest {
     }
 
     @Test
+    @DisplayName("verify records invalid outcome for client shape errors")
+    void verify_invalid_recordsOutcome() {
+        telemetry.verify("steam", () -> VerificationResult.invalid("steamId too long"));
+
+        Timer invalid = meters.find(VerificationTelemetry.VERIFY)
+                .tag("provider", "steam")
+                .tag("outcome", "invalid")
+                .timer();
+        assertThat(invalid).isNotNull();
+        assertThat(invalid.count()).isEqualTo(1);
+    }
+
+    @Test
     @DisplayName("verify records error outcome when the provider throws")
     void verify_error_recordsOutcomeAndRethrows() {
         assertThatThrownBy(() -> telemetry.verify("epic", () -> {

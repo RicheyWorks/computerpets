@@ -24,7 +24,6 @@ import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 /**
  * Verifies that a buyer owns an itch.io game via the official download-key
@@ -56,8 +55,6 @@ public class ItchService implements OwnershipProvider {
 
     /** Rejected as an obvious leftover from documentation / application.yml. */
     static final String PLACEHOLDER_API_KEY = "YOUR_ITCH_API_KEY";
-
-    private static final Pattern NUMERIC_GAME_ID = Pattern.compile("\\d{1,18}");
 
     @Value("${itch.api-key}")
     private String apiKey;
@@ -119,11 +116,9 @@ public class ItchService implements OwnershipProvider {
     @Override
     public VerificationResult verify(Map<String, String> request) {
         ItchVerifyRequest typed = ItchVerifyRequest.from(request);
-        if (typed.gameId() == null || typed.downloadKey() == null) {
-            return VerificationResult.denied("gameId and downloadKey are required");
-        }
-        if (!NUMERIC_GAME_ID.matcher(typed.gameId()).matches()) {
-            return VerificationResult.denied("gameId must be a numeric itch.io game id");
+        Optional<String> shape = typed.invalidReason();
+        if (shape.isPresent()) {
+            return VerificationResult.invalid(shape.get());
         }
         if (!isBlank(configuredGameId) && !configuredGameId.trim().equals(typed.gameId())) {
             return VerificationResult.denied("gameId is not an official ComputerPets itch.io game");

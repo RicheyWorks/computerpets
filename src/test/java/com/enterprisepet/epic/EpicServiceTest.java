@@ -332,26 +332,28 @@ class EpicServiceTest {
     }
 
     @Test
-    @DisplayName("verify returns denied when required fields are missing")
-    void verify_missingRequiredFields_returnsDenied() {
+    @DisplayName("verify returns invalid when required fields are missing")
+    void verify_missingRequiredFields_returnsInvalid() {
         VerificationResult result = service.verify(Map.of("accountId", ACCOUNT_ID));
 
         assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
         assertThat(result.reason()).contains("accountId, sandboxId, and catalogItemId are required");
     }
 
     @Test
-    @DisplayName("verify(null) denies with the same required-field message")
-    void verify_nullRequest_returnsDenied() {
+    @DisplayName("verify(null) returns invalid with the same required-field message")
+    void verify_nullRequest_returnsInvalid() {
         VerificationResult result = service.verify(null);
 
         assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
         assertThat(result.reason()).contains("accountId, sandboxId, and catalogItemId are required");
     }
 
     @Test
-    @DisplayName("verify returns denied when accountId is not a 32-char hex Epic Account ID")
-    void verify_invalidAccountId_returnsDenied() {
+    @DisplayName("verify returns invalid when accountId is not a 32-char hex Epic Account ID")
+    void verify_invalidAccountId_returnsInvalid() {
         VerificationResult result = service.verify(Map.of(
                 "accountId", "not-an-epic-id",
                 "sandboxId", SANDBOX_ID,
@@ -359,7 +361,9 @@ class EpicServiceTest {
         ));
 
         assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
         assertThat(result.reason()).contains("32-character Epic Account ID");
+        mockServer.verify();
     }
 
     @Test

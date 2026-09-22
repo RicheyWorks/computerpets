@@ -38,4 +38,24 @@ class ItchVerifyRequestTest {
         assertThat(request.gameId()).isEqualTo("3");
         assertThat(request.downloadKey()).isEqualTo("YWKse5jeAeuZ8w3a5qO2b2PId1sChw2B9b637w6z");
     }
+
+    @Test
+    @DisplayName("valid shape passes invalidReason")
+    void invalidReason_validShape_empty() {
+        ItchVerifyRequest request = ItchVerifyRequest.from(Map.of(
+                "gameId", "3",
+                "downloadKey", "YWKse5jeAeuZ8w3a5qO2b2PId1sChw2B9b637w6z"
+        ));
+        assertThat(request.invalidReason()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("short downloadKey fails closed")
+    void invalidReason_shortDownloadKey_present() {
+        ItchVerifyRequest request = ItchVerifyRequest.from(Map.of(
+                "gameId", "3",
+                "downloadKey", "short"
+        ));
+        assertThat(request.invalidReason()).isPresent();
+    }
 }

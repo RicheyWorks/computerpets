@@ -199,29 +199,31 @@ class EthereumNftServiceTest {
     }
 
     @Test
-    @DisplayName("verify rejects requests with missing fields")
-    void verify_missingFields_returnsDenied() {
+    @DisplayName("verify rejects requests with missing fields as invalid")
+    void verify_missingFields_returnsInvalid() {
         VerificationResult result = unrestricted.verify(Map.of(
                 "walletAddress", WALLET,
                 "contractAddress", CONTRACT
         ));
 
         assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
         assertThat(result.reason()).contains("required");
     }
 
     @Test
-    @DisplayName("verify(null) denies with the same required-field message")
-    void verify_nullRequest_returnsDenied() {
+    @DisplayName("verify(null) returns invalid with the same required-field message")
+    void verify_nullRequest_returnsInvalid() {
         VerificationResult result = unrestricted.verify(null);
 
         assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
         assertThat(result.reason()).contains("walletAddress, contractAddress, and tokenId are required");
     }
 
     @Test
-    @DisplayName("verify rejects a wallet shorter than 20 bytes")
-    void verify_invalidWallet_returnsDenied() {
+    @DisplayName("verify rejects a wallet shorter than 20 bytes as invalid")
+    void verify_invalidWallet_returnsInvalid() {
         VerificationResult result = unrestricted.verify(Map.of(
                 "walletAddress", "0x",
                 "contractAddress", CONTRACT,
@@ -229,12 +231,13 @@ class EthereumNftServiceTest {
         ));
 
         assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
         assertThat(result.reason()).contains("walletAddress");
     }
 
     @Test
-    @DisplayName("verify rejects a non-decimal tokenId")
-    void verify_invalidTokenId_returnsDenied() {
+    @DisplayName("verify rejects a non-decimal tokenId as invalid")
+    void verify_invalidTokenId_returnsInvalid() {
         VerificationResult result = unrestricted.verify(Map.of(
                 "walletAddress", WALLET,
                 "contractAddress", CONTRACT,
@@ -242,6 +245,7 @@ class EthereumNftServiceTest {
         ));
 
         assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
         assertThat(result.reason()).contains("tokenId");
     }
 

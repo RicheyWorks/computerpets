@@ -38,7 +38,9 @@ public class VerificationTelemetry {
         observation.lowCardinalityKeyValue("provider", safe(provider));
         try (Observation.Scope scope = observation.openScope()) {
             VerificationResult result = action.get();
-            observation.lowCardinalityKeyValue("outcome", result.verified() ? "success" : "denied");
+            observation.lowCardinalityKeyValue("outcome",
+                    result.verified() ? "success"
+                            : (result.clientError() ? "invalid" : "denied"));
             return result;
         } catch (RuntimeException e) {
             observation.lowCardinalityKeyValue("outcome", "error");

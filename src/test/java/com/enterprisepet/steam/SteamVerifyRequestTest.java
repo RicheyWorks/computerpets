@@ -50,4 +50,34 @@ class SteamVerifyRequestTest {
         assertThat(request.steamId()).isEqualTo("76561198000000000");
         assertThat(request.appId()).isNull();
     }
+
+    @Test
+    @DisplayName("documented keys pass invalidReason")
+    void invalidReason_validShape_empty() {
+        SteamVerifyRequest request = SteamVerifyRequest.from(Map.of(
+                "steamId", "76561198000000000",
+                "appId", "123456"
+        ));
+        assertThat(request.invalidReason()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("path-junk steamId fails closed without truncation")
+    void invalidReason_injectionSteamId_present() {
+        SteamVerifyRequest request = SteamVerifyRequest.from(Map.of(
+                "steamId", "ab;cd",
+                "appId", "123456"
+        ));
+        assertThat(request.invalidReason()).contains("steamId must be a numeric SteamID64");
+    }
+
+    @Test
+    @DisplayName("oversized appId fails closed as too long")
+    void invalidReason_appIdTooLong_present() {
+        SteamVerifyRequest request = SteamVerifyRequest.from(Map.of(
+                "steamId", "76561198000000000",
+                "appId", "1".repeat(11)
+        ));
+        assertThat(request.invalidReason()).contains("appId too long");
+    }
 }

@@ -31,6 +31,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -169,8 +170,9 @@ public class MicrosoftStoreService implements OwnershipProvider {
     @Override
     public VerificationResult verify(Map<String, String> request) {
         MicrosoftVerifyRequest typed = MicrosoftVerifyRequest.from(request);
-        if (typed.xstsToken() == null || typed.storeProductId() == null) {
-            return VerificationResult.denied("xstsToken and storeProductId are required");
+        Optional<String> shape = typed.invalidReason();
+        if (shape.isPresent()) {
+            return VerificationResult.invalid(shape.get());
         }
         if (isPlaceholderProductId(typed.storeProductId())) {
             return VerificationResult.denied("storeProductId looks like a placeholder");

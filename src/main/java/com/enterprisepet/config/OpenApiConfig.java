@@ -67,6 +67,7 @@ public class OpenApiConfig {
                         .addExamples("Download Auth Mismatch", ApiExamples.downloadAuthMismatchError())
                         .addExamples("Download Hwid Mismatch", ApiExamples.downloadHwidMismatchError())
                         .addExamples("Hwid Too Long", ApiExamples.hwidTooLongError())
+                        .addExamples("Invalid Verify Fields", ApiExamples.invalidVerifyFieldsError())
 
                         // Additional error variants
                         .addExamples("Unknown Pet Type", ApiExamples.unknownPetTypeError())

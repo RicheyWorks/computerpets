@@ -48,4 +48,27 @@ class EpicVerifyRequestTest {
         assertThat(request.catalogItemId()).isEqualTo("4fe75bbc5a674f4f9b356b5c90567da5");
         assertThat(request.platform()).isEqualTo("STEAM");
     }
+
+    @Test
+    @DisplayName("valid shape passes invalidReason")
+    void invalidReason_validShape_empty() {
+        EpicVerifyRequest request = EpicVerifyRequest.from(Map.of(
+                "accountId", "9626f441055349ce8cb7d7d5a483eaa2",
+                "sandboxId", "fn",
+                "catalogItemId", "4fe75bbc5a674f4f9b356b5c90567da5"
+        ));
+        assertThat(request.invalidReason("EPIC")).isEmpty();
+    }
+
+    @Test
+    @DisplayName("platform with digits fails closed")
+    void invalidReason_badPlatform_present() {
+        EpicVerifyRequest request = EpicVerifyRequest.from(Map.of(
+                "accountId", "9626f441055349ce8cb7d7d5a483eaa2",
+                "sandboxId", "fn",
+                "catalogItemId", "4fe75bbc5a674f4f9b356b5c90567da5",
+                "platform", "EPIC2"
+        ));
+        assertThat(request.invalidReason("EPIC2")).isPresent();
+    }
 }
