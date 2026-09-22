@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -24,10 +29,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Admin audit reads: GET /api/admin/licenses and GET /api/admin/licenses/{jti}.
- * Same X-Admin-Key gate as POST /api/admin/revoke.
+ * TestRestTemplate calls are signed with admin.api-key. Unsigned calls use the raw client.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AdminLicenseLookupIntegrationTest {
+
+    @LocalServerPort
+    private int port;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -57,31 +65,23 @@ class AdminLicenseLookupIntegrationTest {
     private static final String PROVIDER = "steam";
 
     @Test
-    @DisplayName("GET /api/admin/licenses/{jti} returns 401 when X-Admin-Key is missing")
-    void getByJti_missingKey() {
-        ResponseEntity<Map> resp = restTemplate.exchange(
-            "/api/admin/licenses/anything",
-            HttpMethod.GET,
-            new HttpEntity<>(new HttpHeaders()),
-            Map.class);
-
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-        assertThat(String.valueOf(resp.getBody().get("error"))).contains("invalid or missing admin key");
+    @DisplayName("GET /api/admin/licenses/{jti} returns 401 when the admin MAC is missing")
+    void getByJti_missingSignature() throws Exception {
+        HttpResponse<String> resp = unsignedGet("/api/admin/licenses/anything");
+        assertThat(resp.statusCode()).isEqualTo(401);
+        assertThat(resp.body()).contains("Admin signature required.");
     }
 
     @Test
-    @DisplayName("GET /api/admin/licenses/{jti} returns 401 when X-Admin-Key is wrong")
-    void getByJti_wrongKey() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Admin-Key", "wrong-key-123");
-
-        ResponseEntity<Map> resp = restTemplate.exchange(
-            "/api/admin/licenses/anything",
-            HttpMethod.GET,
-            new HttpEntity<>(headers),
-            Map.class);
-
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    @DisplayName("GET /api/admin/licenses/{jti} returns 401 when only a static X-Admin-Key is sent")
+    void getByJti_staticKeyIsNotEnough() throws Exception {
+        HttpRequest req = HttpRequest.newBuilder(URI.create(url("/api/admin/licenses/anything")))
+                .header("X-Admin-Key", adminKey)
+                .GET()
+                .build();
+        HttpResponse<String> resp = HttpClient.newHttpClient().send(req, HttpResponse.BodyHandlers.ofString());
+        assertThat(resp.statusCode()).isEqualTo(401);
+        assertThat(resp.body()).contains("Admin signature required.");
     }
 
     @Test
@@ -184,16 +184,13 @@ class AdminLicenseLookupIntegrationTest {
     }
 
     @Test
-    @DisplayName("GET /api/admin/licenses returns recent licenses and requires the admin key")
-    void listRecent_andAuth() {
+    @DisplayName("GET /api/admin/licenses returns recent licenses and requires the admin MAC")
+    void listRecent_andAuth() throws Exception {
         String jti = extractJti(licenseService.issueLicense(OWNER, PET, PROVIDER, 1, null));
 
-        ResponseEntity<Map> denied = restTemplate.exchange(
-            "/api/admin/licenses",
-            HttpMethod.GET,
-            new HttpEntity<>(new HttpHeaders()),
-            Map.class);
-        assertThat(denied.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        HttpResponse<String> denied = unsignedGet("/api/admin/licenses");
+        assertThat(denied.statusCode()).isEqualTo(401);
+        assertThat(denied.body()).contains("Admin signature required.");
 
         ResponseEntity<List<Map<String, Object>>> resp = restTemplate.exchange(
             "/api/admin/licenses",
@@ -209,9 +206,17 @@ class AdminLicenseLookupIntegrationTest {
 
     private HttpHeaders adminHeaders() {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Admin-Key", adminKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
+    }
+
+    private String url(String path) {
+        return "http://127.0.0.1:" + port + path;
+    }
+
+    private HttpResponse<String> unsignedGet(String path) throws Exception {
+        HttpRequest req = HttpRequest.newBuilder(URI.create(url(path))).GET().build();
+        return HttpClient.newHttpClient().send(req, HttpResponse.BodyHandlers.ofString());
     }
 
     private String extractJti(LicenseService.EncryptedLicense enc) {

@@ -170,8 +170,8 @@ class LicenseSoftDeleteAuditIntegrationTest {
     }
 
     private HttpHeaders adminHeaders() {
+        // TestRestTemplate signs /api/admin with admin.api-key (ADR 0071).
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Admin-Key", adminKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
     }

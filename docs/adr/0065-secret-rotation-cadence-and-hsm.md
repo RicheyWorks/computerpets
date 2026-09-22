@@ -13,7 +13,7 @@
 | License AES-256 | `LICENSE_SECRET_KEY` | Encrypt/decrypt issued licenses | Yes — decrypt current then previous |
 | JWT HS256 | `JWT_SECRET_KEY` | Issue/verify short download JWTs | Yes — verify current then previous |
 | Bundle HMAC | `BUNDLE_SIGNING_KEY` | Sign/verify CDN URL MACs | Yes — verify current then previous |
-| Admin gate | `ADMIN_API_KEY` | `X-Admin-Key` | Yes — accept current or previous |
+| Admin gate | `ADMIN_API_KEY` | Request HMAC ([0071](0071-admin-request-signature.md)) | Yes — verify current or previous |
 | SM shells | `deploy/terraform/modules/secrets` | `computerpets/<KEY>` names only | N/A — populate out of band |
 
 No scheduled rotation contract, no dual-key verify window, and no HSM/KMS pointer existed. This slice closes that gap without storefront work, without DirectX 12 / Vulkan / Solana, and without reopening presence / CSP, Hikari / replica, bundle zip, cosign, Terraform modules, CDN edge redeem, or ProductionProfileGuard beyond the rotation-stamp check. Catalog stays 221. No live AWS apply / ESO install / HSM appliance is required.
