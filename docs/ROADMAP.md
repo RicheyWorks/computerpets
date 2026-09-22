@@ -171,8 +171,8 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 - [x] Overlay and `/demo` heartbeat that tells the truth about Spring Boot (up/down, profile, uptime) from `GET /api/public/heartbeat` — never a painted “UP”. Unreachable Java is DOWN / unread.
 - [x] Rui-sharp poster look for that card. Guest name, stage, bond title, hunger / rest / bond, Feed / Play / Rest, honest heartbeat. Same house on overlay, `/demo`, desk, Live, and Meet.
 - [x] Advertised care routes match what we ship: `/pet/feed`, `/pet/play`, and `/pet/rest` answer **409** `application/problem+json` (title Care is local, door local, performed false). Not 200. Not 401. Care stays on the keeper machine. Desk, overlay, and blotter share that refusal. Catalog stays 221.
-- [ ] Honest GPU sense as a first-class pet sense (heat, util, memory, power). `/metrics/gpu` or desktop-local metrics. Do not fake numbers.
-- [ ] Real GPU path: DirectX 12 / Vulkan, or an honest Chromium GPU path that still feels like the ad. Today’s overlay is Electron/Chromium; the blotter is Qt OpenGL. Do not invent a finished DX12 engine.
+- [x] Honest GPU sense as a first-class pet sense (heat, util, memory, power). Desktop-local on the keeper machine — Windows nvidia-smi or GPU performance counters. Not `/metrics/gpu` on Spring Boot. Mac/Linux stay `mac-linux-gpu-sense`. Missing, malformed, and stale readings stay dark / unread. Never a painted zero. Overlay, `/demo`, desk, Live, Meet, and the blotter share the line. Sparkline is still later. Catalog stays 221.
+- [ ] Real GPU path: DirectX 12 / Vulkan, or an honest Chromium GPU path that still feels like the ad. Today’s overlay is Electron/Chromium; the blotter is Qt OpenGL. GPU sensing is not that engine. Do not invent a finished DX12 engine.
 - [x] Pets occupy the real Windows 10/11 desktop among real windows and icons. Work-area floor, click-through glass, tray picks Rui, Sip, and the grid ten. `/demo` lockstep. Overlay is still Electron/Chromium, not DX12. Desktop-first. Mac / Linux / phone after Windows feels like the ad.
 - [x] House leftover on overlay + `/demo`: keeper multi-area weather plate (Open-Meteo, first-run `no area set`), Wikipedia news plate, Rui ground tricks, Sip pinned and flying (not a 1-second flash), five house voices, footstep options, free music + radio for Rui, and a real steal/carry ribbon. Catalog stays 221. Sandbox stays on.
 - [x] Real window rects on Windows (work-area space, skip overlay / minimized / taskbar). Rui (`red_panda`) clings a window side and dives. The species door (`playFor`) is how later guests get their own sit. Other guests walked a sill that leftover. `/demo` draws a plate and walks the same climb. Sleep and hide still win. Mac / Linux window play is a later door. Catalog stays 221.
@@ -582,6 +582,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-09-03 (Phase 6 leftover: grok-cry intake done; Call plays a species cry when the wav exists; next leftover is dropping mp4s; catalog 221)
+**Last Updated:** 2026-09-22 (Phase 6: honest desktop-local GPU sense. Next product gap is a real GPU path — DX12/Vulkan or an honest Chromium path. Overlay is still Electron/Chromium; blotter is still Qt OpenGL. Catalog 221.)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

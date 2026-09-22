@@ -7,6 +7,7 @@ const Desk = require("./renderer/desk.js");
 const Roster = require("./renderer/roster-load.js");
 const Windows = require("./renderer/windows.js");
 const WindowEnum = require("./windows-enum.cjs");
+const GpuSense = require("./gpu-sense.cjs");
 const HouseMusic = require("./renderer/house-music.js");
 const PetNews = require("./renderer/news.js");
 const PetMarket = require("./renderer/market.js");
@@ -499,6 +500,7 @@ function bootDesk() {
       createTray();
       startHitForward();
       startWindowTick();
+      startGpuTick();
       screen.on("display-metrics-changed", fitWorkArea);
       screen.on("display-added", fitWorkArea);
       screen.on("display-removed", fitWorkArea);
@@ -839,6 +841,42 @@ function stopWindowTick() {
   windowTick = null;
 }
 
+let gpuTimer = null;
+let gpuBusy = false;
+
+function pushGpu() {
+  if (!win || win.isDestroyed() || gpuBusy) return;
+  gpuBusy = true;
+  GpuSense.read({ platform: process.platform })
+    .then((sample) => {
+      if (win && !win.isDestroyed()) win.webContents.send("gpu", sample);
+    })
+    .catch(() => {
+      if (win && !win.isDestroyed()) {
+        win.webContents.send("gpu", {
+          status: "unread",
+          platform: process.platform,
+          reason: "probe-failed",
+          readAtMs: Date.now(),
+        });
+      }
+    })
+    .finally(() => {
+      gpuBusy = false;
+    });
+}
+
+function startGpuTick() {
+  if (gpuTimer) return;
+  pushGpu();
+  gpuTimer = setInterval(pushGpu, 5000);
+}
+
+function stopGpuTick() {
+  if (gpuTimer) clearInterval(gpuTimer);
+  gpuTimer = null;
+}
+
 ipcMain.handle("license-status", licenseIpc(() => getLicenseSession().status()));
 ipcMain.handle("license-unlock", licenseIpc((input) => getLicenseSession().unlock(input || {})));
 ipcMain.handle("license-download", licenseIpc(() => getLicenseSession().download()));
@@ -846,6 +884,7 @@ ipcMain.handle("license-clear", licenseIpc(() => getLicenseSession().clear()));
 
 app.on("window-all-closed", () => {
   stopWindowTick();
+  stopGpuTick();
   WindowEnum.disposePump();
   app.quit();
 });

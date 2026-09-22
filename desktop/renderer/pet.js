@@ -55,6 +55,7 @@ const hudHunger = document.getElementById("hud-hunger");
 const hudRest = document.getElementById("hud-rest");
 const hudBond = document.getElementById("hud-bond");
 const hudHeartbeat = document.getElementById("hud-heartbeat");
+const hudGpu = document.getElementById("hud-gpu");
 const hudTruth = document.getElementById("hud-truth");
 const hudCare = document.getElementById("hud-care");
 const hudCollapse = document.getElementById("hud-collapse");
@@ -88,6 +89,7 @@ const barEnergy = document.getElementById("bar-energy");
 const barHygiene = document.getElementById("bar-hygiene");
 const barBond = document.getElementById("bar-bond");
 let heartbeat = window.PetKeeper ? { ...window.PetKeeper.UNREAD } : { status: "DOWN", profile: null, uptimeSeconds: null, port: 8081 };
+let gpuSample = window.PetGpu ? window.PetGpu.UNREAD : { status: "unread" };
 for (let i = 0; i < 12; i++) dustRoot.appendChild(document.createElement("span"));
 
 let roster = [];
@@ -1167,6 +1169,20 @@ if ("speechSynthesis" in window) {
 }
 setInterval(readHeartbeat, 15_000);
 readHeartbeat();
+if (window.desk && window.desk.onGpu && window.PetGpu) {
+  window.desk.onGpu((raw) => {
+    gpuSample = window.PetGpu.present(window.PetGpu.parseSample(raw), Date.now());
+    paintHud();
+  });
+}
+setInterval(() => {
+  if (!window.PetGpu || !hudGpu) return;
+  const next = window.PetGpu.present(gpuSample, Date.now());
+  if (!gpuSample || next.status !== gpuSample.status) {
+    gpuSample = next;
+    paintHud();
+  }
+}, 5000);
 
 function cardGuest() {
   const C = window.PetCard;
@@ -1263,6 +1279,11 @@ function paintHud() {
   if (hudHeartbeat && K) {
     hudHeartbeat.textContent = K.heartbeatLine(heartbeat);
     hudHeartbeat.setAttribute("data-heartbeat", heartbeat.status || "DOWN");
+  }
+  if (hudGpu && window.PetGpu) {
+    gpuSample = window.PetGpu.present(gpuSample, Date.now());
+    hudGpu.textContent = window.PetGpu.gpuLine(gpuSample);
+    hudGpu.setAttribute("data-gpu", gpuSample.status || "unread");
   }
   if (hudTruth && K) hudTruth.textContent = K.careTruth();
   pet.classList.toggle("dull", !!(hive && hive.quiet));
