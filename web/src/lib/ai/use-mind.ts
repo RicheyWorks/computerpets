@@ -1,5 +1,12 @@
 import { useMemo, useSyncExternalStore } from "react";
-import { DEFAULT_MIND, bindingFor, loadMindSettings } from "./settings";
+import {
+  DEFAULT_MIND,
+  MIND_STORAGE_KEY,
+  bindingFor,
+  loadMindSettings,
+  noteExternalMindStorage,
+  onMindStoreChange,
+} from "./settings";
 import type { MindSettings } from "./types";
 
 const listeners = new Set<() => void>();
@@ -8,9 +15,14 @@ function emit() {
   listeners.forEach((fn) => fn());
 }
 
+onMindStoreChange(() => emit());
+
 if (typeof window !== "undefined") {
   window.addEventListener("storage", (e) => {
-    if (e.key === "computerpets.mind.v1") emit();
+    if (e.key === MIND_STORAGE_KEY || e.key === null) {
+      noteExternalMindStorage();
+      emit();
+    }
   });
 }
 

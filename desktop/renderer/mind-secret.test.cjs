@@ -177,6 +177,54 @@ describe("overlay mind.js local store", () => {
     assert.equal(store.get("computerpets.mind.v1").includes(SECRET), false);
     assert.equal(store.get("computerpets.mind.v1").includes(PET_SECRET), false);
   });
+
+  it("does not keep a plain key in the browser when the desk bridge is down", async () => {
+    const local = new Map();
+    const session = new Map();
+    session.set(
+      "computerpets.mind.v1",
+      JSON.stringify({ default: { plugin: "xai", apiKey: SECRET }, voice: "browser", pets: {} }),
+    );
+    const window = {
+      localStorage: {
+        getItem: (key) => (local.has(key) ? local.get(key) : null),
+        setItem: (key, value) => {
+          local.set(key, String(value));
+        },
+        removeItem: (key) => {
+          local.delete(key);
+        },
+      },
+      sessionStorage: {
+        getItem: (key) => (session.has(key) ? session.get(key) : null),
+        setItem: (key, value) => {
+          session.set(key, String(value));
+        },
+        removeItem: (key) => {
+          session.delete(key);
+        },
+      },
+    };
+    window.window = window;
+    const context = vm.createContext(window);
+    vm.runInContext(fs.readFileSync(path.join(__dirname, "mind.js"), "utf8"), context);
+    const loaded = window.PetMind.load();
+    assert.equal(loaded.default.apiKey, SECRET);
+    assert.equal(loaded.keyKept, "none");
+    assert.equal(session.has("computerpets.mind.v1"), false);
+    const again = window.PetMind.load();
+    assert.equal(again.default.apiKey, SECRET);
+    const saved = await window.PetMind.save({
+      default: { plugin: "openai", apiKey: PET_SECRET },
+      voice: "browser",
+      pets: {},
+    });
+    assert.equal(saved.kept, "none");
+    assert.equal(local.get("computerpets.mind.v1").includes(PET_SECRET), false);
+    assert.equal(local.get("computerpets.mind.v1").includes(SECRET), false);
+    assert.equal(local.get("computerpets.mind.v1").includes("apiKey"), false);
+    assert.equal(window.PetMind.load().default.apiKey, PET_SECRET);
+  });
 });
 
 describe("overlay main wiring", () => {
