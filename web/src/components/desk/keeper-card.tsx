@@ -16,6 +16,7 @@ import {
 } from "@/lib/pets/keeper";
 import { SPARK_H, SPARK_W, UNREAD_GPU, gpuLine, sparkline } from "@/lib/pets/gpu";
 import { UNREAD_LISTENER, presentListener, type ListenerName } from "@/lib/ai/listener";
+import { listenerReadBody } from "@/lib/ai/listener-post";
 import { readMindListener } from "@/lib/ai/listener-read";
 import { useMindBinding } from "@/lib/ai/use-mind";
 import {
@@ -244,7 +245,7 @@ export function KeeperCard({
   useEffect(() => {
     let cancelled = false;
     setListener(UNREAD_LISTENER);
-    void readMindListener({ data: { plugin: askedPlugin, baseUrl: askedBase } })
+    void readMindListener({ data: listenerReadBody({ plugin: askedPlugin, baseUrl: askedBase }) })
       .then((row) => {
         if (!cancelled) setListener(presentListener(row));
       })

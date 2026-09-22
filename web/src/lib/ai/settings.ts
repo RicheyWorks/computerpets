@@ -1,4 +1,5 @@
 import { mindPreset } from "./catalog.ts";
+import { scrubSecretQueryString } from "./secret-query.mjs";
 import type { MindBinding, MindSettings, VoiceKind } from "./types";
 
 /**
@@ -6,6 +7,7 @@ import type { MindBinding, MindSettings, VoiceKind } from "./types";
  * When `window.desk` can reach the overlay seal, the key goes there.
  * Otherwise it stays in this page's memory until the keeper leaves.
  * localStorage and sessionStorage keep the prefs only.
+ * A pasted secret query on a base URL is dropped on save and on read.
  */
 
 export const MIND_STORAGE_KEY = "computerpets.mind.v1";
@@ -62,7 +64,7 @@ function bindingPrefs(raw: unknown, fallbackPlugin: string): MindBinding {
   const next: MindBinding = { plugin: fallbackPlugin };
   if (typeof row.plugin === "string" && row.plugin.trim()) next.plugin = row.plugin.trim().slice(0, 64);
   if (typeof row.model === "string") next.model = row.model.slice(0, 200);
-  if (typeof row.baseUrl === "string") next.baseUrl = row.baseUrl.slice(0, 500);
+  if (typeof row.baseUrl === "string") next.baseUrl = scrubSecretQueryString(row.baseUrl).slice(0, 500);
   return next;
 }
 
