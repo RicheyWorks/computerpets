@@ -99,6 +99,37 @@ test("play names the stream host before the station audio opens", () => {
   assert.equal(M.streamHonesty(M.parseMusic({ plugin: "radio", playing: false, stationUrl: "https://stream.example.test/live" })), "");
   assert.equal(M.streamHonesty(M.parseMusic({ plugin: "radio", playing: true, stationUrl: "notaurl" })), "");
   assert.equal(M.streamMaySend(M.parseMusic({ plugin: "radio", playing: true, stationUrl: "https://stream.example.test/live" }), false), false);
+  assert.equal(M.streamMayLeave("", music), false);
+  assert.equal(M.streamMayLeave(M.RADIO_FIND, music), false);
+  assert.equal(Overlay.streamMayLeave("", music), false);
+  assert.equal(Overlay.streamMayLeave(M.RADIO_FIND, music), false);
+  const other = M.parseMusic({
+    plugin: "radio",
+    playing: true,
+    stationUrl: "https://other.example.test/live",
+  });
+  assert.equal(M.streamMayLeave(M.streamHonesty(other), music), false);
+  assert.equal(Overlay.streamMayLeave(line, music), true);
+  let made = 0;
+  const make = (src) => {
+    made += 1;
+    return { src };
+  };
+  assert.equal(M.openStationStream("", music, music.stationUrl, make), null);
+  assert.equal(M.openStationStream(M.RADIO_FIND, music, music.stationUrl, make), null);
+  assert.equal(M.openStationStream(M.streamHonesty(other), music, music.stationUrl, make), null);
+  assert.equal(Overlay.openStationStream("", music, music.stationUrl, make), null);
+  assert.equal(made, 0);
+  const opened = M.openStationStream(line, music, music.stationUrl, make);
+  assert.equal(made, 1);
+  assert.equal(opened.src, music.stationUrl);
+  const overlayOpened = Overlay.openStationStream(line, music, music.stationUrl, make);
+  assert.equal(made, 2);
+  assert.equal(overlayOpened.src, music.stationUrl);
+  const house = M.parseMusic({ plugin: "house", playing: true });
+  assert.equal(M.openStationStream("this play opens the station stream.", house, "/sounds/house-loop.wav", make), null);
+  assert.equal(Overlay.openStationStream(line, Overlay.parseMusic({ plugin: "house", playing: true }), "sounds/house-loop.wav", make), null);
+  assert.equal(made, 2);
 });
 
 test("radio find names the network address before the search", () => {

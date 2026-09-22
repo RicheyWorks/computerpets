@@ -54,7 +54,7 @@ import {
 } from "@/lib/pets/card";
 import { playDeskSound, playStep, playVoice } from "@/lib/pets/desk-audio";
 import { STEP_KINDS, STEP_LABELS, parseStep, stepOf } from "@/lib/pets/house-sounds";
-import { HOUSE_LOOP_LICENSE, MUSIC_PLUGINS, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_FIND, RADIO_LABEL, RADIO_LOCAL, RADIO_PLACEHOLDER, parseMusic, playSrc, radioHonesty, radioMaySend, readRadioSearch, streamHonesty, streamMaySend, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
+import { HOUSE_LOOP_LICENSE, MUSIC_PLUGINS, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_FIND, RADIO_LABEL, RADIO_LOCAL, RADIO_PLACEHOLDER, openStationStream, parseMusic, playSrc, radioHonesty, radioMaySend, readRadioSearch, streamHonesty, streamMaySend, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
 import { SLEEP_AID_LABEL, SLEEP_AID_LICENSE, SLEEP_AID_MUTE_TRUTH, SLEEP_AID_PLUGINS, parseSleepAid, playSrc as sleepPlaySrc, type SleepAidPrefs } from "@/lib/pets/house-sleep";
 import { currentArea, parseAreas } from "@/lib/pets/weather-areas";
 import { FLY_BIRD_NAME } from "@/lib/pets/bird-fly";
@@ -191,16 +191,24 @@ export function KeeperCard({
       return;
     }
     const remote = music.plugin === "radio" && /^https?:/i.test(src);
+    let audio: HTMLAudioElement;
     if (remote) {
       const line = streamHonesty(music);
       const el = document.getElementById("hud-stream-net");
-      const shown = streamAsked === true && !!el && !el.hidden && !!line && (el.textContent || "").includes(line);
-      if (!streamMaySend(music, shown)) {
+      const shown = streamAsked === true && !!el && !el.hidden ? el.textContent || "" : "";
+      if (!streamMaySend(music, !!line && shown.includes(line))) {
         onMusicChange?.(false);
         return;
       }
+      const opened = openStationStream(shown, music, src, (next) => new Audio(next));
+      if (!opened) {
+        onMusicChange?.(false);
+        return;
+      }
+      audio = opened;
+    } else {
+      audio = new Audio(src);
     }
-    const audio = new Audio(src);
     audio.loop = music.plugin === "house";
     audio.volume = Math.max(0, Math.min(1, guest.volume / 100));
     void audio.play().then(() => onMusicChange?.(true)).catch(() => onMusicChange?.(false));
