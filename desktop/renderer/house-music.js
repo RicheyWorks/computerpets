@@ -1,4 +1,4 @@
-/** Free music + radio for Rui. Same plugin store shape as the mind bus. Find waits until the radio form shows this computer's network address on that https request. */
+/** Free music + radio for Rui. Same plugin store shape as the mind bus. Find waits until the radio form shows this computer's network address on that https request. readRadioSearch also refuses when that painted line is missing. */
 (function (root) {
   const MUSIC_PLUGINS = [
     { id: "off", name: "Quiet", blurb: "No music.", license: "" },
@@ -355,6 +355,40 @@
     return lineInView === true && !!RADIO_NET && RADIO_FIND.indexOf(RADIO_NET) !== -1;
   }
 
+  function radioSearchMayLeave(shown) {
+    if (!RADIO_FIND) return false;
+    return typeof shown === "string" && shown.indexOf(RADIO_FIND) !== -1;
+  }
+
+  function readRadioSearch(shown, query, area, fetchImpl) {
+    if (!radioSearchMayLeave(shown)) return Promise.resolve(null);
+    const urls = radioSearchUrls(query, area);
+    if (!urls.length) return Promise.resolve([]);
+    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
+    return Promise.all(
+      urls.map(function (url) {
+        return Promise.resolve(go(url, { cache: "no-store", headers: { Accept: "application/json" } }))
+          .then(function (r) {
+            return r.json();
+          })
+          .then(function (json) {
+            return parseStations(json);
+          })
+          .catch(function () {
+            return null;
+          });
+      }),
+    ).then(function (batches) {
+      if (batches.every(function (b) {
+        return b == null;
+      })) {
+        throw new Error("unread");
+      }
+      const merged = mergeStations(batches.filter(Boolean));
+      return rankStations(merged, query, area).slice(0, 16);
+    });
+  }
+
   const STREAM_HOST_NAME = "the station stream host";
 
   function streamHostName(raw) {
@@ -434,6 +468,8 @@
     RADIO_FIND,
     radioHonesty,
     radioMaySend,
+    radioSearchMayLeave,
+    readRadioSearch,
     STREAM_HOST_NAME,
     streamHostName,
     streamHostLabel,

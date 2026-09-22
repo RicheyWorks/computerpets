@@ -1,4 +1,4 @@
-/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows this computer's network address on that https request. The featured page also refuses inside readFeatured when that wikipedia line is missing. No invented keys or headlines. */
+/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows this computer's network address on that https request. The featured page also refuses inside readFeatured when that wikipedia line is missing. An RSS read refuses inside readRss when that news-host line is missing. No invented keys or headlines. */
 (function (root) {
   const NEWS_SOURCE = "Wikipedia In the news";
   const TOPIC_SOURCE = "Google News";
@@ -337,11 +337,24 @@
     return typeof shown === "string" && shown.indexOf(NEWS_WIKI_HONESTY) !== -1;
   }
 
+  function rssMayLeave(shown) {
+    if (!NEWS_RSS_HONESTY) return false;
+    return typeof shown === "string" && shown.indexOf(NEWS_RSS_HONESTY) !== -1;
+  }
+
   function readFeatured(shown, fetchImpl) {
     if (!featuredMayLeave(shown)) return Promise.resolve(null);
     const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
     return Promise.resolve(go(newsUrl())).then(function (res) {
       return res && typeof res.json === "function" ? res.json() : null;
+    });
+  }
+
+  function readRss(shown, url, fetchImpl) {
+    if (!rssMayLeave(shown) || !url) return Promise.resolve(null);
+    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
+    return Promise.resolve(go(url)).then(function (res) {
+      return res && typeof res.text === "function" ? res.text() : null;
     });
   }
 
@@ -410,7 +423,9 @@
     newsHonesty,
     newsMaySend,
     featuredMayLeave,
+    rssMayLeave,
     readFeatured,
+    readRss,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetNews = api;

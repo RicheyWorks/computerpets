@@ -142,3 +142,30 @@ test("featured page refuses a fetch until the wikipedia line is present", async 
   assert.deepEqual(await Overlay.readFeatured(wiki, fake), { news: [] });
   assert.equal(calls, 2);
 });
+
+test("news RSS refuses a fetch until the news-host line is present", async () => {
+  const rss = N.NEWS_RSS_HONESTY;
+  assert.equal(rss, Overlay.NEWS_RSS_HONESTY);
+  assert.match(rss, /the news host/);
+  assert.equal(N.rssMayLeave(""), false);
+  assert.equal(N.rssMayLeave(N.NEWS_WIKI_HONESTY), false);
+  assert.equal(N.rssMayLeave(rss), true);
+  assert.equal(Overlay.rssMayLeave(""), false);
+  assert.equal(Overlay.rssMayLeave(N.NEWS_WIKI_HONESTY), false);
+  assert.equal(Overlay.rssMayLeave(rss), true);
+  let calls = 0;
+  const fake = async (url) => {
+    calls += 1;
+    assert.match(String(url), /news\.google\.com/);
+    return { text: async () => "<rss><channel></channel></rss>" };
+  };
+  const url = N.popularRssUrl();
+  assert.equal(await N.readRss("", url, fake), null);
+  assert.equal(await N.readRss(N.NEWS_WIKI_HONESTY, url, fake), null);
+  assert.equal(await Overlay.readRss("", url, fake), null);
+  assert.equal(calls, 0);
+  assert.match(await N.readRss(rss, url, fake), /<rss>/);
+  assert.equal(calls, 1);
+  assert.match(await Overlay.readRss(rss, url, fake), /<rss>/);
+  assert.equal(calls, 2);
+});

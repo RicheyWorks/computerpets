@@ -83,10 +83,12 @@ test("Quotes crypto + NFT panes lockstep with overlay market helpers", () => {
   const popAt = deskSrc.indexOf("popularRssUrl()");
   assert.ok(deskSrc.lastIndexOf("if (!open) return", popAt) < popAt);
   assert.ok(deskSrc.indexOf("if (!newsMaySend") < popAt);
+  assert.ok(deskSrc.indexOf("if (!newsMaySend") < deskSrc.indexOf("readRss(line"));
   assert.ok(deskSrc.indexOf("if (!newsMaySend") < deskSrc.indexOf("readFeatured(line)"));
   assert.doesNotMatch(deskSrc, /fetch\(newsUrl\(\)\)/);
-  assert.ok(deskSrc.indexOf("if (!quoteMaySend") < deskSrc.indexOf("geckoManyUrl("));
-  assert.ok(deskSrc.indexOf("if (!quoteLookMaySend") < deskSrc.indexOf("searchUrl(typed)"));
+  assert.doesNotMatch(deskSrc, /fetch\(popularRssUrl/);
+  assert.ok(deskSrc.indexOf("if (!quoteMaySend") < deskSrc.indexOf("readGeckoMany(line"));
+  assert.ok(deskSrc.indexOf("if (!quoteLookMaySend") < deskSrc.indexOf("readQuoteSearch("));
   assert.ok(Market.quoteHonesty(Market.parseMarket({})).includes(Weather.clientNetLine("the quote host")));
 
 });

@@ -1,4 +1,4 @@
-/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. A quote waits until the open quotes plate shows this computer's network address on that https request. Same map as desktop market.js. No invented key. */
+/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. A quote waits until the open quotes plate shows this computer's network address on that https request. CoinGecko, GeckoTerminal, Yahoo, and a typed look-up also refuse inside the read wrappers when that painted line is missing. Same map as desktop market.js. No invented key. */
 import { clientNetLine } from "./weather-areas.ts";
 
 export const MARKET_LABEL = "Quotes";
@@ -285,10 +285,94 @@ export function quoteMaySend(market: unknown, lineInView: boolean): boolean {
 }
 
 export const QUOTE_LOOK = `this look-up sends the typed name. ${clientNetLine(QUOTE_HOST_NAME)}`;
+export const QUOTE_LEAD = "this quote sends the saved list.";
 
 /** A typed coin or collection look-up uses the quote host. It waits for that line. */
 export function quoteLookMaySend(lineInView: boolean): boolean {
   return lineInView === true && QUOTE_LOOK.includes(clientNetLine(QUOTE_HOST_NAME));
+}
+
+/**
+ * The painted line names this host alone, or inside a combined plate phrase.
+ * Same parse as main plate-net `phraseNames`.
+ */
+export function phraseNames(shown: unknown, hostLabel: string): boolean {
+  if (typeof shown !== "string" || !hostLabel) return false;
+  if (shown.includes(clientNetLine(hostLabel))) return true;
+  const head = "this computer's network address goes with the https request to ";
+  const tail = ", as any client.";
+  let from = 0;
+  while (from < shown.length) {
+    const start = shown.indexOf(head, from);
+    if (start === -1) return false;
+    const end = shown.indexOf(tail, start);
+    if (end === -1) return false;
+    const phrase = shown.slice(start + head.length, end);
+    const parts = phrase.split(/, and |, | and /);
+    if (parts.some((part) => part.trim() === hostLabel)) return true;
+    from = end + tail.length;
+  }
+  return false;
+}
+
+/**
+ * A saved-quote fetch leaves only when the painted line names that host.
+ * A missing line, the look-up sentence, and a closed plate do not call fetch.
+ */
+export function quoteHostMayLeave(shown: unknown, hostLabel: string): boolean {
+  if (typeof shown !== "string" || !hostLabel || !shown.includes(QUOTE_LEAD)) return false;
+  return phraseNames(shown, hostLabel);
+}
+
+/** A typed look-up leaves only when the painted look-up line names the quote host. */
+export function lookMayLeave(shown: unknown): boolean {
+  return QUOTE_LOOK.length > 0 && typeof shown === "string" && shown.includes(QUOTE_LOOK);
+}
+
+type JsonFetch = (url: string, init?: RequestInit) => Promise<{ json: () => Promise<unknown> }>;
+
+function goJson(url: string, fetchImpl: JsonFetch): Promise<unknown> {
+  return Promise.resolve(fetchImpl(url)).then((res) => res.json());
+}
+
+export function readGeckoMany(shown: unknown, ids: string[], fetchImpl: JsonFetch = fetch): Promise<unknown | null> {
+  if (!quoteHostMayLeave(shown, QUOTE_HOST_NAME)) return Promise.resolve(null);
+  const url = geckoManyUrl(ids);
+  if (!url) return Promise.resolve(null);
+  return goJson(url, fetchImpl);
+}
+
+export function readTerminal(
+  shown: unknown,
+  platform: string,
+  address: string,
+  fetchImpl: JsonFetch = fetch,
+): Promise<unknown | null> {
+  if (!quoteHostMayLeave(shown, TERMINAL_HOST_NAME)) return Promise.resolve(null);
+  const url = terminalTokenUrl(platform, address);
+  if (!url) return Promise.resolve(null);
+  return goJson(url, fetchImpl);
+}
+
+export function readYahoo(shown: unknown, symbol: string, fetchImpl: JsonFetch = fetch): Promise<unknown | null> {
+  if (!quoteHostMayLeave(shown, STOCK_HOST_NAME)) return Promise.resolve(null);
+  const url = yahooUrl(symbol);
+  if (!url) return Promise.resolve(null);
+  return goJson(url, fetchImpl);
+}
+
+export function readNft(shown: unknown, geckoId: string, fetchImpl: JsonFetch = fetch): Promise<unknown | null> {
+  if (!quoteHostMayLeave(shown, QUOTE_HOST_NAME)) return Promise.resolve(null);
+  const url = nftUrl(geckoId);
+  if (!url) return Promise.resolve(null);
+  return goJson(url, fetchImpl);
+}
+
+export function readQuoteSearch(shown: unknown, query: string, fetchImpl: JsonFetch = fetch): Promise<unknown | null> {
+  if (!lookMayLeave(shown)) return Promise.resolve(null);
+  const url = searchUrl(query);
+  if (!url) return Promise.resolve(null);
+  return goJson(url, fetchImpl);
 }
 export function addTicker(market: unknown, raw: unknown): MarketPrefs {
   const house = parseMarket(market);
