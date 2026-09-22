@@ -11,7 +11,7 @@ import pytest
 from computerpets_client.license.contract_double import create_contract_test_double
 from computerpets_client.license.errors import LicenseError
 from computerpets_client.license.http_client import HttpResponse, create_license_client
-from computerpets_client.license.license_net import license_honesty
+from computerpets_client.license.license_net import bundle_honesty, license_honesty
 from computerpets_client.license.session import create_license_session
 
 SECRET = base64.b64encode(bytes([7] * 32)).decode("ascii")
@@ -59,7 +59,13 @@ def test_unlocks_against_mocked_backend_using_published_contract():
     session = session_for(backend)
 
     result = session["unlock"](
-        {"steamId": "76561198000000000", "appId": "123456", "petType": "red_panda", "provider": "steam"}
+        {
+            "steamId": "76561198000000000",
+            "appId": "123456",
+            "petType": "red_panda",
+            "provider": "steam",
+            "cdnLine": bundle_honesty("https://cdn.enterprisepet.example/bundles/red_panda.zip"),
+        }
     )
 
     assert result["unlocked"] is True
@@ -76,6 +82,10 @@ def test_unlocks_against_mocked_backend_using_published_contract():
     download = next(c for c in backend["calls"] if c["path"] == "/api/download/red_panda")
     assert download["body"]["hwid"] == "device-abc-123"
     assert str(download["headers"]["Authorization"]).startswith("Bearer ")
+    gets = [call for call in backend["calls"] if call["method"] == "GET"]
+    assert len(gets) == 1
+    assert "hwid" not in gets[0]["query"]
+    assert "hwid" not in gets[0]["body"]
 
 
 def test_fails_closed_without_license_secret_no_always_licensed_stub():
@@ -425,6 +435,7 @@ def test_remote_hash_waits_until_the_host_is_named():
     assert verify["body"]["hwid"] not in line
     download = next(call for call in backend["calls"] if call["path"] == "/api/download/red_panda")
     assert download["body"]["hwid"] == verify["body"]["hwid"]
+    assert not any(urlparse(url).hostname == "cdn.enterprisepet.example" for url in seen)
 
 
 def test_loopback_unlock_does_not_need_the_outbound_line():
@@ -524,3 +535,115 @@ def test_bound_download_names_the_host_and_an_unbound_download_sends_no_hash():
         session["download"]({"licenseLine": license_honesty("https://license.example.test")})
     assert named.value.code == "download_failed"
     assert posts[0]["hwid"] == "already-bound"
+
+
+def test_does_not_get_a_remote_signed_bundle_until_the_cdn_host_is_named():
+    from urllib.parse import parse_qs
+
+    backend = create_contract_test_double(license_secret=SECRET, signing_key=SIGNING)
+    session = session_for(backend)
+    session["status"]()
+    assert backend["calls"] == []
+
+    held = session["unlock"](
+        {"steamId": "76561198000000000", "appId": "123456", "petType": "red_panda", "provider": "steam"}
+    )
+    assert held["download"]["bundle"]["held"] is True
+    assert held["download"]["bundle"]["ok"] is False
+    assert not any(call["method"] == "GET" for call in backend["calls"])
+    assert "hwid=" not in held["download"]["downloadUrl"]
+    session["status"]()
+    assert not any(call["method"] == "GET" for call in backend["calls"])
+
+    with pytest.raises(LicenseError) as missing:
+        session["fetch_signed"]({})
+    assert missing.value.code == "cdn_net_unnamed"
+    assert "cdn.enterprisepet.example" in str(missing.value)
+    assert "/bundles" not in str(missing.value)
+    assert "sig=" not in str(missing.value)
+    assert not any(call["method"] == "GET" for call in backend["calls"])
+
+    with pytest.raises(LicenseError) as other:
+        session["fetch_signed"]({"cdnLine": bundle_honesty("https://other.example.test/pet.zip")})
+    assert other.value.code == "cdn_net_unnamed"
+    assert not any(call["method"] == "GET" for call in backend["calls"])
+
+    line = bundle_honesty(held["download"]["downloadUrl"])
+    assert "secret" not in line
+    assert "/bundles" not in line
+    assert "hwid" not in line
+    fetched = session["fetch_signed"]({"cdnLine": line})
+    assert fetched["bundle"]["ok"] is True
+    assert fetched["bundle"]["held"] is False
+    gets = [call for call in backend["calls"] if call["method"] == "GET"]
+    assert len(gets) == 1
+    assert "hwid" not in parse_qs(gets[0]["query"])
+    assert "hwid" not in gets[0]["body"]
+
+
+def test_fetches_a_loopback_bundle_without_the_outbound_line():
+    from urllib.parse import urlparse
+
+    from computerpets_client.license.contract_double import encrypt_license
+    from computerpets_client.license.http_client import HttpResponse
+
+    now = "2099-01-01T00:00:00Z"
+    jti = "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80"
+    enc = encrypt_license(
+        {
+            "jti": jti,
+            "owner": "76561198000000000",
+            "pet": "red_panda",
+            "validUntil": now,
+            "issuedAt": "2020-01-01T00:00:00Z",
+            "hwid": None,
+        },
+        SECRET,
+    )
+    disk = MemoryFs()
+    store = "/tmp/cp-license-loop-cdn/license.json"
+    disk.write(
+        store,
+        json.dumps(
+            {
+                "backendUrl": "http://127.0.0.1:8080",
+                "license": {"ciphertext": enc["ciphertext"], "iv": enc["iv"]},
+                "auth": {"token": "token"},
+            }
+        ),
+    )
+    seen: list[str] = []
+
+    def fetch(url, **kwargs):
+        seen.append(url)
+        if str(kwargs.get("method") or "GET").upper() == "POST":
+            assert b"hwid" not in (kwargs.get("body") or b"")
+            body = json.dumps(
+                {
+                    "petKey": "red_panda",
+                    "downloadUrl": f"http://user:secret@127.0.0.1:9/bundles/red_panda.zip?owner=76561198000000000&jti={jti}&exp=1893456000&sig=abc#frag",
+                    "expiresAt": "2030-01-01T00:00:00Z",
+                    "ttlSeconds": 900,
+                    "jti": jti,
+                }
+            ).encode("utf-8")
+            return HttpResponse(200, body, {"Content-Type": "application/json"})
+        assert kwargs.get("body") in (None, b"")
+        return HttpResponse(200, b"zip", {"Content-Type": "application/zip"})
+
+    session = create_license_session(
+        user_data_dir="/tmp/cp-license-loop-cdn",
+        env={"LICENSE_SECRET_KEY": SECRET, "COMPUTERPETS_BACKEND_URL": "http://127.0.0.1:8080"},
+        fetch_impl=fetch,
+        read_file=disk.read,
+        write_file=disk.write,
+        mkdir=disk.mkdir,
+    )
+    downloaded = session["download"]()
+    assert bundle_honesty(downloaded["downloadUrl"]) == ""
+    assert downloaded["bundle"]["ok"] is True
+    assert downloaded["bundle"]["held"] is False
+    got = next(url for url in seen if urlparse(url).port == 9)
+    assert "hwid" not in urlparse(got).query
+    assert "secret" in got
+    assert "secret" not in bundle_honesty(got)

@@ -179,6 +179,7 @@ function createLicenseClient(opts = {}) {
 
   /**
    * GET the HMAC-signed CDN URL. Missing/failed CDN is reported, not invented.
+   * The license hash is not a header, a body, or a query this client adds.
    */
   async function fetchBundle(downloadUrl) {
     if (typeof downloadUrl !== "string" || !downloadUrl) {

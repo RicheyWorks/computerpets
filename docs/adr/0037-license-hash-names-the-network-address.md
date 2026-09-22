@@ -25,6 +25,6 @@ This slice shows the same network-address sentence, with the backend host named,
 
 - A remote license host sees this computer's network address, as any client, and it receives the hash. The house does not ask that host to turn the address into a city. The shared sentence still says "https request", including when the backend URL is http.
 - The hash is still a fingerprint. Hashing is not anonymity. The raw id is still not sent.
-- The signed bundle GET can still show this computer's network address to the CDN host. That request does not carry the license hash. This slice does not name that CDN host.
+- The signed bundle GET names that CDN host before it leaves. [0038](0038-signed-bundle-names-the-cdn-host.md).
 - News, quotes, a later forecast, a geocode look-up, a station stream, cloud talk, and cloud voice keep their gates.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.

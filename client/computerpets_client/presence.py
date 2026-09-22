@@ -17,7 +17,8 @@ HOUSE_FILES = ("card.json", "mind.json")
 # market quotes, and radio find are not this client. A station stream
 # is not this client. Cloud talk and cloud voice are not this client.
 # A license hash names its host before it leaves. Opening this process
-# does not post one.
+# does not post one. A signed bundle names the CDN host before that GET.
+# Opening this process does not fetch one.
 # Electron 35
 # cannot revoke a Chromium grant.
 WEATHER_LOCATE_MS = 120_000
