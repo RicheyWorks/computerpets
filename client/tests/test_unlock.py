@@ -10,7 +10,8 @@ import pytest
 
 from computerpets_client.license.contract_double import create_contract_test_double
 from computerpets_client.license.errors import LicenseError
-from computerpets_client.license.http_client import create_license_client
+from computerpets_client.license.http_client import HttpResponse, create_license_client
+from computerpets_client.license.license_net import license_honesty
 from computerpets_client.license.session import create_license_session
 
 SECRET = base64.b64encode(bytes([7] * 32)).decode("ascii")
@@ -339,3 +340,187 @@ def test_missing_os_id_does_not_mint_until_yes():
     verify = next(call for call in backend["calls"] if call["path"] == "/api/verify/steam")
     assert len(verify["body"]["hwid"]) == 64
     assert any(path.endswith("hwid.txt") for path in files)
+
+
+def test_remote_hash_waits_until_the_host_is_named():
+    reads: list[str] = []
+    files: dict[str, str] = {}
+    seen: list[str] = []
+    backend = create_contract_test_double(license_secret=SECRET, signing_key=SIGNING)
+    inner = backend["fetch_impl"]
+
+    def fetch(url, **kwargs):
+        seen.append(url)
+        return inner(url, **kwargs)
+
+    def read(path: str) -> str:
+        reads.append(path)
+        if path.endswith("machine-id"):
+            return "machine-aaa\n"
+        if path not in files:
+            raise FileNotFoundError(path)
+        return files[path]
+
+    session = create_license_session(
+        user_data_dir="/tmp/cp-license-remote-hash",
+        env={
+            "LICENSE_SECRET_KEY": SECRET,
+            "BUNDLE_SIGNING_KEY": SIGNING,
+            "COMPUTERPETS_BACKEND_URL": "https://user:secret@license.example.test",
+        },
+        fetch_impl=fetch,
+        read_file=read,
+        write_file=lambda path, data: files.__setitem__(path, data),
+        mkdir=lambda _path: None,
+    )
+    session["status"]()
+    assert seen == []
+    assert not any("machine-id" in item for item in reads)
+
+    remote = "https://user:secret@license.example.test/api?hwid=raw-id#frag"
+    line = license_honesty(remote)
+    assert "license.example.test" in line
+    assert "secret" not in line
+    assert "raw-id" not in line
+
+    with pytest.raises(LicenseError) as caught:
+        session["unlock"](
+            {"steamId": "76561198000000000", "appId": "123456", "petType": "red_panda", "provider": "steam"}
+        )
+    assert caught.value.code == "license_net_unnamed"
+    assert "license.example.test" in str(caught.value)
+    assert seen == []
+    assert not any("machine-id" in item for item in reads)
+    assert not any(path.endswith("hwid.txt") for path in files)
+
+    with pytest.raises(LicenseError) as other:
+        session["unlock"](
+            {
+                "steamId": "76561198000000000",
+                "appId": "123456",
+                "petType": "red_panda",
+                "provider": "steam",
+                "licenseLine": license_honesty("https://other.example.test"),
+            }
+        )
+    assert other.value.code == "license_net_unnamed"
+    assert seen == []
+
+    session["unlock"](
+        {
+            "steamId": "76561198000000000",
+            "appId": "123456",
+            "petType": "red_panda",
+            "provider": "steam",
+            "licenseLine": line,
+        }
+    )
+    assert seen
+    from urllib.parse import urlparse
+
+    assert urlparse(seen[0]).hostname == "license.example.test"
+    verify = next(call for call in backend["calls"] if call["path"] == "/api/verify/steam")
+    assert len(verify["body"]["hwid"]) == 64
+    assert "machine-aaa" not in verify["body"]["hwid"]
+    assert verify["body"]["hwid"] not in line
+    download = next(call for call in backend["calls"] if call["path"] == "/api/download/red_panda")
+    assert download["body"]["hwid"] == verify["body"]["hwid"]
+
+
+def test_loopback_unlock_does_not_need_the_outbound_line():
+    for backend_url in ("http://127.0.0.1:8080", "http://localhost:8080", "http://[::1]:8080"):
+        backend = create_contract_test_double(license_secret=SECRET, signing_key=SIGNING)
+        session = session_for(backend, {"COMPUTERPETS_BACKEND_URL": backend_url})
+        result = session["unlock"](
+            {
+                "steamId": "76561198000000000",
+                "appId": "123456",
+                "petType": "red_panda",
+                "provider": "steam",
+                "backendUrl": backend_url,
+            }
+        )
+        assert result["unlocked"] is True
+        assert license_honesty(backend_url) == ""
+
+
+def test_bound_download_names_the_host_and_an_unbound_download_sends_no_hash():
+    from computerpets_client.license.decrypt import decrypt_license
+    from computerpets_client.license.contract_double import encrypt_license
+
+    unbound = encrypt_license(
+        {
+            "jti": "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80",
+            "owner": "76561198000000000",
+            "pet": "red_panda",
+            "validUntil": "2099-01-01T00:00:00Z",
+            "issuedAt": "2020-01-01T00:00:00Z",
+            "hwid": None,
+        },
+        SECRET,
+    )
+    assert decrypt_license(unbound["ciphertext"], unbound["iv"], SECRET)["hwid"] is None
+    posts: list[dict] = []
+
+    def fetch(url, **kwargs):
+        body = kwargs.get("body")
+        if kwargs.get("method", "GET").upper() == "POST":
+            posts.append(__import__("json").loads(body.decode("utf-8")))
+        return HttpResponse(500, b"no", {})
+
+    disk = MemoryFs()
+    store = str(Path("/tmp/cp-license-bound-remote") / "license.json")
+    disk.write(
+        store,
+        __import__("json").dumps(
+            {
+                "backendUrl": "https://license.example.test",
+                "license": {"ciphertext": unbound["ciphertext"], "iv": unbound["iv"]},
+                "auth": {"token": "token"},
+            }
+        ),
+    )
+    session = create_license_session(
+        user_data_dir="/tmp/cp-license-bound-remote",
+        env={"LICENSE_SECRET_KEY": SECRET, "COMPUTERPETS_BACKEND_URL": "https://license.example.test"},
+        fetch_impl=fetch,
+        read_file=disk.read,
+        write_file=disk.write,
+        mkdir=disk.mkdir,
+    )
+    with pytest.raises(LicenseError) as unbound_err:
+        session["download"]()
+    assert unbound_err.value.code == "download_failed"
+    assert posts and "hwid" not in posts[0]
+
+    bound = encrypt_license(
+        {
+            "jti": "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80",
+            "owner": "76561198000000000",
+            "pet": "red_panda",
+            "validUntil": "2099-01-01T00:00:00Z",
+            "issuedAt": "2020-01-01T00:00:00Z",
+            "hwid": "already-bound",
+        },
+        SECRET,
+    )
+    disk.write(
+        store,
+        __import__("json").dumps(
+            {
+                "backendUrl": "https://license.example.test",
+                "license": {"ciphertext": bound["ciphertext"], "iv": bound["iv"]},
+                "auth": {"token": "token"},
+            }
+        ),
+    )
+    disk.write(str(Path("/tmp/cp-license-bound-remote") / "hwid.txt"), "already-bound")
+    posts.clear()
+    with pytest.raises(LicenseError) as missing:
+        session["download"]()
+    assert missing.value.code == "license_net_unnamed"
+    assert posts == []
+    with pytest.raises(LicenseError) as named:
+        session["download"]({"licenseLine": license_honesty("https://license.example.test")})
+    assert named.value.code == "download_failed"
+    assert posts[0]["hwid"] == "already-bound"

@@ -20,6 +20,7 @@ from PyQt6.QtWidgets import (
 
 from .license.errors import LicenseError
 from .license.hwid import WEAK_FALLBACK_MESSAGE
+from .license.license_net import LOCAL_STAYS, license_honesty, license_host_name, license_may_send
 from .species import CATALOG_KEYS, SPECIES
 
 WEAK_FALLBACK_YES = "Use the computer name, or a random id if there is no name"
@@ -63,7 +64,13 @@ class UnlockDialog(QDialog):
         self.mark = QLabel(self._mark_text(status))
         self.mark.setWordWrap(True)
 
-        self.backend = QLineEdit(status.get("backendUrl") or "http://127.0.0.1:8081")
+        self._license_backend = str(status.get("backendUrl") or "")
+        self.backend = QLineEdit(self._license_backend or "http://127.0.0.1:8081")
+        self.net = QLabel(LOCAL_STAYS)
+        self.net.setObjectName("licenseNet")
+        self.net.setWordWrap(True)
+        self.backend.textChanged.connect(self._paint_net)
+        self._paint_net()
         self.steam_id = QLineEdit((status.get("fields") or {}).get("steamId") or "")
         self.steam_id.setPlaceholderText("76561198000000000")
         self.app_id = QLineEdit((status.get("fields") or {}).get("appId") or "")
@@ -82,6 +89,7 @@ class UnlockDialog(QDialog):
 
         form = QFormLayout()
         form.addRow("Backend URL", self.backend)
+        form.addRow("", self.net)
         form.addRow("Provider", QLabel("steam"))
         form.addRow("Steam ID", self.steam_id)
         form.addRow("App ID", self.app_id)
@@ -125,7 +133,8 @@ class UnlockDialog(QDialog):
             return (
                 "A license hash is already stored in hwid.txt. Unlock reuses it and does not "
                 "read the operating-system id again. The raw id is not sent. That hash is still "
-                "a device fingerprint."
+                "a device fingerprint. The line under Backend URL names the host before that hash leaves. "
+                "A backend on this computer does not send it."
             )
         return (
             "Opening this window did not read the operating-system machine id. "
@@ -133,12 +142,47 @@ class UnlockDialog(QDialog):
             "hashes it, and stores that hash in hwid.txt. A hash already stored is reused, so an "
             "existing license stays bound. The raw id is not sent. The house receives only the hash, "
             "and only for unlock or a bound download. That hash is a device fingerprint. "
+            "The line under Backend URL names the host before that hash leaves. "
+            "A backend on this computer does not send it. "
             "If that named read fails. " + WEAK_FALLBACK_MESSAGE
         )
 
+    def _unlock_target(self) -> str:
+        typed = self.backend.text().strip()
+        return typed or self._license_backend
+
+    def _download_target(self) -> str:
+        stored = self._license_backend.strip()
+        return stored or self.backend.text().strip()
+
+    def _paint_net(self, *_args: object) -> None:
+        unlock_url = self._unlock_target()
+        parts = [license_honesty(unlock_url) or LOCAL_STAYS]
+        stored = self._license_backend.strip()
+        if stored and license_host_name(stored) and license_host_name(stored) != license_host_name(unlock_url):
+            extra = license_honesty(stored) or LOCAL_STAYS
+            if extra not in parts:
+                parts.append(extra)
+        self.net.setText(" ".join(parts))
+
+    def _shown_line(self) -> str:
+        return self.net.text()
+
+    def _hash_may_leave(self, url: str) -> bool:
+        self._paint_net()
+        if license_may_send(url, self._shown_line()):
+            return True
+        self.ok.setText("Locked. The pet on the blotter still works.")
+        self.err.setText("the license hash was not sent. name the host before it leaves.")
+        return False
+
     def _paint_status(self, status: dict[str, Any]) -> None:
+        if isinstance(status.get("backendUrl"), str):
+            self._license_backend = status["backendUrl"]
         if hasattr(self, "mark"):
             self.mark.setText(self._mark_text(status))
+        if hasattr(self, "net"):
+            self._paint_net()
         if status.get("unlocked") and status.get("license"):
             lic = status["license"]
             text = f"Unlocked — {lic['pet']} · {lic['jti']} · until {lic['validUntil']}"
@@ -172,6 +216,8 @@ class UnlockDialog(QDialog):
         return answer == QMessageBox.StandardButton.Yes
 
     def _unlock(self, allow_weak: bool = False) -> None:
+        if not self._hash_may_leave(self._unlock_target()):
+            return
         self._unlock_allowed_weak = allow_weak
         self.err.setText("")
         self.ok.setText("Talking to the backend…")
@@ -182,6 +228,7 @@ class UnlockDialog(QDialog):
             "appId": self.app_id.text().strip(),
             "petType": self._pet_key(),
             "allowWeakFallback": True if allow_weak else False,
+            "licenseLine": self._shown_line(),
         }
         self._thread = QThread(self)
         self._worker = UnlockWorker(self.session, fields)
@@ -210,8 +257,15 @@ class UnlockDialog(QDialog):
         QMessageBox.warning(self, "Unlock failed", f"{code}: {message}")
 
     def _download(self, allow_weak: bool = False) -> None:
+        if not self._hash_may_leave(self._download_target()):
+            return
         try:
-            self.session["download"]({"allowWeakFallback": True} if allow_weak else {})
+            self.session["download"](
+                {
+                    "allowWeakFallback": True if allow_weak else False,
+                    "licenseLine": self._shown_line(),
+                }
+            )
             self._paint_status(self.session["status"]())
         except LicenseError as err:
             self.err.setText(f"{err.code}: {err}")

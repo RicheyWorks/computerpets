@@ -12,6 +12,7 @@ from .decrypt import decrypt_license
 from .errors import LicenseError
 from .http_client import FetchImpl, create_license_client, normalize_backend_url
 from .hwid import assert_hwid, peek_hwid, resolve_hwid_detail
+from .license_net import license_host_name, license_may_send
 
 STORE_NAME = "license.json"
 DEFAULT_BACKEND = "http://127.0.0.1:8081"
@@ -21,6 +22,21 @@ def default_backend_url(env: dict[str, str] | None = None) -> str:
     env = env if env is not None else _os_env()
     raw = env.get("COMPUTERPETS_BACKEND_URL") or env.get("ENTERPRISEPET_BACKEND_URL") or DEFAULT_BACKEND
     return normalize_backend_url(raw)
+
+
+def _shown_license_line(fields: dict[str, Any] | None) -> str:
+    raw = (fields or {}).get("licenseLine")
+    return raw if isinstance(raw, str) else ""
+
+
+def _assert_hash_named(backend_url: str, shown: str) -> None:
+    if license_may_send(backend_url, shown):
+        return
+    host = license_host_name(backend_url) or "the license host"
+    raise LicenseError(
+        "license_net_unnamed",
+        f"the license hash was not sent to {host}. name that host before it leaves.",
+    )
 
 
 def license_secret(env: dict[str, str] | None = None) -> str:
@@ -144,14 +160,17 @@ def create_license_session(
         device_id_arg: str | None = None,
         secret_arg: str | None = None,
         allow_weak_fallback: bool = False,
+        license_line: str = "",
     ) -> dict[str, Any]:
         store = store_arg if store_arg is not None else load()
         secret = secret_arg if secret_arg is not None else license_secret(env)
         kwargs = {"now": now_fn} if now_fn else {}
         payload = payload_arg or decrypt_license(store["license"]["ciphertext"], store["license"]["iv"], secret, **kwargs)
         bound = bool(payload.get("hwid"))
-        current = device_id_arg or (device_mark(True, allow_weak_fallback is True)["id"] if bound else "")
         backend_url = normalize_backend_url(store.get("backendUrl") or default_backend_url(env))
+        if bound:
+            _assert_hash_named(backend_url, license_line if isinstance(license_line, str) else "")
+        current = device_id_arg or (device_mark(True, allow_weak_fallback is True)["id"] if bound else "")
 
         if bound and payload.get("hwid") != current:
             raise LicenseError("hwid_mismatch", "hardware binding mismatch")
@@ -194,6 +213,7 @@ def create_license_session(
         )
         provider = input_fields.get("provider") if isinstance(input_fields.get("provider"), str) and input_fields.get("provider") else "steam"
         allow_weak = input_fields.get("allowWeakFallback") is True
+        _assert_hash_named(backend_url, _shown_license_line(input_fields))
         current = device_mark(True, allow_weak)["id"]
         secret = license_secret(env)
         if not secret:
@@ -241,12 +261,19 @@ def create_license_session(
             "lastDownload": None,
         }
         save(next_store)
-        downloaded = request_download(next_store, payload, current, secret)
+        downloaded = request_download(
+            next_store,
+            payload,
+            current,
+            secret,
+            allow_weak_fallback=allow_weak,
+            license_line=_shown_license_line(input_fields),
+        )
         return {**public_status(), "download": downloaded}
 
     def download(input_fields: dict[str, Any] | None = None) -> dict[str, Any]:
         allow = bool(input_fields and input_fields.get("allowWeakFallback") is True)
-        return request_download(allow_weak_fallback=allow)
+        return request_download(allow_weak_fallback=allow, license_line=_shown_license_line(input_fields))
 
     def clear() -> dict[str, Any]:
         save({})

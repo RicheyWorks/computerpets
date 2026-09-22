@@ -1,0 +1,30 @@
+# 0037. Unlock names the host before the license hash leaves
+
+- **Status:** Accepted
+- **Date:** 2026-09-22
+- **Code:** `desktop/license/license-net.cjs`, `desktop/license/session.cjs`, `desktop/renderer/license-net.js`, `desktop/renderer/settings.html`, `client/computerpets_client/license/license_net.py`, `client/computerpets_client/license/session.py`, `client/computerpets_client/unlock_dialog.py`
+
+## Context
+
+[0036](0036-cloud-talk-and-voice-name-the-network-address.md) names this computer's network address on cloud talk and cloud voice. That sentence is `clientNetLine`. Unlock did not use it.
+
+Unlock posts the license hash to `POST /api/verify/{provider}` on the backend URL. A license that already has `hwid` posts that same hash again on `POST /api/download/{pet}`. The default backend is `http://127.0.0.1:8081`. A keeper can point the field at another host. The raw operating-system id is not in either body. [0019](0019-license-mark-is-a-local-hash.md). The hash is still a fingerprint.
+
+An unbound download does not send a hash. Opening the house window calls license status. That reads `hwid.txt` only. It does not post. The signed bundle GET does not carry the hash. The browser desk does not post one.
+
+## Decision
+
+This slice shows the same network-address sentence, with the backend host named, before a remote hash leaves. It does not post on house open. It does not start DirectX 12 or Vulkan. It does not move the talk, voice, news, quote, forecast, geocode, or station-stream gates. It does not chase a URL fragment or a hostname secret. It does not send the raw operating-system id. Catalog stays 221.
+
+- `clientNetLine` names the backend hostname. The line is `this unlock sends the license hash.` plus that sentence, plus `a bound download sends that same hash.` The path, the query, the fragment, the port, and any userinfo stay off the line.
+- `licenseMaySend` is true for a remote host only when that line is shown. The overlay paints the line, then calls the gate, then the unlock or download IPC. The blotter does the same before its session call. The session refuses the post when the line is missing. It does not read the operating-system id on that refusal, and it does not write `hwid.txt`.
+- `127.0.0.1`, `localhost`, and `::1` stay on this computer. The screen says the hash does not leave. Those unlocks do not need the outbound sentence.
+- A stored `hwid.txt` is still reused. A missing operating-system id still waits for its own yes. [0030](0030-missing-os-id-waits-for-a-yes.md). An unbound download still omits the hash.
+
+## Consequences
+
+- A remote license host sees this computer's network address, as any client, and it receives the hash. The house does not ask that host to turn the address into a city. The shared sentence still says "https request", including when the backend URL is http.
+- The hash is still a fingerprint. Hashing is not anonymity. The raw id is still not sent.
+- The signed bundle GET can still show this computer's network address to the CDN host. That request does not carry the license hash. This slice does not name that CDN host.
+- News, quotes, a later forecast, a geocode look-up, a station stream, cloud talk, and cloud voice keep their gates.
+- DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.

@@ -16,6 +16,8 @@ HOUSE_FILES = ("card.json", "mind.json")
 # does not call for a place. It does not call a geocode host. News RSS,
 # market quotes, and radio find are not this client. A station stream
 # is not this client. Cloud talk and cloud voice are not this client.
+# A license hash names its host before it leaves. Opening this process
+# does not post one.
 # Electron 35
 # cannot revoke a Chromium grant.
 WEATHER_LOCATE_MS = 120_000
