@@ -14,7 +14,7 @@ import {
   parseHeartbeat,
   type Heartbeat,
 } from "@/lib/pets/keeper";
-import { UNREAD_GPU, gpuLine } from "@/lib/pets/gpu";
+import { SPARK_H, SPARK_W, UNREAD_GPU, gpuLine, sparkline } from "@/lib/pets/gpu";
 import {
   applyFeedFor,
   applyPlay,
@@ -98,6 +98,7 @@ export function KeeperCard({
   className?: string;
 }) {
   const meters = keeperMeters(stats);
+  const gpuSpark = sparkline([], UNREAD_GPU, 0);
   const [beat, setBeat] = useState<Heartbeat>(UNREAD_HEARTBEAT);
   const [card, setCard] = useState<CardPrefs>(() => loadCard());
   const [draft, setDraft] = useState("");
@@ -755,6 +756,13 @@ export function KeeperCard({
           </p>
           <p className="keeper-gpu" data-gpu={UNREAD_GPU.status}>
             {gpuLine(UNREAD_GPU)}
+            <span className="gpu-spark" data-spark={gpuSpark.empty ? "empty" : "trail"} style={{ color: gpuSpark.ink }} aria-hidden="true">
+              {gpuSpark.path ? (
+                <svg viewBox={`0 0 ${SPARK_W} ${SPARK_H}`} width={SPARK_W} height={SPARK_H} aria-hidden="true">
+                  <path d={gpuSpark.path} fill="none" stroke={gpuSpark.ink} strokeWidth={1} />
+                </svg>
+              ) : null}
+            </span>
           </p>
           <p className="keeper-truth">
             {careTruth()} Desk {DESK_PORT}. Not {ADVERTISED_CARE.feed}.

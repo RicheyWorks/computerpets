@@ -12,7 +12,7 @@ On a Mac the extra sits in the menu bar. A click opens care. It does not hide th
 
 On Linux the mark sits in the panel. A click opens care. It does not hide the desk. The floor sits in the work area, beside the panel and above the dock. They walk every workspace. A tap is a choice. A drag is a carry. A right-click tends. First click is a sit. The overlay is a toolbar.
 
-GPU load (temperature, utilization, memory, power) is read on Windows from nvidia-smi or GPU performance counters and painted on the keeper card. Mac and Linux say `mac-linux-gpu-sense` and stay dark. A missing, malformed, or stale reading stays unread — never a painted zero. This is not a DirectX 12 or Vulkan renderer. The overlay is still Electron/Chromium.
+GPU load (temperature, utilization, memory, power) is read on Windows from nvidia-smi or GPU performance counters and painted on the keeper card. A sparkline beside that line is only fresh `read` samples, dropped after about 20 seconds, and it stays an empty dark strip when the reading is unread. One sample is not a stroke. Mac and Linux say `mac-linux-gpu-sense` and stay dark. A missing, malformed, or stale reading stays unread — never a painted zero. This is not a DirectX 12 or Vulkan renderer. The overlay is still Electron/Chromium.
 
 ## Care
 
