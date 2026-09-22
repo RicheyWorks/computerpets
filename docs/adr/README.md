@@ -73,6 +73,7 @@ address, or an API that is not on `main`.
 | [0052](0052-cloud-talk-and-voice-page-times-out-and-denies.md) | Cloud talk and cloud voice page reads time out and deny | Accepted |
 | [0053](0053-itch-and-epic-restclient-times-out-and-denies.md) | Itch and Epic RestClient reads time out and deny | Accepted |
 | [0054](0054-ownership-time-limiter-denies-on-wall.md) | Shared ownership time limiter denies on wall exceed | Accepted |
+| [0055](0055-download-jti-one-time-and-ip-bound.md) | Download jti grants are one-time and IP-bound | Accepted |
 
 ## How to add one
 

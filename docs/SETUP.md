@@ -19,7 +19,7 @@ To run the Spring Boot backend, you will need the following:
 | **Java JDK**      | 21 (LTS)                     | Temurin, Oracle JDK, or Amazon Corretto |
 | **Apache Maven**  | 3.9 or newer                 | Used to build and run the project |
 | **Git**           | Latest stable                | Required to clone the repository |
-| **Redis**         | 7.x                          | Shared rate-limit store and jti deny-list. `docker compose` starts it. Local `mvn spring-boot:run` needs Redis on `localhost:6379` or `RATE_LIMIT_BACKEND=memory`. |
+| **Redis**         | 7.x                          | Shared rate-limit store, jti deny-list, and one-time download grants. `docker compose` starts it. Local `mvn spring-boot:run` needs Redis on `localhost:6379` or `RATE_LIMIT_BACKEND=memory`. |
 | **Terminal**      | PowerShell, Bash, or Zsh     | Windows PowerShell is fully supported |
 
 **Optional but Recommended Tools:**
@@ -167,7 +167,7 @@ The backend will start on **http://localhost:8081** by default. The desk keeps 8
 
 The living desk ledger is `/admin` (not in the house nav). Point it at this origin and paste `ADMIN_API_KEY` — the page sends `X-Admin-Key` on every lookup and revoke.
 
-Rate limits are Redis-backed (10/min on `/api/verify/`, 30/min on `/api/download/`, per client IP). The same Redis holds the jti deny-list: revoke writes `revokedAt` in Postgres first, then `revoked:jti:{jti}` so every replica rejects immediately. `docker compose up` starts Redis and points the app at it (`REDIS_HOST=redis`). A local Maven run expects Redis on `localhost:6379`. If Redis is down, verify/download return **503** with `Retry-After` and `application/problem+json` — the rate limit is not lifted. `LicenseService.validate` itself falls back to the Postgres ledger (it will not accept a revoked license). For a single-process local run without Redis:
+Rate limits are Redis-backed (10/min on `/api/verify/`, 30/min on `/api/download/`, per client IP). The same Redis holds the jti deny-list: revoke writes `revokedAt` in Postgres first, then `revoked:jti:{jti}` so every replica rejects immediately. It also holds one-time download grants (`download:grant:{jti}:{exp}`) issued by `POST /api/download` and redeemed at `GET /api/bundles/{pet}/redeem` (ADR 0055). `docker compose up` starts Redis and points the app at it (`REDIS_HOST=redis`). A local Maven run expects Redis on `localhost:6379`. If Redis is down, verify/download return **503** with `Retry-After` and `application/problem+json` — the rate limit is not lifted. Download issue and redeem also fail closed when the grant store is down. `LicenseService.validate` itself falls back to the Postgres ledger (it will not accept a revoked license). For a single-process local run without Redis:
 
 ```bash
 export RATE_LIMIT_BACKEND=memory
@@ -246,7 +246,7 @@ The Electron overlay is still `cd desktop && npm start`.
 | `EPIC_CATALOG_ITEM_ID`    | No       | empty   | Optional official catalog item allowlist (do not invent one) |
 | `BUNDLE_BASE_URL`         | No       | CDN placeholder | Base URL used when generating signed download links |
 | *(yaml)* `bundle.catalog` | No       | `[]`    | Optional artifact rows (`petKey`, `version`, `platform`, `sha256`, `path`). Empty until a zip exists; unknown keys and placeholder hashes fail startup. Do not invent sha256 values. |
-| `REDIS_HOST`              | No       | localhost | Redis hostname for shared verify/download rate limits and the jti deny-list |
+| `REDIS_HOST`              | No       | localhost | Redis hostname for shared verify/download rate limits, the jti deny-list, and download grants |
 | `REDIS_PORT`              | No       | 6379 | Redis port |
 | `REDIS_TIMEOUT`           | No       | 200ms | Lettuce command/connect timeout for the rate-limit store |
 | `RATE_LIMIT_BACKEND`      | No       | redis | `redis` (default, shared) or `memory` (tests / single local process only) |
