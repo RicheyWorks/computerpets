@@ -192,6 +192,75 @@ test("a locked seal is not replaced with an invented key", async () => {
   assert.equal(S.loadMindSettings().default.apiKey, undefined);
 });
 
+const PASTED = "pasted-key-VALUE-should-not-ride";
+const PASTED_API = "pasted-api-key-VALUE-should-not-ride";
+
+test("desk mind prefs drop a pasted key query on save and on read", async () => {
+  const dirty = `https://example.test/v1beta?key=${PASTED}&api_key=${PASTED_API}&alt=sse`;
+  const { local } = install();
+  await S.saveMindSettings({
+    default: { plugin: "google", model: "gemini-2.5-flash", baseUrl: dirty },
+    voice: "browser",
+    pets: { red_panda: { plugin: "openai", baseUrl: `https://api.example.test/v1?api_key=${PASTED_API}` } },
+  });
+  const disk = textOf(local);
+  assert.equal(disk.includes(PASTED), false);
+  assert.equal(disk.includes(PASTED_API), false);
+  assert.equal(disk.includes("key="), false);
+  assert.equal(disk.includes("api_key="), false);
+  assert.equal(disk.includes("alt=sse"), true);
+  const live = S.loadMindSettings();
+  assert.equal(live.default.baseUrl, "https://example.test/v1beta?alt=sse");
+  assert.equal(live.pets.red_panda.baseUrl, "https://api.example.test/v1");
+  assert.equal(live.default.model, "gemini-2.5-flash");
+
+  const leftover = memStore();
+  leftover.setItem(
+    KEY,
+    JSON.stringify({
+      default: { plugin: "google", baseUrl: `https://example.test/v1?key=${PASTED}&alt=sse` },
+      voice: "browser",
+      pets: {},
+    }),
+  );
+  install({ local: leftover });
+  const opened = S.loadMindSettings();
+  assert.equal(opened.default.baseUrl, "https://example.test/v1?alt=sse");
+  assert.equal(textOf(leftover).includes(PASTED), false);
+  assert.equal(textOf(leftover).includes("key="), false);
+  assert.equal(textOf(leftover).includes("alt=sse"), true);
+});
+
+test("a desk save does not hand a pasted key query to the seal", async () => {
+  let sent = null;
+  const desk = {
+    mindGet() {
+      return {
+        default: { plugin: "google", baseUrl: `https://example.test/v1?key=${PASTED}` },
+        voice: "browser",
+        pets: {},
+        keyKept: "empty",
+      };
+    },
+    mindSet(data) {
+      sent = data;
+      return { kept: "empty" };
+    },
+  };
+  const { local } = install({ desk });
+  const live = S.loadMindSettings();
+  assert.equal(live.default.baseUrl, "https://example.test/v1");
+  assert.equal(JSON.stringify(live).includes(PASTED), false);
+  await S.saveMindSettings({
+    ...live,
+    default: { ...live.default, baseUrl: `https://example.test/v1?api_key=${PASTED_API}&alt=sse` },
+  });
+  assert.equal(sent.default.baseUrl, "https://example.test/v1?alt=sse");
+  assert.equal(JSON.stringify(sent).includes(PASTED_API), false);
+  assert.equal(JSON.stringify(sent).includes("api_key="), false);
+  assert.equal(textOf(local).includes(PASTED_API), false);
+});
+
 test("the desk page does not say the key stays in the browser", () => {
   const page = readFileSync(join(root, "src/routes/mind.tsx"), "utf8");
   const settings = readFileSync(join(root, "src/lib/ai/settings.ts"), "utf8");
@@ -200,6 +269,8 @@ test("the desk page does not say the key stays in the browser", () => {
   assert.doesNotMatch(page, /keys stay in this browser/);
   assert.match(page, /describeKeyKept/);
   assert.match(settings, /mindSet/);
+  assert.match(settings, /scrubSecretQueryString/);
+  assert.match(settings, /secret-query\.mjs/);
   assert.match(settings, /sessionStorage/);
   assert.doesNotMatch(settings, /sessionStorage\.setItem/);
   assert.match(mindDoc, /not stored in this browser/);

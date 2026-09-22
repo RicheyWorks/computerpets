@@ -10,10 +10,14 @@ const spend = await import(join(root, "src/lib/pets/talk-spend.ts"));
 
 const card = readFileSync(join(root, "src/components/desk/keeper-card.tsx"), "utf8");
 const readSrc = readFileSync(join(root, "src/lib/ai/listener-read.ts"), "utf8");
+const postSrc = readFileSync(join(root, "src/lib/ai/listener-post.ts"), "utf8");
 const catalog = readFileSync(join(root, "src/lib/ai/catalog.ts"), "utf8");
 const deskListener = readFileSync(join(root, "..", "desktop/renderer/listener.js"), "utf8");
+const post = await import(join(root, "src/lib/ai/listener-post.ts"));
 
 const SECRET = "sk-live-DO-NOT-PAINT";
+const PASTED = "pasted-key-VALUE-should-not-ride";
+const PASTED_API = "pasted-api-key-VALUE-should-not-ride";
 
 test("desk guests are House lines even when the saved plugin is xAI", () => {
   const heard = L.nameListener({
@@ -77,9 +81,14 @@ test("presentListener refuses a payload that smuggles a key", () => {
 test("the keeper card asks the server without sending a key", () => {
   assert.match(card, /keeper-listener/);
   assert.match(card, /UNREAD_LISTENER/);
-  assert.match(card, /readMindListener\(\{ data: \{ plugin: askedPlugin, baseUrl: askedBase \} \}\)/);
+  assert.match(card, /listenerReadBody\(\{ plugin: askedPlugin, baseUrl: askedBase \}\)/);
+  assert.match(card, /readMindListener\(\{ data: listenerReadBody\(\{ plugin: askedPlugin, baseUrl: askedBase \}\) \}\)/);
   assert.doesNotMatch(card, /apiKey: asked/);
-  assert.match(readSrc, /\.strict\(\)/);
+  assert.match(postSrc, /\.strict\(\)/);
+  assert.match(postSrc, /scrubSecretQueryString/);
+  assert.match(postSrc, /secret-query\.mjs/);
+  assert.doesNotMatch(postSrc, /SECRET_QUERY_NAMES/);
+  assert.match(readSrc, /parseListenerRead/);
   assert.match(readSrc, /houseKeyFlags\(\)/);
   assert.match(readSrc, /signedIn: Boolean\(context\.userId\)/);
   assert.doesNotMatch(readSrc, /apiKey: data/);
@@ -88,4 +97,52 @@ test("the keeper card asks the server without sending a key", () => {
     assert.match(catalog, new RegExp(`id: "${preset.id}"`));
     assert.match(deskListener, new RegExp(`id: "${preset.id}"`));
   }
+});
+
+test("a pasted key query on the saved listener base URL is not in the posted body", () => {
+  const dirty = `https://example.test/v1beta?key=${PASTED}&api_key=${PASTED_API}&alt=sse#key=${PASTED}`;
+  const body = post.listenerReadBody({ plugin: "google", baseUrl: dirty });
+  const wire = JSON.stringify(body);
+  assert.equal(wire.includes(PASTED), false);
+  assert.equal(wire.includes(PASTED_API), false);
+  assert.equal(wire.includes("key="), false);
+  assert.equal(wire.includes("api_key="), false);
+  assert.equal(body.plugin, "google");
+  assert.equal(body.baseUrl, "https://example.test/v1beta?alt=sse");
+
+  const keyOnly = post.listenerReadBody({
+    plugin: "openai",
+    baseUrl: `https://api.example.test/v1?key=${PASTED}`,
+  });
+  assert.equal(JSON.stringify(keyOnly).includes(PASTED), false);
+  assert.equal(keyOnly.baseUrl, "https://api.example.test/v1");
+
+  const apiKeyOnly = post.listenerReadBody({
+    plugin: "openai",
+    baseUrl: `https://api.example.test/v1?api_key=${PASTED_API}&alt=sse`,
+  });
+  assert.equal(JSON.stringify(apiKeyOnly).includes(PASTED_API), false);
+  assert.equal(apiKeyOnly.baseUrl, "https://api.example.test/v1?alt=sse");
+
+  const clean = post.listenerReadBody({
+    plugin: "xai",
+    baseUrl: "https://api.x.ai/v1?alt=sse#room",
+  });
+  assert.equal(clean.baseUrl, "https://api.x.ai/v1?alt=sse#room");
+  assert.equal(clean.plugin, "xai");
+});
+
+test("a pasted key query that still arrives is dropped before the house keeps the listener body", () => {
+  const parsed = post.parseListenerRead({
+    plugin: "google",
+    baseUrl: `https://example.test/v1beta?key=${PASTED}&api_key=${PASTED_API}&alt=sse#key=${PASTED}`,
+  });
+  const wire = JSON.stringify(parsed);
+  assert.equal(wire.includes(PASTED), false);
+  assert.equal(wire.includes(PASTED_API), false);
+  assert.equal(wire.includes("key="), false);
+  assert.equal(wire.includes("api_key="), false);
+  assert.equal(parsed.plugin, "google");
+  assert.equal(parsed.baseUrl, "https://example.test/v1beta?alt=sse");
+  assert.throws(() => post.parseListenerRead({ plugin: "xai", apiKey: SECRET, baseUrl: "https://api.x.ai/v1" }));
 });
