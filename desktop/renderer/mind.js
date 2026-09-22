@@ -499,15 +499,37 @@
     return line.indexOf(net) !== -1;
   }
 
+  /** A remote talk leaves only when the painted line names that talk host. */
+  function talkMayLeave(bind, shown) {
+    const target = talkTarget(bind);
+    if (!target || target.local) return true;
+    const line = talkHonesty(bind);
+    if (!line || typeof shown !== "string") return false;
+    return shown.indexOf(line) !== -1;
+  }
+
+  /**
+   * The only cloud-talk request. A miss resolves to the local reply and does not call request.
+   * A loopback mind still calls request. That fetch stays on this computer.
+   */
+  function readTalk(shown, bind, request, fallback) {
+    if (!talkMayLeave(bind, shown)) return Promise.resolve(fallback);
+    return Promise.resolve().then(function () {
+      return request();
+    });
+  }
+
   async function run(ctx) {
     const bind = binding(ctx.species);
     const p = preset(bind.plugin);
     const base = safeUrl(bind.baseUrl || p.base || "", p.id);
     const model = sanitizeModel(bind.model, p.model);
     const key = bind.apiKey || "";
-    if (p.kind === "local") return { text: ctx.fallback, source: "local" };
-    if (!talkMaySend(bind, !!(ctx && ctx.lineInView === true))) return { text: ctx.fallback, source: "local" };
-    if (!base && p.kind !== "local") return { text: ctx.fallback, source: "local" };
+    const fallback = { text: ctx.fallback, source: "local" };
+    if (p.kind === "local") return fallback;
+    if (!base && p.kind !== "local") return fallback;
+    const shown = ctx && typeof ctx.shown === "string" ? ctx.shown : "";
+    return readTalk(shown, bind, async function () {
     try {
       if (p.kind === "openai") {
         const res = await fetch(pluginRequestUrl(base, "/chat/completions"), {
@@ -596,7 +618,8 @@
     } catch {
       /* house lines */
     }
-    return { text: ctx.fallback, source: "local" };
+    return fallback;
+    }, fallback);
   }
 
   window.PetMind = {
@@ -611,5 +634,7 @@
     talkTarget,
     talkHonesty,
     talkMaySend,
+    talkMayLeave,
+    readTalk,
   };
 })();

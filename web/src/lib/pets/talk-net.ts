@@ -1,4 +1,4 @@
-/** Cloud talk and cloud voice name the host before the request leaves. Same sentence as News and Radio (`clientNetLine`). A loopback mind and on-device speech stay local. */
+/** Cloud talk and cloud voice name the host before the request leaves. `readTalk` and `readVoice` refuse a remote request when that painted host line is missing. A loopback mind and on-device speech stay local. Same sentence as News and Radio (`clientNetLine`). */
 import { mindPreset } from "../ai/catalog.ts";
 import { assertSafeMindUrl } from "../ai/safe-url.ts";
 import type { MindBinding, VoiceKind } from "../ai/types.ts";
@@ -89,4 +89,58 @@ export function voiceMaySend(voice: VoiceKind | string | null | undefined, lineI
   const host =
     voice === "xai" || voice === "openai" ? talkHostName(VOICE_URLS[voice]) || VOICE_HOST_NAME : VOICE_HOST_NAME;
   return line.includes(clientNetLine(host));
+}
+
+/**
+ * A remote talk leaves only when the painted line names that talk host.
+ * A local or loopback mind does not need the line. Another host's line does not count.
+ */
+export function talkMayLeave(
+  shown: unknown,
+  binding: Pick<MindBinding, "plugin" | "baseUrl"> | null | undefined,
+): boolean {
+  const target = talkTarget(binding);
+  if (!target || target.local) return true;
+  const line = talkHonesty(binding);
+  if (!line || typeof shown !== "string") return false;
+  return shown.includes(line);
+}
+
+/**
+ * The only cloud-talk request. A miss resolves to the local reply and does not call `request`.
+ * A loopback mind still calls `request`. That fetch stays on this computer.
+ */
+export function readTalk<T>(
+  shown: unknown,
+  binding: Pick<MindBinding, "plugin" | "baseUrl"> | null | undefined,
+  request: () => Promise<T> | T,
+  local: T,
+): Promise<T> {
+  if (!talkMayLeave(shown, binding)) return Promise.resolve(local);
+  return Promise.resolve().then(request);
+}
+
+/**
+ * A cloud voice leaves only when the painted line names that voice host.
+ * Browser speech, silence, and the talk sentence do not count as a voice send.
+ */
+export function voiceMayLeave(shown: unknown, voice: VoiceKind | string | null | undefined): boolean {
+  const line = voiceHonesty(voice);
+  if (!line) return true;
+  if (typeof shown !== "string") return false;
+  return shown.includes(line);
+}
+
+/**
+ * The only cloud-voice request. A miss resolves to undefined and does not call `request`.
+ * Browser speech and silence do not call `request`. `speechSynthesis` stays on this computer.
+ */
+export function readVoice<T>(
+  shown: unknown,
+  voice: VoiceKind | string | null | undefined,
+  request: () => Promise<T | undefined> | T | undefined,
+): Promise<T | undefined> {
+  if (voice !== "xai" && voice !== "openai") return Promise.resolve(undefined);
+  if (!voiceMayLeave(shown, voice)) return Promise.resolve(undefined);
+  return Promise.resolve().then(request);
 }

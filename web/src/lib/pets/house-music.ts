@@ -1,4 +1,4 @@
-/** Free music + radio for Rui. Same plugin store shape as the mind bus. Find waits until the radio form shows this computer's network address on that https request. `readRadioSearch` also refuses when that painted line is missing. Same map as desktop `house-music.js`. */
+/** Free music + radio for Rui. Same plugin store shape as the mind bus. Find waits until the radio form shows this computer's network address on that https request. `readRadioSearch` also refuses when that painted line is missing. `openStationStream` refuses a station audio open when the painted stream-host line is missing. A house loop is not that open. Same map as desktop `house-music.js`. */
 import { clientNetLine } from "./weather-areas.ts";
 
 export const MUSIC_PLUGINS = [
@@ -338,6 +338,30 @@ export function streamMaySend(music: MusicPrefs | null | undefined, lineInView: 
   const line = streamHonesty(music);
   if (!host || !line || lineInView !== true) return false;
   return line.includes(clientNetLine(host));
+}
+
+/**
+ * A station stream leaves only when the painted line names that stream host.
+ * The radio-find sentence, another host's line, and a missing line do not count.
+ */
+export function streamMayLeave(shown: unknown, music: MusicPrefs | null | undefined): boolean {
+  const line = streamHonesty(music);
+  if (!line || typeof shown !== "string") return false;
+  return shown.includes(line);
+}
+
+/**
+ * The only station-stream open. A miss returns null and does not construct Audio
+ * or assign src. A house loop is not this open.
+ */
+export function openStationStream<T>(
+  shown: unknown,
+  music: MusicPrefs | null | undefined,
+  src: string,
+  makeAudio: (src: string) => T,
+): T | null {
+  if (!streamMayLeave(shown, music) || !src || typeof makeAudio !== "function") return null;
+  return makeAudio(src);
 }
 
 export function radioSearchUrls(query = "", area?: RadioArea | null) {

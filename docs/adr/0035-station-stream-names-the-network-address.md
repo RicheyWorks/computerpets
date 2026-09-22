@@ -1,6 +1,6 @@
 # 0035. A station stream names the network address when Play is pressed
 
-- **Status:** Accepted
+- **Status:** Accepted (the open itself waits in [0044](0044-station-stream-and-cloud-talk-wait-for-the-painted-line.md))
 - **Date:** 2026-09-22
 - **Code:** `desktop/renderer/house-music.js`, `desktop/renderer/pet.js`, `desktop/renderer/index.html`, `web/src/lib/pets/house-music.ts`, `web/src/components/desk/keeper-card.tsx`, `client/computerpets_client/presence.py`
 
@@ -21,6 +21,6 @@ This slice shows the same network-address sentence, with the stream host named, 
 
 ## Consequences
 
-- The station stream host sees this computer's network address, as any client. The house does not ask that host to turn the address into a city. The shared sentence still says "https request", including when the stream itself is http.
+- The station stream host sees this computer's network address, as any client. The house does not ask that host to turn the address into a city. The shared sentence still says "https request", including when the stream itself is http. The audio element is constructed only inside `openStationStream`. A missing line does not assign a stream source and does not say "can't reach". [0044](0044-station-stream-and-cloud-talk-wait-for-the-painted-line.md).
 - Radio Find still waits for its own line. [0034](0034-news-quotes-and-radio-name-the-network-address.md). News, quotes, a later forecast, and a geocode look-up keep their gates.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.

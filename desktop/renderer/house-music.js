@@ -1,4 +1,4 @@
-/** Free music + radio for Rui. Same plugin store shape as the mind bus. Find waits until the radio form shows this computer's network address on that https request. readRadioSearch also refuses when that painted line is missing. */
+/** Free music + radio for Rui. Same plugin store shape as the mind bus. Find waits until the radio form shows this computer's network address on that https request. readRadioSearch also refuses when that painted line is missing. openStationStream refuses a station audio open when the painted stream-host line is missing. A house loop is not that open. */
 (function (root) {
   const MUSIC_PLUGINS = [
     { id: "off", name: "Quiet", blurb: "No music.", license: "" },
@@ -429,6 +429,22 @@
     return !!net && line.indexOf(net) !== -1;
   }
 
+  /** A station stream leaves only when the painted line names that stream host. */
+  function streamMayLeave(shown, music) {
+    const line = streamHonesty(music);
+    if (!line || typeof shown !== "string") return false;
+    return shown.indexOf(line) !== -1;
+  }
+
+  /**
+   * The only station-stream open. A miss returns null and does not construct Audio
+   * or assign src. A house loop is not this open.
+   */
+  function openStationStream(shown, music, src, makeAudio) {
+    if (!streamMayLeave(shown, music) || !src || typeof makeAudio !== "function") return null;
+    return makeAudio(src);
+  }
+
   function overlayPlaySrc(music) {
     if (!music || !music.playing || music.plugin === "off") return "";
     if (music.plugin === "house") return overlayHouseLoopSrc();
@@ -476,6 +492,8 @@
     streamHostPhrase,
     streamHonesty,
     streamMaySend,
+    streamMayLeave,
+    openStationStream,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetHouseMusic = api;
