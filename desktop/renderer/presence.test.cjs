@@ -271,6 +271,17 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.match(petSrc, /readWeatherHere/);
   assert.match(petSrc, /armWeatherLocate/);
   assert.match(petSrc, /ipPlace\(/);
+  assert.match(petSrc, /locateChoice/);
+  assert.match(petSrc, /sharePlace/);
+  assert.match(htmlSrc, /this click sends a place to the forecast host\./);
+  assert.match(htmlSrc, /aria-describedby="weather-here-send"/);
+  const hereAt = petSrc.indexOf('getElementById("weather-here")');
+  const hereBody = petSrc.slice(hereAt, hereAt + 2200);
+  assert.ok(hereBody.indexOf("locateChoice") >= 0);
+  assert.ok(hereBody.indexOf("locateChoice") < hereBody.indexOf("readWeatherHere"));
+  assert.ok(hereBody.indexOf("sharePlace") < hereBody.indexOf("reverseUrl"));
+  assert.doesNotMatch(hereBody, /latitude=\$\{fix|longitude=\$\{fix/);
+  assert.equal(require("./weather-areas.js").HERE_SEND, "this click sends a place to the forecast host.");
   assert.doesNotMatch(petSrc, /getCurrentPosition|watchPosition|maximumAge:\s*600/);
   assert.doesNotMatch(petSrc, /ipwho\.is|ip-api\.com|ipinfo\.io|ipapi\.co|ipPlaceUrl|parseIpPlace/);
   assert.doesNotMatch(areasSrc, /ipwho\.is|ip-api\.com|ipinfo\.io|ipapi\.co|ipPlaceUrl|parseIpPlace/);

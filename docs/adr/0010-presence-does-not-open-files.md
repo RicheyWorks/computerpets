@@ -28,5 +28,5 @@ This slice refuses the drop and the silent grants. It does not list the desktop.
 - License `hwid` still reads machine-id or MachineGuid. That is the license door, not presence.
 - The keeper's plugin key still sits in `mind.json`. It stays off the card.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.
-- Geolocation is not a standing process grant. [0013](0013-weather-locate-is-not-a-process-grant.md) opens it for the weather control and closes it after that locate. Electron cannot revoke a grant Chromium already cached in the renderer. An IP place lookup is not a fallback. [0014](0014-weather-does-not-ask-an-ip-place.md) drops it.
+- Geolocation is not a standing process grant. [0013](0013-weather-locate-is-not-a-process-grant.md) opens it for the weather control and closes it after that locate. Electron cannot revoke a grant Chromium already cached in the renderer. An IP place lookup is not a fallback. [0014](0014-weather-does-not-ask-an-ip-place.md) drops it. A live fix is rounded before it leaves, and a saved typed area is kept. [0015](0015-weather-locate-sends-a-rounded-place.md).
 - DirectX 12 / Vulkan is still open. This slice is not that engine.

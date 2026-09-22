@@ -32,7 +32,8 @@
               </label>
               <button data-hit type="submit" id="weather-lookup">Look up</button>
             </form>
-            <button type="button" data-hit id="weather-here">Use this computer's location</button>
+            <button type="button" data-hit id="weather-here" aria-describedby="weather-here-send">Use this computer's location</button>
+            <p id="weather-here-send" class="keeper-truth">this click sends a place to the forecast host.</p>
             <p id="weather-here-truth" class="keeper-truth"></p>
             <ul id="weather-hits"></ul>
           </div>
