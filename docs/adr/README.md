@@ -75,6 +75,7 @@ address, or an API that is not on `main`.
 | [0054](0054-ownership-time-limiter-denies-on-wall.md) | Shared ownership time limiter denies on wall exceed | Accepted |
 | [0055](0055-download-jti-one-time-and-ip-bound.md) | Download jti grants are one-time and IP-bound | Accepted |
 | [0056](0056-house-secrets-from-file-mounts.md) | House secrets from env, *_FILE mounts, or External Secrets | Accepted |
+| [0057](0057-license-issuance-observation.md) | License issuance is a business observation | Accepted |
 
 ## How to add one
 

@@ -133,7 +133,7 @@ class ObservabilityIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/verify/steam records verify meter and an OTel span")
+    @DisplayName("POST /api/verify/steam records verify and issue meters and an OTel span")
     void verifySteam_recordsSpanAndMeter() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -157,11 +157,20 @@ class ObservabilityIntegrationTest {
         assertThat(verify).isNotNull();
         assertThat(verify.count()).isGreaterThanOrEqualTo(1);
 
+        Timer issue = meterRegistry.find(VerificationTelemetry.ISSUE)
+                .tag("provider", "steam")
+                .tag("pet", "red_panda")
+                .tag("outcome", "success")
+                .timer();
+        assertThat(issue).isNotNull();
+        assertThat(issue.count()).isGreaterThanOrEqualTo(1);
+
         List<SpanData> spans = EXPORTER.spans();
         assertThat(spans).isNotEmpty();
         assertThat(spans)
                 .extracting(SpanData::getName)
                 .anyMatch(name -> name.contains("enterprisepet.verify")
+                        || name.contains("enterprisepet.license.issue")
                         || name.contains("http.server.requests")
                         || name.toLowerCase().contains("verify")
                         || name.contains("http.client.requests"));
