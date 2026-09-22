@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-22 (Trusted-proxy XFF / Forwarded fail-closed — ADR 0067. Not DX12/Vulkan. Catalog 221.) |
+| **Last Updated** | 2026-09-22 (Discovery rate limit on `/api/pets` — ADR 0068. Not DX12/Vulkan. Catalog 221.) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -297,7 +297,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 
 ### 4.4 Cross-Cutting & Infrastructure
 - **`SecurityConfig`** + **`JwtAuthenticationFilter`**: Stateless JWT auth (permitAll on verify/pets/bundles, authenticated on download). Filter populates `SecurityContext` with a `Map` principal for claim access.
-- **`RateLimitingFilter`**: Token-bucket per-IP (10/min verify, 30/min download) using Bucket4j on Redis (`LettuceBasedProxyManager`). Client IP via `ClientAddress` — XFF / `Forwarded` only from configured trusted-proxy CIDRs ([0067](adr/0067-trusted-proxy-client-address.md)). Redis-down → 503 fail-closed.
+- **`RateLimitingFilter`**: Token-bucket per-IP (10/min verify, 30/min download, 60/min discovery on `/api/pets`) using Bucket4j on Redis (`LettuceBasedProxyManager`). Client IP via `ClientAddress` — XFF / `Forwarded` only from configured trusted-proxy CIDRs ([0067](adr/0067-trusted-proxy-client-address.md)). Redis-down → 503 fail-closed. Discovery → [0068](adr/0068-discovery-rate-limit.md).
 - **`ClientAddress`**: Shared resolver for rate limits and download-grant IP binding. Empty `trusted-proxies.cidrs` = always `remoteAddr` (fail-closed).
 - **`RevocationIndex`**: Shared jti deny-list on the same Redis (`RedisRevocationIndex`, keys `revoked:jti:{jti}`). `InMemoryRevocationIndex` when `rate-limit.backend=memory`. Not a second ledger.
 - **`GlobalExceptionHandler`** (`@RestControllerAdvice`): Maps common Spring exceptions + catch-all to RFC 7807 `ProblemDetail`.
@@ -416,7 +416,7 @@ sequenceDiagram
 | Cryptography (Licenses)  | BouncyCastle (bcprov-jdk18on)           | 1.78.1      | Portable, explicit AES-GCM with AEAD; avoids JDK provider differences. |
 | Blockchain               | web3j core                              | 4.12.0      | Standard Java Ethereum client; supports `eth_call` for read-only ownership proofs without a full node. |
 | External HTTP            | Spring RestClient (new in 3.x) + Jackson| —           | Modern, fluent, no RestTemplate boilerplate. |
-| Rate Limiting            | Bucket4j + Lettuce Redis                | 8.10.1      | Same token-bucket math as the in-memory store; `bucket4j-redis` CAS so replicas share 10/min verify and 30/min download. Fail-closes with 503 if Redis is down. |
+| Rate Limiting            | Bucket4j + Lettuce Redis                | 8.10.1      | Same token-bucket math as the in-memory store; `bucket4j-redis` CAS so replicas share 10/min verify, 30/min download, and 60/min discovery. Fail-closes with 503 if Redis is down. |
 | Persistence (scaffolded) | Spring Data JPA + Hibernate + H2 / Postgres | —        | Standard; H2 for fast local dev, Postgres for production durability/audit. Currently unused. |
 | Steam Integration        | Spring RestClient + Steam Web API       | —           | `SteamService` calls `IPlayerService/GetOwnedGames` via RestClient. steam-condenser was unused and has been removed. |
 | Build                    | Maven + Spring Boot Maven Plugin        | —           | Universal, works in restricted environments; explicit Java 21 compiler config. |
@@ -521,7 +521,7 @@ Numbered records of the decisions that are already true on `main` live in [`docs
 | **Stateless crypto licenses instead of server-side sessions or DB rows** | Simple horizontal scaling; client carries the proof; server only needs the master key. | Revocation, usage analytics, and "one active license per owner" policies require future persistence layer. |
 | **Two-phase download (encrypted license + short JWT)** with explicit claim cross-check in `DownloadController` | Strong defense-in-depth against token replay and cross-pet attacks. | Extra round-trip and client complexity; JWT is only useful for the download handshake. |
 | **HMAC-signed URLs rather than direct S3 presigned URLs or serving bytes** | Decouples storage backend; edge calls `GET /api/bundles/{pet}/redeem` for one-time + IP-bound grants on the jti foundation (`deploy/cdn/edge-redeem.js`; ADR 0063). | Requires associating the edge worker (or this backend as proxy) that forwards the keeper address; grant store down → fail closed. |
-| **Redis Bucket4j + Lettuce (`rate-limit.backend=redis`)** | Shared per-IP verify/download buckets across replicas; idle keys expire after the refill window. | Redis is now a runtime dependency. Unreachable Redis fail-closes (503) instead of lifting the limit. `memory` is tests / single-process only. |
+| **Redis Bucket4j + Lettuce (`rate-limit.backend=redis`)** | Shared per-IP verify/download/discovery buckets across replicas; idle keys expire after the refill window. | Redis is now a runtime dependency. Unreachable Redis fail-closes (503) instead of lifting the limit. `memory` is tests / single-process only. |
 | **Flat Map verify body + provider-owned records** (`OwnershipProvider.verify(Map)` then `XxxVerifyRequest.from(map)`) | One `POST /{provider}` and a drop-in SPI; each service reads typed fields instead of scattered `request.get`. | Wire/OpenAPI still describe a generic string map; records are an internal parse, not a new JSON shape. |
 | **Synchronous external calls during verify** | Simple code, easy to understand and debug. | Latency and partial failure modes (one provider slow → whole request slow). No circuit breaker today. |
 | **H2 + show-sql in default/`dev`; Postgres + Redis + no Microsoft dev-mode in `staging`/`prod`** | Local `mvn` and tests stay fast; `prod` is an explicit fail-hard shape. | Forgetting `SPRING_PROFILES_ACTIVE=prod` on a cluster would still boot the H2 default — the k8s ConfigMap sets `prod`. |
@@ -549,7 +549,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 - ~~Rate-limit buckets are in-memory only~~ → Redis-backed Bucket4j (Lettuce).
 - ~~Distributed jti blacklist~~ → Redis `RevocationIndex` (deny-list after Postgres revoke). Redis-down validate falls back to the ledger.
 - ~~`X-Forwarded-For` is trusted unconditionally (spoofing risk if not behind a trusted proxy).~~ → Fail-closed `trusted-proxies.cidrs` ([ADR 0067](adr/0067-trusted-proxy-client-address.md)).
-- No authentication or rate limiting on some discovery endpoints in practice (all routes under `/api/verify` and `/api/pets` are public).
+- ~~No authentication or rate limiting on some discovery endpoints in practice (all routes under `/api/verify` and `/api/pets` are public).~~ → `/api/pets` discovery is rate-limited (60/min, fail-closed; [ADR 0068](adr/0068-discovery-rate-limit.md)). Routes remain unauthenticated. `/api/bundles/**` catalog list is still unlimited.
 - ~~**No tests, no contract tests against the external providers**~~ → **Basic unit tests added** for Steam, Microsoft, NFT, Itch, and Epic. Integration-style HTTP mocking is in place for Steam, Microsoft, Itch, and Epic.
 - ~~Default license key present in `application.yml`**~~ → **Completed**. The application now fails fast at startup if the committed default key is used (except under the 'test' profile). The fallback default was removed from `application.yml`.
 
@@ -562,7 +562,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 ### Security Considerations
 - **Good foundations**: AEAD encryption, short-lived tokens, claim binding, startup secret hygiene, no secrets in JWT bodies.
 - **Attack surface**: Public verify endpoints are the primary target. A compromised master key is catastrophic (full license forgery). CDN signature key compromise allows bundle theft for 15 min windows.
-- **Missing controls**: Real ownership verifiers, hardware binding, replay/revocation store, WAF in front of rate limiter, signed requests for machine clients. (Secret rotation / HSM story → [ADR 0065](adr/0065-secret-rotation-cadence-and-hsm.md). Input length/charset on provider verify fields → [ADR 0066](adr/0066-provider-verify-field-bounds.md). Trusted-proxy XFF → [ADR 0067](adr/0067-trusted-proxy-client-address.md).)
+- **Missing controls**: Real ownership verifiers, hardware binding, replay/revocation store, WAF in front of rate limiter, signed requests for machine clients, `/api/bundles/**` discovery rate limit. (Secret rotation / HSM story → [ADR 0065](adr/0065-secret-rotation-cadence-and-hsm.md). Input length/charset on provider verify fields → [ADR 0066](adr/0066-provider-verify-field-bounds.md). Trusted-proxy XFF → [ADR 0067](adr/0067-trusted-proxy-client-address.md). `/api/pets` discovery rate limit → [ADR 0068](adr/0068-discovery-rate-limit.md).)
 - **Client trust model**: The desktop app must be considered semi-trusted for license decryption (the Python client is expected to hold the same `LICENSE_SECRET_KEY`). The architecture comment "never trust the desktop client" refers to not letting the client *generate* licenses.
 
 ### Extensibility & Future Refactoring Areas

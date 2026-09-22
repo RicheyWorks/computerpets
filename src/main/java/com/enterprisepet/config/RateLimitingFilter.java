@@ -17,16 +17,18 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Per-IP token-bucket rate limiter for sensitive endpoints. Each protected route has
+ * Per-IP token-bucket rate limiter for public API surfaces. Each protected route has
  * its own (capacity, refill period) tuple; an IP exceeding the bucket gets
  * {@code 429 Too Many Requests} with a {@code Retry-After} header and a
  * {@code application/problem+json} body.
  *
  * <p>Default store is Redis ({@code bucket4j-redis} + Lettuce) so replicas share
- * the same 10/min verify and 30/min download budgets. If Redis is unreachable
- * the filter fail-closes with {@code 503 Service Unavailable} and {@code Retry-After}
- * — it does not fall back to a per-instance memory bucket, which would silently
- * lift the shared limit.
+ * the same 10/min verify, 30/min download, and 60/min discovery budgets. If Redis
+ * is unreachable the filter fail-closes with {@code 503 Service Unavailable} and
+ * {@code Retry-After} — it does not fall back to a per-instance memory bucket,
+ * which would silently lift the shared limit.
+ *
+ * <p>Client identity is {@link ClientAddress} (trusted-proxy CIDRs only; ADR 0067).
  */
 @Component
 public class RateLimitingFilter extends OncePerRequestFilter {
@@ -34,12 +36,14 @@ public class RateLimitingFilter extends OncePerRequestFilter {
     private static final Logger log = LoggerFactory.getLogger(RateLimitingFilter.class);
 
     /**
-     * Buckets are namespaced by {@code remoteAddr + "|" + rule.bucketKey}.
+     * Buckets are namespaced by {@code clientId + "|" + rule.bucketKey}.
      * Capacity is generous — these limits are abuse-prevention, not metering.
+     * Discovery uses prefix {@code /api/pets} (covers list, by-rarity, and detail).
      */
     static final List<Rule> RULES = List.of(
-        new Rule("/api/verify/",   "verify",   10, Duration.ofMinutes(1)),
-        new Rule("/api/download/", "download", 30, Duration.ofMinutes(1))
+        new Rule("/api/verify/",   "verify",    10, Duration.ofMinutes(1)),
+        new Rule("/api/download/", "download",  30, Duration.ofMinutes(1)),
+        new Rule("/api/pets",      "discovery", 60, Duration.ofMinutes(1))
     );
 
     private final RateLimitBackend backend;

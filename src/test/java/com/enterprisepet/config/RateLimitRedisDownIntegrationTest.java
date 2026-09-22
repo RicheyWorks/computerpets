@@ -18,7 +18,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * When backend=redis and Redis is unreachable, verify fail-closes with 503.
+ * When backend=redis and Redis is unreachable, rate-limited routes fail-close with 503.
  * Port 1 is never a Redis listener; Lettuce fails fast under the configured timeout.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -65,5 +65,19 @@ class RateLimitRedisDownIntegrationTest {
         assertThat(response.getBody().get("title")).isEqualTo("Service Unavailable");
         assertThat((String) response.getBody().get("detail")).contains("Rate limiter unavailable");
         assertThat(response.getBody().get("retryAfterSeconds")).isEqualTo(5);
+    }
+
+    @Test
+    @DisplayName("Redis down does not lift the limit — discovery returns 503 problem+json")
+    void redisDown_discoveryIs503() {
+        ResponseEntity<Map> response = restTemplate.getForEntity("/api/pets", Map.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
+        assertThat(response.getHeaders().getFirst(HttpHeaders.RETRY_AFTER)).isEqualTo("5");
+        assertThat(response.getHeaders().getContentType()).isNotNull();
+        assertThat(response.getHeaders().getContentType().isCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON)).isTrue();
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().get("status")).isEqualTo(503);
+        assertThat((String) response.getBody().get("detail")).contains("Rate limiter unavailable");
     }
 }

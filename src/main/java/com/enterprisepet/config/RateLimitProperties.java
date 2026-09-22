@@ -6,7 +6,8 @@ import java.time.Duration;
 
 /**
  * Rate-limit store settings. Default backend is Redis so multiple app
- * instances share the same per-IP verify (10/min) and download (30/min) buckets.
+ * instances share the same per-IP verify (10/min), download (30/min), and
+ * discovery (60/min on {@code /api/pets}) buckets.
  *
  * <p>{@code memory} is for automated tests and single-process local runs only.
  * It is not a failover path: when {@code backend=redis} and Redis is unreachable
