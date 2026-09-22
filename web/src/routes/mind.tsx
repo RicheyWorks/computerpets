@@ -6,6 +6,7 @@ import { describeBinding, describeKeyKept, saveMindSettings } from "@/lib/ai/set
 import { refreshMindSettings, useMindSettings } from "@/lib/ai/use-mind";
 import { LIVING_KINDS } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
+import { talkBody } from "@/lib/pets/talk-post";
 import type { MindBinding, MindSettings, VoiceKind } from "@/lib/ai/types";
 
 export const Route = createFileRoute("/mind")({
@@ -80,7 +81,7 @@ function MindPage() {
     try {
       const kind = LIVING_KINDS.find((k) => k.key === petKey) ?? LIVING_KINDS[0]!;
       const res = await converseWithPet({
-        data: {
+        data: talkBody({
           message: "Hello. Who are you?",
           hunger: 70,
           mood: 72,
@@ -90,7 +91,7 @@ function MindPage() {
           speak: false,
           mind: petBind,
           voice: "none",
-        },
+        }),
       });
       setTestLine(`${res.source}: ${res.text}`);
     } catch {
@@ -159,17 +160,19 @@ function MindPage() {
             />
           </Field>
           {selected.needsKey ? (
-            <Field label="API key">
-              <input
-                type="password"
-                autoComplete="off"
-                value={draft.default.apiKey ?? ""}
-                onChange={(e) => setDefault({ apiKey: e.target.value })}
-                placeholder={selected.envKey ? `or ${selected.envKey} on the server` : "optional"}
-                className="h-11 w-full rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm"
-              />
-            </Field>
-            <p className="text-sm text-muted">{describeKeyKept(live.keyKept)}</p>
+            <>
+              <Field label="API key">
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={draft.default.apiKey ?? ""}
+                  onChange={(e) => setDefault({ apiKey: e.target.value })}
+                  placeholder={selected.envKey ? `or ${selected.envKey} on the server` : "optional"}
+                  className="h-11 w-full rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm"
+                />
+              </Field>
+              <p className="text-sm text-muted">{describeKeyKept(live.keyKept)}</p>
+            </>
           ) : (
             <p className="text-sm text-muted">No key. This mind lives here.</p>
           )}

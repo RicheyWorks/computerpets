@@ -24,6 +24,7 @@ The keeper card shows one line: `Listening · {name}`.
 ## Consequences
 
 - `/mind` can still show a cloud assignment the guest card will not claim. The card is who answers. The settings page is what the keeper asked for.
+- Desk talk posts plugin, model, and base URL. It does not post the key. [0021](0021-desk-talk-does-not-send-the-key.md).
 - A failed cloud call still falls back to house lines for that sentence. The card names the plugin that can be asked, not a painted success.
 - DirectX 12 / Vulkan is still open. Desktop presence (no silent file read, no keylogger, no secret capture) is still open. This line is not either of those.
 - The overlay no longer leaves the plugin key in plain text in `mind.json`. [0018](0018-mind-key-is-not-plain-text.md). The desk `/mind` key is not stored in the browser. [0020](0020-desk-mind-key-is-not-in-the-browser.md).
