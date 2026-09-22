@@ -318,3 +318,67 @@ describe("overlay sibling plugin calls keep the key in a header", () => {
     }
   });
 });
+
+describe("overlay drops a pasted secret model before the direct call", () => {
+  const TOKEN = "sk-test-PASTEDKEY0123456789";
+  const OPAQUE = "AbCdEfGh1234567890IjKlMnOp1234567890";
+
+  it("does not store or send a secret model, and keeps a normal model id", async () => {
+    const stored = [];
+    const calls = [];
+    const window = {
+      localStorage: {
+        getItem: () => null,
+        setItem: (_key, value) => {
+          stored.push(String(value));
+        },
+        removeItem: () => {},
+      },
+      sessionStorage: {
+        getItem: () => null,
+        setItem: () => {},
+        removeItem: () => {},
+      },
+      URL,
+      URLSearchParams,
+      fetch: async (url, init) => {
+        calls.push({ url: String(url), init });
+        return {
+          ok: true,
+          json: async () => ({ candidates: [{ content: { parts: [{ text: "gemini line" }] } }] }),
+        };
+      },
+    };
+    window.window = window;
+    vm.runInContext(MIND_SRC, vm.createContext(window));
+    await window.PetMind.save({
+      default: {
+        plugin: "google",
+        apiKey: SECRET,
+        model: TOKEN,
+        baseUrl: "https://example.test/v1beta",
+      },
+      voice: "browser",
+      pets: {
+        red_panda: { plugin: "openai", model: `key=${OPAQUE}` },
+        moth: { plugin: "anthropic", model: "claude-sonnet-4-5" },
+      },
+    });
+    const copy = stored.join("\n");
+    assert.equal(copy.includes(TOKEN), false);
+    assert.equal(copy.includes(OPAQUE), false);
+    assert.equal(copy.includes("claude-sonnet-4-5"), true);
+    const reply = await window.PetMind.run(ctx("budgie"));
+    assert.equal(calls.length, 1);
+    const url = calls[0].url;
+    assert.equal(url.includes(TOKEN), false);
+    assert.equal(url.includes(OPAQUE), false);
+    assert.equal(new URL(url).pathname, "/v1beta/models/gemini-2.5-flash:generateContent");
+    assert.equal(JSON.stringify(calls[0].init.body).includes(TOKEN), false);
+    assert.equal(reply.source, "google");
+    const loaded = window.PetMind.load();
+    assert.equal(loaded.default.model, "");
+    assert.equal(loaded.pets.moth.model, "claude-sonnet-4-5");
+    assert.equal(loaded.pets.red_panda.model, "");
+  });
+});

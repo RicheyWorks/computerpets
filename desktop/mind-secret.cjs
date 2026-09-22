@@ -183,12 +183,45 @@ function scrubSecretQueryString(raw) {
   return after === before ? trimmed : after;
 }
 
+/**
+ * True when a model field is a pasted secret, not a model id.
+ * `sk-…`, a `key=` / `api_key=` assignment, query-like junk, and a long token count.
+ * `gemini-2.5-flash`, `gpt-4o`, `claude-sonnet-4-5`, and a slash model path do not.
+ */
+function isSecretModel(raw) {
+  const value = String(raw || "").trim();
+  if (!value) return false;
+  if (/[?&#]/.test(value) || /%(?:3[DdFf]|26)/i.test(value)) return true;
+  const decoded = value.replace(/%3D/gi, "=").replace(/%3F/gi, "?").replace(/%26/gi, "&");
+  const assigned = new RegExp(`(^|[^A-Za-z0-9_])(?:${secretNameSource()})=`, "i");
+  if (assigned.test(decoded)) return true;
+  if (isPastedKeySegment(value)) return true;
+  const parts = value.split("/");
+  for (let i = 0; i < parts.length; i += 1) {
+    if (isPastedKeySegment(parts[i])) return true;
+  }
+  return false;
+}
+
+/**
+ * Drop a pasted secret in the model field.
+ * A normal model id is returned trimmed.
+ * A secret becomes `fallback`, or empty when the caller is about to store.
+ */
+function scrubSecretModel(raw, fallback) {
+  const fb = arguments.length > 1 && fallback != null ? String(fallback) : "";
+  const value = String(raw || "").trim();
+  if (!value || isSecretModel(value)) return fb;
+  return value;
+}
+
 function baseUrlsNeedRewrite(raw) {
   if (!raw || typeof raw !== "object") return false;
   let dirty = false;
   const seen = (row) => {
-    if (!row || typeof row !== "object" || typeof row.baseUrl !== "string") return;
-    if (scrubSecretQueryString(row.baseUrl) !== row.baseUrl.trim()) dirty = true;
+    if (!row || typeof row !== "object") return;
+    if (typeof row.baseUrl === "string" && scrubSecretQueryString(row.baseUrl) !== row.baseUrl.trim()) dirty = true;
+    if (typeof row.model === "string" && isSecretModel(row.model)) dirty = true;
   };
   seen(raw.default);
   const pets = raw.pets && typeof raw.pets === "object" ? raw.pets : null;
@@ -222,7 +255,11 @@ function bindingPrefs(raw) {
   const next = { plugin: "local" };
   if (!raw || typeof raw !== "object") return next;
   if (typeof raw.plugin === "string" && raw.plugin.trim()) next.plugin = raw.plugin.trim().slice(0, 64);
-  if (typeof raw.model === "string") next.model = raw.model.slice(0, 200);
+  if (typeof raw.model === "string") {
+    const model = scrubSecretModel(raw.model);
+    if (model) next.model = model.slice(0, 200);
+    else if (raw.model.trim()) next.model = "";
+  }
   if (typeof raw.baseUrl === "string") next.baseUrl = scrubSecretQueryString(raw.baseUrl).slice(0, 500);
   return next;
 }

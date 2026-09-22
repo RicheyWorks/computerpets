@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { scrubSecretQueryString } from "../ai/secret-query.mjs";
+import { scrubSecretModel, scrubSecretQueryString } from "../ai/secret-query.mjs";
 import type { MindBinding, VoiceKind } from "../ai/types";
 
 /**
@@ -20,6 +20,11 @@ function withoutClientKey(raw: unknown): unknown {
   if (mind && typeof mind === "object" && !Array.isArray(mind)) {
     const mindCopy = { ...(mind as Record<string, unknown>) };
     delete mindCopy.apiKey;
+    if (typeof mindCopy.model === "string") {
+      const model = scrubSecretModel(mindCopy.model);
+      if (model) mindCopy.model = model;
+      else delete mindCopy.model;
+    }
     if (typeof mindCopy.baseUrl === "string") mindCopy.baseUrl = scrubSecretQueryString(mindCopy.baseUrl);
     copy.mind = mindCopy;
   }
@@ -53,7 +58,7 @@ export function mindForHouse(binding: MindBinding | null | undefined): {
   baseUrl?: string;
 } {
   const plugin = binding?.plugin?.trim() || "local";
-  const model = binding?.model?.trim();
+  const model = scrubSecretModel(binding?.model);
   const baseUrl = binding?.baseUrl?.trim();
   const mind: { plugin: string; model?: string; baseUrl?: string } = { plugin };
   if (model) mind.model = model;
@@ -80,7 +85,8 @@ export type TalkPostInput = {
 /**
  * JSON body for house talk. There is no query string on the post.
  * `apiKey` is not copied onto the body or into `mind`.
- * A pasted secret query on the base URL is dropped before the post. The rest of the body stays.
+ * A pasted secret query on the base URL is dropped before the post.
+ * A pasted secret in the model field is dropped too. A normal model id stays. The rest of the body stays.
  */
 export function talkBody(input: TalkPostInput) {
   return {
