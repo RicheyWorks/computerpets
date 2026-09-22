@@ -1,5 +1,12 @@
 /** Keeper-card desk controls. Same truth as the web card. Persist on the machine. */
 (function (root) {
+  if (!root.PetWeatherAreas && typeof require === "function") {
+    try {
+      root.PetWeatherAreas = require("./weather-areas.js");
+    } catch {
+      /* the overlay script tag loads weather-areas.js first */
+    }
+  }
   const STORE = "computerpets.card.v1";
   const MAX_LINES = 12;
   const LINE_CHARS = 140;
@@ -363,20 +370,30 @@
     return { cmd: "sleep", pose: "sleep" };
   }
 
-  function load() {
+  function readRaw() {
     if (root.desk && root.desk.cardGet) {
       try {
-        return parseCard(root.desk.cardGet());
+        return root.desk.cardGet();
       } catch {
         /* fall through */
       }
     }
     try {
-      const raw = JSON.parse(root.localStorage.getItem(STORE) || "null");
-      return parseCard(raw);
+      if (!root.localStorage) return null;
+      return JSON.parse(root.localStorage.getItem(STORE) || "null");
     } catch {
-      return blankCard();
+      return null;
     }
+  }
+
+  function load() {
+    const raw = readRaw();
+    const card = parseCard(raw);
+    const areas = root.PetWeatherAreas;
+    if (raw && areas && typeof areas.storedLivePinNeedsFuzz === "function" && areas.storedLivePinNeedsFuzz(raw)) {
+      return save(card);
+    }
+    return card;
   }
 
   function save(next) {

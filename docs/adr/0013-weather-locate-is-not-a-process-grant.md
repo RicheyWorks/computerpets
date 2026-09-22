@@ -25,9 +25,9 @@ This slice binds the grant to the weather control. It does not start DirectX 12 
 ## Consequences
 
 - Electron cannot revoke a geolocation grant Chromium already cached in the renderer. The check handler denies the next status query once the locate closes. A reload is the only flush of that cache. This slice does not pretend otherwise.
-- A browser origin grant can outlive the click. The next click may not show a prompt. It is still a click. There is no background watcher.
+- A browser origin grant can outlive the click. [0016](0016-weather-locate-waits-for-an-in-app-yes.md) asks in the app before the locate. After that yes, the browser may still not show a prompt. There is no background watcher.
 - The weather control does not ask an IP place service when the fix fails. [0014](0014-weather-does-not-ask-an-ip-place.md) drops that lookup. A saved area stays.
-- A place the keeper already typed is kept. [0015](0015-weather-locate-sends-a-rounded-place.md) does not start a new locate while that area is saved. A live fix is rounded before it leaves. That is the saved area, not a live location watch.
+- A place the keeper already typed is kept. [0015](0015-weather-locate-sends-a-rounded-place.md) does not start a new locate while that area is saved. A live fix is rounded before it leaves. [0016](0016-weather-locate-waits-for-an-in-app-yes.md) asks in the app before a live locate. That is the saved area, not a live location watch.
 - License `hwid` still reads machine-id or MachineGuid. That is the license door, not presence.
 - The keeper's plugin key still sits in `mind.json`. It stays off the card.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.

@@ -113,8 +113,9 @@
   /**
    * One weather-button fix. Asks once, then clears the session grant.
    * maximumAge is 0, so a cached position is not a silent re-read.
-   * A cached origin grant can still satisfy the prompt. This cannot revoke it.
-   * Callers use this only from the weather control, and only when no typed area is saved.
+   * A cached origin grant can still satisfy the call after the keeper says yes.
+   * This cannot revoke that grant. Electron 35 ResetPermission is empty.
+   * Callers use this only after the in-app Send yes, and only when no typed area is saved.
    */
   function readWeatherHere(geo, hooks) {
     let pending = Promise.resolve();

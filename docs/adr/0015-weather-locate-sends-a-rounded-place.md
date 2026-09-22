@@ -26,11 +26,12 @@ This slice tells the keeper what the click does, rounds a live fix before it lea
 ## Consequences
 
 - Electron 35 cannot revoke a geolocation grant Chromium already cached in the renderer. A reload is the only flush of that cache. The check handler denies the next status query once the locate closes. During the armed window, a grant already cached in the renderer can still satisfy `getCurrentPosition` without a new prompt. This slice does not pretend otherwise.
-- A browser origin grant can outlive the click. If no typed area is saved, the next use of the weather control may return a fix without a new prompt. The page does not call `getCurrentPosition` on load, on a timer, or from a forecast refresh. There is no `watchPosition`.
+- A browser origin grant can outlive the click. If no typed area is saved, a later use could return a fix without a new browser prompt. [0016](0016-weather-locate-waits-for-an-in-app-yes.md) requires an in-app yes before that call. The cached grant can still skip the browser prompt after the yes. The page does not call `getCurrentPosition` on load, on a timer, or from a forecast refresh. There is no `watchPosition`.
 - Rounding to a tenth of a degree is about 11 km. It is not anonymity. Open-Meteo still receives a place. Any HTTPS request to that host, including a typed city lookup and a forecast of a saved area, shows the client address. The house does not ask the host to turn that address into a city.
-- A forecast of a place the keeper already saved still sends that place, rounded on the way out. That is the saved area, not a new live fix. A pin saved before this slice can still sit in `card.json` until a later locate overwrites it. The next forecast does not send the extra digits.
+- A forecast of a place the keeper already saved still sends that place, rounded on the way out. That is the saved area, not a new live fix. A pin saved before this slice could sit in `card.json` at full precision. [0016](0016-weather-locate-waits-for-an-in-app-yes.md) rounds that stored live pin on load. The next forecast does not send the extra digits.
 - Many desktop sessions have no GNSS fix. The button then says the computer did not share a place.
 - License `hwid` still reads machine-id or MachineGuid. That is the license door, not presence.
 - The keeper's plugin key still sits in `mind.json`. It stays off the card.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.
 - DirectX 12 / Vulkan is still open. This slice is not that engine.
+- [0016](0016-weather-locate-waits-for-an-in-app-yes.md) asks in the app before a live locate and rounds a stored live pin on load. The Chromium grant cache named here is unchanged. After that yes, a cached grant can still answer without a new browser prompt.

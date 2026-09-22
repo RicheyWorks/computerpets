@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const A = await import(join(root, "src/lib/pets/weather-areas.ts"));
+const Card = await import(join(root, "src/lib/pets/card.ts"));
 const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/weather-areas.js"));
 
 test("the house does not guess a city", () => {
@@ -39,9 +40,17 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.equal(A.TYPE_A_CITY, "type a city");
   assert.equal(A.HERE_FAIL, "this computer did not share a place");
   assert.equal(A.HERE_SEND, "this click sends a place to the forecast host.");
+  assert.equal(A.HERE_ASK, "send a place from this computer? a saved browser grant can answer without a new prompt. this house cannot revoke that grant.");
+  assert.equal(A.HERE_YES, "Send the place");
+  assert.equal(A.HERE_NO, "Don't send");
+  assert.equal(A.HERE_HELD, "the place was not sent");
   assert.equal(A.HERE_KEPT, "keeping the saved place");
   assert.equal(A.HERE_SENT, "a place was sent to the forecast host");
   assert.equal(Overlay.HERE_SEND, A.HERE_SEND);
+  assert.equal(Overlay.HERE_ASK, A.HERE_ASK);
+  assert.equal(Overlay.HERE_YES, A.HERE_YES);
+  assert.equal(Overlay.HERE_NO, A.HERE_NO);
+  assert.equal(Overlay.HERE_HELD, A.HERE_HELD);
   assert.equal(Overlay.HERE_KEPT, A.HERE_KEPT);
   assert.equal(Overlay.PLACE_STEP, 0.1);
   assert.deepEqual(A.sharePlace(47.60621, -122.33207), { lat: 47.6, lon: -122.3 });
@@ -69,6 +78,46 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.equal(A.locateChoice(both).locate, false);
   assert.equal(A.locateChoice(both).area?.name, "Portland");
   assert.equal(Overlay.locateChoice(both).locate, false);
+  assert.equal(A.locateGate(typed, true).act, "keep");
+  assert.equal(A.locateGate(hereOnly, false).act, "ask");
+  assert.equal(A.locateGate(hereOnly, "yes").act, "ask");
+  assert.equal(A.locateGate(A.blankAreas(), false).act, "ask");
+  assert.equal(A.locateGate(A.blankAreas(), true).act, "locate");
+  assert.equal(A.locateGate(both, true).act, "keep");
+  assert.equal(Overlay.locateGate(A.blankAreas(), false).act, "ask");
+  assert.equal(Overlay.locateGate(A.blankAreas(), true).act, "locate");
+  assert.equal(Overlay.locateGate(typed, true).act, "keep");
+  const preciseHere = {
+    weatherAreas: [{ id: "here", name: "This computer", query: "this computer", lat: 47.60621, lon: -122.33207 }],
+    currentAreaId: "here",
+  };
+  assert.equal(A.storedLivePinNeedsFuzz(preciseHere), true);
+  assert.equal(Overlay.storedLivePinNeedsFuzz(preciseHere), true);
+  const fuzzed = A.parseAreas(preciseHere);
+  assert.equal(fuzzed.areas[0].id, "here");
+  assert.equal(fuzzed.areas[0].query, "this computer");
+  assert.deepEqual({ lat: fuzzed.areas[0].lat, lon: fuzzed.areas[0].lon }, { lat: 47.6, lon: -122.3 });
+  assert.deepEqual(
+    { lat: Overlay.parseAreas(preciseHere).areas[0].lat, lon: Overlay.parseAreas(preciseHere).areas[0].lon },
+    { lat: 47.6, lon: -122.3 },
+  );
+  assert.equal(A.storedLivePinNeedsFuzz(A.toCardPatch(fuzzed)), false);
+  const queryHere = {
+    areas: [{ id: "a-old", name: "This computer", query: "this computer", lat: 40.7128, lon: -74.006 }],
+  };
+  assert.equal(A.storedLivePinNeedsFuzz(queryHere), true);
+  assert.deepEqual(
+    { lat: A.parseAreas(queryHere).areas[0].lat, lon: A.parseAreas(queryHere).areas[0].lon },
+    { lat: 40.7, lon: -74 },
+  );
+  const typedPrecise = {
+    weatherAreas: [{ id: "a-pdx", name: "Portland", query: "Portland", lat: 45.5231, lon: -122.6765 }],
+    currentAreaId: "a-pdx",
+  };
+  assert.equal(A.storedLivePinNeedsFuzz(typedPrecise), false);
+  assert.equal(A.parseAreas(typedPrecise).areas[0].lat, 45.5231);
+  assert.equal(A.parseAreas(typedPrecise).areas[0].lon, -122.6765);
+  assert.equal(A.storedLivePinNeedsFuzz({ weatherAreas: [{ id: "here", name: "This computer", query: "this computer", lat: 47.6, lon: -122.3 }] }), false);
   assert.equal("ipPlaceUrl" in A, false);
   assert.equal("parseIpPlace" in A, false);
   assert.equal("IP_PLACE_HOST" in A, false);
@@ -126,4 +175,39 @@ test("favorites star places and persist", () => {
   assert.deepEqual(house.favoriteIds, []);
   assert.equal(Overlay.FAVORITES_EMPTY, A.FAVORITES_EMPTY);
   assert.equal(Overlay.toggleFavorite(Overlay.blankAreas(), "x").favoriteIds.length, 0);
+});
+
+test("loading the desk card rounds a stored live pin and keeps a typed place", () => {
+  const mem = {};
+  const prev = globalThis.window;
+  globalThis.window = {
+    localStorage: {
+      getItem(k) {
+        return Object.prototype.hasOwnProperty.call(mem, k) ? mem[k] : null;
+      },
+      setItem(k, v) {
+        mem[k] = String(v);
+      },
+    },
+  };
+  mem[Card.CARD_STORE] = JSON.stringify({
+    weatherAreas: [{ id: "here", name: "This computer", query: "this computer", lat: 47.60621, lon: -122.33207 }],
+    currentAreaId: "here",
+  });
+  const card = Card.loadCard();
+  assert.equal(card.weatherAreas[0].lat, 47.6);
+  assert.equal(card.weatherAreas[0].lon, -122.3);
+  const saved = JSON.parse(mem[Card.CARD_STORE]);
+  assert.equal(saved.weatherAreas[0].lat, 47.6);
+  assert.equal(saved.weatherAreas[0].lon, -122.3);
+  mem[Card.CARD_STORE] = JSON.stringify({
+    weatherAreas: [{ id: "a-pdx", name: "Portland", query: "Portland", lat: 45.5231, lon: -122.6765 }],
+    currentAreaId: "a-pdx",
+  });
+  const before = mem[Card.CARD_STORE];
+  const typed = Card.loadCard();
+  assert.equal(typed.weatherAreas[0].lat, 45.5231);
+  assert.equal(mem[Card.CARD_STORE], before);
+  if (prev === undefined) delete globalThis.window;
+  else globalThis.window = prev;
 });

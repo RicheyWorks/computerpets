@@ -11,12 +11,16 @@ import {
   AREA_TRUTH,
   CANT_REACH as WEATHER_CANT_REACH,
   FAVORITES_EMPTY as WEATHER_FAVORITES_EMPTY,
+  HERE_ASK,
   HERE_FAIL,
+  HERE_HELD,
   HERE_KEPT,
+  HERE_NO,
   HERE_SEND,
   HERE_SENT,
+  HERE_YES,
   isFavorite,
-  locateChoice,
+  locateGate,
   NO_AREA,
   parseAreas,
   parseForecast,
@@ -271,6 +275,7 @@ export function DeskWeatherPlate({
   const [hits, setHits] = useState<WeatherArea[]>([]);
   const [looking, setLooking] = useState(false);
   const [hereLine, setHereLine] = useState("");
+  const [hereAsk, setHereAsk] = useState(false);
   const [lookLine, setLookLine] = useState("");
   const areas = useMemo(() => parseAreas(card), [card]);
   const area = currentArea(areas);
@@ -280,6 +285,10 @@ export function DeskWeatherPlate({
   function keepAreas(house: ReturnType<typeof parseAreas>) {
     setCard(writeCard(toCardPatch(house)));
   }
+
+  useEffect(() => {
+    setCard(loadCard());
+  }, []);
 
   useEffect(() => {
     const el = ref.current;
@@ -358,14 +367,29 @@ export function DeskWeatherPlate({
     }
   }
 
-  async function useHere() {
+  function useHere() {
     setHereLine("");
-    const choice = locateChoice(areas);
-    if (!choice.locate) {
+    const gate = locateGate(areas, false);
+    if (gate.act === "keep") {
+      setHereAsk(false);
       setHereLine(HERE_KEPT);
-      if (!area || area.id !== choice.area.id) keepAreas(pickArea(areas, choice.area.id));
+      if (!area || area.id !== gate.area.id) keepAreas(pickArea(areas, gate.area.id));
       return;
     }
+    setHereAsk(true);
+  }
+
+  async function confirmHere() {
+    const gate = locateGate(areas, true);
+    if (gate.act !== "locate") {
+      setHereAsk(false);
+      if (gate.act === "keep") {
+        setHereLine(HERE_KEPT);
+        if (!area || area.id !== gate.area.id) keepAreas(pickArea(areas, gate.area.id));
+      }
+      return;
+    }
+    setHereAsk(false);
     function keep(next: WeatherArea) {
       add(next);
       setHereLine(HERE_SENT);
@@ -403,6 +427,11 @@ export function DeskWeatherPlate({
     } catch {
       keep(unnamed(place.lat, place.lon));
     }
+  }
+
+  function declineHere() {
+    setHereAsk(false);
+    setHereLine(HERE_HELD);
   }
 
   function add(hit: WeatherArea) {
@@ -550,12 +579,23 @@ export function DeskWeatherPlate({
               ) : lookLine ? (
                 <p className="mt-2 text-subtle">{lookLine}</p>
               ) : null}
-              <button type="button" className="mt-2" aria-describedby="weather-here-send" onClick={() => void useHere()}>
+              <button type="button" className="mt-2" aria-describedby="weather-here-send" onClick={() => useHere()}>
                 Use this computer&apos;s location
               </button>
               <p id="weather-here-send" className="mt-1 text-[10px] uppercase tracking-[0.16em] text-subtle">
                 {HERE_SEND}
               </p>
+              {hereAsk ? (
+                <div id="weather-here-ask" className="mt-2 flex flex-wrap items-center gap-2">
+                  <p className="basis-full text-[10px] uppercase tracking-[0.16em] text-subtle">{HERE_ASK}</p>
+                  <button type="button" onClick={() => void confirmHere()}>
+                    {HERE_YES}
+                  </button>
+                  <button type="button" onClick={declineHere}>
+                    {HERE_NO}
+                  </button>
+                </div>
+              ) : null}
               {hereLine ? <p className="mt-1 text-subtle">{hereLine}</p> : null}
             </>
           )}

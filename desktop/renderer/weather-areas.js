@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A stored live pin is rounded on load. */
 (function (root) {
   const NO_AREA = "no area set";
   const AREA_LABEL = "Weather area";
@@ -7,6 +7,10 @@
   const TYPE_A_CITY = "type a city";
   const HERE_FAIL = "this computer did not share a place";
   const HERE_SEND = "this click sends a place to the forecast host.";
+  const HERE_ASK = "send a place from this computer? a saved browser grant can answer without a new prompt. this house cannot revoke that grant.";
+  const HERE_YES = "Send the place";
+  const HERE_NO = "Don't send";
+  const HERE_HELD = "the place was not sent";
   const HERE_KEPT = "keeping the saved place";
   const HERE_SENT = "a place was sent to the forecast host";
   // A tenth of a degree is about 11 km. Rounding is not anonymity.
@@ -56,7 +60,13 @@
     const name = clipName(raw.name) || query;
     if (!name) return null;
     const id = typeof raw.id === "string" && raw.id ? raw.id : `a-${hash(`${name}|${lat}|${lon}`)}`;
-    return { id, name, query: query || name, lat, lon };
+    const area = { id, name, query: query || name, lat, lon };
+    if (!isLiveFix(area)) return area;
+    const place = sharePlace(lat, lon);
+    if (!place) return area;
+    area.lat = place.lat;
+    area.lon = place.lon;
+    return area;
   }
 
   function parseAreas(raw) {
@@ -197,6 +207,35 @@
     return { locate: true, area: null };
   }
 
+  /**
+   * A live locate needs a fresh in-app yes before geolocation is armed.
+   * A saved typed area does not. A cached origin grant is not that yes.
+   * confirmed must be the boolean true from the keeper's Send button.
+   */
+  function locateGate(areas, confirmed) {
+    const choice = locateChoice(areas);
+    if (!choice.locate) return { act: "keep", area: choice.area };
+    if (confirmed === true) return { act: "locate", area: null };
+    return { act: "ask", area: null };
+  }
+
+  /** A stored live pin still has digits finer than a tenth of a degree. */
+  function storedLivePinNeedsFuzz(raw) {
+    if (!raw || typeof raw !== "object") return false;
+    const list = Array.isArray(raw.weatherAreas) ? raw.weatherAreas : Array.isArray(raw.areas) ? raw.areas : [];
+    for (const row of list) {
+      if (!row || typeof row !== "object") continue;
+      const query = clipName(row.query || "");
+      if (row.id !== "here" && query !== "this computer") continue;
+      const lat = num(row.lat);
+      const lon = num(row.lon);
+      const place = sharePlace(lat, lon);
+      if (!place) continue;
+      if (place.lat !== lat || place.lon !== lon) return true;
+    }
+    return false;
+  }
+
   function geocodeUrl(query) {
     const q = clipName(query);
     if (!q) return "";
@@ -298,6 +337,10 @@
     TYPE_A_CITY,
     HERE_FAIL,
     HERE_SEND,
+    HERE_ASK,
+    HERE_YES,
+    HERE_NO,
+    HERE_HELD,
     HERE_KEPT,
     HERE_SENT,
     PLACE_STEP,
@@ -326,6 +369,8 @@
     sharePlace,
     typedArea,
     locateChoice,
+    locateGate,
+    storedLivePinNeedsFuzz,
     reverseUrl,
     parseReverse,
     forecastUrl,

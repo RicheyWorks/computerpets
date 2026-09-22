@@ -1139,7 +1139,8 @@ def _desk_rows() -> list[Affordance]:
                 "The enum pipe carries a shell bit, not a class name, title, or path. "
                 "A focused field keeps its keys. A key outside that field is not logged. "
                 "Escape may dismiss a menu. The key text is not stored. "
-                "A weather locate rounds a live fix. A saved typed area does not start a new locate. "
+                "A live locate waits for an in-app yes. A stored live pin is rounded on load. "
+                "A saved typed area does not start a new locate. "
                 "The blotter does not send a place."
             ),
         ),
