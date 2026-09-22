@@ -706,6 +706,12 @@ function talkLineInView() {
   return (el.textContent || "").indexOf(line) !== -1;
 }
 
+function talkShown() {
+  const el = document.getElementById("hud-talk-net");
+  if (!el || el.hidden || !talkAsked) return "";
+  return el.textContent || "";
+}
+
 function flushTalk() {
   if (!pendingTalk) return;
   const M = window.PetMind;
@@ -723,6 +729,12 @@ function streamLineInView() {
   const line = M && M.streamHonesty ? M.streamHonesty(M.parseMusic(card.music)) : "";
   if (!line) return false;
   return (el.textContent || "").indexOf(line) !== -1;
+}
+
+function streamShown() {
+  const el = document.getElementById("hud-stream-net");
+  if (!el || el.hidden || !streamAsked) return "";
+  return el.textContent || "";
 }
 
 function sitMusic() {
@@ -743,8 +755,34 @@ function sitMusic() {
     return;
   }
   const remote = music.plugin === "radio" && /^https?:/i.test(src);
-  if (remote && (!M.streamMaySend || !M.streamMaySend(music, streamLineInView()))) {
-    stop();
+  if (remote) {
+    const shown = streamShown();
+    if (!M.streamMaySend || !M.streamMaySend(music, streamLineInView())) {
+      stop();
+      return;
+    }
+    if (musicNode && musicNode.dataset.src === src) {
+      musicNode.volume = cardGuest().volume / 100;
+      return;
+    }
+    if (musicNode) {
+      musicNode.pause();
+      musicNode.src = "";
+    }
+    const opened = M.openStationStream
+      ? M.openStationStream(shown, music, src, (next) => new Audio(next))
+      : null;
+    if (!opened) {
+      stop();
+      return;
+    }
+    musicNode = opened;
+    musicNode.dataset.src = src;
+    musicNode.loop = false;
+    musicNode.volume = cardGuest().volume / 100;
+    void musicNode.play().catch(() => {
+      /* honest: stream may not land */
+    });
     return;
   }
   if (musicNode && musicNode.dataset.src === src) {
@@ -2640,7 +2678,7 @@ async function askMind(result) {
       energy: life.energy,
       message: undefined,
       fallback,
-      lineInView: talkLineInView(),
+      shown: talkShown(),
     });
     say(reply.text);
   } catch {

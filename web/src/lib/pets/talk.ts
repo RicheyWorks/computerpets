@@ -6,7 +6,7 @@ import { localMind, runMind } from "@/lib/ai/complete";
 import { speakWithPlugin } from "@/lib/ai/voice";
 import { bindTalkSpend } from "./talk-spend";
 import { parseTalkBody } from "./talk-post";
-import { talkHonesty, talkMaySend, voiceHonesty, voiceMaySend } from "./talk-net";
+import { readTalk, readVoice } from "./talk-net";
 
 export type TalkResult = {
   text: string;
@@ -42,13 +42,18 @@ export const converseWithPet = createServerFn({ method: "POST" })
       hygiene: stats.hygiene,
       message: data.message,
     };
-    const reply = talkMaySend(spend.mind, data.talkLine === talkHonesty(spend.mind))
-      ? await runMind(turn, spend.mind)
-      : localMind(turn);
+    const reply = await readTalk(
+      data.talkLine,
+      spend.mind,
+      () => runMind(turn, spend.mind),
+      localMind(turn),
+    );
 
     const audio =
-      data.speak === false || !voiceMaySend(spend.voice, data.voiceLine === voiceHonesty(spend.voice))
+      data.speak === false
         ? undefined
-        : await speakWithPlugin(reply.text, spend.voice, kind.voice, spend.voiceKey);
+        : await readVoice(data.voiceLine, spend.voice, () =>
+            speakWithPlugin(reply.text, spend.voice, kind.voice, spend.voiceKey),
+          );
     return { text: reply.text, audio, source: reply.source };
   });

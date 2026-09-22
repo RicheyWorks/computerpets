@@ -13,6 +13,7 @@ const talkSrc = readFileSync(join(root, "src/lib/pets/talk.ts"), "utf8");
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 const mindPage = readFileSync(join(root, "src/routes/mind.tsx"), "utf8");
 const petSrc = readFileSync(join(repo, "desktop/renderer/pet.js"), "utf8");
+const mindSrc = readFileSync(join(repo, "desktop/renderer/mind.js"), "utf8");
 
 test("cloud talk names the host with the shared sentence", () => {
   const xai = N.talkHonesty({ plugin: "xai" });
@@ -56,15 +57,80 @@ test("cloud voice names api.x.ai and api.openai.com and leaves speechSynthesis l
   assert.equal(N.VOICE_URLS.openai, "https://api.openai.com/v1/audio/speech");
 });
 
+test("a missing host line does not open a remote talk or a cloud voice", async () => {
+  let talks = 0;
+  let voices = 0;
+  const xai = { plugin: "xai" };
+  const local = { text: "house", source: "local" };
+  const held = await N.readTalk("", xai, async () => {
+    talks += 1;
+    return { text: "cloud", source: "xai" };
+  }, local);
+  assert.equal(talks, 0);
+  assert.equal(held.source, "local");
+  const wrongHost = await N.readTalk(N.talkHonesty({ plugin: "openai" }), xai, async () => {
+    talks += 1;
+    return { text: "cloud", source: "xai" };
+  }, local);
+  assert.equal(talks, 0);
+  assert.equal(wrongHost.text, "house");
+  assert.equal(N.talkMayLeave(N.voiceHonesty("xai"), xai), false);
+  const sent = await N.readTalk(N.talkHonesty(xai), xai, async () => {
+    talks += 1;
+    return { text: "cloud", source: "xai" };
+  }, local);
+  assert.equal(talks, 1);
+  assert.equal(sent.source, "xai");
+  const loop = await N.readTalk("", { plugin: "ollama", baseUrl: "http://127.0.0.1:11434" }, async () => {
+    talks += 1;
+    return { text: "here", source: "ollama" };
+  }, local);
+  assert.equal(talks, 2);
+  assert.equal(loop.source, "ollama");
+  const quiet = await N.readVoice("", "xai", async () => {
+    voices += 1;
+    return "data:audio";
+  });
+  assert.equal(voices, 0);
+  assert.equal(quiet, undefined);
+  const talkNotVoice = await N.readVoice(N.talkHonesty(xai), "xai", async () => {
+    voices += 1;
+    return "data:audio";
+  });
+  assert.equal(voices, 0);
+  assert.equal(talkNotVoice, undefined);
+  const openaiLine = await N.readVoice(N.voiceHonesty("openai"), "xai", async () => {
+    voices += 1;
+    return "data:audio";
+  });
+  assert.equal(voices, 0);
+  assert.equal(openaiLine, undefined);
+  const spoken = await N.readVoice(N.voiceHonesty("xai"), "xai", async () => {
+    voices += 1;
+    return "data:audio";
+  });
+  assert.equal(voices, 1);
+  assert.equal(spoken, "data:audio");
+  const browser = await N.readVoice("", "browser", async () => {
+    voices += 1;
+    return "nope";
+  });
+  assert.equal(browser, undefined);
+  assert.equal(voices, 1);
+  assert.equal(N.voiceMayLeave(N.voiceHonesty("openai"), "openai"), true);
+  assert.equal(N.voiceMayLeave("", "browser"), true);
+});
+
 test("the house calls the cloud only after the posted line matches", () => {
-  const talkAt = talkSrc.indexOf("talkMaySend(spend.mind");
-  const runAt = talkSrc.indexOf("await runMind");
-  const voiceAt = talkSrc.indexOf("voiceMaySend(spend.voice");
-  const speakAt = talkSrc.indexOf("await speakWithPlugin");
+  const talkAt = talkSrc.indexOf("await readTalk(");
+  const runAt = talkSrc.indexOf("() => runMind");
+  const voiceAt = talkSrc.indexOf("await readVoice(");
+  const speakAt = talkSrc.indexOf("speakWithPlugin(reply.text");
   assert.ok(talkAt > 0 && talkAt < runAt);
   assert.ok(voiceAt > 0 && voiceAt < speakAt);
-  assert.match(talkSrc, /data\.talkLine === talkHonesty/);
-  assert.match(talkSrc, /data\.voiceLine === voiceHonesty/);
+  assert.match(talkSrc, /data\.talkLine/);
+  assert.match(talkSrc, /data\.voiceLine/);
+  assert.doesNotMatch(talkSrc, /can't reach/);
   assert.match(roomSrc, /const \[talkAsked, setTalkAsked\] = useState\(false\)/);
   assert.match(roomSrc, /id="hud-talk-net"/);
   assert.match(roomSrc, /id="hud-voice-net"/);
@@ -73,6 +139,14 @@ test("the house calls the cloud only after the posted line matches", () => {
   assert.doesNotMatch(beforeTalk, /converseWithPet\(/);
   assert.match(mindPage, /id="mind-talk-net"/);
   assert.match(mindPage, /if \(!pendingTest\.current\) return/);
+  const askAt = petSrc.indexOf("async function askMind");
+  const askBody = petSrc.slice(askAt, askAt + 800);
+  assert.match(askBody, /shown: talkShown\(\)/);
+  assert.doesNotMatch(askBody, /lineInView:/);
+  const runAtMind = mindSrc.indexOf("async function run");
+  const runBody = mindSrc.slice(runAtMind, mindSrc.indexOf("window.PetMind"));
+  assert.ok(runBody.indexOf("readTalk") < runBody.indexOf("fetch("));
+  assert.doesNotMatch(runBody, /lineInView === true/);
   const bootAt = petSrc.indexOf("window.PetRoster.loadHouseRoster");
   const bootBody = petSrc.slice(bootAt, petSrc.indexOf("bindGuiHarness"));
   assert.doesNotMatch(bootBody, /talkAsked = true/);

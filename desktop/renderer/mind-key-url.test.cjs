@@ -58,6 +58,11 @@ function ctx(species) {
   };
 }
 
+function painted(window, species) {
+  const bind = window.PetMind.binding(species);
+  return { ...ctx(species), shown: window.PetMind.talkHonesty(bind) };
+}
+
 function headerValue(init, name) {
   const headers = (init && init.headers) || {};
   const found = Object.keys(headers).find((key) => key.toLowerCase() === name.toLowerCase());
@@ -99,7 +104,7 @@ describe("overlay gemini key stays off the query", () => {
       voice: "browser",
       pets: {},
     });
-    const reply = await window.PetMind.run(ctx("red_panda"));
+    const reply = await window.PetMind.run(painted(window, "red_panda"));
     assert.equal(calls.length, 1);
     const { url, init } = calls[0];
     const parsed = new URL(url);
@@ -129,7 +134,7 @@ describe("overlay gemini key stays off the query", () => {
         },
       },
     });
-    const reply = await window.PetMind.run(ctx("red_panda"));
+    const reply = await window.PetMind.run(painted(window, "red_panda"));
     assert.equal(calls.length, 1);
     const { url, init } = calls[0];
     const parsed = new URL(url);
@@ -150,7 +155,7 @@ describe("overlay gemini key stays off the query", () => {
       voice: "browser",
       pets: {},
     });
-    await window.PetMind.run(ctx("moth"));
+    await window.PetMind.run(painted(window, "moth"));
     assert.equal(calls.length, 1);
     assert.equal(new URL(calls[0].url).search, "");
     assert.equal(headerValue(calls[0].init, "x-goog-api-key"), undefined);
@@ -192,7 +197,7 @@ describe("overlay drops a pasted key query before the direct call", () => {
         },
       },
     });
-    const reply = await window.PetMind.run(ctx("red_panda"));
+    const reply = await window.PetMind.run(painted(window, "red_panda"));
     assert.equal(calls.length, 1);
     const { url, init } = calls[0];
     const parsed = new URL(url);
@@ -254,7 +259,7 @@ describe("overlay drops a pasted key query before the direct call", () => {
         voice: "browser",
         pets: {},
       });
-      await window.PetMind.run(ctx("red_panda"));
+      await window.PetMind.run(painted(window, "red_panda"));
       assert.equal(calls.length, 1, item.plugin);
       const parsed = new URL(calls[0].url);
       assert.equal(parsed.origin, item.origin, item.plugin);
@@ -308,7 +313,7 @@ describe("overlay sibling plugin calls keep the key in a header", () => {
         voice: "browser",
         pets: {},
       });
-      await window.PetMind.run(ctx("red_panda"));
+      await window.PetMind.run(painted(window, "red_panda"));
       assert.equal(calls.length, 1, item.plugin);
       const parsed = new URL(calls[0].url);
       assert.equal(parsed.origin, item.origin, item.plugin);
@@ -371,7 +376,7 @@ describe("overlay drops a pasted secret model before the direct call", () => {
     assert.equal(copy.includes(TOKEN), false);
     assert.equal(copy.includes(OPAQUE), false);
     assert.equal(copy.includes("claude-sonnet-4-5"), true);
-    const reply = await window.PetMind.run(ctx("budgie"));
+    const reply = await window.PetMind.run(painted(window, "budgie"));
     assert.equal(calls.length, 1);
     const url = calls[0].url;
     assert.equal(url.includes(TOKEN), false);
@@ -404,8 +409,17 @@ describe("overlay cloud talk names the host before the fetch", () => {
     const held = await window.PetMind.run({ ...ctx("red_panda"), lineInView: false });
     assert.equal(calls.length, 0);
     assert.equal(held.source, "local");
+    const booleanOnly = await window.PetMind.run({ ...ctx("red_panda"), lineInView: true, shown: "" });
+    assert.equal(calls.length, 0);
+    assert.equal(booleanOnly.source, "local");
+    const otherHost = await window.PetMind.run({
+      ...ctx("red_panda"),
+      shown: window.PetMind.talkHonesty({ plugin: "openai" }),
+    });
+    assert.equal(calls.length, 0);
+    assert.equal(otherHost.source, "local");
     assert.equal(line.includes("sk-not-on-the-line"), false);
-    const sent = await window.PetMind.run(ctx("red_panda"));
+    const sent = await window.PetMind.run(painted(window, "red_panda"));
     assert.equal(calls.length, 1);
     assert.equal(new URL(calls[0].url).hostname, "api.x.ai");
     assert.equal(sent.source, "xai");
@@ -440,5 +454,8 @@ describe("overlay cloud talk names the host before the fetch", () => {
     assert.equal(calls.length, 0);
     assert.equal(held.source, "local");
     assert.equal(held.text, "house line");
+    const booleanOnly = await window.PetMind.run({ ...ctx("red_panda"), lineInView: true });
+    assert.equal(calls.length, 0);
+    assert.equal(booleanOnly.text, "house line");
   });
 });
