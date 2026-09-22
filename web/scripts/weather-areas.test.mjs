@@ -88,7 +88,36 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.equal(Overlay.locateGate(A.blankAreas(), true).act, "locate");
   assert.equal(Overlay.locateGate(typed, true).act, "keep");
   assert.equal(A.FORECAST_NET, "this computer's network address goes with the https request, as any client.");
+  assert.equal(A.clientNetLine(), A.FORECAST_NET);
+  assert.equal(Overlay.clientNetLine(), A.FORECAST_NET);
   assert.equal(Overlay.FORECAST_NET, A.FORECAST_NET);
+  assert.equal(
+    A.clientNetLine("the geocode host"),
+    "this computer's network address goes with the https request to the geocode host, as any client.",
+  );
+  assert.equal(A.GEOCODE_NET, A.clientNetLine("the geocode host"));
+  assert.equal(Overlay.GEOCODE_NET, A.GEOCODE_NET);
+  assert.equal(A.GEOCODE_LOOK, `this look-up sends the typed name. ${A.GEOCODE_NET}`);
+  assert.equal(A.GEOCODE_REVERSE, `this reverse lookup sends the rounded place. ${A.GEOCODE_NET}`);
+  assert.equal(Overlay.GEOCODE_LOOK, A.GEOCODE_LOOK);
+  assert.equal(Overlay.GEOCODE_REVERSE, A.GEOCODE_REVERSE);
+  assert.ok(A.GEOCODE_LOOK.includes(A.GEOCODE_NET));
+  assert.ok(A.GEOCODE_REVERSE.includes(A.GEOCODE_NET));
+  assert.equal(A.geocodeHonesty("look"), A.GEOCODE_LOOK);
+  assert.equal(A.geocodeHonesty("reverse"), A.GEOCODE_REVERSE);
+  assert.equal(A.geocodeHonesty("ip"), "");
+  assert.equal(A.geocodeHonesty(""), "");
+  assert.equal(Overlay.geocodeHonesty("look"), A.GEOCODE_LOOK);
+  assert.equal(Overlay.geocodeHonesty("reverse"), A.GEOCODE_REVERSE);
+  assert.equal(A.geocodeMaySend("look", false), false);
+  assert.equal(A.geocodeMaySend("look", true), true);
+  assert.equal(A.geocodeMaySend("reverse", false), false);
+  assert.equal(A.geocodeMaySend("reverse", true), true);
+  assert.equal(A.geocodeMaySend("ip", true), false);
+  assert.equal(A.geocodeMaySend("look", "yes"), false);
+  assert.equal(Overlay.geocodeMaySend("look", false), false);
+  assert.equal(Overlay.geocodeMaySend("reverse", true), true);
+  assert.equal(Overlay.geocodeMaySend("ip", true), false);
   assert.equal(
     A.SAVED_HERE_ASK,
     "use this saved computer place for the forecast? this sends the saved place. this computer's network address goes with the https request, as any client. it does not locate again.",
@@ -194,6 +223,16 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.doesNotMatch(areasSrc, /ipwho\.is|ip-api\.com|ipinfo\.io|ipapi\.co|ipPlaceUrl|parseIpPlace/);
   assert.doesNotMatch(overlaySrc, /ipwho\.is|ip-api\.com|ipinfo\.io|ipapi\.co|ipPlaceUrl|parseIpPlace/);
   assert.match(A.reverseUrl(47.6, -122.3), /geocoding-api\.open-meteo\.com\/v1\/reverse/);
+  const html = readFileSync(join(root, "../desktop/renderer/index.html"), "utf8");
+  const plates = readFileSync(join(root, "src/components/desk/desk-plates.tsx"), "utf8");
+  assert.ok(html.includes('id="weather-geocode-net"'));
+  assert.ok(html.includes('id="weather-reverse-net"'));
+  assert.ok(html.includes(A.GEOCODE_LOOK));
+  assert.ok(html.includes(A.GEOCODE_REVERSE));
+  assert.ok(plates.includes('id="weather-geocode-net"'));
+  assert.ok(plates.includes('id="weather-reverse-net"'));
+  assert.ok(plates.includes('geocodeHonesty("look")'));
+  assert.ok(plates.includes('geocodeHonesty("reverse")'));
   assert.equal(Overlay.TYPE_A_CITY, A.TYPE_A_CITY);
   assert.equal(A.mapLiveSky(61, 12, 4), "rain");
   assert.equal(A.mapLiveSky(0, 12, 32), "wind");

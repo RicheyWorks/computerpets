@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line says this computer's network address goes with the https request. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line says this computer's network address goes with the https request. Look up and the reverse lookup after Send the place wait until that same panel shows the line for the geocode host. */
 (function (root) {
   const NO_AREA = "no area set";
   const AREA_LABEL = "Weather area";
@@ -14,7 +14,15 @@
   const HERE_KEPT = "keeping the saved place";
   const HERE_SENT = "a place was sent to the forecast host";
   // Any HTTPS client shows its network address to the host. This is not a city lookup.
-  const FORECAST_NET = "this computer's network address goes with the https request, as any client.";
+  // An empty host is the forecast sentence. "the geocode host" is that same sentence.
+  function clientNetLine(host) {
+    const where = host ? ` to ${host}` : "";
+    return `this computer's network address goes with the https request${where}, as any client.`;
+  }
+  const FORECAST_NET = clientNetLine();
+  const GEOCODE_NET = clientNetLine("the geocode host");
+  const GEOCODE_LOOK = `this look-up sends the typed name. ${GEOCODE_NET}`;
+  const GEOCODE_REVERSE = `this reverse lookup sends the rounded place. ${GEOCODE_NET}`;
   const SAVED_HERE_ASK = `use this saved computer place for the forecast? this sends the saved place. ${FORECAST_NET} it does not locate again.`;
   const SAVED_HERE_YES = "Use this saved place";
   const SAVED_HERE_NO = "Don't send";
@@ -399,6 +407,22 @@
     return gate.ack ? SAVED_FORECAST_CONTINUE : TYPED_FORECAST;
   }
 
+  /** The line in the open weather panel before a typed look-up or a reverse lookup. */
+  function geocodeHonesty(kind) {
+    if (kind === "look") return GEOCODE_LOOK;
+    if (kind === "reverse") return GEOCODE_REVERSE;
+    return "";
+  }
+
+  /**
+   * The geocode host is called only while the keeper can see that line.
+   * A closed plate, a load, and a missing line are not that view.
+   * This does not geocode on its own and does not ask an IP place service.
+   */
+  function geocodeMaySend(kind, lineInView) {
+    return lineInView === true && geocodeHonesty(kind).indexOf(GEOCODE_NET) !== -1;
+  }
+
   function plateLine(areas, live, unread, held, waiting) {
     const area = currentArea(areas);
     if (!area) return NO_AREA;
@@ -423,6 +447,10 @@
     HERE_KEPT,
     HERE_SENT,
     FORECAST_NET,
+    clientNetLine,
+    GEOCODE_NET,
+    GEOCODE_LOOK,
+    GEOCODE_REVERSE,
     SAVED_HERE_ASK,
     SAVED_HERE_YES,
     SAVED_HERE_NO,
@@ -463,6 +491,8 @@
     forecastGate,
     forecastMaySend,
     forecastHonesty,
+    geocodeHonesty,
+    geocodeMaySend,
     ackSavedHere,
     stickHereForecastAck,
     storedLivePinNeedsFuzz,
