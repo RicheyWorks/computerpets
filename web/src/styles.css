@@ -21,6 +21,7 @@
   --radius-md: 12px;
   --radius-lg: 18px;
   --radius-xl: 28px;
+  /* Names already on this computer. The house does not download a font. */
   --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", serif;
   --font-sans: "Figtree", "Segoe UI", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
