@@ -640,6 +640,7 @@ Goal: Significantly reduce blast radius and improve defense-in-depth.
 - **2.4 Secret Management**
   - [x] File-mounted Docker secrets via `NAME_FILE` (`SecretFileEnvironmentPostProcessor`); External Secrets / Vault agent templates into existing Opaque Secret `computerpets-secrets`; local-dev keeps env / `.env.example`. Deny-safe. [0056](adr/0056-house-secrets-from-file-mounts.md). Not a hosted Vault deploy.
   - [x] Prod refuse plain env / hand-filled Opaque Secret — `COMPUTERPETS_SECRETS_SOURCE` + `verify-secret-operator.sh` ([0064](adr/0064-secret-operator-prod-refuses-plain-env.md)).
+  - [x] Secret rotation cadence + dual-key `*_PREVIOUS` + optional `COMPUTERPETS_KEYS_ROTATED_AT` + HSM/KMS pointer ([0065](adr/0065-secret-rotation-cadence-and-hsm.md)).
 
 #### Phase 3: Scalability & Operational Maturity
 Goal: Prepare for horizontal scaling and real production traffic.
