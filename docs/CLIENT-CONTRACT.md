@@ -27,8 +27,15 @@ GET  {downloadUrl}              →  pet .zip bytes (CDN / edge, not this servic
 The encrypted license is the durable entitlement. The JWT only proves the
 caller recently passed verify. The signed URL is a 15-minute fetch ticket.
 
-Discovery endpoints (`/api/verify/**`, `/api/pets/**`, `/api/bundles/**`) are unauthenticated.
-`POST /api/download/**` requires `Authorization: Bearer <jwt>`.
+Discovery reads (`GET /api/verify/providers`, `GET /api/verify/nft/collections`,
+`/api/pets/**`, `GET /api/bundles/{petKey}`) stay unauthenticated.
+`POST /api/verify/{provider}` requires a machine HMAC
+([ADR 0070](adr/0070-machine-request-signature.md)). It does not take a
+license JWT — the license does not exist yet. The living desk does not
+call this route.
+`POST /api/download/**` requires `Authorization: Bearer <jwt>` from that
+issuance and does **not** require the machine HMAC. The house `/admin`
+ledger remains `X-Admin-Key`.
 
 Rate limits (per client IP, Redis-backed, shared across app instances):
 **10/min** on `/api/verify/`, **30/min** on `/api/download/`, **60/min**
@@ -50,6 +57,31 @@ is used ([ADR 0067](adr/0067-trusted-proxy-client-address.md)).
 ## 2. Verify and issue
 
 `POST /api/verify/{provider}`
+
+Machine clients sign the exact raw body. Headers:
+
+| Header | Value |
+|--------|--------|
+| `X-ComputerPets-Timestamp` | Unix seconds |
+| `X-ComputerPets-Signature` | HMAC-SHA256, Base64 URL, no padding |
+
+Canonical UTF-8 text, newline-separated:
+
+```
+computerpets-machine-v1
+POST
+/api/verify/{provider}
+{raw query or empty}
+{timestamp}
+{lowercase hex SHA-256 of the body}
+```
+
+The HMAC key is the UTF-8 bytes of `LICENSE_SECRET_KEY` (the same string
+the client uses to decrypt). `LICENSE_SECRET_KEY_PREVIOUS` verifies during
+rotation; clients sign with the current key. Skew is **300 seconds**.
+Missing, skewed, or bad MAC → **401** `application/problem+json`. The
+provider is not called. This is not `BUNDLE_SIGNING_KEY` and not the JWT
+secret.
 
 `{provider}` is one of the keys from `GET /api/verify/providers`
 (currently `steam`, `nft`, `microsoft`, `itch`, `epic`).

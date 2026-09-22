@@ -183,7 +183,7 @@ function createLicenseSession(opts) {
         throw new LicenseError("denied", `unsupported provider ${provider}`);
       }
 
-      const verified = await client.verify({ backendUrl, provider, fields });
+      const verified = await client.verify({ backendUrl, provider, fields, licenseSecret: secret });
       return { deviceId, secret, fields, verified };
     });
     const { deviceId, secret, fields, verified } = opened;

@@ -295,7 +295,12 @@ def create_license_session(
                 fields_out["hwid"] = current_id
             else:
                 raise LicenseError("denied", f"unsupported provider {provider}")
-            verified_body = client["verify"](backend_url=backend_url, provider=provider, fields=fields_out)
+            verified_body = client["verify"](
+                backend_url=backend_url,
+                provider=provider,
+                fields=fields_out,
+                license_secret=secret_key,
+            )
             return {"current": current_id, "secret": secret_key, "fields": fields_out, "verified": verified_body}
 
         opened = post_license_hash(_shown_license_line(input_fields), backend_url, open_hash)
