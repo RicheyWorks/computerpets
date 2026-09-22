@@ -28,3 +28,4 @@ The house document and the picture card do not request a font host. They do not 
 - The heartbeat still polls this house on those timers. It cannot be pointed at another machine without editing the constant. [0045](0045-license-requests-wait-for-the-painted-line.md).
 - News, quotes, Radio Find, the featured page, a forecast, a geocode look-up, a station stream, and cloud talk stay on their wrappers. [0040](0040-news-quotes-and-radio-wait-for-the-line-in-main.md). [0041](0041-featured-page-waits-for-the-wikipedia-line.md). [0042](0042-desk-and-overlay-fetches-wait-for-the-painted-line.md). [0043](0043-forecast-and-geocode-wait-for-the-painted-line.md). [0044](0044-station-stream-and-cloud-talk-wait-for-the-painted-line.md).
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.
+- A STUN host is not this font request. [0047](0047-stun-waits-for-the-painted-line.md).

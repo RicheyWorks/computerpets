@@ -45,8 +45,16 @@ export interface P2PRoomOptions {
   room: string;
   selfId: string;
   name?: string;
-  /** Defaults to VITE_STUN_URLS (comma-separated) or Google public STUN. */
+  /**
+   * Explicit ICE servers. There is no public STUN default.
+   * A stun or turn URL is kept only when `paintedLine` names that host.
+   */
   iceServers?: RTCIceServer[];
+  /**
+   * The line the keeper can see. Each stun or turn host needs
+   * `stunNetLine(host)` in this string before that URL is used.
+   */
+  paintedLine?: string;
   onPeersChanged?: (peers: PeerInfo[]) => void;
   /** Fires for both the unreliable "state" and reliable "reliable" channels. */
   onMessage?: (from: string, data: unknown, channel: "state" | "reliable") => void;
@@ -81,18 +89,54 @@ const STALL_MS = 10_000;
 const MAX_RECOVERY_ATTEMPTS = 3;
 const SIGNAL_RETRY_DELAYS_MS = [250, 750];
 
+/**
+ * Names the STUN or TURN host before ICE asks it. Not an https fetch.
+ * The port, the query, and any userinfo stay off the line.
+ */
+export function stunNetLine(host: string): string {
+  return `this computer's network address goes with the stun request to ${host}, as any client.`;
+}
+
+/** No public STUN. Host candidates stay on this computer. */
 export function defaultIceServers(): RTCIceServer[] {
-  const urls = (import.meta.env.VITE_STUN_URLS as string | undefined)
-    ?.split(",")
-    .map((u) => u.trim())
-    .filter(Boolean);
-  // Two independent providers: ICE queries all of them in parallel during
-  // gathering, so either one being unreachable costs nothing.
-  return [
-    {
-      urls: urls?.length ? urls : ["stun:stun.l.google.com:19302", "stun:stun.cloudflare.com:3478"],
-    },
-  ];
+  return [];
+}
+
+function iceUrlList(server: RTCIceServer): string[] {
+  const urls = server.urls;
+  if (Array.isArray(urls)) return urls.filter((url) => typeof url === "string" && url.length > 0);
+  return typeof urls === "string" && urls.length > 0 ? [urls] : [];
+}
+
+/** Host only. `stun:user:secret@host:3478` names `host`, not the secret. */
+export function iceUrlHost(url: string): string | null {
+  const match = /^(?:stuns?|turns?):(?:[^@/?#]+@)?(\[[^\]]+\]|[^:/?#]+)/i.exec(url.trim());
+  if (!match) return null;
+  const host = match[1].toLowerCase();
+  return host.length > 0 ? host : null;
+}
+
+/**
+ * Keeps a stun or turn URL only when the painted line names that host.
+ * Anything else, including a missing line, is an empty list. Opening a
+ * peer connection with that list does not send a STUN binding request.
+ */
+export function iceServersForRoom(
+  iceServers: RTCIceServer[] | undefined,
+  paintedLine: string | undefined,
+): RTCIceServer[] {
+  const line = paintedLine ?? "";
+  if (!iceServers?.length || !line) return [];
+  const kept: RTCIceServer[] = [];
+  for (const server of iceServers) {
+    const urls = iceUrlList(server).filter((url) => {
+      const host = iceUrlHost(url);
+      return host !== null && line.includes(stunNetLine(host));
+    });
+    if (urls.length === 0) continue;
+    kept.push({ ...server, urls });
+  }
+  return kept;
 }
 
 export class P2PRoom {
@@ -246,7 +290,7 @@ export class P2PRoom {
   private connectTo(peerId: string, name: string, initiator: boolean): PeerSlot | null {
     if (this.closed) return null;
     const pc = new RTCPeerConnection({
-      iceServers: this.opts.iceServers ?? defaultIceServers(),
+      iceServers: iceServersForRoom(this.opts.iceServers ?? defaultIceServers(), this.opts.paintedLine),
     });
     const slot: PeerSlot = {
       pc,
