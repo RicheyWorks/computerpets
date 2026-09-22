@@ -76,6 +76,7 @@ address, or an API that is not on `main`.
 | [0055](0055-download-jti-one-time-and-ip-bound.md) | Download jti grants are one-time and IP-bound | Accepted |
 | [0056](0056-house-secrets-from-file-mounts.md) | House secrets from env, *_FILE mounts, or External Secrets | Accepted |
 | [0057](0057-license-issuance-observation.md) | License issuance is a business observation | Accepted |
+| [0058](0058-license-soft-delete-and-audit.md) | License revoke soft-deletes and writes an audit ledger | Accepted |
 
 ## How to add one
 

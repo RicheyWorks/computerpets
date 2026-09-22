@@ -31,8 +31,14 @@ public record LicenseAuditResponse(
         @Schema(description = "When the license was revoked, if any")
         Instant revokedAt,
 
+        @Schema(description = "When the license was soft-deleted (set on revoke; never hard-wiped)")
+        Instant deletedAt,
+
         @Schema(description = "True when revokedAt is set")
         boolean revoked,
+
+        @Schema(description = "True when deletedAt is set (soft-deleted; excluded from default queries)")
+        boolean deleted,
 
         @Schema(description = "True when the license was issued with a hardware binding")
         boolean hwidBound
@@ -48,7 +54,9 @@ public record LicenseAuditResponse(
                 license.getExpiresAt(),
                 license.getLastUsedAt(),
                 license.getRevokedAt(),
+                license.getDeletedAt(),
                 license.isRevoked(),
+                license.isDeleted(),
                 hwid != null && !hwid.isBlank()
         );
     }

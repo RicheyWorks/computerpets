@@ -10,7 +10,9 @@ export type LicenseAudit = {
   expiresAt: string | null;
   lastUsedAt: string | null;
   revokedAt: string | null;
+  deletedAt: string | null;
   revoked: boolean;
+  deleted: boolean;
   hwidBound: boolean;
 };
 
