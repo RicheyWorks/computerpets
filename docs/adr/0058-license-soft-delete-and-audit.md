@@ -24,4 +24,4 @@ This slice closes that DB-maturity gap without storefront work and without Direc
 - Operators keep a tombstone on the admin ledger after revoke; downloads still stop immediately via Redis + ledger.
 - Active-only listings and download usage stamps skip soft-deleted rows.
 - Prometheus issuance rate (ADR 0057) stays separate from the durable audit ledger.
-- Read-replica / pool tuning lands in [0059](0059-hikari-pool-and-read-replica.md). Bundle zip contents, image signing, and Terraform remain the next non-storefront / non-DX12 maturity items.
+- Read-replica / pool tuning lands in [0059](0059-hikari-pool-and-read-replica.md). Bundle zip contents land in [0060](0060-bundle-zip-contents-and-update.md). Image signing lands in [0061](0061-ghcr-image-signing.md). Terraform remains the next non-storefront / non-DX12 maturity item.
