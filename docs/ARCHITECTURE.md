@@ -162,7 +162,7 @@ The service runs as a Spring Boot executable JAR or the multi-stage `Dockerfile`
 - Spring profiles (`dev` / `staging` / `prod`) overlay the same `application.yml` keys. Default and `dev` keep H2 unless `SPRING_DATASOURCE_*` is set (`docker-compose.yml` already points `dev` at Postgres). `staging` and `prod` require Postgres and have no H2 fallback.
 - Redis-backed Bucket4j rate limiter (Lettuce / `bucket4j-redis`) shared across replicas. If Redis is down, verify/download fail closed with HTTP 503. `prod` refuses `RATE_LIMIT_BACKEND=memory`.
 - Redis-backed jti deny-list (`RevocationIndex`) shared across replicas. Postgres `IssuedLicense.revokedAt` remains the ledger; Redis is a fast deny so a replica that has not seen the row still rejects. If Redis is down, `LicenseService.validate` falls back to the ledger (it does not accept a revoked license). HTTP download may still 503 from the rate-limit filter.
-- Critical secrets (`LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, `ADMIN_API_KEY`) loaded from environment variables with strict `@PostConstruct` startup validation that refuses to run on missing or placeholder values.
+- Critical secrets (`LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, `ADMIN_API_KEY`) load from environment variables or `NAME_FILE` mounts (`SecretFileEnvironmentPostProcessor`) with strict `@PostConstruct` startup validation that refuses to run on missing or placeholder values. Production operators use Docker secrets, Kubernetes External Secrets, or Vault agent templates — [ADR 0056](adr/0056-house-secrets-from-file-mounts.md). Secret values are never logged.
 - `ProductionProfileGuard` (`@Profile("prod")`) refuses Microsoft Store `dev-mode`, an in-memory rate-limit store, and an H2 JDBC URL even when environment variables try to override `application-prod.yml`.
 - `Dockerfile` + GitHub Actions GHCR publish + `deploy/k8s/` (Deployment/Service, in-cluster Postgres/Redis scaffolding, optional Ingress). Blue/green is two Deployments and a Service `color` selector — not a service mesh.
 - External dependencies (Alchemy, Microsoft Collections, Steam Web API, itch.io, Epic, future CDN) are called directly; Resilience4j circuit breakers, retries, and a shared ownership time limiter wrap the store providers.
@@ -177,7 +177,7 @@ For any non-trivial user base or multi-region deployment, the following producti
   - Distributed token-bucket rate limits (`bucket4j-redis` or equivalent).
   - Shared jti deny-list (`revoked:jti:{jti}`, TTL ≥ remaining license life + 1h skew) so a revoked license is rejected immediately across all replicas. Postgres remains the ledger.
   - Optional short-TTL caching of expensive external provider responses (e.g., recent NFT ownership checks).
-- **External secret management** (HashiCorp Vault, AWS Secrets Manager, Azure Key Vault, or Kubernetes `ExternalSecrets` operator) instead of plain environment variables for the three long-lived cryptographic keys. Secrets should be rotated on a schedule and never appear in logs or container specs.
+- **External secret management** (HashiCorp Vault, AWS Secrets Manager, Azure Key Vault, or Kubernetes `ExternalSecrets` operator) instead of plain environment variables for the long-lived cryptographic keys. The house contract is env, `NAME_FILE` mounts, or sync into Opaque Secret `computerpets-secrets` ([ADR 0056](adr/0056-house-secrets-from-file-mounts.md)). Secrets should be rotated on a schedule and never appear in logs or committed specs.
 - **CDN / Object Storage** (Amazon CloudFront + S3, Cloudflare R2, Google Cloud CDN, etc.) as the authoritative source for the actual pet `.zip` bundles. The backend only generates short-lived HMAC-signed URLs; it never serves the binary assets itself.
 - **Health/readiness/liveness probes** exposed via Spring Boot Actuator (`/actuator/health`, `/actuator/health/readiness`) so the orchestrator can safely perform rolling updates and drain traffic.
 - Optional but recommended: WAF / API Gateway / cloud load balancer rules in front for L7 bot mitigation, additional rate limiting, and IP reputation filtering.
@@ -411,7 +411,7 @@ sequenceDiagram
 | Persistence (scaffolded) | Spring Data JPA + Hibernate + H2 / Postgres | —        | Standard; H2 for fast local dev, Postgres for production durability/audit. Currently unused. |
 | Steam Integration        | Spring RestClient + Steam Web API       | —           | `SteamService` calls `IPlayerService/GetOwnedGames` via RestClient. steam-condenser was unused and has been removed. |
 | Build                    | Maven + Spring Boot Maven Plugin        | —           | Universal, works in restricted environments; explicit Java 21 compiler config. |
-| Config & Secrets         | Spring @Value + env overrides + @PostConstruct guards | — | Fail-fast on missing/placeholder keys; supports 12-factor deployment. |
+| Config & Secrets         | Spring @Value + env / `NAME_FILE` mounts + @PostConstruct guards | — | Fail-fast on missing/placeholder keys; Docker secrets + External Secrets operator contract (ADR 0056). |
 | Metrics                  | Micrometer + Prometheus registry                      | BOM | `/actuator/prometheus` scrape. `enterprisepet.verify` timer tagged `provider`/`outcome` for success rate and latency. |
 | Tracing                  | Micrometer Tracing + OpenTelemetry + OTLP/HTTP        | BOM | `micrometer-tracing-bridge-otel` + `opentelemetry-exporter-otlp`. Export off unless `OTEL_EXPORTER_OTLP_ENDPOINT` is set. |
 
@@ -440,6 +440,7 @@ ComputerPets/
 │   │   │   ├── config/
 │   │   │   │   ├── GlobalExceptionHandler.java
 │   │   │   │   ├── ProductionProfileGuard.java
+│   │   │   │   ├── SecretFileEnvironmentPostProcessor.java
 │   │   │   │   ├── RateLimitingFilter.java
 │   │   │   │   └── SecurityConfig.java
 │   │   │   ├── controller/
@@ -632,8 +633,7 @@ Goal: Significantly reduce blast radius and improve defense-in-depth.
   - Implement proper timeouts and fallback behavior (in progress — overlay news, quote, and radio IPC reads time out at twelve seconds and return unread with an empty plate; a radio timeout does not call the next directory host. Weather forecast and geocode page wrappers time out the same way and flip unread / can't reach. Desk and overlay news, quote, and radio page wrappers time out the same way. Cloud talk and cloud voice page wrappers time out the same way and keep the house line or silence. Steam, Itch, and Epic RestClients time out at ten seconds and deny. Microsoft and NFT already time out. Shared Resilience4j ownership time limiter (`ownership`, twelve-second wall) wraps Steam / Itch / Epic / Microsoft; exceed denies. RestClient still owns the per-HTTP ten-second hop. Fallbacks deny. [0049](adr/0049-plate-ipc-times-out-and-denies.md). [0050](adr/0050-weather-page-times-out-and-denies.md). [0051](adr/0051-news-quote-radio-page-times-out-and-denies.md). [0052](adr/0052-cloud-talk-and-voice-page-times-out-and-denies.md). [0053](adr/0053-itch-and-epic-restclient-times-out-and-denies.md). [0054](adr/0054-ownership-time-limiter-denies-on-wall.md))
 
 - **2.4 Secret Management**
-  - Move away from raw environment variables for production
-  - Integrate with AWS Secrets Manager / HashiCorp Vault / Kubernetes External Secrets
+  - [x] File-mounted Docker secrets via `NAME_FILE` (`SecretFileEnvironmentPostProcessor`); External Secrets / Vault agent templates into existing Opaque Secret `computerpets-secrets`; local-dev keeps env / `.env.example`. Deny-safe. [0056](adr/0056-house-secrets-from-file-mounts.md). Not a hosted Vault deploy.
 
 #### Phase 3: Scalability & Operational Maturity
 Goal: Prepare for horizontal scaling and real production traffic.

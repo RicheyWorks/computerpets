@@ -40,7 +40,9 @@ No mesh.
   H2 default. The k8s ConfigMap must keep `prod`.
 - In-cluster Postgres/Redis are not a managed HA pair. They match
   docker-compose so the manifests are honest scaffolding.
-- Image signing, Terraform for managed stores, and a secrets operator
-  are still open. Secrets are a Kubernetes `Secret` / env vars today.
+- Image signing and Terraform for managed stores are still open.
+  Secret *injection* is env, Docker `*_FILE` mounts, or External Secrets /
+  Vault agent into the existing Opaque Secret ([0056](0056-house-secrets-from-file-mounts.md)).
+  A hosted Vault cluster is still the keeper's infrastructure.
 - Helm values and a service mesh are non-goals until the app outgrows
   one Deployment and a selector flip.
