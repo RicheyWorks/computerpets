@@ -1,6 +1,7 @@
 /** Visible top-level window bounds. Rects only — never pixels, titles, or paths.
- * Field 9 of an enum line is a shell bit (or a legacy class used only to set that bit).
- * The class string is not kept. Extra columns are not titles and are not kept.
+ * Field 9 of a live enum line is a shell bit. A legacy class token can still set
+ * that bit and is not stored. The live enumerator does not copy a window class.
+ * Extra columns are not titles and are not kept.
  */
 (function (root) {
   const TASKBAR_CLASS = {
