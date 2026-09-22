@@ -23,8 +23,9 @@ import java.util.Map;
  * Internal admin endpoints for license lookup, audit, and revocation.
  *
  * <p>Protected by a strong pre-shared admin key (X-Admin-Key header).
- * This is intentionally simple for Phase 2; in production you would typically
- * use a separate short-lived admin JWT, mTLS, or a full secrets manager + Vault agent.
+ * This is intentionally simple for Phase 2; production operators supply
+ * {@code ADMIN_API_KEY} via env, {@code ADMIN_API_KEY_FILE}, or External Secrets
+ * into the existing Opaque Secret (ADR 0056).
  */
 @RestController
 @RequestMapping("/api/admin")
