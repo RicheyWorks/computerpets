@@ -32,7 +32,7 @@ from .choice import guest_marks, guest_pick, guest_tap, walking_cmd
 from .gift import gift_line, leave_gift, pick_gift
 from .gpu import SPARK_H, SPARK_W, gpu_line, initial_sample, ink, read_local, remember, sparkline
 from .listener import listener_line
-from .presence import refuse_file_drop, seal_widget
+from .presence import host_path_label, list_host_folder, refuse_file_drop, seal_widget, window_caption
 from .guide import plaque_for
 from .hive import colony_of, colony_word, is_hive_place
 from .hours import (
@@ -959,6 +959,25 @@ def main(argv: list[str] | None = None) -> int:
             print("check failed: blotter accepts file drops", file=sys.stderr)
             return 1
         print("ok: presence refuses dropped files")
+        for folder in ("Desktop", "Documents", "Downloads", r"C:\Users\keeper\Projects"):
+            listed = list_host_folder(folder)
+            if listed["listed"] or listed["names"]:
+                print(f"check failed: presence listed {folder}", file=sys.stderr)
+                return 1
+        caption = window_caption(
+            {
+                "title": "homework.docx — Notepad",
+                "document": "homework.docx",
+                "path": r"C:\Users\keeper\Documents\homework.docx",
+            }
+        )
+        if caption is not None:
+            print("check failed: presence read a window title", file=sys.stderr)
+            return 1
+        if host_path_label(r"C:\Users\keeper\Desktop\homework.docx", False):
+            print("check failed: presence showed a path without consent", file=sys.stderr)
+            return 1
+        print("ok: presence does not list folders or read titles")
         QTimer.singleShot(250, app.quit)
     return app.exec()
 

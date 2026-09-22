@@ -3,8 +3,11 @@
 from computerpets_client.presence import (
     allow_navigation,
     allow_permission,
+    host_path_label,
     house_file,
+    list_host_folder,
     refuse_file_drop,
+    window_caption,
 )
 
 
@@ -24,6 +27,20 @@ def test_navigation_and_capture_stay_refused():
     assert allow_permission("clipboard-read") is False
     assert allow_permission("display-capture") is False
     assert allow_permission("fileSystem") is False
+
+
+def test_user_folders_are_not_listed_and_titles_are_not_read():
+    for folder in ("Desktop", "Documents", "Downloads", "/home/keeper/Projects"):
+        listed = list_host_folder(folder)
+        assert listed == {"listed": False, "names": []}
+    row = {
+        "title": "homework.docx — Notepad",
+        "document": "homework.docx",
+        "path": r"C:\Users\keeper\Documents\homework.docx",
+    }
+    assert window_caption(row) is None
+    assert host_path_label(row["path"], False) == ""
+    assert host_path_label(row["path"], True) == row["path"]
 
 
 def test_a_dropped_file_is_not_read():

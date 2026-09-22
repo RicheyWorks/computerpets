@@ -59,6 +59,29 @@ test("window payloads stay rects — titles and paths are dropped", () => {
   ]);
   assert.deepEqual(scrubbed, [{ id: "9", x: 10, y: 20, width: 300, height: 200 }]);
   assert.equal(JSON.stringify(scrubbed).includes("homework"), false);
+  assert.equal(JSON.stringify(scrubbed).includes("Cabinet"), false);
+});
+
+test("presence does not list Desktop, Documents, or Downloads", () => {
+  for (const folder of ["Desktop", "Documents", "Downloads", "C:\\Users\\keeper\\Pictures", "/home/keeper/Projects"]) {
+    const listed = Presence.listHostFolder(folder);
+    assert.deepEqual(listed, { listed: false, names: [] });
+  }
+  assert.doesNotMatch(readFileSync(join(__dirname, "..", "presence.cjs"), "utf8"), /readdir|readdirSync|Get-ChildItem|listdir/);
+});
+
+test("a window caption is never a title, and a path needs consent", () => {
+  const row = {
+    title: "homework.docx — Notepad",
+    document: "homework.docx",
+    path: "C:\\Users\\keeper\\Documents\\homework.docx",
+    className: "CabinetWClass",
+  };
+  assert.equal(Presence.windowCaption(row), null);
+  assert.equal(Presence.hostPathLabel(row.path, false), "");
+  assert.equal(Presence.hostPathLabel(row.path, undefined), "");
+  assert.equal(Presence.hostPathLabel(row.path, true), row.path);
+  assert.equal(Presence.hostPathLabel("  ", true), "");
 });
 
 test("a host file drop is not a gift and is not read", () => {
@@ -128,6 +151,8 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.doesNotMatch(preloadSrc, /clipboard|getPathForFile|showOpenFilePicker|readFile/);
   assert.doesNotMatch(petSrc, /dataTransfer|getPathForFile|showOpenFilePicker|clipboard|desktopCapturer/);
   assert.doesNotMatch(enumSrc, /GetWindowText|desktopCapturer|PrintWindow|BitBlt|GetDC/);
+  assert.doesNotMatch(enumSrc, /Get-ChildItem|Directory\.GetFiles|Environment\.GetFolderPath|SpecialFolder|KnownFolder|cls\.Replace/);
+  assert.match(enumSrc, /shell \? "1" : "0"/);
 });
 
 test("desk, demo, and blotter share the same refusal", () => {

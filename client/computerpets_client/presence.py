@@ -33,6 +33,27 @@ def refuse_file_drop(types: list[str] | None = None, file_count: int = 0) -> dic
     return {"accept": False, "read": False, "files": files}
 
 
+def list_host_folder(name: str = "") -> dict[str, object]:
+    """Presence does not list a host folder. This does not touch the disk."""
+    del name
+    return {"listed": False, "names": []}
+
+
+def window_caption(row: dict | None = None) -> None:
+    """The blotter has no window title and no document name."""
+    del row
+    return None
+
+
+def host_path_label(value: str = "", consent: bool = False) -> str:
+    """A host path is omitted unless the keeper has already consented."""
+    if consent is not True:
+        return ""
+    if not isinstance(value, str):
+        return ""
+    return value.strip()
+
+
 def seal_widget(widget) -> None:
     """Qt ignores drops when this is false. Callers still override the events."""
     widget.setAcceptDrops(False)

@@ -1,4 +1,7 @@
-/** Visible top-level window bounds. Rects only — never pixels. Same map as desktop `windows.js`. */
+/** Visible top-level window bounds. Rects only — never pixels, titles, or paths. Same map as desktop `windows.js`.
+ * Field 9 of an enum line is a shell bit (or a legacy class used only to set that bit).
+ * The class string is not kept. Extra columns are not titles and are not kept.
+ */
 
 export const TASKBAR_CLASS: Record<string, number> = {
   Shell_TrayWnd: 1,
@@ -28,6 +31,8 @@ export type RawWindow = {
   tool?: boolean;
   toolWindow?: boolean;
   cloaked?: boolean;
+  /** Shell bit from the enumerator. A class string is not stored. */
+  shell?: boolean;
   className?: string;
   class?: string;
 };
@@ -64,6 +69,8 @@ export function parseEnumText(text: string | undefined) {
     const right = Number(p[3]);
     const bottom = Number(p[4]);
     if (![left, top, right, bottom].every(Number.isFinite)) continue;
+    const token = p[8];
+    const shell = token === "1" || Boolean(TASKBAR_CLASS[token]);
     rows.push({
       id: String(p[0]),
       left,
@@ -73,7 +80,7 @@ export function parseEnumText(text: string | undefined) {
       minimized: p[5] === "1",
       tool: p[6] === "1",
       cloaked: p[7] === "1",
-      className: p.slice(8).join("\t"),
+      shell,
     });
   }
   return rows;
@@ -149,6 +156,7 @@ export function takeRects(
     if (row.minimized || row.iconic) continue;
     if (row.tool || row.toolWindow) continue;
     if (row.cloaked) continue;
+    if (row.shell) continue;
     const cls = String(row.className || row.class || "");
     if (TASKBAR_CLASS[cls]) continue;
     const box = rowBox(row, scale, work);
