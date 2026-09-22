@@ -28,4 +28,4 @@ This slice closes the zip + update gap without a storefront, without DirectX 12 
 
 - Operators publishing a catalog row must ship a real zip that matches this layout and the configured sha256. Placeholder hashes still fail startup.
 - Legacy empty-catalog downloads keep working as opaque fetches.
-- Image signing and Terraform remain the next non-storefront / non-DX12 maturity items after this 4.1 checkbox.
+- Image signing lands in [0061](0061-ghcr-image-signing.md). Terraform for managed stores remains the next non-storefront / non-DX12 maturity item.

@@ -106,6 +106,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+      # Keyless cosign (Sigstore Fulcio) via GitHub OIDC — ADR 0061
+      id-token: write
     # Only build Docker image on main branch pushes (not on PRs)
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
@@ -143,6 +145,31 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Output image digest
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign image digest (keyless)
+        env:
+          DIGEST: ${{ steps.image.outputs.digest }}
         run: |
-          echo "Image digest: ${{ steps.image.outputs.digest }}"
+          set -euo pipefail
+          if [ -z "${DIGEST}" ]; then
+            echo "Refuse: docker build-push produced no digest" >&2
+            exit 1
+          fi
+          # Sign the immutable digest only — never a mutable tag (ADR 0061).
+          cosign sign --yes "ghcr.io/${{ github.repository }}@${DIGEST}"
+
+      - name: Verify image signature (fail-closed)
+        env:
+          DIGEST: ${{ steps.image.outputs.digest }}
+        run: |
+          set -euo pipefail
+          IMAGE="ghcr.io/${{ github.repository }}@${DIGEST}"
+          IDENTITY="https://github.com/${{ github.repository }}/.github/workflows/ci.yml@refs/heads/main"
+          ISSUER="https://token.actions.githubusercontent.com"
+          cosign verify \
+            --certificate-identity="${IDENTITY}" \
+            --certificate-oidc-issuer="${ISSUER}" \
+            "${IMAGE}"
+          echo "Signed and verified: ${IMAGE}"

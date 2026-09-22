@@ -40,7 +40,8 @@ No mesh.
   H2 default. The k8s ConfigMap must keep `prod`.
 - In-cluster Postgres/Redis are not a managed HA pair. They match
   docker-compose so the manifests are honest scaffolding.
-- Image signing and Terraform for managed stores are still open.
+- Image signing is keyless cosign on GHCR publish + fail-closed verify
+  ([0061](0061-ghcr-image-signing.md)). Terraform for managed stores is still open.
   Secret *injection* is env, Docker `*_FILE` mounts, or External Secrets /
   Vault agent into the existing Opaque Secret ([0056](0056-house-secrets-from-file-mounts.md)).
   A hosted Vault cluster is still the keeper's infrastructure.
