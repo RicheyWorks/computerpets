@@ -74,6 +74,33 @@ test("typed city and call-sign look-ups use name or city, never tag-as-city or j
   assert.notEqual(seattle[0].name, "Smooth Jazz All Night");
 });
 
+test("play names the stream host before the station audio opens", () => {
+  const music = M.parseMusic({
+    plugin: "radio",
+    playing: true,
+    stationName: "A free station",
+    stationUrl: "https://stream.example.test:8000/live?token=secret#frag",
+  });
+  const line = "this play opens the station stream. this computer's network address goes with the https request to stream.example.test, as any client.";
+  assert.equal(M.streamHonesty(music), line);
+  assert.equal(Overlay.streamHonesty(music), line);
+  assert.equal(M.streamHostPhrase(music), "stream.example.test");
+  assert.equal(Overlay.streamHostPhrase(music), "stream.example.test");
+  assert.doesNotMatch(line, /token|secret|frag|\/live/);
+  assert.equal(M.streamMaySend(music, false), false);
+  assert.equal(M.streamMaySend(music, true), true);
+  assert.equal(Overlay.streamMaySend(music, false), false);
+  assert.equal(Overlay.streamMaySend(music, true), true);
+  assert.equal(M.streamHostLabel(""), "the station stream host");
+  assert.equal(Overlay.streamHostLabel(""), "the station stream host");
+  assert.equal(M.STREAM_HOST_NAME, Overlay.STREAM_HOST_NAME);
+  assert.equal(M.streamHonesty(M.parseMusic({ plugin: "house", playing: true })), "");
+  assert.equal(Overlay.streamHonesty(Overlay.parseMusic({ plugin: "house", playing: true })), "");
+  assert.equal(M.streamHonesty(M.parseMusic({ plugin: "radio", playing: false, stationUrl: "https://stream.example.test/live" })), "");
+  assert.equal(M.streamHonesty(M.parseMusic({ plugin: "radio", playing: true, stationUrl: "notaurl" })), "");
+  assert.equal(M.streamMaySend(M.parseMusic({ plugin: "radio", playing: true, stationUrl: "https://stream.example.test/live" }), false), false);
+});
+
 test("radio find names the network address before the search", () => {
   const line = "this find sends the station look-up. this computer's network address goes with the https request to the radio host, as any client.";
   assert.equal(M.RADIO_FIND, line);

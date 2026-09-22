@@ -198,6 +198,7 @@ let plateSkipToggle = false;
 let houseBooted = false;
 let autoMeetWait = 4.5;
 let musicNode = null;
+let streamAsked = false;
 let sleepNode = null;
 let lureDrag = null;
 
@@ -226,7 +227,9 @@ function playWindows() {
 function musicOn() {
   const M = window.PetHouseMusic;
   if (!M || !card || !card.music) return false;
-  return !!(card.music.playing && card.music.plugin !== "off" && !(window.PetCard && window.PetCard.isMuted(card.mutes, "music")));
+  const music = M.parseMusic(card.music);
+  if (music.plugin === "radio" && music.stationUrl && !streamAsked) return false;
+  return !!(music.playing && music.plugin !== "off" && !(window.PetCard && window.PetCard.isMuted(card.mutes, "music")));
 }
 
 function cardOpen() {
@@ -280,6 +283,7 @@ function fillRadioHits(list, truth, music, stations) {
     pick.dataset.on = music.stationId === st.id ? "1" : "0";
     pick.addEventListener("click", (ev) => {
       ev.stopPropagation();
+      streamAsked = true;
       card.music = M.parseMusic({
         plugin: "radio",
         stationId: st.id,
@@ -662,17 +666,35 @@ function sitSleepAid() {
   sleepNode = S.applySleepAid(sleepNode, card.sleepAid, card.mutes, cardGuest().volume / 100);
 }
 
+function streamLineInView() {
+  const el = document.getElementById("hud-stream-net");
+  if (!el || el.hidden || !streamAsked) return false;
+  const M = window.PetHouseMusic;
+  const line = M && M.streamHonesty ? M.streamHonesty(M.parseMusic(card.music)) : "";
+  if (!line) return false;
+  return (el.textContent || "").indexOf(line) !== -1;
+}
+
 function sitMusic() {
   const M = window.PetHouseMusic;
   const C = window.PetCard;
   if (!M) return;
-  const src = M.overlayPlaySrc(card.music);
-  if (!src || (C && C.isMuted(card.mutes, "music"))) {
+  const music = M.parseMusic(card.music);
+  const src = M.overlayPlaySrc(music);
+  const stop = () => {
     if (musicNode) {
       musicNode.pause();
       musicNode.src = "";
       musicNode = null;
     }
+  };
+  if (!src || (C && C.isMuted(card.mutes, "music"))) {
+    stop();
+    return;
+  }
+  const remote = music.plugin === "radio" && /^https?:/i.test(src);
+  if (remote && (!M.streamMaySend || !M.streamMaySend(music, streamLineInView()))) {
+    stop();
     return;
   }
   if (musicNode && musicNode.dataset.src === src) {
@@ -1551,7 +1573,9 @@ function paintCard() {
         btn.dataset.on = music.plugin === plugin.id ? "1" : "0";
         btn.addEventListener("click", (e) => {
           e.stopPropagation();
-          card.music = M.parseMusic({ ...music, plugin: plugin.id, playing: plugin.id !== "off" });
+          const next = M.parseMusic({ ...music, plugin: plugin.id, playing: plugin.id !== "off" });
+          if (next.plugin === "radio" && next.playing && next.stationUrl) streamAsked = true;
+          card.music = next;
           persistCard();
           sitMusic();
         });
@@ -1559,9 +1583,17 @@ function paintCard() {
       }
     }
     const play = document.getElementById("hud-music-play");
+    const remoteStream = music.plugin === "radio" && !!music.stationUrl;
+    const audible = !!(music.playing && music.plugin !== "off" && (!remoteStream || streamAsked));
     if (play) {
       play.hidden = music.plugin === "off";
-      play.textContent = music.playing ? "Pause" : "Play";
+      play.textContent = audible ? "Pause" : "Play";
+    }
+    const streamEl = document.getElementById("hud-stream-net");
+    if (streamEl) {
+      const line = streamAsked && M.streamHonesty ? M.streamHonesty(music) : "";
+      streamEl.textContent = line;
+      streamEl.hidden = !line;
     }
     const license = document.getElementById("hud-music-license");
     if (license) {
@@ -3637,7 +3669,11 @@ if (hudMusicPlay) {
     const M = window.PetHouseMusic;
     if (!M) return;
     const music = M.parseMusic(card.music);
-    card.music = M.parseMusic({ ...music, playing: !music.playing && music.plugin !== "off" });
+    const remoteStream = music.plugin === "radio" && !!music.stationUrl;
+    const audible = !!(music.playing && music.plugin !== "off" && (!remoteStream || streamAsked));
+    const next = M.parseMusic({ ...music, playing: !audible && music.plugin !== "off" });
+    if (next.plugin === "radio" && next.playing && next.stationUrl) streamAsked = true;
+    card.music = next;
     persistCard();
     sitMusic();
   });

@@ -258,6 +258,49 @@ export function radioMaySend(lineInView: boolean): boolean {
   return lineInView === true && RADIO_FIND.includes(RADIO_NET);
 }
 
+export const STREAM_HOST_NAME = "the station stream host";
+
+/** Hostname of a station stream. Empty when the value is not an http(s) stream. */
+export function streamHostName(raw: unknown): string {
+  const safe = safeStream(raw);
+  if (!safe) return "";
+  try {
+    return new URL(safe).hostname || "";
+  } catch {
+    return "";
+  }
+}
+
+/** The actual stream host when known, otherwise the station-stream name. */
+export function streamHostLabel(hostname: string): string {
+  const host = String(hostname || "").trim();
+  return host || STREAM_HOST_NAME;
+}
+
+export function streamHostPhrase(music: MusicPrefs | null | undefined): string {
+  if (!music || music.plugin !== "radio" || !music.playing) return "";
+  const safe = safeStream(music.stationUrl);
+  if (!safe) return "";
+  return streamHostLabel(streamHostName(safe));
+}
+
+export function streamHonesty(music: MusicPrefs | null | undefined): string {
+  const host = streamHostPhrase(music);
+  if (!host) return "";
+  return `this play opens the station stream. ${clientNetLine(host)}`;
+}
+
+/**
+ * A station stream is opened only when Play (or a station pick) has put that
+ * line in view. A load does not open it. A house loop is not this send.
+ */
+export function streamMaySend(music: MusicPrefs | null | undefined, lineInView: boolean): boolean {
+  const host = streamHostPhrase(music);
+  const line = streamHonesty(music);
+  if (!host || !line || lineInView !== true) return false;
+  return line.includes(clientNetLine(host));
+}
+
 export function radioSearchUrls(query = "", area?: RadioArea | null) {
   const p = parseRadioQuery(query, area);
   const out: string[] = [];
