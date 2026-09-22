@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -17,9 +20,11 @@ import java.util.Set;
  * {@code prod}. Environment variables outrank {@code application-prod.yml}, so
  * this guard exists to catch {@code MICROSOFT_DEV_MODE=true},
  * {@code RATE_LIMIT_BACKEND=memory}, an H2 {@code SPRING_DATASOURCE_URL},
- * a misconfigured {@code SPRING_DATASOURCE_REPLICA_URL}, or plain env
+ * a misconfigured {@code SPRING_DATASOURCE_REPLICA_URL}, plain env
  * {@code Secret} injection without an External Secrets / {@code *_FILE} /
- * Vault-agent operator attestation ([ADR 0064](../../docs/adr/0064-secret-operator-prod-refuses-plain-env.md)).
+ * Vault-agent operator attestation ([ADR 0064](../../docs/adr/0064-secret-operator-prod-refuses-plain-env.md)),
+ * or a stale optional {@code COMPUTERPETS_KEYS_ROTATED_AT} stamp
+ * ([ADR 0065](../../docs/adr/0065-secret-rotation-cadence-and-hsm.md)).
  */
 @Component
 @Profile("prod")
@@ -33,6 +38,13 @@ public class ProductionProfileGuard {
             "external-secrets",
             "vault-agent"
     );
+
+    /**
+     * When {@code COMPUTERPETS_KEYS_ROTATED_AT} is set on prod, refuse start if
+     * the stamp is older than this (license lifetime + buffer). Blank stamp is
+     * allowed — operators opt in (ADR 0065).
+     */
+    static final Duration KEYS_ROTATED_AT_MAX_AGE = Duration.ofDays(400);
 
     /** Critical house crypto keys that must use {@code *_FILE} when source is {@code file}. */
     static final List<String> CRITICAL_SECRET_ENV_NAMES = List.of(
@@ -48,6 +60,7 @@ public class ProductionProfileGuard {
     private final String replicaDatasourceUrl;
     private final String secretsSource;
     private final String allowPlainSecret;
+    private final String keysRotatedAt;
     private final Environment environment;
 
     public ProductionProfileGuard(
@@ -57,6 +70,7 @@ public class ProductionProfileGuard {
             @Value("${spring.datasource.replica.url:}") String replicaDatasourceUrl,
             @Value("${COMPUTERPETS_SECRETS_SOURCE:}") String secretsSource,
             @Value("${COMPUTERPETS_ALLOW_PLAIN_SECRET:false}") String allowPlainSecret,
+            @Value("${COMPUTERPETS_KEYS_ROTATED_AT:}") String keysRotatedAt,
             Environment environment) {
         this.microsoftDevMode = microsoftDevMode;
         this.rateLimitBackend = rateLimitBackend;
@@ -64,6 +78,7 @@ public class ProductionProfileGuard {
         this.replicaDatasourceUrl = replicaDatasourceUrl;
         this.secretsSource = secretsSource == null ? "" : secretsSource.trim();
         this.allowPlainSecret = allowPlainSecret == null ? "" : allowPlainSecret.trim();
+        this.keysRotatedAt = keysRotatedAt == null ? "" : keysRotatedAt.trim();
         this.environment = environment;
     }
 
@@ -95,6 +110,7 @@ public class ProductionProfileGuard {
             }
         }
         rejectPlainEnvSecrets();
+        rejectStaleKeysRotatedAt();
         log.info(
                 "Production profile guard passed (Postgres, Redis, microsoft.dev-mode=false, secrets source={}).",
                 plainSecretAllowed() ? "plain-local-override" : secretsSource.toLowerCase(Locale.ROOT));
@@ -137,6 +153,40 @@ public class ProductionProfileGuard {
                                     + "See deploy/k8s/deployment-secrets-file.example.yaml (ADR 0064).");
                 }
             }
+        }
+    }
+
+    /**
+     * Optional rotation stamp. When operators set it, refuse a stamp older than
+     * {@link #KEYS_ROTATED_AT_MAX_AGE} so mid-flight rotation cannot leave only
+     * expired material without an operator refresh (ADR 0065).
+     */
+    void rejectStaleKeysRotatedAt() {
+        if (keysRotatedAt.isBlank()) {
+            return;
+        }
+        Instant rotated;
+        try {
+            rotated = Instant.parse(keysRotatedAt);
+        } catch (DateTimeParseException e) {
+            throw new IllegalStateException(
+                    "COMPUTERPETS_KEYS_ROTATED_AT='" + keysRotatedAt
+                            + "' is not a valid ISO-8601 instant (e.g. 2026-09-22T12:00:00Z). "
+                            + "Unset it or set a parseable stamp (ADR 0065).",
+                    e);
+        }
+        Instant now = Instant.now();
+        if (rotated.isAfter(now.plus(Duration.ofHours(1)))) {
+            throw new IllegalStateException(
+                    "COMPUTERPETS_KEYS_ROTATED_AT is in the future. Refusing start (ADR 0065).");
+        }
+        if (rotated.isBefore(now.minus(KEYS_ROTATED_AT_MAX_AGE))) {
+            throw new IllegalStateException(
+                    "COMPUTERPETS_KEYS_ROTATED_AT is older than "
+                            + KEYS_ROTATED_AT_MAX_AGE.toDays()
+                            + " days while spring.profiles.active=prod. "
+                            + "Rotate house keys (JWT / bundle / license / admin), refresh the stamp, "
+                            + "and keep *_PREVIOUS only for the dual-key window (ADR 0065).");
         }
     }
 

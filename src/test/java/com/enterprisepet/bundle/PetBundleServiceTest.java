@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class PetBundleServiceTest {
 
@@ -30,6 +31,7 @@ class PetBundleServiceTest {
         PetBundleService s = new PetBundleService(catalog);
         ReflectionTestUtils.setField(s, "bundleBaseUrl", BASE_URL);
         ReflectionTestUtils.setField(s, "signingKey", SIGNING_KEY);
+        ReflectionTestUtils.setField(s, "previousSigningKey", "");
         s.init();
         return s;
     }
@@ -109,6 +111,42 @@ class PetBundleServiceTest {
             "red_panda", "steam:owner", "jti-xyz", manifest.expEpochSeconds(), sig)).isTrue();
         assertThat(service.signatureMatches(
             "red_panda", "steam:owner", "jti-xyz", manifest.expEpochSeconds(), sig + "x")).isFalse();
+    }
+
+    @Test
+    @DisplayName("signatureMatches accepts a sig from the previous key during rotation")
+    void signatureMatches_acceptsPreviousKey() throws Exception {
+        PetBundleService previousOnly = serviceWith(BundleCatalog.empty());
+        ReflectionTestUtils.setField(previousOnly, "signingKey", "previous-bundle-signing-key-value");
+        ReflectionTestUtils.setField(previousOnly, "previousSigningKey", "");
+        previousOnly.init();
+        var oldManifest = previousOnly.manifestFor(PetType.RED_PANDA, "steam:owner", "jti-old");
+        String oldSig = queryParam(URI.create(oldManifest.downloadUrl()).getRawQuery(), "sig");
+
+        PetBundleService rotated = serviceWith(BundleCatalog.empty());
+        ReflectionTestUtils.setField(rotated, "signingKey", SIGNING_KEY);
+        ReflectionTestUtils.setField(rotated, "previousSigningKey", "previous-bundle-signing-key-value");
+        rotated.init();
+
+        assertThat(rotated.signatureMatches(
+                "red_panda", "steam:owner", "jti-old", oldManifest.expEpochSeconds(), oldSig))
+                .isTrue();
+        // New manifests still sign with the current key only.
+        var fresh = rotated.manifestFor(PetType.RED_PANDA, "steam:owner", "jti-new");
+        String freshSig = queryParam(URI.create(fresh.downloadUrl()).getRawQuery(), "sig");
+        assertThat(freshSig).isEqualTo(hmac("red_panda|steam:owner|jti-new|" + fresh.expEpochSeconds()));
+    }
+
+    @Test
+    @DisplayName("init refuses a previous signing key equal to current")
+    void init_refusesIdenticalPrevious() {
+        PetBundleService s = new PetBundleService(BundleCatalog.empty());
+        ReflectionTestUtils.setField(s, "bundleBaseUrl", BASE_URL);
+        ReflectionTestUtils.setField(s, "signingKey", SIGNING_KEY);
+        ReflectionTestUtils.setField(s, "previousSigningKey", SIGNING_KEY);
+        assertThatThrownBy(s::init)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("must differ");
     }
 
     @Test

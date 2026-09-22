@@ -104,8 +104,11 @@ There is **no key-derivation function**. `LICENSE_SECRET_KEY` is
 standard Base64 of **exactly 32 bytes** and is used directly as the AES-256 key.
 
 A client that decrypts locally must be provisioned with the same
-`LICENSE_SECRET_KEY` the server uses. Download does **not** require local
-decrypt — you can POST the opaque `ciphertext` + `iv` back unchanged.
+`LICENSE_SECRET_KEY` the server uses. During an AES rotation window the
+client may also hold `LICENSE_SECRET_KEY_PREVIOUS` so sealed licenses
+issued under the old key still open locally ([ADR 0065](adr/0065-secret-rotation-cadence-and-hsm.md)).
+Download does **not** require local decrypt — you can POST the opaque
+`ciphertext` + `iv` back unchanged (the backend dual-decrypts).
 
 | Parameter | Value |
 |-----------|--------|

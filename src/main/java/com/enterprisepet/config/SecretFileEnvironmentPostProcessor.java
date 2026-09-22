@@ -41,9 +41,13 @@ public final class SecretFileEnvironmentPostProcessor implements EnvironmentPost
      */
     static final List<String> SECRET_ENV_NAMES = List.of(
             "LICENSE_SECRET_KEY",
+            "LICENSE_SECRET_KEY_PREVIOUS",
             "JWT_SECRET_KEY",
+            "JWT_SECRET_KEY_PREVIOUS",
             "BUNDLE_SIGNING_KEY",
+            "BUNDLE_SIGNING_KEY_PREVIOUS",
             "ADMIN_API_KEY",
+            "ADMIN_API_KEY_PREVIOUS",
             "SPRING_DATASOURCE_PASSWORD",
             "POSTGRES_PASSWORD",
             "STEAM_API_KEY",

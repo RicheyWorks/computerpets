@@ -30,3 +30,4 @@ This slice closes that gap without storefront work, without DirectX 12 / Vulkan 
 - ESO → Opaque Secret → `envFrom` remains valid when `COMPUTERPETS_SECRETS_SOURCE=external-secrets` (values may still appear in process env; the operator contract is the sync path, not scrubbing `environ`).
 - File mounts keep crypto keys out of process environment listings when operators choose `file`.
 - CDN edge redeem ([0063](0063-cdn-edge-redeem-verification.md)) and Terraform managed stores ([0062](0062-terraform-managed-stores.md)) are not reopened beyond this cross-link.
+- Secret rotation cadence / dual-key / HSM pointer lands in [0065](0065-secret-rotation-cadence-and-hsm.md).
