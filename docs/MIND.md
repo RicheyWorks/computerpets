@@ -10,7 +10,7 @@ The pet engine talks through a **plugin bus**. House lines are always the fallba
 | xAI Grok | OpenAI-compatible |
 | OpenAI | OpenAI |
 | Anthropic | Messages API |
-| Google Gemini | generateContent, key in `x-goog-api-key` |
+| Google Gemini | generateContent, key in `x-goog-api-key`; a pasted `key` query is dropped |
 | Groq | OpenAI-compatible |
 | OpenRouter | OpenAI-compatible |
 | Together | OpenAI-compatible |
@@ -58,4 +58,4 @@ An unknown plugin, a missing key, or an unsafe URL stays House lines. The line n
 
 ## Desktop
 
-Tray → **Minds**. Same roster of plugins. The overlay calls the chosen mind directly (CSP allows `https:` and localhost). There is no house account in front of that call. Gemini `generateContent` sends the plugin key as `x-goog-api-key`. That key is not on the URL. OpenAI-compatible calls and a custom webhook keep `Authorization`. Anthropic keeps `x-api-key`. The plugin key is sealed with Electron `safeStorage` when the OS secret store is available. `mind.json` keeps the prefs and the seal, not the plain key.
+Tray → **Minds**. Same roster of plugins. The overlay calls the chosen mind directly (CSP allows `https:` and localhost). There is no house account in front of that call. Gemini `generateContent` sends the plugin key as `x-goog-api-key`. That key is not on the URL. A pasted base URL loses `key`, `api_key`, and the same kind of secret query before the call. The model is sanitized the way the house already sanitizes it, so a model value cannot add a query to that path. OpenAI-compatible calls and a custom webhook keep `Authorization`. Anthropic keeps `x-api-key`. The plugin key is sealed with Electron `safeStorage` when the OS secret store is available. `mind.json` keeps the prefs and the seal, not the plain key.
