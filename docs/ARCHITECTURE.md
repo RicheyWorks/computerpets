@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-22 (Hikari pool defaults + optional deny-safe read replica — ADR 0059. Not DX12/Vulkan. Catalog 221.) |
+| **Last Updated** | 2026-09-22 (Bundle zip contents + fail-closed update — ADR 0060. Not DX12/Vulkan. Catalog 221.) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -77,7 +77,7 @@ The system is currently a modular monolith with scaffolding for persistence (JPA
 - **ProviderRegistry** discovers `OwnershipProvider` beans at startup and routes `/api/verify/{key}` calls.
 - **LicenseService** is the cryptographic source of truth for entitlements (AES-GCM).
 - **JwtService + JwtAuthenticationFilter** protect the download phase only.
-- **PetBundleService** authorizes access to external storage without serving bytes itself. A config-driven `bundle.catalog` may attach version, platform, and sha256 to the signed manifest; empty catalog keeps today's URL-only contract.
+- **PetBundleService** authorizes access to external storage without serving bytes itself. A config-driven `bundle.catalog` may attach version, platform, and sha256 to the signed manifest; empty catalog keeps today's URL-only contract. Published zips follow `computerpets.bundle/v1` (`BundleZipContract`); clients fail closed on bad/missing catalog digest (ADR 0060).
 - External dependencies are called synchronously during verification (Web3 RPC, Microsoft Collections API, Steam Web API, itch.io API, and EOS Auth + Ecom).
 
 ```mermaid
@@ -286,7 +286,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 |-----------------------|--------------------------------------------------------------------------------|-----------------------------|----------------------------------------|----------------------------------|
 | `LicenseService`      | Issue & validate AES-256-GCM encrypted JSON license payloads (jti, owner, pet, timestamps); revoke writes Postgres then the shared deny-list | BouncyCastle GCMBlockCipher + Jackson | `license/LicenseService.java`          | `LicenseRepository`, `RevocationIndex`, Spring @Value, ObjectMapper, SecureRandom |
 | `JwtService`          | Issue short-lived (default 30 min) HS256 JWTs carrying owner/pet/provider claims; parse & validate | JJWT 0.12 + Spring @Value   | `security/JwtService.java`             | SecretKey from config            |
-| `PetBundleService`    | Generate 15-minute HMAC-SHA256 signed CDN download URLs bound to (petKey, owner, jti, expiry); optional catalog metadata; verify MAC on redeem | javax.crypto.Mac + Spring   | `bundle/PetBundleService.java`, `bundle/BundleCatalog.java` | Signing key + `bundle.catalog` |
+| `PetBundleService`    | Generate 15-minute HMAC-SHA256 signed CDN download URLs bound to (petKey, owner, jti, expiry); optional catalog metadata; verify MAC on redeem | javax.crypto.Mac + Spring   | `bundle/PetBundleService.java`, `bundle/BundleCatalog.java`, `bundle/BundleZipContract.java` | Signing key + `bundle.catalog` |
 | `DownloadGrantService` / `DownloadGrantIndex` | Issue one-time IP-bound grants on `jti`+`exp`; atomic redeem for edge/`GET /api/bundles/{pet}/redeem` | Redis SETEX + Lua (or in-memory) | `bundle/DownloadGrantService.java`, `bundle/RedisDownloadGrantIndex.java` | Same Redis as rate limits |
 | `PetCatalog` / `PetType` | Static catalog of 210 living kinds across 4 rarity tiers; lookup + grouping utilities   | Java enum + Spring @Service | `pet/PetType.java`, `pet/PetCatalog.java` | —                                |
 
@@ -665,7 +665,7 @@ Goal: Deliver a complete, usable platform.
   - [x] Publish the license format, decrypt, hwid, and download rules (`docs/CLIENT-CONTRACT.md`)
   - [x] Electron overlay (`desktop/license/`) and PyQt blotter (`client/`) implement that handshake
   - [x] Bundle artifact catalog (`version` / `platform` / `sha256`) on the signed download manifest
-  - Define bundle zip contents and update process
+  - [x] Bundle zip contents (`computerpets.bundle/v1`) and fail-closed update process (ADR 0060)
 
 - **4.2 Additional Ownership Providers**
   - [x] Itch.io download-key receipt verify (`ItchService`)

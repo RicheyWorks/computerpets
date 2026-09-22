@@ -7,6 +7,7 @@ const { decryptLicense } = require("./decrypt.cjs");
 const { resolveHwidDetail, peekHwid, assertHwid } = require("./hwid.cjs");
 const { createLicenseClient, normalizeBackendUrl } = require("./client.cjs");
 const { getSignedBundle, postLicenseHash, postUnboundDownload } = require("./license-net.cjs");
+const { alreadyCurrent } = require("./bundle-zip.cjs");
 
 const STORE_NAME = "license.json";
 const DEFAULT_BACKEND = "http://127.0.0.1:8081";
@@ -221,13 +222,13 @@ function createLicenseSession(opts) {
     return { ...publicStatus(), download: downloaded };
   }
 
-  function readBundle(downloadUrl, shown, strict) {
+  function readBundle(downloadUrl, shown, strict, expect) {
     return getSignedBundle(
       shown,
       downloadUrl,
       async () => {
         try {
-          const bundle = await client.fetchBundle(downloadUrl);
+          const bundle = await client.fetchBundle(downloadUrl, expect);
           return { ...bundle, held: false };
         } catch (err) {
           return {
@@ -241,6 +242,20 @@ function createLicenseSession(opts) {
       },
       strict === true
     );
+  }
+
+  function catalogExpect(manifest, store) {
+    const local =
+      store && store.installedBundle && typeof store.installedBundle === "object"
+        ? store.installedBundle
+        : null;
+    return {
+      petKey: typeof manifest.petKey === "string" ? manifest.petKey : null,
+      version: typeof manifest.version === "string" ? manifest.version : null,
+      platform: typeof manifest.platform === "string" ? manifest.platform : null,
+      sha256: typeof manifest.sha256 === "string" ? manifest.sha256 : null,
+      local,
+    };
   }
 
   async function requestDownload(storeArg, payloadArg, deviceIdArg, secretArg, allowWeakFallback, shownLine, shownCdn) {
@@ -268,7 +283,32 @@ function createLicenseSession(opts) {
       });
     });
 
-    const bundle = await readBundle(manifest.downloadUrl, typeof shownCdn === "string" ? shownCdn : "");
+    const expect = catalogExpect(manifest, store);
+    let bundle;
+    if (alreadyCurrent(expect)) {
+      bundle = {
+        ok: true,
+        status: 0,
+        bytes: 0,
+        held: false,
+        update: "current",
+        petKey: expect.petKey,
+        version: expect.version,
+        platform: expect.platform,
+        sha256: expect.sha256,
+      };
+    } else if (expect.version && !expect.sha256) {
+      bundle = {
+        ok: false,
+        status: 0,
+        bytes: 0,
+        held: false,
+        update: "refuse",
+        error: "bundle_sha256_missing",
+      };
+    } else {
+      bundle = await readBundle(manifest.downloadUrl, typeof shownCdn === "string" ? shownCdn : "", false, expect);
+    }
 
     const lastDownload = {
       petKey: manifest.petKey || payload.pet,
@@ -276,9 +316,24 @@ function createLicenseSession(opts) {
       expiresAt: manifest.expiresAt || null,
       jti: manifest.jti || payload.jti,
       ttlSeconds: manifest.ttlSeconds || null,
+      version: typeof manifest.version === "string" ? manifest.version : null,
+      platform: typeof manifest.platform === "string" ? manifest.platform : null,
+      sha256: typeof manifest.sha256 === "string" ? manifest.sha256 : null,
+      filename: typeof manifest.filename === "string" ? manifest.filename : null,
       bundle,
     };
-    save({ ...store, lastDownload });
+    const nextStore = { ...store, lastDownload };
+    if (bundle && bundle.ok && (bundle.update === "install" || bundle.update === "replace" || bundle.update === "current")) {
+      if (bundle.sha256 && bundle.version && bundle.petKey) {
+        nextStore.installedBundle = {
+          petKey: bundle.petKey,
+          version: bundle.version,
+          platform: bundle.platform || null,
+          sha256: bundle.sha256,
+        };
+      }
+    }
+    save(nextStore);
     return lastDownload;
   }
 
@@ -294,9 +349,21 @@ function createLicenseSession(opts) {
     if (!downloadUrl) {
       throw new LicenseError("signed_url_invalid", "downloadUrl missing");
     }
-    const bundle = await readBundle(downloadUrl, shownCdnLine(input), true);
+    const expect = catalogExpect(last || {}, store);
+    const bundle = await readBundle(downloadUrl, shownCdnLine(input), true, expect);
     const next = { ...last, bundle };
-    save({ ...store, lastDownload: next });
+    const nextStore = { ...store, lastDownload: next };
+    if (bundle && bundle.ok && (bundle.update === "install" || bundle.update === "replace" || bundle.update === "current")) {
+      if (bundle.sha256 && bundle.version && bundle.petKey) {
+        nextStore.installedBundle = {
+          petKey: bundle.petKey,
+          version: bundle.version,
+          platform: bundle.platform || null,
+          sha256: bundle.sha256,
+        };
+      }
+    }
+    save(nextStore);
     return next;
   }
 

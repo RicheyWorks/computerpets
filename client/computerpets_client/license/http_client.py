@@ -12,6 +12,7 @@ from urllib.request import Request, urlopen
 from .errors import LicenseError
 from .hwid import assert_hwid
 from .signed_url import verify_signed_download_url
+from .bundle_zip import accept_bundle_bytes
 
 DEFAULT_TIMEOUT_S = 12.0
 _PROVIDER_RE = re.compile(r"^[a-z0-9_]+$")
@@ -201,14 +202,38 @@ def create_license_client(
         )
         return payload
 
-    def fetch_bundle(download_url: str) -> dict[str, Any]:
-        """GET the signed bundle. The license hash is not added to this request."""
+    def fetch_bundle(download_url: str, expect: dict[str, Any] | None = None) -> dict[str, Any]:
+        """GET the signed bundle. The license hash is not added to this request.
+
+        When ``expect`` claims catalog version/sha256, zip digest + layout must
+        pass or the result is ``ok: False`` — fail closed.
+        """
         if not isinstance(download_url, str) or not download_url:
             raise LicenseError("signed_url_invalid", "downloadUrl missing")
         res = request(download_url, method="GET")
         if not res.ok:
             return {"ok": False, "status": res.status, "bytes": 0}
-        return {"ok": True, "status": res.status, "bytes": len(res.body)}
+        base = {"ok": True, "status": res.status, "bytes": len(res.body)}
+        if not isinstance(expect, dict):
+            return base
+        decision = accept_bundle_bytes(res.body, expect)
+        if not decision.get("accepted"):
+            return {
+                "ok": False,
+                "status": res.status,
+                "bytes": len(res.body),
+                "update": decision.get("action"),
+                "error": decision.get("error"),
+            }
+        return {
+            **base,
+            "update": decision.get("action"),
+            "petKey": decision.get("petKey"),
+            "version": decision.get("version"),
+            "platform": decision.get("platform"),
+            "sha256": decision.get("sha256"),
+            "memberCount": decision.get("memberCount"),
+        }
 
     return {
         "verify": verify,
