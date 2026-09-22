@@ -141,7 +141,8 @@ def create_contract_test_double(
             sig = sign_download_mac(message, signing_key)
             download_url = (
                 f"https://cdn.enterprisepet.example/bundles/{pet_key}.zip"
-                f"?owner={quote(record['payload']['owner'], safe='')}"
+                f"?pet={quote(pet_key, safe='')}"
+                f"&owner={quote(record['payload']['owner'], safe='')}"
                 f"&jti={quote(record['payload']['jti'], safe='')}"
                 f"&exp={exp}&sig={sig}"
             )

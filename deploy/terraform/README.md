@@ -38,7 +38,7 @@ deploy/terraform/
 | Postgres/Redis resources | **skipped** until `vpc_id` + `private_subnet_ids` are set |
 | House crypto in tfvars / state | **refused** (`write_house_secret_values` must stay false) |
 | Secrets Manager | **shells only** — names match External Secrets `remoteRef` keys |
-| Bundle bucket | Block public ACLs; CloudFront OAC only |
+| Bundle bucket | Block public ACLs; CloudFront OAC only. Edge redeem: `deploy/cdn/` ([ADR 0063](../../docs/adr/0063-cdn-edge-redeem-verification.md)) |
 | Redis AUTH / TLS | **off** — the app has no Redis password setting (same honesty as k8s README) |
 
 ## Operator flow

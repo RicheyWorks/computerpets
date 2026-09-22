@@ -22,9 +22,10 @@ import java.util.Optional;
  *
  * <p>In production the actual {@code .zip} would live on S3 / CloudFront / R2 and the URL
  * would be a presigned download. Here we emit a stable URL pattern plus an HMAC-SHA256
- * token over {@code petKey|owner|jti|exp}, which an edge worker (or this same backend's
- * download proxy) can verify before serving bytes. This keeps the master key off the
- * client and bounds replay to {@link #DOWNLOAD_URL_TTL}.
+ * token over {@code petKey|owner|jti|exp}, which an edge worker calls house redeem to
+ * verify before serving bytes ({@code deploy/cdn/edge-redeem.js}; ADR 0063). The URL
+ * also carries {@code pet=} so redeem works when the object key is a catalog path.
+ * This keeps the master key off the client and bounds replay to {@link #DOWNLOAD_URL_TTL}.
  *
  * <p>When {@link BundleCatalog} has a matching row the manifest also carries
  * {@code version}, {@code platform}, and {@code sha256}. Those fields are omitted
@@ -109,20 +110,24 @@ public class PetBundleService {
 
         // jti must appear on the URL when it is in the MAC, otherwise an edge
         // worker cannot reconstruct petKey|owner|jti|exp from query params.
-        // Do not scrub owner/jti/exp/sig for presence theater.
+        // pet= carries the catalog key so edge redeem works when object-key is
+        // a catalog path (e.g. red_panda-win-1.0.0.zip), not only {petKey}.zip.
+        // Do not scrub owner/jti/exp/sig/pet for presence theater.
         String url = (jti == null || jti.isBlank())
             ? String.format(
-                "%s/%s?owner=%s&exp=%d&sig=%s",
+                "%s/%s?pet=%s&owner=%s&exp=%d&sig=%s",
                 stripTrailingSlash(bundleBaseUrl),
                 objectKey,
+                urlEncode(pet.key()),
                 urlEncode(owner),
                 expEpoch,
                 token
             )
             : String.format(
-                "%s/%s?owner=%s&jti=%s&exp=%d&sig=%s",
+                "%s/%s?pet=%s&owner=%s&jti=%s&exp=%d&sig=%s",
                 stripTrailingSlash(bundleBaseUrl),
                 objectKey,
+                urlEncode(pet.key()),
                 urlEncode(owner),
                 urlEncode(jti),
                 expEpoch,
