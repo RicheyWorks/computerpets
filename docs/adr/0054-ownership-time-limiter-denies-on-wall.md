@@ -20,5 +20,6 @@ One shared Resilience4j time limiter instance (`ownership`, twelve seconds, `can
 ## Consequences
 
 - A hung ownership probe denies. Deny means the store did not answer in time, not that the keeper owns the title.
+- The bean constructs its own twelve-second `TimeLimiter` from `OWNERSHIP_WALL` so Spring context start does not depend on Resilience4j registry bean ordering (same wall as yml).
 - Presence / CSP series is not reopened. One-line cross-links only.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.

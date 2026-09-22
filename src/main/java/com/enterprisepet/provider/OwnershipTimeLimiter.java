@@ -1,6 +1,7 @@
 package com.enterprisepet.provider;
 
 import io.github.resilience4j.timelimiter.TimeLimiter;
+import io.github.resilience4j.timelimiter.TimeLimiterConfig;
 import io.github.resilience4j.timelimiter.TimeLimiterRegistry;
 import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
@@ -27,6 +28,11 @@ import java.util.function.Supplier;
  * ({@code false} or {@link java.util.Optional#empty()}) — never an invented grant.
  * Circuit breaker and retry stay as they are; this does not add a retry budget.
  *
+ * <p>The wall is {@link #OWNERSHIP_WALL} (twelve seconds), matching
+ * {@code resilience4j.timelimiter.instances.ownership} in application.yml. The
+ * bean constructs its own {@link TimeLimiter} so Spring context start does not
+ * depend on Resilience4j registry bean ordering.
+ *
  * <p>When the tool is not injected (focused unit tests that construct a provider
  * with {@code new}), {@link #guard} runs the probe directly.
  */
@@ -48,23 +54,37 @@ public class OwnershipTimeLimiter {
     private final TimeLimiter timeLimiter;
     private final ExecutorService workers;
 
-    public OwnershipTimeLimiter(TimeLimiterRegistry registry) {
-        this.timeLimiter = registry.timeLimiter(INSTANCE);
-        AtomicInteger n = new AtomicInteger();
-        ThreadFactory factory = r -> {
-            Thread t = new Thread(r, "ownership-timelimiter-" + n.incrementAndGet());
-            t.setDaemon(true);
-            return t;
-        };
-        this.workers = Executors.newCachedThreadPool(factory);
+    public OwnershipTimeLimiter() {
+        this(defaultLimiter(), newWorkerPool());
     }
 
     /**
      * Package-visible constructor for focused tests with a custom registry.
      */
     OwnershipTimeLimiter(TimeLimiterRegistry registry, ExecutorService workers) {
-        this.timeLimiter = registry.timeLimiter(INSTANCE);
+        this(registry.timeLimiter(INSTANCE), workers);
+    }
+
+    private OwnershipTimeLimiter(TimeLimiter timeLimiter, ExecutorService workers) {
+        this.timeLimiter = timeLimiter;
         this.workers = workers;
+    }
+
+    private static TimeLimiter defaultLimiter() {
+        return TimeLimiter.of(INSTANCE, TimeLimiterConfig.custom()
+                .timeoutDuration(OWNERSHIP_WALL)
+                .cancelRunningFuture(true)
+                .build());
+    }
+
+    private static ExecutorService newWorkerPool() {
+        AtomicInteger n = new AtomicInteger();
+        ThreadFactory factory = r -> {
+            Thread t = new Thread(r, "ownership-timelimiter-" + n.incrementAndGet());
+            t.setDaemon(true);
+            return t;
+        };
+        return Executors.newCachedThreadPool(factory);
     }
 
     /**

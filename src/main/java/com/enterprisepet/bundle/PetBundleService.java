@@ -45,7 +45,7 @@ public class PetBundleService {
     };
 
     /** How long a signed download URL is valid for. */
-    private static final Duration DOWNLOAD_URL_TTL = Duration.ofMinutes(15);
+    public static final Duration DOWNLOAD_URL_TTL = Duration.ofMinutes(15);
 
     private static final String HMAC_ALGORITHM = "HmacSHA256";
 
@@ -99,11 +99,9 @@ public class PetBundleService {
      */
     public BundleManifest manifestFor(PetType pet, String owner, String jti, String platform) {
         Instant expiresAt = Instant.now().plus(DOWNLOAD_URL_TTL);
+        long expEpoch = expiresAt.getEpochSecond();
 
-        String toSign = (jti == null || jti.isBlank())
-            ? pet.key() + "|" + owner + "|" + expiresAt.getEpochSecond()
-            : pet.key() + "|" + owner + "|" + jti + "|" + expiresAt.getEpochSecond();
-
+        String toSign = macInput(pet.key(), owner, jti, expEpoch);
         String token = sign(toSign);
 
         Optional<BundleCatalog.Artifact> artifact = catalog.resolve(pet.key(), platform);
@@ -111,13 +109,14 @@ public class PetBundleService {
 
         // jti must appear on the URL when it is in the MAC, otherwise an edge
         // worker cannot reconstruct petKey|owner|jti|exp from query params.
+        // Do not scrub owner/jti/exp/sig for presence theater.
         String url = (jti == null || jti.isBlank())
             ? String.format(
                 "%s/%s?owner=%s&exp=%d&sig=%s",
                 stripTrailingSlash(bundleBaseUrl),
                 objectKey,
                 urlEncode(owner),
-                expiresAt.getEpochSecond(),
+                expEpoch,
                 token
             )
             : String.format(
@@ -126,7 +125,7 @@ public class PetBundleService {
                 objectKey,
                 urlEncode(owner),
                 urlEncode(jti),
-                expiresAt.getEpochSecond(),
+                expEpoch,
                 token
             );
 
@@ -147,7 +146,50 @@ public class PetBundleService {
             manifest.put("filename", a.path());
         });
 
-        return new BundleManifest(pet.key(), url, expiresAt.toString(), manifest);
+        return new BundleManifest(pet.key(), url, expiresAt.toString(), expEpoch, manifest);
+    }
+
+    /**
+     * True when {@code sig} matches the HMAC over {@code petKey|owner|jti|exp}
+     * (or {@code petKey|owner|exp} when {@code jti} is blank). Constant-time compare.
+     */
+    public boolean signatureMatches(String petKey, String owner, String jti, long expEpochSeconds, String sig) {
+        if (petKey == null || petKey.isBlank() || owner == null || sig == null || sig.isBlank()) {
+            return false;
+        }
+        String expected = sign(macInput(petKey, owner, jti, expEpochSeconds));
+        return constantTimeEquals(expected, sig);
+    }
+
+    static String macInput(String petKey, String owner, String jti, long expEpochSeconds) {
+        if (jti == null || jti.isBlank()) {
+            return petKey + "|" + owner + "|" + expEpochSeconds;
+        }
+        return petKey + "|" + owner + "|" + jti + "|" + expEpochSeconds;
+    }
+
+    private static boolean constantTimeEquals(String a, String b) {
+        if (a == null || b == null) {
+            return false;
+        }
+        byte[] left = a.getBytes(StandardCharsets.UTF_8);
+        byte[] right = b.getBytes(StandardCharsets.UTF_8);
+        if (left.length != right.length) {
+            // Still walk the longer side so length leaks less wall time.
+            int len = Math.max(left.length, right.length);
+            int diff = left.length ^ right.length;
+            for (int i = 0; i < len; i++) {
+                byte lb = i < left.length ? left[i] : 0;
+                byte rb = i < right.length ? right[i] : 0;
+                diff |= lb ^ rb;
+            }
+            return false;
+        }
+        int diff = 0;
+        for (int i = 0; i < left.length; i++) {
+            diff |= left[i] ^ right[i];
+        }
+        return diff == 0;
     }
 
     /** Backward-compatible overload (jti omitted). */
@@ -174,6 +216,14 @@ public class PetBundleService {
         return java.net.URLEncoder.encode(s == null ? "" : s, StandardCharsets.UTF_8);
     }
 
-    /** Returned to the client; {@code body} is the JSON-friendly view for serialization. */
-    public record BundleManifest(String petKey, String downloadUrl, String expiresAt, Map<String, Object> body) {}
+    /**
+     * Returned to the client; {@code body} is the JSON-friendly view for serialization.
+     * {@code expEpochSeconds} is the same {@code exp} query value on {@code downloadUrl}.
+     */
+    public record BundleManifest(
+            String petKey,
+            String downloadUrl,
+            String expiresAt,
+            long expEpochSeconds,
+            Map<String, Object> body) {}
 }

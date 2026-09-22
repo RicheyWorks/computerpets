@@ -54,5 +54,5 @@ rate-limit filter.
   ledger still deny, just after a DB read.
 - The deny-list is not a second source of truth. Do not revoke only in
   Redis.
-- Signed download URLs are still replayable for 15 minutes. jti is in
-  the HMAC; one-time or IP-bound URLs are not this decision.
+- Signed download URLs carry jti in the HMAC. One-time redeem and IP
+  binding of those grants is [0055](0055-download-jti-one-time-and-ip-bound.md).

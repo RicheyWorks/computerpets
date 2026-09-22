@@ -1,6 +1,9 @@
 package com.enterprisepet.controller;
 
+import com.enterprisepet.bundle.DownloadGrantService;
+import com.enterprisepet.bundle.DownloadGrantUnavailableException;
 import com.enterprisepet.bundle.PetBundleService;
+import com.enterprisepet.config.ClientAddress;
 import com.enterprisepet.dto.DownloadRequest;
 import com.enterprisepet.dto.DownloadResponse;
 import com.enterprisepet.dto.ErrorResponse;
@@ -15,6 +18,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,15 +47,18 @@ public class DownloadController {
 
     private final LicenseService licenseService;
     private final PetBundleService bundleService;
+    private final DownloadGrantService grantService;
     private final PetCatalog petCatalog;
     private final VerificationTelemetry telemetry;
 
     public DownloadController(LicenseService licenseService,
                               PetBundleService bundleService,
+                              DownloadGrantService grantService,
                               PetCatalog petCatalog,
                               VerificationTelemetry telemetry) {
         this.licenseService = licenseService;
         this.bundleService = bundleService;
+        this.grantService = grantService;
         this.petCatalog = petCatalog;
         this.telemetry = telemetry;
     }
@@ -97,17 +104,21 @@ public class DownloadController {
                                     @ExampleObject(ref = "Download Pet Mismatch"),
                                     @ExampleObject(ref = "Download Auth Mismatch"),
                                     @ExampleObject(ref = "Download Hwid Mismatch")
-                            }))
+                            })),
+            @ApiResponse(responseCode = "503", description = "Download grant store unavailable (fail closed)",
+                    content = @Content(mediaType = "application/json"))
         }
     )
     @PostMapping("/{petKey}")
     public ResponseEntity<?> download(@PathVariable("petKey") String petKey,
                                       @RequestParam(value = "platform", required = false) String platform,
-                                      @RequestBody DownloadRequest body) {
-        return telemetry.download(petKey, () -> executeDownload(petKey, body, platform));
+                                      @RequestBody DownloadRequest body,
+                                      HttpServletRequest request) {
+        return telemetry.download(petKey, () -> executeDownload(petKey, body, platform, request));
     }
 
-    private ResponseEntity<?> executeDownload(String petKey, DownloadRequest body, String queryPlatform) {
+    private ResponseEntity<?> executeDownload(String petKey, DownloadRequest body, String queryPlatform,
+                                              HttpServletRequest request) {
         Optional<PetType> petOpt = petCatalog.find(petKey);
         if (petOpt.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of(
@@ -163,10 +174,18 @@ public class DownloadController {
             }
         }
 
-        // Phase 2.1: record usage + bind signed URL to this specific jti
+        // Phase 2.1: record usage, bind signed URL to this jti, register one-time grant (+ IP).
         licenseService.recordDownload(license.jti());
         String platform = firstNonBlank(body.platform(), queryPlatform);
         var manifest = bundleService.manifestFor(pet, license.owner(), license.jti(), platform);
+        try {
+            grantService.issue(manifest, license.jti(), ClientAddress.from(request));
+        } catch (DownloadGrantUnavailableException e) {
+            return ResponseEntity.status(503).body(Map.of(
+                "error", "download grant store unavailable",
+                "hint", "Retry shortly. A signed URL is not returned when the grant cannot be tracked."
+            ));
+        }
         return ResponseEntity.ok(manifest.body());
     }
 

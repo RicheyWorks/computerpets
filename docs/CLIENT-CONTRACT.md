@@ -317,8 +317,9 @@ Unknown `petKey` values, placeholder / short / non-hex `sha256`, and
 duplicate `petKey`+`platform` rows fail process startup. The house
 prefers a refused boot over a typo that ships.
 
-A successful download sets `IssuedLicense.lastUsedAt`. That is audit only;
-the URL is **not** one-time-use.
+A successful download sets `IssuedLicense.lastUsedAt` (audit) and registers a
+one-time download grant for that `jti`+`exp`, bound to the requesting client
+address. See §7.
 
 An unbound body omits `hwid`. That POST still shows this computer's network
 address to the backend host. The overlay and the blotter name that host
@@ -378,6 +379,46 @@ fragment, and any userinfo stay off the line. The license hash is not
 on that GET. A CDN on this computer, or a `file:` URL, stays local.
 Opening the house does not fetch it.
 
+### One-time redeem and IP binding
+
+Before serving bytes, an edge worker (or this backend as download proxy)
+calls:
+
+`GET /api/bundles/{petKey}/redeem?owner=...&jti=...&exp=...&sig=...`
+
+`{petKey}` is the catalog pet key (the HMAC input), not necessarily the
+object filename. Unauthenticated — the signature is the gate. The query
+fields stay; they are not scrubbed for presence theater.
+
+The grant is keyed by `jti`+`exp`. First success:
+
+```json
+{ "allowed": true, "petKey": "red_panda", "jti": "...", "exp": 1755411300 }
+```
+
+| Status | `error` | Keeper hint (API `hint`) |
+|--------|---------|--------------------------|
+| 200 | — | allowed |
+| 400 | `unknown pet type` / `download grant exp invalid` | — |
+| 401 | `download signature invalid` | Request a new download. |
+| 401 | `download grant expired` | Request a new download. |
+| 401 | `download grant unknown` | Request a new download. |
+| 403 | `download grant already used` | This download link was already used. Request a new download. |
+| 403 | `download grant address mismatch` | Bound to the address that requested it. Shared NAT may look like one address. |
+| 503 | `download grant store unavailable` | Retry; bytes are not served when the grant cannot be checked. |
+
+A second redeem of the **same** grant denies. The house does not silently
+re-open it. A fresh `POST /api/download/{petKey}` issues a new `exp` and a
+new grant.
+
+IP binding uses the same client-address rule as rate limits (first
+`X-Forwarded-For` hop, else remote address). An edge that calls redeem must
+forward the keeper's requesting address. Shared NAT / CGNAT is a known
+limit. Geolocation is not invented.
+
+If the grant store is down at issue time, `POST /api/download` returns
+**503** and does not return a signed URL.
+
 ---
 
 ## 8. Advertised care paths
@@ -420,7 +461,7 @@ paths are not this contract.
 - Zip **contents** or an update protocol (`bundle.catalog` names version, platform, and sha256 when a row is configured; it does not describe what is inside the zip)
 - A live NFT collection address (`ethereum.collections` stays empty until one is deployed)
 - A prescribed HWID recipe (MAC, disk serial, …)
-- One-time or IP-bound download URLs (jti is in the MAC; replay within 15 minutes is still possible)
+- Zip byte serving from this backend (redeem authorizes; the CDN still holds the object)
 - Client-side JWT verification (optional; download already checks it)
 - A `/metrics/gpu` route. GPU temperature, utilization, memory, and power are desktop-local on the keeper machine (`desktop/gpu-probe.ps1`, blotter `gpu.py`). The sparkline is a local history of those `read` samples, not a server series. Spring Boot does not see that GPU. Mac and Linux stay unread (`mac-linux-gpu-sense`). The browser has no sensor, so its strip stays empty.
 - A route that returns a mind API key. The keeper card may name who is listening. It does not receive the key. Guests stay on house lines.
