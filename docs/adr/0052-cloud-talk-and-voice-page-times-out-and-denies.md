@@ -15,11 +15,11 @@
 - A missing painted line still resolves to the house line or undefined and does not call the request. That hold still does not say "can't reach".
 - A loopback mind still calls the request with no remote deadline. `speechSynthesis` and browser speech stay on this computer and do not call `readVoice`.
 - A hang rejects. Desk and overlay catch and keep the house line or silence. They do not invent a reply or audio.
-- Steam's RestClient now uses a ten-second connect and read deadline, same spirit as Microsoft Collections. A hang denies ownership. Resilience4j still has no time limiter. Itch and Epic RestClient deadlines land in [0053](0053-itch-and-epic-restclient-times-out-and-denies.md).
+- Steam's RestClient now uses a ten-second connect and read deadline, same spirit as Microsoft Collections. A hang denies ownership. Shared ownership time limiter. [0054](0054-ownership-time-limiter-denies-on-wall.md). Itch and Epic RestClient deadlines land in [0053](0053-itch-and-epic-restclient-times-out-and-denies.md).
 
 ## Consequences
 
 - Cloud talk and cloud voice no longer wait forever on a silent host. The house line and silence mean the host did not answer. They do not mean the mind had nothing to say.
 - News, quote, radio, and weather page wrappers already time out. [0050](0050-weather-page-times-out-and-denies.md). [0051](0051-news-quote-radio-page-times-out-and-denies.md). Overlay plate IPC already times out. [0049](0049-plate-ipc-times-out-and-denies.md).
-- Itch and Epic RestClients now time out the same way. [0053](0053-itch-and-epic-restclient-times-out-and-denies.md). Resilience4j still has no time limiter.
+- Itch and Epic RestClients now time out the same way. [0053](0053-itch-and-epic-restclient-times-out-and-denies.md). Shared ownership time limiter. [0054](0054-ownership-time-limiter-denies-on-wall.md).
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.

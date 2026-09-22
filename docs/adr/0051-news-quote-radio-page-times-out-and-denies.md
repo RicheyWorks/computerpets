@@ -20,5 +20,5 @@
 
 - The news, quotes, and radio plates no longer wait forever on those page reads. "can't reach" and unread mean the host did not answer or the body did not land. They do not mean the search found nothing.
 - Cloud talk and cloud voice page wrappers time out. [0052](0052-cloud-talk-and-voice-page-times-out-and-denies.md). Overlay news, quote, and radio IPC already time out. [0049](0049-plate-ipc-times-out-and-denies.md). Weather page wrappers already time out. [0050](0050-weather-page-times-out-and-denies.md).
-- Steam's RestClient times out. [0052](0052-cloud-talk-and-voice-page-times-out-and-denies.md). Itch and Epic RestClients time out. [0053](0053-itch-and-epic-restclient-times-out-and-denies.md). Microsoft and NFT already time out. Resilience4j still has no time limiter. Those stay Phase 2.
+- Steam's RestClient times out. [0052](0052-cloud-talk-and-voice-page-times-out-and-denies.md). Itch and Epic RestClients time out. [0053](0053-itch-and-epic-restclient-times-out-and-denies.md). Microsoft and NFT already time out. Shared ownership time limiter. [0054](0054-ownership-time-limiter-denies-on-wall.md).
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.

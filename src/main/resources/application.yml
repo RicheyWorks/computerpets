@@ -288,3 +288,11 @@ resilience4j:
       epic:
         maxAttempts: 3
         waitDuration: 500ms
+  # Outer wall for one Steam / Itch / Epic / Microsoft ownership probe.
+  # RestClient still owns the per-HTTP 10s connect+read. This caps stacked hops
+  # (Epic token + ownership) and any hang past the socket deadline. Exceed denies.
+  timelimiter:
+    instances:
+      ownership:
+        timeoutDuration: 12s
+        cancelRunningFuture: true

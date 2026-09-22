@@ -2,6 +2,7 @@ package com.enterprisepet.steam;
 
 import com.enterprisepet.observability.ObservedRestClients;
 import com.enterprisepet.provider.OwnershipProvider;
+import com.enterprisepet.provider.OwnershipTimeLimiter;
 import com.enterprisepet.provider.VerificationResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,6 +62,10 @@ public class SteamService implements OwnershipProvider {
 
     @Autowired
     private ObservationRegistry observationRegistry = ObservationRegistry.NOOP;
+
+    /** Shared outer wall clock. Null in focused unit tests — see {@link OwnershipTimeLimiter#guard}. */
+    @Autowired(required = false)
+    private OwnershipTimeLimiter ownershipTimeLimiter;
 
     @Value("${steam.api-base-url:https://api.steampowered.com}")
     private String steamApiBaseUrl;
@@ -125,11 +130,17 @@ public class SteamService implements OwnershipProvider {
     /**
      * Asks Steam whether {@code steamId} owns {@code appId}.
      * The house door is {@link #verify}; this only hears Steam.
-     * Protected by Resilience4j circuit breaker + retry (Phase 2.3).
+     * Protected by Resilience4j circuit breaker + retry, plus the shared
+     * ownership time limiter (outer wall; RestClient still owns the 10s hop).
      */
     @CircuitBreaker(name = "steam", fallbackMethod = "ownsAppFallback")
     @Retry(name = "steam")
     public boolean ownsApp(String steamId, String appId) {
+        return OwnershipTimeLimiter.guard(ownershipTimeLimiter, "steam",
+                () -> ownsAppProbe(steamId, appId), false);
+    }
+
+    private boolean ownsAppProbe(String steamId, String appId) {
         log.info("Checking Steam ownership steamId={} appId={}", steamId, appId);
 
         if (steamApiKey == null || steamApiKey.isBlank() || "YOUR_STEAM_WEB_API_KEY".equals(steamApiKey)) {

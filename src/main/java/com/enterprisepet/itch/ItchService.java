@@ -2,6 +2,7 @@ package com.enterprisepet.itch;
 
 import com.enterprisepet.observability.ObservedRestClients;
 import com.enterprisepet.provider.OwnershipProvider;
+import com.enterprisepet.provider.OwnershipTimeLimiter;
 import com.enterprisepet.provider.VerificationResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -77,6 +78,10 @@ public class ItchService implements OwnershipProvider {
     @Autowired
     private ObservationRegistry observationRegistry = ObservationRegistry.NOOP;
 
+    /** Shared outer wall clock. Null in focused unit tests — see {@link OwnershipTimeLimiter#guard}. */
+    @Autowired(required = false)
+    private OwnershipTimeLimiter ownershipTimeLimiter;
+
     public ItchService() {}
 
     ItchService(RestClient restClient, String apiKey) {
@@ -131,11 +136,17 @@ public class ItchService implements OwnershipProvider {
 
     /**
      * Asks itch.io whether {@code downloadKey} is a valid receipt for {@code gameId}.
-     * Returns the stable owner id on success. Protected by Resilience4j (Phase 2.3).
+     * Returns the stable owner id on success. Protected by Resilience4j CB + retry,
+     * plus the shared ownership time limiter (outer wall; RestClient still owns the 10s hop).
      */
     @CircuitBreaker(name = "itch", fallbackMethod = "ownsReceiptFallback")
     @Retry(name = "itch")
     public Optional<String> ownsReceipt(String gameId, String downloadKey) {
+        return OwnershipTimeLimiter.guard(ownershipTimeLimiter, "itch",
+                () -> ownsReceiptProbe(gameId, downloadKey), Optional.empty());
+    }
+
+    private Optional<String> ownsReceiptProbe(String gameId, String downloadKey) {
         log.info("Checking Itch.io ownership gameId={}", gameId);
 
         if (isUnconfiguredApiKey(apiKey)) {
