@@ -6,7 +6,7 @@ const { LicenseError } = require("./errors.cjs");
 const { decryptLicense } = require("./decrypt.cjs");
 const { resolveHwidDetail, peekHwid, assertHwid } = require("./hwid.cjs");
 const { createLicenseClient, normalizeBackendUrl } = require("./client.cjs");
-const { bundleHostName, bundleMayFetch, downloadMayPost, licenseHostName, licenseMaySend } = require("./license-net.cjs");
+const { getSignedBundle, postLicenseHash, postUnboundDownload } = require("./license-net.cjs");
 
 const STORE_NAME = "license.json";
 const DEFAULT_BACKEND = "http://127.0.0.1:8081";
@@ -40,33 +40,6 @@ function shownLicenseLine(input) {
 
 function shownCdnLine(input) {
   return input && typeof input.cdnLine === "string" ? input.cdnLine : "";
-}
-
-function assertHashNamed(backendUrl, shown) {
-  if (licenseMaySend(backendUrl, shown)) return;
-  const host = licenseHostName(backendUrl) || "the license host";
-  throw new LicenseError(
-    "license_net_unnamed",
-    `the license hash was not sent to ${host}. name that host before it leaves.`
-  );
-}
-
-function assertDownloadNamed(backendUrl, shown) {
-  if (downloadMayPost(backendUrl, shown)) return;
-  const host = licenseHostName(backendUrl) || "the license host";
-  throw new LicenseError(
-    "download_net_unnamed",
-    `this download was not sent to ${host}. name that host before it leaves.`
-  );
-}
-
-function assertBundleNamed(downloadUrl, shown) {
-  if (bundleMayFetch(downloadUrl, shown)) return;
-  const host = bundleHostName(downloadUrl) || "the bundle host";
-  throw new LicenseError(
-    "cdn_net_unnamed",
-    `the signed bundle was not fetched from ${host}. name that host before it leaves.`
-  );
 }
 
 /**
@@ -183,32 +156,36 @@ function createLicenseSession(opts) {
   async function unlock(input = {}) {
     const store = load();
     const backendUrl = normalizeBackendUrl(input.backendUrl || store.backendUrl || defaultBackendUrl(env));
-    assertHashNamed(backendUrl, shownLicenseLine(input));
     const provider = typeof input.provider === "string" && input.provider ? input.provider : "steam";
-    const deviceId = deviceMark(true, input.allowWeakFallback === true).id;
-    const secret = licenseSecret(env);
-    if (!secret) {
-      throw new LicenseError("missing_secret", "LICENSE_SECRET_KEY is missing; cannot decrypt the issued license");
-    }
-
-    const fields = {
-      petType: typeof input.petType === "string" && input.petType ? input.petType : "red_panda",
-      hwid: deviceId,
-    };
-    if (provider === "steam") {
-      if (!input.steamId || !input.appId) {
-        throw new LicenseError("denied", "steamId and appId are required");
+    const allowWeak = input.allowWeakFallback === true;
+    const opened = await postLicenseHash(shownLicenseLine(input), backendUrl, async () => {
+      const deviceId = deviceMark(true, allowWeak).id;
+      const secret = licenseSecret(env);
+      if (!secret) {
+        throw new LicenseError("missing_secret", "LICENSE_SECRET_KEY is missing; cannot decrypt the issued license");
       }
-      fields.steamId = String(input.steamId);
-      fields.appId = String(input.appId);
-    } else if (input.fields && typeof input.fields === "object") {
-      Object.assign(fields, input.fields);
-      fields.hwid = deviceId;
-    } else {
-      throw new LicenseError("denied", `unsupported provider ${provider}`);
-    }
 
-    const verified = await client.verify({ backendUrl, provider, fields });
+      const fields = {
+        petType: typeof input.petType === "string" && input.petType ? input.petType : "red_panda",
+        hwid: deviceId,
+      };
+      if (provider === "steam") {
+        if (!input.steamId || !input.appId) {
+          throw new LicenseError("denied", "steamId and appId are required");
+        }
+        fields.steamId = String(input.steamId);
+        fields.appId = String(input.appId);
+      } else if (input.fields && typeof input.fields === "object") {
+        Object.assign(fields, input.fields);
+        fields.hwid = deviceId;
+      } else {
+        throw new LicenseError("denied", `unsupported provider ${provider}`);
+      }
+
+      const verified = await client.verify({ backendUrl, provider, fields });
+      return { deviceId, secret, fields, verified };
+    });
+    const { deviceId, secret, fields, verified } = opened;
     const payload = decryptLicense(verified.license.ciphertext, verified.license.iv, secret, { now });
 
     if (payload.hwid && payload.hwid !== deviceId) {
@@ -244,22 +221,26 @@ function createLicenseSession(opts) {
     return { ...publicStatus(), download: downloaded };
   }
 
-  async function readBundle(downloadUrl, shown) {
-    if (!bundleMayFetch(downloadUrl, shown)) {
-      return { ok: false, status: 0, bytes: 0, held: true };
-    }
-    try {
-      const bundle = await client.fetchBundle(downloadUrl);
-      return { ...bundle, held: false };
-    } catch (err) {
-      return {
-        ok: false,
-        status: 0,
-        bytes: 0,
-        held: false,
-        error: err instanceof LicenseError ? err.message : String(err.message || err),
-      };
-    }
+  function readBundle(downloadUrl, shown, strict) {
+    return getSignedBundle(
+      shown,
+      downloadUrl,
+      async () => {
+        try {
+          const bundle = await client.fetchBundle(downloadUrl);
+          return { ...bundle, held: false };
+        } catch (err) {
+          return {
+            ok: false,
+            status: 0,
+            bytes: 0,
+            held: false,
+            error: err instanceof LicenseError ? err.message : String(err.message || err),
+          };
+        }
+      },
+      strict === true
+    );
   }
 
   async function requestDownload(storeArg, payloadArg, deviceIdArg, secretArg, allowWeakFallback, shownLine, shownCdn) {
@@ -269,23 +250,22 @@ function createLicenseSession(opts) {
     const bound = Boolean(payload.hwid);
     const backendUrl = normalizeBackendUrl(store.backendUrl || defaultBackendUrl(env));
     const shown = typeof shownLine === "string" ? shownLine : "";
-    if (bound) assertHashNamed(backendUrl, shown);
-    else assertDownloadNamed(backendUrl, shown);
-    const deviceId = deviceIdArg || (bound ? deviceMark(true, allowWeakFallback === true).id : "");
-
-    if (bound && payload.hwid !== deviceId) {
-      throw new LicenseError("hwid_mismatch", "hardware binding mismatch");
-    }
-
-    const manifest = await client.download({
-      backendUrl,
-      petKey: payload.pet,
-      ciphertext: store.license.ciphertext,
-      iv: store.license.iv,
-      hwid: payload.hwid ? deviceId : undefined,
-      token: store.auth && store.auth.token,
-      expect: { jti: payload.jti, petKey: payload.pet, owner: payload.owner },
-      signingKey: env.BUNDLE_SIGNING_KEY || undefined,
+    const post = bound ? postLicenseHash : postUnboundDownload;
+    const manifest = await post(shown, backendUrl, async () => {
+      const deviceId = deviceIdArg || (bound ? deviceMark(true, allowWeakFallback === true).id : "");
+      if (bound && payload.hwid !== deviceId) {
+        throw new LicenseError("hwid_mismatch", "hardware binding mismatch");
+      }
+      return client.download({
+        backendUrl,
+        petKey: payload.pet,
+        ciphertext: store.license.ciphertext,
+        iv: store.license.iv,
+        hwid: payload.hwid ? deviceId : undefined,
+        token: store.auth && store.auth.token,
+        expect: { jti: payload.jti, petKey: payload.pet, owner: payload.owner },
+        signingKey: env.BUNDLE_SIGNING_KEY || undefined,
+      });
     });
 
     const bundle = await readBundle(manifest.downloadUrl, typeof shownCdn === "string" ? shownCdn : "");
@@ -314,8 +294,7 @@ function createLicenseSession(opts) {
     if (!downloadUrl) {
       throw new LicenseError("signed_url_invalid", "downloadUrl missing");
     }
-    assertBundleNamed(downloadUrl, shownCdnLine(input));
-    const bundle = await readBundle(downloadUrl, shownCdnLine(input));
+    const bundle = await readBundle(downloadUrl, shownCdnLine(input), true);
     const next = { ...last, bundle };
     save({ ...store, lastDownload: next });
     return next;

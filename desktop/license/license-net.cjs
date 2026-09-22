@@ -8,6 +8,7 @@
  * The path, the query, the fragment, and any userinfo stay off the line.
  */
 const { clientNetLine } = require("../renderer/weather-areas.js");
+const { LicenseError } = require("./errors.cjs");
 
 const LICENSE_HOST_NAME = "the license host";
 const LOCAL_STAYS = "this unlock stays on this computer. the license hash does not leave.";
@@ -64,6 +65,28 @@ function licenseMaySend(backendUrl, shown) {
 }
 
 /**
+ * The only unlock-hash POST, including a bound download that sends that same hash.
+ * A miss rejects and does not call `request`, so the caller does not read an OS id
+ * or write `hwid.txt` inside that request. A loopback backend still calls `request`.
+ * That post stays on this computer.
+ * @param {unknown} shown
+ * @param {string} backendUrl
+ * @param {() => unknown} request
+ */
+function postLicenseHash(shown, backendUrl, request) {
+  if (!licenseMaySend(backendUrl, shown)) {
+    const host = licenseHostName(backendUrl) || LICENSE_HOST_NAME;
+    return Promise.reject(
+      new LicenseError(
+        "license_net_unnamed",
+        `the license hash was not sent to ${host}. name that host before it leaves.`
+      )
+    );
+  }
+  return Promise.resolve().then(request);
+}
+
+/**
  * Empty when this download does not leave the computer, or the shared sentence is missing.
  * The hash sentence is a different line. This one does not say a hash is sent.
  */
@@ -88,6 +111,26 @@ function downloadMayPost(backendUrl, shown) {
   const net = clientNetLine(target.label);
   if (!line || !net || typeof shown !== "string") return false;
   return shown.indexOf(line) !== -1 && shown.indexOf(net) !== -1;
+}
+
+/**
+ * The only unbound download POST. A miss rejects and does not call `request`.
+ * That POST has no hash and does not read an OS id. A loopback backend still calls `request`.
+ * @param {unknown} shown
+ * @param {string} backendUrl
+ * @param {() => unknown} request
+ */
+function postUnboundDownload(shown, backendUrl, request) {
+  if (!downloadMayPost(backendUrl, shown)) {
+    const host = licenseHostName(backendUrl) || LICENSE_HOST_NAME;
+    return Promise.reject(
+      new LicenseError(
+        "download_net_unnamed",
+        `this download was not sent to ${host}. name that host before it leaves.`
+      )
+    );
+  }
+  return Promise.resolve().then(request);
 }
 
 function bundleUrl(raw) {
@@ -141,6 +184,31 @@ function bundleMayFetch(downloadUrl, shown) {
   return shown.indexOf(line) !== -1 && shown.indexOf(net) !== -1;
 }
 
+/**
+ * The only signed-bundle GET. A miss does not call `request` and does not scrub the signed query.
+ * `strict` rejects with the session gate. Otherwise the miss is a held read.
+ * A loopback CDN or a file URL still calls `request`. That read stays on this computer.
+ * @param {unknown} shown
+ * @param {string} downloadUrl
+ * @param {() => unknown} request
+ * @param {boolean} [strict]
+ */
+function getSignedBundle(shown, downloadUrl, request, strict) {
+  if (!bundleMayFetch(downloadUrl, shown)) {
+    if (strict) {
+      const host = bundleHostName(downloadUrl) || BUNDLE_HOST_NAME;
+      return Promise.reject(
+        new LicenseError(
+          "cdn_net_unnamed",
+          `the signed bundle was not fetched from ${host}. name that host before it leaves.`
+        )
+      );
+    }
+    return Promise.resolve({ ok: false, status: 0, bytes: 0, held: true });
+  }
+  return Promise.resolve().then(request);
+}
+
 module.exports = {
   LICENSE_HOST_NAME,
   LOCAL_STAYS,
@@ -152,11 +220,14 @@ module.exports = {
   licenseTarget,
   licenseHonesty,
   licenseMaySend,
+  postLicenseHash,
   downloadTalkHonesty,
   downloadMayPost,
+  postUnboundDownload,
   bundleHostName,
   bundleTarget,
   bundleHonesty,
   bundleMayFetch,
+  getSignedBundle,
   clientNetLine,
 };

@@ -2,6 +2,9 @@
 
 from pathlib import Path
 
+import pytest
+
+from computerpets_client.license.errors import LicenseError
 from computerpets_client.license.license_net import (
     BUNDLE_IDLE,
     BUNDLE_LOCAL,
@@ -13,9 +16,12 @@ from computerpets_client.license.license_net import (
     client_net_line,
     download_may_post,
     download_talk_honesty,
+    get_signed_bundle,
     license_honesty,
     license_host_name,
     license_may_send,
+    post_license_hash,
+    post_unbound_download,
 )
 
 
@@ -46,16 +52,18 @@ def test_license_line_names_the_host_and_drops_the_path():
 
 def test_blotter_paints_the_line_before_unlock_or_download():
     dialog = Path(__file__).resolve().parents[1].joinpath("computerpets_client", "unlock_dialog.py").read_text(encoding="utf-8")
-    unlock = dialog[dialog.index("def _unlock") : dialog.index("def _on_ok")]
-    download = dialog[dialog.index("def _download") : dialog.index("def _clear")]
+    unlock = dialog[dialog.index("def _unlock(self") : dialog.index("def _on_ok")]
+    download = dialog[dialog.index("def _download(self") : dialog.index("def _clear")]
+    begin = dialog[dialog.index("def _begin_unlock") : dialog.index("def _unlock(self")]
     worker = dialog[dialog.index("def run") : dialog.index("class UnlockDialog")]
-    assert unlock.index("_hash_may_leave") < unlock.index("UnlockWorker")
+    assert unlock.index("_paint_net") < unlock.index("post_license_hash")
+    assert unlock.index("post_license_hash") < unlock.index("_begin_unlock")
+    assert "license_may_send" not in unlock
+    assert "UnlockWorker" in begin
     assert '["unlock"]' in worker
-    assert download.index("_hash_may_leave") < download.index('["download"]')
+    assert download.index("def go") < download.index("post_license_hash")
     assert "device fingerprint" in dialog
     assert "raw id is not sent" in dialog
-    gate = dialog[dialog.index("def _hash_may_leave") : dialog.index("def _paint_status")]
-    assert gate.index("_paint_net") < gate.index("license_may_send")
 
 
 def test_unbound_download_line_names_the_host_and_does_not_say_a_hash_is_sent():
@@ -95,10 +103,10 @@ def test_unbound_download_line_names_the_host_and_does_not_say_a_hash_is_sent():
 def test_blotter_paints_the_download_line_before_an_unbound_post():
     dialog = Path(__file__).resolve().parents[1].joinpath("computerpets_client", "unlock_dialog.py").read_text(encoding="utf-8")
     download = dialog[dialog.index("def _download(self") : dialog.index("def _clear")]
-    assert download.index("_download_may_leave") < download.index('["download"]')
-    assert download.index("_hash_may_leave") < download.index('["download"]')
-    gate = dialog[dialog.index("def _download_may_leave") : dialog.index("def _paint_status")]
-    assert gate.index("_paint_net") < gate.index("download_may_post")
+    assert download.index("_paint_net") < download.index("post_unbound_download")
+    assert download.index("def go") < download.index("post_unbound_download")
+    assert "download_may_post" not in download
+    assert "_download_may_leave" not in download
     init = dialog[dialog.index("class UnlockDialog") : dialog.index("def _mark_text")]
     assert '["download"]' not in init
 
@@ -135,11 +143,65 @@ def test_bundle_line_names_the_cdn_host_and_drops_the_path():
 
 def test_blotter_paints_the_cdn_line_before_the_bundle_get():
     dialog = Path(__file__).resolve().parents[1].joinpath("computerpets_client", "unlock_dialog.py").read_text(encoding="utf-8")
-    fetch = dialog[dialog.index("def _fetch_if_held") : dialog.index("def _hash_may_leave")]
-    assert fetch.index("_paint_bundle") < fetch.index('["fetch_signed"]')
+    fetch = dialog[dialog.index("def _fetch_if_held") : dialog.index("def _paint_status")]
+    assert fetch.index("_paint_bundle") < fetch.index("get_signed_bundle")
+    assert fetch.index("get_signed_bundle") < fetch.index('["fetch_signed"]')
+    assert "bundle_may_fetch" not in fetch
     on_ok = dialog[dialog.index("def _on_ok") : dialog.index("def _on_fail")]
     assert on_ok.index("_paint_status") < on_ok.index("_fetch_if_held")
     download = dialog[dialog.index("def _download(self") : dialog.index("def _clear")]
     assert download.index('["download"]') < download.index("_fetch_if_held")
     init = dialog[dialog.index("class UnlockDialog") : dialog.index("def _mark_text")]
     assert "fetch_signed" not in init
+
+
+def test_wrappers_are_the_only_request_and_a_miss_does_not_call_it():
+    remote = "https://user:secret@license.example.test/api/verify?hwid=raw-id#frag"
+    bundle = "https://user:secret@cdn.example.test/bundles/red_panda.zip?owner=o&jti=j&exp=1&sig=abc#frag"
+    calls = {"n": 0}
+
+    def request():
+        calls["n"] += 1
+        return "sent"
+
+    with pytest.raises(LicenseError) as missing:
+        post_license_hash("", remote, request)
+    assert missing.value.code == "license_net_unnamed"
+    assert "can't reach" not in str(missing.value)
+    assert "unreachable" not in str(missing.value)
+    with pytest.raises(LicenseError) as other:
+        post_license_hash(client_net_line("other.example.test"), remote, request)
+    assert other.value.code == "license_net_unnamed"
+    assert calls["n"] == 0
+    assert post_license_hash(license_honesty(remote), remote, request) == "sent"
+    assert post_license_hash("", "http://127.0.0.1:8081", lambda: "local") == "local"
+
+    with pytest.raises(LicenseError) as unnamed:
+        post_unbound_download(license_honesty(remote), remote, request)
+    assert unnamed.value.code == "download_net_unnamed"
+    assert "can't reach" not in str(unnamed.value)
+    talk = download_talk_honesty(remote)
+    assert post_unbound_download(talk, remote, lambda: "posted") == "posted"
+    assert post_unbound_download("", "http://127.0.0.1:8081", lambda: "local") == "local"
+
+    held = get_signed_bundle("", bundle, request, False)
+    assert held["held"] is True
+    with pytest.raises(LicenseError) as cdn:
+        get_signed_bundle(bundle_honesty("https://other.example.test/pet.zip"), bundle, request, True)
+    assert cdn.value.code == "cdn_net_unnamed"
+    assert "sig=" not in str(cdn.value)
+    assert "can't reach" not in str(cdn.value)
+    fetched = get_signed_bundle(bundle_honesty(bundle), bundle, lambda: bundle, True)
+    assert "owner=o" in fetched and "jti=j" in fetched and "exp=1" in fetched and "sig=abc" in fetched
+    assert get_signed_bundle("", "http://127.0.0.1:9/pet.zip", lambda: "local") == "local"
+
+    session = Path(__file__).resolve().parents[1].joinpath("computerpets_client", "license", "session.py").read_text(encoding="utf-8")
+    unlock = session[session.index("def unlock") : session.index("def download")]
+    assert unlock.index("def open_hash") < unlock.index('client["verify"]') < unlock.index("post_license_hash")
+    assert "license_may_send" not in unlock
+    body = session[session.index("def request_download") : session.index("def _read_bundle")]
+    assert body.index("def post") < body.index('client["download"]') < body.index("post_license_hash")
+    assert "download_may_post" not in body
+    read = session[session.index("def _read_bundle") : session.index("def unlock")]
+    assert read.index("def fetch") < read.index('client["fetch_bundle"]') < read.index("get_signed_bundle")
+    assert "bundle_may_fetch" not in read

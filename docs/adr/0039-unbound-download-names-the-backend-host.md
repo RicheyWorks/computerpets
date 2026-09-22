@@ -1,6 +1,6 @@
 # 0039. An unbound download names the backend host before the POST leaves
 
-- **Status:** Accepted
+- **Status:** Accepted (the POST itself waits in [0045](0045-license-requests-wait-for-the-painted-line.md))
 - **Date:** 2026-09-22
 - **Code:** `desktop/license/license-net.cjs`, `desktop/license/session.cjs`, `desktop/renderer/license-net.js`, `desktop/renderer/settings.html`, `client/computerpets_client/license/license_net.py`, `client/computerpets_client/license/session.py`, `client/computerpets_client/unlock_dialog.py`
 
@@ -23,7 +23,7 @@ This slice shows a download sentence, with the backend host named, before that u
 
 ## Consequences
 
-- A remote backend sees this computer's network address on an unbound download, as any client, and it does not receive the hash. The house does not ask that host to turn the address into a city. The shared sentence still says "https request", including when the backend URL is http.
+- A remote backend sees this computer's network address on an unbound download, as any client, and it does not receive the hash. The house does not ask that host to turn the address into a city. The shared sentence still says "https request", including when the backend URL is http. That POST leaves only inside `postUnboundDownload`. A missing line does not post and does not say "can't reach". [0045](0045-license-requests-wait-for-the-painted-line.md).
 - Opening the house does not post.
 - The hash sentence is unchanged. The signed query on the bundle GET is unchanged.
 - News, quotes, a later forecast, a geocode look-up, a station stream, cloud talk, and cloud voice keep their gates.
