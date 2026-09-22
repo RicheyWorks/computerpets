@@ -20,7 +20,16 @@ from PyQt6.QtWidgets import (
 
 from .license.errors import LicenseError
 from .license.hwid import WEAK_FALLBACK_MESSAGE
-from .license.license_net import LOCAL_STAYS, license_honesty, license_host_name, license_may_send
+from .license.license_net import (
+    BUNDLE_IDLE,
+    BUNDLE_LOCAL,
+    bundle_honesty,
+    bundle_may_fetch,
+    LOCAL_STAYS,
+    license_honesty,
+    license_host_name,
+    license_may_send,
+)
 from .species import CATALOG_KEYS, SPECIES
 
 WEAK_FALLBACK_YES = "Use the computer name, or a random id if there is no name"
@@ -69,6 +78,9 @@ class UnlockDialog(QDialog):
         self.net = QLabel(LOCAL_STAYS)
         self.net.setObjectName("licenseNet")
         self.net.setWordWrap(True)
+        self.bundle = QLabel(BUNDLE_IDLE)
+        self.bundle.setObjectName("bundleNet")
+        self.bundle.setWordWrap(True)
         self.backend.textChanged.connect(self._paint_net)
         self._paint_net()
         self.steam_id = QLineEdit((status.get("fields") or {}).get("steamId") or "")
@@ -90,6 +102,7 @@ class UnlockDialog(QDialog):
         form = QFormLayout()
         form.addRow("Backend URL", self.backend)
         form.addRow("", self.net)
+        form.addRow("", self.bundle)
         form.addRow("Provider", QLabel("steam"))
         form.addRow("Steam ID", self.steam_id)
         form.addRow("App ID", self.app_id)
@@ -168,6 +181,50 @@ class UnlockDialog(QDialog):
     def _shown_line(self) -> str:
         return self.net.text()
 
+    def _shown_bundle_line(self) -> str:
+        return self.bundle.text()
+
+    def _bundle_url(self, status: dict[str, Any]) -> str:
+        download = status.get("download") if isinstance(status.get("download"), dict) else {}
+        last = status.get("lastDownload") if isinstance(status.get("lastDownload"), dict) else {}
+        if isinstance(download.get("downloadUrl"), str):
+            return download["downloadUrl"]
+        if isinstance(last.get("downloadUrl"), str):
+            return last["downloadUrl"]
+        if isinstance(status.get("downloadUrl"), str):
+            return status["downloadUrl"]
+        return ""
+
+    def _bundle_body(self, status: dict[str, Any]) -> dict[str, Any]:
+        download = status.get("download") if isinstance(status.get("download"), dict) else {}
+        last = status.get("lastDownload") if isinstance(status.get("lastDownload"), dict) else {}
+        if isinstance(download.get("bundle"), dict):
+            return download["bundle"]
+        if isinstance(last.get("bundle"), dict):
+            return last["bundle"]
+        body = status.get("bundle")
+        return body if isinstance(body, dict) else {}
+
+    def _paint_bundle(self, download_url: str) -> None:
+        if not download_url:
+            self.bundle.setText(BUNDLE_IDLE)
+            return
+        self.bundle.setText(bundle_honesty(download_url) or BUNDLE_LOCAL)
+
+    def _fetch_if_held(self, status: dict[str, Any]) -> None:
+        url = self._bundle_url(status)
+        self._paint_bundle(url)
+        bundle = self._bundle_body(status)
+        if not url or bundle.get("held") is not True:
+            return
+        if not bundle_may_fetch(url, self._shown_bundle_line()):
+            self.err.setText("the signed bundle was not fetched. name the host before it leaves.")
+            return
+        try:
+            self.session["fetch_signed"]({"cdnLine": self._shown_bundle_line()})
+        except LicenseError as err:
+            self.err.setText(f"{err.code}: {err}")
+
     def _hash_may_leave(self, url: str) -> bool:
         self._paint_net()
         if license_may_send(url, self._shown_line()):
@@ -183,6 +240,8 @@ class UnlockDialog(QDialog):
             self.mark.setText(self._mark_text(status))
         if hasattr(self, "net"):
             self._paint_net()
+        if hasattr(self, "bundle"):
+            self._paint_bundle(self._bundle_url(status))
         if status.get("unlocked") and status.get("license"):
             lic = status["license"]
             text = f"Unlocked — {lic['pet']} · {lic['jti']} · until {lic['validUntil']}"
@@ -229,6 +288,7 @@ class UnlockDialog(QDialog):
             "petType": self._pet_key(),
             "allowWeakFallback": True if allow_weak else False,
             "licenseLine": self._shown_line(),
+            "cdnLine": self._shown_bundle_line(),
         }
         self._thread = QThread(self)
         self._worker = UnlockWorker(self.session, fields)
@@ -243,6 +303,7 @@ class UnlockDialog(QDialog):
     def _on_ok(self, status: object) -> None:
         if isinstance(status, dict):
             self._paint_status(status)
+            self._fetch_if_held(status)
             self.accept()
 
     def _on_fail(self, err: object) -> None:
@@ -260,12 +321,15 @@ class UnlockDialog(QDialog):
         if not self._hash_may_leave(self._download_target()):
             return
         try:
-            self.session["download"](
+            downloaded = self.session["download"](
                 {
                     "allowWeakFallback": True if allow_weak else False,
                     "licenseLine": self._shown_line(),
+                    "cdnLine": self._shown_bundle_line(),
                 }
             )
+            if isinstance(downloaded, dict):
+                self._fetch_if_held({"download": downloaded})
             self._paint_status(self.session["status"]())
         except LicenseError as err:
             self.err.setText(f"{err.code}: {err}")

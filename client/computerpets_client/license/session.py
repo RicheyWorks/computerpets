@@ -12,7 +12,7 @@ from .decrypt import decrypt_license
 from .errors import LicenseError
 from .http_client import FetchImpl, create_license_client, normalize_backend_url
 from .hwid import assert_hwid, peek_hwid, resolve_hwid_detail
-from .license_net import license_host_name, license_may_send
+from .license_net import bundle_host_name, bundle_may_fetch, license_host_name, license_may_send
 
 STORE_NAME = "license.json"
 DEFAULT_BACKEND = "http://127.0.0.1:8081"
@@ -29,6 +29,11 @@ def _shown_license_line(fields: dict[str, Any] | None) -> str:
     return raw if isinstance(raw, str) else ""
 
 
+def _shown_cdn_line(fields: dict[str, Any] | None) -> str:
+    raw = (fields or {}).get("cdnLine")
+    return raw if isinstance(raw, str) else ""
+
+
 def _assert_hash_named(backend_url: str, shown: str) -> None:
     if license_may_send(backend_url, shown):
         return
@@ -36,6 +41,16 @@ def _assert_hash_named(backend_url: str, shown: str) -> None:
     raise LicenseError(
         "license_net_unnamed",
         f"the license hash was not sent to {host}. name that host before it leaves.",
+    )
+
+
+def _assert_bundle_named(download_url: str, shown: str) -> None:
+    if bundle_may_fetch(download_url, shown):
+        return
+    host = bundle_host_name(download_url) or "the bundle host"
+    raise LicenseError(
+        "cdn_net_unnamed",
+        f"the signed bundle was not fetched from {host}. name that host before it leaves.",
     )
 
 
@@ -161,6 +176,7 @@ def create_license_session(
         secret_arg: str | None = None,
         allow_weak_fallback: bool = False,
         license_line: str = "",
+        cdn_line: str = "",
     ) -> dict[str, Any]:
         store = store_arg if store_arg is not None else load()
         secret = secret_arg if secret_arg is not None else license_secret(env)
@@ -186,13 +202,7 @@ def create_license_session(
             signing_key=env.get("BUNDLE_SIGNING_KEY") or None,
         )
 
-        bundle: dict[str, Any] = {"ok": False, "status": 0, "bytes": 0, "error": None}
-        try:
-            bundle = client["fetch_bundle"](manifest["downloadUrl"])
-        except LicenseError as err:
-            bundle = {"ok": False, "status": 0, "bytes": 0, "error": str(err)}
-        except Exception as err:
-            bundle = {"ok": False, "status": 0, "bytes": 0, "error": str(err)}
+        bundle = _read_bundle(manifest["downloadUrl"], cdn_line if isinstance(cdn_line, str) else "")
 
         last_download = {
             "petKey": manifest.get("petKey") or payload["pet"],
@@ -204,6 +214,19 @@ def create_license_session(
         }
         save({**store, "lastDownload": last_download})
         return last_download
+
+    def _read_bundle(download_url: str, shown: str) -> dict[str, Any]:
+        if not bundle_may_fetch(download_url, shown):
+            return {"ok": False, "status": 0, "bytes": 0, "held": True}
+        try:
+            bundle = client["fetch_bundle"](download_url)
+        except LicenseError as err:
+            return {"ok": False, "status": 0, "bytes": 0, "held": False, "error": str(err)}
+        except Exception as err:
+            return {"ok": False, "status": 0, "bytes": 0, "held": False, "error": str(err)}
+        if isinstance(bundle, dict):
+            return {**bundle, "held": False}
+        return {"ok": False, "status": 0, "bytes": 0, "held": False}
 
     def unlock(input_fields: dict[str, Any] | None = None) -> dict[str, Any]:
         input_fields = input_fields or {}
@@ -268,12 +291,30 @@ def create_license_session(
             secret,
             allow_weak_fallback=allow_weak,
             license_line=_shown_license_line(input_fields),
+            cdn_line=_shown_cdn_line(input_fields),
         )
         return {**public_status(), "download": downloaded}
 
     def download(input_fields: dict[str, Any] | None = None) -> dict[str, Any]:
         allow = bool(input_fields and input_fields.get("allowWeakFallback") is True)
-        return request_download(allow_weak_fallback=allow, license_line=_shown_license_line(input_fields))
+        return request_download(
+            allow_weak_fallback=allow,
+            license_line=_shown_license_line(input_fields),
+            cdn_line=_shown_cdn_line(input_fields),
+        )
+
+    def fetch_signed(input_fields: dict[str, Any] | None = None) -> dict[str, Any]:
+        store = load()
+        last = store.get("lastDownload") if isinstance(store.get("lastDownload"), dict) else {}
+        download_url = last.get("downloadUrl") if isinstance(last.get("downloadUrl"), str) else ""
+        if not download_url:
+            raise LicenseError("signed_url_invalid", "downloadUrl missing")
+        shown = _shown_cdn_line(input_fields)
+        _assert_bundle_named(download_url, shown)
+        bundle = _read_bundle(download_url, shown)
+        next_download = {**last, "bundle": bundle}
+        save({**store, "lastDownload": next_download})
+        return next_download
 
     def clear() -> dict[str, Any]:
         save({})
@@ -283,6 +324,7 @@ def create_license_session(
         "status": public_status,
         "unlock": unlock,
         "download": download,
+        "fetch_signed": fetch_signed,
         "clear": clear,
         "hwid": lambda: device_mark(True)["id"],
     }

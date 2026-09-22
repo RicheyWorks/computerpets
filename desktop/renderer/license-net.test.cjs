@@ -17,5 +17,14 @@ describe("overlay license line matches the main-process gate", () => {
     assert.equal(page.licenseHonesty("http://127.0.0.1:8081"), "");
     assert.equal(page.LOCAL_STAYS, main.LOCAL_STAYS);
     assert.equal(page.licenseHonesty(url).includes(path.basename("raw-id")), false);
+    const bundle = "https://user:secret@cdn.example.test/bundles/pet.zip?hwid=raw-id#room";
+    assert.equal(page.bundleHonesty(bundle), main.bundleHonesty(bundle));
+    assert.equal(page.bundleMayFetch(bundle, page.bundleHonesty(bundle)), true);
+    assert.equal(page.bundleMayFetch(bundle, false), false);
+    assert.equal(page.bundleHonesty("file:///tmp/pet.zip"), "");
+    assert.equal(page.BUNDLE_LOCAL, main.BUNDLE_LOCAL);
+    assert.equal(page.BUNDLE_IDLE, main.BUNDLE_IDLE);
+    assert.equal(page.bundleHonesty(bundle).includes("raw-id"), false);
+    assert.equal(page.licenseHonesty(url), main.licenseHonesty(url));
   });
 });

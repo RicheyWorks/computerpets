@@ -970,6 +970,7 @@ function stopGpuTick() {
 ipcMain.handle("license-status", licenseIpc(() => getLicenseSession().status()));
 ipcMain.handle("license-unlock", licenseIpc((input) => getLicenseSession().unlock(input || {})));
 ipcMain.handle("license-download", licenseIpc((input) => getLicenseSession().download(input || {})));
+ipcMain.handle("license-fetch-bundle", licenseIpc((input) => getLicenseSession().fetchSigned(input || {})));
 ipcMain.handle("license-clear", licenseIpc(() => getLicenseSession().clear()));
 
 app.on("window-all-closed", () => {

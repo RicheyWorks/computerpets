@@ -8,7 +8,7 @@ const fs = require("fs");
 const { createLicenseSession } = require("./session.cjs");
 const { createContractTestDouble, encryptLicense } = require("./contract-test-double.cjs");
 const { LicenseError } = require("./errors.cjs");
-const { licenseHonesty } = require("./license-net.cjs");
+const { bundleHonesty, licenseHonesty } = require("./license-net.cjs");
 
 const SECRET = Buffer.alloc(32, 7).toString("base64");
 const SIGNING = "test-bundle-signing-key-not-a-placeholder";
@@ -55,6 +55,7 @@ describe("license session", () => {
       appId: "123456",
       petType: "red_panda",
       provider: "steam",
+      cdnLine: bundleHonesty("https://cdn.enterprisepet.example/bundles/red_panda.zip"),
     });
 
     assert.equal(result.unlocked, true);
@@ -71,6 +72,10 @@ describe("license session", () => {
     const download = backend.calls.find((c) => c.path === "/api/download/red_panda");
     assert.equal(download.body.hwid, "device-abc-123");
     assert.ok(String(download.headers.Authorization).startsWith("Bearer "));
+    const gets = backend.calls.filter((call) => call.method === "GET");
+    assert.equal(gets.length, 1);
+    assert.equal(new URLSearchParams(gets[0].query).has("hwid"), false);
+    assert.equal(Object.prototype.hasOwnProperty.call(gets[0].body, "hwid"), false);
   });
 
   it("fails closed without LICENSE_SECRET_KEY — no always-licensed stub", async () => {
@@ -440,6 +445,7 @@ describe("license session", () => {
     assert.equal(line.includes(verify.body.hwid), false);
     const download = backend.calls.find((call) => call.path === "/api/download/red_panda");
     assert.equal(download.body.hwid, verify.body.hwid);
+    assert.equal(seen.some((url) => new URL(url).hostname === "cdn.enterprisepet.example"), false);
   });
 
   it("keeps a loopback unlock on this computer without the outbound line", async () => {
@@ -525,5 +531,124 @@ describe("license session", () => {
     assert.equal(posts.length, 1);
     assert.equal(posts[0].hwid, "already-bound");
     assert.equal(Object.prototype.hasOwnProperty.call(posts[0], "machine-id"), false);
+  });
+
+  it("does not GET a remote signed bundle until the CDN host is named", async () => {
+    const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
+    const session = sessionFor(backend);
+    await session.status();
+    assert.equal(backend.calls.length, 0);
+
+    const held = await session.unlock({
+      steamId: "76561198000000000",
+      appId: "123456",
+      petType: "red_panda",
+      provider: "steam",
+    });
+    assert.equal(held.download.bundle.held, true);
+    assert.equal(held.download.bundle.ok, false);
+    assert.equal(backend.calls.some((call) => call.method === "GET"), false);
+    assert.equal(held.download.downloadUrl.includes("hwid="), false);
+    await session.status();
+    assert.equal(backend.calls.some((call) => call.method === "GET"), false);
+
+    await assert.rejects(
+      () => session.fetchSigned({}),
+      (err) =>
+        err instanceof LicenseError &&
+        err.code === "cdn_net_unnamed" &&
+        /cdn\.enterprisepet\.example/.test(err.message) &&
+        !err.message.includes("/bundles") &&
+        !err.message.includes("sig=")
+    );
+    assert.equal(backend.calls.some((call) => call.method === "GET"), false);
+
+    await assert.rejects(
+      () => session.fetchSigned({ cdnLine: bundleHonesty("https://other.example.test/pet.zip") }),
+      (err) => err instanceof LicenseError && err.code === "cdn_net_unnamed"
+    );
+    assert.equal(backend.calls.some((call) => call.method === "GET"), false);
+
+    const line = bundleHonesty(held.download.downloadUrl);
+    assert.equal(line.includes("secret"), false);
+    assert.equal(line.includes("/bundles"), false);
+    assert.equal(line.includes("hwid"), false);
+    const fetched = await session.fetchSigned({ cdnLine: line });
+    assert.equal(fetched.bundle.ok, true);
+    assert.equal(fetched.bundle.held, false);
+    const gets = backend.calls.filter((call) => call.method === "GET");
+    assert.equal(gets.length, 1);
+    assert.equal(new URLSearchParams(gets[0].query).has("hwid"), false);
+    assert.equal(Object.prototype.hasOwnProperty.call(gets[0].body, "hwid"), false);
+  });
+
+  it("fetches a loopback bundle without the outbound line and does not send the hash", async () => {
+    const now = Date.now();
+    const jti = "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80";
+    const enc = encryptLicense(
+      {
+        jti,
+        owner: "76561198000000000",
+        pet: "red_panda",
+        validUntil: new Date(now + 86400_000).toISOString(),
+        issuedAt: new Date(now).toISOString(),
+        hwid: null,
+      },
+      SECRET
+    );
+    const files = new Map();
+    const dir = path.join(os.tmpdir(), "cp-license-loop-cdn");
+    files.set(
+      path.join(dir, "license.json"),
+      JSON.stringify({
+        backendUrl: "http://127.0.0.1:8080",
+        license: { ciphertext: enc.ciphertext, iv: enc.iv },
+        auth: { token: "token" },
+      })
+    );
+    const seen = [];
+    const session = createLicenseSession({
+      userDataDir: dir,
+      env: { LICENSE_SECRET_KEY: SECRET, COMPUTERPETS_BACKEND_URL: "http://127.0.0.1:8080" },
+      readFile: (p) => {
+        if (!files.has(String(p))) {
+          const err = new Error("ENOENT");
+          err.code = "ENOENT";
+          throw err;
+        }
+        return files.get(String(p));
+      },
+      writeFile: (p, data) => {
+        files.set(String(p), String(data));
+      },
+      mkdir: () => {},
+      fetchImpl: async (url, init) => {
+        seen.push(String(url));
+        if (init && String(init.method || "GET").toUpperCase() === "POST") {
+          assert.equal(JSON.parse(init.body).hwid, undefined);
+          return new Response(
+            JSON.stringify({
+              petKey: "red_panda",
+              downloadUrl: `http://user:secret@127.0.0.1:9/bundles/red_panda.zip?owner=76561198000000000&jti=${jti}&exp=1893456000&sig=abc#frag`,
+              expiresAt: "2030-01-01T00:00:00Z",
+              ttlSeconds: 900,
+              jti,
+            }),
+            { status: 200, headers: { "content-type": "application/json" } }
+          );
+        }
+        assert.equal(init && init.body, undefined);
+        return new Response("zip", { status: 200 });
+      },
+    });
+    const downloaded = await session.download();
+    assert.equal(bundleHonesty(downloaded.downloadUrl), "");
+    assert.equal(downloaded.bundle.ok, true);
+    assert.equal(downloaded.bundle.held, false);
+    const got = seen.find((url) => new URL(url).port === "9");
+    assert.ok(got);
+    assert.equal(new URL(got).searchParams.has("hwid"), false);
+    assert.equal(got.includes("secret"), true);
+    assert.equal(bundleHonesty(got).includes("secret"), false);
   });
 });

@@ -34,6 +34,7 @@ contextBridge.exposeInMainWorld("desk", {
   licenseStatus: () => ipcRenderer.invoke("license-status"),
   licenseUnlock: (input) => ipcRenderer.invoke("license-unlock", input),
   licenseDownload: (input) => ipcRenderer.invoke("license-download", input),
+  licenseFetchBundle: (input) => ipcRenderer.invoke("license-fetch-bundle", input),
   licenseClear: () => ipcRenderer.invoke("license-clear"),
   onCommand: (fn) => {
     const wrapped = (_e, cmd) => fn(cmd);
