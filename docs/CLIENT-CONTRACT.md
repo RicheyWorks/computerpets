@@ -359,6 +359,7 @@ paths are not this contract.
 - A prescribed HWID recipe (MAC, disk serial, …)
 - One-time or IP-bound download URLs (jti is in the MAC; replay within 15 minutes is still possible)
 - Client-side JWT verification (optional; download already checks it)
+- A `/metrics/gpu` route. GPU temperature, utilization, memory, and power are desktop-local on the keeper machine (`desktop/gpu-probe.ps1`, blotter `gpu.py`). Spring Boot does not see that GPU. Mac and Linux stay unread (`mac-linux-gpu-sense`).
 
 Admin revocation (`POST /api/admin/revoke` with `X-Admin-Key`) and license
 audit (`GET /api/admin/licenses`, `GET /api/admin/licenses/{jti}`) are

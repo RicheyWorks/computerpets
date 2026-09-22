@@ -1074,6 +1074,20 @@ select {
   color: #8fa08a;
 }
 
+#hud-gpu,
+.keeper-gpu {
+  margin: 4px 0 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #5c564e;
+}
+
+#hud-gpu[data-gpu="read"],
+.keeper-gpu[data-gpu="read"] {
+  color: #9a9288;
+}
+
 #choice {
   position: absolute;
   left: 0;
