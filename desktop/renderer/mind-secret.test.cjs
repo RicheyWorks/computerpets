@@ -182,21 +182,51 @@ describe("mind.json base URL", () => {
     assert.equal(JSON.stringify(opened.mind).includes(SECRET), false);
   });
 
-  it("does not rewrite a clean base URL and leaves a non-URL as typed", () => {
+  it("does not rewrite a clean base URL and strips a non-URL key assignment", () => {
     const sealed = Secret.writeMindRecord(mindWithKey(), xorCodec(), null).file;
     const opened = Secret.readMindRecord(JSON.parse(JSON.stringify(sealed)), xorCodec());
     assert.equal(opened.rewrite, false);
     assert.equal(opened.file.sealedKeys, sealed.sealedKeys);
+    const cleanOdd = {
+      default: { plugin: "custom", baseUrl: "not a url" },
+      voice: "browser",
+      pets: {},
+    };
+    const cleanWritten = Secret.writeMindRecord(cleanOdd, null, null);
+    assert.equal(cleanWritten.file.default.baseUrl, "not a url");
+    const cleanRead = Secret.readMindRecord(cleanWritten.file, null);
+    assert.equal(cleanRead.rewrite, false);
+    assert.equal(cleanRead.mind.default.baseUrl, "not a url");
+
     const odd = {
       default: { plugin: "custom", baseUrl: `not a url?key=${PASTED}` },
       voice: "browser",
       pets: {},
     };
     const written = Secret.writeMindRecord(odd, null, null);
-    assert.equal(written.file.default.baseUrl, `not a url?key=${PASTED}`);
+    assert.equal(written.file.default.baseUrl, "not a url");
+    assert.equal(JSON.stringify(written.file).includes(PASTED), false);
     const read = Secret.readMindRecord(written.file, null);
     assert.equal(read.rewrite, false);
-    assert.equal(read.mind.default.baseUrl, `not a url?key=${PASTED}`);
+    assert.equal(read.mind.default.baseUrl, "not a url");
+  });
+
+  it("drops userinfo and a path key on save and rewrites a leftover without a new seal", () => {
+    const token = "sk-test-PASTEDKEY0123456789";
+    const sealed = Secret.writeMindRecord(mindWithKey(), xorCodec(), null).file;
+    const prior = sealed.sealedKeys;
+    sealed.default.baseUrl = `https://user:${token}@api.example.test/v1/key/${token}?alt=sse`;
+    sealed.pets.red_panda.baseUrl = `https://api.example.test/v1/models/gemini-2.5-flash%3Fapi_key%3D${token}`;
+    const opened = Secret.readMindRecord(sealed, xorCodec());
+    assert.equal(opened.rewrite, true);
+    assert.equal(opened.kept, "os");
+    assert.equal(opened.file.sealedKeys, prior);
+    assert.equal(opened.mind.default.apiKey, SECRET);
+    assert.equal(opened.file.default.baseUrl, "https://api.example.test/v1?alt=sse");
+    assert.equal(opened.file.pets.red_panda.baseUrl, "https://api.example.test/v1/models/gemini-2.5-flash");
+    assert.equal(JSON.stringify(opened.file).includes(token), false);
+    assert.equal(JSON.stringify(opened.mind).includes(SECRET), true);
+    assert.equal(JSON.stringify(opened.file).includes(SECRET), false);
   });
 
   it("keeps the secret-query names in lockstep with the web module and the overlay", () => {
@@ -213,6 +243,34 @@ describe("mind.json base URL", () => {
     assert.match(disk, /scrubSecretQueryString/);
     assert.match(overlay, /scrubSecretQueryString/);
     assert.match(disk, /baseUrlsNeedRewrite/);
+    assert.match(disk, /function isPastedKeySegment/);
+    assert.match(overlay, /function isPastedKeySegment/);
+    assert.match(disk, /function stripUserinfo/);
+    assert.match(overlay, /function stripUserinfo/);
+    const helper = (src) => {
+      let start = src.indexOf("function secretNameSource");
+      start = src.lastIndexOf("\n", start) + 1;
+      const endName = src.indexOf("function scrubSecretQueryString");
+      const after = src.slice(endName);
+      let depth = 0;
+      let end = -1;
+      for (let i = after.indexOf("{"); i < after.length; i += 1) {
+        if (after[i] === "{") depth += 1;
+        else if (after[i] === "}") {
+          depth -= 1;
+          if (depth === 0) {
+            end = i + 1;
+            break;
+          }
+        }
+      }
+      const block = src.slice(start, endName + end);
+      const lines = block.replace(/export function /g, "function ").split("\n");
+      const min = Math.min(...lines.filter((line) => line.trim()).map((line) => line.match(/^ */)[0].length));
+      return lines.map((line) => line.slice(min)).join("\n").trim();
+    };
+    assert.equal(helper(disk), helper(secretQuerySrc));
+    assert.equal(helper(overlay), helper(secretQuerySrc));
   });
 });
 
@@ -342,6 +400,7 @@ describe("overlay mind.js local store", () => {
       },
       URL,
       URLSearchParams,
+      decodeURIComponent,
     };
     window.window = window;
     vm.runInContext(fs.readFileSync(path.join(__dirname, "mind.js"), "utf8"), vm.createContext(window));
@@ -363,6 +422,44 @@ describe("overlay mind.js local store", () => {
     assert.equal(window.PetMind.load().default.baseUrl, "https://example.test/v1?alt=sse");
     assert.equal(local.get("computerpets.mind.v1").includes(PASTED), false);
     assert.equal(local.get("computerpets.mind.v1").includes(PET_SECRET), false);
+  });
+
+  it("drops userinfo, a path key, and a non-URL key assignment from the browser copy", async () => {
+    const token = "sk-test-PASTEDKEY0123456789";
+    const local = new Map();
+    const window = {
+      localStorage: {
+        getItem: (key) => (local.has(key) ? local.get(key) : null),
+        setItem: (key, value) => {
+          local.set(key, String(value));
+        },
+        removeItem: (key) => {
+          local.delete(key);
+        },
+      },
+      URL,
+      URLSearchParams,
+      decodeURIComponent,
+    };
+    window.window = window;
+    vm.runInContext(fs.readFileSync(path.join(__dirname, "mind.js"), "utf8"), vm.createContext(window));
+    await window.PetMind.save({
+      default: {
+        plugin: "openai",
+        baseUrl: `https://user:${token}@api.example.test/v1/key/${token}?alt=sse`,
+      },
+      voice: "browser",
+      pets: {
+        red_panda: { plugin: "google", baseUrl: `not a url?api_key=${token}` },
+      },
+    });
+    const disk = local.get("computerpets.mind.v1");
+    assert.equal(disk.includes(token), false);
+    assert.equal(disk.includes("alt=sse"), true);
+    const loaded = window.PetMind.load();
+    assert.equal(loaded.default.baseUrl, "https://api.example.test/v1?alt=sse");
+    assert.equal(loaded.pets.red_panda.baseUrl, "not a url");
+    assert.equal(loaded.default.model, undefined);
   });
 
   it("does not hand a pasted key query to the desk bridge or the browser copy", async () => {
@@ -388,6 +485,7 @@ describe("overlay mind.js local store", () => {
       },
       URL,
       URLSearchParams,
+      decodeURIComponent,
       desk: {
         mindGet() {
           return {

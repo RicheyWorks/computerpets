@@ -31,7 +31,7 @@ export function sanitizeModel(raw: string | undefined, fallback: string) {
 }
 
 /**
- * Join a plugin path onto a base URL after the secret query is gone.
+ * Join a plugin path onto a base URL after userinfo, a pasted key path, and a secret query are gone.
  * A leftover non-secret query stays a query. It is not glued into the path.
  */
 export function pluginRequestUrl(base: string, suffix = "") {
@@ -57,6 +57,7 @@ export function assertSafeMindUrl(raw: string | undefined, opts: { presetId: str
   } catch {
     throw new Error("bad url");
   }
+  stripSecretQuery(url);
   if (url.username || url.password) throw new Error("userinfo");
   if (url.protocol !== "http:" && url.protocol !== "https:") throw new Error("protocol");
   const host = url.hostname.toLowerCase().replace(/^\[|\]$/g, "");

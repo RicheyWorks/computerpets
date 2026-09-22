@@ -45,6 +45,7 @@ address, or an API that is not on `main`.
 | [0024](0024-desk-talk-drops-a-pasted-key-query.md) | Desk talk drops a pasted key query before the post | Accepted |
 | [0025](0025-listener-read-drops-a-pasted-key-query.md) | The listener read drops a pasted key query before the post | Accepted |
 | [0026](0026-mind-json-drops-a-pasted-key-query.md) | mind.json drops a pasted key query on save and on read | Accepted |
+| [0027](0027-base-url-drops-userinfo-and-a-path-key.md) | A base URL drops userinfo, a path key, and a non-URL key assignment | Accepted |
 
 ## How to add one
 
