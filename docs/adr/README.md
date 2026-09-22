@@ -85,6 +85,7 @@ address, or an API that is not on `main`.
 | [0064](0064-secret-operator-prod-refuses-plain-env.md) | Secret-operator hardening — prod refuses plain env Secret | Accepted |
 | [0065](0065-secret-rotation-cadence-and-hsm.md) | Secret rotation cadence, dual-key verify, and HSM/KMS pointer | Accepted |
 | [0066](0066-provider-verify-field-bounds.md) | Provider verify fields fail closed on length and charset | Accepted |
+| [0067](0067-trusted-proxy-client-address.md) | Trusted-proxy client address (fail-closed XFF / Forwarded) | Accepted |
 
 ## How to add one
 

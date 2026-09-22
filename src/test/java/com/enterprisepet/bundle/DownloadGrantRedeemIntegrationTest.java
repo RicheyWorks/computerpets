@@ -54,6 +54,8 @@ class DownloadGrantRedeemIntegrationTest {
         registry.add("ownership.providers.steam.enabled", () -> "true");
         registry.add("steam.api-key", () -> "TEST_KEY");
         registry.add("steam.api-base-url", () -> "http://localhost:0");
+        // TestRestTemplate peers from loopback; honour XFF for IP-binding cases (ADR 0067).
+        registry.add("trusted-proxies.cidrs", () -> "127.0.0.1/32,::1/128");
     }
 
     @Test

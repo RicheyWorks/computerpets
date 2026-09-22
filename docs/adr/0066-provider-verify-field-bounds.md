@@ -35,5 +35,5 @@ This closes the verify-field gap without storefront work, without DirectX 12 / V
 
 - Path-junk / oversized Steam IDs, itch download keys, Epic ids, Microsoft tokens, and NFT proofs never leave the house.
 - Clients that previously saw **403** for malformed Epic/Itch/NFT shape now see **400** — clearer contract; update callers that branched on 403 for typos.
-- `X-Forwarded-For` remains trusted unconditionally until a dedicated trusted-proxy slice.
+- `X-Forwarded-For` remains trusted unconditionally until a dedicated trusted-proxy slice. → Closed by [0067](0067-trusted-proxy-client-address.md).
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.

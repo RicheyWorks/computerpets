@@ -50,17 +50,20 @@ public class DownloadController {
     private final DownloadGrantService grantService;
     private final PetCatalog petCatalog;
     private final VerificationTelemetry telemetry;
+    private final ClientAddress clientAddress;
 
     public DownloadController(LicenseService licenseService,
                               PetBundleService bundleService,
                               DownloadGrantService grantService,
                               PetCatalog petCatalog,
-                              VerificationTelemetry telemetry) {
+                              VerificationTelemetry telemetry,
+                              ClientAddress clientAddress) {
         this.licenseService = licenseService;
         this.bundleService = bundleService;
         this.grantService = grantService;
         this.petCatalog = petCatalog;
         this.telemetry = telemetry;
+        this.clientAddress = clientAddress;
     }
 
     /**
@@ -179,7 +182,7 @@ public class DownloadController {
         String platform = firstNonBlank(body.platform(), queryPlatform);
         var manifest = bundleService.manifestFor(pet, license.owner(), license.jti(), platform);
         try {
-            grantService.issue(manifest, license.jti(), ClientAddress.from(request));
+            grantService.issue(manifest, license.jti(), clientAddress.from(request));
         } catch (DownloadGrantUnavailableException e) {
             return ResponseEntity.status(503).body(Map.of(
                 "error", "download grant store unavailable",

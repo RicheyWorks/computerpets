@@ -231,6 +231,12 @@ export RATE_LIMIT_BACKEND=memory
 
 Do not use `memory` when more than one app instance is serving traffic; buckets would not be shared.
 
+Client IP for rate limits and download-grant binding is fail-closed on forwarded headers ([ADR 0067](adr/0067-trusted-proxy-client-address.md)). Empty `TRUSTED_PROXY_CIDRS` (default outside the `dev` profile) always uses servlet `remoteAddr`. The `dev` profile defaults to loopback (`127.0.0.1/32,::1/128`) so a laptop can still honour `X-Forwarded-For` from local tooling. Behind an ALB / ingress / CDN edge, set the peer CIDRs explicitly:
+
+```bash
+export TRUSTED_PROXY_CIDRS=10.0.0.0/8,172.16.0.0/12
+```
+
 ### Distributed tracing (optional)
 
 Verify, download, and outbound Steam / Itch / Epic / Microsoft / NFT calls emit Micrometer observations (spans + timers). Export is **off** until a collector URL is set. Prometheus at `/actuator/prometheus` is unchanged.
@@ -308,6 +314,7 @@ The Electron overlay is still `cd desktop && npm start`.
 | `REDIS_TIMEOUT`           | No       | 200ms | Lettuce command/connect timeout for the rate-limit store |
 | `RATE_LIMIT_BACKEND`      | No       | redis | `redis` (default, shared) or `memory` (tests / single local process only) |
 | `RATE_LIMIT_FAIL_CLOSED_RETRY_AFTER` | No | 5 | `Retry-After` seconds when Redis is down (HTTP 503) |
+| `TRUSTED_PROXY_CIDRS`     | No       | empty; `dev` → loopback | Comma/whitespace CIDRs allowed to present `X-Forwarded-For` / `Forwarded`. Empty = always `remoteAddr` (ADR 0067). |
 | `OTEL_EXPORTER_OTLP_ENDPOINT` | No | empty | OTLP/HTTP collector **base** URL (e.g. `http://localhost:4318`). Empty = no export; the app starts without a collector. |
 | `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` | No | empty | Full traces URL if you already have `/v1/traces`. Overrides the base URL when set. |
 | `TRACING_SAMPLING_PROBABILITY` | No | 1.0 | Micrometer sampling rate (`0.0`–`1.0`). |
@@ -395,7 +402,8 @@ node deploy/cdn/edge-redeem.test.cjs
 ```
 
 The edge does not hold `BUNDLE_SIGNING_KEY`; it calls house redeem and
-forwards the viewer address as `X-Forwarded-For`.
+forwards the viewer address as `X-Forwarded-For`. List the edge / LB peer
+CIDRs in `TRUSTED_PROXY_CIDRS` so the house honours that header ([ADR 0067](adr/0067-trusted-proxy-client-address.md)).
 
 ---
 
