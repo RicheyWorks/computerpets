@@ -23,6 +23,6 @@ Those renderer fetches do not leave unless the painted `clientNetLine` for that 
 ## Consequences
 
 - A remote news host, quote host, terminal host, stock host, or radio host sees this computer's network address from a desk or no-door path only after that line was painted, as any client.
-- The featured Wikipedia page stays on [0041](0041-featured-page-waits-for-the-wikipedia-line.md). Forecast, geocode, station stream, and cloud talk stay on their own gates.
+- The featured Wikipedia page stays on [0041](0041-featured-page-waits-for-the-wikipedia-line.md). A forecast and a geocode look-up refuse inside their own wrappers. [0043](0043-forecast-and-geocode-wait-for-the-painted-line.md). A station stream and cloud talk stay on their own gates.
 - Unlock, a bound download, an unbound download, and the signed bundle GET keep their lines. [0037](0037-license-hash-names-the-network-address.md). [0038](0038-signed-bundle-names-the-cdn-host.md). [0039](0039-unbound-download-names-the-backend-host.md).
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.

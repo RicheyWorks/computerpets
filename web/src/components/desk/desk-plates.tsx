@@ -7,12 +7,16 @@ import {
   favoriteAreas,
   forecastGate,
   forecastHonesty,
+  forecastMayLeave,
   forecastMaySend,
   forecastUrl,
   GEOCODE_NET,
   geocodeHonesty,
   geocodeMaySend,
   geocodeUrl,
+  readForecast,
+  readGeocode,
+  readReverse,
   AREA_LABEL,
   AREA_PLACEHOLDER,
   AREA_TRUTH,
@@ -357,16 +361,16 @@ export function DeskWeatherPlate({
       }
       return;
     }
-    let cancelled = false;
+    const line = forecastHonesty(gate);
     const url = forecastUrl(gate.area.lat, gate.area.lon);
-    if (!url) return;
+    if (!url || !forecastMayLeave(line)) return;
+    let cancelled = false;
     liveKey.current = "";
     setLive(null);
     setUnread(false);
-    void fetch(url)
-      .then((r) => r.json())
+    void readForecast(line, url)
       .then((json) => {
-        if (cancelled) return;
+        if (cancelled || json == null) return;
         const next = parseForecast(json);
         liveKey.current = next ? key : "";
         setUnread(!next);
@@ -385,14 +389,18 @@ export function DeskWeatherPlate({
     };
   }, [areas, card.hereForecastAck, onSky, open, tab]);
 
-  function geocodeLineShown(id: string) {
-    if (typeof document === "undefined") return false;
+  function geocodeShown(id: string) {
+    if (typeof document === "undefined") return "";
     const el = document.getElementById(id);
-    if (!el) return false;
-    return (el.textContent || "").includes(GEOCODE_NET);
+    return el ? el.textContent || "" : "";
+  }
+
+  function geocodeLineShown(id: string) {
+    return geocodeShown(id).includes(GEOCODE_NET);
   }
 
   async function search() {
+    const shown = geocodeShown("weather-geocode-net");
     if (!geocodeMaySend("look", geocodeLineShown("weather-geocode-net"))) {
       setHits([]);
       return;
@@ -406,7 +414,11 @@ export function DeskWeatherPlate({
     setLooking(true);
     setLookLine("");
     try {
-      const json = await (await fetch(url)).json();
+      const json = await readGeocode(shown, url);
+      if (json == null) {
+        setHits([]);
+        return;
+      }
       const found = parseGeocode(json);
       setHits(found);
       if (!found.length) setLookLine("No place from that look-up.");
@@ -469,6 +481,7 @@ export function DeskWeatherPlate({
       setHereLine(HERE_FAIL);
       return;
     }
+    const shown = geocodeShown("weather-reverse-net");
     if (!geocodeMaySend("reverse", geocodeLineShown("weather-reverse-net"))) {
       keep(unnamed(place.lat, place.lon));
       return;
@@ -479,7 +492,11 @@ export function DeskWeatherPlate({
       return;
     }
     try {
-      const json = await (await fetch(url)).json();
+      const json = await readReverse(shown, url);
+      if (json == null) {
+        keep(unnamed(place.lat, place.lon));
+        return;
+      }
       const named = parseReverse(json);
       keep(
         named

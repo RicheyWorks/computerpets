@@ -120,6 +120,8 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.ok(confirmBody.indexOf("sharePlace") < confirmBody.indexOf("reverseUrl"));
   assert.match(confirmBody, /geocodeMaySend\("reverse"/);
   assert.ok(confirmBody.indexOf('geocodeMaySend("reverse"') < confirmBody.indexOf("reverseUrl"));
+  assert.ok(confirmBody.indexOf("reverseUrl") < confirmBody.indexOf("readReverse(shown"));
+  assert.doesNotMatch(confirmBody, /fetch\(/);
   const forecastEffect = plates.slice(plates.indexOf("const gate = forecastGate"), plates.indexOf("async function search"));
   assert.doesNotMatch(forecastEffect, /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
   const openToggle = plates.slice(plates.indexOf("onClick={() => chrome.toggleOpen"), plates.indexOf("onClick={() => chrome.toggleOpen") + 80);
@@ -140,6 +142,9 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.ok(gateAt > 0 && forecastAt > gateAt);
   assert.match(forecastEffect, /forecastMaySend/);
   assert.ok(forecastEffect.indexOf("forecastMaySend") < forecastEffect.indexOf("forecastUrl"));
+  assert.ok(forecastEffect.indexOf("forecastUrl") < forecastEffect.indexOf("readForecast(line"));
+  assert.match(forecastEffect, /forecastMayLeave/);
+  assert.doesNotMatch(forecastEffect, /fetch\(/);
   assert.match(plates, /forecastHonesty/);
   assert.match(plates, /id="weather-forecast-net"/);
   assert.match(plates, /id="weather-geocode-net"/);
@@ -150,6 +155,8 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   const searchBody = plates.slice(searchAt, plates.indexOf("function useHere"));
   assert.match(searchBody, /geocodeMaySend\("look"/);
   assert.ok(searchBody.indexOf('geocodeMaySend("look"') < searchBody.indexOf("geocodeUrl("));
+  assert.ok(searchBody.indexOf("geocodeUrl(") < searchBody.indexOf("readGeocode(shown"));
+  assert.doesNotMatch(searchBody, /fetch\(/);
   assert.doesNotMatch(searchBody, /readWeatherHere|reverseUrl|noteWeatherLocateYes|getCurrentPosition/);
   assert.equal(plates.split("geocodeUrl(").length - 1, 1);
   assert.equal(plates.split("reverseUrl(").length - 1, 1);
