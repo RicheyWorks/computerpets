@@ -1,7 +1,8 @@
-/** Unlock and a bound download name the backend host before the license hash leaves. A signed bundle GET names the CDN host before that request leaves. Same sentence as News and Radio (`clientNetLine`). A loopback host stays on this computer. */
+/** Unlock and a bound download name the backend host before the license hash leaves. An unbound download names that host before the POST leaves. That POST has no hash. A signed bundle GET names the CDN host before that request leaves. Same sentence as News and Radio (`clientNetLine`). A loopback host stays on this computer. */
 (function (root) {
   const LICENSE_HOST_NAME = "the license host";
   const LOCAL_STAYS = "this unlock stays on this computer. the license hash does not leave.";
+  const DOWNLOAD_LOCAL = "this download stays on this computer. it talks to this computer. the license hash is not on that request.";
   const BUNDLE_HOST_NAME = "the bundle host";
   const BUNDLE_IDLE = "a signed bundle is not fetched until this line names the host.";
   const BUNDLE_LOCAL = "this download stays on this computer. the signed bundle does not leave.";
@@ -43,6 +44,23 @@
     const target = licenseTarget(backendUrl);
     if (!target || target.local) return true;
     const line = licenseHonesty(backendUrl);
+    const net = clientNetLine(target.label);
+    if (!line || !net || typeof shown !== "string") return false;
+    return shown.indexOf(line) !== -1 && shown.indexOf(net) !== -1;
+  }
+
+  function downloadTalkHonesty(backendUrl) {
+    const target = licenseTarget(backendUrl);
+    if (!target || target.local) return "";
+    const net = clientNetLine(target.label);
+    if (!net) return "";
+    return `this download talks to ${target.label}. ${net} the license hash is not on that request.`;
+  }
+
+  function downloadMayPost(backendUrl, shown) {
+    const target = licenseTarget(backendUrl);
+    if (!target || target.local) return true;
+    const line = downloadTalkHonesty(backendUrl);
     const net = clientNetLine(target.label);
     if (!line || !net || typeof shown !== "string") return false;
     return shown.indexOf(line) !== -1 && shown.indexOf(net) !== -1;
@@ -92,6 +110,7 @@
   const api = {
     LICENSE_HOST_NAME,
     LOCAL_STAYS,
+    DOWNLOAD_LOCAL,
     BUNDLE_HOST_NAME,
     BUNDLE_IDLE,
     BUNDLE_LOCAL,
@@ -99,6 +118,8 @@
     licenseTarget,
     licenseHonesty,
     licenseMaySend,
+    downloadTalkHonesty,
+    downloadMayPost,
     bundleHostName,
     bundleTarget,
     bundleHonesty,

@@ -4,7 +4,7 @@ const { describe, it } = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("fs");
 const path = require("path");
-const { licenseHonesty, licenseMaySend, licenseHostName, LOCAL_STAYS, clientNetLine, bundleHonesty, bundleMayFetch, bundleHostName, BUNDLE_LOCAL, BUNDLE_IDLE } = require("./license-net.cjs");
+const { licenseHonesty, licenseMaySend, licenseHostName, LOCAL_STAYS, clientNetLine, bundleHonesty, bundleMayFetch, bundleHostName, BUNDLE_LOCAL, BUNDLE_IDLE, downloadTalkHonesty, downloadMayPost, DOWNLOAD_LOCAL } = require("./license-net.cjs");
 
 describe("license hash names the backend host", () => {
   it("uses the shared network sentence and leaves the path off the line", () => {
@@ -51,6 +51,60 @@ describe("license hash names the backend host", () => {
     assert.match(dialog, /device fingerprint/);
     assert.match(dialog, /raw id is not sent/);
     assert.equal(dialog.includes("licenseUnlock"), false);
+  });
+});
+
+describe("unbound download names the backend host", () => {
+  it("uses the shared network sentence and does not say a hash is sent", () => {
+    const dirty = "https://user:secret@license.example.test:8443/api/download/red_panda?hwid=raw-id#frag";
+    const line = downloadTalkHonesty(dirty);
+    const hash = licenseHonesty(dirty);
+    assert.equal(
+      hash,
+      `this unlock sends the license hash. ${clientNetLine("license.example.test")} a bound download sends that same hash.`
+    );
+    assert.equal(
+      line,
+      `this download talks to license.example.test. ${clientNetLine("license.example.test")} the license hash is not on that request.`
+    );
+    assert.equal(line.includes("sends the license hash"), false);
+    assert.equal(line.includes("secret"), false);
+    assert.equal(line.includes("raw-id"), false);
+    assert.equal(line.includes("/api"), false);
+    assert.equal(line.includes("8443"), false);
+    assert.equal(line.includes("frag"), false);
+    assert.equal(downloadMayPost(dirty, line), true);
+    assert.equal(downloadMayPost(dirty, ""), false);
+    assert.equal(downloadMayPost(dirty, hash), false);
+    assert.equal(downloadMayPost(dirty, clientNetLine("license.example.test")), false);
+    assert.equal(downloadMayPost(dirty, clientNetLine("other.example.test")), false);
+    assert.equal(downloadTalkHonesty("http://127.0.0.1:8081"), "");
+    assert.equal(downloadTalkHonesty("http://localhost:8081"), "");
+    assert.equal(downloadTalkHonesty("http://[::1]:8081"), "");
+    assert.equal(downloadMayPost("http://127.0.0.1:8081", ""), true);
+    assert.equal(DOWNLOAD_LOCAL.includes("talks to this computer"), true);
+    assert.equal(DOWNLOAD_LOCAL.includes("not on that request"), true);
+    assert.equal(DOWNLOAD_LOCAL.includes("https request"), false);
+    assert.equal(DOWNLOAD_LOCAL.includes("sends the license hash"), false);
+  });
+
+  it("paints the download line before an unbound POST and does not post on open", () => {
+    const settings = fs.readFileSync(path.join(__dirname, "..", "renderer", "settings.html"), "utf8");
+    const dialog = fs.readFileSync(path.join(__dirname, "..", "..", "client", "computerpets_client", "unlock_dialog.py"), "utf8");
+    const send = settings.slice(settings.indexOf("async function sendLicense"), settings.indexOf('getElementById("unlock")'));
+    assert.ok(send.indexOf("paintLicenseNet") < send.indexOf("downloadMayPost"));
+    assert.ok(send.indexOf("downloadMayPost") < send.indexOf("licenseDownload"));
+    assert.ok(settings.indexOf("downloadTalkHonesty") < settings.indexOf("async function sendLicense"));
+    const boot = settings.slice(settings.indexOf("licenseStatus().then"), settings.indexOf('backend.addEventListener'));
+    assert.equal(boot.includes("licenseDownload"), false);
+    assert.equal(boot.includes("licenseUnlock"), false);
+    const download = dialog.slice(dialog.indexOf("def _download(self"), dialog.indexOf("def _clear"));
+    assert.ok(download.indexOf("_download_may_leave") < download.indexOf('["download"]'));
+    assert.ok(download.indexOf("_hash_may_leave") < download.indexOf('["download"]'));
+    const gate = dialog.slice(dialog.indexOf("def _download_may_leave"), dialog.indexOf("def _paint_status"));
+    assert.ok(gate.indexOf("_paint_net") < gate.indexOf("download_may_post"));
+    const init = dialog.slice(dialog.indexOf("class UnlockDialog"), dialog.indexOf("def _mark_text"));
+    assert.equal(init.includes('["download"]'), false);
   });
 });
 

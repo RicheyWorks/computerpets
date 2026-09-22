@@ -116,6 +116,7 @@
       const licenseOk = document.getElementById("licenseOk");
       const licenseErr = document.getElementById("licenseErr");
       let licenseBackend = "";
+      let licenseUnbound = false;
 
       function unlockTarget() {
         return (backend.value || "").trim() || licenseBackend;
@@ -136,6 +137,10 @@
         if (stored && Net.licenseHostName(stored) && Net.licenseHostName(stored) !== Net.licenseHostName(unlockUrl)) {
           const extra = Net.licenseHonesty(stored) || Net.LOCAL_STAYS;
           if (parts.indexOf(extra) === -1) parts.push(extra);
+        }
+        if (licenseUnbound) {
+          const talk = Net.downloadTalkHonesty(downloadTarget()) || Net.DOWNLOAD_LOCAL;
+          if (parts.indexOf(talk) === -1) parts.push(talk);
         }
         node.textContent = parts.join(" ");
       }
@@ -198,7 +203,14 @@
         paintLicenseNet();
         const line = shownLicenseLine();
         const url = which === "download" ? downloadTarget() : unlockTarget();
-        if (!window.LicenseNet || !window.LicenseNet.licenseMaySend(url, line)) {
+        const unboundDownload = which === "download" && licenseUnbound;
+        if (unboundDownload) {
+          if (!window.LicenseNet || !window.LicenseNet.downloadMayPost(url, line)) {
+            licenseErr.textContent = "this download was not sent. name the host before it leaves.";
+            licenseOk.textContent = "Locked. Pets on the desk still work.";
+            return null;
+          }
+        } else if (!window.LicenseNet || !window.LicenseNet.licenseMaySend(url, line)) {
           licenseErr.textContent = "the license hash was not sent. name the host before it leaves.";
           licenseOk.textContent = "Locked. Pets on the desk still work.";
           return null;
@@ -283,6 +295,9 @@
 
       function showLicense(status) {
         if (!status) return;
+        if (Object.prototype.hasOwnProperty.call(status, "license")) {
+          licenseUnbound = !!(status.license && !status.license.hwid);
+        }
         paintMark(status);
         if (typeof status.backendUrl === "string") licenseBackend = status.backendUrl;
         if (status.backendUrl && !backend.value) backend.value = status.backendUrl;

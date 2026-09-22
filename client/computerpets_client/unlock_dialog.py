@@ -23,8 +23,11 @@ from .license.hwid import WEAK_FALLBACK_MESSAGE
 from .license.license_net import (
     BUNDLE_IDLE,
     BUNDLE_LOCAL,
+    DOWNLOAD_LOCAL,
     bundle_honesty,
     bundle_may_fetch,
+    download_may_post,
+    download_talk_honesty,
     LOCAL_STAYS,
     license_honesty,
     license_host_name,
@@ -33,6 +36,11 @@ from .license.license_net import (
 from .species import CATALOG_KEYS, SPECIES
 
 WEAK_FALLBACK_YES = "Use the computer name, or a random id if there is no name"
+
+
+def _license_is_unbound(status: dict[str, Any]) -> bool:
+    lic = status.get("license") if isinstance(status, dict) else None
+    return isinstance(lic, dict) and not lic.get("hwid")
 
 
 class UnlockWorker(QObject):
@@ -74,6 +82,7 @@ class UnlockDialog(QDialog):
         self.mark.setWordWrap(True)
 
         self._license_backend = str(status.get("backendUrl") or "")
+        self._license_unbound = _license_is_unbound(status)
         self.backend = QLineEdit(self._license_backend or "http://127.0.0.1:8081")
         self.net = QLabel(LOCAL_STAYS)
         self.net.setObjectName("licenseNet")
@@ -176,6 +185,10 @@ class UnlockDialog(QDialog):
             extra = license_honesty(stored) or LOCAL_STAYS
             if extra not in parts:
                 parts.append(extra)
+        if self._license_unbound:
+            talk = download_talk_honesty(self._download_target()) or DOWNLOAD_LOCAL
+            if talk not in parts:
+                parts.append(talk)
         self.net.setText(" ".join(parts))
 
     def _shown_line(self) -> str:
@@ -233,7 +246,16 @@ class UnlockDialog(QDialog):
         self.err.setText("the license hash was not sent. name the host before it leaves.")
         return False
 
+    def _download_may_leave(self, url: str) -> bool:
+        self._paint_net()
+        if download_may_post(url, self._shown_line()):
+            return True
+        self.ok.setText("Locked. The pet on the blotter still works.")
+        self.err.setText("this download was not sent. name the host before it leaves.")
+        return False
+
     def _paint_status(self, status: dict[str, Any]) -> None:
+        self._license_unbound = _license_is_unbound(status)
         if isinstance(status.get("backendUrl"), str):
             self._license_backend = status["backendUrl"]
         if hasattr(self, "mark"):
@@ -318,7 +340,10 @@ class UnlockDialog(QDialog):
         QMessageBox.warning(self, "Unlock failed", f"{code}: {message}")
 
     def _download(self, allow_weak: bool = False) -> None:
-        if not self._hash_may_leave(self._download_target()):
+        if self._license_unbound:
+            if not self._download_may_leave(self._download_target()):
+                return
+        elif not self._hash_may_leave(self._download_target()):
             return
         try:
             downloaded = self.session["download"](

@@ -1,5 +1,6 @@
 """Unlock and a bound download name the backend host before the license hash leaves.
 
+An unbound download names that host before the POST leaves. That POST has no hash.
 A signed bundle GET names the CDN host before that request leaves.
 The sentence matches ``clientNetLine`` in ``desktop/renderer/weather-areas.js``.
 A loopback host stays on this computer. The path, the query, the fragment,
@@ -12,6 +13,7 @@ from urllib.parse import urlparse
 
 LICENSE_HOST_NAME = "the license host"
 LOCAL_STAYS = "this unlock stays on this computer. the license hash does not leave."
+DOWNLOAD_LOCAL = "this download stays on this computer. it talks to this computer. the license hash is not on that request."
 BUNDLE_HOST_NAME = "the bundle host"
 BUNDLE_IDLE = "a signed bundle is not fetched until this line names the host."
 BUNDLE_LOCAL = "this download stays on this computer. the signed bundle does not leave."
@@ -97,6 +99,27 @@ def bundle_may_fetch(download_url: object, shown: object) -> bool:
     if not target or target["local"]:
         return True
     line = bundle_honesty(download_url)
+    net = client_net_line(str(target["label"]))
+    if not line or not net or not isinstance(shown, str):
+        return False
+    return line in shown and net in shown
+
+
+def download_talk_honesty(backend_url: object) -> str:
+    target = license_target(backend_url)
+    if not target or target["local"]:
+        return ""
+    net = client_net_line(str(target["label"]))
+    if not net:
+        return ""
+    return f"this download talks to {target['label']}. {net} the license hash is not on that request."
+
+
+def download_may_post(backend_url: object, shown: object) -> bool:
+    target = license_target(backend_url)
+    if not target or target["local"]:
+        return True
+    line = download_talk_honesty(backend_url)
     net = client_net_line(str(target["label"]))
     if not line or not net or not isinstance(shown, str):
         return False
