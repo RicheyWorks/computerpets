@@ -56,6 +56,8 @@ const hudRest = document.getElementById("hud-rest");
 const hudBond = document.getElementById("hud-bond");
 const hudHeartbeat = document.getElementById("hud-heartbeat");
 const hudGpu = document.getElementById("hud-gpu");
+const hudGpuLine = document.getElementById("hud-gpu-line");
+const hudGpuSpark = document.getElementById("hud-gpu-spark");
 const hudTruth = document.getElementById("hud-truth");
 const hudCare = document.getElementById("hud-care");
 const hudCollapse = document.getElementById("hud-collapse");
@@ -90,6 +92,7 @@ const barHygiene = document.getElementById("bar-hygiene");
 const barBond = document.getElementById("bar-bond");
 let heartbeat = window.PetKeeper ? { ...window.PetKeeper.UNREAD } : { status: "DOWN", profile: null, uptimeSeconds: null, port: 8081 };
 let gpuSample = window.PetGpu ? window.PetGpu.UNREAD : { status: "unread" };
+let gpuHistory = window.PetGpu ? window.PetGpu.emptyHistory() : [];
 for (let i = 0; i < 12; i++) dustRoot.appendChild(document.createElement("span"));
 
 let roster = [];
@@ -1171,17 +1174,24 @@ setInterval(readHeartbeat, 15_000);
 readHeartbeat();
 if (window.desk && window.desk.onGpu && window.PetGpu) {
   window.desk.onGpu((raw) => {
-    gpuSample = window.PetGpu.present(window.PetGpu.parseSample(raw), Date.now());
+    const now = Date.now();
+    gpuSample = window.PetGpu.present(window.PetGpu.parseSample(raw), now);
+    gpuHistory = window.PetGpu.remember(gpuHistory, gpuSample, now);
     paintHud();
   });
 }
 setInterval(() => {
   if (!window.PetGpu || !hudGpu) return;
-  const next = window.PetGpu.present(gpuSample, Date.now());
-  if (!gpuSample || next.status !== gpuSample.status) {
-    gpuSample = next;
-    paintHud();
-  }
+  const now = Date.now();
+  const next = window.PetGpu.present(gpuSample, now);
+  const history = window.PetGpu.remember(gpuHistory, next, now);
+  const spark = window.PetGpu.sparkline(history, next, now);
+  const mark = spark.empty ? "empty" : "trail";
+  const prev = hudGpuSpark ? hudGpuSpark.getAttribute("data-spark") : "";
+  const changed = !gpuSample || next.status !== gpuSample.status || history.length !== gpuHistory.length || mark !== prev;
+  gpuSample = next;
+  gpuHistory = history;
+  if (changed) paintHud();
 }, 5000);
 
 function cardGuest() {
@@ -1281,9 +1291,34 @@ function paintHud() {
     hudHeartbeat.setAttribute("data-heartbeat", heartbeat.status || "DOWN");
   }
   if (hudGpu && window.PetGpu) {
-    gpuSample = window.PetGpu.present(gpuSample, Date.now());
-    hudGpu.textContent = window.PetGpu.gpuLine(gpuSample);
+    const now = Date.now();
+    gpuSample = window.PetGpu.present(gpuSample, now);
+    gpuHistory = window.PetGpu.remember(gpuHistory, gpuSample, now);
+    const line = window.PetGpu.gpuLine(gpuSample);
+    if (hudGpuLine) hudGpuLine.textContent = line;
+    else hudGpu.textContent = line;
     hudGpu.setAttribute("data-gpu", gpuSample.status || "unread");
+    const spark = window.PetGpu.sparkline(gpuHistory, gpuSample, now);
+    if (hudGpuSpark) {
+      hudGpuSpark.setAttribute("data-spark", spark.empty ? "empty" : "trail");
+      hudGpuSpark.replaceChildren();
+      if (!spark.empty && spark.path) {
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("viewBox", `0 0 ${window.PetGpu.SPARK_W} ${window.PetGpu.SPARK_H}`);
+        svg.setAttribute("width", String(window.PetGpu.SPARK_W));
+        svg.setAttribute("height", String(window.PetGpu.SPARK_H));
+        svg.setAttribute("aria-hidden", "true");
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", spark.path);
+        path.setAttribute("fill", "none");
+        path.setAttribute("stroke", spark.ink);
+        path.setAttribute("stroke-width", "1");
+        path.setAttribute("stroke-linecap", "round");
+        path.setAttribute("stroke-linejoin", "round");
+        svg.appendChild(path);
+        hudGpuSpark.appendChild(svg);
+      }
+    }
   }
   if (hudTruth && K) hudTruth.textContent = K.careTruth();
   pet.classList.toggle("dull", !!(hive && hive.quiet));

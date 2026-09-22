@@ -4,7 +4,7 @@ A first real PyQt6 desk: **all two hundred twenty-one living companions** from t
 
 This is **not** a custom GPU shader engine. Drawing uses Qt’s GPU-backed scene: `QGraphicsView` with a `QOpenGLWidget` viewport (Qt RHI / OpenGL compositing). If the platform cannot create an OpenGL surface, the scene falls back to Qt software raster and says so in the status bar.
 
-GPU **load** (temperature, utilization, memory, power) is a separate desktop-local sense. On Windows the blotter reads nvidia-smi or GPU performance counters. Mac and Linux stay `mac-linux-gpu-sense`. A missing, malformed, or stale reading stays dark. This is still Qt OpenGL, not DirectX 12 or Vulkan.
+GPU **load** (temperature, utilization, memory, power) is a separate desktop-local sense. On Windows the blotter reads nvidia-smi or GPU performance counters and keeps a sparkline of those real samples. The strip stays empty when the reading is unread, stale, malformed, or unsupported. Mac and Linux stay `mac-linux-gpu-sense`. A missing, malformed, or stale reading stays dark. This is still Qt OpenGL, not DirectX 12 or Vulkan.
 
 Pets walk without a license — same as the overlay. Unlock is fail-closed. There is no “always licensed” stub.
 

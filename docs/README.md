@@ -90,7 +90,7 @@ A dedicated `API.md` document may be added in the future as the API matures.
 
 The long-term vision for ComputerPets includes:
 
-- A custom GPU shader engine (the PyQt client uses Qt’s OpenGL-backed scene; the overlay is Electron/Chromium). GPU load sensing is not that engine.
+- A custom GPU shader engine (the PyQt client uses Qt’s OpenGL-backed scene; the overlay is Electron/Chromium). GPU load sensing and its sample sparkline shipped. They are not that engine.
 - A live ComputerPets collection address in `ethereum.collections`
 - Additional ownership providers (Solana, etc.)
 
