@@ -202,6 +202,27 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   const radioFn = keeper.indexOf("function lookupRadio");
   assert.ok(keeper.indexOf("radioMaySend", radioFn) < keeper.indexOf("radioSearchUrls", radioFn));
   assert.match(keeper, /id="hud-radio-net"/);
+  const musicEffect = keeper.slice(keeper.indexOf("const src = playSrc(music)"), keeper.indexOf("const src = sleepPlaySrc"));
+  assert.ok(musicEffect.indexOf("streamMaySend") < musicEffect.indexOf("new Audio"));
+  assert.match(keeper, /const \[streamAsked, setStreamAsked\] = useState\(false\)/);
+  assert.ok(keeper.indexOf("setStreamAsked(true)") < keeper.indexOf("writeMusic(next, ask"));
+  assert.match(keeper, /id="hud-stream-net"/);
+  const sitAt = pet.indexOf("function sitMusic");
+  const sitBody = pet.slice(sitAt, pet.indexOf("function ruiSleepBout"));
+  assert.ok(sitBody.indexOf("streamMaySend") < sitBody.indexOf("new Audio"));
+  const playAt = pet.indexOf("hudMusicPlay.addEventListener");
+  const playBody = pet.slice(playAt, playAt + 900);
+  assert.ok(playBody.indexOf("streamAsked = true") < playBody.indexOf("persistCard"));
+  assert.ok(playBody.indexOf("persistCard") < playBody.indexOf("sitMusic"));
+  const pickAt = pet.indexOf("function fillRadioHits");
+  const pickBody = pet.slice(pickAt, pet.indexOf("function radioLineInView"));
+  assert.ok(pickBody.indexOf("streamAsked = true") < pickBody.indexOf("persistCard"));
+  const bootAt = pet.indexOf("window.PetRoster.loadHouseRoster");
+  const bootBody = pet.slice(bootAt, pet.indexOf("bindGuiHarness"));
+  assert.match(bootBody, /sitMusic\(\)/);
+  assert.doesNotMatch(bootBody, /streamAsked = true/);
+  assert.match(html, /id="hud-stream-net"/);
+  assert.match(pet, /let streamAsked = false/);
 });
 
 test("a dropped file is not a gift and is not read", () => {

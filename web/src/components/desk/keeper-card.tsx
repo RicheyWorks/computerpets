@@ -54,7 +54,7 @@ import {
 } from "@/lib/pets/card";
 import { playDeskSound, playStep, playVoice } from "@/lib/pets/desk-audio";
 import { STEP_KINDS, STEP_LABELS, parseStep, stepOf } from "@/lib/pets/house-sounds";
-import { HOUSE_LOOP_LICENSE, MUSIC_PLUGINS, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_FIND, RADIO_LABEL, RADIO_LOCAL, RADIO_PLACEHOLDER, mergeStations, parseMusic, parseStations, playSrc, radioHonesty, radioMaySend, radioSearchUrls, rankStations, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
+import { HOUSE_LOOP_LICENSE, MUSIC_PLUGINS, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_FIND, RADIO_LABEL, RADIO_LOCAL, RADIO_PLACEHOLDER, mergeStations, parseMusic, parseStations, playSrc, radioHonesty, radioMaySend, radioSearchUrls, rankStations, streamHonesty, streamMaySend, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
 import { SLEEP_AID_LABEL, SLEEP_AID_LICENSE, SLEEP_AID_MUTE_TRUTH, SLEEP_AID_PLUGINS, parseSleepAid, playSrc as sleepPlaySrc, type SleepAidPrefs } from "@/lib/pets/house-sleep";
 import { currentArea, parseAreas } from "@/lib/pets/weather-areas";
 import { FLY_BIRD_NAME } from "@/lib/pets/bird-fly";
@@ -115,6 +115,7 @@ export function KeeperCard({
   const [radioUnread, setRadioUnread] = useState(false);
   const [radioEmpty, setRadioEmpty] = useState(false);
   const [radioQ, setRadioQ] = useState("");
+  const [streamAsked, setStreamAsked] = useState(false);
   const [callQ, setCallQ] = useState("");
   const [callPick, setCallPick] = useState("");
   const [callGroup, setCallGroup] = useState("");
@@ -133,9 +134,16 @@ export function KeeperCard({
     setCard(saveCard(next));
   }
 
-  function writeMusic(next: MusicPrefs) {
+  function writeMusic(next: MusicPrefs, asked = streamAsked) {
     write({ ...card, music: next });
-    onMusicChange?.(!!next.playing && next.plugin !== "off");
+    const remote = next.plugin === "radio" && !!next.stationUrl;
+    onMusicChange?.(!!next.playing && next.plugin !== "off" && (!remote || asked));
+  }
+
+  function commitMusic(next: MusicPrefs) {
+    const ask = next.plugin === "radio" && !!next.playing && !!next.stationUrl;
+    if (ask) setStreamAsked(true);
+    writeMusic(next, ask || streamAsked);
   }
 
   function writeSleepAid(next: SleepAidPrefs) {
@@ -203,6 +211,16 @@ export function KeeperCard({
       onMusicChange?.(false);
       return;
     }
+    const remote = music.plugin === "radio" && /^https?:/i.test(src);
+    if (remote) {
+      const line = streamHonesty(music);
+      const el = document.getElementById("hud-stream-net");
+      const shown = streamAsked === true && !!el && !el.hidden && !!line && (el.textContent || "").includes(line);
+      if (!streamMaySend(music, shown)) {
+        onMusicChange?.(false);
+        return;
+      }
+    }
     const audio = new Audio(src);
     audio.loop = music.plugin === "house";
     audio.volume = Math.max(0, Math.min(1, guest.volume / 100));
@@ -212,7 +230,7 @@ export function KeeperCard({
       audio.src = "";
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [music.plugin, music.playing, music.stationUrl, card.mutes.music, guest.volume]);
+  }, [music.plugin, music.playing, music.stationUrl, card.mutes.music, guest.volume, streamAsked]);
 
   useEffect(() => {
     const src = sleepPlaySrc(sleepAid);
@@ -602,11 +620,18 @@ export function KeeperCard({
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    writeMusic({ ...music, playing: !music.playing && music.plugin !== "off" });
+                    const remoteStream = music.plugin === "radio" && !!music.stationUrl;
+                    const audible = music.playing && (!remoteStream || streamAsked);
+                    commitMusic({ ...music, playing: !audible && music.plugin !== "off" });
                   }}
                 >
-                  {music.playing ? "Pause" : "Play"}
+                  {music.playing && (music.plugin !== "radio" || !music.stationUrl || streamAsked) ? "Pause" : "Play"}
                 </button>
+              ) : null}
+              {music.plugin === "radio" ? (
+                <p id="hud-stream-net" className="keeper-truth" hidden={!streamAsked || !streamHonesty(music)}>
+                  {streamAsked ? streamHonesty(music) : ""}
+                </p>
               ) : null}
               {MUSIC_PLUGINS.map((plugin) => (
                 <button
@@ -615,7 +640,7 @@ export function KeeperCard({
                   data-on={music.plugin === plugin.id ? "1" : "0"}
                   onClick={(e) => {
                     e.stopPropagation();
-                    writeMusic({ ...music, plugin: plugin.id, playing: plugin.id !== "off" });
+                    commitMusic({ ...music, plugin: plugin.id, playing: plugin.id !== "off" });
                   }}
                 >
                   {plugin.name}
@@ -672,7 +697,7 @@ export function KeeperCard({
                           data-on={music.stationId === st.id ? "1" : "0"}
                           onClick={(e) => {
                             e.stopPropagation();
-                            writeMusic({ ...music, plugin: "radio", stationId: st.id, stationName: st.name, stationUrl: st.url, playing: true });
+                            commitMusic({ ...music, plugin: "radio", stationId: st.id, stationName: st.name, stationUrl: st.url, playing: true });
                           }}
                         >
                           {st.name}
