@@ -121,9 +121,113 @@ test("a missing host line does not open a remote talk or a cloud voice", async (
   assert.equal(N.voiceMayLeave("", "browser"), true);
 });
 
+test("cloud talk and cloud voice time out and deny a silent host", async () => {
+  assert.equal(N.TALK_TIMEOUT_MS, 12_000);
+  assert.equal(N.VOICE_TIMEOUT_MS, 12_000);
+  assert.equal(N.TalkTimeout.name, "TalkTimeout");
+  assert.equal(N.VoiceTimeout.name, "VoiceTimeout");
+  const xai = { plugin: "xai" };
+  const local = { text: "house", source: "local" };
+  const hang = () => new Promise(() => {});
+  await assert.rejects(
+    () => N.readTalk(N.talkHonesty(xai), xai, hang, local, 30),
+    (err) => err instanceof N.TalkTimeout && err.name === "TalkTimeout",
+  );
+  await assert.rejects(
+    () => N.readVoice(N.voiceHonesty("xai"), "xai", hang, 30),
+    (err) => err instanceof N.VoiceTimeout && err.name === "VoiceTimeout",
+  );
+
+  let fulfilled = null;
+  const late = N.readTalk(
+    N.talkHonesty(xai),
+    xai,
+    () =>
+      new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ text: "late cloud", source: "xai" });
+        }, 80);
+      }),
+    local,
+    20,
+  ).then(
+    (body) => {
+      fulfilled = body;
+      return body;
+    },
+    (err) => {
+      fulfilled = err;
+      throw err;
+    },
+  );
+  await assert.rejects(() => late, (err) => err instanceof N.TalkTimeout);
+  await new Promise((r) => setTimeout(r, 120));
+  assert.ok(fulfilled instanceof N.TalkTimeout);
+  assert.equal(fulfilled.name, "TalkTimeout");
+
+  let voiceFulfilled = null;
+  const lateVoice = N.readVoice(
+    N.voiceHonesty("openai"),
+    "openai",
+    () =>
+      new Promise((resolve) => {
+        setTimeout(() => {
+          resolve("data:audio/late");
+        }, 80);
+      }),
+    20,
+  ).then(
+    (body) => {
+      voiceFulfilled = body;
+      return body;
+    },
+    (err) => {
+      voiceFulfilled = err;
+      throw err;
+    },
+  );
+  await assert.rejects(() => lateVoice, (err) => err instanceof N.VoiceTimeout);
+  await new Promise((r) => setTimeout(r, 120));
+  assert.ok(voiceFulfilled instanceof N.VoiceTimeout);
+
+  const answered = await N.readTalk(
+    N.talkHonesty(xai),
+    xai,
+    async () => ({ text: "cloud", source: "xai" }),
+    local,
+    200,
+  );
+  assert.equal(answered.source, "xai");
+  assert.equal(await N.readTalk("", xai, hang, local, 30), local);
+  assert.equal(await N.readVoice("", "xai", hang, 30), undefined);
+
+  let loopCalls = 0;
+  const loopHang = N.readTalk(
+    "",
+    { plugin: "ollama", baseUrl: "http://127.0.0.1:11434" },
+    async () => {
+      loopCalls += 1;
+      await new Promise((r) => setTimeout(r, 40));
+      return { text: "here", source: "ollama" };
+    },
+    local,
+    15,
+  );
+  assert.equal((await loopHang).source, "ollama");
+  assert.equal(loopCalls, 1);
+
+  assert.match(mindSrc, /TALK_TIMEOUT_MS/);
+  assert.match(mindSrc, /AbortController/);
+  assert.match(mindSrc, /TalkTimeout/);
+  assert.match(talkSrc, /isTalkTimeout/);
+  assert.match(talkSrc, /isVoiceTimeout/);
+  assert.match(voiceSrc, /signal/);
+  assert.doesNotMatch(talkSrc, /can't reach/);
+});
+
 test("the house calls the cloud only after the posted line matches", () => {
   const talkAt = talkSrc.indexOf("await readTalk(");
-  const runAt = talkSrc.indexOf("() => runMind");
+  const runAt = talkSrc.indexOf("runMind(turn, spend.mind");
   const voiceAt = talkSrc.indexOf("await readVoice(");
   const speakAt = talkSrc.indexOf("speakWithPlugin(reply.text");
   assert.ok(talkAt > 0 && talkAt < runAt);

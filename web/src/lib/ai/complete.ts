@@ -32,7 +32,17 @@ function endpoint(binding: MindBinding, presetId: string, suffix = "") {
   return pluginRequestUrl(base, suffix);
 }
 
-async function openaiCompat(ctx: MindContext, binding: MindBinding, presetId: string): Promise<MindReply> {
+/** Prefer the page-wrapper deadline when present; otherwise the house mind timeout. */
+function leaveSignal(outer?: AbortSignal) {
+  return outer ?? mindTimeout();
+}
+
+async function openaiCompat(
+  ctx: MindContext,
+  binding: MindBinding,
+  presetId: string,
+  signal?: AbortSignal,
+): Promise<MindReply> {
   const preset = mindPreset(presetId);
   const model = sanitizeModel(binding.model, preset.defaultModel || "gpt-4.1-mini");
   const headers: Record<string, string> = { "Content-Type": "application/json" };
@@ -45,7 +55,7 @@ async function openaiCompat(ctx: MindContext, binding: MindBinding, presetId: st
     method: "POST",
     headers,
     redirect: "error",
-    signal: mindTimeout(),
+    signal: leaveSignal(signal),
     body: JSON.stringify({
       model,
       max_tokens: 80,
@@ -64,7 +74,7 @@ async function openaiCompat(ctx: MindContext, binding: MindBinding, presetId: st
   return { text, source: presetId };
 }
 
-async function anthropic(ctx: MindContext, binding: MindBinding): Promise<MindReply> {
+async function anthropic(ctx: MindContext, binding: MindBinding, signal?: AbortSignal): Promise<MindReply> {
   const preset = mindPreset("anthropic");
   const res = await fetch(endpoint(binding, "anthropic", "/v1/messages"), {
     method: "POST",
@@ -74,7 +84,7 @@ async function anthropic(ctx: MindContext, binding: MindBinding): Promise<MindRe
       "anthropic-version": "2023-06-01",
     },
     redirect: "error",
-    signal: mindTimeout(),
+    signal: leaveSignal(signal),
     body: JSON.stringify({
       model: sanitizeModel(binding.model, preset.defaultModel || "claude-sonnet-4-5"),
       max_tokens: 80,
@@ -91,13 +101,13 @@ async function anthropic(ctx: MindContext, binding: MindBinding): Promise<MindRe
   return { text, source: "anthropic" };
 }
 
-async function ollama(ctx: MindContext, binding: MindBinding): Promise<MindReply> {
+async function ollama(ctx: MindContext, binding: MindBinding, signal?: AbortSignal): Promise<MindReply> {
   const preset = mindPreset("ollama");
   const res = await fetch(endpoint(binding, "ollama", "/api/chat"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     redirect: "error",
-    signal: mindTimeout(),
+    signal: leaveSignal(signal),
     body: JSON.stringify({
       model: sanitizeModel(binding.model, preset.defaultModel || "llama3.2"),
       stream: false,
@@ -115,7 +125,7 @@ async function ollama(ctx: MindContext, binding: MindBinding): Promise<MindReply
   return { text, source: "ollama" };
 }
 
-async function gemini(ctx: MindContext, binding: MindBinding): Promise<MindReply> {
+async function gemini(ctx: MindContext, binding: MindBinding, signal?: AbortSignal): Promise<MindReply> {
   const preset = mindPreset("google");
   const model = sanitizeModel(binding.model, preset.defaultModel || "gemini-2.5-flash");
   const base = endpoint(binding, "google");
@@ -127,7 +137,7 @@ async function gemini(ctx: MindContext, binding: MindBinding): Promise<MindReply
       ...(binding.apiKey ? { "x-goog-api-key": binding.apiKey } : {}),
     },
     redirect: "error",
-    signal: mindTimeout(),
+    signal: leaveSignal(signal),
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: ctx.systemPrompt }] },
       contents: [{ role: "user", parts: [{ text: userTurn(ctx) }] }],
@@ -142,7 +152,7 @@ async function gemini(ctx: MindContext, binding: MindBinding): Promise<MindReply
   return { text, source: "google" };
 }
 
-async function custom(ctx: MindContext, binding: MindBinding): Promise<MindReply> {
+async function custom(ctx: MindContext, binding: MindBinding, signal?: AbortSignal): Promise<MindReply> {
   const url = endpoint(binding, "custom");
   const res = await fetch(url, {
     method: "POST",
@@ -151,7 +161,7 @@ async function custom(ctx: MindContext, binding: MindBinding): Promise<MindReply
       ...(binding.apiKey ? { Authorization: `Bearer ${binding.apiKey}` } : {}),
     },
     redirect: "error",
-    signal: mindTimeout(),
+    signal: leaveSignal(signal),
     body: JSON.stringify({
       name: ctx.name,
       species: ctx.species,
@@ -181,15 +191,19 @@ export function localMind(ctx: MindContext): MindReply {
   return { text: kind.fallbackLine(ctx.message, stats), source: "local" };
 }
 
-export async function runMind(ctx: MindContext, binding: MindBinding): Promise<MindReply> {
+export async function runMind(
+  ctx: MindContext,
+  binding: MindBinding,
+  signal?: AbortSignal,
+): Promise<MindReply> {
   const preset = mindPreset(binding.plugin);
   if (preset.kind === "local") return localMind(ctx);
   try {
-    if (preset.kind === "openai") return await openaiCompat(ctx, binding, preset.id);
-    if (preset.kind === "anthropic") return await anthropic(ctx, binding);
-    if (preset.kind === "ollama") return await ollama(ctx, binding);
-    if (preset.kind === "gemini") return await gemini(ctx, binding);
-    if (preset.kind === "custom") return await custom(ctx, binding);
+    if (preset.kind === "openai") return await openaiCompat(ctx, binding, preset.id, signal);
+    if (preset.kind === "anthropic") return await anthropic(ctx, binding, signal);
+    if (preset.kind === "ollama") return await ollama(ctx, binding, signal);
+    if (preset.kind === "gemini") return await gemini(ctx, binding, signal);
+    if (preset.kind === "custom") return await custom(ctx, binding, signal);
   } catch {
     return localMind(ctx);
   }

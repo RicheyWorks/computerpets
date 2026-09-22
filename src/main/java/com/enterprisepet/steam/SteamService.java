@@ -14,9 +14,12 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.net.http.HttpClient;
+import java.time.Duration;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -39,6 +42,9 @@ import java.util.Set;
 public class SteamService implements OwnershipProvider {
 
     private static final Logger log = LoggerFactory.getLogger(SteamService.class);
+
+    /** Connect and read deadline. Matches Microsoft Collections. A hang denies. */
+    static final Duration STEAM_TIMEOUT = Duration.ofSeconds(10);
 
     @Value("${steam.api-key}")
     private String steamApiKey;
@@ -81,7 +87,13 @@ public class SteamService implements OwnershipProvider {
     @PostConstruct
     void init() {
         if (this.restClient == null) {
+            HttpClient httpClient = HttpClient.newBuilder()
+                    .connectTimeout(STEAM_TIMEOUT)
+                    .build();
+            JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
+            requestFactory.setReadTimeout(STEAM_TIMEOUT);
             this.restClient = ObservedRestClients.builder(observationRegistry)
+                    .requestFactory(requestFactory)
                     .baseUrl(steamApiBaseUrl)
                     .build();
         }

@@ -613,6 +613,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-09-22 (Phase 2.3: News, quote, and radio page wrappers time out and return unread. Talk/voice and Steam RestClient still open. DX12/Vulkan was not started. Catalog 221.)
+**Last Updated:** 2026-09-22 (Phase 2.3: Cloud talk and cloud voice page wrappers time out and keep the house line or silence. Steam RestClient times out. Itch/Epic RestClient and Resilience4j time limiter still open. DX12/Vulkan was not started. Catalog 221.)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

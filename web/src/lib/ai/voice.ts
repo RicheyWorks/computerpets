@@ -5,6 +5,7 @@ export async function speakWithPlugin(
   voice: VoiceKind,
   petVoice: string,
   apiKey?: string,
+  signal?: AbortSignal,
 ): Promise<string | undefined> {
   if (voice === "none" || voice === "browser") return undefined;
   if (voice === "xai") {
@@ -13,6 +14,7 @@ export async function speakWithPlugin(
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
       body: JSON.stringify({ text: text.slice(0, 220), voice_id: petVoice, language: "en" }),
+      ...(signal ? { signal } : {}),
     });
     if (!res.ok) return undefined;
     const buf = Buffer.from(await res.arrayBuffer());
@@ -29,6 +31,7 @@ export async function speakWithPlugin(
         voice: petVoice === "leo" ? "ash" : petVoice === "ara" ? "coral" : "verse",
         input: text.slice(0, 220),
       }),
+      ...(signal ? { signal } : {}),
     });
     if (!res.ok) return undefined;
     const buf = Buffer.from(await res.arrayBuffer());
