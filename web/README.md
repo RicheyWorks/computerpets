@@ -14,7 +14,7 @@ npm run dev
 
 Opens the desk. Guests get Rui immediately. Signed-in keepers can hatch and care through the kennel. The kennel is a room. The cards stay paper. The shelf is a room. The two hundred twenty-one sit by den, not by rarity.
 
-Optional talk voice uses `XAI_API_KEY` (Grok chat + TTS) for a signed-in keeper. A guest still hears house lines. Without a house key, Rui still answers from local lines and the browser speech synthesizer.
+Optional talk voice uses `XAI_API_KEY` (Grok chat + TTS) for a signed-in keeper. A guest still hears house lines. Without a house key, Rui still answers from local lines and the browser speech synthesizer. The keeper card says who is listening. Guests stay `Listening · House lines`. A signed-in cloud name appears only when that house env key exists. The key is not on the card. Until the read returns, the line is `Listening · unread`.
 
 ## Layout
 

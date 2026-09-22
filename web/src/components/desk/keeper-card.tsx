@@ -15,6 +15,9 @@ import {
   type Heartbeat,
 } from "@/lib/pets/keeper";
 import { SPARK_H, SPARK_W, UNREAD_GPU, gpuLine, sparkline } from "@/lib/pets/gpu";
+import { UNREAD_LISTENER, presentListener, type ListenerName } from "@/lib/ai/listener";
+import { readMindListener } from "@/lib/ai/listener-read";
+import { useMindBinding } from "@/lib/ai/use-mind";
 import {
   applyFeedFor,
   applyPlay,
@@ -100,6 +103,10 @@ export function KeeperCard({
   const meters = keeperMeters(stats);
   const gpuSpark = sparkline([], UNREAD_GPU, 0);
   const [beat, setBeat] = useState<Heartbeat>(UNREAD_HEARTBEAT);
+  const [listener, setListener] = useState<ListenerName>(UNREAD_LISTENER);
+  const asked = useMindBinding(guestKey);
+  const askedPlugin = asked.plugin;
+  const askedBase = asked.baseUrl;
   const [card, setCard] = useState<CardPrefs>(() => loadCard());
   const [draft, setDraft] = useState("");
   const [offArmed, setOffArmed] = useState(false);
@@ -233,6 +240,21 @@ export function KeeperCard({
       window.clearInterval(id);
     };
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    setListener(UNREAD_LISTENER);
+    void readMindListener({ data: { plugin: askedPlugin, baseUrl: askedBase } })
+      .then((row) => {
+        if (!cancelled) setListener(presentListener(row));
+      })
+      .catch(() => {
+        if (!cancelled) setListener(UNREAD_LISTENER);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [askedPlugin, askedBase]);
 
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -763,6 +785,9 @@ export function KeeperCard({
                 </svg>
               ) : null}
             </span>
+          </p>
+          <p className="keeper-listener" data-listener={listener.id}>
+            {listener.line}
           </p>
           <p className="keeper-truth">
             {careTruth()} Desk {DESK_PORT}. Not {ADVERTISED_CARE.feed}.

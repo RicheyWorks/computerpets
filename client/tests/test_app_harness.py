@@ -73,6 +73,7 @@ CROSS_DOMAIN = {
     "card.needs_persist",
     "card.speak_opts",
     "card.volume_mutes",
+    "card.listener",
     "gui.choice_close_exit",
     "web.guest_choice",
     "web.ethogram_tricks",
@@ -166,6 +167,7 @@ def test_gaps_are_honest_and_accounted():
     assert "live.nft_floor" in hole_ids
     assert "live.gpu_sense" in hole_ids
     assert "card.gpu" not in hole_ids
+    assert "card.listener" not in hole_ids
     assert "live.cry_playback" in hole_ids
     assert "gui.overlay_paint" in hole_ids
     assert "gui.card_hud_paint" in hole_ids
@@ -205,6 +207,7 @@ def test_gaps_are_honest_and_accounted():
     assert "card.needs_persist" in driven_ids
     assert "card.speak_opts" in driven_ids
     assert "card.volume_mutes" in driven_ids
+    assert "card.listener" in driven_ids
     assert "desk.market.tickers" in driven_ids
     assert "desk.news.x" in driven_ids
     assert "visit.todays" in driven_ids
@@ -253,6 +256,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "card.needs_persist",
         "card.speak_opts",
         "card.volume_mutes",
+        "card.listener",
         "gui.choice_close_exit",
         "web.guest_choice",
         "web.ethogram_tricks",

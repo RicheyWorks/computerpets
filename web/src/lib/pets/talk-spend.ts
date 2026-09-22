@@ -33,6 +33,16 @@ function quietVoice(voice: VoiceKind | undefined): VoiceKind {
   return "browser";
 }
 
+/** Which house env keys exist. Booleans only — the secret stays on the server. */
+export function houseKeyFlags(env: EnvMap = process.env): Record<string, boolean> {
+  const flags: Record<string, boolean> = {};
+  for (const [id, name] of Object.entries(HOUSE_ENV)) {
+    const value = env[name];
+    flags[id] = typeof value === "string" && value.trim().length > 0;
+  }
+  return flags;
+}
+
 /**
  * Who may spend a house key.
  *

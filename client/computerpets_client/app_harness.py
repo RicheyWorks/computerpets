@@ -1379,6 +1379,18 @@ def _card_rows() -> list[Affordance]:
                 "No invented zeros. Live Windows probe stays live.gpu_sense."
             ),
         ),
+        Affordance(
+            "card.listener",
+            "card",
+            "Honest mind-bus listener name",
+            "listener.py / listener.js / listener.ts",
+            notes=(
+                "Offline: House lines unless the plugin can actually be asked. "
+                "Overlay needs has_key true. Desk guests stay House lines. "
+                "A signed-in cloud name needs house_keys[id] true. "
+                "The blotter has no bus. No key, URL, or model on the line."
+            ),
+        ),
     ]
 
 
@@ -1529,6 +1541,56 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
             extras=checks,
             trace=[f"gpu.{name}={'ok' if ok else 'fail'}" for name, ok in checks.items()],
             error=None if not failed else f"gpu sense drifted: {', '.join(failed)}",
+        )
+    if local_id == "listener":
+        from .listener import name_listener
+
+        secret = "sk-live-DO-NOT-PAINT"
+        guest = name_listener({"door": "desk", "plugin": "xai", "signed_in": False, "house_keys": {"xai": True}, "api_key": secret})
+        signed = name_listener({"door": "desk", "plugin": "xai", "signed_in": True, "house_keys": {"xai": True}, "api_key": secret})
+        no_key = name_listener({"door": "desk", "plugin": "xai", "signed_in": True, "house_keys": {"xai": False}})
+        overlay = name_listener({"door": "overlay", "plugin": "openai", "has_key": True, "api_key": secret})
+        overlay_bare = name_listener({"door": "overlay", "plugin": "openai", "has_key": secret})
+        blotter = name_listener({"door": "blotter", "plugin": "xai", "has_key": True, "house_keys": {"xai": True}})
+        ollama = name_listener({"door": "overlay", "plugin": "ollama"})
+        unsafe = name_listener({"door": "overlay", "plugin": "custom", "base_url": "http://169.254.169.254/latest"})
+        unknown = name_listener({"door": "overlay", "plugin": secret})
+        overlay_html = _read("desktop/renderer/index.html")
+        pet = _read("desktop/renderer/pet.js")
+        card = _read("web/src/components/desk/keeper-card.tsx")
+        read_src = _read("web/src/lib/ai/listener-read.ts")
+        blotter_src = _read("client/computerpets_client/app.py")
+        checks = {
+            "guest": guest["id"] == "local" and secret not in guest["line"],
+            "signed": signed["id"] == "xai" and signed["line"] == "Listening · xAI Grok" and secret not in signed["line"],
+            "no_key": no_key["id"] == "local",
+            "overlay": overlay["id"] == "openai" and secret not in str(overlay.values()),
+            "string_key": overlay_bare["id"] == "local" and secret not in overlay_bare["line"],
+            "blotter": blotter["line"] == "Listening · House lines",
+            "ollama": ollama["line"] == "Listening · Ollama",
+            "unsafe": unsafe["id"] == "local" and "169.254" not in unsafe["line"],
+            "unknown": unknown["id"] == "local" and secret not in unknown["line"],
+            "surfaces": (
+                'id="hud-listener"' in overlay_html
+                and "Listening · House lines" in overlay_html
+                and "nameListener" in pet
+                and "hasKey: key.length > 0" in pet
+                and "keeper-listener" in card
+                and "readMindListener({ data: { plugin: askedPlugin, baseUrl: askedBase } })" in card
+                and "apiKey" not in read_src.split("return nameListener", 1)[-1]
+                and 'door": "blotter"' in blotter_src
+                and "listener_label" in blotter_src
+            ),
+        }
+        failed = [name for name, ok in checks.items() if not ok]
+        return InvokeResult(
+            aid,
+            "card",
+            not failed,
+            detail="listener " + ",".join(checks),
+            extras=checks,
+            trace=[f"listener.{name}={'ok' if ok else 'fail'}" for name, ok in checks.items()],
+            error=None if not failed else f"listener naming drifted: {', '.join(failed)}",
         )
     return InvokeResult(aid, "card", False, error=f"unknown card id {local_id!r}")
 
