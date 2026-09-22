@@ -66,6 +66,7 @@ address, or an API that is not on `main`.
 | [0045](0045-license-requests-wait-for-the-painted-line.md) | License requests wait for the painted line | Accepted |
 | [0046](0046-house-fonts-stay-on-this-computer.md) | House fonts stay on this computer | Accepted |
 | [0047](0047-stun-waits-for-the-painted-line.md) | A STUN host waits for the painted line | Accepted |
+| [0048](0048-overlay-connect-src-names-the-house-hosts.md) | Overlay connect-src names the house hosts | Accepted |
 
 ## How to add one
 

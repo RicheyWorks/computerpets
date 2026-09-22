@@ -2,9 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <!-- connect-src names every hardcoded house host. The https: scheme stays for a painted custom talk host and for a redirect from a preset talk host. media-src https: and http: stay for a station stream host. ADR 0048. -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https: http://127.0.0.1:* http://localhost:*; media-src 'self' https: http: blob:"
+      content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' https: https://api.x.ai https://api.openai.com https://api.anthropic.com https://generativelanguage.googleapis.com https://api.groq.com https://openrouter.ai https://api.together.xyz https://api.fireworks.ai https://api.deepseek.com https://api.mistral.ai https://en.wikipedia.org https://news.google.com https://api.coingecko.com https://api.geckoterminal.com https://query1.finance.yahoo.com https://de1.api.radio-browser.info https://de2.api.radio-browser.info https://fi1.api.radio-browser.info https://api.open-meteo.com https://geocoding-api.open-meteo.com http://127.0.0.1:* http://localhost:*; media-src 'self' https: http: blob:"
     />
     <title>ComputerPets</title>
     <link rel="stylesheet" href="styles.css" />
