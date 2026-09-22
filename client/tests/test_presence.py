@@ -11,9 +11,11 @@ from computerpets_client.presence import (
     clear_weather_locate,
     host_path_label,
     house_file,
+    hold_weather_locate,
     read_machine_mark,
     ip_place,
     list_host_folder,
+    note_weather_locate_yes,
     read_weather_here,
     record_keystroke,
     refuse_file_drop,
@@ -44,6 +46,9 @@ def test_navigation_and_capture_stay_refused():
     assert allow_permission("clipboard-read") is False
     assert allow_permission("display-capture") is False
     assert allow_permission("fileSystem") is False
+    note_weather_locate_yes()
+    assert read_weather_here() is None
+    hold_weather_locate()
     assert read_weather_here() is None
     assert allow_permission("geolocation", 1_000) is False
     assert ip_place() is None

@@ -40,7 +40,7 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.equal(A.TYPE_A_CITY, "type a city");
   assert.equal(A.HERE_FAIL, "this computer did not share a place");
   assert.equal(A.HERE_SEND, "this click sends a place to the forecast host.");
-  assert.equal(A.HERE_ASK, "send a place from this computer? a saved browser grant can answer without a new prompt. this house cannot revoke that grant.");
+  assert.equal(A.HERE_ASK, "send a place from this computer? a prior browser allow can satisfy the next locate without a new os or browser prompt. the house still asks in the app. this house cannot revoke that grant.");
   assert.equal(A.HERE_YES, "Send the place");
   assert.equal(A.HERE_NO, "Don't send");
   assert.equal(A.HERE_HELD, "the place was not sent");

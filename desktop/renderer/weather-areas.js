@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. */
 (function (root) {
   const NO_AREA = "no area set";
   const AREA_LABEL = "Weather area";
@@ -7,7 +7,7 @@
   const TYPE_A_CITY = "type a city";
   const HERE_FAIL = "this computer did not share a place";
   const HERE_SEND = "this click sends a place to the forecast host.";
-  const HERE_ASK = "send a place from this computer? a saved browser grant can answer without a new prompt. this house cannot revoke that grant.";
+  const HERE_ASK = "send a place from this computer? a prior browser allow can satisfy the next locate without a new os or browser prompt. the house still asks in the app. this house cannot revoke that grant.";
   const HERE_YES = "Send the place";
   const HERE_NO = "Don't send";
   const HERE_HELD = "the place was not sent";
