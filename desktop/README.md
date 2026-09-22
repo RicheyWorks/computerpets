@@ -16,6 +16,8 @@ The keeper card names who is listening on the mind bus. With no key saved, that 
 
 GPU load (temperature, utilization, memory, power) is read on Windows from nvidia-smi or GPU performance counters and painted on the keeper card. A sparkline beside that line is only fresh `read` samples, dropped after about 20 seconds, and it stays an empty dark strip when the reading is unread. One sample is not a stroke. Mac and Linux say `mac-linux-gpu-sense` and stay dark. A missing, malformed, or stale reading stays unread — never a painted zero. This is not a DirectX 12 or Vulkan renderer. The overlay is still Electron/Chromium.
 
+A file dropped on the glass is not opened and not read. The overlay refuses in-page navigation and popups. Clipboard, screen capture, and the file-system permission stay denied. Geolocation is the weather button. Gifts and place marks are house objects. Card and mind prefs stay `card.json` and `mind.json` under the app user-data folder. The desk does not list the Desktop.
+
 ## Care
 
 A tap on the guest is a choice. They pick Rest, Walk or Sit, Talk, Treat, Play, Special, Hide or Call back, or Pick if a gift sits. Right-click or use the tray / the extra / the mark for the full care list:

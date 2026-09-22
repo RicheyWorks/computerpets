@@ -11,6 +11,7 @@ const GpuSense = require("./gpu-sense.cjs");
 const HouseMusic = require("./renderer/house-music.js");
 const PetNews = require("./renderer/news.js");
 const PetMarket = require("./renderer/market.js");
+const Presence = require("./presence.cjs");
 
 /** Buffffff opt-in: COMPUTERPETS_GUI_HARNESS=1 runs Electron smokes then quits. */
 const GUI_HARNESS = process.env.COMPUTERPETS_GUI_HARNESS === "1";
@@ -69,16 +70,18 @@ function loadRoster() {
 }
 
 function mindFile() {
-  return path.join(app.getPath("userData"), "mind.json");
+  return Presence.houseFile(app.getPath("userData"), "mind.json");
 }
 
 function cardFile() {
-  return path.join(app.getPath("userData"), "card.json");
+  return Presence.houseFile(app.getPath("userData"), "card.json");
 }
 
 function readCard() {
+  const file = cardFile();
+  if (!file) return { collapsed: false, color: "ink", voiceStyle: "hearth", mutes: {}, off: false, pets: {} };
   try {
-    const parsed = JSON.parse(fs.readFileSync(cardFile(), "utf8"));
+    const parsed = JSON.parse(fs.readFileSync(file, "utf8"));
     if (!parsed || typeof parsed !== "object") return { collapsed: false, color: "ink", voiceStyle: "hearth", mutes: {}, off: false, pets: {} };
     return parsed;
   } catch {
@@ -87,17 +90,20 @@ function readCard() {
 }
 
 function writeCard(data) {
-  if (!data || typeof data !== "object") return;
+  const file = cardFile();
+  if (!file || !data || typeof data !== "object") return;
   try {
-    fs.writeFileSync(cardFile(), JSON.stringify(data));
+    fs.writeFileSync(file, JSON.stringify(data));
   } catch {
     /* ignore */
   }
 }
 
 function readMind() {
+  const file = mindFile();
+  if (!file) return { default: { plugin: "local" }, voice: "browser", pets: {} };
   try {
-    const parsed = JSON.parse(fs.readFileSync(mindFile(), "utf8"));
+    const parsed = JSON.parse(fs.readFileSync(file, "utf8"));
     if (!parsed || typeof parsed !== "object") return { default: { plugin: "local" }, voice: "browser", pets: {} };
     return parsed;
   } catch {
@@ -106,16 +112,43 @@ function readMind() {
 }
 
 function writeMind(data) {
-  if (!data || typeof data !== "object") return;
+  const file = mindFile();
+  if (!file || !data || typeof data !== "object") return;
   const next = {
     default: data.default && typeof data.default === "object" ? data.default : { plugin: "local" },
     voice: typeof data.voice === "string" ? data.voice : "browser",
     pets: data.pets && typeof data.pets === "object" ? data.pets : {},
   };
   try {
-    fs.writeFileSync(mindFile(), JSON.stringify(next));
+    fs.writeFileSync(file, JSON.stringify(next));
   } catch {
     /* ignore */
+  }
+}
+
+const sealedContents = new WeakSet();
+
+/** Renderer navigation and capture stay refused. Main loadFile is not this path. */
+function sealDeskContents(contents) {
+  if (!contents || sealedContents.has(contents)) return;
+  sealedContents.add(contents);
+  const refuseNav = (event) => {
+    if (!Presence.allowNavigation()) event.preventDefault();
+  };
+  contents.on("will-navigate", refuseNav);
+  contents.on("will-redirect", refuseNav);
+  contents.on("will-frame-navigate", refuseNav);
+  if (typeof contents.setWindowOpenHandler === "function") {
+    contents.setWindowOpenHandler(() => ({ action: "deny" }));
+  }
+  const session = contents.session;
+  if (session && typeof session.setPermissionRequestHandler === "function") {
+    session.setPermissionRequestHandler((_wc, permission, callback) => {
+      callback(Presence.allowPermission(permission));
+    });
+  }
+  if (session && typeof session.setPermissionCheckHandler === "function") {
+    session.setPermissionCheckHandler((_wc, permission) => Presence.allowPermission(permission));
   }
 }
 
@@ -269,6 +302,7 @@ function openSettings() {
       sandbox: true,
     },
   });
+  sealDeskContents(settingsWin.webContents);
   settingsWin.loadFile(path.join(__dirname, "renderer", "settings.html"));
   settingsWin.on("closed", () => {
     settingsWin = null;
@@ -306,6 +340,7 @@ function createWindow() {
     },
   });
 
+  sealDeskContents(win.webContents);
   win.setAlwaysOnTop(true, "screen-saver");
   win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
   win.setIgnoreMouseEvents(true, { forward: true });
@@ -815,11 +850,13 @@ function pushWindowRects() {
   WindowEnum.listRaw({ platform: process.platform })
     .then((listed) => {
       if (!win || win.isDestroyed()) return;
-      const windows = Windows.takeRects(listed.raw, {
-        workArea: area,
-        scaleFactor: display.scaleFactor || 1,
-        skipIds: overlaySkipIds(),
-      });
+      const windows = Presence.scrubWindows(
+        Windows.takeRects(listed.raw, {
+          workArea: area,
+          scaleFactor: display.scaleFactor || 1,
+          skipIds: overlaySkipIds(),
+        }),
+      );
       win.webContents.send("windows", windows);
     })
     .catch(() => {
