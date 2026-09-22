@@ -8,6 +8,7 @@ const fs = require("fs");
 const { createLicenseSession } = require("./session.cjs");
 const { createContractTestDouble, encryptLicense } = require("./contract-test-double.cjs");
 const { LicenseError } = require("./errors.cjs");
+const { licenseHonesty } = require("./license-net.cjs");
 
 const SECRET = Buffer.alloc(32, 7).toString("base64");
 const SIGNING = "test-bundle-signing-key-not-a-placeholder";
@@ -352,5 +353,177 @@ describe("license session", () => {
     );
     assert.equal(posts.length, 0);
     assert.equal([...files.keys()].some((key) => key.endsWith("hwid.txt")), false);
+  });
+
+  it("does not post a license hash to a remote host until that host is named", async () => {
+    const reads = [];
+    const files = new Map();
+    const dir = path.join(os.tmpdir(), "cp-license-remote-hash");
+    const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
+    const seen = [];
+    const session = createLicenseSession({
+      userDataDir: dir,
+      env: {
+        LICENSE_SECRET_KEY: SECRET,
+        BUNDLE_SIGNING_KEY: SIGNING,
+        COMPUTERPETS_BACKEND_URL: "https://user:secret@license.example.test",
+      },
+      fetchImpl: async (url, init) => {
+        seen.push(String(url));
+        return backend.fetchImpl(url, init);
+      },
+      readFile: (p) => {
+        const key = String(p);
+        reads.push(key);
+        if (key.includes("machine-id")) return "machine-aaa\n";
+        if (!files.has(key)) {
+          const err = new Error("ENOENT");
+          err.code = "ENOENT";
+          throw err;
+        }
+        return files.get(key);
+      },
+      writeFile: (p, data) => {
+        files.set(String(p), String(data));
+      },
+      mkdir: () => {},
+    });
+
+    await session.status();
+    assert.equal(seen.length, 0);
+    assert.equal(reads.some((item) => item.includes("machine-id")), false);
+
+    const remote = "https://user:secret@license.example.test/api?hwid=raw-id#frag";
+    const line = licenseHonesty(remote);
+    assert.match(line, /license\.example\.test/);
+    assert.equal(line.includes("secret"), false);
+    assert.equal(line.includes("raw-id"), false);
+    assert.equal(line.includes("/api"), false);
+    assert.equal(line.includes("#frag"), false);
+    assert.equal(line.includes("frag"), false);
+
+    await assert.rejects(
+      () => session.unlock({ steamId: "76561198000000000", appId: "123456", petType: "red_panda", provider: "steam" }),
+      (err) => err instanceof LicenseError && err.code === "license_net_unnamed" && /license\.example\.test/.test(err.message)
+    );
+    assert.equal(seen.length, 0);
+    assert.equal(reads.some((item) => item.includes("machine-id")), false);
+    assert.equal([...files.keys()].some((key) => key.endsWith("hwid.txt")), false);
+
+    const other = licenseHonesty("https://other.example.test");
+    await assert.rejects(
+      () =>
+        session.unlock({
+          steamId: "76561198000000000",
+          appId: "123456",
+          petType: "red_panda",
+          provider: "steam",
+          licenseLine: other,
+        }),
+      (err) => err instanceof LicenseError && err.code === "license_net_unnamed"
+    );
+    assert.equal(seen.length, 0);
+
+    await session.unlock({
+      steamId: "76561198000000000",
+      appId: "123456",
+      petType: "red_panda",
+      provider: "steam",
+      licenseLine: line,
+      hwid: undefined,
+    });
+    assert.equal(seen.length > 0, true);
+    assert.equal(new URL(seen[0]).hostname, "license.example.test");
+    const verify = backend.calls.find((call) => call.path === "/api/verify/steam");
+    assert.match(verify.body.hwid, /^[0-9a-f]{64}$/);
+    assert.equal(String(verify.body.hwid).includes("machine-aaa"), false);
+    assert.equal(line.includes(verify.body.hwid), false);
+    const download = backend.calls.find((call) => call.path === "/api/download/red_panda");
+    assert.equal(download.body.hwid, verify.body.hwid);
+  });
+
+  it("keeps a loopback unlock on this computer without the outbound line", async () => {
+    for (const backendUrl of ["http://127.0.0.1:8080", "http://localhost:8080", "http://[::1]:8080"]) {
+      const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
+      const session = createLicenseSession({
+        userDataDir: path.join(os.tmpdir(), "cp-license-loop"),
+        env: { LICENSE_SECRET_KEY: SECRET, BUNDLE_SIGNING_KEY: SIGNING, COMPUTERPETS_BACKEND_URL: backendUrl },
+        fetchImpl: backend.fetchImpl,
+        hwid: "device-abc-123",
+        ...memoryFs(),
+      });
+      const result = await session.unlock({
+        steamId: "76561198000000000",
+        appId: "123456",
+        petType: "red_panda",
+        provider: "steam",
+        backendUrl,
+      });
+      assert.equal(result.unlocked, true);
+      assert.equal(licenseHonesty(backendUrl), "");
+      assert.equal(backend.calls[0].body.hwid, "device-abc-123");
+    }
+  });
+
+  it("names the host before a bound download sends the hash", async () => {
+    const now = Date.now();
+    const dir = path.join(os.tmpdir(), "cp-license-bound-remote");
+    const enc = encryptLicense(
+      {
+        jti: "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80",
+        owner: "76561198000000000",
+        pet: "red_panda",
+        validUntil: new Date(now + 86400_000).toISOString(),
+        issuedAt: new Date(now).toISOString(),
+        hwid: "already-bound",
+      },
+      SECRET
+    );
+    const files = new Map();
+    files.set(
+      path.join(dir, "license.json"),
+      JSON.stringify({
+        backendUrl: "https://license.example.test",
+        license: { ciphertext: enc.ciphertext, iv: enc.iv },
+        auth: { token: "token" },
+      })
+    );
+    files.set(path.join(dir, "hwid.txt"), "already-bound");
+    const posts = [];
+    const session = createLicenseSession({
+      userDataDir: dir,
+      env: { LICENSE_SECRET_KEY: SECRET, COMPUTERPETS_BACKEND_URL: "https://license.example.test" },
+      readFile: (p) => {
+        const key = String(p);
+        if (key.includes("machine-id")) throw new Error("os read");
+        if (!files.has(key)) {
+          const err = new Error("ENOENT");
+          err.code = "ENOENT";
+          throw err;
+        }
+        return files.get(key);
+      },
+      writeFile: (p, data) => {
+        files.set(String(p), String(data));
+      },
+      mkdir: () => {},
+      fetchImpl: async (_url, init) => {
+        if (init && String(init.method || "GET").toUpperCase() === "POST") posts.push(JSON.parse(init.body));
+        return new Response("no", { status: 500 });
+      },
+    });
+    await assert.rejects(
+      () => session.download(),
+      (err) => err instanceof LicenseError && err.code === "license_net_unnamed"
+    );
+    assert.equal(posts.length, 0);
+
+    await assert.rejects(
+      () => session.download({ licenseLine: licenseHonesty("https://license.example.test") }),
+      (err) => err instanceof LicenseError && err.code === "download_failed"
+    );
+    assert.equal(posts.length, 1);
+    assert.equal(posts[0].hwid, "already-bound");
+    assert.equal(Object.prototype.hasOwnProperty.call(posts[0], "machine-id"), false);
   });
 });
