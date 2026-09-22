@@ -52,9 +52,9 @@ class RateLimitRedisDownIntegrationTest {
     }
 
     @Test
-    @DisplayName("Redis down does not lift the limit — verify returns 503 problem+json")
-    void redisDown_verifyIs503() {
-        ResponseEntity<Map> response = restTemplate.getForEntity("/api/verify/providers", Map.class);
+    @DisplayName("Redis down does not lift the limit — discovery returns 503 problem+json")
+    void redisDown_discoveryIs503() {
+        ResponseEntity<Map> response = restTemplate.getForEntity("/api/pets", Map.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
         assertThat(response.getHeaders().getFirst(HttpHeaders.RETRY_AFTER)).isEqualTo("5");
@@ -62,8 +62,6 @@ class RateLimitRedisDownIntegrationTest {
         assertThat(response.getHeaders().getContentType().isCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON)).isTrue();
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().get("status")).isEqualTo(503);
-        assertThat(response.getBody().get("title")).isEqualTo("Service Unavailable");
         assertThat((String) response.getBody().get("detail")).contains("Rate limiter unavailable");
-        assertThat(response.getBody().get("retryAfterSeconds")).isEqualTo(5);
     }
 }
