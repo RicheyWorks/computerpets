@@ -251,9 +251,12 @@
         const text = clip(body.message?.content);
         if (text) return { text, source: p.id };
       } else if (p.kind === "gemini") {
-        const res = await fetch(`${base}/models/${model}:generateContent?key=${encodeURIComponent(key)}`, {
+        const res = await fetch(`${base}/models/${model}:generateContent`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            ...(key ? { "x-goog-api-key": key } : {}),
+          },
           body: JSON.stringify({
             systemInstruction: { parts: [{ text: ctx.system }] },
             contents: [{ role: "user", parts: [{ text: userTurn(ctx) }] }],
