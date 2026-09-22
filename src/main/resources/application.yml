@@ -220,6 +220,7 @@ management:
     distribution:
       percentiles-histogram:
         enterprisepet.verify: true
+        enterprisepet.license.issue: true
         enterprisepet.download: true
         http.server.requests: true
 

@@ -218,13 +218,14 @@ export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
 # then start the backend as usual
 ```
 
-`OTEL_EXPORTER_OTLP_ENDPOINT` is the OpenTelemetry base URL; the app appends `/v1/traces`. After a `POST /api/verify/{provider}` you should see `http.server.requests`, `enterprisepet.verify`, and a client/`eth_call` child span in the collector.
+`OTEL_EXPORTER_OTLP_ENDPOINT` is the OpenTelemetry base URL; the app appends `/v1/traces`. After a `POST /api/verify/{provider}` you should see `http.server.requests`, `enterprisepet.verify`, `enterprisepet.license.issue` (on a successful grant), and a client/`eth_call` child span in the collector.
 
 Business metrics (same observations):
 
 | Meter | Tags | Use |
 |-------|------|-----|
 | `enterprisepet.verify` | `provider`, `outcome` (`success` / `denied` / `error`) | Latency per provider; success rate = `success` / all |
+| `enterprisepet.license.issue` | `provider`, `pet`, `outcome` (`success` / `error`) | Issuance rate after a verified grant; encrypt + persist latency ([ADR 0057](adr/0057-license-issuance-observation.md)) |
 | `enterprisepet.download` | `pet` | Download latency |
 | `enterprisepet.provider.call` | `provider`, `operation` | NFT `eth_call` latency |
 

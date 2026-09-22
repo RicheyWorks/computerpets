@@ -3,7 +3,7 @@
 This document outlines the phased plan to evolve the EnterprisePet Backend from its current secure baseline into a production-ready, scalable service.
 
 > **Current Status (May 2026):** All P0 security items + **Phase 1 Production Readiness Foundations** have been completed.
-> We are now starting **Phase 2: Security & Reliability Hardening**.
+> **Phase 2** (Security & Reliability Hardening) is complete. Current focus: close remaining Phase 3 observability gaps and other non-storefront, non-DX12 release-readiness work. See [ARCHITECTURE.md](ARCHITECTURE.md) §10.
 
 ---
 
@@ -54,7 +54,7 @@ All critical items required before any public or limited production exposure hav
 
 ---
 
-## Phase 2: Security & Reliability Hardening (Current Focus — Starting May 2026)
+## Phase 2: Security & Reliability Hardening (Completed — September 2026)
 
 **Goal:** Significantly improve defense-in-depth and reduce operational risk.
 
@@ -69,7 +69,7 @@ All critical items required before any public or limited production exposure hav
 
 - **2.3 Resilience Patterns**
   - [x] Circuit breakers + retries (Resilience4j) added for Steam, Microsoft, NFT, Itch, and Epic providers (with per-provider configuration in application.yml)
-  - Timeouts and graceful degradation (in progress — fallbacks currently deny safely)
+  - [x] Timeouts and graceful degradation (fallbacks deny safely)
     - [x] Overlay IPC news, quote, and radio reads time out at twelve seconds and return unread with an empty plate. The keeper line stays can't reach. A radio timeout does not call the next directory host. Weather forecast and geocode page wrappers time out the same way and flip unread / can't reach. Desk and overlay news, quote, and radio page wrappers (RSS, featured Wikipedia, CoinGecko, GeckoTerminal, Yahoo, Radio Find) time out the same way. Cloud talk and cloud voice page wrappers time out the same way and keep the house line or silence. Steam, Itch, and Epic RestClients time out at ten seconds and deny. Microsoft and NFT already time out. Shared Resilience4j ownership time limiter (`ownership`, twelve-second wall) wraps Steam / Itch / Epic / Microsoft probes; exceed denies. RestClient still owns the per-HTTP ten-second hop. Not a new host. Not invented weather or entitlements. Catalog stays 221.
   - [x] Microsoft Store verify uses Collections v9 `publisherQuery`; prod still refuses dev-mode; live Store ID is still a publish-time config, not invented here.
 
@@ -102,6 +102,7 @@ All critical items required before any public or limited production exposure hav
 - **3.2 Observability Maturity**
   - [x] Distributed tracing (Micrometer + OpenTelemetry)
   - [x] Custom business metrics (verification success rate, latency per provider)
+  - [x] License issuance rate (`enterprisepet.license.issue` on verify→issue; provider + pet + outcome; ADR 0057)
 
 - **3.3 Deployment & Environments**
   - [x] Proper Spring profiles (`dev` / `staging` / `prod`)
@@ -613,6 +614,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-09-22 (Phase 2.4: House secrets from env, `*_FILE` mounts, or External Secrets / Vault agent templates. Deny-safe. DX12/Vulkan was not started. Catalog 221.)
+**Last Updated:** 2026-09-22 (Phase 2 complete. License issuance observation `enterprisepet.license.issue` — ADR 0057. DX12/Vulkan was not started. Catalog 221.)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.
