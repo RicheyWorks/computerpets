@@ -426,7 +426,15 @@ function fetchWeather() {
   paintWeather();
   A.readForecast(line, url)
     .then((json) => {
-      if (gen !== weatherFetchGen || json == null) return;
+      if (gen !== weatherFetchGen) return;
+      if (json == null) {
+        liveSky = null;
+        liveSkyKey = "";
+        weatherUnread = true;
+        paintHousePlates();
+        paintWeather();
+        return;
+      }
       liveSky = A.parseForecast(json);
       liveSkyKey = liveSky ? key : "";
       weatherUnread = !liveSky;
@@ -3889,7 +3897,10 @@ if (weatherPlate) {
     }
     A.readGeocode(shown, url)
       .then((json) => {
-        if (json == null) return;
+        if (json == null) {
+          hits.innerHTML = `<li>${A.CANT_REACH}</li>`;
+          return;
+        }
         const found = A.parseGeocode(json);
         hits.replaceChildren();
         if (!found.length) {

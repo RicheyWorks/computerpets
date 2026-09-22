@@ -370,7 +370,14 @@ export function DeskWeatherPlate({
     setUnread(false);
     void readForecast(line, url)
       .then((json) => {
-        if (cancelled || json == null) return;
+        if (cancelled) return;
+        if (json == null) {
+          liveKey.current = "";
+          setUnread(true);
+          setLive(null);
+          onSky?.(null);
+          return;
+        }
         const next = parseForecast(json);
         liveKey.current = next ? key : "";
         setUnread(!next);
@@ -417,6 +424,7 @@ export function DeskWeatherPlate({
       const json = await readGeocode(shown, url);
       if (json == null) {
         setHits([]);
+        setLookLine(WEATHER_CANT_REACH);
         return;
       }
       const found = parseGeocode(json);
