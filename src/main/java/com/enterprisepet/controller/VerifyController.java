@@ -87,7 +87,7 @@ public class VerifyController {
     @Operation(
         summary = "Verify ownership and issue license",
         description = "Verifies ownership via the selected provider and returns an encrypted license + short-lived JWT. " +
-                "Requires X-ComputerPets-Timestamp and X-ComputerPets-Signature (HMAC-SHA256, 300s skew, LICENSE_SECRET_KEY). " +
+                "Requires X-ComputerPets-Timestamp, X-ComputerPets-Nonce, and X-ComputerPets-Signature (HMAC-SHA256, 300s skew, single-use nonce, LICENSE_SECRET_KEY). " +
                 "Optional body field `hwid` (max 128 chars) binds the license to a device; see docs/CLIENT-CONTRACT.md. " +
                 "Provider fields are fail-closed on length and charset before any outbound store call.",
         responses = {

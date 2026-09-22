@@ -68,7 +68,7 @@ class AdminRequestSignatureIntegrationTest {
     void staticKeyIsNotEnough() throws Exception {
         HttpResponse<String> res = call("POST", "/api/admin/revoke", "",
                 "{\"jti\":\"anything\"}".getBytes(StandardCharsets.UTF_8),
-                null, null, ADMIN_KEY);
+                null, null, null, ADMIN_KEY);
         assertThat(res.statusCode()).isEqualTo(401);
         assertThat(res.body()).contains("\"status\":401");
         assertThat(res.body()).contains("Admin signature required.");
@@ -81,13 +81,14 @@ class AdminRequestSignatureIntegrationTest {
     void badMacAndSkewAre401() throws Exception {
         byte[] body = "{\"jti\":\"anything\"}".getBytes(StandardCharsets.UTF_8);
         HttpResponse<String> bad = call("POST", "/api/admin/revoke", "", body,
-                Long.toString(Instant.now().getEpochSecond()), "not-a-signature", null);
+                Long.toString(Instant.now().getEpochSecond()), "0123456789abcdef", "not-a-signature", null);
         assertThat(bad.statusCode()).isEqualTo(401);
         assertThat(bad.body()).contains("Admin signature invalid.");
 
         String stale = Long.toString(Instant.now().getEpochSecond() - 301);
-        String sig = AdminRequestSignature.sign(ADMIN_KEY, "POST", "/api/admin/revoke", "", stale, body);
-        HttpResponse<String> skew = call("POST", "/api/admin/revoke", "", body, stale, sig, null);
+        String skewNonce = "admin-skew-nonce01";
+        String sig = AdminRequestSignature.sign(ADMIN_KEY, "POST", "/api/admin/revoke", "", stale, skewNonce, body);
+        HttpResponse<String> skew = call("POST", "/api/admin/revoke", "", body, stale, skewNonce, sig, null);
         assertThat(skew.statusCode()).isEqualTo(401);
         assertThat(skew.body()).contains("300 second window");
     }
@@ -97,13 +98,15 @@ class AdminRequestSignatureIntegrationTest {
     void currentAndPreviousKeysReachController() throws Exception {
         byte[] body = "{\"jti\":\"does-not-exist-uuid\"}".getBytes(StandardCharsets.UTF_8);
         String ts = Long.toString(Instant.now().getEpochSecond());
-        String current = AdminRequestSignature.sign(ADMIN_KEY, "POST", "/api/admin/revoke", "", ts, body);
-        HttpResponse<String> now = call("POST", "/api/admin/revoke", "", body, ts, current, null);
+        String currentNonce = "admin-current-nonce";
+        String current = AdminRequestSignature.sign(ADMIN_KEY, "POST", "/api/admin/revoke", "", ts, currentNonce, body);
+        HttpResponse<String> now = call("POST", "/api/admin/revoke", "", body, ts, currentNonce, current, null);
         assertThat(now.statusCode()).isEqualTo(404);
         assertThat(now.body()).doesNotContain("Admin signature");
 
-        String previous = AdminRequestSignature.sign(PREVIOUS_KEY, "POST", "/api/admin/revoke", "", ts, body);
-        HttpResponse<String> old = call("POST", "/api/admin/revoke", "", body, ts, previous, null);
+        String previousNonce = "admin-previous-nonc";
+        String previous = AdminRequestSignature.sign(PREVIOUS_KEY, "POST", "/api/admin/revoke", "", ts, previousNonce, body);
+        HttpResponse<String> old = call("POST", "/api/admin/revoke", "", body, ts, previousNonce, previous, null);
         assertThat(old.statusCode()).isEqualTo(404);
         assertThat(old.body()).contains("not found or already revoked");
     }
@@ -111,12 +114,13 @@ class AdminRequestSignatureIntegrationTest {
     @Test
     @DisplayName("GET audit without a MAC is 401; a signed GET is 200")
     void signedGetReachesList() throws Exception {
-        HttpResponse<String> denied = call("GET", "/api/admin/licenses", "", new byte[0], null, null, null);
+        HttpResponse<String> denied = call("GET", "/api/admin/licenses", "", new byte[0], null, null, null, null);
         assertThat(denied.statusCode()).isEqualTo(401);
 
         String ts = Long.toString(Instant.now().getEpochSecond());
-        String sig = AdminRequestSignature.sign(ADMIN_KEY, "GET", "/api/admin/licenses", "", ts, new byte[0]);
-        HttpResponse<String> ok = call("GET", "/api/admin/licenses", "", new byte[0], ts, sig, null);
+        String nonce = "admin-list-nonce001";
+        String sig = AdminRequestSignature.sign(ADMIN_KEY, "GET", "/api/admin/licenses", "", ts, nonce, new byte[0]);
+        HttpResponse<String> ok = call("GET", "/api/admin/licenses", "", new byte[0], ts, nonce, sig, null);
         assertThat(ok.statusCode()).isEqualTo(200);
         assertThat(ok.body()).startsWith("[");
     }
@@ -134,8 +138,28 @@ class AdminRequestSignatureIntegrationTest {
         assertThat(String.valueOf(res.getBody().get("error"))).contains("jti is required");
     }
 
+    @Test
+    @DisplayName("a captured admin request is 401 on replay; a new nonce still reaches the controller")
+    void replayIs401() throws Exception {
+        byte[] body = "{\"jti\":\"does-not-exist-uuid\"}".getBytes(StandardCharsets.UTF_8);
+        String ts = Long.toString(Instant.now().getEpochSecond());
+        String nonce = "admin-replay-nonce1";
+        String sig = AdminRequestSignature.sign(ADMIN_KEY, "POST", "/api/admin/revoke", "", ts, nonce, body);
+        HttpResponse<String> first = call("POST", "/api/admin/revoke", "", body, ts, nonce, sig, null);
+        assertThat(first.statusCode()).isEqualTo(404);
+
+        HttpResponse<String> replay = call("POST", "/api/admin/revoke", "", body, ts, nonce, sig, null);
+        assertThat(replay.statusCode()).isEqualTo(401);
+        assertThat(replay.body()).contains("Admin request replayed.");
+
+        String fresh = "admin-replay-nonce2";
+        String freshSig = AdminRequestSignature.sign(ADMIN_KEY, "POST", "/api/admin/revoke", "", ts, fresh, body);
+        HttpResponse<String> again = call("POST", "/api/admin/revoke", "", body, ts, fresh, freshSig, null);
+        assertThat(again.statusCode()).isEqualTo(404);
+    }
+
     private HttpResponse<String> call(String method, String path, String query, byte[] body,
-                                      String timestamp, String signature, String staticKey) throws Exception {
+                                      String timestamp, String nonce, String signature, String staticKey) throws Exception {
         String uri = "http://127.0.0.1:" + port + path + (query == null || query.isEmpty() ? "" : "?" + query);
         HttpRequest.Builder builder = HttpRequest.newBuilder(URI.create(uri));
         if ("POST".equals(method)) {
@@ -146,6 +170,9 @@ class AdminRequestSignatureIntegrationTest {
         }
         if (timestamp != null) {
             builder.header(AdminRequestSignature.TIMESTAMP_HEADER, timestamp);
+        }
+        if (nonce != null) {
+            builder.header(AdminRequestSignature.NONCE_HEADER, nonce);
         }
         if (signature != null) {
             builder.header(AdminRequestSignature.SIGNATURE_HEADER, signature);

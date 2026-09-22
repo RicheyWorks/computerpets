@@ -55,7 +55,7 @@ class MachineRequestSignatureIntegrationTest {
     @Test
     @DisplayName("unsigned POST /api/verify is 401 and does not issue a license")
     void unsignedVerifyIs401() throws Exception {
-        HttpResponse<String> res = post(new byte[] {'{', '}'}, null, null);
+        HttpResponse<String> res = post(new byte[] {'{', '}'}, null, null, null);
         assertThat(res.statusCode()).isEqualTo(401);
         assertThat(res.body()).contains("Machine signature required.");
         assertThat(res.headers().firstValue("content-type").orElse(""))
@@ -66,13 +66,14 @@ class MachineRequestSignatureIntegrationTest {
     @DisplayName("a bad MAC and a stale timestamp are 401")
     void badMacAndSkewAre401() throws Exception {
         byte[] body = "{\"steamId\":\"76561198000000000\",\"appId\":\"123456\"}".getBytes(StandardCharsets.UTF_8);
-        HttpResponse<String> bad = post(body, Long.toString(Instant.now().getEpochSecond()), "not-a-signature");
+        HttpResponse<String> bad = post(body, Long.toString(Instant.now().getEpochSecond()), "0123456789abcdef", "not-a-signature");
         assertThat(bad.statusCode()).isEqualTo(401);
         assertThat(bad.body()).contains("Machine signature invalid.");
 
         String stale = Long.toString(Instant.now().getEpochSecond() - 301);
-        String sig = MachineRequestSignature.sign(LICENSE_KEY, "POST", "/api/verify/steam", "", stale, body);
-        HttpResponse<String> skew = post(body, stale, sig);
+        String skewNonce = "machine-skew-nonce";
+        String sig = MachineRequestSignature.sign(LICENSE_KEY, "POST", "/api/verify/steam", "", stale, skewNonce, body);
+        HttpResponse<String> skew = post(body, stale, skewNonce, sig);
         assertThat(skew.statusCode()).isEqualTo(401);
         assertThat(skew.body()).contains("300 second window");
     }
@@ -83,8 +84,9 @@ class MachineRequestSignatureIntegrationTest {
         byte[] body = "{\"steamId\":\"76561198000000000\",\"appId\":\"123456\",\"petType\":\"red_panda\"}"
                 .getBytes(StandardCharsets.UTF_8);
         String ts = Long.toString(Instant.now().getEpochSecond());
-        String sig = MachineRequestSignature.sign(LICENSE_KEY, "POST", "/api/verify/steam", "", ts, body);
-        HttpResponse<String> res = post(body, ts, sig);
+        String nonce = "machine-fresh-nonce";
+        String sig = MachineRequestSignature.sign(LICENSE_KEY, "POST", "/api/verify/steam", "", ts, nonce, body);
+        HttpResponse<String> res = post(body, ts, nonce, sig);
         assertThat(res.statusCode()).isEqualTo(403);
         assertThat(res.body()).doesNotContain("Machine signature");
     }
@@ -114,13 +116,32 @@ class MachineRequestSignatureIntegrationTest {
         assertThat(res.getBody()).doesNotContain("Machine signature");
     }
 
-    private HttpResponse<String> post(byte[] body, String timestamp, String signature) throws Exception {
+    @Test
+    @DisplayName("a captured verify is 401 on replay")
+    void replayIs401() throws Exception {
+        byte[] body = "{\"steamId\":\"76561198000000000\",\"appId\":\"123456\",\"petType\":\"red_panda\"}"
+                .getBytes(StandardCharsets.UTF_8);
+        String ts = Long.toString(Instant.now().getEpochSecond());
+        String nonce = "machine-replay-non1";
+        String sig = MachineRequestSignature.sign(LICENSE_KEY, "POST", "/api/verify/steam", "", ts, nonce, body);
+        HttpResponse<String> first = post(body, ts, nonce, sig);
+        assertThat(first.statusCode()).isEqualTo(403);
+
+        HttpResponse<String> replay = post(body, ts, nonce, sig);
+        assertThat(replay.statusCode()).isEqualTo(401);
+        assertThat(replay.body()).contains("Machine request replayed.");
+    }
+
+    private HttpResponse<String> post(byte[] body, String timestamp, String nonce, String signature) throws Exception {
         HttpRequest.Builder builder = HttpRequest.newBuilder(
                         URI.create("http://127.0.0.1:" + port + "/api/verify/steam"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofByteArray(body));
         if (timestamp != null) {
             builder.header(MachineRequestSignature.TIMESTAMP_HEADER, timestamp);
+        }
+        if (nonce != null) {
+            builder.header(MachineRequestSignature.NONCE_HEADER, nonce);
         }
         if (signature != null) {
             builder.header(MachineRequestSignature.SIGNATURE_HEADER, signature);
