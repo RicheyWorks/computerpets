@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-22 (Terraform managed stores — ADR 0062. Not DX12/Vulkan. Catalog 221.) |
+| **Last Updated** | 2026-09-22 (CDN edge redeem — ADR 0063. Not DX12/Vulkan. Catalog 221.) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -249,6 +249,7 @@ flowchart TB
   - ~~CI publishes the image to GHCR; image signing is still open.~~ Keyless cosign on every `main` GHCR publish; `deploy/k8s/verify-image-signature.sh` fail-closed verify for prod digests ([0061](adr/0061-ghcr-image-signing.md)).
   - ~~Actuator is not enabled.~~ Probes are `/actuator/health/liveness` and `/readiness` (permitted without a JWT).
   - ~~No Terraform/Pulumi/Crossplane definitions for the surrounding infrastructure (managed Postgres, Redis, secrets, CDN, WAF).~~ Terraform root in `deploy/terraform/` for managed Postgres, Redis, Secrets Manager shells (External Secrets contract), CDN, and WAF stubs ([0062](adr/0062-terraform-managed-stores.md)). Pulumi / Crossplane remain non-goals. A live cloud apply is still the keeper's account.
+  - ~~CDN edge assumed to verify HMAC / redeem without a shipped worker.~~ Fail-closed edge redeem in `deploy/cdn/edge-redeem.js` calls house `GET /api/bundles/{pet}/redeem` before bytes ([0063](adr/0063-cdn-edge-redeem-verification.md)). Keeper associates the function on apply.
   - Secrets are still accepted via plain environment variables / a Kubernetes `Secret` (acceptable only behind a proper secrets operator). Prefer External Secrets + Terraform-created shells.
 
 This deployment view directly addresses the multi-instance and rate-limiting concerns already called out in the README and `AUDIT.md`.
@@ -331,8 +332,8 @@ Rate limiting and basic validation occur before provider dispatch. Provider exce
    - Calls `LicenseService.validate(ciphertext, iv)` → decrypts, checks expiry and authenticity via GCM tag, then the Redis deny-list, then the Postgres ledger.
    - Compares `license.pet` against path variable.
    - If JWT present in context, performs claim cross-check: `jwt.sub == license.owner && jwt.pet == license.pet`.
-4. On success, `PetBundleService.manifestFor(...)` signs `petKey|owner|exp` with HMAC-SHA256 and returns a CDN URL containing the signature as a query parameter.
-5. Client downloads the actual `.zip` from the CDN (edge verification of signature is assumed to be implemented at the CDN or via a future proxy).
+4. On success, `PetBundleService.manifestFor(...)` signs `petKey|owner|jti|exp` with HMAC-SHA256 and returns a CDN URL containing `pet`, `owner`, `jti`, `exp`, and `sig` query parameters.
+5. Client downloads the actual `.zip` from the CDN. The edge worker (`deploy/cdn/edge-redeem.js`) calls house redeem first; bytes are served only when `{ "allowed": true }` ([0063](adr/0063-cdn-edge-redeem-verification.md)).
 
 This two-phase (verify → download) + dual-artifact (license + JWT) design prevents:
 - Use of a stolen license without a matching fresh JWT.
@@ -385,10 +386,11 @@ sequenceDiagram
     L-->>D: LicensePayload{jti, owner, pet, validUntil}
     D->>D: assert pet matches && (JWT absent or claims match license)
     D->>B: manifestFor(pet, owner)
-    B-->>D: BundleManifest{downloadUrl: "https://cdn.../red_panda.zip?owner=...&exp=...&sig=HMAC...", ttlSeconds:900, ...}
+    B-->>D: BundleManifest{downloadUrl: "https://cdn.../red_panda.zip?pet=...&owner=...&jti=...&exp=...&sig=HMAC...", ttlSeconds:900, ...}
     D-->>C: 200 {petKey, downloadUrl, expiresAt, ttlSeconds, ...}
 
-    C->>CDN: GET /red_panda.zip?owner=...&exp=...&sig=...
+    C->>CDN: GET /red_panda.zip?pet=...&owner=...&jti=...&exp=...&sig=...
+    Note over CDN: edge redeem → house /api/bundles/{pet}/redeem
     CDN-->>C: 200 (zip bytes)
 ```
 
@@ -511,7 +513,7 @@ Numbered records of the decisions that are already true on `main` live in [`docs
 | **Plugin SPI with Spring auto-discovery** (`ProviderRegistry` ctor takes `List<OwnershipProvider>`) | Zero boilerplate for new platforms; clients discover via `/providers` endpoint. | Duplicate-key detection at startup is good, but runtime registration or ordering is not dynamic. |
 | **Stateless crypto licenses instead of server-side sessions or DB rows** | Simple horizontal scaling; client carries the proof; server only needs the master key. | Revocation, usage analytics, and "one active license per owner" policies require future persistence layer. |
 | **Two-phase download (encrypted license + short JWT)** with explicit claim cross-check in `DownloadController` | Strong defense-in-depth against token replay and cross-pet attacks. | Extra round-trip and client complexity; JWT is only useful for the download handshake. |
-| **HMAC-signed URLs rather than direct S3 presigned URLs or serving bytes** | Decouples storage backend; edge calls `GET /api/bundles/{pet}/redeem` for one-time + IP-bound grants on the jti foundation. | Requires a verifier at the CDN/edge (or this backend as proxy) that forwards the keeper address; grant store down → fail closed. |
+| **HMAC-signed URLs rather than direct S3 presigned URLs or serving bytes** | Decouples storage backend; edge calls `GET /api/bundles/{pet}/redeem` for one-time + IP-bound grants on the jti foundation (`deploy/cdn/edge-redeem.js`; ADR 0063). | Requires associating the edge worker (or this backend as proxy) that forwards the keeper address; grant store down → fail closed. |
 | **Redis Bucket4j + Lettuce (`rate-limit.backend=redis`)** | Shared per-IP verify/download buckets across replicas; idle keys expire after the refill window. | Redis is now a runtime dependency. Unreachable Redis fail-closes (503) instead of lifting the limit. `memory` is tests / single-process only. |
 | **Flat Map verify body + provider-owned records** (`OwnershipProvider.verify(Map)` then `XxxVerifyRequest.from(map)`) | One `POST /{provider}` and a drop-in SPI; each service reads typed fields instead of scattered `request.get`. | Wire/OpenAPI still describe a generic string map; records are an internal parse, not a new JSON shape. |
 | **Synchronous external calls during verify** | Simple code, easy to understand and debug. | Latency and partial failure modes (one provider slow → whole request slow). No circuit breaker today. |
@@ -659,6 +661,7 @@ Goal: Prepare for horizontal scaling and real production traffic.
   - [x] Blue/green: `computerpets-blue` / `computerpets-green` + Service `color` selector
   - [x] GHCR image signing: keyless cosign on `main` publish + fail-closed digest verify ([0061](adr/0061-ghcr-image-signing.md))
   - [x] Terraform for managed Postgres / Redis / secrets / CDN / WAF stubs (`deploy/terraform/`; [0062](adr/0062-terraform-managed-stores.md))
+  - [x] CDN edge redeem verification — fail-closed house redeem before zip bytes (`deploy/cdn/edge-redeem.js`; [0063](adr/0063-cdn-edge-redeem-verification.md))
 
 #### Phase 4: Client & Ecosystem Integration
 Goal: Deliver a complete, usable platform.

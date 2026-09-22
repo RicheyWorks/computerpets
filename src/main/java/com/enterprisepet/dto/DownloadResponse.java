@@ -13,7 +13,7 @@ public record DownloadResponse(
         @Schema(description = "Rarity tier of the pet", example = "COMMON")
         String rarity,
 
-        @Schema(description = "Signed temporary download URL", example = "https://cdn.../red_panda.zip?owner=...&jti=...&exp=...&sig=...")
+        @Schema(description = "Signed temporary download URL", example = "https://cdn.../red_panda.zip?pet=red_panda&owner=...&jti=...&exp=...&sig=...")
         String downloadUrl,
 
         @Schema(description = "ISO-8601 expiration time of the URL", example = "2026-05-23T12:15:00Z")

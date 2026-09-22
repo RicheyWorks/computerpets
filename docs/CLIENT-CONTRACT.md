@@ -298,7 +298,7 @@ use `bundle.default-platform` (default `win`).
   "petKey": "red_panda",
   "displayName": "Red Panda",
   "rarity": "COMMON",
-  "downloadUrl": "https://cdn.enterprisepet.example/bundles/red_panda.zip?owner=76561198000000000&jti=3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80&exp=1755411300&sig=...",
+  "downloadUrl": "https://cdn.enterprisepet.example/bundles/red_panda.zip?pet=red_panda&owner=76561198000000000&jti=3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80&exp=1755411300&sig=...",
   "expiresAt": "2026-08-17T05:30:00Z",
   "ttlSeconds": 900,
   "jti": "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80"
@@ -343,7 +343,8 @@ request.
 ## 7. Signed download URL
 
 The backend does not serve `.zip` bytes. It returns an HMAC-signed URL
-for a CDN / edge worker that shares `BUNDLE_SIGNING_KEY`.
+for a CDN / edge worker. The edge calls house redeem (it does **not** need
+`BUNDLE_SIGNING_KEY` when redeem is the gate — [ADR 0063](adr/0063-cdn-edge-redeem-verification.md)).
 
 | Parameter | Value |
 |-----------|--------|
@@ -358,16 +359,17 @@ URL shape when the license has a `jti` (always true for licenses issued
 by this backend):
 
 ```
-{bundle.base-url}/{object-key}?owner={url-encoded}&jti={url-encoded}&exp={epoch}&sig={sig}
+{bundle.base-url}/{object-key}?pet={petKey}&owner={url-encoded}&jti={url-encoded}&exp={epoch}&sig={sig}
 ```
 
 `object-key` is the catalog `path` when a row matches, otherwise
 `{petKey}.zip`. The HMAC still signs the pet catalog key (`red_panda`),
-not the filename.
+not the filename. `pet=` repeats that catalog key so an edge verifier can
+call redeem when the object key is a catalog path.
 
-`owner` and `jti` are `application/x-www-form-urlencoded`
+`owner`, `jti`, and `pet` are `application/x-www-form-urlencoded`
 (`URLEncoder`, UTF-8). `jti` is in the query string so an edge verifier
-can rebuild the exact MAC input.
+can rebuild the exact MAC input (house redeem does that verification).
 
 Default `bundle.base-url` is `https://cdn.enterprisepet.example/bundles`.
 When `bundle.catalog` is empty the zip is an opaque object: URL + HMAC only,
@@ -388,9 +390,13 @@ calls:
 
 `GET /api/bundles/{petKey}/redeem?owner=...&jti=...&exp=...&sig=...`
 
-`{petKey}` is the catalog pet key (the HMAC input), not necessarily the
-object filename. Unauthenticated — the signature is the gate. The query
-fields stay; they are not scrubbed for presence theater.
+`{petKey}` is the catalog pet key (the HMAC input / `pet=` query), not
+necessarily the object filename. Unauthenticated — the signature is the
+gate. The query fields stay; they are not scrubbed for presence theater.
+
+Reference edge: `deploy/cdn/edge-redeem.js` (Lambda@Edge / Cloudflare Worker).
+Missing `HOUSE_API_BASE`, redeem network errors, and non-allow house
+statuses fail closed — zip bytes are not served.
 
 The grant is keyed by `jti`+`exp`. First success:
 

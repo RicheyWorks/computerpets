@@ -120,7 +120,7 @@ public final class ApiExamples {
           "petKey": "red_panda",
           "displayName": "Red Panda",
           "rarity": "COMMON",
-          "downloadUrl": "https://cdn.example.com/bundles/red_panda.zip?owner=...&jti=...&exp=...&sig=...",
+          "downloadUrl": "https://cdn.example.com/bundles/red_panda.zip?pet=red_panda&owner=...&jti=...&exp=...&sig=...",
           "expiresAt": "2026-05-23T12:15:00Z",
           "ttlSeconds": 900,
           "jti": "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80"

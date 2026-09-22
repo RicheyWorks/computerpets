@@ -63,7 +63,7 @@ resource "aws_cloudfront_origin_access_control" "bundles" {
 resource "aws_cloudfront_distribution" "bundles" {
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = "ComputerPets pet bundle CDN stub (HMAC query still verified by house redeem)"
+  comment             = "ComputerPets pet bundle CDN stub (edge redeem: deploy/cdn/edge-redeem.js — ADR 0063)"
   price_class         = var.price_class
   default_root_object = ""
 

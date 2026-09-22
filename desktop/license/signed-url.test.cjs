@@ -37,7 +37,7 @@ describe("signed download URL (CLIENT-CONTRACT §7)", () => {
     const sig = signDownloadMac(message, KEY);
     const url =
       "https://cdn.enterprisepet.example/bundles/red_panda.zip" +
-      "?owner=steam%3Aowner&jti=3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80" +
+      "?pet=red_panda&owner=steam%3Aowner&jti=3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80" +
       `&exp=${exp}&sig=${sig}`;
     const parsed = verifySignedDownloadUrl(url, {
       signingKey: KEY,
@@ -46,6 +46,28 @@ describe("signed download URL (CLIENT-CONTRACT §7)", () => {
       owner: "steam:owner",
     });
     assert.equal(parsed.jti, "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80");
+    assert.equal(parsed.petKey, "red_panda");
+  });
+
+  it("prefers pet= query over catalog object filename", () => {
+    const exp = 1755411300;
+    const message = downloadMacMessage({
+      petKey: "red_panda",
+      owner: "steam:owner",
+      jti: "jti-1",
+      exp,
+    });
+    const sig = signDownloadMac(message, KEY);
+    const url =
+      "https://cdn.enterprisepet.example/bundles/red_panda-win-1.0.0.zip" +
+      `?pet=red_panda&owner=steam%3Aowner&jti=jti-1&exp=${exp}&sig=${sig}`;
+    const parsed = verifySignedDownloadUrl(url, {
+      signingKey: KEY,
+      jti: "jti-1",
+      petKey: "red_panda",
+      owner: "steam:owner",
+    });
+    assert.equal(parsed.petKey, "red_panda");
   });
 
   it("fails closed when jti is missing from a jti-bound URL", () => {

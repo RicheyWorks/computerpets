@@ -138,7 +138,8 @@ function createContractTestDouble(cfg) {
       const sig = signDownloadMac(message, signingKey);
       const downloadUrl =
         `https://cdn.enterprisepet.example/bundles/${petKey}.zip` +
-        `?owner=${encodeURIComponent(record.payload.owner)}` +
+        `?pet=${encodeURIComponent(petKey)}` +
+        `&owner=${encodeURIComponent(record.payload.owner)}` +
         `&jti=${encodeURIComponent(record.payload.jti)}` +
         `&exp=${exp}&sig=${sig}`;
       return json(200, {

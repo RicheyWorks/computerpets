@@ -114,6 +114,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Blue/green via two Deployments + Service `color` selector (no mesh)
   - [x] GHCR image signing — keyless cosign (Sigstore Fulcio) on `main` publish; fail-closed digest verify for prod deploy (`deploy/k8s/verify-image-signature.sh`; ADR 0061)
   - [x] Terraform for managed stores — Postgres / Redis / Secrets Manager shells / CDN / WAF stubs (`deploy/terraform/`; deny-safe defaults; ADR 0062)
+  - [x] CDN edge redeem verification — fail-closed call to house `GET /api/bundles/{pet}/redeem` before zip bytes (`deploy/cdn/edge-redeem.js`; `pet=` on signed URLs; ADR 0063)
 
 ---
 
