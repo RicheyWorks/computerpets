@@ -24,6 +24,7 @@
       "main.cjs",
       "preload.cjs",
       "presence.cjs",
+      "mind-secret.cjs",
       "windows-enum.cjs",
       "license/**/*.cjs",
       "!license/**/*.test.cjs",

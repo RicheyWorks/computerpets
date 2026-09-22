@@ -16,7 +16,7 @@ contextBridge.exposeInMainWorld("desk", {
   },
   vitals: (payload) => ipcRenderer.send("vitals", payload),
   mindGet: () => ipcRenderer.sendSync("mind-get"),
-  mindSet: (data) => ipcRenderer.send("mind-set", data),
+  mindSet: (data) => ipcRenderer.invoke("mind-set", data),
   cardGet: () => ipcRenderer.sendSync("card-get"),
   cardSet: (data) => ipcRenderer.send("card-set", data),
   quit: () => ipcRenderer.send("quit-desk"),

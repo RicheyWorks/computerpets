@@ -29,6 +29,6 @@ This slice binds the grant to the weather control. It does not start DirectX 12 
 - The weather control does not ask an IP place service when the fix fails. [0014](0014-weather-does-not-ask-an-ip-place.md) drops that lookup. A saved area stays.
 - A place the keeper already typed is kept. [0015](0015-weather-locate-sends-a-rounded-place.md) does not start a new locate while that area is saved. A live fix is rounded before it leaves. [0016](0016-weather-locate-waits-for-an-in-app-yes.md) asks in the app before a live locate. That is the saved area, not a live location watch.
 - License `hwid` still reads machine-id or MachineGuid. That is the license door, not presence.
-- The keeper's plugin key still sits in `mind.json`. It stays off the card.
+- The overlay plugin key is not plain text in `mind.json`. [0018](0018-mind-key-is-not-plain-text.md). It stays off the card.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.
 - DirectX 12 / Vulkan is still open. This slice is not that engine.

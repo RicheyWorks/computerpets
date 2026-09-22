@@ -29,6 +29,6 @@ This slice drops the IP place fallback. It does not start DirectX 12 or Vulkan. 
 - A granted fix used to leave at full precision. [0015](0015-weather-locate-sends-a-rounded-place.md) rounds it to a tenth of a degree and keeps a saved typed area instead of starting a new locate. That is still the click's fix, not an IP place service. [0016](0016-weather-locate-waits-for-an-in-app-yes.md) asks in the app before that locate. A cached origin grant can still answer `getCurrentPosition` after the yes, without a new browser prompt. Electron 35 cannot revoke it.
 - A typed city on the card is still sent to the forecast. A saved live pin waits. [0017](0017-saved-computer-place-waits-for-a-forecast-yes.md).
 - License `hwid` still reads machine-id or MachineGuid. That is the license door, not presence.
-- The keeper's plugin key still sits in `mind.json`. It stays off the card.
+- The overlay plugin key is not plain text in `mind.json`. [0018](0018-mind-key-is-not-plain-text.md). It stays off the card.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.
 - DirectX 12 / Vulkan is still open. This slice is not that engine.

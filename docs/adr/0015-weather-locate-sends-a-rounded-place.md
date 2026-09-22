@@ -31,7 +31,7 @@ This slice tells the keeper what the click does, rounds a live fix before it lea
 - A forecast of a place the keeper already saved still sends that place, rounded on the way out, when the place is a typed city. A pin saved before this slice could sit in `card.json` at full precision. [0016](0016-weather-locate-waits-for-an-in-app-yes.md) rounds that stored live pin on load. [0017](0017-saved-computer-place-waits-for-a-forecast-yes.md) holds a forecast of that live pin until the keeper says to use it. The next forecast does not send the extra digits.
 - Many desktop sessions have no GNSS fix. The button then says the computer did not share a place.
 - License `hwid` still reads machine-id or MachineGuid. That is the license door, not presence.
-- The keeper's plugin key still sits in `mind.json`. It stays off the card.
+- The overlay plugin key is not plain text in `mind.json`. [0018](0018-mind-key-is-not-plain-text.md). It stays off the card.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.
 - DirectX 12 / Vulkan is still open. This slice is not that engine.
 - [0016](0016-weather-locate-waits-for-an-in-app-yes.md) asks in the app before a live locate and rounds a stored live pin on load. The Chromium grant cache named here is unchanged. After that yes, a cached grant can still answer without a new browser prompt.
