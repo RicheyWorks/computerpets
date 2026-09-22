@@ -100,20 +100,25 @@ public class EthereumNftService implements OwnershipProvider {
     public VerificationResult verify(Map<String, String> request) {
         NftVerifyRequest typed = NftVerifyRequest.from(request);
         if (typed.walletAddress() == null || typed.contractAddress() == null || typed.tokenId() == null) {
-            return VerificationResult.denied("walletAddress, contractAddress, and tokenId are required");
+            return VerificationResult.invalid("walletAddress, contractAddress, and tokenId are required");
         }
 
         Optional<String> wallet = EthereumAddress.normalize(typed.walletAddress());
         if (wallet.isEmpty()) {
-            return VerificationResult.denied("walletAddress is not a valid Ethereum address");
+            return VerificationResult.invalid("walletAddress is not a valid Ethereum address");
         }
         Optional<String> contract = EthereumAddress.normalize(typed.contractAddress());
         if (contract.isEmpty()) {
-            return VerificationResult.denied("contractAddress is not a valid Ethereum address");
+            return VerificationResult.invalid("contractAddress is not a valid Ethereum address");
         }
         Optional<BigInteger> tokenId = parseTokenId(typed.tokenId());
         if (tokenId.isEmpty()) {
-            return VerificationResult.denied("tokenId must be a non-negative decimal integer");
+            return VerificationResult.invalid("tokenId must be a non-negative decimal integer");
+        }
+
+        Optional<String> proofShape = typed.invalidProofReason();
+        if (proofShape.isPresent()) {
+            return VerificationResult.invalid(proofShape.get());
         }
 
         VerificationResult signature = checkSignature(typed, wallet.get());
@@ -276,7 +281,7 @@ public class EthereumNftService implements OwnershipProvider {
             return null;
         }
         if (!request.hasSignature() || !request.hasMessage()) {
-            return VerificationResult.denied("message and signature are required to prove wallet control");
+            return VerificationResult.invalid("message and signature are required to prove wallet control");
         }
         Optional<String> signer = WalletSignature.recoverAddress(request.message(), request.signature());
         if (signer.isEmpty() || !EthereumAddress.equalsNormalized(wallet, signer.get())) {

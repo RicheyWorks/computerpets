@@ -167,6 +167,13 @@ public final class ApiExamples {
         }
         """;
 
+    public static final String INVALID_VERIFY_FIELDS_ERROR = """
+        {
+          "error": "steamId must be a numeric SteamID64",
+          "provider": "steam"
+        }
+        """;
+
     public static final String UNKNOWN_PET_TYPE_ERROR = """
         {
           "error": "unknown petType",
@@ -504,6 +511,13 @@ public final class ApiExamples {
                 .summary("hwid exceeds 128 characters")
                 .description("Returned by /api/verify when hwid is longer than the IssuedLicense column")
                 .value(HWID_TOO_LONG_ERROR);
+    }
+
+    public static Example invalidVerifyFieldsError() {
+        return new Example()
+                .summary("Provider verify fields fail length or charset")
+                .description("Returned by /api/verify when a provider field is missing, too long, or outside the allowed charset — before any outbound store call")
+                .value(INVALID_VERIFY_FIELDS_ERROR);
     }
 
     public static Example downloadLicenseInvalidError() {

@@ -220,33 +220,51 @@ class ItchServiceTest {
     }
 
     @Test
-    @DisplayName("verify returns denied when required fields are missing")
-    void verify_missingRequiredFields_returnsDenied() {
+    @DisplayName("verify returns invalid when required fields are missing")
+    void verify_missingRequiredFields_returnsInvalid() {
         VerificationResult result = service.verify(Map.of("gameId", GAME_ID));
 
         assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
         assertThat(result.reason()).contains("gameId and downloadKey are required");
     }
 
     @Test
-    @DisplayName("verify(null) denies with the same required-field message")
-    void verify_nullRequest_returnsDenied() {
+    @DisplayName("verify(null) returns invalid with the same required-field message")
+    void verify_nullRequest_returnsInvalid() {
         VerificationResult result = service.verify(null);
 
         assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
         assertThat(result.reason()).contains("gameId and downloadKey are required");
     }
 
     @Test
-    @DisplayName("verify returns denied when gameId is not numeric")
-    void verify_nonNumericGameId_returnsDenied() {
+    @DisplayName("verify returns invalid when gameId is not numeric")
+    void verify_nonNumericGameId_returnsInvalid() {
         VerificationResult result = service.verify(Map.of(
                 "gameId", "not-a-number",
                 "downloadKey", DOWNLOAD_KEY
         ));
 
         assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
         assertThat(result.reason()).contains("numeric");
+        mockServer.verify();
+    }
+
+    @Test
+    @DisplayName("verify returns invalid when downloadKey has injection charset")
+    void verify_injectionDownloadKey_returnsInvalid() {
+        VerificationResult result = service.verify(Map.of(
+                "gameId", GAME_ID,
+                "downloadKey", "../etc/passwd!!!!"
+        ));
+
+        assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
+        assertThat(result.reason()).contains("downloadKey");
+        mockServer.verify();
     }
 
     @Test

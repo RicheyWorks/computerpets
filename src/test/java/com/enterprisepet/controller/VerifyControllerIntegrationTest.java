@@ -137,4 +137,49 @@ class VerifyControllerIntegrationTest {
         assertThat(response.getBody().get("error")).isEqualTo("hwid too long");
         assertThat(response.getBody().get("maxLength")).isEqualTo(128);
     }
+
+    @Test
+    @DisplayName("POST /api/verify/steam returns 400 for malformed steamId before calling Steam")
+    void verifySteam_malformedSteamId_returns400_withoutNetwork() {
+        wireMockServer.resetAll();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        Map<String, String> body = Map.of(
+                "steamId", "not-a-steam-id",
+                "appId", "123456",
+                "petType", "red_panda"
+        );
+
+        ResponseEntity<Map> response = restTemplate.postForEntity(
+                "/api/verify/steam", new HttpEntity<>(body, headers), Map.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody().get("error")).asString().contains("steamId");
+        assertThat(response.getBody().get("provider")).isEqualTo("steam");
+        wireMockServer.verify(0, getRequestedFor(urlPathEqualTo("/IPlayerService/GetOwnedGames/v1/")));
+    }
+
+    @Test
+    @DisplayName("POST /api/verify/steam returns 400 for oversized appId before calling Steam")
+    void verifySteam_appIdTooLong_returns400_withoutNetwork() {
+        wireMockServer.resetAll();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        Map<String, String> body = Map.of(
+                "steamId", "76561198000000000",
+                "appId", "1".repeat(11),
+                "petType", "red_panda"
+        );
+
+        ResponseEntity<Map> response = restTemplate.postForEntity(
+                "/api/verify/steam", new HttpEntity<>(body, headers), Map.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody().get("error")).asString().contains("appId too long");
+        wireMockServer.verify(0, getRequestedFor(urlPathEqualTo("/IPlayerService/GetOwnedGames/v1/")));
+    }
 }
