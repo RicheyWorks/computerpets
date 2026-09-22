@@ -6,7 +6,7 @@ const { LicenseError } = require("./errors.cjs");
 const { decryptLicense } = require("./decrypt.cjs");
 const { resolveHwidDetail, peekHwid, assertHwid } = require("./hwid.cjs");
 const { createLicenseClient, normalizeBackendUrl } = require("./client.cjs");
-const { licenseHostName, licenseMaySend } = require("./license-net.cjs");
+const { bundleHostName, bundleMayFetch, licenseHostName, licenseMaySend } = require("./license-net.cjs");
 
 const STORE_NAME = "license.json";
 const DEFAULT_BACKEND = "http://127.0.0.1:8081";
@@ -38,12 +38,25 @@ function shownLicenseLine(input) {
   return input && typeof input.licenseLine === "string" ? input.licenseLine : "";
 }
 
+function shownCdnLine(input) {
+  return input && typeof input.cdnLine === "string" ? input.cdnLine : "";
+}
+
 function assertHashNamed(backendUrl, shown) {
   if (licenseMaySend(backendUrl, shown)) return;
   const host = licenseHostName(backendUrl) || "the license host";
   throw new LicenseError(
     "license_net_unnamed",
     `the license hash was not sent to ${host}. name that host before it leaves.`
+  );
+}
+
+function assertBundleNamed(downloadUrl, shown) {
+  if (bundleMayFetch(downloadUrl, shown)) return;
+  const host = bundleHostName(downloadUrl) || "the bundle host";
+  throw new LicenseError(
+    "cdn_net_unnamed",
+    `the signed bundle was not fetched from ${host}. name that host before it leaves.`
   );
 }
 
@@ -210,11 +223,37 @@ function createLicenseSession(opts) {
     };
     save(next);
 
-    const downloaded = await requestDownload(next, payload, deviceId, secret, input.allowWeakFallback === true, shownLicenseLine(input));
+    const downloaded = await requestDownload(
+      next,
+      payload,
+      deviceId,
+      secret,
+      input.allowWeakFallback === true,
+      shownLicenseLine(input),
+      shownCdnLine(input)
+    );
     return { ...publicStatus(), download: downloaded };
   }
 
-  async function requestDownload(storeArg, payloadArg, deviceIdArg, secretArg, allowWeakFallback, shownLine) {
+  async function readBundle(downloadUrl, shown) {
+    if (!bundleMayFetch(downloadUrl, shown)) {
+      return { ok: false, status: 0, bytes: 0, held: true };
+    }
+    try {
+      const bundle = await client.fetchBundle(downloadUrl);
+      return { ...bundle, held: false };
+    } catch (err) {
+      return {
+        ok: false,
+        status: 0,
+        bytes: 0,
+        held: false,
+        error: err instanceof LicenseError ? err.message : String(err.message || err),
+      };
+    }
+  }
+
+  async function requestDownload(storeArg, payloadArg, deviceIdArg, secretArg, allowWeakFallback, shownLine, shownCdn) {
     const store = storeArg || load();
     const secret = secretArg || licenseSecret(env);
     const payload = payloadArg || decryptLicense(store.license.ciphertext, store.license.iv, secret, { now });
@@ -238,17 +277,7 @@ function createLicenseSession(opts) {
       signingKey: env.BUNDLE_SIGNING_KEY || undefined,
     });
 
-    let bundle = { ok: false, status: 0, bytes: 0, error: null };
-    try {
-      bundle = await client.fetchBundle(manifest.downloadUrl);
-    } catch (err) {
-      bundle = {
-        ok: false,
-        status: 0,
-        bytes: 0,
-        error: err instanceof LicenseError ? err.message : String(err.message || err),
-      };
-    }
+    const bundle = await readBundle(manifest.downloadUrl, typeof shownCdn === "string" ? shownCdn : "");
 
     const lastDownload = {
       petKey: manifest.petKey || payload.pet,
@@ -264,7 +293,21 @@ function createLicenseSession(opts) {
 
   async function download(input = {}) {
     const allow = input && input.allowWeakFallback === true;
-    return requestDownload(null, null, null, null, allow, shownLicenseLine(input));
+    return requestDownload(null, null, null, null, allow, shownLicenseLine(input), shownCdnLine(input));
+  }
+
+  async function fetchSigned(input = {}) {
+    const store = load();
+    const last = store.lastDownload;
+    const downloadUrl = last && typeof last.downloadUrl === "string" ? last.downloadUrl : "";
+    if (!downloadUrl) {
+      throw new LicenseError("signed_url_invalid", "downloadUrl missing");
+    }
+    assertBundleNamed(downloadUrl, shownCdnLine(input));
+    const bundle = await readBundle(downloadUrl, shownCdnLine(input));
+    const next = { ...last, bundle };
+    save({ ...store, lastDownload: next });
+    return next;
   }
 
   function clear() {
@@ -276,6 +319,7 @@ function createLicenseSession(opts) {
     status: publicStatus,
     unlock,
     download,
+    fetchSigned,
     clear,
     hwid: () => deviceMark(true).id,
   };

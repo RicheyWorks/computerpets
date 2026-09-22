@@ -202,6 +202,7 @@ def create_license_client(
         return payload
 
     def fetch_bundle(download_url: str) -> dict[str, Any]:
+        """GET the signed bundle. The license hash is not added to this request."""
         if not isinstance(download_url, str) or not download_url:
             raise LicenseError("signed_url_invalid", "downloadUrl missing")
         res = request(download_url, method="GET")
