@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line says this computer's network address goes with the https request. `readForecast` refuses that fetch when the painted forecast line is missing. Look up and the reverse lookup after Send the place wait until that same panel shows the line for the geocode host. `readGeocode` and `readReverse` refuse those fetches when that painted line is missing. Same map as desktop `weather-areas.js`. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line says this computer's network address goes with the https request. `readForecast` refuses that fetch when the painted forecast line is missing. Look up and the reverse lookup after Send the place wait until that same panel shows the line for the geocode host. `readGeocode` and `readReverse` refuse those fetches when that painted line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. Same map as desktop `weather-areas.js`. */
 import type { Weather } from "./weather";
 
 export const NO_AREA = "no area set";
@@ -516,28 +516,98 @@ export function geocodeReverseMayLeave(shown: unknown): boolean {
 
 type JsonFetch = (url: string, init?: RequestInit) => Promise<{ json: () => Promise<unknown> }>;
 
-function readJson(url: string, fetchImpl: JsonFetch): Promise<unknown | null> {
-  return Promise.resolve(fetchImpl(url, { cache: "no-store" })).then((res) =>
-    res && typeof res.json === "function" ? res.json() : null,
-  );
+/** Twelve seconds covers headers and the body. Matches overlay plate IPC. */
+export const WEATHER_TIMEOUT_MS = 12_000;
+
+/** A silent Open-Meteo host. Callers flip the plate to unread / "can't reach". */
+export class WeatherTimeout extends Error {
+  constructor() {
+    super("weather request timed out");
+    this.name = "WeatherTimeout";
+  }
 }
 
-/** The only forecast fetch. A miss resolves to null and does not call fetch. */
-export function readForecast(shown: unknown, url: string, fetchImpl: JsonFetch = fetch): Promise<unknown | null> {
+function isWeatherTimeout(err: unknown): boolean {
+  if (!err || typeof err !== "object") return false;
+  const name = (err as { name?: string }).name;
+  const code = (err as { code?: string }).code;
+  return name === "WeatherTimeout" || name === "AbortError" || name === "TimeoutError" || code === "ABORT_ERR";
+}
+
+/**
+ * One outbound weather JSON read. The timer covers headers and the body.
+ * A timeout rejects with WeatherTimeout. The caller does not get a body.
+ * A late body after the deadline is not parsed.
+ */
+function readJson(
+  url: string,
+  fetchImpl: JsonFetch,
+  timeoutMs: number = WEATHER_TIMEOUT_MS,
+): Promise<unknown | null> {
+  if (typeof fetchImpl !== "function") return Promise.reject(new WeatherTimeout());
+
+  const ctrl = new AbortController();
+  let settled = false;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  return new Promise((resolve, reject) => {
+    timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      ctrl.abort();
+      reject(new WeatherTimeout());
+    }, timeoutMs);
+
+    Promise.resolve()
+      .then(() => fetchImpl(url, { cache: "no-store", signal: ctrl.signal }))
+      .then(async (res) => {
+        const json = res && typeof res.json === "function" ? await res.json() : null;
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(json);
+      })
+      .catch((err) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        if (isWeatherTimeout(err)) reject(new WeatherTimeout());
+        else reject(err);
+      });
+  });
+}
+
+/** The only forecast fetch. A miss resolves to null and does not call fetch. A hang rejects. */
+export function readForecast(
+  shown: unknown,
+  url: string,
+  fetchImpl: JsonFetch = fetch,
+  timeoutMs: number = WEATHER_TIMEOUT_MS,
+): Promise<unknown | null> {
   if (!forecastMayLeave(shown) || !url) return Promise.resolve(null);
-  return readJson(url, fetchImpl);
+  return readJson(url, fetchImpl, timeoutMs);
 }
 
-/** The only geocode look-up fetch. A miss resolves to null and does not call fetch. */
-export function readGeocode(shown: unknown, url: string, fetchImpl: JsonFetch = fetch): Promise<unknown | null> {
+/** The only geocode look-up fetch. A miss resolves to null and does not call fetch. A hang rejects. */
+export function readGeocode(
+  shown: unknown,
+  url: string,
+  fetchImpl: JsonFetch = fetch,
+  timeoutMs: number = WEATHER_TIMEOUT_MS,
+): Promise<unknown | null> {
   if (!geocodeLookMayLeave(shown) || !url) return Promise.resolve(null);
-  return readJson(url, fetchImpl);
+  return readJson(url, fetchImpl, timeoutMs);
 }
 
-/** The only reverse-lookup fetch. A miss resolves to null and does not call fetch. */
-export function readReverse(shown: unknown, url: string, fetchImpl: JsonFetch = fetch): Promise<unknown | null> {
+/** The only reverse-lookup fetch. A miss resolves to null and does not call fetch. A hang rejects. */
+export function readReverse(
+  shown: unknown,
+  url: string,
+  fetchImpl: JsonFetch = fetch,
+  timeoutMs: number = WEATHER_TIMEOUT_MS,
+): Promise<unknown | null> {
   if (!geocodeReverseMayLeave(shown) || !url) return Promise.resolve(null);
-  return readJson(url, fetchImpl);
+  return readJson(url, fetchImpl, timeoutMs);
 }
 
 export function plateLine(

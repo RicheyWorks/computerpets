@@ -68,6 +68,7 @@ address, or an API that is not on `main`.
 | [0047](0047-stun-waits-for-the-painted-line.md) | A STUN host waits for the painted line | Accepted |
 | [0048](0048-overlay-connect-src-names-the-house-hosts.md) | Overlay connect-src names the house hosts | Accepted |
 | [0049](0049-plate-ipc-times-out-and-denies.md) | Overlay plate IPC times out and denies | Accepted |
+| [0050](0050-weather-page-times-out-and-denies.md) | Weather page reads time out and deny | Accepted |
 
 ## How to add one
 

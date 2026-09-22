@@ -413,8 +413,14 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.ok(fetchBody.indexOf("forecastHonesty") < fetchBody.indexOf("forecastUrl"));
   assert.ok(fetchBody.indexOf("forecastUrl") < fetchBody.indexOf("readForecast(line"));
   assert.match(fetchBody, /forecastMayLeave/);
+  assert.match(fetchBody, /json == null/);
+  assert.match(fetchBody, /weatherUnread = true/);
   assert.doesNotMatch(fetchBody, /fetch\(/);
   assert.doesNotMatch(fetchBody, /reverseUrl|readWeatherHere|armWeatherLocate|getCurrentPosition|noteWeatherLocateYes|geocodeUrl/);
+  assert.match(areasSrc, /WEATHER_TIMEOUT_MS/);
+  assert.match(areasSrc, /AbortController/);
+  assert.match(areasSrc, /WeatherTimeout/);
+  assert.equal(require("./weather-areas.js").WEATHER_TIMEOUT_MS, 12_000);
   const beatAt = petSrc.indexOf("setInterval(readHeartbeat");
   assert.doesNotMatch(petSrc.slice(beatAt, beatAt + 80), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
   const gpuAt = petSrc.indexOf("setInterval(() => {\n  if (!window.PetGpu");
@@ -432,6 +438,8 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.ok(addBody.indexOf('geocodeHonesty("look")') < addBody.indexOf("geocodeUrl"));
   assert.ok(addBody.indexOf('geocodeMaySend("look"') < addBody.indexOf("geocodeUrl"));
   assert.ok(addBody.indexOf("geocodeUrl") < addBody.indexOf("readGeocode(shown"));
+  assert.match(addBody, /json == null/);
+  assert.match(addBody, /CANT_REACH/);
   assert.doesNotMatch(addBody, /fetch\(/);
   assert.doesNotMatch(addBody, /reverseUrl|readWeatherHere|getCurrentPosition|noteWeatherLocateYes/);
   assert.equal(petSrc.split("geocodeUrl(").length - 1, 1);

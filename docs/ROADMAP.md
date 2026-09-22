@@ -70,7 +70,7 @@ All critical items required before any public or limited production exposure hav
 - **2.3 Resilience Patterns**
   - [x] Circuit breakers + retries (Resilience4j) added for Steam, Microsoft, NFT, Itch, and Epic providers (with per-provider configuration in application.yml)
   - Timeouts and graceful degradation (in progress — fallbacks currently deny safely)
-    - [x] Overlay IPC news, quote, and radio reads time out at twelve seconds and return unread with an empty plate. The keeper line stays can't reach. A radio timeout does not call the next directory host. Desk and overlay page wrappers (weather, news, talk, voice) still have no deadline. Not a new host. Not invented headlines, prices, or stations. Catalog stays 221.
+    - [x] Overlay IPC news, quote, and radio reads time out at twelve seconds and return unread with an empty plate. The keeper line stays can't reach. A radio timeout does not call the next directory host. Weather forecast and geocode page wrappers time out the same way and flip unread / can't reach. Desk and overlay news, quote, radio, talk, and voice page wrappers still have no deadline. Not a new host. Not invented weather. Catalog stays 221.
   - [x] Microsoft Store verify uses Collections v9 `publisherQuery`; prod still refuses dev-mode; live Store ID is still a publish-time config, not invented here.
 
 - **2.4 Secret Management**
@@ -200,6 +200,7 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 - [x] A peer room is not opened with the house. ICE servers default to none. A STUN or TURN host is used only when the painted line names that host. The desk, the overlay, and the blotter do not construct a room. Catalog stays 221. Not DX12.
 - [x] Overlay connect-src names every hardcoded talk, voice, news, quote, radio, weather, and geocode host. One `https:` scheme stays, because a painted custom talk host and a redirect from a preset talk host are not a closed list. A new literal host has to land on that list and in the painted-line wrapper together. The minds window is `connect-src 'none'`. The desk and `/demo` document has no CSP. Station audio stays on `media-src` `https:` and `http:`. Opening the house does not gain a new outbound host. Catalog stays 221. Not DX12.
 - [x] Overlay news, quote, and radio IPC reads time out at twelve seconds. The plate returns unread and stays empty. The keeper line stays can't reach. A radio timeout does not call the next directory host. A missing painted line still does not fetch and does not say can't reach. Desk and overlay page wrappers still have no deadline. Catalog stays 221. Not DX12.
+- [x] Weather forecast and geocode page wrappers (`readForecast` / `readGeocode` / `readReverse`) time out at twelve seconds. A hang rejects unread / can't reach. A late body is not parsed. A missing painted line still does not fetch and does not say can't reach. Desk and overlay news, quote, radio, talk, and voice page wrappers still have no deadline. Catalog stays 221. Not DX12.
 - [x] House leftover on overlay + `/demo`: keeper multi-area weather plate (Open-Meteo, first-run `no area set`), Wikipedia news plate, Rui ground tricks, Sip pinned and flying (not a 1-second flash), five house voices, footstep options, free music + radio for Rui, and a real steal/carry ribbon. Catalog stays 221. Sandbox stays on.
 - [x] Real window rects on Windows (work-area space, skip overlay / minimized / taskbar). Rui (`red_panda`) clings a window side and dives. The species door (`playFor`) is how later guests get their own sit. Other guests walked a sill that leftover. `/demo` draws a plate and walks the same climb. Sleep and hide still win. Mac / Linux window play is a later door. Catalog stays 221.
 - [x] Arc (`cyber_dragon` / `arc`) rides a real window ridge: jump onto the title-bar / top, hold, then hop or slide off. Not Rui's cling-dive. Not the generic sill. Same `playFor` door. `/demo` lockstep. Sleep, hide, leave, rest, and the keeper card still win. Windows first. Mac / Linux window play stays `mac-linux-window-play`. Catalog stays 221. Volt leftover follows.
@@ -611,6 +612,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-09-22 (Phase 6: A STUN host waits for the painted line. Opening the house does not contact one. DX12/Vulkan was not started. Catalog 221.)
+**Last Updated:** 2026-09-22 (Phase 2.3: Weather forecast and geocode page wrappers time out and return unread. DX12/Vulkan was not started. Catalog 221.)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

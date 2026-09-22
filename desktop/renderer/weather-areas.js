@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line says this computer's network address goes with the https request. readForecast refuses that fetch when the painted forecast line is missing. Look up and the reverse lookup after Send the place wait until that same panel shows the line for the geocode host. readGeocode and readReverse refuse those fetches when that painted line is missing. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line says this computer's network address goes with the https request. readForecast refuses that fetch when the painted forecast line is missing. Look up and the reverse lookup after Send the place wait until that same panel shows the line for the geocode host. readGeocode and readReverse refuse those fetches when that painted line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. */
 (function (root) {
   const NO_AREA = "no area set";
   const AREA_LABEL = "Weather area";
@@ -446,29 +446,87 @@
     return typeof shown === "string" && shown.indexOf(GEOCODE_REVERSE) !== -1;
   }
 
-  function readJson(url, fetchImpl) {
+  /** Twelve seconds covers headers and the body. Matches overlay plate IPC. */
+  const WEATHER_TIMEOUT_MS = 12_000;
+
+  /** A silent Open-Meteo host. Callers flip the plate to unread / "can't reach". */
+  class WeatherTimeout extends Error {
+    constructor() {
+      super("weather request timed out");
+      this.name = "WeatherTimeout";
+    }
+  }
+
+  function isWeatherTimeout(err) {
+    return !!(
+      err &&
+      (err.name === "WeatherTimeout" ||
+        err.name === "AbortError" ||
+        err.name === "TimeoutError" ||
+        err.code === "ABORT_ERR")
+    );
+  }
+
+  /**
+   * One outbound weather JSON read. The timer covers headers and the body.
+   * A timeout rejects with WeatherTimeout. The caller does not get a body.
+   * A late body after the deadline is not parsed.
+   */
+  function readJson(url, fetchImpl, timeoutMs) {
     const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
-    return Promise.resolve(go(url, { cache: "no-store" })).then(function (res) {
-      return res && typeof res.json === "function" ? res.json() : null;
+    if (typeof go !== "function") return Promise.reject(new WeatherTimeout());
+    const ms = typeof timeoutMs === "number" ? timeoutMs : WEATHER_TIMEOUT_MS;
+    const ctrl = new AbortController();
+    let settled = false;
+    let timer;
+
+    return new Promise(function (resolve, reject) {
+      timer = setTimeout(function () {
+        if (settled) return;
+        settled = true;
+        ctrl.abort();
+        reject(new WeatherTimeout());
+      }, ms);
+
+      Promise.resolve()
+        .then(function () {
+          return go(url, { cache: "no-store", signal: ctrl.signal });
+        })
+        .then(function (res) {
+          return res && typeof res.json === "function" ? res.json() : null;
+        })
+        .then(function (json) {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          resolve(json);
+        })
+        .catch(function (err) {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          if (isWeatherTimeout(err)) reject(new WeatherTimeout());
+          else reject(err);
+        });
     });
   }
 
-  /** The only forecast fetch. A miss resolves to null and does not call fetch. */
-  function readForecast(shown, url, fetchImpl) {
+  /** The only forecast fetch. A miss resolves to null and does not call fetch. A hang rejects. */
+  function readForecast(shown, url, fetchImpl, timeoutMs) {
     if (!forecastMayLeave(shown) || !url) return Promise.resolve(null);
-    return readJson(url, fetchImpl);
+    return readJson(url, fetchImpl, timeoutMs);
   }
 
-  /** The only geocode look-up fetch. A miss resolves to null and does not call fetch. */
-  function readGeocode(shown, url, fetchImpl) {
+  /** The only geocode look-up fetch. A miss resolves to null and does not call fetch. A hang rejects. */
+  function readGeocode(shown, url, fetchImpl, timeoutMs) {
     if (!geocodeLookMayLeave(shown) || !url) return Promise.resolve(null);
-    return readJson(url, fetchImpl);
+    return readJson(url, fetchImpl, timeoutMs);
   }
 
-  /** The only reverse-lookup fetch. A miss resolves to null and does not call fetch. */
-  function readReverse(shown, url, fetchImpl) {
+  /** The only reverse-lookup fetch. A miss resolves to null and does not call fetch. A hang rejects. */
+  function readReverse(shown, url, fetchImpl, timeoutMs) {
     if (!geocodeReverseMayLeave(shown) || !url) return Promise.resolve(null);
-    return readJson(url, fetchImpl);
+    return readJson(url, fetchImpl, timeoutMs);
   }
 
   function plateLine(areas, live, unread, held, waiting) {
@@ -541,6 +599,8 @@
     forecastHonesty,
     forecastMayLeave,
     readForecast,
+    WEATHER_TIMEOUT_MS,
+    WeatherTimeout,
     geocodeHonesty,
     geocodeMaySend,
     geocodeLookMayLeave,
