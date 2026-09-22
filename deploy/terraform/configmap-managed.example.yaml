@@ -1,0 +1,24 @@
+# Example ConfigMap overlay after Terraform apply (NOT in kustomization).
+#
+# Replace SPRING_DATASOURCE_URL / REDIS_HOST with terraform outputs
+# `spring_datasource_url` and `redis_host`. Set BUNDLE_BASE_URL from
+# `bundle_base_url` (Secret or ConfigMap). Then drop the in-cluster
+# postgres + redis Deployments from the live overlay.
+#
+# Secrets still come from computerpets-secrets via External Secrets
+# (deploy/k8s/external-secret.example.yaml) — not from this ConfigMap.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: computerpets-config
+  namespace: computerpets
+data:
+  SPRING_PROFILES_ACTIVE: prod
+  SPRING_DATASOURCE_URL: jdbc:postgresql://REPLACE_WITH_TF_OUTPUT:5432/computerpets
+  REDIS_HOST: REPLACE_WITH_TF_OUTPUT
+  REDIS_PORT: "6379"
+  RATE_LIMIT_BACKEND: redis
+  MICROSOFT_DEV_MODE: "false"
+  SERVER_PORT: "8081"
+  # Optional read replica (ADR 0059) — set only when a managed replica exists:
+  # SPRING_DATASOURCE_REPLICA_URL: jdbc:postgresql://REPLACE_REPLICA:5432/computerpets

@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-22 (Bundle zip contents + fail-closed update — ADR 0060. Not DX12/Vulkan. Catalog 221.) |
+| **Last Updated** | 2026-09-22 (Terraform managed stores — ADR 0062. Not DX12/Vulkan. Catalog 221.) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -248,8 +248,8 @@ flowchart TB
   - ~~No Kubernetes manifests, Helm chart, or Kustomize overlays.~~ Manifests in `deploy/k8s/` (not Helm). In-cluster Postgres/Redis are compose-equivalent scaffolding, not a managed HA pair.
   - ~~CI publishes the image to GHCR; image signing is still open.~~ Keyless cosign on every `main` GHCR publish; `deploy/k8s/verify-image-signature.sh` fail-closed verify for prod digests ([0061](adr/0061-ghcr-image-signing.md)).
   - ~~Actuator is not enabled.~~ Probes are `/actuator/health/liveness` and `/readiness` (permitted without a JWT).
-  - No Terraform/Pulumi/Crossplane definitions for the surrounding infrastructure (managed Postgres, Redis, secrets, CDN, WAF).
-  - Secrets are still accepted via plain environment variables / a Kubernetes `Secret` (acceptable only behind a proper secrets operator).
+  - ~~No Terraform/Pulumi/Crossplane definitions for the surrounding infrastructure (managed Postgres, Redis, secrets, CDN, WAF).~~ Terraform root in `deploy/terraform/` for managed Postgres, Redis, Secrets Manager shells (External Secrets contract), CDN, and WAF stubs ([0062](adr/0062-terraform-managed-stores.md)). Pulumi / Crossplane remain non-goals. A live cloud apply is still the keeper's account.
+  - Secrets are still accepted via plain environment variables / a Kubernetes `Secret` (acceptable only behind a proper secrets operator). Prefer External Secrets + Terraform-created shells.
 
 This deployment view directly addresses the multi-instance and rate-limiting concerns already called out in the README and `AUDIT.md`.
 
@@ -658,6 +658,7 @@ Goal: Prepare for horizontal scaling and real production traffic.
   - [x] Kubernetes manifests (`deploy/k8s/`, Kustomize — not Helm)
   - [x] Blue/green: `computerpets-blue` / `computerpets-green` + Service `color` selector
   - [x] GHCR image signing: keyless cosign on `main` publish + fail-closed digest verify ([0061](adr/0061-ghcr-image-signing.md))
+  - [x] Terraform for managed Postgres / Redis / secrets / CDN / WAF stubs (`deploy/terraform/`; [0062](adr/0062-terraform-managed-stores.md))
 
 #### Phase 4: Client & Ecosystem Integration
 Goal: Deliver a complete, usable platform.

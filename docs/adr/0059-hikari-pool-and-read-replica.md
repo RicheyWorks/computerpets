@@ -27,4 +27,4 @@ This slice closes the pool + optional-replica gap without storefront work, witho
 
 - Local `mvn` / H2 tests stay on one pool; no replica required.
 - Misconfigured replica fails at startup with a clear `IllegalStateException`, not a late write error on a read-only endpoint.
-- Bundle zip contents and fail-closed update land in [0060](0060-bundle-zip-contents-and-update.md). Image signing lands in [0061](0061-ghcr-image-signing.md). Terraform for managed stores remains open.
+- Bundle zip contents and fail-closed update land in [0060](0060-bundle-zip-contents-and-update.md). Image signing lands in [0061](0061-ghcr-image-signing.md). Managed-store Terraform lands in [0062](0062-terraform-managed-stores.md).
