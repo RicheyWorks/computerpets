@@ -263,7 +263,7 @@ This deployment view directly addresses the multi-instance and rate-limiting con
 | `VerifyController`     | Provider discovery (`/providers`), ownership verification dispatch, license + JWT issuance | Spring Web          | `controller/VerifyController.java`             | `ProviderRegistry`, `LicenseService`, `JwtService`, `PetCatalog` |
 | `DownloadController`   | License + JWT cross-validation, delegation to bundle manifest generation       | Spring Web + Security | `controller/DownloadController.java`           | `LicenseService`, `PetBundleService`, `PetCatalog`, `SecurityContextHolder` |
 | `PetController`        | Public read-only catalog browsing (list, filter by rarity, detail)             | Spring Web          | `controller/PetController.java`                | `PetCatalog`                          |
-| `BundleController`     | Public artifact catalog for a pet (`GET /api/bundles/{petKey}`)                | Spring Web          | `bundle/BundleController.java`                 | `BundleCatalog`, `PetCatalog`         |
+| `BundleController`     | Public artifact catalog (`GET /api/bundles/{petKey}`) and one-time grant redeem (`GET /api/bundles/{petKey}/redeem`) | Spring Web          | `bundle/BundleController.java`                 | `BundleCatalog`, `PetCatalog`, `DownloadGrantService` |
 
 All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` for consistent error shapes. The verify wire body and `OwnershipProvider.verify` SPI stay a flat `Map<String, String>`; each provider parses that map into an immutable `*VerifyRequest` record (Steam, Itch, Epic, NFT, Microsoft).
 
@@ -286,7 +286,8 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 |-----------------------|--------------------------------------------------------------------------------|-----------------------------|----------------------------------------|----------------------------------|
 | `LicenseService`      | Issue & validate AES-256-GCM encrypted JSON license payloads (jti, owner, pet, timestamps); revoke writes Postgres then the shared deny-list | BouncyCastle GCMBlockCipher + Jackson | `license/LicenseService.java`          | `LicenseRepository`, `RevocationIndex`, Spring @Value, ObjectMapper, SecureRandom |
 | `JwtService`          | Issue short-lived (default 30 min) HS256 JWTs carrying owner/pet/provider claims; parse & validate | JJWT 0.12 + Spring @Value   | `security/JwtService.java`             | SecretKey from config            |
-| `PetBundleService`    | Generate 15-minute HMAC-SHA256 signed CDN download URLs bound to (petKey, owner, jti, expiry); optional catalog metadata | javax.crypto.Mac + Spring   | `bundle/PetBundleService.java`, `bundle/BundleCatalog.java` | Signing key + `bundle.catalog` |
+| `PetBundleService`    | Generate 15-minute HMAC-SHA256 signed CDN download URLs bound to (petKey, owner, jti, expiry); optional catalog metadata; verify MAC on redeem | javax.crypto.Mac + Spring   | `bundle/PetBundleService.java`, `bundle/BundleCatalog.java` | Signing key + `bundle.catalog` |
+| `DownloadGrantService` / `DownloadGrantIndex` | Issue one-time IP-bound grants on `jti`+`exp`; atomic redeem for edge/`GET /api/bundles/{pet}/redeem` | Redis SETEX + Lua (or in-memory) | `bundle/DownloadGrantService.java`, `bundle/RedisDownloadGrantIndex.java` | Same Redis as rate limits |
 | `PetCatalog` / `PetType` | Static catalog of 210 living kinds across 4 rarity tiers; lookup + grouping utilities   | Java enum + Spring @Service | `pet/PetType.java`, `pet/PetCatalog.java` | —                                |
 
 ### 4.4 Cross-Cutting & Infrastructure
@@ -507,7 +508,7 @@ Numbered records of the decisions that are already true on `main` live in [`docs
 | **Plugin SPI with Spring auto-discovery** (`ProviderRegistry` ctor takes `List<OwnershipProvider>`) | Zero boilerplate for new platforms; clients discover via `/providers` endpoint. | Duplicate-key detection at startup is good, but runtime registration or ordering is not dynamic. |
 | **Stateless crypto licenses instead of server-side sessions or DB rows** | Simple horizontal scaling; client carries the proof; server only needs the master key. | Revocation, usage analytics, and "one active license per owner" policies require future persistence layer. |
 | **Two-phase download (encrypted license + short JWT)** with explicit claim cross-check in `DownloadController` | Strong defense-in-depth against token replay and cross-pet attacks. | Extra round-trip and client complexity; JWT is only useful for the download handshake. |
-| **HMAC-signed URLs rather than direct S3 presigned URLs or serving bytes** | Decouples storage backend; allows custom edge logic (IP binding, one-time use, logging) without changing the Java service. | Requires a verifier at the CDN/edge or a lightweight proxy; signature is replayable for 15 min from any IP today. |
+| **HMAC-signed URLs rather than direct S3 presigned URLs or serving bytes** | Decouples storage backend; edge calls `GET /api/bundles/{pet}/redeem` for one-time + IP-bound grants on the jti foundation. | Requires a verifier at the CDN/edge (or this backend as proxy) that forwards the keeper address; grant store down → fail closed. |
 | **Redis Bucket4j + Lettuce (`rate-limit.backend=redis`)** | Shared per-IP verify/download buckets across replicas; idle keys expire after the refill window. | Redis is now a runtime dependency. Unreachable Redis fail-closes (503) instead of lifting the limit. `memory` is tests / single-process only. |
 | **Flat Map verify body + provider-owned records** (`OwnershipProvider.verify(Map)` then `XxxVerifyRequest.from(map)`) | One `POST /{provider}` and a drop-in SPI; each service reads typed fields instead of scattered `request.get`. | Wire/OpenAPI still describe a generic string map; records are an internal parse, not a new JSON shape. |
 | **Synchronous external calls during verify** | Simple code, easy to understand and debug. | Latency and partial failure modes (one provider slow → whole request slow). No circuit breaker today. |
@@ -619,8 +620,8 @@ The roadmap is organized into six phases with concrete, prioritized work items:
 Goal: Significantly reduce blast radius and improve defense-in-depth.
 
 - **2.1 Download Authorization Hardening**
-  - Make signed download URLs one-time-use or IP-bound (store nonce / jti in Redis or DB)
-  - Consider embedding the license `jti` into the HMAC signature
+  - [x] Make signed download URLs one-time-use and IP-bound (`DownloadGrantIndex` on `jti`+`exp`; redeem API; ADR 0055)
+  - [x] Embed the license `jti` into the HMAC signature
 
 - **2.2 Hardware Binding (hwid)**
   - Add `hwid` field to license payload
@@ -693,7 +694,7 @@ Goal: Prepare for growth and complexity.
 ### Short Term (1–2 sprints)
 5. Introduce JPA entities for `IssuedLicense` (jti PK, owner, pet, provider, issuedAt, expiresAt, revokedAt) and a `LicenseRepository`. Persist on issuance; check revocation + existence in `LicenseService.validate`.
 6. Add hardware-fingerprint (`hwid`) binding to the license payload and download validation (client computes stable HWID and sends it at verify time).
-7. Make download URLs or the underlying authorization one-time-use or IP-bound (store nonce in Redis or embed `jti` in the HMAC input).
+7. ~~Make download URLs one-time-use or IP-bound~~ → `DownloadGrantIndex` + `GET /api/bundles/{pet}/redeem` (ADR 0055).
 8. Add Spring Boot Actuator + Prometheus metrics; expose `/actuator/health` properly (already permitted).
 9. Write a minimal OpenAPI / Springdoc spec so clients can generate bindings.
 

@@ -115,12 +115,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
      * to prevent spoofing.
      */
     static String clientId(HttpServletRequest req) {
-        String fwd = req.getHeader("X-Forwarded-For");
-        if (fwd != null && !fwd.isBlank()) {
-            int comma = fwd.indexOf(',');
-            return (comma > 0 ? fwd.substring(0, comma) : fwd).trim();
-        }
-        return req.getRemoteAddr();
+        return ClientAddress.from(req);
     }
 
     /** Path prefix → (capacity, refill window). */
