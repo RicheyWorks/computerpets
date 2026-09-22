@@ -91,6 +91,7 @@ A dedicated `API.md` document may be added in the future as the API matures.
 The long-term vision for ComputerPets includes:
 
 - A custom GPU shader engine (the PyQt client uses Qt’s OpenGL-backed scene; the overlay is Electron/Chromium). GPU load sensing and its sample sparkline shipped. They are not that engine.
+- The keeper card names who is listening on the mind bus. House lines unless that plugin can actually be asked. The key stays with the keeper.
 - A live ComputerPets collection address in `ethereum.collections`
 - Additional ownership providers (Solana, etc.)
 

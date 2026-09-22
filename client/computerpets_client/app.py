@@ -31,6 +31,7 @@ from .blotter import DayWash, DeskBackground, WeatherLayer, attach_gpu_viewport
 from .choice import guest_marks, guest_pick, guest_tap, walking_cmd
 from .gift import gift_line, leave_gift, pick_gift
 from .gpu import SPARK_H, SPARK_W, gpu_line, initial_sample, ink, read_local, remember, sparkline
+from .listener import listener_line
 from .guide import plaque_for
 from .hive import colony_of, colony_word, is_hive_place
 from .hours import (
@@ -307,6 +308,10 @@ class DeskWindow(QMainWindow):
         gpu_row_layout.addWidget(self.gpu_spark, 0, Qt.AlignmentFlag.AlignVCenter)
         self._apply_gpu(initial_sample())
         layout.addWidget(gpu_row)
+        self.listener_label = QLabel(listener_line({"door": "blotter"}))
+        self.listener_label.setObjectName("listenerSense")
+        self.listener_label.setStyleSheet("color: #9a9288; font-size: 11px;")
+        layout.addWidget(self.listener_label)
         self.setCentralWidget(root)
 
         status = QStatusBar()
@@ -924,6 +929,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"ok: {window.species.name} is {well}")
         print(window.renderer_label)
         print(f"ok: gpu sense {window.gpu_label.text()}")
+        print(f"ok: listener {window.listener_label.text()}")
         QTimer.singleShot(250, app.quit)
     return app.exec()
 
