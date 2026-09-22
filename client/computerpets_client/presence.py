@@ -12,9 +12,11 @@ HOUSE_FILES = ("card.json", "mind.json")
 # is the civil-day clock. There is no watcher and no silent re-query.
 # A cached origin grant is a desk limit. This process does not locate, so
 # it has no in-app locate confirm, no live pin to round, and no saved
-# computer place to send to a forecast host.
+# computer place to send to a forecast host. Noting a locate yes still
+# does not call for a place. Electron 35 cannot revoke a Chromium grant.
 WEATHER_LOCATE_MS = 120_000
 _weather_locate_until = 0
+_weather_locate_yes = False
 
 
 def _now_ms(now: int = 0) -> int:
@@ -51,8 +53,24 @@ def allow_permission(permission: str, now: int = 0) -> bool:
     return weather_locate_open(now)
 
 
+def note_weather_locate_yes() -> None:
+    """The blotter has no Send the place button. Noting a yes does not read a place."""
+    global _weather_locate_yes
+    _weather_locate_yes = True
+
+
+def hold_weather_locate() -> None:
+    """Don't send. The blotter never had a locate to hold."""
+    global _weather_locate_yes
+    _weather_locate_yes = False
+
+
 def read_weather_here() -> None:
-    """The blotter does not read the machine location and does not send a place."""
+    """The blotter does not read the machine location and does not send a place.
+
+    A fresh in-app yes on the desk is not this function. Noting one still returns nothing.
+    """
+    hold_weather_locate()
     clear_weather_locate()
     return None
 

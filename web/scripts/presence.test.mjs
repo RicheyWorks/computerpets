@@ -34,6 +34,17 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
 
   let watched = 0;
   const seen = [];
+  P.holdWeatherLocate();
+  const silent = await P.readWeatherHere(
+    {
+      getCurrentPosition() {
+        seen.push("silent");
+      },
+    },
+  );
+  assert.equal(silent, null);
+  assert.deepEqual(seen, []);
+  P.noteWeatherLocateYes();
   const fix = await P.readWeatherHere(
     {
       getCurrentPosition(ok, _err, opts) {
@@ -52,6 +63,35 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.equal(watched, 0);
   assert.equal(P.allowPermission("geolocation"), false);
   assert.equal(await P.readWeatherHere(undefined), null);
+  P.noteWeatherLocateYes();
+  P.holdWeatherLocate();
+  assert.equal(await P.readWeatherHere(
+    {
+      getCurrentPosition() {
+        seen.push("held");
+      },
+    },
+  ), null);
+  assert.deepEqual(seen, [seen[0]]);
+  P.noteWeatherLocateYes();
+  const again = await P.readWeatherHere(
+    {
+      getCurrentPosition(ok) {
+        seen.push("again");
+        ok({ coords: { latitude: 1, longitude: 2 } });
+      },
+    },
+  );
+  assert.deepEqual(again, { lat: 1, lon: 2 });
+  assert.equal(seen.filter((x) => x === "again").length, 1);
+  assert.equal(await P.readWeatherHere(
+    {
+      getCurrentPosition() {
+        seen.push("third");
+      },
+    },
+  ), null);
+  assert.equal(seen.includes("third"), false);
   assert.equal(P.ipPlace(), null);
   assert.equal(P.ipPlace(true), null);
   assert.match(plates, /readWeatherHere/);
@@ -66,12 +106,24 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   const confirmAt = plates.indexOf("async function confirmHere");
   const useBody = plates.slice(useAt, confirmAt);
   assert.match(useBody, /locateGate\(areas, false\)/);
-  assert.doesNotMatch(useBody, /readWeatherHere|reverseUrl|sharePlace/);
+  assert.doesNotMatch(useBody, /readWeatherHere|reverseUrl|sharePlace|noteWeatherLocateYes/);
   const declineAt = plates.indexOf("function declineHere");
   const confirmBody = plates.slice(confirmAt, declineAt);
   assert.match(confirmBody, /locateGate\(areas, true\)/);
-  assert.ok(confirmBody.indexOf("locateGate") < confirmBody.indexOf("readWeatherHere"));
+  assert.match(confirmBody, /noteWeatherLocateYes/);
+  assert.match(confirmBody, /holdWeatherLocate/);
+  assert.ok(confirmBody.indexOf("locateGate") < confirmBody.indexOf("noteWeatherLocateYes"));
+  assert.ok(confirmBody.indexOf("noteWeatherLocateYes") < confirmBody.indexOf("readWeatherHere"));
+  const declineBody = plates.slice(declineAt, declineAt + 280);
+  assert.match(declineBody, /holdWeatherLocate/);
+  assert.doesNotMatch(declineBody, /readWeatherHere|noteWeatherLocateYes|getCurrentPosition/);
   assert.ok(confirmBody.indexOf("sharePlace") < confirmBody.indexOf("reverseUrl"));
+  const forecastEffect = plates.slice(plates.indexOf("const gate = forecastGate"), plates.indexOf("async function search"));
+  assert.doesNotMatch(forecastEffect, /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
+  const openToggle = plates.slice(plates.indexOf("onClick={() => chrome.toggleOpen"), plates.indexOf("onClick={() => chrome.toggleOpen") + 80);
+  assert.doesNotMatch(openToggle, /readWeatherHere|noteWeatherLocateYes|getCurrentPosition/);
+  assert.doesNotMatch(demo, /readWeatherHere|noteWeatherLocateYes|getCurrentPosition/);
+  assert.match(room, /DeskWeatherPlate/);
   assert.doesNotMatch(confirmBody, /latitude=\$\{fix|longitude=\$\{fix/);
   assert.match(plates, /forecastGate/);
   assert.match(plates, /SAVED_HERE_ASK/);
@@ -88,6 +140,9 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   const askAt = plates.indexOf('id="weather-saved-ask"');
   assert.ok(openAt > 0 && askAt > openAt);
   assert.doesNotMatch(plates, /getCurrentPosition|watchPosition|maximumAge:\s*600/);
+  const tickAt = plates.indexOf("setInterval");
+  assert.ok(tickAt > 0);
+  assert.doesNotMatch(plates.slice(tickAt, tickAt + 240), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition/);
   assert.doesNotMatch(plates, /ipwho\.is|ip-api\.com|ipinfo\.io|ipapi\.co|ipPlaceUrl|parseIpPlace/);
   const src = readFileSync(join(root, "src/lib/pets/presence.ts"), "utf8");
   assert.doesNotMatch(src, /watchPosition/);

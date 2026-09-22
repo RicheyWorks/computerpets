@@ -8,10 +8,25 @@ export const HOUSE_FILES = ["card.json", "mind.json"] as const;
  * this page cannot revoke it. That cache can answer the next control use
  * without a new prompt. maximumAge 0 does not flush the grant.
  * Callers do not watch, do not re-query, and do not ask when a typed area is saved.
+ * One yes covers one read. After that locate, or after Don't send, the next
+ * getCurrentPosition waits for a fresh in-app yes. A timer or a panel reopen
+ * does not note that yes. A prior browser allow can still satisfy the next
+ * locate without a new OS or browser prompt. This does not revoke the grant.
  */
 export const WEATHER_LOCATE_MS = 120_000;
 
 let weatherLocateUntil = 0;
+let weatherLocateYes = false;
+
+/** The Send the place button. A cached Chromium grant is not this yes. */
+export function noteWeatherLocateYes(): void {
+  weatherLocateYes = true;
+}
+
+/** Don't send, and any path that must not leave a yes armed. */
+export function holdWeatherLocate(): void {
+  weatherLocateYes = false;
+}
 
 export function allowNavigation(_url?: string): boolean {
   return false;
@@ -115,11 +130,13 @@ export function readMachineMark(): { read: false; raw: null; id: "" } {
   return { read: false, raw: null, id: "" };
 }
 
-/** One weather-button fix. Arms geolocation, asks once, then clears. Does not watch. Call only after the in-app Send yes. A cached origin grant can still answer that call without a new browser prompt. This does not revoke the grant. */
+/** One weather-button fix after noteWeatherLocateYes. A second call does not ask the browser until that yes is noted again. Does not watch. A cached origin grant can still answer the fresh yes without a new browser prompt. This does not revoke the grant. */
 export function readWeatherHere(
   geo?: GeoLike,
   hooks?: WeatherLocateHooks | null,
 ): Promise<{ lat: number; lon: number } | null> {
+  if (!weatherLocateYes) return Promise.resolve(null);
+  weatherLocateYes = false;
   armWeatherLocate();
   let pending: Promise<unknown> = Promise.resolve();
   if (hooks && typeof hooks.arm === "function") {

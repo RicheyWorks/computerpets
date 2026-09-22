@@ -28,7 +28,7 @@ This slice holds a forecast of the current saved live pin until the keeper ackno
 
 ## Consequences
 
-- Electron 35 still cannot revoke a geolocation grant Chromium already cached in the renderer. This yes is not a revoke, not a browser prompt, and not a call to `getCurrentPosition`. After a locate yes, that cached grant can still satisfy `getCurrentPosition` without a new browser prompt. `maximumAge: 0` refuses a cached position. It does not flush the permission grant. A reload is the only flush of that renderer cache. This slice does not pretend otherwise.
+- Electron 35 still cannot revoke a geolocation grant Chromium already cached in the renderer. This yes is not a revoke, not a browser prompt, and not a call to `getCurrentPosition`. After a locate yes, that cached grant can still satisfy `getCurrentPosition` without a new browser prompt. `maximumAge: 0` refuses a cached position. It does not flush the permission grant. A reload is the only flush of that renderer cache. This slice does not pretend otherwise. A later locate in the same session still waits for a fresh in-app yes. [0031](0031-later-locate-still-asks-in-the-app.md).
 - The saved-place yes does not arm the session grant, does not call `getCurrentPosition`, and does not reverse-geocode. There is no `watchPosition`.
 - A typed city lookup and an acknowledged forecast still show the client address to the forecast host. The house does not ask the host to turn that address into a city. Rounding to a tenth of a degree is about 11 km. It is not anonymity.
 - An ack with digits finer than a tenth is dropped. It cannot keep a precise pin on the card.

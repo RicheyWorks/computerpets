@@ -28,5 +28,5 @@ A missing named id does not mint a license mark until the keeper says yes. This 
 - Desk presence does not read a machine id. [0019](0019-license-mark-is-a-local-hash.md).
 - The enumerator does not call GetClassName. Shell windows are known handles. A keeper window's class is not read. [0029](0029-enumerator-does-not-read-a-window-class.md).
 - A raw token in a URL fragment, and a secret in a hostname, stay documented. This slice does not chase them.
-- Geolocation is not a standing process grant. Electron cannot revoke a grant Chromium already cached in the renderer. [0013](0013-weather-locate-is-not-a-process-grant.md).
+- Geolocation is not a standing process grant. Electron cannot revoke a grant Chromium already cached in the renderer. A later locate still waits for a fresh in-app yes. [0031](0031-later-locate-still-asks-in-the-app.md).
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.

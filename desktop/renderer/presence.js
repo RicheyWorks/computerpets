@@ -84,6 +84,17 @@
   }
 
   const WEATHER_LOCATE_MS = 120000;
+  let weatherLocateYes = false;
+
+  /** The Send the place button. A cached Chromium grant is not this yes. */
+  function noteWeatherLocateYes() {
+    weatherLocateYes = true;
+  }
+
+  /** Don't send, and any path that must not leave a yes armed. */
+  function holdWeatherLocate() {
+    weatherLocateYes = false;
+  }
 
   function weatherLocateOptions() {
     return { maximumAge: 0, timeout: WEATHER_LOCATE_MS, enableHighAccuracy: false };
@@ -116,13 +127,16 @@
   }
 
   /**
-   * One weather-button fix. Asks once, then clears the session grant.
+   * One weather-button fix after noteWeatherLocateYes. A second call in the
+   * session does not call getCurrentPosition until that yes is noted again.
    * maximumAge is 0, so a cached position is not a silent re-read.
-   * A cached origin grant can still satisfy the call after the keeper says yes.
+   * A prior browser allow can still satisfy the fresh yes without a new OS or browser prompt.
    * This cannot revoke that grant. Electron 35 ResetPermission is empty.
-   * Callers use this only after the in-app Send yes, and only when no typed area is saved.
+   * A timer or a panel reopen does not note the yes.
    */
   function readWeatherHere(geo, hooks) {
+    if (!weatherLocateYes) return Promise.resolve(null);
+    weatherLocateYes = false;
     let pending = Promise.resolve();
     if (hooks && typeof hooks.arm === "function") {
       try {
@@ -171,7 +185,18 @@
       );
   }
 
-  const api = { hasHostFiles, install, classifyKey, recordKeystroke, ipPlace, readMachineMark, readWeatherHere, weatherLocateOptions };
+  const api = {
+    hasHostFiles,
+    install,
+    classifyKey,
+    recordKeystroke,
+    ipPlace,
+    readMachineMark,
+    readWeatherHere,
+    weatherLocateOptions,
+    noteWeatherLocateYes,
+    holdWeatherLocate,
+  };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetPresence = api;
   if (typeof document !== "undefined") install(document);
