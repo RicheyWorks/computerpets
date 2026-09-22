@@ -36,6 +36,7 @@ describe("license client (verify + download)", () => {
     assert.equal(verifyCall.method, "POST");
     assert.equal(verifyCall.path, "/api/verify/steam");
     assert.ok(verifyCall.headers["X-ComputerPets-Timestamp"]);
+    assert.ok(verifyCall.headers["X-ComputerPets-Nonce"]);
     assert.ok(verifyCall.headers["X-ComputerPets-Signature"]);
     assert.deepEqual(verifyCall.body, {
       steamId: "76561198000000000",

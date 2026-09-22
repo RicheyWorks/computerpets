@@ -40,4 +40,4 @@ This slice does not reopen presence/CSP, Hikari/replica, bundle zip, cosign, Ter
 - The key still sits in the operator tab. A script in that page can sign. This raises the bar from a reusable header to possession of the key plus a fresh MAC.
 - A machine-verify MAC does not verify here: different version string (`computerpets-machine-v1`) and different key.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** a signed admin or machine request can still be replayed inside the 300 second window (no nonce). ARCHITECTURE still lists a replay store beside the revocation ledger that already ships. Not started here.
+- **Next gap:** landed as [0072](0072-signed-request-nonce.md). Not started in this ADR.

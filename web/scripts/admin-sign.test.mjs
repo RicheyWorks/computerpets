@@ -9,8 +9,10 @@ test("house ledger admin MAC matches AdminRequestSignature vector", async () => 
     path: "/api/admin/revoke",
     query: "",
     timestamp: "1700000000",
+    nonce: "0123456789abcdef",
     body: '{"jti":"abc"}',
   });
   assert.equal(signed.timestamp, "1700000000");
-  assert.equal(signed.signature, "-VMFZenWBOFRVfYpmAGRHN-njILBKegCBerR6B3RnE0");
+  assert.equal(signed.nonce, "0123456789abcdef");
+  assert.equal(signed.signature, "mIV045pY8c-HU1s7kMEQ2eFV02JmJQfWA_CpYl3e9pA");
 });

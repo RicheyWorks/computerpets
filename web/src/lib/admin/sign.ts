@@ -1,6 +1,13 @@
 export const ADMIN_MAC_VERSION = "computerpets-admin-v1";
 export const TIMESTAMP_HEADER = "X-ComputerPets-Timestamp";
+export const NONCE_HEADER = "X-ComputerPets-Nonce";
 export const SIGNATURE_HEADER = "X-ComputerPets-Signature";
+
+function randomNonce(): string {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  return base64Url(bytes);
+}
 
 function utf8(value: string): Uint8Array {
   return new TextEncoder().encode(value);
@@ -27,12 +34,17 @@ export async function signAdminRequest(parts: {
   path: string;
   query?: string;
   timestamp?: string;
+  nonce?: string;
   body?: Uint8Array | string;
-}): Promise<{ timestamp: string; signature: string }> {
+}): Promise<{ timestamp: string; nonce: string; signature: string }> {
   if (!parts.key) {
     throw new Error("ADMIN_API_KEY is missing");
   }
   const timestamp = parts.timestamp ?? String(Math.floor(Date.now() / 1000));
+  const nonce = parts.nonce ?? randomNonce();
+  if (!/^[A-Za-z0-9_-]{16,128}$/.test(nonce)) {
+    throw new Error("admin nonce is not 16-128 chars of [A-Za-z0-9_-]");
+  }
   const bodyBytes = typeof parts.body === "string" ? utf8(parts.body) : (parts.body ?? new Uint8Array());
   const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", asBuffer(bodyBytes)));
   const canonical = [
@@ -41,6 +53,7 @@ export async function signAdminRequest(parts: {
     parts.path || "",
     parts.query || "",
     timestamp,
+    nonce,
     hex(digest),
   ].join("\n");
   const cryptoKey = await crypto.subtle.importKey(
@@ -51,5 +64,5 @@ export async function signAdminRequest(parts: {
     ["sign"],
   );
   const mac = new Uint8Array(await crypto.subtle.sign("HMAC", cryptoKey, asBuffer(utf8(canonical))));
-  return { timestamp, signature: base64Url(mac) };
+  return { timestamp, nonce, signature: base64Url(mac) };
 }

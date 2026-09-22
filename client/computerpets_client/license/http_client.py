@@ -11,7 +11,7 @@ from urllib.request import Request, urlopen
 
 from .errors import LicenseError
 from .hwid import assert_hwid
-from .machine_sign import SIGNATURE_HEADER, TIMESTAMP_HEADER, sign_machine_request
+from .machine_sign import NONCE_HEADER, SIGNATURE_HEADER, TIMESTAMP_HEADER, sign_machine_request
 from .signed_url import verify_signed_download_url
 from .bundle_zip import accept_bundle_bytes
 
@@ -138,6 +138,7 @@ def create_license_client(
                 "Accept": "application/json",
                 "Content-Type": "application/json",
                 TIMESTAMP_HEADER: signed[TIMESTAMP_HEADER],
+                NONCE_HEADER: signed[NONCE_HEADER],
                 SIGNATURE_HEADER: signed[SIGNATURE_HEADER],
             },
             body=raw,

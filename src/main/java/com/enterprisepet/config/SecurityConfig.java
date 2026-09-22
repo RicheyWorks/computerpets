@@ -66,6 +66,7 @@ public class SecurityConfig {
         admin.setAllowedHeaders(List.of(
                 "Content-Type",
                 "X-ComputerPets-Timestamp",
+                "X-ComputerPets-Nonce",
                 "X-ComputerPets-Signature"));
         admin.setMaxAge(3600L);
 

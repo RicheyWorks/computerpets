@@ -152,6 +152,7 @@ def test_client_posts_steam_wire_shape_then_downloads_with_bearer_and_jti():
     assert verify_call["method"] == "POST"
     assert verify_call["path"] == "/api/verify/steam"
     assert verify_call["headers"]["X-ComputerPets-Timestamp"]
+    assert verify_call["headers"]["X-ComputerPets-Nonce"]
     assert verify_call["headers"]["X-ComputerPets-Signature"]
     assert verify_call["body"] == {
         "steamId": "76561198000000000",
