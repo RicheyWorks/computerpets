@@ -88,9 +88,12 @@ const SECRET = ${JSON.stringify(SECRET)};
 const seen = [];
 globalThis.fetch = async (url, init) => {
   seen.push({ url: String(url), headers: init && init.headers, body: init && init.body });
+  if (String(url).includes("chat/completions")) {
+    return { ok: true, json: async () => ({ choices: [{ message: { content: "openai hi" } }] }) };
+  }
   return { ok: true, json: async () => ({ candidates: [{ content: { parts: [{ text: "hi there" }] } }] }) };
 };
-const reply = await runMind({
+const ctx = {
   name: "Moth",
   species: "red_panda",
   speciesLabel: "red panda",
@@ -100,8 +103,27 @@ const reply = await runMind({
   energy: 10,
   hygiene: 10,
   message: "hello",
-}, { plugin: "google", apiKey: SECRET, model: "gemini-2.5-flash", baseUrl: "https://example.test/v1beta" });
-process.stdout.write(JSON.stringify({ reply, seen }));
+};
+const PASTED = "pasted-key-VALUE-should-not-ride";
+const PASTED_API = "pasted-api-key-VALUE-should-not-ride";
+const MODEL_BIT = "model-query-VALUE-should-not-ride";
+function pasted(originPath) {
+  return originPath + "?key=" + PASTED + "&api_key=" + PASTED_API + "&api-key=" + PASTED + "&access_token=" + PASTED + "&token=" + PASTED + "&alt=sse#key=" + PASTED;
+}
+const reply = await runMind(ctx, { plugin: "google", apiKey: SECRET, model: "gemini-2.5-flash", baseUrl: "https://example.test/v1beta" });
+const dirty = await runMind(ctx, {
+  plugin: "google",
+  apiKey: SECRET,
+  model: "gemini-2.0-flash?key=" + MODEL_BIT + "&api_key=" + PASTED_API,
+  baseUrl: pasted("https://example.test/v1beta"),
+});
+const openai = await runMind(ctx, {
+  plugin: "openai",
+  apiKey: SECRET,
+  model: "gpt-4.1-mini?key=" + MODEL_BIT,
+  baseUrl: pasted("https://api.example.test/v1"),
+});
+process.stdout.write(JSON.stringify({ reply, dirty, openai, seen, PASTED, PASTED_API, MODEL_BIT }));
 `,
     );
     const res = spawnSync(
@@ -111,7 +133,7 @@ process.stdout.write(JSON.stringify({ reply, seen }));
     );
     assert.equal(res.status, 0, res.stderr || res.stdout);
     const out = JSON.parse(res.stdout);
-    assert.equal(out.seen.length, 1);
+    assert.equal(out.seen.length, 3);
     const url = new URL(out.seen[0].url);
     assert.equal(out.reply.text, "hi there");
     assert.equal(out.reply.source, "google");
@@ -125,6 +147,43 @@ process.stdout.write(JSON.stringify({ reply, seen }));
     assert.equal(String(out.seen[0].body).includes(SECRET), false);
     assert.equal(out.seen[0].url.includes("localhost"), false);
     assert.equal(out.seen[0].url.includes("/api/pets"), false);
+
+    const dirtyUrl = new URL(out.seen[1].url);
+    assert.equal(out.dirty.text, "hi there");
+    assert.equal(out.dirty.source, "google");
+    assert.equal(dirtyUrl.origin, "https://example.test");
+    assert.equal(dirtyUrl.pathname, "/v1beta/models/gemini-2.5-flash:generateContent");
+    assert.equal(dirtyUrl.searchParams.get("alt"), "sse");
+    assert.equal(dirtyUrl.hash, "");
+    for (const name of ["key", "api_key", "api-key", "access_token", "token"]) {
+      assert.equal(dirtyUrl.searchParams.has(name), false, name);
+    }
+    for (const secret of [SECRET, out.PASTED, out.PASTED_API, out.MODEL_BIT]) {
+      assert.equal(out.seen[1].url.includes(secret), false, secret);
+      assert.equal(out.seen[1].url.includes(encodeURIComponent(secret)), false, secret);
+      assert.equal(String(out.seen[1].body).includes(secret), false, secret);
+    }
+    assert.equal(out.seen[1].headers["x-goog-api-key"], SECRET);
+    assert.equal(String(out.seen[1].body).includes("gemini-2.0-flash?"), false);
+    assert.equal(out.seen[1].url.includes("localhost"), false);
+    assert.equal(out.seen[1].url.includes("/api/pets"), false);
+
+    const openaiUrl = new URL(out.seen[2].url);
+    assert.equal(out.openai.text, "openai hi");
+    assert.equal(out.openai.source, "openai");
+    assert.equal(openaiUrl.origin, "https://api.example.test");
+    assert.equal(openaiUrl.pathname, "/v1/chat/completions");
+    assert.equal(openaiUrl.searchParams.get("alt"), "sse");
+    assert.equal(openaiUrl.searchParams.has("key"), false);
+    assert.equal(openaiUrl.searchParams.has("api_key"), false);
+    assert.equal(openaiUrl.hash, "");
+    for (const secret of [SECRET, out.PASTED, out.PASTED_API, out.MODEL_BIT]) {
+      assert.equal(out.seen[2].url.includes(secret), false, secret);
+    }
+    assert.equal(out.seen[2].headers.Authorization, `Bearer ${SECRET}`);
+    assert.match(String(out.seen[2].body), /gpt-4\.1-mini/);
+    assert.equal(String(out.seen[2].body).includes(out.MODEL_BIT), false);
+    assert.equal(out.seen[2].url.includes("/api/pets"), false);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

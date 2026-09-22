@@ -1,7 +1,7 @@
 import { livingByKey } from "@/lib/pets/living";
 import { normalizeCare } from "@/lib/pets/care";
 import { mindPreset } from "./catalog";
-import { assertSafeMindUrl, mindTimeout, sanitizeModel } from "./safe-url";
+import { assertSafeMindUrl, mindTimeout, pluginRequestUrl, sanitizeModel } from "./safe-url";
 import type { MindBinding, MindContext, MindReply } from "./types";
 
 function userTurn(ctx: MindContext) {
@@ -29,7 +29,7 @@ function endpoint(binding: MindBinding, presetId: string, suffix = "") {
     presetId,
     kind: preset.kind,
   });
-  return `${base}${suffix}`;
+  return pluginRequestUrl(base, suffix);
 }
 
 async function openaiCompat(ctx: MindContext, binding: MindBinding, presetId: string): Promise<MindReply> {
@@ -119,7 +119,7 @@ async function gemini(ctx: MindContext, binding: MindBinding): Promise<MindReply
   const preset = mindPreset("google");
   const model = sanitizeModel(binding.model, preset.defaultModel || "gemini-2.5-flash");
   const base = endpoint(binding, "google");
-  const url = `${base}/models/${model}:generateContent`;
+  const url = pluginRequestUrl(base, `/models/${model}:generateContent`);
   const res = await fetch(url, {
     method: "POST",
     headers: {
