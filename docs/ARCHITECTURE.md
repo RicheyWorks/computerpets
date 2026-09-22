@@ -296,7 +296,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 - **`RevocationIndex`**: Shared jti deny-list on the same Redis (`RedisRevocationIndex`, keys `revoked:jti:{jti}`). `InMemoryRevocationIndex` when `rate-limit.backend=memory`. Not a second ledger.
 - **`GlobalExceptionHandler`** (`@RestControllerAdvice`): Maps common Spring exceptions + catch-all to RFC 7807 `ProblemDetail`.
 - **`EnterprisePetBackendApplication`**: Standard `@SpringBootApplication`.
-- **Observability (Phase 3.2)**: Micrometer Observation + `micrometer-tracing-bridge-otel`. HTTP server spans on `/api/verify/**` and `/api/download/**`; RestClient client spans for Steam/Itch/Epic/Microsoft; `eth_call` spans for NFT. Business timers `enterprisepet.verify` (provider + outcome) and `enterprisepet.download`. OTLP/HTTP export only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set. Prometheus remains `/actuator/prometheus`.
+- **Observability (Phase 3.2)**: Micrometer Observation + `micrometer-tracing-bridge-otel`. HTTP server spans on `/api/verify/**` and `/api/download/**`; RestClient client spans for Steam/Itch/Epic/Microsoft; `eth_call` spans for NFT. Business timers `enterprisepet.verify` (provider + outcome), `enterprisepet.license.issue` (provider + pet + outcome; issuance rate after a verified grant), and `enterprisepet.download`. OTLP/HTTP export only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set. Prometheus remains `/actuator/prometheus`. [0057](adr/0057-license-issuance-observation.md).
 - **Config**: `application.yml` plus `application-dev.yml` / `application-staging.yml` / `application-prod.yml` (same YAML + env-var style). `@PostConstruct` guards refuse missing/weak/placeholder secrets. `ProductionProfileGuard` fail-hards the prod profile.
 
 ### 4.5 Data & Persistence (Scaffolded, Not Yet Used)
@@ -412,7 +412,7 @@ sequenceDiagram
 | Steam Integration        | Spring RestClient + Steam Web API       | —           | `SteamService` calls `IPlayerService/GetOwnedGames` via RestClient. steam-condenser was unused and has been removed. |
 | Build                    | Maven + Spring Boot Maven Plugin        | —           | Universal, works in restricted environments; explicit Java 21 compiler config. |
 | Config & Secrets         | Spring @Value + env / `NAME_FILE` mounts + @PostConstruct guards | — | Fail-fast on missing/placeholder keys; Docker secrets + External Secrets operator contract (ADR 0056). |
-| Metrics                  | Micrometer + Prometheus registry                      | BOM | `/actuator/prometheus` scrape. `enterprisepet.verify` timer tagged `provider`/`outcome` for success rate and latency. |
+| Metrics                  | Micrometer + Prometheus registry                      | BOM | `/actuator/prometheus` scrape. `enterprisepet.verify` timer tagged `provider`/`outcome` for success rate and latency. `enterprisepet.license.issue` tagged `provider`/`pet`/`outcome` for issuance rate. |
 | Tracing                  | Micrometer Tracing + OpenTelemetry + OTLP/HTTP        | BOM | `micrometer-tracing-bridge-otel` + `opentelemetry-exporter-otlp`. Export off unless `OTEL_EXPORTER_OTLP_ENDPOINT` is set. |
 
 **Notable absences (intentional or future):** No Spring Cloud / service mesh yet (single service), no reactive stack (blocking I/O is acceptable for low-volume verification calls), no ORM entities yet.
@@ -558,7 +558,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 - **Easy wins**: New providers, richer `PetType` metadata, additional claims in licenses.
 - **Medium**: Dynamic pet catalog backed by DB, subscription/entitlement types. Admin revocation UI and API now ship (`/admin` + `/api/admin/*`).
 - **Structural**: Extract a true "License Domain Service" if more rules (concurrent use, transfer, gifting) appear. Providers already parse typed `*VerifyRequest` records from the Map SPI; a generic `OwnershipProvider<R>` is still optional later.
-- **Observability**: Micrometer tracing (OpenTelemetry / OTLP) and `enterprisepet.verify` / `enterprisepet.download` business meters are in place. Structured logging includes `traceId` / `spanId` / `correlationId`.
+- **Observability**: Micrometer tracing (OpenTelemetry / OTLP) and `enterprisepet.verify` / `enterprisepet.license.issue` / `enterprisepet.download` business meters are in place. Structured logging includes `traceId` / `spanId` / `correlationId`.
 - **Deployment**: Dockerfile, `deploy/k8s/` manifests, Spring profiles (`dev` / `staging` / `prod`). Flyway migrations already ship with the license ledger.
 
 ---
@@ -589,13 +589,13 @@ A detailed and actively maintained roadmap is available in a dedicated document:
 The roadmap is organized into six phases with concrete, prioritized work items:
 
 - **Phase 1:** Production Readiness Foundations *(completed May 2026)*
-- **Phase 2:** Security & Reliability Hardening *(current focus)*
+- **Phase 2:** Security & Reliability Hardening *(complete — September 2026)*
 - **Phase 3:** Scalability & Operational Maturity
 - **Phase 4:** Client & Ecosystem Integration
 - **Phase 5:** Long-term Architecture Evolution
 - **Phase 6:** House polish — the X ads *(north-star; see [§11](#11-house-polish-north-star-the-x-ads))*
 
-**Status:** Phase 1 complete. All listed items (observability, persistence, CI/CD/containers, API contracts) delivered. Starting Phase 2. See [ROADMAP.md](ROADMAP.md) for the authoritative checklist.
+**Status:** Phase 1 and Phase 2 complete. Phase 3 observability now includes license issuance rate (`enterprisepet.license.issue`). See [ROADMAP.md](ROADMAP.md) for the authoritative checklist.
 
 - **1.1 Observability Baseline**
   - Add Spring Boot Actuator + Prometheus metrics
@@ -629,8 +629,8 @@ Goal: Significantly reduce blast radius and improve defense-in-depth.
   - Require and validate hardware fingerprint on both verify and download paths
 
 - **2.3 Resilience Patterns**
-  - Add circuit breakers + retries (Resilience4j) around external provider calls (Steam, Microsoft, Web3)
-  - Implement proper timeouts and fallback behavior (in progress — overlay news, quote, and radio IPC reads time out at twelve seconds and return unread with an empty plate; a radio timeout does not call the next directory host. Weather forecast and geocode page wrappers time out the same way and flip unread / can't reach. Desk and overlay news, quote, and radio page wrappers time out the same way. Cloud talk and cloud voice page wrappers time out the same way and keep the house line or silence. Steam, Itch, and Epic RestClients time out at ten seconds and deny. Microsoft and NFT already time out. Shared Resilience4j ownership time limiter (`ownership`, twelve-second wall) wraps Steam / Itch / Epic / Microsoft; exceed denies. RestClient still owns the per-HTTP ten-second hop. Fallbacks deny. [0049](adr/0049-plate-ipc-times-out-and-denies.md). [0050](adr/0050-weather-page-times-out-and-denies.md). [0051](adr/0051-news-quote-radio-page-times-out-and-denies.md). [0052](adr/0052-cloud-talk-and-voice-page-times-out-and-denies.md). [0053](adr/0053-itch-and-epic-restclient-times-out-and-denies.md). [0054](adr/0054-ownership-time-limiter-denies-on-wall.md))
+  - [x] Circuit breakers + retries (Resilience4j) around external provider calls (Steam, Microsoft, Web3)
+  - [x] Timeouts and graceful degradation (fallbacks deny). Overlay / desk plate and weather wrappers, cloud talk and voice, Steam / Itch / Epic RestClients, and the shared ownership time limiter. [0049](adr/0049-plate-ipc-times-out-and-denies.md). [0050](adr/0050-weather-page-times-out-and-denies.md). [0051](adr/0051-news-quote-radio-page-times-out-and-denies.md). [0052](adr/0052-cloud-talk-and-voice-page-times-out-and-denies.md). [0053](adr/0053-itch-and-epic-restclient-times-out-and-denies.md). [0054](adr/0054-ownership-time-limiter-denies-on-wall.md).
 
 - **2.4 Secret Management**
   - [x] File-mounted Docker secrets via `NAME_FILE` (`SecretFileEnvironmentPostProcessor`); External Secrets / Vault agent templates into existing Opaque Secret `computerpets-secrets`; local-dev keeps env / `.env.example`. Deny-safe. [0056](adr/0056-house-secrets-from-file-mounts.md). Not a hosted Vault deploy.
@@ -649,7 +649,7 @@ Goal: Prepare for horizontal scaling and real production traffic.
 - **3.3 Advanced Observability**
   - [x] Distributed tracing (Micrometer + OpenTelemetry / OTLP — Tempo, Jaeger, or any collector)
   - [x] Custom metrics for verification success rate and latency per provider (`enterprisepet.verify`)
-  - License issuance rate (still open)
+  - [x] License issuance rate (`enterprisepet.license.issue` — provider + pet + outcome; [0057](adr/0057-license-issuance-observation.md))
 
 - **3.4 Environment & Deployment Strategy**
   - [x] Proper Spring profiles (`dev`, `staging`, `prod`)

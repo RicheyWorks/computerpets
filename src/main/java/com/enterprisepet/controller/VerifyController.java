@@ -170,7 +170,8 @@ public class VerifyController {
                 "maxLength", 128
             ));
         }
-        var license = licenseService.issueLicense(result.ownerId(), pet.type.key(), provider.key(), LICENSE_DAYS, hwid);
+        var license = telemetry.issue(provider.key(), pet.type.key(),
+                () -> licenseService.issueLicense(result.ownerId(), pet.type.key(), provider.key(), LICENSE_DAYS, hwid));
         var auth = jwtService.issue(result.ownerId(), pet.type.key(), provider.key());
 
         Map<String, Object> body = new LinkedHashMap<>();
