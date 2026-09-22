@@ -3,9 +3,11 @@
 from computerpets_client.presence import (
     allow_navigation,
     allow_permission,
+    classify_key,
     host_path_label,
     house_file,
     list_host_folder,
+    record_keystroke,
     refuse_file_drop,
     window_caption,
 )
@@ -41,6 +43,36 @@ def test_user_folders_are_not_listed_and_titles_are_not_read():
     assert window_caption(row) is None
     assert host_path_label(row["path"], False) == ""
     assert host_path_label(row["path"], True) == row["path"]
+
+
+def test_keys_outside_a_focused_field_are_not_logged():
+    class _Field(dict):
+        def __init__(self):
+            super().__init__(target={"tagName": "INPUT"})
+            self.reads = 0
+
+        def get(self, name, default=None):
+            if name == "key":
+                self.reads += 1
+                return "hunter2"
+            return super().get(name, default)
+
+    field = _Field()
+    noted = classify_key(field)
+    assert noted == {"record": False, "field": True, "toggle": False}
+    assert field.reads == 0
+    assert "hunter2" not in str(noted)
+
+    outside = classify_key({"key": "hunter2", "target": {"tagName": "BODY"}})
+    assert outside == {"record": False, "field": False, "toggle": False}
+    assert "hunter2" not in str(outside)
+    buf: list[str] = []
+    assert record_keystroke(buf, {"key": "hunter2"}) == {"record": False, "keys": []}
+    assert buf == []
+    dismiss = classify_key({"key": "Escape", "target": {"tagName": "DIV"}})
+    assert dismiss == {"record": False, "field": False, "toggle": "dismiss"}
+    assert "Escape" not in str(dismiss)
+    assert classify_key({"key": "Escape", "target": {"tagName": "TEXTAREA"}})["field"] is True
 
 
 def test_a_dropped_file_is_not_read():

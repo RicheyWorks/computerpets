@@ -32,7 +32,15 @@ from .choice import guest_marks, guest_pick, guest_tap, walking_cmd
 from .gift import gift_line, leave_gift, pick_gift
 from .gpu import SPARK_H, SPARK_W, gpu_line, initial_sample, ink, read_local, remember, sparkline
 from .listener import listener_line
-from .presence import host_path_label, list_host_folder, refuse_file_drop, seal_widget, window_caption
+from .presence import (
+    classify_key,
+    host_path_label,
+    list_host_folder,
+    record_keystroke,
+    refuse_file_drop,
+    seal_widget,
+    window_caption,
+)
 from .guide import plaque_for
 from .hive import colony_of, colony_word, is_hive_place
 from .hours import (
@@ -978,6 +986,24 @@ def main(argv: list[str] | None = None) -> int:
             print("check failed: presence showed a path without consent", file=sys.stderr)
             return 1
         print("ok: presence does not list folders or read titles")
+        field_note = classify_key({"key": "hunter2", "target": {"tagName": "INPUT"}})
+        if field_note["record"] or field_note["field"] is not True or "hunter2" in str(field_note):
+            print("check failed: presence read a field key", file=sys.stderr)
+            return 1
+        outside = classify_key({"key": "hunter2", "target": {"tagName": "BODY"}})
+        if outside["record"] or outside["toggle"] or "hunter2" in str(outside):
+            print("check failed: presence logged a key outside a field", file=sys.stderr)
+            return 1
+        dismiss = classify_key({"key": "Escape", "target": {"tagName": "DIV"}})
+        if dismiss["toggle"] != "dismiss" or "Escape" in str(dismiss):
+            print("check failed: presence stored a dismiss key", file=sys.stderr)
+            return 1
+        buf: list[str] = []
+        logged = record_keystroke(buf, {"key": "hunter2"})
+        if logged["record"] or logged["keys"] or buf:
+            print("check failed: presence kept a keystroke log", file=sys.stderr)
+            return 1
+        print("ok: presence does not log keys outside a focused field")
         QTimer.singleShot(250, app.quit)
     return app.exec()
 

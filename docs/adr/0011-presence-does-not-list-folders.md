@@ -24,7 +24,7 @@ This slice closes those two leftovers. It does not log keys. It does not start D
 
 ## Consequences
 
-- Logging keys outside a focused field is still open. Do not add it in a later guest.
+- Logging keys outside a focused field closed in [0012](0012-presence-does-not-log-keys.md). Do not add a key log in a later guest.
 - License `hwid` still reads machine-id or MachineGuid. That is the license door, not presence.
 - The keeper's plugin key still sits in `mind.json`. It stays off the card.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.

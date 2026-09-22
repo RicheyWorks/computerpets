@@ -54,6 +54,45 @@ def host_path_label(value: str = "", consent: bool = False) -> str:
     return value.strip()
 
 
+_FIELD_TAGS = frozenset({"INPUT", "TEXTAREA", "SELECT"})
+
+
+def _focused_field(event: dict | None) -> bool:
+    if not isinstance(event, dict):
+        return False
+    if event.get("focused") is True or event.get("field") is True:
+        return True
+    target = event.get("target")
+    if not isinstance(target, dict):
+        return False
+    if target.get("isContentEditable") is True:
+        return True
+    tag = str(target.get("tagName") or target.get("tag") or "").upper()
+    return tag in _FIELD_TAGS
+
+
+def classify_key(event: dict | None = None) -> dict[str, object]:
+    """A key outside a focused field is not a presence log.
+
+    A focused field keeps the character. This does not read it.
+    Escape outside a field may dismiss a menu. The key text is not returned.
+    """
+    if _focused_field(event):
+        return {"record": False, "field": True, "toggle": False}
+    key = ""
+    if isinstance(event, dict) and isinstance(event.get("key"), str):
+        key = event["key"]
+    if key == "Escape":
+        return {"record": False, "field": False, "toggle": "dismiss"}
+    return {"record": False, "field": False, "toggle": False}
+
+
+def record_keystroke(buffer: list | None = None, event: dict | None = None) -> dict[str, object]:
+    """Refuse a keystroke log. The buffer is not appended. The key is not returned."""
+    del buffer, event
+    return {"record": False, "keys": []}
+
+
 def seal_widget(widget) -> None:
     """Qt ignores drops when this is false. Callers still override the events."""
     widget.setAcceptDrops(False)

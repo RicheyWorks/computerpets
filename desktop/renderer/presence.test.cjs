@@ -38,7 +38,7 @@ test("in-page navigation is refused, including a dropped file URL", () => {
 
 test("clipboard, screen capture, and the file system stay denied; geolocation is the weather button", () => {
   assert.equal(Presence.allowPermission("geolocation"), true);
-  for (const name of ["clipboard-read", "clipboard-sanitized-write", "display-capture", "media", "fileSystem", "midi", ""]) {
+  for (const name of ["clipboard-read", "clipboard-sanitized-write", "display-capture", "media", "keyboardLock", "fileSystem", "midi", ""]) {
     assert.equal(Presence.allowPermission(name), false, name);
   }
 });
@@ -82,6 +82,51 @@ test("a window caption is never a title, and a path needs consent", () => {
   assert.equal(Presence.hostPathLabel(row.path, undefined), "");
   assert.equal(Presence.hostPathLabel(row.path, true), row.path);
   assert.equal(Presence.hostPathLabel("  ", true), "");
+});
+
+test("a focused field keeps the key, and a key outside it is not logged", () => {
+  let fieldReads = 0;
+  const field = {
+    get key() {
+      fieldReads += 1;
+      return "hunter2";
+    },
+    target: { tagName: "INPUT" },
+  };
+  const noted = Presence.classifyKey(field);
+  assert.deepEqual(noted, { record: false, field: true, toggle: false });
+  assert.equal(fieldReads, 0);
+  assert.equal(JSON.stringify(noted).includes("hunter2"), false);
+
+  let logReads = 0;
+  const outside = {
+    get key() {
+      logReads += 1;
+      return "hunter2";
+    },
+    target: { tagName: "BODY" },
+  };
+  const ignored = Presence.classifyKey(outside);
+  assert.deepEqual(ignored, { record: false, field: false, toggle: false });
+  assert.equal(JSON.stringify(ignored).includes("hunter2"), false);
+  const buf = [];
+  const logged = Presence.recordKeystroke(buf, outside);
+  assert.deepEqual(logged, { record: false, keys: [] });
+  assert.deepEqual(buf, []);
+  assert.equal(logReads, 1);
+
+  const dismiss = Presence.classifyKey({ key: "Escape", target: { tagName: "DIV" } });
+  assert.deepEqual(dismiss, { record: false, field: false, toggle: "dismiss" });
+  assert.equal(JSON.stringify(dismiss).includes("Escape"), false);
+  const inField = Presence.classifyKey({ key: "Escape", target: { tagName: "TEXTAREA" } });
+  assert.equal(inField.field, true);
+  assert.equal(inField.toggle, false);
+
+  const guardNote = Guard.classifyKey({ key: "q", target: { tagName: "SELECT" } });
+  assert.deepEqual(guardNote, { record: false, field: true, toggle: false });
+  assert.deepEqual(Guard.recordKeystroke(["q"], { key: "q" }), { record: false, keys: [] });
+  assert.doesNotMatch(readFileSync(join(__dirname, "..", "presence.cjs"), "utf8"), /SetWindowsHook|globalShortcut|keylog|uiohook/);
+  assert.doesNotMatch(guardSrc, /SetWindowsHook|globalShortcut|keylog|uiohook|localStorage/);
 });
 
 test("a host file drop is not a gift and is not read", () => {
@@ -147,7 +192,7 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.match(mainSrc, /Presence\.allowPermission/);
   assert.match(mainSrc, /Presence\.scrubWindows/);
   assert.match(mainSrc, /Presence\.houseFile/);
-  assert.doesNotMatch(mainSrc, /clipboard|globalShortcut|desktopCapturer|getPathForFile|showOpenDialog/);
+  assert.doesNotMatch(mainSrc, /clipboard|globalShortcut|desktopCapturer|getPathForFile|showOpenDialog|SetWindowsHook|uiohook|before-input-event/);
   assert.doesNotMatch(preloadSrc, /clipboard|getPathForFile|showOpenFilePicker|readFile/);
   assert.doesNotMatch(petSrc, /dataTransfer|getPathForFile|showOpenFilePicker|clipboard|desktopCapturer/);
   assert.doesNotMatch(enumSrc, /GetWindowText|desktopCapturer|PrintWindow|BitBlt|GetDC/);
@@ -169,4 +214,19 @@ test("desk, demo, and blotter share the same refusal", () => {
   assert.match(appSrc, /def dragEnterEvent/);
   assert.match(appSrc, /def dropEvent/);
   assert.doesNotMatch(appSrc, /mimeData\(\)|urls\(\)/);
+  assert.match(webSrc, /export function classifyKey/);
+  assert.match(webSrc, /export function recordKeystroke/);
+  assert.match(roomSrc, /classifyKey\(e\)/);
+  assert.match(petSrc, /PetPresence\.classifyKey\(e\)/);
+  assert.match(pySrc, /def classify_key/);
+  assert.match(pySrc, /def record_keystroke/);
+  assert.match(appSrc, /classify_key/);
+  assert.match(appSrc, /record_keystroke/);
+  assert.doesNotMatch(appSrc, /grabKeyboard|SetWindowsHook|pynput|keyPressEvent|installEventFilter/);
+  assert.doesNotMatch(petSrc, /recordKeystroke|keylog|SetWindowsHook/);
+  assert.doesNotMatch(roomSrc, /recordKeystroke|keylog/);
+  const listenerAt = petSrc.indexOf('document.addEventListener("keydown"');
+  const listener = petSrc.slice(listenerAt, listenerAt + 420);
+  assert.match(listener, /classifyKey\(e\)/);
+  assert.equal(listener.slice(0, listener.indexOf("classifyKey")).includes("e.key"), false);
 });
