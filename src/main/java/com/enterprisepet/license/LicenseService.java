@@ -35,21 +35,33 @@ public class LicenseService {
 
     private final LicenseRepository licenseRepository;
     private final RevocationIndex revocationIndex;
+    private final LicenseAuditor auditService;
 
     @Autowired
-    public LicenseService(LicenseRepository licenseRepository, RevocationIndex revocationIndex) {
+    public LicenseService(LicenseRepository licenseRepository,
+                          RevocationIndex revocationIndex,
+                          LicenseAuditor auditService) {
         this.licenseRepository = licenseRepository;
         this.revocationIndex = Objects.requireNonNull(revocationIndex, "revocationIndex");
+        this.auditService = Objects.requireNonNull(auditService, "auditService");
     }
 
     /** Test constructor — skips key initialization and @PostConstruct validation. */
     LicenseService(LicenseRepository licenseRepository, boolean forTest) {
-        this(licenseRepository, new InMemoryRevocationIndex());
+        this(licenseRepository, new InMemoryRevocationIndex(), NoOpLicenseAuditor.INSTANCE);
     }
 
     /** Test constructor with an explicit deny-list (shared Redis or a test double). */
     LicenseService(LicenseRepository licenseRepository, RevocationIndex revocationIndex, boolean forTest) {
-        this(licenseRepository, revocationIndex);
+        this(licenseRepository, revocationIndex, NoOpLicenseAuditor.INSTANCE);
+    }
+
+    /** Test constructor with deny-list + audit double. */
+    LicenseService(LicenseRepository licenseRepository,
+                   RevocationIndex revocationIndex,
+                   LicenseAuditor auditService,
+                   boolean forTest) {
+        this(licenseRepository, revocationIndex, auditService);
     }
 
     private static final Logger log = LoggerFactory.getLogger(LicenseService.class);
@@ -142,10 +154,11 @@ public class LicenseService {
 
             String jti = UUID.randomUUID().toString();
 
+            boolean hwidBound = hwid != null && !hwid.isBlank();
             String payload = json.writeValueAsString(new LicensePayload(
                 jti, ownerId, petType,
                 validUntil.toString(), issuedAt.toString(),
-                (hwid != null && !hwid.isBlank()) ? hwid : null
+                hwidBound ? hwid : null
             ));
 
             byte[] plaintext = payload.getBytes(StandardCharsets.UTF_8);
@@ -153,10 +166,11 @@ public class LicenseService {
 
             IssuedLicense issued = new IssuedLicense(ownerId, petType, provider, issuedAt, validUntil);
             issued.setJti(jti);
-            if (hwid != null && !hwid.isBlank()) {
+            if (hwidBound) {
                 issued.setHwid(hwid);
             }
             licenseRepository.save(issued);
+            auditService.recordIssued(issued, hwidBound);
 
             return new EncryptedLicense(
                 Base64.getEncoder().encodeToString(ciphertext),
@@ -180,9 +194,10 @@ public class LicenseService {
      *   <li>Shared {@link RevocationIndex} (Redis) — deny immediately if the
      *       {@code jti} is listed. A replica that has not seen the Postgres
      *       {@code revokedAt} row still rejects.</li>
-     *   <li>Postgres ledger — missing {@code jti} or {@code revokedAt} set
-     *       denies. Always consulted when the index misses or is down, so Redis
-     *       cannot silently resurrect a revoked license.</li>
+     *   <li>Postgres ledger — missing {@code jti}, {@code revokedAt} set, or
+     *       soft-deleted ({@code deletedAt}) denies. Always consulted when the
+     *       index misses or is down, so Redis cannot silently resurrect a
+     *       revoked license.</li>
      * </ol>
      * If Redis is unreachable, this method does <em>not</em> fail the download:
      * it falls back to the ledger. (HTTP {@code /api/download} may still 503
@@ -204,9 +219,9 @@ public class LicenseService {
                 return Optional.empty();
             }
 
-            // Postgres is the ledger (Phase 1.2). Unknown jti is treated as invalid.
+            // Postgres is the ledger (Phase 1.2). Unknown / revoked / soft-deleted jti denies.
             if (licenseRepository.findByJti(payload.jti())
-                    .map(IssuedLicense::isRevoked)
+                    .map(lic -> !lic.isActive())
                     .orElse(true)) {
                 return Optional.empty();
             }
@@ -219,24 +234,41 @@ public class LicenseService {
     }
 
     /**
-     * Revokes a previously issued license by its jti.
+     * Revokes a previously issued license by its jti (soft-delete; no hard wipe).
      * Returns true if the license existed and was newly revoked.
      * Idempotent: calling twice returns false on the second call.
      *
-     * <p>Order: persist {@code revokedAt} in Postgres (ledger), then write the
-     * {@code jti} to the shared deny-list with TTL ≥ remaining license life.
-     * A Redis write failure is logged; revoke still succeeds.
+     * <p>Order: persist {@code revokedAt} + {@code deletedAt} in Postgres (ledger),
+     * append an audit event, then write the {@code jti} to the shared deny-list
+     * with TTL ≥ remaining license life. A Redis write failure is logged; revoke
+     * still succeeds.
      */
     public boolean revoke(String jti) {
+        return revoke(jti, LicenseAuditService.ACTOR_SYSTEM);
+    }
+
+    /**
+     * Same as {@link #revoke(String)} with an explicit actor for the audit ledger
+     * (e.g. {@code admin}).
+     */
+    public boolean revoke(String jti, String actor) {
         if (jti == null || jti.isBlank()) return false;
         return licenseRepository.findByJti(jti)
             .map(lic -> {
                 boolean newlyRevoked = !lic.isRevoked();
                 if (newlyRevoked) {
-                    lic.setRevokedAt(Instant.now());
+                    Instant now = Instant.now();
+                    lic.setRevokedAt(now);
+                    lic.setDeletedAt(now);
                     licenseRepository.save(lic);
-                    log.info("License revoked jti={}", jti);
+                    auditService.recordRevoked(lic, actor);
+                    log.info("License revoked (soft-deleted) jti={}", jti);
                 } else {
+                    // Heal soft-delete stamp if an older row only had revokedAt.
+                    if (lic.getDeletedAt() == null) {
+                        lic.setDeletedAt(lic.getRevokedAt() != null ? lic.getRevokedAt() : Instant.now());
+                        licenseRepository.save(lic);
+                    }
                     log.info("License already revoked jti={}", jti);
                 }
                 // Heal the deny-list even on a repeat revoke (Redis was down the first time).
@@ -274,7 +306,8 @@ public class LicenseService {
     }
 
     /**
-     * Looks up a persisted license by jti for admin audit. Does not decrypt.
+     * Looks up a persisted license by jti for admin audit. Includes soft-deleted
+     * rows so operators can still see revoked licenses with honest copy.
      */
     public Optional<IssuedLicense> findIssued(String jti) {
         if (jti == null || jti.isBlank()) return Optional.empty();
@@ -282,7 +315,7 @@ public class LicenseService {
     }
 
     /**
-     * Recent licenses for one owner (newest first, capped).
+     * Recent licenses for one owner including soft-deleted (admin ledger).
      */
     public List<IssuedLicense> findByOwner(String owner) {
         if (owner == null || owner.isBlank()) return List.of();
@@ -290,21 +323,37 @@ public class LicenseService {
     }
 
     /**
-     * Newest issued licenses across all owners (capped).
+     * Newest issued licenses across all owners including soft-deleted (admin).
      */
     public List<IssuedLicense> listRecent() {
         return licenseRepository.findTop50ByOrderByIssuedAtDesc();
     }
 
     /**
-     * Records that a download occurred for the given license (updates lastUsedAt).
-     * Used for audit / future rate-limiting of downloads per license.
+     * Active-only list for one owner (default queries exclude soft-deleted).
+     */
+    public List<IssuedLicense> findActiveByOwner(String owner) {
+        if (owner == null || owner.isBlank()) return List.of();
+        return licenseRepository.findTop50ByDeletedAtIsNullAndOwnerOrderByIssuedAtDesc(owner.trim());
+    }
+
+    /**
+     * Newest active licenses (default queries exclude soft-deleted).
+     */
+    public List<IssuedLicense> listActiveRecent() {
+        return licenseRepository.findTop50ByDeletedAtIsNullOrderByIssuedAtDesc();
+    }
+
+    /**
+     * Records that a download occurred for the given license (updates lastUsedAt)
+     * and appends a DOWNLOAD audit event. Soft-deleted rows are left untouched.
      */
     public void recordDownload(String jti) {
         if (jti == null || jti.isBlank()) return;
-        licenseRepository.findByJti(jti).ifPresent(lic -> {
+        licenseRepository.findByJtiAndDeletedAtIsNull(jti).ifPresent(lic -> {
             lic.setLastUsedAt(Instant.now());
             licenseRepository.save(lic);
+            auditService.recordDownload(lic);
         });
     }
 

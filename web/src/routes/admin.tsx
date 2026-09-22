@@ -96,7 +96,7 @@ export function AdminPage() {
       const next = await lookupLicenses(apiBase, adminKey, query);
       setRows(next);
       setPendingJti(null);
-      setNote("License revoked. Downloads for this jti stop immediately.");
+      setNote("License revoked and soft-deleted. Downloads for this jti stop immediately. The row stays on the ledger.");
     } catch (err) {
       if (err instanceof AdminApiError && err.status === 401) {
         lock("Admin key rejected.");
@@ -124,7 +124,8 @@ export function AdminPage() {
         <p className="text-sm text-muted sm:text-base">
           Same gate as the API: <span className="font-mono text-fg">X-Admin-Key</span> /{" "}
           <span className="font-mono text-fg">ADMIN_API_KEY</span>. The key stays in this tab.
-          Issued, last used, revoked, provider, and pet are on each row.
+          Issued, last used, revoked, soft-deleted, provider, and pet are on each row.
+          Revoke soft-deletes; it does not wipe the ledger.
         </p>
       </header>
 
@@ -206,10 +207,11 @@ export function AdminPage() {
                   </div>
                   <StatusBadge row={row} />
                 </div>
-                <dl className="grid gap-3 sm:grid-cols-3">
+                <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   <Stamp label="Issued" value={row.issuedAt} />
                   <Stamp label="Last used" value={row.lastUsedAt} />
                   <Stamp label="Revoked" value={row.revokedAt} />
+                  <Stamp label="Soft-deleted" value={row.deletedAt} />
                 </dl>
                 {row.revoked ? null : pendingJti === row.jti ? (
                   <div className="flex flex-wrap items-center gap-2">
@@ -260,7 +262,7 @@ function Stamp({ label, value }: { label: string; value: string | null }) {
 }
 
 function StatusBadge({ row }: { row: LicenseAudit }) {
-  if (row.revoked) return <Badge>Revoked</Badge>;
+  if (row.revoked || row.deleted) return <Badge>Revoked</Badge>;
   if (row.expiresAt && Date.parse(row.expiresAt) < Date.now()) return <Badge>Expired</Badge>;
   return <Badge>Active</Badge>;
 }
