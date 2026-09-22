@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-22 (Bundle catalog rate limit on `GET /api/bundles/{petKey}` — ADR 0069. Not DX12/Vulkan. Catalog 221.) |
+| **Last Updated** | 2026-09-22 (Signed machine verify HMAC on `POST /api/verify` — ADR 0070. Not DX12/Vulkan. Catalog 221.) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
