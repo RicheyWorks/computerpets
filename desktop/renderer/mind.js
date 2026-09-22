@@ -153,15 +153,80 @@
     return Promise.resolve({ kept });
   }
 
+  const SECRET_QUERY_NAMES = new Set([
+    "key",
+    "api_key",
+    "apikey",
+    "access_token",
+    "refresh_token",
+    "id_token",
+    "token",
+    "secret",
+    "client_secret",
+    "x_goog_api_key",
+    "x_api_key",
+    "auth",
+    "authorization",
+    "bearer",
+  ]);
+
+  function isSecretQueryName(name) {
+    return SECRET_QUERY_NAMES.has(String(name || "").trim().toLowerCase().replace(/-/g, "_"));
+  }
+
+  function hashCarriesSecretQuery(hash) {
+    const body = String(hash || "").replace(/^#\??/, "");
+    if (!body) return false;
+    const params = new URLSearchParams(body);
+    let dirty = false;
+    params.forEach((_, name) => {
+      if (isSecretQueryName(name)) dirty = true;
+    });
+    return dirty;
+  }
+
+  function stripSecretQuery(url) {
+    const names = new Set();
+    url.searchParams.forEach((_, name) => names.add(name));
+    names.forEach((name) => {
+      if (isSecretQueryName(name)) url.searchParams.delete(name);
+    });
+    if (hashCarriesSecretQuery(url.hash)) url.hash = "";
+  }
+
+  function sanitizeModel(raw, fallback) {
+    const fb = String(fallback || "");
+    const value = String(raw || fb).trim();
+    if (!value || value.includes("..") || value.includes("\\")) return fb;
+    if (!/^[a-zA-Z0-9._:/-]{1,80}$/.test(value)) return fb;
+    return value;
+  }
+
+  function pluginRequestUrl(base, suffix) {
+    const url = new URL(base);
+    stripSecretQuery(url);
+    if (suffix) {
+      const extra = String(suffix).startsWith("/") ? String(suffix) : `/${suffix}`;
+      url.pathname = `${url.pathname.replace(/\/$/, "")}${extra}`;
+    }
+    stripSecretQuery(url);
+    return url.toString();
+  }
+
   function safeUrl(raw, id) {
     try {
       const url = new URL(String(raw || ""));
       if (url.username || url.password) return "";
       const host = url.hostname.replace(/^\[|\]$/g, "");
       const local = host === "127.0.0.1" || host === "localhost" || host === "::1";
-      if (local) return id === "ollama" || id === "lmstudio" || id === "custom" ? url.toString().replace(/\/$/, "") : "";
+      if (local) {
+        if (!(id === "ollama" || id === "lmstudio" || id === "custom")) return "";
+        stripSecretQuery(url);
+        return url.toString().replace(/\/$/, "");
+      }
       if (url.protocol !== "https:") return "";
       if (/^(10|127|0)\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[0-1])\./.test(host)) return "";
+      stripSecretQuery(url);
       return url.toString().replace(/\/$/, "");
     } catch {
       return "";
@@ -194,13 +259,13 @@
     const bind = binding(ctx.species);
     const p = preset(bind.plugin);
     const base = safeUrl(bind.baseUrl || p.base || "", p.id);
-    const model = bind.model || p.model;
+    const model = sanitizeModel(bind.model, p.model);
     const key = bind.apiKey || "";
     if (p.kind === "local") return { text: ctx.fallback, source: "local" };
     if (!base && p.kind !== "local") return { text: ctx.fallback, source: "local" };
     try {
       if (p.kind === "openai") {
-        const res = await fetch(`${base}/chat/completions`, {
+        const res = await fetch(pluginRequestUrl(base, "/chat/completions"), {
           method: "POST",
           headers: { "Content-Type": "application/json", ...(key ? { Authorization: `Bearer ${key}` } : {}) },
           body: JSON.stringify({
@@ -217,7 +282,7 @@
         const text = clip(body.choices?.[0]?.message?.content);
         if (text) return { text, source: p.id };
       } else if (p.kind === "anthropic") {
-        const res = await fetch(`${base}/v1/messages`, {
+        const res = await fetch(pluginRequestUrl(base, "/v1/messages"), {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -235,7 +300,7 @@
         const text = clip(body.content?.[0]?.text);
         if (text) return { text, source: p.id };
       } else if (p.kind === "ollama") {
-        const res = await fetch(`${base}/api/chat`, {
+        const res = await fetch(pluginRequestUrl(base, "/api/chat"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -251,7 +316,7 @@
         const text = clip(body.message?.content);
         if (text) return { text, source: p.id };
       } else if (p.kind === "gemini") {
-        const res = await fetch(`${base}/models/${model}:generateContent`, {
+        const res = await fetch(pluginRequestUrl(base, `/models/${model}:generateContent`), {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -267,7 +332,7 @@
         const text = clip(body.candidates?.[0]?.content?.parts?.[0]?.text);
         if (text) return { text, source: p.id };
       } else if (p.kind === "custom") {
-        const res = await fetch(base, {
+        const res = await fetch(pluginRequestUrl(base), {
           method: "POST",
           headers: { "Content-Type": "application/json", ...(key ? { Authorization: `Bearer ${key}` } : {}) },
           body: JSON.stringify({
