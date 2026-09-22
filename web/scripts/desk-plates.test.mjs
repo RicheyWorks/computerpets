@@ -72,5 +72,19 @@ test("Quotes crypto + NFT panes lockstep with overlay market helpers", () => {
   // Bare unknown tickers guess stock; Coins Add forces crypto via kind/search.
   assert.equal(Market.classify("PEPE").kind, "stock");
   assert.equal(OverlayMarket.classify("WIF").kind, "stock");
+  assert.equal(Market.quoteHonesty(Market.parseMarket({})), OverlayMarket.quoteHonesty({}));
+  assert.equal(Market.quoteMaySend(Market.parseMarket({}), false), false);
+  assert.equal(Market.QUOTE_LOOK, OverlayMarket.QUOTE_LOOK);
+  assert.equal(News.newsHonesty(News.blankNewsPrefs()), "this news send reads the rss feed. this computer's network address goes with the https request to the news host, as any client.");
+  assert.ok(deskSrc.includes('id="news-net"'));
+  assert.ok(deskSrc.includes('id="market-net"'));
+  assert.ok(deskSrc.includes('id="market-look-net"'));
+  assert.ok(deskSrc.includes("newsMaySend"));
+  const popAt = deskSrc.indexOf("popularRssUrl()");
+  assert.ok(deskSrc.lastIndexOf("if (!open) return", popAt) < popAt);
+  assert.ok(deskSrc.indexOf("if (!newsMaySend") < popAt);
+  assert.ok(deskSrc.indexOf("if (!quoteMaySend") < deskSrc.indexOf("geckoManyUrl("));
+  assert.ok(deskSrc.indexOf("if (!quoteLookMaySend") < deskSrc.indexOf("searchUrl(typed)"));
+  assert.ok(Market.quoteHonesty(Market.parseMarket({})).includes(Weather.clientNetLine("the quote host")));
 
 });

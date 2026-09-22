@@ -1,4 +1,4 @@
-/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. CoinGecko + GeckoTerminal public APIs. No invented key. */
+/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. A quote waits until the open quotes plate shows this computer's network address on that https request. CoinGecko + GeckoTerminal public APIs. No invented key. */
 (function (root) {
   const MARKET_LABEL = "Quotes";
   const COIN_LABEL = "Coins";
@@ -562,6 +562,67 @@
     return Number(price).toPrecision(3);
   }
 
+  function sharedNet(host) {
+    let areas = root.PetWeatherAreas;
+    if (!areas && typeof module !== "undefined" && module.exports) {
+      try {
+        areas = require("./weather-areas.js");
+        root.PetWeatherAreas = areas;
+      } catch (err) {
+        areas = null;
+      }
+    }
+    if (!areas || typeof areas.clientNetLine !== "function") return "";
+    return areas.clientNetLine(host);
+  }
+
+  const QUOTE_HOST_NAME = "the quote host";
+  const TERMINAL_HOST_NAME = "the terminal host";
+  const STOCK_HOST_NAME = "the stock host";
+
+  function asMarket(market) {
+    if (market && Array.isArray(market.tickers) && Array.isArray(market.nfts)) return market;
+    return parseMarket(market);
+  }
+
+  function quoteHostPhrase(market) {
+    const house = asMarket(market);
+    const names = [];
+    const hasQuote = house.tickers.some((row) => row.kind === "crypto" && row.geckoId && !row.address) || !!currentNft(house);
+    const hasTerminal = house.tickers.some((row) => row.kind === "crypto" && row.address);
+    const ticker = currentTicker(house);
+    const hasStock = !!(ticker && ticker.kind === "stock");
+    if (hasQuote) names.push(QUOTE_HOST_NAME);
+    if (hasTerminal) names.push(TERMINAL_HOST_NAME);
+    if (hasStock) names.push(STOCK_HOST_NAME);
+    if (!names.length) return "";
+    if (names.length === 1) return names[0];
+    if (names.length === 2) return names[0] + " and " + names[1];
+    return names.slice(0, -1).join(", ") + ", and " + names[names.length - 1];
+  }
+
+  function quoteHonesty(market) {
+    const host = quoteHostPhrase(market);
+    const net = host ? sharedNet(host) : "";
+    if (!host || !net) return "";
+    return `this quote sends the saved list. ${net}`;
+  }
+
+  function quoteMaySend(market, lineInView) {
+    const host = quoteHostPhrase(market);
+    const line = quoteHonesty(market);
+    const net = host ? sharedNet(host) : "";
+    if (!host || !line || !net || lineInView !== true) return false;
+    return line.indexOf(net) !== -1;
+  }
+
+  const QUOTE_LOOK = `this look-up sends the typed name. ${sharedNet(QUOTE_HOST_NAME)}`;
+
+  function quoteLookMaySend(lineInView) {
+    const net = sharedNet(QUOTE_HOST_NAME);
+    return lineInView === true && !!net && QUOTE_LOOK.indexOf(net) !== -1;
+  }
+
   function plateLine(market, live, unread) {
     const house = market && market.tickers ? market : parseMarket(market);
     const ticker = currentTicker(house);
@@ -698,6 +759,14 @@
     formatPrice,
     plateLine,
     nftLine,
+    QUOTE_HOST_NAME,
+    TERMINAL_HOST_NAME,
+    STOCK_HOST_NAME,
+    quoteHostPhrase,
+    quoteHonesty,
+    quoteMaySend,
+    QUOTE_LOOK,
+    quoteLookMaySend,
     FAVORITES_EMPTY,
     MAX_FAVORITES,
     toggleFavoriteTicker,

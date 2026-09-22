@@ -1,4 +1,5 @@
-/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. Same map as desktop `news.js`. */
+/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows this computer's network address on that https request. Same map as desktop `news.js`. */
+import { clientNetLine } from "./weather-areas.ts";
 
 export const NEWS_SOURCE = "Wikipedia In the news";
 export const TOPIC_SOURCE = "Google News";
@@ -323,6 +324,43 @@ export function newsLine(items: NewsItem[] | undefined, unread = false) {
   if (unread && (!items || !items.length)) return CANT_REACH;
   if (!items || !items.length) return NO_HEADLINES;
   return items[0]!.title;
+}
+
+export const NEWS_RSS_NET = clientNetLine("the news host");
+export const NEWS_WIKI_NET = clientNetLine("the wikipedia host");
+export const NEWS_RSS_HONESTY = `this news send reads the rss feed. ${NEWS_RSS_NET}`;
+export const NEWS_WIKI_HONESTY = `this news send reads the featured page. ${NEWS_WIKI_NET}`;
+
+export type NewsSendKind = "rss" | "wiki" | "none";
+
+/** Favorites stay on the card. Popular, X, and a named topic read Google News. World reads Wikipedia. */
+export function newsSendKind(prefs: unknown): NewsSendKind {
+  const house = parseNewsPrefs(prefs);
+  const tab = house.tab || "popular";
+  if (tab === "favorites") return "none";
+  if (tab === "popular" || tab === "x") return "rss";
+  const topic = currentTopic(house);
+  if (topic && topic.id !== WORLD_ID && topic.query) return "rss";
+  return "wiki";
+}
+
+export function newsHonesty(prefs: unknown): string {
+  const kind = newsSendKind(prefs);
+  if (kind === "rss") return NEWS_RSS_HONESTY;
+  if (kind === "wiki") return NEWS_WIKI_HONESTY;
+  return "";
+}
+
+/**
+ * The news host is called only while the keeper can see that line.
+ * A closed plate, a load, and the favorites tab are not that view.
+ * This does not add a tracker. The caller still owns the twenty-minute refresh.
+ */
+export function newsMaySend(prefs: unknown, lineInView: boolean): boolean {
+  const line = newsHonesty(prefs);
+  const kind = newsSendKind(prefs);
+  const net = kind === "rss" ? NEWS_RSS_NET : kind === "wiki" ? NEWS_WIKI_NET : "";
+  return lineInView === true && net.length > 0 && line.includes(net);
 }
 
 export function sourceLine(topic?: NewsTopic | null, tab?: unknown) {

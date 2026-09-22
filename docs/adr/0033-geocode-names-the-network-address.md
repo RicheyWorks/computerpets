@@ -28,3 +28,4 @@ This slice shows the same network-address sentence before those two requests lea
 - The geocode host sees this computer's network address, as any HTTPS client. The house does not ask it for a city from that address.
 - License `hwid` still reads a named machine id only when a bind needs it. A missing OS id still waits for its own yes. [0030](0030-missing-os-id-waits-for-a-yes.md). This slice does not change that door.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.
+- News RSS, market quotes, and Radio Find name the network address in [0034](0034-news-quotes-and-radio-name-the-network-address.md).
