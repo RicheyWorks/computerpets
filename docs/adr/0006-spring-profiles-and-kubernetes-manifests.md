@@ -41,7 +41,9 @@ No mesh.
 - In-cluster Postgres/Redis are not a managed HA pair. They match
   docker-compose so the manifests are honest scaffolding.
 - Image signing is keyless cosign on GHCR publish + fail-closed verify
-  ([0061](0061-ghcr-image-signing.md)). Terraform for managed stores is still open.
+  ([0061](0061-ghcr-image-signing.md)). Managed stores are Terraform in
+  `deploy/terraform/` ([0062](0062-terraform-managed-stores.md)); in-cluster
+  Postgres/Redis remain scaffolding until a keeper applies that root.
   Secret *injection* is env, Docker `*_FILE` mounts, or External Secrets /
   Vault agent into the existing Opaque Secret ([0056](0056-house-secrets-from-file-mounts.md)).
   A hosted Vault cluster is still the keeper's infrastructure.

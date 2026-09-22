@@ -80,6 +80,7 @@ address, or an API that is not on `main`.
 | [0059](0059-hikari-pool-and-read-replica.md) | Hikari pool defaults and optional deny-safe read replica | Accepted |
 | [0060](0060-bundle-zip-contents-and-update.md) | Bundle zip contents and fail-closed update process | Accepted |
 | [0061](0061-ghcr-image-signing.md) | GHCR image signing with keyless cosign (fail-closed verify) | Accepted |
+| [0062](0062-terraform-managed-stores.md) | Terraform for managed Postgres, Redis, secrets, CDN, and WAF stubs | Accepted |
 
 ## How to add one
 
