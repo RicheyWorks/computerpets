@@ -33,7 +33,7 @@ web/
 
 Ownership, licenses, and NFT verify stay in the Java service at the repo root (`mvn spring-boot:run`). That door is **http://localhost:8081**. This folder is the living client; the desk keeps 8080.
 
-Operators open `/admin` (not in the house nav) with `ADMIN_API_KEY` as `X-Admin-Key` against that service to look up and revoke licenses.
+Operators open `/admin` (not in the house nav) and paste `ADMIN_API_KEY`. The page signs each lookup and revoke. It does not send the key.
 
 ## Advertising demos
 

@@ -44,7 +44,7 @@ public class SecurityConfig {
                                  "/actuator/health/readiness").permitAll()
                 // Advertised care paths answer 409 without a JWT. A missing license is not why feed fails.
                 .requestMatchers("/pet/feed", "/pet/play", "/pet/rest").permitAll()
-                // Admin operations use a separate pre-shared key (X-Admin-Key) — handled inside the controller.
+                // Admin HMAC is AdminRequestSignatureFilter (ADR 0071), not a license JWT.
                 .requestMatchers("/api/admin/**").permitAll()
                 // Bundle download requires a freshly-issued JWT from /api/verify/{provider}.
                 .requestMatchers("/api/download/**").authenticated()
@@ -56,14 +56,17 @@ public class SecurityConfig {
 
     /**
      * Browser house {@code /admin} calls these endpoints from another origin
-     * with {@code X-Admin-Key}. The key is the real gate; CORS only unblocks the preflight.
+     * with the admin request HMAC headers. CORS only unblocks the preflight.
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration admin = new CorsConfiguration();
         admin.setAllowedOriginPatterns(List.of("*"));
         admin.setAllowedMethods(List.of("GET", "POST", "OPTIONS"));
-        admin.setAllowedHeaders(List.of("X-Admin-Key", "Content-Type"));
+        admin.setAllowedHeaders(List.of(
+                "Content-Type",
+                "X-ComputerPets-Timestamp",
+                "X-ComputerPets-Signature"));
         admin.setMaxAge(3600L);
 
         CorsConfiguration heartbeat = new CorsConfiguration();

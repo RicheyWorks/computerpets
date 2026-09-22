@@ -122,8 +122,8 @@ export function AdminPage() {
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">License ledger</p>
         <h1 className="font-display text-4xl leading-none sm:text-5xl">Look up. Revoke. Leave a mark.</h1>
         <p className="text-sm text-muted sm:text-base">
-          Same gate as the API: <span className="font-mono text-fg">X-Admin-Key</span> /{" "}
-          <span className="font-mono text-fg">ADMIN_API_KEY</span>. The key stays in this tab.
+          Same gate as the API: <span className="font-mono text-fg">ADMIN_API_KEY</span> signs each
+          request. The key stays in this tab and is not sent as a header.
           Issued, last used, revoked, soft-deleted, provider, and pet are on each row.
           Revoke soft-deletes; it does not wipe the ledger.
         </p>

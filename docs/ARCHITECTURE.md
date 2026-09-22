@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-22 (Signed machine verify HMAC on `POST /api/verify` — ADR 0070. Not DX12/Vulkan. Catalog 221.) |
+| **Last Updated** | 2026-09-22 (Signed admin HMAC on `/api/admin/**` — ADR 0071. Not DX12/Vulkan. Catalog 221.) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -346,11 +346,11 @@ This two-phase (verify → download) + dual-artifact (license + JWT) design prev
 - Use of a JWT issued for pet A to obtain pet B.
 
 #### 4.3 Admin lookup, audit, and revoke
-1. Operator opens the house `/admin` ledger (not in the public nav) and supplies `ADMIN_API_KEY` plus the license-service base URL. The key is sent as `X-Admin-Key` and kept in `sessionStorage` for the tab only.
+1. Operator opens the house `/admin` ledger (not in the public nav) and supplies `ADMIN_API_KEY` plus the license-service base URL. The key stays in `sessionStorage` for the tab and signs each request. It is not sent as a header.
 2. `GET /api/admin/licenses` (optional `owner`) and `GET /api/admin/licenses/{jti}` return persisted audit fields: owner, pet, provider, issued, last used, revoked, soft-deleted (`deletedAt`). Soft-deleted rows stay visible here with honest revoked copy.
 3. `POST /api/admin/revoke` `{ "jti" }` sets `revokedAt` + `deletedAt` in Postgres (soft-delete; no hard wipe), appends a `REVOKED` audit event, then writes the jti to the shared Redis deny-list (TTL ≥ remaining license life + 1h). Subsequent `LicenseService.validate()` and `/api/download` fail closed (same 401). A replica that has not seen the row still denies via Redis.
 
-All three routes are `permitAll` at the Spring Security layer; the controller rejects a missing or wrong key with 401. CORS is enabled only for `/api/admin/**` so the living desk can call a separate origin.
+All three routes are `permitAll` at the Spring Security layer. `AdminRequestSignatureFilter` requires `X-ComputerPets-Timestamp` and `X-ComputerPets-Signature` (HMAC-SHA256, `computerpets-admin-v1`, 300s skew, `ADMIN_API_KEY` or previous during rotation) and rejects a missing, skewed, or bad MAC with **401** `application/problem+json` before the controller runs ([ADR 0071](adr/0071-admin-request-signature.md)). A static `X-Admin-Key` is not enough. CORS is enabled only for `/api/admin/**` so the living desk can call a separate origin.
 
 ### Sequence Diagram – Happy Path End-to-End
 
@@ -563,7 +563,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 ### Security Considerations
 - **Good foundations**: AEAD encryption, short-lived tokens, claim binding, startup secret hygiene, no secrets in JWT bodies.
 - **Attack surface**: Public verify endpoints are the primary target. A compromised master key is catastrophic (full license forgery). CDN signature key compromise allows bundle theft for 15 min windows.
-- **Missing controls**: Real ownership verifiers, hardware binding, replay/revocation store, WAF in front of rate limiter. (Secret rotation / HSM story → [ADR 0065](adr/0065-secret-rotation-cadence-and-hsm.md). Input length/charset on provider verify fields → [ADR 0066](adr/0066-provider-verify-field-bounds.md). Trusted-proxy XFF → [ADR 0067](adr/0067-trusted-proxy-client-address.md). `/api/pets` discovery rate limit → [ADR 0068](adr/0068-discovery-rate-limit.md). Bundle catalog rate limit → [ADR 0069](adr/0069-bundle-catalog-rate-limit.md). Signed machine verify → [ADR 0070](adr/0070-machine-request-signature.md). Admin hooks remain a static `X-Admin-Key`.)
+- **Missing controls**: Real ownership verifiers, hardware binding, replay/revocation store, WAF in front of rate limiter. (Secret rotation / HSM story → [ADR 0065](adr/0065-secret-rotation-cadence-and-hsm.md). Input length/charset on provider verify fields → [ADR 0066](adr/0066-provider-verify-field-bounds.md). Trusted-proxy XFF → [ADR 0067](adr/0067-trusted-proxy-client-address.md). `/api/pets` discovery rate limit → [ADR 0068](adr/0068-discovery-rate-limit.md). Bundle catalog rate limit → [ADR 0069](adr/0069-bundle-catalog-rate-limit.md). Signed machine verify → [ADR 0070](adr/0070-machine-request-signature.md). Signed admin requests → [ADR 0071](adr/0071-admin-request-signature.md). A signed admin or machine request can still be replayed inside 300 seconds; there is no nonce store.)
 - **Client trust model**: The desktop app must be considered semi-trusted for license decryption (the Python client is expected to hold the same `LICENSE_SECRET_KEY`). The architecture comment "never trust the desktop client" refers to not letting the client *generate* licenses.
 
 ### Extensibility & Future Refactoring Areas
@@ -689,7 +689,7 @@ Goal: Deliver a complete, usable platform.
   - Solana, etc. (blocked until a live collection address exists)
 
 - **4.3 Admin & Operations Tools**
-  - [x] `POST /api/admin/revoke`, `GET /api/admin/licenses`, `GET /api/admin/licenses/{jti}` — same `X-Admin-Key` / `ADMIN_API_KEY` gate
+  - [x] `POST /api/admin/revoke`, `GET /api/admin/licenses`, `GET /api/admin/licenses/{jti}` — admin request HMAC (`ADMIN_API_KEY`, 300s skew; ADR 0071)
   - [x] House `/admin` ledger in `web/` for jti/owner lookup, audit stamps, and revoke (not in the public nav)
 
 #### Phase 5: Long-term Architecture Evolution

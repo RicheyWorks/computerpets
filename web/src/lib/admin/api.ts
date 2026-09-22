@@ -1,3 +1,5 @@
+import { signAdminRequest, SIGNATURE_HEADER, TIMESTAMP_HEADER } from "@/lib/admin/sign";
+
 const KEY_STORAGE = "cp.admin.key";
 const BASE_STORAGE = "cp.admin.apiBase";
 
@@ -48,11 +50,10 @@ export function defaultApiBase(): string {
   return "http://localhost:8081";
 }
 
-function headers(adminKey: string): HeadersInit {
-  return {
-    "X-Admin-Key": adminKey,
-    "Content-Type": "application/json",
-  };
+function splitTarget(path: string): { path: string; query: string } {
+  const q = path.indexOf("?");
+  if (q < 0) return { path, query: "" };
+  return { path: path.slice(0, q), query: path.slice(q + 1) };
 }
 
 function resolve(apiBase: string, path: string): string {
@@ -62,25 +63,43 @@ function resolve(apiBase: string, path: string): string {
 
 async function readError(res: Response, fallback: string): Promise<string> {
   try {
-    const body = (await res.json()) as { error?: string; reason?: string };
-    return body.error || body.reason || fallback;
+    const body = (await res.json()) as { error?: string; reason?: string; detail?: string };
+    return body.detail || body.error || body.reason || fallback;
   } catch {
     return fallback;
   }
 }
 
 async function adminFetch(apiBase: string, adminKey: string, path: string, init?: RequestInit): Promise<Response> {
+  if (init?.body != null && typeof init.body !== "string") {
+    throw new AdminApiError(0, "Admin request body must be the exact string that was signed.");
+  }
+  const method = (init?.method ?? "GET").toUpperCase();
+  const target = splitTarget(path);
+  const body = typeof init?.body === "string" ? init.body : "";
+  const signed = await signAdminRequest({
+    key: adminKey,
+    method,
+    path: target.path,
+    query: target.query,
+    body,
+  });
   let res: Response;
   try {
     res = await fetch(resolve(apiBase, path), {
       ...init,
-      headers: { ...headers(adminKey), ...(init?.headers ?? {}) },
+      headers: {
+        "Content-Type": "application/json",
+        [TIMESTAMP_HEADER]: signed.timestamp,
+        [SIGNATURE_HEADER]: signed.signature,
+        ...(init?.headers ?? {}),
+      },
     });
   } catch {
     throw new AdminApiError(0, "Cannot reach the license service. Check the API URL.");
   }
   if (res.status === 401) {
-    throw new AdminApiError(401, "Admin key rejected.");
+    throw new AdminApiError(401, await readError(res, "Admin signature rejected."));
   }
   return res;
 }

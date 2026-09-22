@@ -70,7 +70,7 @@ and [ADR 0056](adr/0056-house-secrets-from-file-mounts.md).
 | `LICENSE_SECRET_KEY`    | 32 bytes   | Master AES-256-GCM key for encrypting licenses. Also the HMAC key for `POST /api/verify` machine signatures ([ADR 0070](adr/0070-machine-request-signature.md)). |
 | `JWT_SECRET_KEY`        | 48+ bytes  | Signing key for short-lived JWT tokens       |
 | `BUNDLE_SIGNING_KEY`    | 48+ bytes  | HMAC key for signing temporary download URLs |
-| `ADMIN_API_KEY`         | 32+ bytes  | Pre-shared key for `/api/admin/*` and the house `/admin` ledger (`X-Admin-Key`) |
+| `ADMIN_API_KEY`         | 32+ bytes  | HMAC key for `/api/admin/**` and the house `/admin` ledger (not a header; [ADR 0071](adr/0071-admin-request-signature.md)) |
 
 Each of those names also accepts a `NAME_FILE` path (Docker secrets,
 Kubernetes projected volumes, Vault agent templates). A non-blank env
@@ -136,7 +136,7 @@ Injection and fail-closed prod attestation are done ([ADR 0056](adr/0056-house-s
 |-----|-------------------|--------------|-------------------------|
 | `JWT_SECRET_KEY` | ~90 days | `JWT_SECRET_KEY_PREVIOUS` | ≥ JWT TTL (30m) + skew |
 | `BUNDLE_SIGNING_KEY` | ~90 days | `BUNDLE_SIGNING_KEY_PREVIOUS` | ≥ 15m download TTL + skew |
-| `ADMIN_API_KEY` | ~90 days | `ADMIN_API_KEY_PREVIOUS` | Operator cutover |
+| `ADMIN_API_KEY` | ~90 days | `ADMIN_API_KEY_PREVIOUS` | Operator cutover (HMAC verify, [ADR 0071](adr/0071-admin-request-signature.md)) |
 | `LICENSE_SECRET_KEY` | ~180 days | `LICENSE_SECRET_KEY_PREVIOUS` | Until old sealed licenses expire or keepers re-verify (up to ~365d) |
 
 **Roll without downtime**
@@ -221,7 +221,30 @@ java -jar target\enterprise-pet-backend-1.0.0-SNAPSHOT.jar
 
 The backend will start on **http://localhost:8081** by default. The desk keeps 8080. They do not share a door.
 
-The living desk ledger is `/admin` (not in the house nav). Point it at this origin and paste `ADMIN_API_KEY` — the page sends `X-Admin-Key` on every lookup and revoke.
+The living desk ledger is `/admin` (not in the house nav). Point it at this origin and paste `ADMIN_API_KEY`. The page keeps the key in the tab and signs every lookup and revoke. It does not send the key.
+
+Operator curl uses the same MAC. Canonical UTF-8 text is `computerpets-admin-v1`, the uppercase method, the path, the raw query or an empty line, the unix timestamp, and the lowercase hex SHA-256 of the raw body. Signature is HMAC-SHA256 with `ADMIN_API_KEY` (UTF-8), Base64 URL, no padding. Headers are `X-ComputerPets-Timestamp` and `X-ComputerPets-Signature`. A static `X-Admin-Key` is refused (**401** `application/problem+json`). Skew is 300 seconds. `ADMIN_API_KEY_PREVIOUS` still verifies during rotation.
+
+```bash
+TS=$(date +%s)
+BODY='{"jti":"YOUR-JTI"}'
+SIG=$(TS="$TS" BODY="$BODY" python3 -c '
+import hashlib, hmac, os, base64
+key = os.environ["ADMIN_API_KEY"].encode()
+body = os.environ["BODY"].encode()
+ts = os.environ["TS"]
+digest = hashlib.sha256(body).hexdigest()
+msg = "\n".join(["computerpets-admin-v1", "POST", "/api/admin/revoke", "", ts, digest]).encode()
+print(base64.urlsafe_b64encode(hmac.new(key, msg, hashlib.sha256).digest()).decode().rstrip("="))
+')
+curl -sS -X POST "http://localhost:8081/api/admin/revoke" \
+  -H "Content-Type: application/json" \
+  -H "X-ComputerPets-Timestamp: $TS" \
+  -H "X-ComputerPets-Signature: $SIG" \
+  --data-binary "$BODY"
+```
+
+A list with no query signs an empty body and an empty query line (`GET`, path `/api/admin/licenses`). When `owner` is set, the query line is the raw query (`owner=` plus the encoding you actually send), not a decoded value.
 
 Rate limits are Redis-backed (10/min on `/api/verify/`, 30/min on `/api/download/`, 60/min on `/api/pets` discovery — list/detail share one bucket — and 60/min on `GET /api/bundles/{petKey}` catalog reads, per client IP; [ADR 0068](adr/0068-discovery-rate-limit.md), [ADR 0069](adr/0069-bundle-catalog-rate-limit.md)). Signed `GET /api/bundles/{pet}/redeem` is not on the catalog bucket. The same Redis holds the jti deny-list: revoke soft-deletes in Postgres (`revokedAt` + `deletedAt`; ADR 0058) first, then writes `revoked:jti:{jti}` so every replica rejects immediately. Append-only `license_audit_events` records ISSUED / REVOKED / DOWNLOAD without secret values. It also holds one-time download grants (`download:grant:{jti}:{exp}`) issued by `POST /api/download` and redeemed at `GET /api/bundles/{pet}/redeem` (ADR 0055). `docker compose up` starts Redis and points the app at it (`REDIS_HOST=redis`). A local Maven run expects Redis on `localhost:6379`. If Redis is down, verify/download/pets/bundle-catalog reads return **503** with `Retry-After` and `application/problem+json` — the rate limit is not lifted. Download issue and redeem also fail closed when the grant store is down. `LicenseService.validate` itself falls back to the Postgres ledger (it will not accept a revoked or soft-deleted license). For a single-process local run without Redis:
 
@@ -295,7 +318,7 @@ The Electron overlay is still `cd desktop && npm start`.
 | `LICENSE_SECRET_KEY`      | Yes      | —       | AES-256 master encryption key (base64) |
 | `JWT_SECRET_KEY`          | Yes      | —       | JWT signing key (base64) |
 | `BUNDLE_SIGNING_KEY`      | Yes      | —       | CDN URL signing key (base64) |
-| `ADMIN_API_KEY`           | Yes      | —       | Admin API + `/admin` ledger (`X-Admin-Key` header) |
+| `ADMIN_API_KEY`           | Yes      | —       | Admin HMAC key for `/api/admin/**` and the `/admin` ledger (ADR 0071) |
 | `MICROSOFT_DEV_MODE`      | No       | false   | Bypasses real Microsoft verification (development only). House door still applies. |
 | `MICROSOFT_PRODUCT_ID`    | No       | empty   | House Microsoft Store product id / comma allowlist. Empty fails closed (do not invent one) |
 | `STEAM_API_KEY`           | No       | placeholder | Steam Web API key; placeholder or blank fails closed |

@@ -11,11 +11,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,6 +34,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class DownloadControllerIntegrationTest {
+
+    @LocalServerPort
+    private int port;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -223,9 +232,8 @@ class DownloadControllerIntegrationTest {
         var enc = licenseService.issueLicense(validOwner, validPet, validProvider, 1, null);
         var issuedJwt = jwtService.issue(validOwner, validPet, validProvider);
 
-        // First, revoke via admin (requires X-Admin-Key)
+        // Revoke via admin. TestRestTemplate signs with admin.api-key (ADR 0071).
         HttpHeaders adminHeaders = new HttpHeaders();
-        adminHeaders.set("X-Admin-Key", adminKey);
         adminHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Map<String, String>> revokeReq = new HttpEntity<>(
             Map.of("jti", extractJtiFromLicense(enc)), adminHeaders);
@@ -329,36 +337,40 @@ class DownloadControllerIntegrationTest {
     // --- Admin direct edge cases (beyond the revoke-inside-download test) ---
 
     @Test
-    @DisplayName("POST /api/admin/revoke returns 401 when X-Admin-Key header is missing")
-    void admin_revoke_missingKey() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Map<String, String>> req = new HttpEntity<>(Map.of("jti", "anything"), headers);
+    @DisplayName("POST /api/admin/revoke returns 401 when the admin MAC is missing, even with X-Admin-Key")
+    void admin_revoke_staticKeyIsNotEnough() throws Exception {
+        HttpRequest req = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + "/api/admin/revoke"))
+                .header("Content-Type", "application/json")
+                .header("X-Admin-Key", adminKey)
+                .POST(HttpRequest.BodyPublishers.ofString("{\"jti\":\"anything\"}"))
+                .build();
+        HttpResponse<String> resp = HttpClient.newHttpClient().send(req, HttpResponse.BodyHandlers.ofString());
 
-        ResponseEntity<Map> resp = restTemplate.postForEntity("/api/admin/revoke", req, Map.class);
-
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-        assertThat(String.valueOf(resp.getBody().get("error"))).contains("invalid or missing admin key");
+        assertThat(resp.statusCode()).isEqualTo(401);
+        assertThat(resp.body()).contains("Admin signature required.");
+        assertThat(resp.headers().firstValue("content-type").orElse("")).contains("application/problem+json");
     }
 
     @Test
-    @DisplayName("POST /api/admin/revoke returns 401 when X-Admin-Key is wrong")
-    void admin_revoke_wrongKey() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Admin-Key", "wrong-key-123");
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Map<String, String>> req = new HttpEntity<>(Map.of("jti", "anything"), headers);
+    @DisplayName("POST /api/admin/revoke returns 401 when the admin MAC is wrong")
+    void admin_revoke_badMac() throws Exception {
+        String body = "{\"jti\":\"anything\"}";
+        HttpRequest req = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + "/api/admin/revoke"))
+                .header("Content-Type", "application/json")
+                .header("X-ComputerPets-Timestamp", Long.toString(Instant.now().getEpochSecond()))
+                .header("X-ComputerPets-Signature", "not-a-signature")
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .build();
+        HttpResponse<String> resp = HttpClient.newHttpClient().send(req, HttpResponse.BodyHandlers.ofString());
 
-        ResponseEntity<Map> resp = restTemplate.postForEntity("/api/admin/revoke", req, Map.class);
-
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(resp.statusCode()).isEqualTo(401);
+        assertThat(resp.body()).contains("Admin signature invalid.");
     }
 
     @Test
     @DisplayName("POST /api/admin/revoke returns 400 when jti is missing from body")
     void admin_revoke_missingJti() {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Admin-Key", adminKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Map<String, String>> req = new HttpEntity<>(Map.of(), headers); // no jti
 
@@ -372,7 +384,6 @@ class DownloadControllerIntegrationTest {
     @DisplayName("POST /api/admin/revoke returns 404 for nonexistent jti")
     void admin_revoke_nonexistentJti() {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Admin-Key", adminKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Map<String, String>> req = new HttpEntity<>(Map.of("jti", "does-not-exist-uuid"), headers);
 
@@ -389,7 +400,6 @@ class DownloadControllerIntegrationTest {
         String jti = extractJtiFromLicense(enc);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Admin-Key", adminKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         // First revoke
