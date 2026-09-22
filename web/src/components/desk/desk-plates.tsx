@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { readWeatherHere } from "@/lib/pets/presence";
 import {
   addArea,
   currentArea,
@@ -373,32 +374,23 @@ export function DeskWeatherPlate({
         setHereLine(WEATHER_CANT_REACH);
       }
     }
-    if (!navigator.geolocation) {
+    const fix = await readWeatherHere(typeof navigator === "undefined" ? undefined : navigator.geolocation);
+    if (!fix) {
       await fromIp();
       return;
     }
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const url = reverseUrl(pos.coords.latitude, pos.coords.longitude);
-        if (!url) {
-          keep({ id: "here", name: "This computer", query: "this computer", lat: pos.coords.latitude, lon: pos.coords.longitude });
-          return;
-        }
-        void fetch(url)
-          .then((r) => r.json())
-          .then((json) => {
-            const named = parseReverse(json);
-            keep(named || { id: "here", name: "This computer", query: "this computer", lat: pos.coords.latitude, lon: pos.coords.longitude });
-          })
-          .catch(() => {
-            void fromIp();
-          });
-      },
-      () => {
-        void fromIp();
-      },
-      { maximumAge: 600_000 },
-    );
+    const url = reverseUrl(fix.lat, fix.lon);
+    if (!url) {
+      keep({ id: "here", name: "This computer", query: "this computer", lat: fix.lat, lon: fix.lon });
+      return;
+    }
+    try {
+      const json = await (await fetch(url)).json();
+      const named = parseReverse(json);
+      keep(named || { id: "here", name: "This computer", query: "this computer", lat: fix.lat, lon: fix.lon });
+    } catch {
+      await fromIp();
+    }
   }
 
   function add(hit: WeatherArea) {
