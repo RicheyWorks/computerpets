@@ -8,19 +8,22 @@ import org.springframework.stereotype.Component;
 import java.util.function.Supplier;
 
 /**
- * Business-level observations for verify and download.
+ * Business-level observations for verify, license issue, and download.
  *
  * <p>Micrometer's meter observation handler turns these into timers
- * ({@code enterprisepet.verify} / {@code enterprisepet.download}); the
- * OpenTelemetry tracing bridge turns the same observations into spans.
- * {@code enterprisepet.verify} is tagged with {@code provider} and
- * {@code outcome} so Prometheus can compute success rate and latency
- * per provider.
+ * ({@code enterprisepet.verify} / {@code enterprisepet.license.issue} /
+ * {@code enterprisepet.download}); the OpenTelemetry tracing bridge turns
+ * the same observations into spans. {@code enterprisepet.verify} is tagged
+ * with {@code provider} and {@code outcome} so Prometheus can compute
+ * success rate and latency per provider. {@code enterprisepet.license.issue}
+ * is tagged with {@code provider}, {@code pet}, and {@code outcome} for
+ * issuance rate after a verified grant.
  */
 @Component
 public class VerificationTelemetry {
 
     public static final String VERIFY = "enterprisepet.verify";
+    public static final String ISSUE = "enterprisepet.license.issue";
     public static final String DOWNLOAD = "enterprisepet.download";
     public static final String PROVIDER_CALL = "enterprisepet.provider.call";
 
@@ -36,6 +39,27 @@ public class VerificationTelemetry {
         try (Observation.Scope scope = observation.openScope()) {
             VerificationResult result = action.get();
             observation.lowCardinalityKeyValue("outcome", result.verified() ? "success" : "denied");
+            return result;
+        } catch (RuntimeException e) {
+            observation.lowCardinalityKeyValue("outcome", "error");
+            observation.error(e);
+            throw e;
+        } finally {
+            observation.stop();
+        }
+    }
+
+    /**
+     * License issuance after a verified grant. Count of {@code outcome=success}
+     * is the issuance rate; latency covers encrypt + persist.
+     */
+    public <T> T issue(String provider, String petKey, Supplier<T> action) {
+        Observation observation = Observation.start(ISSUE, observations);
+        observation.lowCardinalityKeyValue("provider", safe(provider));
+        observation.lowCardinalityKeyValue("pet", safe(petKey));
+        try (Observation.Scope scope = observation.openScope()) {
+            T result = action.get();
+            observation.lowCardinalityKeyValue("outcome", "success");
             return result;
         } catch (RuntimeException e) {
             observation.lowCardinalityKeyValue("outcome", "error");

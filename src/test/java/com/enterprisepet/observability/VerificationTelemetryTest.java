@@ -85,4 +85,41 @@ class VerificationTelemetryTest {
         assertThat(timer).isNotNull();
         assertThat(timer.count()).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("issue records success latency for provider and pet")
+    void issue_success_recordsTimer() {
+        String value = telemetry.issue("steam", "red_panda", () -> "license");
+
+        assertThat(value).isEqualTo("license");
+        Timer timer = meters.find(VerificationTelemetry.ISSUE)
+                .tag("provider", "steam")
+                .tag("pet", "red_panda")
+                .tag("outcome", "success")
+                .timer();
+        assertThat(timer).isNotNull();
+        assertThat(timer.count()).isEqualTo(1);
+        assertThat(timer.totalTime(java.util.concurrent.TimeUnit.NANOSECONDS)).isPositive();
+    }
+
+    @Test
+    @DisplayName("issue records error outcome when encrypt or persist throws")
+    void issue_error_recordsOutcomeAndRethrows() {
+        assertThatThrownBy(() -> telemetry.issue("itch", "cat", () -> {
+            throw new IllegalStateException("persist failed");
+        })).isInstanceOf(IllegalStateException.class);
+
+        Timer error = meters.find(VerificationTelemetry.ISSUE)
+                .tag("provider", "itch")
+                .tag("pet", "cat")
+                .tag("outcome", "error")
+                .timer();
+        assertThat(error).isNotNull();
+        assertThat(error.count()).isEqualTo(1);
+        assertThat(meters.find(VerificationTelemetry.ISSUE)
+                .tag("provider", "itch")
+                .tag("pet", "cat")
+                .tag("outcome", "success")
+                .timer()).isNull();
+    }
 }
