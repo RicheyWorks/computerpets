@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
@@ -37,9 +38,16 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.equal(A.geocodeUrl("   "), "");
   assert.equal(A.TYPE_A_CITY, "type a city");
   assert.equal(A.HERE_FAIL, "this computer did not share a place");
-  assert.match(A.ipPlaceUrl(), /ipwho\.is/);
+  assert.equal("ipPlaceUrl" in A, false);
+  assert.equal("parseIpPlace" in A, false);
+  assert.equal("IP_PLACE_HOST" in A, false);
+  assert.equal("ipPlaceUrl" in Overlay, false);
+  assert.equal("parseIpPlace" in Overlay, false);
+  const areasSrc = readFileSync(join(root, "src/lib/pets/weather-areas.ts"), "utf8");
+  const overlaySrc = readFileSync(join(root, "../desktop/renderer/weather-areas.js"), "utf8");
+  assert.doesNotMatch(areasSrc, /ipwho\.is|ip-api\.com|ipinfo\.io|ipapi\.co|ipPlaceUrl|parseIpPlace/);
+  assert.doesNotMatch(overlaySrc, /ipwho\.is|ip-api\.com|ipinfo\.io|ipapi\.co|ipPlaceUrl|parseIpPlace/);
   assert.match(A.reverseUrl(47.6, -122.3), /geocoding-api\.open-meteo\.com\/v1\/reverse/);
-  assert.equal(A.parseIpPlace({ success: true, city: "Seattle", region: "Washington", country: "United States", latitude: 47.6, longitude: -122.3 })?.name, "Seattle, Washington, United States");
   assert.equal(Overlay.TYPE_A_CITY, A.TYPE_A_CITY);
   assert.equal(A.mapLiveSky(61, 12, 4), "rain");
   assert.equal(A.mapLiveSky(0, 12, 32), "wind");
