@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-22 (Itch and Epic RestClient reads time out and deny. Resilience4j time limiter still open. Not DX12/Vulkan. Catalog 221.) |
+| **Last Updated** | 2026-09-22 (Shared ownership Resilience4j time limiter denies on wall exceed. RestClient still owns the 10s hop. Not DX12/Vulkan. Catalog 221.) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -165,7 +165,7 @@ The service runs as a Spring Boot executable JAR or the multi-stage `Dockerfile`
 - Critical secrets (`LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, `ADMIN_API_KEY`) loaded from environment variables with strict `@PostConstruct` startup validation that refuses to run on missing or placeholder values.
 - `ProductionProfileGuard` (`@Profile("prod")`) refuses Microsoft Store `dev-mode`, an in-memory rate-limit store, and an H2 JDBC URL even when environment variables try to override `application-prod.yml`.
 - `Dockerfile` + GitHub Actions GHCR publish + `deploy/k8s/` (Deployment/Service, in-cluster Postgres/Redis scaffolding, optional Ingress). Blue/green is two Deployments and a Service `color` selector — not a service mesh.
-- External dependencies (Alchemy, Microsoft Collections, Steam Web API, itch.io, Epic, future CDN) are called directly; Resilience4j circuit breakers wrap the providers.
+- External dependencies (Alchemy, Microsoft Collections, Steam Web API, itch.io, Epic, future CDN) are called directly; Resilience4j circuit breakers, retries, and a shared ownership time limiter wrap the store providers.
 - The living desk (`web/`) and Electron overlay (`desktop/`) talk to this backend.
 
 ### Recommended Production Topology
@@ -628,7 +628,7 @@ Goal: Significantly reduce blast radius and improve defense-in-depth.
 
 - **2.3 Resilience Patterns**
   - Add circuit breakers + retries (Resilience4j) around external provider calls (Steam, Microsoft, Web3)
-  - Implement proper timeouts and fallback behavior (in progress — overlay news, quote, and radio IPC reads time out at twelve seconds and return unread with an empty plate; a radio timeout does not call the next directory host. Weather forecast and geocode page wrappers time out the same way and flip unread / can't reach. Desk and overlay news, quote, and radio page wrappers time out the same way. Cloud talk and cloud voice page wrappers time out the same way and keep the house line or silence. Steam, Itch, and Epic RestClients time out at ten seconds and deny. Microsoft and NFT already time out. Resilience4j time limiters still open. Fallbacks deny. [0049](adr/0049-plate-ipc-times-out-and-denies.md). [0050](adr/0050-weather-page-times-out-and-denies.md). [0051](adr/0051-news-quote-radio-page-times-out-and-denies.md). [0052](adr/0052-cloud-talk-and-voice-page-times-out-and-denies.md). [0053](adr/0053-itch-and-epic-restclient-times-out-and-denies.md))
+  - Implement proper timeouts and fallback behavior (in progress — overlay news, quote, and radio IPC reads time out at twelve seconds and return unread with an empty plate; a radio timeout does not call the next directory host. Weather forecast and geocode page wrappers time out the same way and flip unread / can't reach. Desk and overlay news, quote, and radio page wrappers time out the same way. Cloud talk and cloud voice page wrappers time out the same way and keep the house line or silence. Steam, Itch, and Epic RestClients time out at ten seconds and deny. Microsoft and NFT already time out. Shared Resilience4j ownership time limiter (`ownership`, twelve-second wall) wraps Steam / Itch / Epic / Microsoft; exceed denies. RestClient still owns the per-HTTP ten-second hop. Fallbacks deny. [0049](adr/0049-plate-ipc-times-out-and-denies.md). [0050](adr/0050-weather-page-times-out-and-denies.md). [0051](adr/0051-news-quote-radio-page-times-out-and-denies.md). [0052](adr/0052-cloud-talk-and-voice-page-times-out-and-denies.md). [0053](adr/0053-itch-and-epic-restclient-times-out-and-denies.md). [0054](adr/0054-ownership-time-limiter-denies-on-wall.md))
 
 - **2.4 Secret Management**
   - Move away from raw environment variables for production
