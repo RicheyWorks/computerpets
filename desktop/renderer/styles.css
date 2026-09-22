@@ -163,6 +163,19 @@ select {
   pointer-events: auto;
 }
 
+#weather-here-ask {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+}
+
+#weather-here-ask .keeper-truth {
+  flex-basis: 100%;
+  margin-top: 0;
+}
+
 .desk-plate > button,
 .desk-plate-toggle {
   display: flex;
