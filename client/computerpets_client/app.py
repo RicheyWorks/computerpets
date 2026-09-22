@@ -7,10 +7,11 @@ import os
 import random
 import sys
 import threading
+import time
 from typing import Any
 
-from PyQt6.QtCore import QObject, QRectF, Qt, QTimer, pyqtSignal
-from PyQt6.QtGui import QColor, QFont, QPainter
+from PyQt6.QtCore import QLineF, QObject, QRectF, Qt, QTimer, pyqtSignal
+from PyQt6.QtGui import QColor, QFont, QPainter, QPen
 from PyQt6.QtWidgets import (
     QApplication,
     QComboBox,
@@ -29,7 +30,7 @@ from PyQt6.QtWidgets import (
 from .blotter import DayWash, DeskBackground, WeatherLayer, attach_gpu_viewport
 from .choice import guest_marks, guest_pick, guest_tap, walking_cmd
 from .gift import gift_line, leave_gift, pick_gift
-from .gpu import gpu_line, initial_sample, ink, read_local
+from .gpu import SPARK_H, SPARK_W, gpu_line, initial_sample, ink, read_local, remember, sparkline
 from .guide import plaque_for
 from .hive import colony_of, colony_word, is_hive_place
 from .hours import (
@@ -111,6 +112,36 @@ class BlotterView(QGraphicsView):
 
 class _GpuBridge(QObject):
     arrived = pyqtSignal(object)
+
+
+class GpuSpark(QWidget):
+    """History strip. Empty until two fresh utilization samples exist."""
+
+    def __init__(self, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        self.setObjectName("gpuSpark")
+        self.setFixedSize(SPARK_W, SPARK_H)
+        self._spark = sparkline([], initial_sample(), 0)
+
+    def set_spark(self, spark: dict) -> None:
+        self._spark = spark if isinstance(spark, dict) else sparkline([], None, 0)
+        self.update()
+
+    def paintEvent(self, event) -> None:
+        spark = self._spark or {}
+        coords = spark.get("coords") or []
+        if spark.get("empty") or spark.get("path") == "" or len(coords) < 2:
+            return
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        pen = QPen(QColor(spark.get("ink") or "#5c564e"))
+        pen.setWidthF(1.0)
+        pen.setCapStyle(Qt.PenCapStyle.RoundCap)
+        pen.setJoinStyle(Qt.PenJoinStyle.RoundJoin)
+        painter.setPen(pen)
+        for left, right in zip(coords, coords[1:]):
+            painter.drawLine(QLineF(left["x"], left["y"], right["x"], right["y"]))
+        painter.end()
 
 
 class DeskWindow(QMainWindow):
@@ -262,12 +293,20 @@ class DeskWindow(QMainWindow):
         layout.addWidget(self.vital_label)
         self.gpu_label = QLabel("GPU unread")
         self.gpu_label.setObjectName("gpuSense")
+        self.gpu_spark = GpuSpark()
+        self._gpu_history: list = []
         self._gpu_bridge = _GpuBridge(self)
         self._gpu_bridge.arrived.connect(self._apply_gpu)
         self._gpu_busy = False
         self._gpu_timer: QTimer | None = None
+        gpu_row = QWidget()
+        gpu_row_layout = QHBoxLayout(gpu_row)
+        gpu_row_layout.setContentsMargins(0, 0, 0, 0)
+        gpu_row_layout.setSpacing(8)
+        gpu_row_layout.addWidget(self.gpu_label, 1)
+        gpu_row_layout.addWidget(self.gpu_spark, 0, Qt.AlignmentFlag.AlignVCenter)
         self._apply_gpu(initial_sample())
-        layout.addWidget(self.gpu_label)
+        layout.addWidget(gpu_row)
         self.setCentralWidget(root)
 
         status = QStatusBar()
@@ -388,8 +427,12 @@ class DeskWindow(QMainWindow):
 
     def _apply_gpu(self, sample) -> None:
         self._gpu_busy = False
+        now = time.time() * 1000
+        self._gpu_history = remember(self._gpu_history, sample, now)
+        spark = sparkline(self._gpu_history, sample, now)
         self.gpu_label.setText(gpu_line(sample))
         self.gpu_label.setStyleSheet(f"color: {ink(sample)}; font-size: 11px;")
+        self.gpu_spark.set_spark(spark)
 
     def _refresh_vitals(self) -> None:
         s = self.care

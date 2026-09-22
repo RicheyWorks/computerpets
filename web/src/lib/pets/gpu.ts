@@ -1,4 +1,4 @@
-/** Desktop-local GPU sense. The browser has no sensor, so this page stays unread. */
+/** Desktop-local GPU sense. The browser has no sensor, so this page stays unread and the sparkline stays empty. */
 
 export const STALE_MS = 20000;
 export const LATER_DOOR = "mac-linux-gpu-sense";
@@ -208,8 +208,131 @@ export function gpuLine(sample: unknown) {
   return `GPU ${name} · ${fmtMeasure(clean.tempC, "°C")} · ${fmtMeasure(clean.utilPercent, "%")} · ${fmtMem(clean.memoryUsedBytes, clean.memoryTotalBytes)} · ${fmtMeasure(clean.powerWatts, " W")}`;
 }
 
+export const READ_INK = "#9a9288";
+export const UNREAD_INK = "#5c564e";
+export const SPARK_W = 72;
+export const SPARK_H = 14;
+export const SPARK_PAD = 1;
+export const SPARK_MAX = 24;
+
+export type GpuPoint = {
+  readAtMs: number;
+  tempC: number | null;
+  utilPercent: number | null;
+  memoryUsedBytes: number | null;
+  memoryTotalBytes: number | null;
+  powerWatts: number | null;
+};
+
+export type GpuSpark = {
+  empty: boolean;
+  ink: string;
+  history: GpuPoint[];
+  points: GpuPoint[];
+  path: string;
+  coords: { x: number; y: number }[];
+};
+
 export function gpuInk(sample: unknown) {
-  return parseSample(sample).status === "read" ? "#9a9288" : "#5c564e";
+  return parseSample(sample).status === "read" ? READ_INK : UNREAD_INK;
+}
+
+export function emptyHistory(): GpuPoint[] {
+  return [];
+}
+
+function fmtTenths(n: number) {
+  const tenths = Math.floor(n * 10 + 0.5);
+  const whole = Math.trunc(tenths / 10);
+  const frac = Math.abs(tenths % 10);
+  if (frac === 0) return String(whole);
+  return `${whole}.${frac}`;
+}
+
+function freshStamp(readAtMs: number, nowMs: number) {
+  if (typeof readAtMs !== "number" || !Number.isFinite(readAtMs)) return false;
+  if (typeof nowMs !== "number" || !Number.isFinite(nowMs)) return false;
+  const age = nowMs - readAtMs;
+  return age >= -5000 && age <= STALE_MS;
+}
+
+function pointFrom(sample: GpuSample): GpuPoint {
+  return {
+    readAtMs: sample.readAtMs as number,
+    tempC: sample.tempC,
+    utilPercent: sample.utilPercent,
+    memoryUsedBytes: sample.memoryUsedBytes,
+    memoryTotalBytes: sample.memoryTotalBytes,
+    powerWatts: sample.powerWatts,
+  };
+}
+
+function cleanPoint(row: unknown): GpuPoint | null {
+  if (!row || typeof row !== "object" || Array.isArray(row)) return null;
+  const raw = row as Record<string, unknown>;
+  const readAtMs = stamp(raw.readAtMs);
+  if (readAtMs == null) return null;
+  const temp = finiteIn(raw.tempC, -40, 125);
+  const util = finiteIn(raw.utilPercent, 0, 100);
+  let used = finiteIn(raw.memoryUsedBytes, 0, 2 ** 48);
+  let total = finiteIn(raw.memoryTotalBytes, 0, 2 ** 48);
+  const power = finiteIn(raw.powerWatts, 0, 2000);
+  if (used != null && total != null && used > total) {
+    used = null;
+    total = null;
+  }
+  const point: GpuPoint = {
+    readAtMs,
+    tempC: temp == null ? null : round1(temp),
+    utilPercent: util == null ? null : round1(util),
+    memoryUsedBytes: used == null ? null : roundInt(used),
+    memoryTotalBytes: total == null ? null : roundInt(total),
+    powerWatts: power == null ? null : round1(power),
+  };
+  if (!METRIC_KEYS.some((key) => point[key] != null)) return null;
+  return point;
+}
+
+function trimHistory(history: unknown, nowMs: number): GpuPoint[] {
+  if (typeof nowMs !== "number" || !Number.isFinite(nowMs)) return [];
+  const rows = Array.isArray(history) ? history : [];
+  const kept: GpuPoint[] = [];
+  rows.forEach((row) => {
+    const point = cleanPoint(row);
+    if (!point || !freshStamp(point.readAtMs, nowMs)) return;
+    kept.push(point);
+  });
+  kept.sort((a, b) => a.readAtMs - b.readAtMs);
+  return kept.length > SPARK_MAX ? kept.slice(kept.length - SPARK_MAX) : kept;
+}
+
+export function remember(history: unknown, sample: unknown, nowMs: number): GpuPoint[] {
+  const kept = trimHistory(history, nowMs);
+  const clean = present(sample, nowMs);
+  if (clean.status !== "read" || clean.readAtMs == null || !freshStamp(clean.readAtMs, nowMs)) return kept;
+  const next = kept.filter((point) => point.readAtMs !== clean.readAtMs);
+  next.push(pointFrom(clean));
+  next.sort((a, b) => a.readAtMs - b.readAtMs);
+  return next.length > SPARK_MAX ? next.slice(next.length - SPARK_MAX) : next;
+}
+
+function sparkCoord(i: number, n: number, util: number) {
+  const span = SPARK_W - SPARK_PAD * 2;
+  const x = round1(SPARK_PAD + (i * span) / (n - 1));
+  const y = round1(SPARK_PAD + ((100 - util) * (SPARK_H - SPARK_PAD * 2)) / 100);
+  return { x, y };
+}
+
+export function sparkline(history: unknown, sample: unknown, nowMs: number): GpuSpark {
+  const shown = present(sample, nowMs);
+  const fresh = shown.status === "read" ? trimHistory(history, nowMs) : [];
+  const utilPoints = fresh.filter((point) => typeof point.utilPercent === "number");
+  if (shown.status !== "read" || utilPoints.length < 2) {
+    return { empty: true, ink: UNREAD_INK, history: fresh, points: [], path: "", coords: [] };
+  }
+  const coords = utilPoints.map((point, i) => sparkCoord(i, utilPoints.length, point.utilPercent as number));
+  const path = coords.map((coord, i) => `${i === 0 ? "M" : " L"}${fmtTenths(coord.x)} ${fmtTenths(coord.y)}`).join("");
+  return { empty: false, ink: READ_INK, history: fresh, points: utilPoints, path, coords };
 }
 
 function metricToken(token: unknown): Token {
