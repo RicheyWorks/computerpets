@@ -60,7 +60,10 @@ mvn -v
 
 ### 3. Configure Required Environment Variables
 
-The backend requires four secrets to start. These must be set as environment variables.
+The backend requires four secrets to start. Local-dev may set them as
+environment variables or in a `.env` file (see `.env.example`). Production
+should prefer file mounts or External Secrets — [Secret management](#secret-management)
+and [ADR 0056](adr/0056-house-secrets-from-file-mounts.md).
 
 | Variable                | Length     | Purpose                                      |
 |-------------------------|------------|----------------------------------------------|
@@ -68,6 +71,10 @@ The backend requires four secrets to start. These must be set as environment var
 | `JWT_SECRET_KEY`        | 48+ bytes  | Signing key for short-lived JWT tokens       |
 | `BUNDLE_SIGNING_KEY`    | 48+ bytes  | HMAC key for signing temporary download URLs |
 | `ADMIN_API_KEY`         | 32+ bytes  | Pre-shared key for `/api/admin/*` and the house `/admin` ledger (`X-Admin-Key`) |
+
+Each of those names also accepts a `NAME_FILE` path (Docker secrets,
+Kubernetes projected volumes, Vault agent templates). A non-blank env
+value wins; a set but missing file path refuses to start.
 
 #### Generate Secrets (PowerShell - Windows)
 
@@ -93,7 +100,31 @@ export BUNDLE_SIGNING_KEY=$(openssl rand -base64 48)
 export ADMIN_API_KEY=$(openssl rand -base64 32)
 ```
 
-**Important**: The application will refuse to start if these variables are missing or contain obvious placeholder values.
+**Important**: The application will refuse to start if these variables are missing or contain obvious placeholder values. It will not invent a production secret. Secret values are never logged.
+
+### Secret management
+
+Phase 2.4 — three operator shapes, one deny-safe contract ([ADR 0056](adr/0056-house-secrets-from-file-mounts.md)):
+
+| Shape | How | When |
+|-------|-----|------|
+| **Local-dev** | Env vars or `.env` from `.env.example` | `mvn spring-boot:run`, plain `docker compose up` |
+| **Docker secrets** | Files under `./secrets/` + `docker-compose.secrets.yml` sets `NAME_FILE=/run/secrets/…` | Compose bring-up without putting keys in `environment:` |
+| **Kubernetes** | Opaque Secret `computerpets-secrets` via `envFrom`, filled by hand, External Secrets Operator (`deploy/k8s/external-secret.example.yaml`), or Vault Agent templates | Cluster / prod |
+
+**Precedence:** non-blank `NAME` wins over `NAME_FILE`. If `NAME_FILE` is set and the path is missing or unreadable, the process **refuses to start**. Optional storefront keys (`STEAM_API_KEY`, `ITCH_API_KEY`, `EPIC_*`, `ETHEREUM_RPC_URL`) may use the same `*_FILE` pattern; blank or placeholder still **fails closed** at verify (no invented entitlement).
+
+```bash
+# Docker secrets overlay (files gitignored — see secrets/README.md)
+mkdir -p secrets
+openssl rand -base64 32 > secrets/license_secret_key
+openssl rand -base64 48 > secrets/jwt_secret_key
+openssl rand -base64 48 > secrets/bundle_signing_key
+openssl rand -base64 32 > secrets/admin_api_key
+docker compose -f docker-compose.yml -f docker-compose.secrets.yml up --build
+```
+
+Keeper-local mind plugin keys (`mind.json` seal on the overlay, desk bridge) are not house production secrets — they stay on the keeper machine.
 
 ### 4. (Optional) Enable Microsoft Development Mode
 
@@ -277,6 +308,12 @@ Required Secret keys: `LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`,
 `BUNDLE_SIGNING_KEY`, `ADMIN_API_KEY`, plus Postgres username/password.
 Redis has no password setting in the app — only `REDIS_HOST` /
 `REDIS_PORT` on the ConfigMap.
+
+Prefer External Secrets Operator or Vault Agent to fill
+`computerpets-secrets` rather than committing values into `secret.yaml`.
+Example CR: `deploy/k8s/external-secret.example.yaml` (not in
+kustomization). File mounts + `NAME_FILE` are also supported — see
+[Secret management](#secret-management).
 
 Blue/green is two Deployments (`computerpets-blue` live,
 `computerpets-green` at 0 replicas) and a Service selector

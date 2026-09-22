@@ -74,9 +74,9 @@ All critical items required before any public or limited production exposure hav
   - [x] Microsoft Store verify uses Collections v9 `publisherQuery`; prod still refuses dev-mode; live Store ID is still a publish-time config, not invented here.
 
 - **2.4 Secret Management**
-  - All critical secrets already use the same strict fail-hard placeholder pattern (LICENSE_SECRET_KEY, JWT_*, BUNDLE_*, new ADMIN_API_KEY)
-  - docker-compose and application.yml updated for the admin key
-  - Recommended production path: Vault / Kubernetes External Secrets / Docker secrets (documented in SETUP)
+  - [x] All critical secrets use the same strict fail-hard placeholder pattern (`LICENSE_SECRET_KEY`, `JWT_*`, `BUNDLE_*`, `ADMIN_API_KEY`)
+  - [x] docker-compose and application.yml carry the admin key
+  - [x] Production path: Docker `*_FILE` mounts + Kubernetes External Secrets / Vault agent templates into the existing Opaque Secret (ADR 0056, `SecretFileEnvironmentPostProcessor`, `docker-compose.secrets.yml`, `deploy/k8s/external-secret.example.yaml`). Local-dev keeps env / `.env.example`. Deny-safe: missing file → refuse start; missing optional storefront key → refuse the feature; never invent a production secret; never log secret values. Not a hosted Vault deploy.
 
 - **Admin Tooling (new)**
   - [x] `POST /api/admin/revoke` — revokes any license by jti using the existing persistence layer. Protected by `X-Admin-Key` header.
@@ -613,6 +613,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-09-22 (Phase 2.3: Shared ownership Resilience4j time limiter denies on wall exceed. RestClient still owns the 10s hop. DX12/Vulkan was not started. Catalog 221.)
+**Last Updated:** 2026-09-22 (Phase 2.4: House secrets from env, `*_FILE` mounts, or External Secrets / Vault agent templates. Deny-safe. DX12/Vulkan was not started. Catalog 221.)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

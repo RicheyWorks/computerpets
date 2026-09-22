@@ -9,10 +9,26 @@ the jti deny-list, fail-hard secrets, and the Actuator probes already in
 kubectl apply -k deploy/k8s
 ```
 
-Fill `secret.yaml` **before** apply. Empty or placeholder keys will not
+Fill `secret.yaml` **before** apply, or replace it with External Secrets /
+Vault Agent so real values never sit in git. Empty or placeholder keys will not
 boot — `LicenseService`, `JwtService`, `PetBundleService`, and
 `AdminController` refuse to start, and `ProductionProfileGuard` refuses
 H2, `RATE_LIMIT_BACKEND=memory`, and `MICROSOFT_DEV_MODE=true`.
+
+## Secret management (Phase 2.4)
+
+Three shapes; same deny-safe contract ([ADR 0056](../../docs/adr/0056-house-secrets-from-file-mounts.md)):
+
+| Shape | Mechanism |
+|-------|-----------|
+| **Opaque Secret + envFrom** (default manifests) | Edit `secret.yaml` or let External Secrets sync into `computerpets-secrets` |
+| **External Secrets Operator** | Example CR: `external-secret.example.yaml` (**not** in kustomization). Point `secretStoreRef` at your Vault / AWS / GCP / Azure store. |
+| **File mounts + `NAME_FILE`** | Project Secret keys as files; set `LICENSE_SECRET_KEY_FILE=/var/run/secrets/…` (and the same for JWT / BUNDLE / ADMIN). `SecretFileEnvironmentPostProcessor` loads them. Missing path → refuse start. |
+
+Optional storefront keys may use `STEAM_API_KEY_FILE` / `ITCH_API_KEY_FILE` / `EPIC_*_FILE` / `ETHEREUM_RPC_URL_FILE`. Blank still fails closed at verify.
+
+Never invent production secret values in manifests. Never log secret values.
+Local-dev keeps env / `.env.example` and plain `docker-compose.yml`.
 
 ## What gets created
 
