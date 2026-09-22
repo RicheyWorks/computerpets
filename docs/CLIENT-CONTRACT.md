@@ -31,10 +31,12 @@ Discovery endpoints (`/api/verify/**`, `/api/pets/**`, `/api/bundles/**`) are un
 `POST /api/download/**` requires `Authorization: Bearer <jwt>`.
 
 Rate limits (per client IP, Redis-backed, shared across app instances):
-**10/min** on `/api/verify/`, **30/min** on `/api/download/`. Exceeding
-them returns **429** with `Retry-After` and `application/problem+json`.
-If Redis is unreachable the server fail-closes with **503** (same media
-type and `Retry-After`) instead of lifting the limit. Client IP uses
+**10/min** on `/api/verify/`, **30/min** on `/api/download/`, **60/min**
+on `/api/pets` (list, by-rarity, and detail share one discovery bucket).
+Exceeding them returns **429** with `Retry-After` and
+`application/problem+json`. If Redis is unreachable the server fail-closes
+with **503** (same media type and `Retry-After`) instead of lifting the
+limit ([ADR 0068](adr/0068-discovery-rate-limit.md)). Client IP uses
 `remoteAddr` unless the peer matches `trusted-proxies.cidrs`, in which
 case the first `X-Forwarded-For` hop (else RFC 7239 `Forwarded` `for=`)
 is used ([ADR 0067](adr/0067-trusted-proxy-client-address.md)).

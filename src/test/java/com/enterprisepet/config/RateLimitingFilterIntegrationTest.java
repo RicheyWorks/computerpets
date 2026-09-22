@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * HTTP contract for the in-memory store used by other @SpringBootTest classes:
- * 10/min verify, 429 + Retry-After + application/problem+json.
+ * 10/min verify, 60/min discovery, 429 + Retry-After + application/problem+json.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
@@ -60,5 +60,27 @@ class RateLimitingFilterIntegrationTest {
         assertThat(limited.getBody().get("title")).isEqualTo("Too Many Requests");
         assertThat((String) limited.getBody().get("detail")).contains("Rate limit exceeded for verify");
         assertThat(limited.getBody().get("retryAfterSeconds")).isInstanceOf(Number.class);
+    }
+
+    @Test
+    @DisplayName("61st /api/pets request in a minute is 429 with discovery detail")
+    void sixtyFirstDiscovery_is429() {
+        ResponseEntity<String> lastAllowed = null;
+        for (int i = 0; i < 60; i++) {
+            lastAllowed = restTemplate.getForEntity("/api/pets", String.class);
+            assertThat(lastAllowed.getStatusCode())
+                .as("discovery request %d should be allowed", i + 1)
+                .isEqualTo(HttpStatus.OK);
+        }
+        assertThat(lastAllowed.getHeaders().getFirst("X-RateLimit-Remaining")).isEqualTo("0");
+
+        ResponseEntity<Map> limited = restTemplate.getForEntity("/api/pets/by-rarity", Map.class);
+        assertThat(limited.getStatusCode()).isEqualTo(HttpStatus.TOO_MANY_REQUESTS);
+        assertThat(limited.getHeaders().getFirst(HttpHeaders.RETRY_AFTER)).isNotBlank();
+        assertThat(limited.getHeaders().getContentType()).isNotNull();
+        assertThat(limited.getHeaders().getContentType().isCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON)).isTrue();
+        assertThat(limited.getBody()).isNotNull();
+        assertThat(limited.getBody().get("status")).isEqualTo(429);
+        assertThat((String) limited.getBody().get("detail")).contains("Rate limit exceeded for discovery");
     }
 }

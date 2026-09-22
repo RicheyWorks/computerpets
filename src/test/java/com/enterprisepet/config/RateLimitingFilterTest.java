@@ -30,9 +30,52 @@ class RateLimitingFilterTest {
         MockHttpServletResponse res = new MockHttpServletResponse();
         FilterChain chain = new MockFilterChain();
 
-        filter.doFilter(new MockHttpServletRequest("GET", "/api/pets"), res, chain);
+        filter.doFilter(new MockHttpServletRequest("GET", "/api/public/heartbeat"), res, chain);
 
         assertThat(res.getStatus()).isEqualTo(200);
+    }
+
+    @Test
+    @DisplayName("discovery /api/pets consumes the discovery bucket")
+    void discoveryPets_usesDiscoveryBucket() throws Exception {
+        AtomicInteger seen = new AtomicInteger();
+        RateLimitingFilter filter = new RateLimitingFilter((key, cap, period) -> {
+            assertThat(key).endsWith("|discovery");
+            assertThat(cap).isEqualTo(60L);
+            seen.incrementAndGet();
+            return RateLimitBackend.Probe.allowed(59);
+        }, properties, trustNone);
+        MockHttpServletResponse res = new MockHttpServletResponse();
+
+        filter.doFilter(new MockHttpServletRequest("GET", "/api/pets"), res,
+            (request, response) -> {});
+        filter.doFilter(new MockHttpServletRequest("GET", "/api/pets/by-rarity"), res,
+            (request, response) -> {});
+        filter.doFilter(new MockHttpServletRequest("GET", "/api/pets/red_panda"), res,
+            (request, response) -> {});
+
+        assertThat(seen.get()).isEqualTo(3);
+        assertThat(res.getHeader("X-RateLimit-Remaining")).isEqualTo("59");
+    }
+
+    @Test
+    @DisplayName("exhausted discovery bucket returns 429 problem+json")
+    void discoveryDeny_returns429() throws Exception {
+        AtomicInteger chainCalls = new AtomicInteger();
+        RateLimitingFilter filter = new RateLimitingFilter(
+            (key, cap, period) -> RateLimitBackend.Probe.denied(TimeUnit.SECONDS.toNanos(12)),
+            properties, trustNone);
+        MockHttpServletResponse res = new MockHttpServletResponse();
+
+        filter.doFilter(new MockHttpServletRequest("GET", "/api/pets"), res,
+            (request, response) -> chainCalls.incrementAndGet());
+
+        assertThat(chainCalls.get()).isZero();
+        assertThat(res.getStatus()).isEqualTo(429);
+        assertThat(res.getHeader(HttpHeaders.RETRY_AFTER)).isEqualTo("13");
+        assertThat(res.getContentAsString())
+            .contains("Rate limit exceeded for discovery")
+            .contains("\"status\":429");
     }
 
     @Test
