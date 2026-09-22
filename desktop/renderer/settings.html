@@ -37,9 +37,10 @@
       <hr />
       <h2>Unlock</h2>
       <p class="lead">Prove Steam ownership against the house backend. The desk pets still live here either way — this is the published license contract, not a second overlay.</p>
-      <p class="lead" id="licenseMark">Opening this window did not read the operating-system machine id. The first Unlock reads Linux machine-id, Windows MachineGuid, or the Mac platform UUID, hashes it, and stores that hash in hwid.txt. A hash already stored is reused, so an existing license stays bound. The raw id is not sent. The house receives only the hash, and only for unlock or a bound download. That hash is a device fingerprint. If that named read fails. This computer has no stable operating-system id. Unlock waits until you say yes before it hashes the computer name. If this computer has no name, that yes hashes a random id. A rename changes the computer-name hash. Deleting hwid.txt makes a random id a different mark.</p>
+      <p class="lead" id="licenseMark">Opening this window did not read the operating-system machine id. The first Unlock reads Linux machine-id, Windows MachineGuid, or the Mac platform UUID, hashes it, and stores that hash in hwid.txt. A hash already stored is reused, so an existing license stays bound. The raw id is not sent. The house receives only the hash, and only for unlock or a bound download. That hash is a device fingerprint. The line under Backend URL names the host before that hash leaves. A backend on this computer does not send it. If that named read fails. This computer has no stable operating-system id. Unlock waits until you say yes before it hashes the computer name. If this computer has no name, that yes hashes a random id. A rename changes the computer-name hash. Deleting hwid.txt makes a random id a different mark.</p>
       <label>Backend URL</label>
       <input id="backend" placeholder="http://127.0.0.1:8081" />
+      <p class="lead" id="licenseNet">this unlock stays on this computer. the license hash does not leave.</p>
       <label>Provider</label>
       <select id="provider"><option value="steam">Steam</option></select>
       <label>Steam ID</label>
@@ -57,6 +58,8 @@
       <p class="ok" id="licenseOk"></p>
       <p class="err" id="licenseErr"></p>
     </main>
+    <script src="weather-areas.js"></script>
+    <script src="license-net.js"></script>
     <script src="presence.js"></script>
     <script src="mind.js"></script>
     <script>
@@ -111,6 +114,60 @@
       const petType = document.getElementById("petType");
       const licenseOk = document.getElementById("licenseOk");
       const licenseErr = document.getElementById("licenseErr");
+      let licenseBackend = "";
+
+      function unlockTarget() {
+        return (backend.value || "").trim() || licenseBackend;
+      }
+
+      function downloadTarget() {
+        return (licenseBackend || "").trim() || (backend.value || "").trim();
+      }
+
+      function paintLicenseNet() {
+        const node = document.getElementById("licenseNet");
+        const Net = window.LicenseNet;
+        if (!node || !Net) return;
+        const parts = [];
+        const unlockUrl = unlockTarget();
+        parts.push(Net.licenseHonesty(unlockUrl) || Net.LOCAL_STAYS);
+        const stored = (licenseBackend || "").trim();
+        if (stored && Net.licenseHostName(stored) && Net.licenseHostName(stored) !== Net.licenseHostName(unlockUrl)) {
+          const extra = Net.licenseHonesty(stored) || Net.LOCAL_STAYS;
+          if (parts.indexOf(extra) === -1) parts.push(extra);
+        }
+        node.textContent = parts.join(" ");
+      }
+
+      function shownLicenseLine() {
+        const node = document.getElementById("licenseNet");
+        return node ? node.textContent || "" : "";
+      }
+
+      async function sendLicense(which, extra) {
+        paintLicenseNet();
+        const line = shownLicenseLine();
+        const url = which === "download" ? downloadTarget() : unlockTarget();
+        if (!window.LicenseNet || !window.LicenseNet.licenseMaySend(url, line)) {
+          licenseErr.textContent = "the license hash was not sent. name the host before it leaves.";
+          licenseOk.textContent = "Locked. Pets on the desk still work.";
+          return null;
+        }
+        if (which === "download") {
+          if (!window.desk?.licenseDownload) return null;
+          return window.desk.licenseDownload({
+            allowWeakFallback: !!(extra && extra.allowWeakFallback === true),
+            licenseLine: line,
+          });
+        }
+        if (!window.desk?.licenseUnlock) {
+          licenseErr.textContent = "Unlock is only available in the desktop app.";
+          return null;
+        }
+        licenseErr.textContent = "";
+        licenseOk.textContent = "Talking to the backend…";
+        return window.desk.licenseUnlock({ ...licenseFields(), ...(extra || {}), licenseLine: line });
+      }
 
       function fillPetTypes(rows) {
         (Array.isArray(rows) ? rows : []).forEach((row) => {
@@ -150,10 +207,10 @@
         const node = document.getElementById("licenseMark");
         if (!node || !mark) return;
         if (mark.read === "stored") {
-          node.textContent = "A license hash is already stored in hwid.txt. Unlock reuses it and does not read the operating-system id again. The raw id is not sent. That hash is still a device fingerprint.";
+          node.textContent = "A license hash is already stored in hwid.txt. Unlock reuses it and does not read the operating-system id again. The raw id is not sent. That hash is still a device fingerprint. The line under Backend URL names the host before that hash leaves. A backend on this computer does not send it.";
           return;
         }
-        node.textContent = "Opening this window did not read the operating-system machine id. The first Unlock reads Linux machine-id, Windows MachineGuid, or the Mac platform UUID, hashes it, and stores that hash in hwid.txt. A hash already stored is reused, so an existing license stays bound. The raw id is not sent. The house receives only the hash, and only for unlock or a bound download. That hash is a device fingerprint. If that named read fails. This computer has no stable operating-system id. Unlock waits until you say yes before it hashes the computer name. If this computer has no name, that yes hashes a random id. A rename changes the computer-name hash. Deleting hwid.txt makes a random id a different mark.";
+        node.textContent = "Opening this window did not read the operating-system machine id. The first Unlock reads Linux machine-id, Windows MachineGuid, or the Mac platform UUID, hashes it, and stores that hash in hwid.txt. A hash already stored is reused, so an existing license stays bound. The raw id is not sent. The house receives only the hash, and only for unlock or a bound download. That hash is a device fingerprint. The line under Backend URL names the host before that hash leaves. A backend on this computer does not send it. If that named read fails. This computer has no stable operating-system id. Unlock waits until you say yes before it hashes the computer name. If this computer has no name, that yes hashes a random id. A rename changes the computer-name hash. Deleting hwid.txt makes a random id a different mark.";
       }
 
       function showWeakYes(which) {
@@ -173,7 +230,9 @@
       function showLicense(status) {
         if (!status) return;
         paintMark(status);
+        if (typeof status.backendUrl === "string") licenseBackend = status.backendUrl;
         if (status.backendUrl && !backend.value) backend.value = status.backendUrl;
+        paintLicenseNet();
         if (status.fields) {
           if (status.fields.steamId) steamId.value = status.fields.steamId;
           if (status.fields.appId) appId.value = status.fields.appId;
@@ -207,15 +266,13 @@
         window.desk.licenseStatus().then(showLicense);
       }
 
+      backend.addEventListener("input", paintLicenseNet);
+      paintLicenseNet();
+
       document.getElementById("unlock").addEventListener("click", async () => {
-        if (!window.desk?.licenseUnlock) {
-          licenseErr.textContent = "Unlock is only available in the desktop app.";
-          return;
-        }
-        licenseErr.textContent = "";
-        licenseOk.textContent = "Talking to the backend…";
         hideWeakYes();
-        const status = await window.desk.licenseUnlock(licenseFields());
+        const status = await sendLicense("unlock");
+        if (!status) return;
         showLicense(status);
         if (status && status.ok === false && status.error && status.error.code === "hwid_needs_fallback_yes") {
           showWeakYes("unlock");
@@ -223,10 +280,10 @@
       });
 
       document.getElementById("redownload").addEventListener("click", async () => {
-        if (!window.desk?.licenseDownload) return;
         licenseErr.textContent = "";
         hideWeakYes();
-        const status = await window.desk.licenseDownload();
+        const status = await sendLicense("download");
+        if (!status) return;
         if (status.ok === false) {
           licenseErr.textContent = status.error ? status.error.message : "Download failed.";
           if (status.error && status.error.code === "hwid_needs_fallback_yes") showWeakYes("download");
@@ -245,9 +302,9 @@
         const which = document.getElementById("weakMark").dataset.which;
         hideWeakYes();
         if (which === "download") {
-          if (!window.desk?.licenseDownload) return;
           licenseErr.textContent = "";
-          const status = await window.desk.licenseDownload({ allowWeakFallback: true });
+          const status = await sendLicense("download", { allowWeakFallback: true });
+          if (!status) return;
           if (status.ok === false) {
             licenseErr.textContent = status.error ? status.error.message : "Download failed.";
             if (status.error && status.error.code === "hwid_needs_fallback_yes") showWeakYes("download");
@@ -256,10 +313,8 @@
           showLicense(await window.desk.licenseStatus());
           return;
         }
-        if (!window.desk?.licenseUnlock) return;
-        licenseErr.textContent = "";
-        licenseOk.textContent = "Talking to the backend…";
-        const status = await window.desk.licenseUnlock({ ...licenseFields(), allowWeakFallback: true });
+        const status = await sendLicense("unlock", { allowWeakFallback: true });
+        if (!status) return;
         showLicense(status);
         if (status && status.ok === false && status.error && status.error.code === "hwid_needs_fallback_yes") {
           showWeakYes("unlock");

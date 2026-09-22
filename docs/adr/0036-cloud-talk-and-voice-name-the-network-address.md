@@ -28,3 +28,4 @@ This slice shows the same network-address sentence, with the host named, before 
 - A station stream still waits for its own line. [0035](0035-station-stream-names-the-network-address.md). News, quotes, a later forecast, and a geocode look-up keep their gates.
 - Desk talk still does not post the plugin key. The overlay still calls the plugin directly.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.
+- Unlock and a bound download name their host before the license hash leaves. [0037](0037-license-hash-names-the-network-address.md).
