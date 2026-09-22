@@ -64,6 +64,7 @@ address, or an API that is not on `main`.
 | [0043](0043-forecast-and-geocode-wait-for-the-painted-line.md) | A forecast and a geocode look-up wait for the painted line | Accepted |
 | [0044](0044-station-stream-and-cloud-talk-wait-for-the-painted-line.md) | A station stream and cloud talk wait for the painted line | Accepted |
 | [0045](0045-license-requests-wait-for-the-painted-line.md) | License requests wait for the painted line | Accepted |
+| [0046](0046-house-fonts-stay-on-this-computer.md) | House fonts stay on this computer | Accepted |
 
 ## How to add one
 
