@@ -13,6 +13,7 @@ from .errors import LicenseError
 from .http_client import FetchImpl, create_license_client, normalize_backend_url
 from .hwid import assert_hwid, peek_hwid, resolve_hwid_detail
 from .license_net import get_signed_bundle, post_license_hash, post_unbound_download
+from .bundle_zip import already_current
 
 STORE_NAME = "license.json"
 DEFAULT_BACKEND = "http://127.0.0.1:8081"
@@ -183,7 +184,32 @@ def create_license_session(
 
         poster = post_license_hash if bound else post_unbound_download
         manifest = poster(shown, backend_url, post)
-        bundle = _read_bundle(manifest["downloadUrl"], cdn_line if isinstance(cdn_line, str) else "")
+        expect = _catalog_expect(manifest if isinstance(manifest, dict) else {}, store)
+        if already_current(expect):
+            bundle = {
+                "ok": True,
+                "status": 0,
+                "bytes": 0,
+                "held": False,
+                "update": "current",
+                "petKey": expect["petKey"],
+                "version": expect["version"],
+                "platform": expect["platform"],
+                "sha256": expect["sha256"],
+            }
+        elif expect.get("version") and not expect.get("sha256"):
+            bundle = {
+                "ok": False,
+                "status": 0,
+                "bytes": 0,
+                "held": False,
+                "update": "refuse",
+                "error": "bundle_sha256_missing",
+            }
+        else:
+            bundle = _read_bundle(
+                manifest["downloadUrl"], cdn_line if isinstance(cdn_line, str) else "", False, expect
+            )
 
         last_download = {
             "petKey": manifest.get("petKey") or payload["pet"],
@@ -191,15 +217,46 @@ def create_license_session(
             "expiresAt": manifest.get("expiresAt"),
             "jti": manifest.get("jti") or payload["jti"],
             "ttlSeconds": manifest.get("ttlSeconds"),
+            "version": manifest.get("version") if isinstance(manifest.get("version"), str) else None,
+            "platform": manifest.get("platform") if isinstance(manifest.get("platform"), str) else None,
+            "sha256": manifest.get("sha256") if isinstance(manifest.get("sha256"), str) else None,
+            "filename": manifest.get("filename") if isinstance(manifest.get("filename"), str) else None,
             "bundle": bundle,
         }
-        save({**store, "lastDownload": last_download})
+        next_store = {**store, "lastDownload": last_download}
+        if (
+            isinstance(bundle, dict)
+            and bundle.get("ok")
+            and bundle.get("update") in {"install", "replace", "current"}
+            and bundle.get("sha256")
+            and bundle.get("version")
+            and bundle.get("petKey")
+        ):
+            next_store["installedBundle"] = {
+                "petKey": bundle["petKey"],
+                "version": bundle["version"],
+                "platform": bundle.get("platform"),
+                "sha256": bundle["sha256"],
+            }
+        save(next_store)
         return last_download
 
-    def _read_bundle(download_url: str, shown: str, strict: bool = False) -> dict[str, Any]:
+    def _catalog_expect(manifest: dict[str, Any], store: dict[str, Any]) -> dict[str, Any]:
+        local = store.get("installedBundle") if isinstance(store.get("installedBundle"), dict) else None
+        return {
+            "petKey": manifest.get("petKey") if isinstance(manifest.get("petKey"), str) else None,
+            "version": manifest.get("version") if isinstance(manifest.get("version"), str) else None,
+            "platform": manifest.get("platform") if isinstance(manifest.get("platform"), str) else None,
+            "sha256": manifest.get("sha256") if isinstance(manifest.get("sha256"), str) else None,
+            "local": local,
+        }
+
+    def _read_bundle(
+        download_url: str, shown: str, strict: bool = False, expect: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         def fetch() -> dict[str, Any]:
             try:
-                bundle = client["fetch_bundle"](download_url)
+                bundle = client["fetch_bundle"](download_url, expect)
             except LicenseError as err:
                 return {"ok": False, "status": 0, "bytes": 0, "held": False, "error": str(err)}
             except Exception as err:
@@ -298,9 +355,25 @@ def create_license_session(
         if not download_url:
             raise LicenseError("signed_url_invalid", "downloadUrl missing")
         shown = _shown_cdn_line(input_fields)
-        bundle = _read_bundle(download_url, shown, True)
+        expect = _catalog_expect(last, store)
+        bundle = _read_bundle(download_url, shown, True, expect)
         next_download = {**last, "bundle": bundle}
-        save({**store, "lastDownload": next_download})
+        next_store = {**store, "lastDownload": next_download}
+        if (
+            isinstance(bundle, dict)
+            and bundle.get("ok")
+            and bundle.get("update") in {"install", "replace", "current"}
+            and bundle.get("sha256")
+            and bundle.get("version")
+            and bundle.get("petKey")
+        ):
+            next_store["installedBundle"] = {
+                "petKey": bundle["petKey"],
+                "version": bundle["version"],
+                "platform": bundle.get("platform"),
+                "sha256": bundle["sha256"],
+            }
+        save(next_store)
         return next_download
 
     def clear() -> dict[str, Any]:

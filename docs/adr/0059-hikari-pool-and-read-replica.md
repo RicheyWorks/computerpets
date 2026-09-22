@@ -27,4 +27,4 @@ This slice closes the pool + optional-replica gap without storefront work, witho
 
 - Local `mvn` / H2 tests stay on one pool; no replica required.
 - Misconfigured replica fails at startup with a clear `IllegalStateException`, not a late write error on a read-only endpoint.
-- Bundle zip contents, image signing, and Terraform remain the next non-storefront / non-DX12 maturity items.
+- Bundle zip contents and fail-closed update land in [0060](0060-bundle-zip-contents-and-update.md). Image signing and Terraform remain the next non-storefront / non-DX12 maturity items.

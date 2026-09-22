@@ -3,6 +3,7 @@
 const { LicenseError } = require("./errors.cjs");
 const { assertHwid } = require("./hwid.cjs");
 const { verifySignedDownloadUrl } = require("./signed-url.cjs");
+const { acceptBundleBytes } = require("./bundle-zip.cjs");
 
 const DEFAULT_TIMEOUT_MS = 12_000;
 
@@ -180,8 +181,10 @@ function createLicenseClient(opts = {}) {
   /**
    * GET the HMAC-signed CDN URL. Missing/failed CDN is reported, not invented.
    * The license hash is not a header, a body, or a query this client adds.
+   * When {@code expect} claims catalog version/sha256, zip digest + layout must
+   * pass or the result is refused (ok:false) — fail closed.
    */
-  async function fetchBundle(downloadUrl) {
+  async function fetchBundle(downloadUrl, expect) {
     if (typeof downloadUrl !== "string" || !downloadUrl) {
       throw new LicenseError("signed_url_invalid", "downloadUrl missing");
     }
@@ -190,7 +193,29 @@ function createLicenseClient(opts = {}) {
       return { ok: false, status: res.status, bytes: 0 };
     }
     const buf = Buffer.from(await res.arrayBuffer());
-    return { ok: true, status: res.status, bytes: buf.length };
+    const base = { ok: true, status: res.status, bytes: buf.length };
+    if (!expect || typeof expect !== "object") {
+      return base;
+    }
+    const decision = acceptBundleBytes(buf, expect);
+    if (!decision.accepted) {
+      return {
+        ok: false,
+        status: res.status,
+        bytes: buf.length,
+        update: decision.action,
+        error: decision.error,
+      };
+    }
+    return {
+      ...base,
+      update: decision.action,
+      petKey: decision.petKey,
+      version: decision.version,
+      platform: decision.platform,
+      sha256: decision.sha256,
+      memberCount: decision.memberCount,
+    };
   }
 
   return { verify, download, fetchBundle, normalizeBackendUrl };

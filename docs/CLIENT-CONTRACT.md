@@ -4,12 +4,13 @@
 
 This is the wire contract a native (or third-party) client implements against.
 It describes **what the backend already does**. It does not invent endpoints,
-bundle zip layouts, NFT collection addresses, or a hardware-fingerprint algorithm.
+NFT collection addresses, or a hardware-fingerprint algorithm. Bundle zip
+layout is §8 (`computerpets.bundle/v1`).
 
 | Field | Value |
 |-------|--------|
-| **Source of truth** | `LicenseService`, `JwtService`, `PetBundleService`, `VerifyController`, `DownloadController` |
-| **Last verified** | 2026-08-17 |
+| **Source of truth** | `LicenseService`, `JwtService`, `PetBundleService`, `BundleZipContract`, `VerifyController`, `DownloadController` |
+| **Last verified** | 2026-09-22 |
 
 ---
 
@@ -369,8 +370,9 @@ not the filename.
 can rebuild the exact MAC input.
 
 Default `bundle.base-url` is `https://cdn.enterprisepet.example/bundles`.
-The zip **contents** are not specified here — only the URL, signature,
-and optional catalog metadata.
+When `bundle.catalog` is empty the zip is an opaque object: URL + HMAC only,
+no integrity or version claim. When a catalog row is present, the zip must
+follow §8 (`computerpets.bundle/v1`) and the outer sha256 must match.
 
 The overlay and the blotter GET that URL only after the screen names the
 CDN host. The line says this computer's network address goes with the
@@ -421,7 +423,59 @@ If the grant store is down at issue time, `POST /api/download` returns
 
 ---
 
-## 8. Advertised care paths
+## 8. Bundle zip contents and update process
+
+Format id: **`computerpets.bundle/v1`**. Shared by `BundleZipContract`,
+`desktop/license/bundle-zip.cjs`, and `client/.../bundle_zip.py`.
+This is not a storefront and does not invent CDN objects.
+
+### Zip layout
+
+Root must contain `manifest.json`:
+
+```json
+{
+  "format": "computerpets.bundle/v1",
+  "petKey": "red_panda",
+  "version": "1.0.0",
+  "platform": "win",
+  "files": [
+    { "path": "sprites/sit/1.png", "sha256": "<64 lowercase hex>" }
+  ]
+}
+```
+
+| Rule | Detail |
+|------|--------|
+| Manifest fields | Exactly `format`, `petKey`, `version`, `platform`, `files`. Unknown fields refuse (no price / storefront keys). |
+| Members | Every non-manifest zip entry appears in `files[]` with matching member sha256. Undeclared members refuse. |
+| Paths | Relative only under `sprites/`, `cries/`, or `meta/`. No `..`, absolute paths, or `\`. |
+| Sprites | At least one `sprites/` member (house pose frames). |
+| Empty catalog | No version/sha256 on the download JSON → opaque fetch; layout is not claimed. |
+
+### Fail-closed accept
+
+After a successful signed CDN GET (or when skipping the GET because the
+install is already current):
+
+| Condition | Result |
+|-----------|--------|
+| No catalog `version` / `sha256` | `opaque` — bytes counted only; not a versioned install |
+| `version` without `sha256` | refuse `bundle_sha256_missing` (do not GET / do not keep) |
+| Zip digest ≠ catalog `sha256` | refuse `bundle_sha256_mismatch` |
+| Bad / missing URL HMAC | refuse `signed_url_invalid` (existing) |
+| Layout / member digest / pet / version / platform mismatch | refuse `bundle_zip_invalid` or `bundle_*_mismatch` |
+| Local `installedBundle` matches pet + version + sha256 | `current` — CDN GET may be skipped |
+| No local install, zip OK | `install` — record `installedBundle` |
+| Local differs, zip OK | `replace` — record `installedBundle` |
+
+`installedBundle` is local keeper state (`petKey`, `version`, `platform`,
+`sha256`). The backend does not store it. Zip **byte serving** stays on the
+CDN; redeem still authorizes.
+
+---
+
+## 9. Advertised care paths
 
 The posters name three paths. Care (hunger, rest, bond) stays on the keeper
 machine — the blotter, the living desk, and the overlay. Java does not apply it.
@@ -455,10 +509,9 @@ paths are not this contract.
 
 ---
 
-## 9. What this contract does not include
+## 10. What this contract does not include
 
-- An overlay protocol or asset pack layout (the PyQt blotter in `client/` and the Electron overlay in `desktop/` implement this handshake; they do not add endpoints)
-- Zip **contents** or an update protocol (`bundle.catalog` names version, platform, and sha256 when a row is configured; it does not describe what is inside the zip)
+- An overlay protocol beyond the handshake and the published bundle zip layout in §8 (the PyQt blotter in `client/` and the Electron overlay in `desktop/` implement this handshake; they do not add endpoints)
 - A live NFT collection address (`ethereum.collections` stays empty until one is deployed)
 - A prescribed HWID recipe (MAC, disk serial, …)
 - Zip byte serving from this backend (redeem authorizes; the CDN still holds the object)
