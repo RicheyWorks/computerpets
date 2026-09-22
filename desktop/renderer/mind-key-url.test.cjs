@@ -10,7 +10,7 @@ const SECRET = "gem-key/with?and=&equals";
 const PET_SECRET = "pet-gem-key?not=on-url";
 const MIND_SRC = fs.readFileSync(path.join(__dirname, "mind.js"), "utf8");
 
-function loadMind() {
+function loadMind(fetchImpl) {
   const calls = [];
   const window = {
     PetWeatherAreas: require("./weather-areas.js"),
@@ -26,8 +26,12 @@ function loadMind() {
     },
     URL,
     URLSearchParams,
+    AbortController,
+    setTimeout,
+    clearTimeout,
     fetch: async (url, init) => {
       calls.push({ url: String(url), init });
+      if (typeof fetchImpl === "function") return fetchImpl(url, init);
       return {
         ok: true,
         json: async () => ({
@@ -349,6 +353,9 @@ describe("overlay drops a pasted secret model before the direct call", () => {
       },
       URL,
       URLSearchParams,
+      AbortController,
+      setTimeout,
+      clearTimeout,
       fetch: async (url, init) => {
         calls.push({ url: String(url), init });
         return {
@@ -423,6 +430,63 @@ describe("overlay cloud talk names the host before the fetch", () => {
     assert.equal(calls.length, 1);
     assert.equal(new URL(calls[0].url).hostname, "api.x.ai");
     assert.equal(sent.source, "xai");
+  });
+
+  it("times out a silent talk host and keeps the house line", async () => {
+    assert.match(MIND_SRC, /TALK_TIMEOUT_MS/);
+    assert.match(MIND_SRC, /TalkTimeout/);
+    assert.match(MIND_SRC, /AbortController/);
+    const { window } = loadMind(() => new Promise(() => {}));
+    assert.equal(window.PetMind.TALK_TIMEOUT_MS, 12_000);
+    assert.equal(window.PetMind.TalkTimeout.name, "TalkTimeout");
+    const hang = window.PetMind.readTalk(
+      window.PetMind.talkHonesty({ plugin: "xai" }),
+      { plugin: "xai" },
+      () => new Promise(() => {}),
+      { text: "house", source: "local" },
+      30,
+    );
+    await assert.rejects(
+      () => hang,
+      (err) => err instanceof window.PetMind.TalkTimeout && err.name === "TalkTimeout",
+    );
+
+    let fulfilled = null;
+    const late = window.PetMind.readTalk(
+      window.PetMind.talkHonesty({ plugin: "xai" }),
+      { plugin: "xai" },
+      () =>
+        new Promise((resolve) => {
+          setTimeout(() => resolve({ text: "late", source: "xai" }), 80);
+        }),
+      { text: "house", source: "local" },
+      20,
+    ).then(
+      (body) => {
+        fulfilled = body;
+        return body;
+      },
+      (err) => {
+        fulfilled = err;
+        throw err;
+      },
+    );
+    await assert.rejects(() => late, (err) => err instanceof window.PetMind.TalkTimeout);
+    await new Promise((r) => setTimeout(r, 120));
+    assert.ok(fulfilled instanceof window.PetMind.TalkTimeout);
+    assert.equal(fulfilled.name, "TalkTimeout");
+
+    const loop = await window.PetMind.readTalk(
+      "",
+      { plugin: "ollama", baseUrl: "http://127.0.0.1:11434" },
+      async () => {
+        await new Promise((r) => setTimeout(r, 40));
+        return { text: "here", source: "ollama" };
+      },
+      { text: "house", source: "local" },
+      15,
+    );
+    assert.equal(loop.source, "ollama");
   });
 
   it("names a custom host and keeps the path off the line", () => {

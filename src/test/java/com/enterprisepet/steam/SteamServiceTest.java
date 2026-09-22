@@ -484,4 +484,10 @@ class SteamServiceTest {
         mockServer.verify();
     }
 
+    @Test
+    @DisplayName("Steam RestClient uses a ten-second connect and read deadline")
+    void steamTimeoutMatchesMicrosoft() {
+        assertThat(SteamService.STEAM_TIMEOUT).isEqualTo(java.time.Duration.ofSeconds(10));
+    }
+
 }

@@ -6,7 +6,7 @@ import { localMind, runMind } from "@/lib/ai/complete";
 import { speakWithPlugin } from "@/lib/ai/voice";
 import { bindTalkSpend } from "./talk-spend";
 import { parseTalkBody } from "./talk-post";
-import { readTalk, readVoice } from "./talk-net";
+import { isTalkTimeout, isVoiceTimeout, readTalk, readVoice } from "./talk-net";
 
 export type TalkResult = {
   text: string;
@@ -42,18 +42,30 @@ export const converseWithPet = createServerFn({ method: "POST" })
       hygiene: stats.hygiene,
       message: data.message,
     };
-    const reply = await readTalk(
-      data.talkLine,
-      spend.mind,
-      () => runMind(turn, spend.mind),
-      localMind(turn),
-    );
+    const house = localMind(turn);
+    let reply;
+    try {
+      reply = await readTalk(
+        data.talkLine,
+        spend.mind,
+        (signal) => runMind(turn, spend.mind, signal),
+        house,
+      );
+    } catch (err) {
+      if (!isTalkTimeout(err)) throw err;
+      reply = house;
+    }
 
-    const audio =
-      data.speak === false
-        ? undefined
-        : await readVoice(data.voiceLine, spend.voice, () =>
-            speakWithPlugin(reply.text, spend.voice, kind.voice, spend.voiceKey),
-          );
+    let audio: string | undefined;
+    if (data.speak !== false) {
+      try {
+        audio = await readVoice(data.voiceLine, spend.voice, (signal) =>
+          speakWithPlugin(reply.text, spend.voice, kind.voice, spend.voiceKey, signal),
+        );
+      } catch (err) {
+        if (!isVoiceTimeout(err)) throw err;
+        audio = undefined;
+      }
+    }
     return { text: reply.text, audio, source: reply.source };
   });
