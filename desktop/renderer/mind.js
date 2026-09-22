@@ -508,16 +508,78 @@
     return shown.indexOf(line) !== -1;
   }
 
+  /** Twelve seconds covers headers and the body. Matches weather, news, quote, and radio page wrappers. */
+  const TALK_TIMEOUT_MS = 12_000;
+
+  /** A silent talk host. Callers keep the house line. */
+  class TalkTimeout extends Error {
+    constructor() {
+      super("talk request timed out");
+      this.name = "TalkTimeout";
+    }
+  }
+
+  function isTalkTimeout(err) {
+    return !!(
+      err &&
+      (err.name === "TalkTimeout" ||
+        err.name === "AbortError" ||
+        err.name === "TimeoutError" ||
+        err.code === "ABORT_ERR")
+    );
+  }
+
+  /**
+   * One remote talk leave. The timer covers headers and the body.
+   * A timeout rejects with TalkTimeout. The caller does not get a body.
+   * A late body after the deadline is not parsed.
+   */
+  function readRemoteTalk(request, timeoutMs) {
+    if (typeof request !== "function") return Promise.reject(new TalkTimeout());
+    const ctrl = new AbortController();
+    let settled = false;
+    let timer;
+    return new Promise(function (resolve, reject) {
+      timer = setTimeout(function () {
+        if (settled) return;
+        settled = true;
+        ctrl.abort();
+        reject(new TalkTimeout());
+      }, timeoutMs);
+      Promise.resolve()
+        .then(function () {
+          return request(ctrl.signal);
+        })
+        .then(function (value) {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          resolve(value);
+        })
+        .catch(function (err) {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          if (isTalkTimeout(err)) reject(new TalkTimeout());
+          else reject(err);
+        });
+    });
+  }
+
   /**
    * The only cloud-talk request. A miss resolves to the local reply and does not call request.
-   * A loopback mind still calls request. That fetch stays on this computer.
-   * Overlay connect-src names the preset hosts. A custom host still uses the https: scheme. ADR 0048.
+   * A loopback mind still calls request with no remote deadline. That fetch stays on this computer.
+   * A remote hang rejects with TalkTimeout. Overlay connect-src names the preset hosts. ADR 0048.
    */
-  function readTalk(shown, bind, request, fallback) {
+  function readTalk(shown, bind, request, fallback, timeoutMs) {
     if (!talkMayLeave(bind, shown)) return Promise.resolve(fallback);
-    return Promise.resolve().then(function () {
-      return request();
-    });
+    const target = talkTarget(bind);
+    if (!target || target.local) {
+      return Promise.resolve().then(function () {
+        return request();
+      });
+    }
+    return readRemoteTalk(request, timeoutMs == null ? TALK_TIMEOUT_MS : timeoutMs);
   }
 
   async function run(ctx) {
@@ -530,10 +592,12 @@
     if (p.kind === "local") return fallback;
     if (!base && p.kind !== "local") return fallback;
     const shown = ctx && typeof ctx.shown === "string" ? ctx.shown : "";
-    return readTalk(shown, bind, async function () {
     try {
+      return await readTalk(shown, bind, async function (signal) {
+    try {
+      const leave = signal ? { signal: signal } : {};
       if (p.kind === "openai") {
-        const res = await fetch(pluginRequestUrl(base, "/chat/completions"), {
+        const res = await fetch(pluginRequestUrl(base, "/chat/completions"), Object.assign({
           method: "POST",
           headers: { "Content-Type": "application/json", ...(key ? { Authorization: `Bearer ${key}` } : {}) },
           body: JSON.stringify({
@@ -545,12 +609,12 @@
               { role: "user", content: userTurn(ctx) },
             ],
           }),
-        });
+        }, leave));
         const body = await res.json();
         const text = clip(body.choices?.[0]?.message?.content);
         if (text) return { text, source: p.id };
       } else if (p.kind === "anthropic") {
-        const res = await fetch(pluginRequestUrl(base, "/v1/messages"), {
+        const res = await fetch(pluginRequestUrl(base, "/v1/messages"), Object.assign({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -563,12 +627,12 @@
             system: ctx.system,
             messages: [{ role: "user", content: userTurn(ctx) }],
           }),
-        });
+        }, leave));
         const body = await res.json();
         const text = clip(body.content?.[0]?.text);
         if (text) return { text, source: p.id };
       } else if (p.kind === "ollama") {
-        const res = await fetch(pluginRequestUrl(base, "/api/chat"), {
+        const res = await fetch(pluginRequestUrl(base, "/api/chat"), Object.assign({
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -579,12 +643,12 @@
               { role: "user", content: userTurn(ctx) },
             ],
           }),
-        });
+        }, leave));
         const body = await res.json();
         const text = clip(body.message?.content);
         if (text) return { text, source: p.id };
       } else if (p.kind === "gemini") {
-        const res = await fetch(pluginRequestUrl(base, `/models/${model}:generateContent`), {
+        const res = await fetch(pluginRequestUrl(base, `/models/${model}:generateContent`), Object.assign({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -595,12 +659,12 @@
             contents: [{ role: "user", parts: [{ text: userTurn(ctx) }] }],
             generationConfig: { maxOutputTokens: 80, temperature: 0.9 },
           }),
-        });
+        }, leave));
         const body = await res.json();
         const text = clip(body.candidates?.[0]?.content?.parts?.[0]?.text);
         if (text) return { text, source: p.id };
       } else if (p.kind === "custom") {
-        const res = await fetch(pluginRequestUrl(base), {
+        const res = await fetch(pluginRequestUrl(base), Object.assign({
           method: "POST",
           headers: { "Content-Type": "application/json", ...(key ? { Authorization: `Bearer ${key}` } : {}) },
           body: JSON.stringify({
@@ -611,7 +675,7 @@
             stats: { hunger: ctx.hunger, mood: ctx.mood, energy: ctx.energy },
             message: ctx.message ?? null,
           }),
-        });
+        }, leave));
         const body = await res.json();
         const text = clip(body.text || body.content);
         if (text) return { text, source: "custom" };
@@ -621,6 +685,10 @@
     }
     return fallback;
     }, fallback);
+    } catch (err) {
+      if (isTalkTimeout(err)) return fallback;
+      throw err;
+    }
   }
 
   window.PetMind = {
@@ -631,6 +699,9 @@
     binding,
     run,
     TALK_HOST_NAME,
+    TALK_TIMEOUT_MS,
+    TalkTimeout,
+    isTalkTimeout,
     talkHostName,
     talkTarget,
     talkHonesty,

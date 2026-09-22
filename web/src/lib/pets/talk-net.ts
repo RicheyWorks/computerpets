@@ -1,4 +1,4 @@
-/** Cloud talk and cloud voice name the host before the request leaves. `readTalk` and `readVoice` refuse a remote request when that painted host line is missing. A loopback mind and on-device speech stay local. Same sentence as News and Radio (`clientNetLine`). Overlay connect-src names these hosts. ADR 0048. */
+/** Cloud talk and cloud voice name the host before the request leaves. `readTalk` and `readVoice` refuse a remote request when that painted host line is missing. A remote leave gives up after twelve seconds. A loopback mind and on-device speech stay local. Same sentence as News and Radio (`clientNetLine`). Overlay connect-src names these hosts. ADR 0048. ADR 0052. */
 import { mindPreset } from "../ai/catalog.ts";
 import { assertSafeMindUrl } from "../ai/safe-url.ts";
 import type { MindBinding, VoiceKind } from "../ai/types.ts";
@@ -106,18 +106,103 @@ export function talkMayLeave(
   return shown.includes(line);
 }
 
+/** Twelve seconds covers headers and the body. Matches weather, news, quote, and radio page wrappers. */
+export const TALK_TIMEOUT_MS = 12_000;
+export const VOICE_TIMEOUT_MS = 12_000;
+
+/** A silent talk host. Callers keep the house line. */
+export class TalkTimeout extends Error {
+  constructor() {
+    super("talk request timed out");
+    this.name = "TalkTimeout";
+  }
+}
+
+/** A silent voice host. Callers keep silence — no invented audio. */
+export class VoiceTimeout extends Error {
+  constructor() {
+    super("voice request timed out");
+    this.name = "VoiceTimeout";
+  }
+}
+
+function isAbortTimeout(err: unknown, name: string): boolean {
+  if (!err || typeof err !== "object") return false;
+  const errName = (err as { name?: string }).name;
+  const code = (err as { code?: string }).code;
+  return errName === name || errName === "AbortError" || errName === "TimeoutError" || code === "ABORT_ERR";
+}
+
+export function isTalkTimeout(err: unknown): boolean {
+  return isAbortTimeout(err, "TalkTimeout");
+}
+
+export function isVoiceTimeout(err: unknown): boolean {
+  return isAbortTimeout(err, "VoiceTimeout");
+}
+
+type TalkRequest<T> = (signal?: AbortSignal) => Promise<T> | T;
+type VoiceRequest<T> = (signal?: AbortSignal) => Promise<T | undefined> | T | undefined;
+
+/**
+ * One remote talk or voice leave. The timer covers headers and the body.
+ * A timeout rejects with the named error. The caller does not get a body.
+ * A late body after the deadline is not parsed.
+ */
+function readRemote<T>(
+  request: TalkRequest<T>,
+  Timeout: new () => Error,
+  timeoutName: string,
+  timeoutMs: number,
+): Promise<T> {
+  if (typeof request !== "function") return Promise.reject(new Timeout());
+
+  const ctrl = new AbortController();
+  let settled = false;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  return new Promise((resolve, reject) => {
+    timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      ctrl.abort();
+      reject(new Timeout());
+    }, timeoutMs);
+
+    Promise.resolve()
+      .then(() => request(ctrl.signal))
+      .then((value) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(value);
+      })
+      .catch((err) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        if (isAbortTimeout(err, timeoutName)) reject(new Timeout());
+        else reject(err);
+      });
+  });
+}
+
 /**
  * The only cloud-talk request. A miss resolves to the local reply and does not call `request`.
- * A loopback mind still calls `request`. That fetch stays on this computer.
+ * A loopback mind still calls `request` with no remote deadline. That fetch stays on this computer.
+ * A remote hang rejects with TalkTimeout. The caller keeps the house line and does not parse a late body.
  */
 export function readTalk<T>(
   shown: unknown,
   binding: Pick<MindBinding, "plugin" | "baseUrl"> | null | undefined,
-  request: () => Promise<T> | T,
+  request: TalkRequest<T>,
   local: T,
+  timeoutMs: number = TALK_TIMEOUT_MS,
 ): Promise<T> {
   if (!talkMayLeave(shown, binding)) return Promise.resolve(local);
-  return Promise.resolve().then(request);
+  const target = talkTarget(binding);
+  if (!target || target.local) return Promise.resolve().then(() => request());
+  return readRemote(request, TalkTimeout, "TalkTimeout", timeoutMs);
 }
 
 /**
@@ -134,13 +219,15 @@ export function voiceMayLeave(shown: unknown, voice: VoiceKind | string | null |
 /**
  * The only cloud-voice request. A miss resolves to undefined and does not call `request`.
  * Browser speech and silence do not call `request`. `speechSynthesis` stays on this computer.
+ * A remote hang rejects with VoiceTimeout. The caller keeps silence and does not parse a late body.
  */
 export function readVoice<T>(
   shown: unknown,
   voice: VoiceKind | string | null | undefined,
-  request: () => Promise<T | undefined> | T | undefined,
+  request: VoiceRequest<T>,
+  timeoutMs: number = VOICE_TIMEOUT_MS,
 ): Promise<T | undefined> {
   if (voice !== "xai" && voice !== "openai") return Promise.resolve(undefined);
   if (!voiceMayLeave(shown, voice)) return Promise.resolve(undefined);
-  return Promise.resolve().then(request);
+  return readRemote(request, VoiceTimeout, "VoiceTimeout", timeoutMs);
 }
