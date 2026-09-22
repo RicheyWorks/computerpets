@@ -84,6 +84,56 @@ function hostPathLabel(value, consent) {
   return value.trim();
 }
 
+const FIELD_TAGS = new Set(["INPUT", "TEXTAREA", "SELECT"]);
+
+function isFocusedField(event) {
+  if (!event || typeof event !== "object") return false;
+  if (event.focused === true || event.field === true) return true;
+  const target = event.target;
+  if (!target || typeof target !== "object") return false;
+  if (target.isContentEditable === true) return true;
+  const tag = String(target.tagName || target.tag || "").toUpperCase();
+  if (FIELD_TAGS.has(tag)) return true;
+  if (typeof target.closest === "function") {
+    try {
+      return Boolean(target.closest("input, textarea, select, [contenteditable='true']"));
+    } catch {
+      return false;
+    }
+  }
+  return false;
+}
+
+/**
+ * A key outside a focused field is not a presence log.
+ * A focused field keeps the character. This does not read it.
+ * Escape outside a field may dismiss a menu. The key text is not returned.
+ * There is no global hook and no keystroke buffer.
+ * @param {{ key?: string, focused?: boolean, field?: boolean, target?: object } | null | undefined} event
+ * @returns {{ record: false, field: boolean, toggle: false | "dismiss" }}
+ */
+function keyText(event) {
+  if (!event || typeof event !== "object" || !("key" in event)) return "";
+  const value = event.key;
+  return typeof value === "string" ? value : "";
+}
+
+function classifyKey(event) {
+  if (isFocusedField(event)) return { record: false, field: true, toggle: false };
+  if (keyText(event) === "Escape") return { record: false, field: false, toggle: "dismiss" };
+  return { record: false, field: false, toggle: false };
+}
+
+/**
+ * Refuse a keystroke log. The buffer is not appended. The key is not returned.
+ * @param {unknown} [_buffer]
+ * @param {unknown} [_event]
+ * @returns {{ record: false, keys: [] }}
+ */
+function recordKeystroke(_buffer, _event) {
+  return { record: false, keys: [] };
+}
+
 function scrubWindows(list) {
   if (!Array.isArray(list)) return [];
   const out = [];
@@ -130,4 +180,6 @@ module.exports = {
   listHostFolder,
   windowCaption,
   hostPathLabel,
+  classifyKey,
+  recordKeystroke,
 };

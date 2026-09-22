@@ -49,6 +49,35 @@ test("the desk does not list user folders or read a window title", () => {
   assert.doesNotMatch(src, /readdir|showDirectoryPicker|webkitdirectory|getDirectory/);
 });
 
+test("a focused field keeps the key, and a key outside it is not logged", () => {
+  let reads = 0;
+  const field = {
+    get key() {
+      reads += 1;
+      return "hunter2";
+    },
+    target: { tagName: "INPUT" },
+  };
+  const noted = P.classifyKey(field);
+  assert.deepEqual(noted, { record: false, field: true, toggle: false });
+  assert.equal(reads, 0);
+  assert.equal(JSON.stringify(noted).includes("hunter2"), false);
+
+  const ignored = P.classifyKey({ key: "hunter2", target: { tagName: "BODY" } });
+  assert.deepEqual(ignored, { record: false, field: false, toggle: false });
+  assert.equal(JSON.stringify(ignored).includes("hunter2"), false);
+  const buf = [];
+  assert.deepEqual(P.recordKeystroke(buf, { key: "hunter2" }), { record: false, keys: [] });
+  assert.deepEqual(buf, []);
+  const dismiss = P.classifyKey({ key: "Escape", target: { tagName: "DIV" } });
+  assert.deepEqual(dismiss, { record: false, field: false, toggle: "dismiss" });
+  assert.equal(JSON.stringify(dismiss).includes("Escape"), false);
+  assert.equal(P.classifyKey({ key: "Escape", target: { tagName: "TEXTAREA" } }).field, true);
+  assert.match(room, /classifyKey\(e\)/);
+  const src = readFileSync(join(root, "src/lib/pets/presence.ts"), "utf8");
+  assert.doesNotMatch(src, /SetWindowsHook|globalShortcut|keylog|uiohook|localStorage/);
+});
+
 test("the living desk and /demo install the drop guard", () => {
   assert.match(room, /installFileDropGuard/);
   assert.match(demo, /CompanionRoom/);

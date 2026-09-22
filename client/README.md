@@ -6,7 +6,7 @@ This is **not** a custom GPU shader engine. Drawing uses Qt’s GPU-backed scene
 
 The blotter has no mind plugin bus. Its listener line stays `Listening · House lines`. It does not read a key and it does not invent a cloud mind.
 
-A file dropped on the blotter is ignored. The blotter does not list Desktop, Documents, or Downloads, and it does not read a window title or a document name. A host path is omitted unless the keeper has already consented. There is no such control.
+A file dropped on the blotter is ignored. The blotter does not list Desktop, Documents, or Downloads, and it does not read a window title or a document name. A host path is omitted unless the keeper has already consented. There is no such control. The blotter does not install a keyboard hook. A key outside a focused field is not logged. Typing in a field stays in that field.
 
 GPU **load** (temperature, utilization, memory, power) is a separate desktop-local sense. On Windows the blotter reads nvidia-smi or GPU performance counters and keeps a sparkline of those real samples. The strip stays empty when the reading is unread, stale, malformed, or unsupported. Mac and Linux stay `mac-linux-gpu-sense`. A missing, malformed, or stale reading stays dark. This is still Qt OpenGL, not DirectX 12 or Vulkan.
 

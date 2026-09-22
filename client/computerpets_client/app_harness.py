@@ -1131,12 +1131,14 @@ def _desk_rows() -> list[Affordance]:
         Affordance(
             "desk.presence",
             "desk",
-            "Presence does not list folders or read window titles",
+            "Presence does not list folders, read titles, or log keys",
             "presence.py / presence.cjs / presence.ts + windows-enum.cjs",
             notes=(
                 "Offline: Desktop, Documents, Downloads, and any other host folder stay unlistable. "
                 "Window captions stay empty. A path is omitted unless consent is already true. "
-                "The enum pipe carries a shell bit, not a class name, title, or path."
+                "The enum pipe carries a shell bit, not a class name, title, or path. "
+                "A focused field keeps its keys. A key outside that field is not logged. "
+                "Escape may dismiss a menu. The key text is not stored."
             ),
         ),
         Affordance(
@@ -1312,7 +1314,7 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
     if local_id == "windows.perch":
         return _run_node_smoke("windows_perch", domain="desk", action_id=aid)
     if local_id == "presence":
-        from .presence import host_path_label, list_host_folder, window_caption
+        from .presence import classify_key, host_path_label, list_host_folder, record_keystroke, window_caption
 
         desktop = list_host_folder("Desktop")
         documents = list_host_folder(r"C:\Users\keeper\Documents")
@@ -1332,6 +1334,14 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
         presence_js = _read("desktop/presence.cjs")
         presence_ts = _read("web/src/lib/pets/presence.ts")
         blotter = _read("client/computerpets_client/app.py")
+        pet_js = _read("desktop/renderer/pet.js")
+        room = _read("web/src/components/desk/companion-room.tsx")
+        field_note = classify_key({"key": "hunter2", "target": {"tagName": "INPUT"}})
+        outside = classify_key({"key": "hunter2", "target": {"tagName": "BODY"}})
+        dismiss = classify_key({"key": "Escape", "target": {"tagName": "DIV"}})
+        buf: list[str] = []
+        logged = record_keystroke(buf, {"key": "hunter2"})
+        main_js = _read("desktop/main.cjs")
         checks = {
             "desktop": desktop == {"listed": False, "names": []},
             "documents": documents["listed"] is False and documents["names"] == [],
@@ -1353,6 +1363,20 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
                 and "def list_host_folder" in _read("client/computerpets_client/presence.py")
                 and "list_host_folder" in blotter
                 and "window_caption" in blotter
+            ),
+            "field": field_note == {"record": False, "field": True, "toggle": False} and "hunter2" not in str(field_note),
+            "outside": outside == {"record": False, "field": False, "toggle": False} and "hunter2" not in str(outside),
+            "dismiss": dismiss["toggle"] == "dismiss" and "Escape" not in str(dismiss),
+            "log": logged == {"record": False, "keys": []} and buf == [],
+            "hooks": (
+                "globalShortcut" not in main_js
+                and "SetWindowsHook" not in main_js
+                and "PetPresence.classifyKey" in pet_js
+                and "classifyKey(e)" in room
+                and "def classify_key" in _read("client/computerpets_client/presence.py")
+                and "classify_key" in blotter
+                and "grabKeyboard" not in blotter
+                and "keyPressEvent" not in blotter
             ),
         }
         failed = [name for name, ok in checks.items() if not ok]
