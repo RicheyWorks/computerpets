@@ -29,6 +29,65 @@ export function sanitizeModel(raw: string | undefined, fallback: string) {
   return value;
 }
 
+/** Query names that would put a plugin secret on the URL. Hyphens match underscores. */
+const SECRET_QUERY_NAMES = new Set([
+  "key",
+  "api_key",
+  "apikey",
+  "access_token",
+  "refresh_token",
+  "id_token",
+  "token",
+  "secret",
+  "client_secret",
+  "x_goog_api_key",
+  "x_api_key",
+  "auth",
+  "authorization",
+  "bearer",
+]);
+
+export function isSecretQueryName(name: string) {
+  const norm = name.trim().toLowerCase().replace(/-/g, "_");
+  return SECRET_QUERY_NAMES.has(norm);
+}
+
+function hashCarriesSecretQuery(hash: string) {
+  const body = hash.replace(/^#\??/, "");
+  if (!body) return false;
+  const params = new URLSearchParams(body);
+  let dirty = false;
+  params.forEach((_, name) => {
+    if (isSecretQueryName(name)) dirty = true;
+  });
+  return dirty;
+}
+
+/** Drop a pasted `key` / `api_key` (and the same kind of secret) before a direct plugin call. */
+export function stripSecretQuery(url: URL) {
+  const names = new Set<string>();
+  url.searchParams.forEach((_, name) => names.add(name));
+  for (const name of names) {
+    if (isSecretQueryName(name)) url.searchParams.delete(name);
+  }
+  if (hashCarriesSecretQuery(url.hash)) url.hash = "";
+}
+
+/**
+ * Join a plugin path onto a base URL after the secret query is gone.
+ * A leftover non-secret query stays a query. It is not glued into the path.
+ */
+export function pluginRequestUrl(base: string, suffix = "") {
+  const url = new URL(base);
+  stripSecretQuery(url);
+  if (suffix) {
+    const extra = suffix.startsWith("/") ? suffix : `/${suffix}`;
+    url.pathname = `${url.pathname.replace(/\/$/, "")}${extra}`;
+  }
+  stripSecretQuery(url);
+  return url.toString();
+}
+
 export function allowLocalEndpoint(presetId: string, kind: MindKind) {
   return presetId === "ollama" || presetId === "lmstudio" || kind === "custom";
 }
@@ -47,10 +106,12 @@ export function assertSafeMindUrl(raw: string | undefined, opts: { presetId: str
   const local = LOCAL_HOSTS.has(host);
   if (local) {
     if (!allowLocalEndpoint(opts.presetId, opts.kind)) throw new Error("localhost blocked");
+    stripSecretQuery(url);
     return url.toString().replace(/\/$/, "");
   }
   if (url.protocol !== "https:") throw new Error("https only");
   if (isPrivateHost(host)) throw new Error("private host");
+  stripSecretQuery(url);
   return url.toString().replace(/\/$/, "");
 }
 

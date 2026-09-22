@@ -21,7 +21,7 @@ The overlay Gemini call does not put the plugin key on the URL. It does not star
 
 ## Consequences
 
-- A log, a Referer, or a screenshot of the Gemini URL cannot collect the plugin key from the query string. The key is not in that URL.
+- A log, a Referer, or a screenshot of the Gemini URL cannot collect the plugin key from the query string. The key is not in that URL. A pasted base URL that already carries `key` or `api_key` is dropped before the direct call, and a model value cannot add a query. [0023](0023-pasted-key-query-is-dropped.md).
 - The call remains a direct plugin request. There is no ComputerPets account in front of it.
 - Desk talk still does not post the key. [0021](0021-desk-talk-does-not-send-the-key.md). The desk `/mind` key stays out of browser storage. [0020](0020-desk-mind-key-is-not-in-the-browser.md). The overlay key stays out of plain `mind.json`. [0018](0018-mind-key-is-not-plain-text.md).
 - License `hwid` still reads a named machine id only when a bind needs it, and only when `hwid.txt` is empty. A stored hash is reused. The raw id is not sent. The hash is still a fingerprint. [0019](0019-license-mark-is-a-local-hash.md).

@@ -26,7 +26,7 @@ House talk does not carry the plugin key. It does not start DirectX 12 or Vulkan
 
 - A proxy or a house log of this post cannot collect the keeper's plugin key from the talk body. The key is not in that JSON.
 - Guests stay on house lines. A signed-in cloud reply still depends on the server env key, not on a key the browser sent.
-- The overlay still sends its sealed key to the plugin it calls, as a header. Gemini uses `x-goog-api-key` and does not put that key on the query string. [0022](0022-gemini-key-stays-off-the-query.md). That request is the plugin, not the house.
+- The overlay still sends its sealed key to the plugin it calls, as a header. Gemini uses `x-goog-api-key` and does not put that key on the query string. [0022](0022-gemini-key-stays-off-the-query.md). A pasted `key` query is dropped before that direct call. [0023](0023-pasted-key-query-is-dropped.md). That request is the plugin, not the house.
 - The desk `/mind` key stays out of browser storage. [0020](0020-desk-mind-key-is-not-in-the-browser.md). The overlay key stays out of plain `mind.json`. [0018](0018-mind-key-is-not-plain-text.md).
 - License `hwid` still reads a named machine id only when a bind needs it, and only when `hwid.txt` is empty. A stored hash is reused. The raw id is not sent. The hash is still a fingerprint. [0019](0019-license-mark-is-a-local-hash.md).
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.
