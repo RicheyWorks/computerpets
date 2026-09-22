@@ -20,7 +20,7 @@ This slice shows the same network-address sentence, with the host named, before 
 - `newsMaySend` and `quoteMaySend` are true only when that line is in the open plate. A closed plate, a load, and the news favorites tab do not send. The page paints the line, then calls the gate, then builds the URL.
 - The twenty-minute refresh still exists. It sends only while the plate stays open and the line is in view. It does not ask again on each tick. The desk quotes plate has no interval; opening it, or changing the saved list while it is open, is the send.
 - Radio Find and Local wait until the radio form shows the line. A load does not search. A coin or collection look-up waits until the open quotes plate shows the look-up line. A known coin or a pasted contract is still added on the card without that search.
-- The blotter still does not call a news host, a quote host, or a radio host.
+- The blotter still does not call a news host, a quote host, or a radio host. Play of a station stream is [0035](0035-station-stream-names-the-network-address.md).
 
 ## Consequences
 

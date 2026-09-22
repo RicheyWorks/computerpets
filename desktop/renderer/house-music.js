@@ -355,6 +355,46 @@
     return lineInView === true && !!RADIO_NET && RADIO_FIND.indexOf(RADIO_NET) !== -1;
   }
 
+  const STREAM_HOST_NAME = "the station stream host";
+
+  function streamHostName(raw) {
+    const safe = safeStream(raw);
+    if (!safe) return "";
+    try {
+      return new URL(safe).hostname || "";
+    } catch (err) {
+      return "";
+    }
+  }
+
+  function streamHostLabel(hostname) {
+    const host = String(hostname || "").trim();
+    return host || STREAM_HOST_NAME;
+  }
+
+  function streamHostPhrase(music) {
+    if (!music || music.plugin !== "radio" || !music.playing) return "";
+    const safe = safeStream(music.stationUrl);
+    if (!safe) return "";
+    return streamHostLabel(streamHostName(safe));
+  }
+
+  function streamHonesty(music) {
+    const host = streamHostPhrase(music);
+    if (!host) return "";
+    const net = sharedNet(host);
+    if (!net) return "";
+    return `this play opens the station stream. ${net}`;
+  }
+
+  function streamMaySend(music, lineInView) {
+    const host = streamHostPhrase(music);
+    const line = streamHonesty(music);
+    if (!host || !line || lineInView !== true) return false;
+    const net = sharedNet(host);
+    return !!net && line.indexOf(net) !== -1;
+  }
+
   function overlayPlaySrc(music) {
     if (!music || !music.playing || music.plugin === "off") return "";
     if (music.plugin === "house") return overlayHouseLoopSrc();
@@ -394,6 +434,12 @@
     RADIO_FIND,
     radioHonesty,
     radioMaySend,
+    STREAM_HOST_NAME,
+    streamHostName,
+    streamHostLabel,
+    streamHostPhrase,
+    streamHonesty,
+    streamMaySend,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetHouseMusic = api;
