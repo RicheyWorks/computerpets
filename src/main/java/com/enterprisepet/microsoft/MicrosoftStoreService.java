@@ -2,6 +2,7 @@ package com.enterprisepet.microsoft;
 
 import com.enterprisepet.observability.ObservedRestClients;
 import com.enterprisepet.provider.OwnershipProvider;
+import com.enterprisepet.provider.OwnershipTimeLimiter;
 import com.enterprisepet.provider.VerificationResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -107,6 +108,10 @@ public class MicrosoftStoreService implements OwnershipProvider {
     @Autowired
     private ObservationRegistry observationRegistry = ObservationRegistry.NOOP;
 
+    /** Shared outer wall clock. Null in focused unit tests — see {@link OwnershipTimeLimiter#guard}. */
+    @Autowired(required = false)
+    private OwnershipTimeLimiter ownershipTimeLimiter;
+
     public MicrosoftStoreService() {}
 
     MicrosoftStoreService(RestClient restClient) {
@@ -196,11 +201,17 @@ public class MicrosoftStoreService implements OwnershipProvider {
      *
      * <p>The response field names (camelCase {@code productId} vs PascalCase
      * {@code ProductId}) vary between Microsoft Store endpoints — we accept either.
-     * Protected by Resilience4j circuit breaker + retry (Phase 2.3).
+     * Protected by Resilience4j circuit breaker + retry, plus the shared ownership
+     * time limiter (outer wall; RestClient still owns the 10s hop).
      */
     @CircuitBreaker(name = "microsoft", fallbackMethod = "ownsProductFallback")
     @Retry(name = "microsoft")
     public boolean ownsProduct(MicrosoftVerifyRequest request) {
+        return OwnershipTimeLimiter.guard(ownershipTimeLimiter, "microsoft",
+                () -> ownsProductProbe(request), false);
+    }
+
+    private boolean ownsProductProbe(MicrosoftVerifyRequest request) {
         if (request == null || request.storeProductId() == null) {
             return false;
         }

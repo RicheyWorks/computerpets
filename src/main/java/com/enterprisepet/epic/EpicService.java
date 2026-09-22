@@ -2,6 +2,7 @@ package com.enterprisepet.epic;
 
 import com.enterprisepet.observability.ObservedRestClients;
 import com.enterprisepet.provider.OwnershipProvider;
+import com.enterprisepet.provider.OwnershipTimeLimiter;
 import com.enterprisepet.provider.VerificationResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -118,6 +119,10 @@ public class EpicService implements OwnershipProvider {
     @Autowired
     private ObservationRegistry observationRegistry = ObservationRegistry.NOOP;
 
+    /** Shared outer wall clock. Null in focused unit tests — see {@link OwnershipTimeLimiter#guard}. */
+    @Autowired(required = false)
+    private OwnershipTimeLimiter ownershipTimeLimiter;
+
     public EpicService() {}
 
     EpicService(RestClient restClient, String clientId, String clientSecret, String deploymentId) {
@@ -192,12 +197,21 @@ public class EpicService implements OwnershipProvider {
 
     /**
      * Asks Epic whether {@code accountId} owns {@code sandboxId:catalogItemId}.
-     * Returns {@code epic:{accountId}} on success. Protected by Resilience4j.
+     * Returns {@code epic:{accountId}} on success. Protected by Resilience4j CB + retry,
+     * plus the shared ownership time limiter (outer wall over token + ownership hops;
+     * RestClient still owns each 10s hop).
      */
     @CircuitBreaker(name = "epic", fallbackMethod = "ownsCatalogItemFallback")
     @Retry(name = "epic")
     public Optional<String> ownsCatalogItem(String accountId, String sandboxId,
                                             String catalogItemId, String platform) {
+        return OwnershipTimeLimiter.guard(ownershipTimeLimiter, "epic",
+                () -> ownsCatalogItemProbe(accountId, sandboxId, catalogItemId, platform),
+                Optional.empty());
+    }
+
+    private Optional<String> ownsCatalogItemProbe(String accountId, String sandboxId,
+                                                  String catalogItemId, String platform) {
         log.info("Checking Epic Games Store ownership accountId={} sandboxId={} catalogItemId={}",
                 accountId, sandboxId, catalogItemId);
 
