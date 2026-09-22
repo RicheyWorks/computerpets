@@ -5,11 +5,90 @@
  * When a codec is present (Electron safeStorage), the key is sealed into
  * `sealedKeys` and the plain `apiKey` field is omitted. When it is not,
  * the key is left out of the file. Callers keep it in memory for the process.
+ * A pasted secret query on a base URL is dropped on save and on read.
+ * That cleanup does not re-encode the seal. The seal payload is still only keys.
  * This module does not read the disk and does not talk to the network.
  */
 
 const MAX_KEY = 4000;
 const SEALED = "sealedKeys";
+
+// Same names as web/src/lib/ai/secret-query.mjs. The overlay renderer keeps this list too.
+const SECRET_QUERY_NAMES = new Set([
+  "key",
+  "api_key",
+  "apikey",
+  "access_token",
+  "refresh_token",
+  "id_token",
+  "token",
+  "secret",
+  "client_secret",
+  "x_goog_api_key",
+  "x_api_key",
+  "auth",
+  "authorization",
+  "bearer",
+]);
+
+function isSecretQueryName(name) {
+  const norm = String(name || "")
+    .trim()
+    .toLowerCase()
+    .replace(/-/g, "_");
+  return SECRET_QUERY_NAMES.has(norm);
+}
+
+function hashCarriesSecretQuery(hash) {
+  const body = String(hash || "").replace(/^#\??/, "");
+  if (!body) return false;
+  const params = new URLSearchParams(body);
+  let dirty = false;
+  params.forEach((_, name) => {
+    if (isSecretQueryName(name)) dirty = true;
+  });
+  return dirty;
+}
+
+function stripSecretQuery(url) {
+  const names = new Set();
+  url.searchParams.forEach((_, name) => names.add(name));
+  for (const name of names) {
+    if (isSecretQueryName(name)) url.searchParams.delete(name);
+  }
+  if (hashCarriesSecretQuery(url.hash)) url.hash = "";
+}
+
+/** Drop a pasted secret query from a base URL. A non-URL is left as typed. */
+function scrubSecretQueryString(raw) {
+  const trimmed = String(raw || "").trim();
+  if (!trimmed) return trimmed;
+  let url;
+  try {
+    url = new URL(trimmed);
+  } catch {
+    return trimmed;
+  }
+  const before = url.toString();
+  stripSecretQuery(url);
+  const after = url.toString();
+  return after === before ? trimmed : after;
+}
+
+function baseUrlsNeedRewrite(raw) {
+  if (!raw || typeof raw !== "object") return false;
+  let dirty = false;
+  const seen = (row) => {
+    if (!row || typeof row !== "object" || typeof row.baseUrl !== "string") return;
+    if (scrubSecretQueryString(row.baseUrl) !== row.baseUrl.trim()) dirty = true;
+  };
+  seen(raw.default);
+  const pets = raw.pets && typeof raw.pets === "object" ? raw.pets : null;
+  if (pets) {
+    for (const name of Object.keys(pets)) seen(pets[name]);
+  }
+  return dirty;
+}
 
 function blankKeys() {
   return { default: "", pets: {} };
@@ -36,7 +115,7 @@ function bindingPrefs(raw) {
   if (!raw || typeof raw !== "object") return next;
   if (typeof raw.plugin === "string" && raw.plugin.trim()) next.plugin = raw.plugin.trim().slice(0, 64);
   if (typeof raw.model === "string") next.model = raw.model.slice(0, 200);
-  if (typeof raw.baseUrl === "string") next.baseUrl = raw.baseUrl.slice(0, 500);
+  if (typeof raw.baseUrl === "string") next.baseUrl = scrubSecretQueryString(raw.baseUrl).slice(0, 500);
   return next;
 }
 
@@ -173,6 +252,7 @@ function previousSeal(parsed) {
  */
 function readMindRecord(parsed, codec) {
   const prefs = prefsFrom(parsed);
+  const scrubUrl = baseUrlsNeedRewrite(parsed);
   const legacy = collectKeys(parsed);
   const plain = fileHasPlainKey(parsed);
   const stored = previousSeal(parsed);
@@ -184,7 +264,7 @@ function readMindRecord(parsed, codec) {
     return {
       mind,
       file: { ...prefs, [SEALED]: stored },
-      rewrite: plain,
+      rewrite: plain || scrubUrl,
       kept: "os",
     };
   }
@@ -213,14 +293,14 @@ function readMindRecord(parsed, codec) {
     return {
       mind,
       file: { ...prefs, [SEALED]: stored },
-      rewrite: false,
+      rewrite: scrubUrl,
       kept: mind.keyKept,
     };
   }
 
   const mind = attachKeys(prefs, blankKeys());
   mind.keyKept = "empty";
-  return { mind, file: prefs, rewrite: false, kept: "empty" };
+  return { mind, file: prefs, rewrite: scrubUrl, kept: "empty" };
 }
 
 /**

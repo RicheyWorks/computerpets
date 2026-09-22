@@ -17,6 +17,7 @@ const safeUrlSrc = readFileSync(join(root, "src/lib/ai/safe-url.ts"), "utf8");
 const secretQuerySrc = readFileSync(join(root, "src/lib/ai/secret-query.mjs"), "utf8");
 const mindPageSrc = readFileSync(join(root, "src/routes/mind.tsx"), "utf8");
 const overlayMind = readFileSync(join(repo, "desktop/renderer/mind.js"), "utf8");
+const overlayMindFile = readFileSync(join(repo, "desktop/mind-secret.cjs"), "utf8");
 const overlayPet = readFileSync(join(repo, "desktop/renderer/pet.js"), "utf8");
 const speciesSrc = readFileSync(join(root, "src/lib/pets/catalog.ts"), "utf8");
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
@@ -307,6 +308,15 @@ test("desk and overlay talk do not put apiKey on a house body or query", () => {
   );
   const overlayNames = [...overlayBlock.matchAll(/"([a-z_]+)"/g)].map((m) => m[1]);
   assert.deepEqual(overlayNames, sharedNames);
+  const diskBlock = overlayMindFile.slice(
+    overlayMindFile.indexOf("const SECRET_QUERY_NAMES"),
+    overlayMindFile.indexOf("function isSecretQueryName"),
+  );
+  const diskNames = [...diskBlock.matchAll(/"([a-z_]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(diskNames, sharedNames);
+  assert.match(overlayMind, /scrubSecretQueryString/);
+  assert.match(overlayMindFile, /scrubSecretQueryString/);
+  assert.match(overlayMindFile, /baseUrlsNeedRewrite/);
   assert.doesNotMatch(postSrc, /apiKey:\s*z\./);
   assert.doesNotMatch(postSrc, /URLSearchParams/);
   assert.doesNotMatch(postSrc, /searchParams/);
