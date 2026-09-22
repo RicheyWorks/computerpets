@@ -102,6 +102,15 @@
   }
 
   /**
+   * IP place is not a location grant. There is no keeper control that asks
+   * to use the network's city, so this returns nothing. A consent argument
+   * does not open a lookup. Callers must not fetch a network city.
+   */
+  function ipPlace() {
+    return null;
+  }
+
+  /**
    * One weather-button fix. Asks once, then clears the session grant.
    * maximumAge is 0, so a cached fix is not a silent re-read.
    */
@@ -154,7 +163,7 @@
       );
   }
 
-  const api = { hasHostFiles, install, classifyKey, recordKeystroke, readWeatherHere, weatherLocateOptions };
+  const api = { hasHostFiles, install, classifyKey, recordKeystroke, ipPlace, readWeatherHere, weatherLocateOptions };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetPresence = api;
   if (typeof document !== "undefined") install(document);

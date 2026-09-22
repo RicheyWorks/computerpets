@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. */
 (function (root) {
   const NO_AREA = "no area set";
   const AREA_LABEL = "Weather area";
@@ -10,7 +10,6 @@
   const FAVORITES_EMPTY = "No favorites yet — star a place.";
   const GEOCODE_HOST = "geocoding-api.open-meteo.com";
   const FORECAST_HOST = "api.open-meteo.com";
-  const IP_PLACE_HOST = "ipwho.is";
   const MAX_AREAS = 8;
   const MAX_FAVORITES = 24;
   const AREA_NAME_CHARS = 48;
@@ -160,21 +159,6 @@
     return `https://${GEOCODE_HOST}/v1/reverse?latitude=${la}&longitude=${lo}&language=en&format=json`;
   }
 
-  function ipPlaceUrl() {
-    return `https://${IP_PLACE_HOST}/`;
-  }
-
-  function parseIpPlace(json) {
-    if (!json || typeof json !== "object" || json.success === false) return null;
-    const lat = num(json.latitude);
-    const lon = num(json.longitude);
-    if (lat == null || lon == null) return null;
-    const bits = [clipName(json.city), clipName(json.region), clipName(json.country)].filter(Boolean);
-    const name = bits.join(", ");
-    if (!name) return null;
-    return { id: "here", name, query: name, lat, lon };
-  }
-
   function parseReverse(json) {
     const list = json && Array.isArray(json.results) ? json.results : json && json.name ? [json] : [];
     return parseGeocode({ results: list })[0] || null;
@@ -267,7 +251,6 @@
     CANT_REACH,
     FAVORITES_EMPTY,
     GEOCODE_HOST,
-    IP_PLACE_HOST,
     FORECAST_HOST,
     MAX_AREAS,
     MAX_FAVORITES,
@@ -288,8 +271,6 @@
     tabLabel,
     geocodeUrl,
     reverseUrl,
-    ipPlaceUrl,
-    parseIpPlace,
     parseReverse,
     forecastUrl,
     parseGeocode,

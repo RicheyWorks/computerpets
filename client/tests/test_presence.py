@@ -1,5 +1,7 @@
 """Presence does not open keeper files. Drops are not gifts."""
 
+from pathlib import Path
+
 from computerpets_client.presence import (
     WEATHER_LOCATE_MS,
     allow_navigation,
@@ -9,6 +11,7 @@ from computerpets_client.presence import (
     clear_weather_locate,
     host_path_label,
     house_file,
+    ip_place,
     list_host_folder,
     read_weather_here,
     record_keystroke,
@@ -41,6 +44,18 @@ def test_navigation_and_capture_stay_refused():
     assert allow_permission("fileSystem") is False
     assert read_weather_here() is None
     assert allow_permission("geolocation", 1_000) is False
+    assert ip_place() is None
+    assert ip_place(True) is None
+    root = Path(__file__).resolve().parents[1]
+    for rel in (
+        "computerpets_client/presence.py",
+        "computerpets_client/app.py",
+        "computerpets_client/weather.py",
+    ):
+        text = (root / rel).read_text(encoding="utf-8")
+        assert "ipwho" not in text
+        assert "ip-api.com" not in text
+        assert "ipinfo.io" not in text
 
 
 def test_user_folders_are_not_listed_and_titles_are_not_read():

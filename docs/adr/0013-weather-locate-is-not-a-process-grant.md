@@ -26,7 +26,7 @@ This slice binds the grant to the weather control. It does not start DirectX 12 
 
 - Electron cannot revoke a geolocation grant Chromium already cached in the renderer. The check handler denies the next status query once the locate closes. A reload is the only flush of that cache. This slice does not pretend otherwise.
 - A browser origin grant can outlive the click. The next click may not show a prompt. It is still a click. There is no background watcher.
-- The weather control may still ask an IP place service when the fix fails. That lookup is the same click, not a standing geolocation grant.
+- The weather control does not ask an IP place service when the fix fails. [0014](0014-weather-does-not-ask-an-ip-place.md) drops that lookup. A saved area stays.
 - A place the keeper already saved on the card is still sent to the forecast. That is the saved area, not a live location watch.
 - License `hwid` still reads machine-id or MachineGuid. That is the license door, not presence.
 - The keeper's plugin key still sits in `mind.json`. It stays off the card.
