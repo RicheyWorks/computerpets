@@ -40,8 +40,8 @@ This slice does not reopen presence/CSP, Hikari/replica, bundle zip, cosign, Ter
 ## Consequences
 
 - A caller who does not hold `LICENSE_SECRET_KEY` cannot complete `POST /api/verify`. The official overlay and blotter already need that key to decrypt, so Unlock still issues a license and then downloads with the JWT.
-- The living-desk browser does not call this route. `/admin` still sends a static `X-Admin-Key`.
+- The living-desk browser does not call this route. `/admin` sent a static `X-Admin-Key` until [0071](0071-admin-request-signature.md).
 - A captured signed verify can be replayed until the 300 second window ends. There is no nonce store in this slice.
 - The desktop binary still contains the license key, because decrypt requires it. This raises the bar from an anonymous POST to possession of that key. It does not make the client trusted.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** admin hooks still accept a static `X-Admin-Key` with no request MAC and no skew. Not started here.
+- **Next gap:** landed as [0071](0071-admin-request-signature.md). Not started in this ADR.
