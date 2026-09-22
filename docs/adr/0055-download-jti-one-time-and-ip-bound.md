@@ -12,7 +12,7 @@
 
 Each issued signed URL is an open **download grant** keyed by `jti` + `exp` in the same Redis as rate limits (process memory when `rate-limit.backend=memory`).
 
-1. **Issue** — after license validation, register the grant with the requesting `ClientAddress` (first `X-Forwarded-For` hop, else remote address) and the fifteen-minute TTL. If the grant store is down, **fail closed** with 503 and do not return a URL that cannot be tracked.
+1. **Issue** — after license validation, register the grant with the requesting `ClientAddress` (trusted-proxy XFF / `Forwarded`, else remote address — [0067](0067-trusted-proxy-client-address.md)) and the fifteen-minute TTL. If the grant store is down, **fail closed** with 503 and do not return a URL that cannot be tracked.
 2. **Redeem** — `GET /api/bundles/{petKey}/redeem?owner=&jti=&exp=&sig=` verifies the HMAC, rejects an expired `exp`, then atomically consumes the grant. First success returns `{ "allowed": true, ... }`. A second redeem of the same grant returns **403** `download grant already used` with keeper copy to request a new download. The house does **not** silently re-open that grant.
 3. **IP binding** — redeem must present the same address bound at issue when both are non-blank. Mismatch is **403** `download grant address mismatch`. An edge worker that calls redeem must forward the keeper's requesting address (same `X-Forwarded-For` convention as rate limits). Shared NAT / CGNAT may make several keepers look like one address. This is not geolocation and does not invent a city.
 4. Signed query fields (`owner`, `jti`, `exp`, `sig`) stay on the URL. Catalog stays 221. DirectX 12 / Vulkan is not started. Presence / CSP series is not reopened.
