@@ -1,4 +1,4 @@
-import { signAdminRequest, SIGNATURE_HEADER, TIMESTAMP_HEADER } from "@/lib/admin/sign";
+import { signAdminRequest, NONCE_HEADER, SIGNATURE_HEADER, TIMESTAMP_HEADER } from "@/lib/admin/sign";
 
 const KEY_STORAGE = "cp.admin.key";
 const BASE_STORAGE = "cp.admin.apiBase";
@@ -91,6 +91,7 @@ async function adminFetch(apiBase: string, adminKey: string, path: string, init?
       headers: {
         "Content-Type": "application/json",
         [TIMESTAMP_HEADER]: signed.timestamp,
+        [NONCE_HEADER]: signed.nonce,
         [SIGNATURE_HEADER]: signed.signature,
         ...(init?.headers ?? {}),
       },

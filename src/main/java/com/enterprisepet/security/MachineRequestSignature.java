@@ -21,6 +21,8 @@ public final class MachineRequestSignature {
 
     public static final String TIMESTAMP_HEADER = "X-ComputerPets-Timestamp";
     public static final String SIGNATURE_HEADER = "X-ComputerPets-Signature";
+    /** Single-use nonce. Same header the admin door uses; the MAC version differs. */
+    public static final String NONCE_HEADER = RequestNonce.HEADER;
     /** Accept timestamps this many seconds either side of the house clock. */
     public static final int SKEW_SECONDS = 300;
     public static final String VERSION = "computerpets-machine-v1";
@@ -36,15 +38,22 @@ public final class MachineRequestSignature {
         /** Outside {@link #SKEW_SECONDS}. */
         SKEW,
         /** MAC did not match the current or previous license key. */
-        INVALID
+        INVALID,
+        /** Nonce header missing or blank. */
+        NONCE_MISSING,
+        /** Nonce charset or length refused. */
+        NONCE_INVALID
     }
 
     public static String sign(String key, String method, String path, String query,
-                              String timestamp, byte[] body) {
+                              String timestamp, String nonce, byte[] body) {
         if (key == null || key.isBlank()) {
             throw new IllegalArgumentException("machine signing key is blank");
         }
-        return mac(key, canonical(method, path, query, timestamp, body));
+        if (RequestNonce.shape(nonce) != RequestNonce.Shape.OK) {
+            throw new IllegalArgumentException("machine nonce is not 16-128 chars of [A-Za-z0-9_-]");
+        }
+        return mac(key, canonical(method, path, query, timestamp, nonce, body));
     }
 
     /**
@@ -53,10 +62,17 @@ public final class MachineRequestSignature {
      */
     public static Decision verify(String currentKey, String previousKey,
                                   String method, String path, String query,
-                                  String timestamp, String signature, byte[] body,
+                                  String timestamp, String nonce, String signature, byte[] body,
                                   long nowEpochSeconds) {
         if (timestamp == null || timestamp.isBlank() || signature == null || signature.isBlank()) {
             return Decision.MISSING;
+        }
+        RequestNonce.Shape nonceShape = RequestNonce.shape(nonce);
+        if (nonceShape == RequestNonce.Shape.MISSING) {
+            return Decision.NONCE_MISSING;
+        }
+        if (nonceShape == RequestNonce.Shape.INVALID) {
+            return Decision.NONCE_INVALID;
         }
         Long ts = parseEpochSeconds(timestamp);
         if (ts == null) {
@@ -69,7 +85,7 @@ public final class MachineRequestSignature {
         if (currentKey == null || currentKey.isBlank()) {
             return Decision.INVALID;
         }
-        String message = canonical(method, path, query, timestamp.trim(), body);
+        String message = canonical(method, path, query, timestamp.trim(), nonce, body);
         if (constantTimeEquals(mac(currentKey, message), signature.trim())) {
             return Decision.OK;
         }
@@ -80,17 +96,20 @@ public final class MachineRequestSignature {
         return Decision.INVALID;
     }
 
-    static String canonical(String method, String path, String query, String timestamp, byte[] body) {
+    static String canonical(String method, String path, String query, String timestamp,
+                            String nonce, byte[] body) {
         String verb = method == null ? "" : method.toUpperCase(Locale.ROOT);
         String p = path == null ? "" : path;
         String q = query == null ? "" : query;
         String ts = timestamp == null ? "" : timestamp;
+        String n = nonce == null ? "" : nonce;
         byte[] bytes = body == null ? new byte[0] : body;
         return VERSION + "\n"
                 + verb + "\n"
                 + p + "\n"
                 + q + "\n"
                 + ts + "\n"
+                + n + "\n"
                 + HexFormat.of().formatHex(sha256(bytes));
     }
 

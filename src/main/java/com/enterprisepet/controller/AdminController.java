@@ -22,8 +22,8 @@ import java.util.Map;
  * Internal admin endpoints for license lookup, audit, and revocation.
  *
  * <p>The HTTP gate is {@link com.enterprisepet.config.AdminRequestSignatureFilter}:
- * timestamp plus HMAC-SHA256 over method, path, query, and body, keyed by
- * {@code ADMIN_API_KEY} (previous key during rotation). A static
+ * timestamp, single-use nonce, and HMAC-SHA256 over method, path, query, nonce, and body, keyed by
+ * {@code ADMIN_API_KEY} (previous key during rotation, ADR 0072). A static
  * {@code X-Admin-Key} header is not accepted (ADR 0071). Production operators
  * supply the key via env, {@code ADMIN_API_KEY_FILE}, or External Secrets into
  * the existing Opaque Secret (ADR 0056). Revoke soft-deletes the ledger row
@@ -89,7 +89,7 @@ public class AdminController {
             @ApiResponse(responseCode = "200", description = "Revocation result",
                 content = @Content(mediaType = "application/json",
                     examples = @ExampleObject(value = "{\"revoked\": true, \"jti\": \"...\"}"))),
-            @ApiResponse(responseCode = "401", description = "Missing, skewed, or invalid admin signature"),
+            @ApiResponse(responseCode = "401", description = "Missing, skewed, invalid, or replayed admin signature"),
             @ApiResponse(responseCode = "404", description = "License not found")
         }
     )
@@ -125,7 +125,7 @@ public class AdminController {
         description = "Returns audit fields for a license by jti. Requires an admin request HMAC (ADR 0071).",
         responses = {
             @ApiResponse(responseCode = "200", description = "License audit row"),
-            @ApiResponse(responseCode = "401", description = "Missing, skewed, or invalid admin signature"),
+            @ApiResponse(responseCode = "401", description = "Missing, skewed, invalid, or replayed admin signature"),
             @ApiResponse(responseCode = "404", description = "License not found")
         }
     )
@@ -144,7 +144,7 @@ public class AdminController {
         description = "Returns the newest licenses, optionally filtered by exact owner. Capped at 50. Requires an admin request HMAC (ADR 0071).",
         responses = {
             @ApiResponse(responseCode = "200", description = "License audit rows"),
-            @ApiResponse(responseCode = "401", description = "Missing, skewed, or invalid admin signature")
+            @ApiResponse(responseCode = "401", description = "Missing, skewed, invalid, or replayed admin signature")
         }
     )
     @GetMapping("/licenses")

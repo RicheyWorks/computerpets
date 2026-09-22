@@ -63,6 +63,7 @@ Machine clients sign the exact raw body. Headers:
 | Header | Value |
 |--------|--------|
 | `X-ComputerPets-Timestamp` | Unix seconds |
+| `X-ComputerPets-Nonce` | 16–128 chars of `[A-Za-z0-9_-]`, single-use |
 | `X-ComputerPets-Signature` | HMAC-SHA256, Base64 URL, no padding |
 
 Canonical UTF-8 text, newline-separated:
@@ -73,15 +74,17 @@ POST
 /api/verify/{provider}
 {raw query or empty}
 {timestamp}
+{nonce}
 {lowercase hex SHA-256 of the body}
 ```
 
 The HMAC key is the UTF-8 bytes of `LICENSE_SECRET_KEY` (the same string
 the client uses to decrypt). `LICENSE_SECRET_KEY_PREVIOUS` verifies during
 rotation; clients sign with the current key. Skew is **300 seconds**.
-Missing, skewed, or bad MAC → **401** `application/problem+json`. The
-provider is not called. This is not `BUNDLE_SIGNING_KEY` and not the JWT
-secret.
+The nonce is claimed once for that window ([ADR 0072](adr/0072-signed-request-nonce.md)).
+Missing, skewed, bad, or replayed MAC → **401** `application/problem+json`.
+Nonce store down → **503**. The provider is not called. This is not
+`BUNDLE_SIGNING_KEY` and not the JWT secret.
 
 `{provider}` is one of the keys from `GET /api/verify/providers`
 (currently `steam`, `nft`, `microsoft`, `itch`, `epic`).
@@ -582,6 +585,6 @@ paths are not this contract.
 
 Admin revocation (`POST /api/admin/revoke`) and license audit
 (`GET /api/admin/licenses`, `GET /api/admin/licenses/{jti}`) are operator
-APIs, not part of the client handshake. They require the admin request HMAC
-([ADR 0071](adr/0071-admin-request-signature.md)). The house `/admin` page
-signs with the same key. Operator curl is in [SETUP.md](SETUP.md).
+APIs, not part of the client handshake. They require the admin request HMAC and a single-use nonce
+([ADR 0071](adr/0071-admin-request-signature.md), [ADR 0072](adr/0072-signed-request-nonce.md)).
+The house `/admin` page signs with the same key. Operator curl is in [SETUP.md](SETUP.md).

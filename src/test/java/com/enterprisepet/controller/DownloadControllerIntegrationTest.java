@@ -358,6 +358,7 @@ class DownloadControllerIntegrationTest {
         HttpRequest req = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + "/api/admin/revoke"))
                 .header("Content-Type", "application/json")
                 .header("X-ComputerPets-Timestamp", Long.toString(Instant.now().getEpochSecond()))
+                .header("X-ComputerPets-Nonce", "0123456789abcdef")
                 .header("X-ComputerPets-Signature", "not-a-signature")
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();

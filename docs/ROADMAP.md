@@ -64,6 +64,7 @@ All critical items required before any public or limited production exposure hav
   - [x] One-time-use + IP binding on the jti foundation (`DownloadGrantIndex`; `GET /api/bundles/{pet}/redeem`; deny-safe second use and address mismatch; ADR 0055)
   - [x] Signed machine verify — `POST /api/verify/{provider}` requires HMAC-SHA256 (`X-ComputerPets-Timestamp`, `X-ComputerPets-Signature`, 300s skew, `LICENSE_SECRET_KEY`). Download stays the license JWT. Redeem stays the URL HMAC (ADR 0070). Catalog stays 221.
   - [x] Signed admin requests — every `/api/admin/**` method except OPTIONS requires HMAC-SHA256 (`computerpets-admin-v1`, 300s skew, `ADMIN_API_KEY`). A static `X-Admin-Key` is refused (ADR 0071). Catalog stays 221.
+  - [x] Single-use nonce — signed admin and machine requests send `X-ComputerPets-Nonce` (in the MAC). Replay inside 300 seconds is **401**. The nonce store shares Redis with the rate limiter (`replay:nonce:…`, `SET NX EX 300`). Store down is **503** (ADR 0072). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload
