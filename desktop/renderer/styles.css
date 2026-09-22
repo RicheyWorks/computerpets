@@ -1088,6 +1088,20 @@ select {
   color: #9a9288;
 }
 
+#hud-listener,
+.keeper-listener {
+  margin: 4px 0 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #9a9288;
+}
+
+#hud-listener[data-listener="unread"],
+.keeper-listener[data-listener="unread"] {
+  color: #5c564e;
+}
+
 .gpu-spark {
   display: inline-block;
   width: 72px;

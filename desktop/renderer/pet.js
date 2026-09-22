@@ -58,6 +58,7 @@ const hudHeartbeat = document.getElementById("hud-heartbeat");
 const hudGpu = document.getElementById("hud-gpu");
 const hudGpuLine = document.getElementById("hud-gpu-line");
 const hudGpuSpark = document.getElementById("hud-gpu-spark");
+const hudListener = document.getElementById("hud-listener");
 const hudTruth = document.getElementById("hud-truth");
 const hudCare = document.getElementById("hud-care");
 const hudCollapse = document.getElementById("hud-collapse");
@@ -1319,6 +1320,18 @@ function paintHud() {
         hudGpuSpark.appendChild(svg);
       }
     }
+  }
+  if (hudListener && window.PetListener) {
+    const binding = window.PetMind && kind ? window.PetMind.binding(kind.key) : { plugin: "local" };
+    const key = binding && typeof binding.apiKey === "string" ? binding.apiKey.trim() : "";
+    const heard = window.PetListener.nameListener({
+      door: "overlay",
+      plugin: binding && binding.plugin,
+      baseUrl: binding && binding.baseUrl,
+      hasKey: key.length > 0,
+    });
+    hudListener.textContent = heard.line;
+    hudListener.setAttribute("data-listener", heard.id);
   }
   if (hudTruth && K) hudTruth.textContent = K.careTruth();
   pet.classList.toggle("dull", !!(hive && hive.quiet));

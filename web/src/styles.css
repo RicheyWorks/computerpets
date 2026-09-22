@@ -748,6 +748,18 @@
     color: var(--color-muted);
   }
 
+  .keeper-listener {
+    margin: 0.25rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--color-muted);
+  }
+
+  .keeper-listener[data-listener="unread"] {
+    color: #5c564e;
+  }
+
   .gpu-spark {
     display: inline-block;
     width: 72px;

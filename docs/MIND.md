@@ -44,6 +44,18 @@ Authorization: Bearer {apiKey}   # optional
 
 Reply with `{ "text": "..." }` (also accepts `{ "content": "..." }` or OpenAI message shape). Keep it under ~2 sentences.
 
+## Who is listening
+
+The keeper card names the plugin that will actually be asked.
+
+| Door | Line |
+|---|---|
+| Overlay | `Listening · House lines` unless the keeper saved a key for a cloud plugin, or chose Ollama, LM Studio, or a custom webhook with a safe URL. The key stays in `mind.json`. It is not on the card. |
+| Desk, `/demo`, Live, Meet | Guests are House lines, even when `/mind` still shows a cloud default. A signed-in keeper sees a cloud name only when that house env key exists. The card says `Listening · unread` until the read returns. The browser does not send the key. |
+| Blotter | House lines. There is no plugin bus on the blotter. |
+
+An unknown plugin, a missing key, or an unsafe URL stays House lines. The line never includes a key, a URL, or a model.
+
 ## Desktop
 
 Tray → **Minds**. Same roster of plugins. The overlay calls the chosen mind directly (CSP allows `https:` and localhost).

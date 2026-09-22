@@ -360,6 +360,7 @@ paths are not this contract.
 - One-time or IP-bound download URLs (jti is in the MAC; replay within 15 minutes is still possible)
 - Client-side JWT verification (optional; download already checks it)
 - A `/metrics/gpu` route. GPU temperature, utilization, memory, and power are desktop-local on the keeper machine (`desktop/gpu-probe.ps1`, blotter `gpu.py`). The sparkline is a local history of those `read` samples, not a server series. Spring Boot does not see that GPU. Mac and Linux stay unread (`mac-linux-gpu-sense`). The browser has no sensor, so its strip stays empty.
+- A route that returns a mind API key. The keeper card may name who is listening. It does not receive the key. Guests stay on house lines.
 
 Admin revocation (`POST /api/admin/revoke` with `X-Admin-Key`) and license
 audit (`GET /api/admin/licenses`, `GET /api/admin/licenses/{jti}`) are
