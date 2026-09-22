@@ -25,13 +25,21 @@
       const row = petsIn[name] && typeof petsIn[name] === "object" ? petsIn[name] : {};
       const next = {};
       if (typeof row.plugin === "string") next.plugin = row.plugin;
-      if (typeof row.model === "string") next.model = row.model;
+      if (typeof row.model === "string") {
+        const model = scrubSecretModel(row.model);
+        if (model) next.model = model;
+        else if (row.model.trim()) next.model = "";
+      }
       if (typeof row.baseUrl === "string") next.baseUrl = scrubSecretQueryString(row.baseUrl);
       pets[name] = next;
     });
     const def = src.default && typeof src.default === "object" ? src.default : {};
     const defaults = { plugin: typeof def.plugin === "string" && def.plugin ? def.plugin : "local" };
-    if (typeof def.model === "string") defaults.model = def.model;
+    if (typeof def.model === "string") {
+      const model = scrubSecretModel(def.model);
+      if (model) defaults.model = model;
+      else if (def.model.trim()) defaults.model = "";
+    }
     if (typeof def.baseUrl === "string") defaults.baseUrl = scrubSecretQueryString(def.baseUrl);
     return {
       default: defaults,
@@ -104,12 +112,23 @@
     row.baseUrl = scrubSecretQueryString(row.baseUrl);
   }
 
+  function scrubBindingModel(row) {
+    if (!row || typeof row !== "object" || typeof row.model !== "string") return;
+    const model = scrubSecretModel(row.model);
+    if (model) row.model = model;
+    else if (row.model.trim()) row.model = "";
+  }
+
   function scrubMindBaseUrls(mind) {
     if (!mind || typeof mind !== "object") return mind;
     scrubBindingUrl(mind.default);
+    scrubBindingModel(mind.default);
     const pets = mind.pets;
     if (pets && typeof pets === "object") {
-      Object.keys(pets).forEach((name) => scrubBindingUrl(pets[name]));
+      Object.keys(pets).forEach((name) => {
+        scrubBindingUrl(pets[name]);
+        scrubBindingModel(pets[name]);
+      });
     }
     return mind;
   }
@@ -336,10 +355,43 @@
     return after === before ? trimmed : after;
   }
 
+  /**
+   * True when a model field is a pasted secret, not a model id.
+   * `sk-…`, a `key=` / `api_key=` assignment, query-like junk, and a long token count.
+   * `gemini-2.5-flash`, `gpt-4o`, `claude-sonnet-4-5`, and a slash model path do not.
+   */
+  function isSecretModel(raw) {
+    const value = String(raw || "").trim();
+    if (!value) return false;
+    if (/[?&#]/.test(value) || /%(?:3[DdFf]|26)/i.test(value)) return true;
+    const decoded = value.replace(/%3D/gi, "=").replace(/%3F/gi, "?").replace(/%26/gi, "&");
+    const assigned = new RegExp(`(^|[^A-Za-z0-9_])(?:${secretNameSource()})=`, "i");
+    if (assigned.test(decoded)) return true;
+    if (isPastedKeySegment(value)) return true;
+    const parts = value.split("/");
+    for (let i = 0; i < parts.length; i += 1) {
+      if (isPastedKeySegment(parts[i])) return true;
+    }
+    return false;
+  }
+
+  /**
+   * Drop a pasted secret in the model field.
+   * A normal model id is returned trimmed.
+   * A secret becomes `fallback`, or empty when the caller is about to store.
+   */
+  function scrubSecretModel(raw, fallback) {
+    const fb = arguments.length > 1 && fallback != null ? String(fallback) : "";
+    const value = String(raw || "").trim();
+    if (!value || isSecretModel(value)) return fb;
+    return value;
+  }
+
   function sanitizeModel(raw, fallback) {
     const fb = String(fallback || "");
     const value = String(raw || fb).trim();
     if (!value || value.includes("..") || value.includes("\\")) return fb;
+    if (isSecretModel(value)) return fb;
     if (!/^[a-zA-Z0-9._:/-]{1,80}$/.test(value)) return fb;
     return value;
   }

@@ -229,6 +229,63 @@ describe("mind.json base URL", () => {
     assert.equal(JSON.stringify(opened.file).includes(SECRET), false);
   });
 
+  it("drops a pasted secret model on save and rewrites a leftover without a new seal", () => {
+    const token = "sk-test-PASTEDKEY0123456789";
+    const opaque = "AbCdEfGh1234567890IjKlMnOp1234567890";
+    const written = Secret.writeMindRecord(
+      {
+        default: { plugin: "openai", model: token, baseUrl: "https://api.openai.com/v1", apiKey: SECRET },
+        voice: "browser",
+        pets: {
+          red_panda: { plugin: "google", model: `api_key=${token}` },
+          moth: { plugin: "anthropic", model: "claude-sonnet-4-5" },
+          fox: { plugin: "together", model: "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo" },
+        },
+      },
+      xorCodec(),
+      null,
+    );
+    const disk = JSON.stringify(written.file);
+    assert.equal(disk.includes(token), false);
+    assert.equal(disk.includes("api_key="), false);
+    assert.equal(disk.includes(SECRET), false);
+    assert.equal(written.file.default.model, "");
+    assert.equal(written.file.default.baseUrl, "https://api.openai.com/v1");
+    assert.equal(written.file.pets.red_panda.model, "");
+    assert.equal(written.file.pets.moth.model, "claude-sonnet-4-5");
+    assert.equal(written.file.pets.fox.model, "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo");
+    assert.equal(written.kept, "os");
+
+    const sealed = Secret.writeMindRecord(mindWithKey(), xorCodec(), null).file;
+    const prior = sealed.sealedKeys;
+    sealed.default.model = `key=${opaque}`;
+    sealed.pets.red_panda.model = "gpt-4o";
+    const opened = Secret.readMindRecord(sealed, xorCodec());
+    assert.equal(opened.rewrite, true);
+    assert.equal(opened.kept, "os");
+    assert.equal(opened.file.sealedKeys, prior);
+    assert.equal(opened.mind.default.apiKey, SECRET);
+    assert.equal(opened.file.default.model, "");
+    assert.equal(opened.file.pets.red_panda.model, "gpt-4o");
+    assert.equal(JSON.stringify(opened.file).includes(opaque), false);
+    assert.equal(JSON.stringify(opened.file).includes(SECRET), false);
+    assert.equal(opened.mind.default.model, "");
+
+    const clean = Secret.writeMindRecord(
+      {
+        default: { plugin: "google", model: "gemini-2.5-flash" },
+        voice: "browser",
+        pets: { red_panda: { plugin: "openai", model: "gpt-4o" } },
+      },
+      null,
+      null,
+    );
+    const reread = Secret.readMindRecord(clean.file, null);
+    assert.equal(reread.rewrite, false);
+    assert.equal(reread.file.default.model, "gemini-2.5-flash");
+    assert.equal(reread.file.pets.red_panda.model, "gpt-4o");
+  });
+
   it("keeps the secret-query names in lockstep with the web module and the overlay", () => {
     const secretQuerySrc = fs.readFileSync(path.join(__dirname, "..", "..", "web/src/lib/ai/secret-query.mjs"), "utf8");
     const overlay = fs.readFileSync(path.join(__dirname, "mind.js"), "utf8");
@@ -250,7 +307,7 @@ describe("mind.json base URL", () => {
     const helper = (src) => {
       let start = src.indexOf("function secretNameSource");
       start = src.lastIndexOf("\n", start) + 1;
-      const endName = src.indexOf("function scrubSecretQueryString");
+      const endName = src.indexOf("function scrubSecretModel");
       const after = src.slice(endName);
       let depth = 0;
       let end = -1;

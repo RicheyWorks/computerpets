@@ -1,4 +1,4 @@
-import { stripSecretQuery } from "./secret-query.mjs";
+import { isSecretModel, stripSecretQuery } from "./secret-query.mjs";
 import type { MindKind } from "./types";
 
 const LOCAL_HOSTS = new Set(["127.0.0.1", "localhost", "::1"]);
@@ -25,7 +25,8 @@ function isPrivateHost(host: string) {
 
 export function sanitizeModel(raw: string | undefined, fallback: string) {
   const value = (raw || fallback).trim();
-  if (value.includes("..") || value.includes("\\")) return fallback;
+  if (!value || value.includes("..") || value.includes("\\")) return fallback;
+  if (isSecretModel(value)) return fallback;
   if (!/^[a-zA-Z0-9._:/-]{1,80}$/.test(value)) return fallback;
   return value;
 }
