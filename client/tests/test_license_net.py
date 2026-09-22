@@ -5,11 +5,14 @@ from pathlib import Path
 from computerpets_client.license.license_net import (
     BUNDLE_IDLE,
     BUNDLE_LOCAL,
+    DOWNLOAD_LOCAL,
     LOCAL_STAYS,
     bundle_honesty,
     bundle_host_name,
     bundle_may_fetch,
     client_net_line,
+    download_may_post,
+    download_talk_honesty,
     license_honesty,
     license_host_name,
     license_may_send,
@@ -53,6 +56,51 @@ def test_blotter_paints_the_line_before_unlock_or_download():
     assert "raw id is not sent" in dialog
     gate = dialog[dialog.index("def _hash_may_leave") : dialog.index("def _paint_status")]
     assert gate.index("_paint_net") < gate.index("license_may_send")
+
+
+def test_unbound_download_line_names_the_host_and_does_not_say_a_hash_is_sent():
+    dirty = "https://user:secret@license.example.test:8443/api/download/red_panda?hwid=raw-id#frag"
+    line = download_talk_honesty(dirty)
+    hash_line = license_honesty(dirty)
+    assert hash_line == (
+        "this unlock sends the license hash. "
+        + client_net_line("license.example.test")
+        + " a bound download sends that same hash."
+    )
+    assert line == (
+        "this download talks to license.example.test. "
+        + client_net_line("license.example.test")
+        + " the license hash is not on that request."
+    )
+    assert "sends the license hash" not in line
+    assert "secret" not in line
+    assert "raw-id" not in line
+    assert "/api" not in line
+    assert "8443" not in line
+    assert "frag" not in line
+    assert download_may_post(dirty, line) is True
+    assert download_may_post(dirty, "") is False
+    assert download_may_post(dirty, hash_line) is False
+    assert download_may_post(dirty, client_net_line("license.example.test")) is False
+    assert download_talk_honesty("http://127.0.0.1:8081") == ""
+    assert download_talk_honesty("http://localhost:8081") == ""
+    assert download_talk_honesty("http://[::1]:8081") == ""
+    assert download_may_post("http://127.0.0.1:8081", "") is True
+    assert "talks to this computer" in DOWNLOAD_LOCAL
+    assert "not on that request" in DOWNLOAD_LOCAL
+    assert "https request" not in DOWNLOAD_LOCAL
+    assert "sends the license hash" not in DOWNLOAD_LOCAL
+
+
+def test_blotter_paints_the_download_line_before_an_unbound_post():
+    dialog = Path(__file__).resolve().parents[1].joinpath("computerpets_client", "unlock_dialog.py").read_text(encoding="utf-8")
+    download = dialog[dialog.index("def _download(self") : dialog.index("def _clear")]
+    assert download.index("_download_may_leave") < download.index('["download"]')
+    assert download.index("_hash_may_leave") < download.index('["download"]')
+    gate = dialog[dialog.index("def _download_may_leave") : dialog.index("def _paint_status")]
+    assert gate.index("_paint_net") < gate.index("download_may_post")
+    init = dialog[dialog.index("class UnlockDialog") : dialog.index("def _mark_text")]
+    assert '["download"]' not in init
 
 
 def test_bundle_line_names_the_cdn_host_and_drops_the_path():

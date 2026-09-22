@@ -8,7 +8,7 @@ const fs = require("fs");
 const { createLicenseSession } = require("./session.cjs");
 const { createContractTestDouble, encryptLicense } = require("./contract-test-double.cjs");
 const { LicenseError } = require("./errors.cjs");
-const { bundleHonesty, licenseHonesty } = require("./license-net.cjs");
+const { bundleHonesty, downloadTalkHonesty, licenseHonesty } = require("./license-net.cjs");
 
 const SECRET = Buffer.alloc(32, 7).toString("base64");
 const SIGNING = "test-bundle-signing-key-not-a-placeholder";
@@ -531,6 +531,96 @@ describe("license session", () => {
     assert.equal(posts.length, 1);
     assert.equal(posts[0].hwid, "already-bound");
     assert.equal(Object.prototype.hasOwnProperty.call(posts[0], "machine-id"), false);
+  });
+
+  it("does not POST an unbound download to a remote host until that host is named", async () => {
+    const now = Date.now();
+    const enc = encryptLicense(
+      {
+        jti: "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80",
+        owner: "76561198000000000",
+        pet: "red_panda",
+        validUntil: new Date(now + 86400_000).toISOString(),
+        issuedAt: new Date(now).toISOString(),
+        hwid: null,
+      },
+      SECRET
+    );
+    const files = new Map();
+    const dir = path.join(os.tmpdir(), "cp-license-unbound-remote");
+    files.set(
+      path.join(dir, "license.json"),
+      JSON.stringify({
+        backendUrl: "https://user:secret@license.example.test/api/download/red_panda?hwid=raw-id#frag",
+        license: { ciphertext: enc.ciphertext, iv: enc.iv },
+        auth: { token: "token" },
+      })
+    );
+    const posts = [];
+    const seen = [];
+    const session = createLicenseSession({
+      userDataDir: dir,
+      env: { LICENSE_SECRET_KEY: SECRET, COMPUTERPETS_BACKEND_URL: "https://license.example.test" },
+      readFile: (p) => {
+        const key = String(p);
+        if (key.includes("machine-id") || key.includes("MachineGuid")) throw new Error("os read");
+        if (!files.has(key)) {
+          const err = new Error("ENOENT");
+          err.code = "ENOENT";
+          throw err;
+        }
+        return files.get(key);
+      },
+      writeFile: (p, data) => {
+        files.set(String(p), String(data));
+      },
+      mkdir: () => {},
+      fetchImpl: async (url, init) => {
+        seen.push(String(url));
+        if (init && String(init.method || "GET").toUpperCase() === "POST") posts.push(JSON.parse(init.body));
+        return new Response("no", { status: 500 });
+      },
+    });
+    await session.status();
+    assert.equal(seen.length, 0);
+
+    const remote = "https://user:secret@license.example.test:8443/api/download/red_panda?hwid=raw-id#frag";
+    const line = downloadTalkHonesty(remote);
+    assert.equal(line.includes("sends the license hash"), false);
+    assert.equal(line.includes("secret"), false);
+    assert.equal(line.includes("/api"), false);
+    assert.equal(line.includes("frag"), false);
+    assert.match(line, /this download talks to license\.example\.test/);
+
+    await assert.rejects(
+      () => session.download(),
+      (err) =>
+        err instanceof LicenseError &&
+        err.code === "download_net_unnamed" &&
+        /license\.example\.test/.test(err.message) &&
+        !err.message.includes("secret") &&
+        !err.message.includes("/api") &&
+        !err.message.includes("sig=")
+    );
+    assert.equal(posts.length, 0);
+    assert.equal(seen.length, 0);
+
+    await assert.rejects(
+      () => session.download({ licenseLine: licenseHonesty(remote) }),
+      (err) => err instanceof LicenseError && err.code === "download_net_unnamed"
+    );
+    assert.equal(posts.length, 0);
+
+    await assert.rejects(
+      () => session.download({ licenseLine: line }),
+      (err) => err instanceof LicenseError && err.code === "download_failed"
+    );
+    assert.equal(posts.length, 1);
+    assert.equal(Object.prototype.hasOwnProperty.call(posts[0], "hwid"), false);
+    assert.equal(typeof posts[0].ciphertext, "string");
+    assert.equal(typeof posts[0].iv, "string");
+    assert.equal(new URL(seen[0]).hostname, "license.example.test");
+    assert.equal(seen[0].includes("secret"), true);
   });
 
   it("does not GET a remote signed bundle until the CDN host is named", async () => {
