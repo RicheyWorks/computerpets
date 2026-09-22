@@ -511,6 +511,7 @@
   /**
    * The only cloud-talk request. A miss resolves to the local reply and does not call request.
    * A loopback mind still calls request. That fetch stays on this computer.
+   * Overlay connect-src names the preset hosts. A custom host still uses the https: scheme. ADR 0048.
    */
   function readTalk(shown, bind, request, fallback) {
     if (!talkMayLeave(bind, shown)) return Promise.resolve(fallback);
