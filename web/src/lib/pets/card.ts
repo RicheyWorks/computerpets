@@ -1,5 +1,5 @@
 /** Keeper-card desk controls. Same truth as the overlay card. Persist on the machine. */
-import { parseAreas, storedLivePinNeedsFuzz } from "./weather-areas.ts";
+import { parseAreas, stickHereForecastAck, storedLivePinNeedsFuzz, type HereForecastAck } from "./weather-areas.ts";
 import { parseNewsPrefs } from "./news.ts";
 import { parseMarket } from "./market.ts";
 import { parseStep } from "./house-sounds.ts";
@@ -73,6 +73,7 @@ export type CardPrefs = {
   currentAreaId: string | null;
   weatherTab: string;
   favoriteAreaIds: string[];
+  hereForecastAck: HereForecastAck | null;
   newsPrefs: Array<{ id: string; name: string; query: string }>;
   currentNewsId: string;
   newsTab: string;
@@ -120,6 +121,7 @@ export function blankCard(): CardPrefs {
     currentAreaId: null,
     weatherTab: "current",
     favoriteAreaIds: [],
+    hereForecastAck: null,
     newsPrefs: [{ id: "world", name: "World", query: "" }],
     currentNewsId: "world",
     newsTab: "popular",
@@ -239,6 +241,7 @@ export function parseCard(raw: unknown): CardPrefs {
   next.currentAreaId = areas.currentId;
   next.weatherTab = areas.tab || "current";
   next.favoriteAreaIds = areas.favoriteIds || [];
+  next.hereForecastAck = stickHereForecastAck(o, o.hereForecastAck);
   const news = parseNewsPrefs(o);
   next.newsPrefs = news.topics;
   next.currentNewsId = news.currentId;

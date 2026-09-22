@@ -76,6 +76,28 @@ test("a stored live pin is rounded when the card loads", () => {
   assert.equal(typed.weatherAreas[0].lat, 45.5231);
   assert.equal(typed.weatherAreas[0].lon, -122.6765);
   assert.equal(mem[C.STORE], beforeTyped);
+  mem[C.STORE] = JSON.stringify({
+    weatherAreas: [{ id: "here", name: "This computer", query: "this computer", lat: 47.6, lon: -122.3 }],
+    currentAreaId: "here",
+    hereForecastAck: { lat: 47.6, lon: -122.3 },
+  });
+  const acked = C.load();
+  assert.deepEqual(acked.hereForecastAck, { lat: 47.6, lon: -122.3 });
+  const preciseAck = C.parseCard({
+    weatherAreas: [{ id: "here", name: "This computer", query: "this computer", lat: 47.6, lon: -122.3 }],
+    currentAreaId: "here",
+    hereForecastAck: { lat: 47.606, lon: -122.332 },
+  });
+  assert.equal(preciseAck.hereForecastAck, null);
+  const moved = C.parseCard({
+    weatherAreas: [
+      { id: "here", name: "This computer", query: "this computer", lat: 47.6, lon: -122.3 },
+      { id: "a-pdx", name: "Portland", query: "Portland", lat: 45.5, lon: -122.6 },
+    ],
+    currentAreaId: "a-pdx",
+    hereForecastAck: { lat: 47.6, lon: -122.3 },
+  });
+  assert.equal(moved.hereForecastAck, null);
   if (prevStore === undefined) delete global.localStorage;
   else global.localStorage = prevStore;
   if (prevDesk === undefined) delete global.desk;
