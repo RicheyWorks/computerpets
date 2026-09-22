@@ -23,6 +23,7 @@
     "files": [
       "main.cjs",
       "preload.cjs",
+      "presence.cjs",
       "windows-enum.cjs",
       "license/**/*.cjs",
       "!license/**/*.test.cjs",

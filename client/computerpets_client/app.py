@@ -32,6 +32,7 @@ from .choice import guest_marks, guest_pick, guest_tap, walking_cmd
 from .gift import gift_line, leave_gift, pick_gift
 from .gpu import SPARK_H, SPARK_W, gpu_line, initial_sample, ink, read_local, remember, sparkline
 from .listener import listener_line
+from .presence import refuse_file_drop, seal_widget
 from .guide import plaque_for
 from .hive import colony_of, colony_word, is_hive_place
 from .hours import (
@@ -105,6 +106,16 @@ class BlotterView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setFrameShape(QGraphicsView.Shape.NoFrame)
         self.setBackgroundBrush(QColor(42, 34, 24))
+        seal_widget(self)
+
+    def dragEnterEvent(self, event) -> None:
+        event.ignore()
+
+    def dragMoveEvent(self, event) -> None:
+        event.ignore()
+
+    def dropEvent(self, event) -> None:
+        event.ignore()
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
@@ -172,6 +183,7 @@ class DeskWindow(QMainWindow):
 
         self.setWindowTitle("ComputerPets — blotter")
         self.resize(1000, 860)
+        seal_widget(self)
 
         self.scene = QGraphicsScene(0, 0, SCENE_W, SCENE_H, self)
         self.scene.addItem(DeskBackground(SCENE_W, SCENE_H))
@@ -334,6 +346,15 @@ class DeskWindow(QMainWindow):
         self._refresh_license()
         self._refresh_vitals()
         self._reset_visit()
+
+    def dragEnterEvent(self, event) -> None:
+        event.ignore()
+
+    def dragMoveEvent(self, event) -> None:
+        event.ignore()
+
+    def dropEvent(self, event) -> None:
+        event.ignore()
 
     def closeEvent(self, event) -> None:
         remember_visit(self.species.key, user_data_dir=self._user_data_dir)
@@ -930,6 +951,14 @@ def main(argv: list[str] | None = None) -> int:
         print(window.renderer_label)
         print(f"ok: gpu sense {window.gpu_label.text()}")
         print(f"ok: listener {window.listener_label.text()}")
+        dropped = refuse_file_drop(["Files", "text/uri-list"], 1)
+        if dropped["accept"] or dropped["read"] or not dropped["files"]:
+            print("check failed: presence would read a dropped file", file=sys.stderr)
+            return 1
+        if window.acceptDrops() or window.view.acceptDrops():
+            print("check failed: blotter accepts file drops", file=sys.stderr)
+            return 1
+        print("ok: presence refuses dropped files")
         QTimer.singleShot(250, app.quit)
     return app.exec()
 
