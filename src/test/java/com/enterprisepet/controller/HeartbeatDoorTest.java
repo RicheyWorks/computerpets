@@ -5,7 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -75,13 +79,42 @@ class HeartbeatDoorTest {
     }
 
     @Test
-    @DisplayName("advertised care routes are not a door")
-    void advertisedCareRoutes_areNotInvented() {
-        assertThat(restTemplate.getForEntity("/pet/feed", String.class).getStatusCode().is2xxSuccessful())
-            .isFalse();
-        assertThat(restTemplate.getForEntity("/pet/play", String.class).getStatusCode().is2xxSuccessful())
-            .isFalse();
-        assertThat(restTemplate.getForEntity("/pet/rest", String.class).getStatusCode().is2xxSuccessful())
-            .isFalse();
+    @DisplayName("advertised care routes refuse locally and are not a 200 or a license wall")
+    void advertisedCareRoutes_refuseLocally() {
+        for (String path : new String[] {"/pet/feed", "/pet/play", "/pet/rest"}) {
+            assertLocalRefusal(restTemplate.getForEntity(path, String.class), path);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<String> posted = new HttpEntity<>("{\"hunger\":0,\"bond\":100}", headers);
+            assertLocalRefusal(
+                restTemplate.exchange(path, HttpMethod.POST, posted, String.class),
+                path);
+        }
+    }
+
+    @Test
+    @DisplayName("only the three advertised care paths answer; other /pet paths stay closed")
+    void otherPetPaths_stayClosed() {
+        ResponseEntity<String> bath = restTemplate.getForEntity("/pet/bath", String.class);
+        assertThat(bath.getStatusCode().is2xxSuccessful()).isFalse();
+        assertThat(bath.getStatusCode()).isNotEqualTo(HttpStatus.CONFLICT);
+    }
+
+    private static void assertLocalRefusal(ResponseEntity<String> response, String path) {
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(response.getStatusCode().is2xxSuccessful()).isFalse();
+        assertThat(response.getStatusCode()).isNotEqualTo(HttpStatus.UNAUTHORIZED);
+        String body = response.getBody();
+        assertThat(body).isNotNull();
+        assertThat(body).contains("\"status\":409");
+        assertThat(body).contains("\"title\":\"Care is local\"");
+        assertThat(body).contains("Care is local. " + path + " is not a door.");
+        assertThat(body).contains("\"door\":\"local\"");
+        assertThat(body).contains("\"performed\":false");
+        assertThat(body).contains("\"verb\":\"" + path.substring(path.lastIndexOf('/') + 1) + "\"");
+        assertThat(body).doesNotContain("hunger");
+        assertThat(body).doesNotContain("bond");
+        assertThat(body).doesNotContainIgnoringCase("jwt");
+        assertThat(body).doesNotContainIgnoringCase("license");
     }
 }

@@ -41,6 +41,8 @@ public class SecurityConfig {
                                  "/actuator/health",
                                  "/actuator/health/liveness",
                                  "/actuator/health/readiness").permitAll()
+                // Advertised care paths answer 409 without a JWT. A missing license is not why feed fails.
+                .requestMatchers("/pet/feed", "/pet/play", "/pet/rest").permitAll()
                 // Admin operations use a separate pre-shared key (X-Admin-Key) — handled inside the controller.
                 .requestMatchers("/api/admin/**").permitAll()
                 // Bundle download requires a freshly-issued JWT from /api/verify/{provider}.
@@ -69,9 +71,18 @@ public class SecurityConfig {
         heartbeat.setAllowedHeaders(List.of("Content-Type"));
         heartbeat.setMaxAge(3600L);
 
+        CorsConfiguration careDoor = new CorsConfiguration();
+        careDoor.setAllowedOriginPatterns(List.of("*"));
+        careDoor.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        careDoor.setAllowedHeaders(List.of("Content-Type"));
+        careDoor.setMaxAge(3600L);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/admin/**", admin);
         source.registerCorsConfiguration("/api/public/**", heartbeat);
+        source.registerCorsConfiguration("/pet/feed", careDoor);
+        source.registerCorsConfiguration("/pet/play", careDoor);
+        source.registerCorsConfiguration("/pet/rest", careDoor);
         return source;
     }
 }
