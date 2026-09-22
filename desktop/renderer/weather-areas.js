@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. */
 (function (root) {
   const NO_AREA = "no area set";
   const AREA_LABEL = "Weather area";
@@ -6,6 +6,11 @@
   const AREA_TRUTH = "Weather area. Named places you add. Not the radio station.";
   const TYPE_A_CITY = "type a city";
   const HERE_FAIL = "this computer did not share a place";
+  const HERE_SEND = "this click sends a place to the forecast host.";
+  const HERE_KEPT = "keeping the saved place";
+  const HERE_SENT = "a place was sent to the forecast host";
+  // A tenth of a degree is about 11 km. Rounding is not anonymity.
+  const PLACE_STEP = 0.1;
   const CANT_REACH = "can't reach";
   const FAVORITES_EMPTY = "No favorites yet — star a place.";
   const GEOCODE_HOST = "geocoding-api.open-meteo.com";
@@ -146,6 +151,52 @@
     return parseTab(tab) === "favorites" ? "Favorites" : "Current";
   }
 
+  function isLiveFix(area) {
+    if (!area) return false;
+    return area.id === "here" || area.query === "this computer";
+  }
+
+  /**
+   * Round a fix to a place before it can leave. A tenth of a degree.
+   * This is not anonymity. The forecast host still receives a place.
+   */
+  function sharePlace(lat, lon) {
+    const la = num(lat);
+    const lo = num(lon);
+    if (la == null || lo == null) return null;
+    if (la < -90 || la > 90 || lo < -180 || lo > 180) return null;
+    const places = Math.round(1 / PLACE_STEP);
+    const round = (v) => {
+      const n = Number((Math.round(v * places) / places).toFixed(1));
+      return Object.is(n, -0) ? 0 : n;
+    };
+    let latR = round(la);
+    let lonR = round(lo);
+    if (latR > 90) latR = 90;
+    if (latR < -90) latR = -90;
+    if (lonR > 180) lonR = 180;
+    if (lonR < -180) lonR = -180;
+    return { lat: latR, lon: lonR };
+  }
+
+  /** A place the keeper typed. A live "here" fix is not one. */
+  function typedArea(areas) {
+    const house = parseAreas(areas);
+    const typed = house.areas.filter((a) => !isLiveFix(a));
+    if (!typed.length) return null;
+    return typed.find((a) => a.id === house.currentId) || typed[0];
+  }
+
+  /**
+   * Prefer a saved typed area. Do not start a live locate when one is present.
+   * A cached geolocation grant is not consulted on that path.
+   */
+  function locateChoice(areas) {
+    const saved = typedArea(areas);
+    if (saved) return { locate: false, area: saved };
+    return { locate: true, area: null };
+  }
+
   function geocodeUrl(query) {
     const q = clipName(query);
     if (!q) return "";
@@ -153,10 +204,9 @@
   }
 
   function reverseUrl(lat, lon) {
-    const la = num(lat);
-    const lo = num(lon);
-    if (la == null || lo == null) return "";
-    return `https://${GEOCODE_HOST}/v1/reverse?latitude=${la}&longitude=${lo}&language=en&format=json`;
+    const place = sharePlace(lat, lon);
+    if (!place) return "";
+    return `https://${GEOCODE_HOST}/v1/reverse?latitude=${place.lat.toFixed(1)}&longitude=${place.lon.toFixed(1)}&language=en&format=json`;
   }
 
   function parseReverse(json) {
@@ -165,10 +215,9 @@
   }
 
   function forecastUrl(lat, lon) {
-    const la = num(lat);
-    const lo = num(lon);
-    if (la == null || lo == null) return "";
-    return `https://${FORECAST_HOST}/v1/forecast?latitude=${la}&longitude=${lo}&current=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=3&timezone=auto`;
+    const place = sharePlace(lat, lon);
+    if (!place) return "";
+    return `https://${FORECAST_HOST}/v1/forecast?latitude=${place.lat.toFixed(1)}&longitude=${place.lon.toFixed(1)}&current=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=3&timezone=auto`;
   }
 
   function parseGeocode(json) {
@@ -248,6 +297,10 @@
     AREA_TRUTH,
     TYPE_A_CITY,
     HERE_FAIL,
+    HERE_SEND,
+    HERE_KEPT,
+    HERE_SENT,
+    PLACE_STEP,
     CANT_REACH,
     FAVORITES_EMPTY,
     GEOCODE_HOST,
@@ -270,6 +323,9 @@
     favoriteAreas,
     tabLabel,
     geocodeUrl,
+    sharePlace,
+    typedArea,
+    locateChoice,
     reverseUrl,
     parseReverse,
     forecastUrl,

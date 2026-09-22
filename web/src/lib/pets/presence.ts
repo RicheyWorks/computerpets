@@ -5,7 +5,9 @@ export const HOUSE_FILES = ["card.json", "mind.json"] as const;
 /**
  * Geolocation is not a standing grant. It opens only for one weather-button
  * locate, then closes. A browser may keep an origin grant after that click;
- * this page cannot revoke it. Callers do not watch and do not re-query.
+ * this page cannot revoke it. That cache can answer the next control use
+ * without a new prompt. maximumAge 0 does not flush the grant.
+ * Callers do not watch, do not re-query, and do not ask when a typed area is saved.
  */
 export const WEATHER_LOCATE_MS = 120_000;
 
@@ -108,7 +110,7 @@ export function ipPlace(..._ignored: unknown[]): IpPlace | null {
   return null;
 }
 
-/** One weather-button fix. Arms geolocation, asks once, then clears. Does not watch. */
+/** One weather-button fix. Arms geolocation, asks once, then clears. Does not watch. A cached origin grant can still answer without a new prompt. */
 export function readWeatherHere(
   geo?: GeoLike,
   hooks?: WeatherLocateHooks | null,

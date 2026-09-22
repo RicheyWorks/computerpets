@@ -16,6 +16,11 @@ const HOUSE_FILES = Object.freeze(["card.json", "mind.json"]);
  * revoked mid-session. This flag is the live check: false once the locate
  * ends or WEATHER_LOCATE_MS passes. Callers do not watch and do not re-query.
  * An IP place service is not a fallback when that fix is missing.
+ * maximumAge 0 does not flush a permission grant. Chromium can still
+ * answer getCurrentPosition from an origin grant it already cached,
+ * without a new prompt. Electron 35 cannot revoke that cache.
+ * Callers ask only from the weather control, and only when no typed
+ * area is saved. A saved typed area does not arm this grant.
  */
 const WEATHER_LOCATE_MS = 120_000;
 let weatherLocateUntil = 0;
@@ -104,7 +109,8 @@ function ipPlace() {
 
 /**
  * One weather-button fix. Arms geolocation, asks once, then clears.
- * Does not call watchPosition. maximumAge is 0, so a cached fix is not a silent re-read.
+ * Does not call watchPosition. maximumAge is 0, so a cached position is not a silent re-read.
+ * A cached origin grant can still satisfy the prompt. This does not revoke it.
  * `hooks.arm` / `hooks.clear` are how the overlay tells the Electron session.
  * @param {{ getCurrentPosition?: Function } | null | undefined} geo
  * @param {{ arm?: Function, clear?: Function } | null | undefined} [hooks]
