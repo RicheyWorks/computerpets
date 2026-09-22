@@ -110,6 +110,11 @@
     return null;
   }
 
+  /** The page does not read a machine id. License binding is the overlay main process. */
+  function readMachineMark() {
+    return { read: false, raw: null, id: "" };
+  }
+
   /**
    * One weather-button fix. Asks once, then clears the session grant.
    * maximumAge is 0, so a cached position is not a silent re-read.
@@ -166,7 +171,7 @@
       );
   }
 
-  const api = { hasHostFiles, install, classifyKey, recordKeystroke, ipPlace, readWeatherHere, weatherLocateOptions };
+  const api = { hasHostFiles, install, classifyKey, recordKeystroke, ipPlace, readMachineMark, readWeatherHere, weatherLocateOptions };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetPresence = api;
   if (typeof document !== "undefined") install(document);

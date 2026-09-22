@@ -17,6 +17,7 @@ test("desk presence refuses navigation and host paths", () => {
   assert.equal(P.houseFile("/house", "mind.json"), "/house/mind.json");
   assert.equal(P.houseFile("/house", "../Desktop/notes.txt"), null);
   assert.equal(P.houseFile("/house", "hwid.txt"), null);
+  assert.deepEqual(P.readMachineMark(), { read: false, raw: null, id: "" });
 });
 
 test("clipboard and file-system grants stay denied; geolocation is not a standing grant", async () => {

@@ -11,6 +11,7 @@ from computerpets_client.presence import (
     clear_weather_locate,
     host_path_label,
     house_file,
+    read_machine_mark,
     ip_place,
     list_host_folder,
     read_weather_here,
@@ -26,6 +27,7 @@ def test_house_files_stay_inside_user_data():
     assert house_file("/tmp/computerpets", "../Desktop/homework.txt") is None
     assert house_file("/tmp/computerpets", "/etc/passwd") is None
     assert house_file("/tmp/computerpets", "hwid.txt") is None
+    assert read_machine_mark() == {"read": False, "raw": None, "id": ""}
     assert house_file("", "card.json") is None
 
 

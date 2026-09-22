@@ -5,7 +5,8 @@ const assert = require("node:assert/strict");
 const os = require("os");
 const path = require("path");
 const fs = require("fs");
-const { resolveHwid, assertHwid, MAX_HWID_LENGTH } = require("./hwid.cjs");
+const { readFileSync } = require("node:fs");
+const { resolveHwid, resolveHwidDetail, peekHwid, describeMachineMarks, assertHwid, MAX_HWID_LENGTH } = require("./hwid.cjs");
 const { LicenseError } = require("./errors.cjs");
 
 describe("hwid (CLIENT-CONTRACT §5)", () => {
@@ -53,5 +54,138 @@ describe("hwid (CLIENT-CONTRACT §5)", () => {
   it("does not normalize case — exact string equality is the caller's job", () => {
     assert.equal(assertHwid("Device-ABC"), "Device-ABC");
     assert.notEqual(assertHwid("Device-ABC"), "device-abc");
+  });
+
+  it("hashes linux machine-id and does not return the raw id", () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cp-hwid-"));
+    const seen = [];
+    const detail = resolveHwidDetail({
+      userDataDir: dir,
+      platform: "linux",
+      readFile: (p) => {
+        seen.push(String(p));
+        if (String(p).endsWith("hwid.txt")) {
+          const err = new Error("ENOENT");
+          err.code = "ENOENT";
+          throw err;
+        }
+        return "machine-aaa\n";
+      },
+      writeFile: (p, data) => {
+        assert.equal(String(data).includes("machine-aaa"), false);
+        fs.writeFileSync(p, data);
+      },
+    });
+    assert.equal(detail.id, "eaa1f7bdd907e76c52b378ce67b87a05bb287933089e7adc50ca18399cbb53a4");
+    assert.equal(detail.source, "etc-machine-id");
+    assert.equal(detail.read, "machine");
+    assert.equal(detail.raw, undefined);
+    assert.equal(detail.rawLeavesMachine, false);
+    assert.equal(JSON.stringify(detail).includes("machine-aaa"), false);
+    const osReads = seen.filter((item) => !item.endsWith("hwid.txt"));
+    assert.equal(osReads[0].endsWith("/etc/machine-id") || osReads[0] === "/etc/machine-id", true);
+    assert.equal(fs.readFileSync(path.join(dir, "hwid.txt"), "utf8"), detail.id);
+  });
+
+  it("reuses a stored mark and does not read the OS id again", () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cp-hwid-"));
+    const file = path.join(dir, "hwid.txt");
+    fs.writeFileSync(file, "legacy-device\n");
+    let osReads = 0;
+    const detail = resolveHwidDetail({
+      userDataDir: dir,
+      platform: "linux",
+      readFile: (p) => {
+        if (!String(p).endsWith("hwid.txt")) osReads += 1;
+        return fs.readFileSync(p, "utf8");
+      },
+      writeFile: () => {
+        throw new Error("stored mark must not be rewritten");
+      },
+    });
+    assert.equal(osReads, 0);
+    assert.equal(detail.id, "legacy-device");
+    assert.equal(detail.read, "stored");
+    assert.equal(detail.source, "hwid.txt");
+    assert.equal(fs.readFileSync(file, "utf8"), "legacy-device\n");
+  });
+
+  it("peek does not read machine-id", () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cp-hwid-"));
+    const peeked = peekHwid({
+      userDataDir: dir,
+      readFile: (p) => {
+        if (!String(p).endsWith("hwid.txt")) throw new Error("os read");
+        const err = new Error("ENOENT");
+        err.code = "ENOENT";
+        throw err;
+      },
+    });
+    assert.equal(peeked.read, "unread");
+    assert.equal(peeked.id, "");
+    const marks = describeMachineMarks("linux");
+    assert.deepEqual(
+      marks.slice(0, 2).map((mark) => mark.source),
+      ["etc-machine-id", "dbus-machine-id"]
+    );
+    assert.equal(marks.some((mark) => mark.where === "/etc/machine-id"), true);
+    const win = describeMachineMarks("win32").find((mark) => mark.source === "machine-guid");
+    assert.equal(win.where, "HKLM\\SOFTWARE\\Microsoft\\Cryptography");
+    assert.equal(win.value, "MachineGuid");
+    assert.equal(describeMachineMarks("darwin").some((mark) => mark.source === "io-platform-uuid"), true);
+  });
+
+  it("hashes a Windows hostname fallback and does not return the name", () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cp-hwid-"));
+    const detail = resolveHwidDetail({
+      userDataDir: dir,
+      platform: "win32",
+      hostname: "KEEP-ME-SECRET",
+      exec: () => {
+        throw new Error("no registry");
+      },
+      readFile: () => {
+        const err = new Error("ENOENT");
+        err.code = "ENOENT";
+        throw err;
+      },
+      writeFile: (p, data) => fs.writeFileSync(p, data),
+    });
+    assert.equal(detail.source, "hostname");
+    assert.equal(detail.id, "db23d6351ce1544f7e49e1b6b54524ec310ce159e7d76bc88acfbbf431567440");
+    assert.equal(JSON.stringify(detail).includes("KEEP-ME-SECRET"), false);
+    assert.equal(fs.readFileSync(path.join(dir, "hwid.txt"), "utf8").includes("KEEP-ME-SECRET"), false);
+  });
+
+  it("queries MachineGuid with the historical registry command", () => {
+    let cmd = "";
+    resolveHwidDetail({
+      platform: "win32",
+      exec: (command) => {
+        cmd = command;
+        return "    MachineGuid    REG_SZ    aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\r\n";
+      },
+      readFile: () => {
+        const err = new Error("ENOENT");
+        err.code = "ENOENT";
+        throw err;
+      },
+      writeFile: () => {},
+    });
+    assert.equal(cmd, "reg query HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid");
+  });
+
+  it("names the read on the unlock screen and does not send the raw id from presence", () => {
+    const settings = readFileSync(path.join(__dirname, "..", "renderer", "settings.html"), "utf8");
+    const dialog = readFileSync(path.join(__dirname, "..", "..", "client", "computerpets_client", "unlock_dialog.py"), "utf8");
+    for (const src of [settings, dialog]) {
+      assert.match(src, /MachineGuid/);
+      assert.match(src, /machine-id/);
+      assert.match(src, /did not read/);
+      assert.match(src, /raw id is not sent/);
+      assert.match(src, /device fingerprint/);
+    }
+    assert.match(settings, /status\.hwidMark/);
+    assert.equal(settings.includes("status.hwid)"), false);
   });
 });

@@ -11,7 +11,7 @@ from typing import Any, Callable
 from .decrypt import decrypt_license
 from .errors import LicenseError
 from .http_client import FetchImpl, create_license_client, normalize_backend_url
-from .hwid import assert_hwid, resolve_hwid
+from .hwid import assert_hwid, peek_hwid, resolve_hwid_detail
 
 STORE_NAME = "license.json"
 DEFAULT_BACKEND = "http://127.0.0.1:8081"
@@ -67,10 +67,13 @@ def create_license_session(
         maker(str(Path(store_file).parent))
         writer(store_file, json.dumps(data, indent=2))
 
-    def device_id() -> str:
+    def device_mark(allow_read: bool) -> dict[str, Any]:
         if isinstance(hwid, str) and hwid:
-            return assert_hwid(hwid)
-        return resolve_hwid(user_data_dir=user_data_dir, read_file=reader, write_file=writer)
+            return {"id": assert_hwid(hwid), "source": "caller", "read": "caller", "rawLeavesMachine": False}
+        peeked = peek_hwid(user_data_dir=user_data_dir, read_file=reader)
+        if not allow_read or peeked["read"] == "stored":
+            return peeked
+        return resolve_hwid_detail(user_data_dir=user_data_dir, read_file=reader, write_file=writer)
 
     def decrypt_stored(store: dict[str, Any]) -> dict[str, Any] | None:
         license_body = store.get("license") or {}
@@ -97,16 +100,22 @@ def create_license_session(
             error = error or {"code": err.code, "message": str(err)}
 
         try:
-            current_hwid = device_id()
+            mark = device_mark(False)
         except LicenseError:
-            current_hwid = ""
+            mark = {"id": "", "source": "hwid.txt", "read": "rejected", "rawLeavesMachine": False}
 
         return {
             "unlocked": bool(payload),
             "backendUrl": backend_url,
             "provider": store.get("provider") or "steam",
             "fields": store.get("fields") if isinstance(store.get("fields"), dict) else {},
-            "hwid": current_hwid,
+            "hwid": mark["id"],
+            "hwidMark": {
+                "read": mark["read"],
+                "source": mark["source"],
+                "rawLeavesMachine": False,
+                "phoneHome": "hash-on-unlock-and-bound-download",
+            },
             "license": (
                 {
                     "jti": payload["jti"],
@@ -134,10 +143,11 @@ def create_license_session(
         secret = secret_arg if secret_arg is not None else license_secret(env)
         kwargs = {"now": now_fn} if now_fn else {}
         payload = payload_arg or decrypt_license(store["license"]["ciphertext"], store["license"]["iv"], secret, **kwargs)
-        current = device_id_arg or device_id()
+        bound = bool(payload.get("hwid"))
+        current = device_id_arg or (device_mark(True)["id"] if bound else "")
         backend_url = normalize_backend_url(store.get("backendUrl") or default_backend_url(env))
 
-        if payload.get("hwid") and payload["hwid"] != current:
+        if bound and payload.get("hwid") != current:
             raise LicenseError("hwid_mismatch", "hardware binding mismatch")
 
         manifest = client["download"](
@@ -177,7 +187,7 @@ def create_license_session(
             input_fields.get("backendUrl") or store.get("backendUrl") or default_backend_url(env)
         )
         provider = input_fields.get("provider") if isinstance(input_fields.get("provider"), str) and input_fields.get("provider") else "steam"
-        current = device_id()
+        current = device_mark(True)["id"]
         secret = license_secret(env)
         if not secret:
             raise LicenseError("missing_secret", "LICENSE_SECRET_KEY is missing; cannot decrypt the issued license")
@@ -239,5 +249,5 @@ def create_license_session(
         "unlock": unlock,
         "download": download,
         "clear": clear,
-        "hwid": device_id,
+        "hwid": lambda: device_mark(True)["id"],
     }

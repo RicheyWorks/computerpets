@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const { LicenseError } = require("./errors.cjs");
 const { decryptLicense } = require("./decrypt.cjs");
-const { resolveHwid, assertHwid } = require("./hwid.cjs");
+const { resolveHwidDetail, peekHwid, assertHwid } = require("./hwid.cjs");
 const { createLicenseClient, normalizeBackendUrl } = require("./client.cjs");
 
 const STORE_NAME = "license.json";
@@ -68,9 +68,13 @@ function createLicenseSession(opts) {
     writeStore(storeFile, data, writeFile, mkdir);
   }
 
-  function hwid() {
-    if (typeof opts.hwid === "string" && opts.hwid) return assertHwid(opts.hwid);
-    return resolveHwid({ userDataDir: opts.userDataDir, readFile, writeFile });
+  function deviceMark(allowRead) {
+    if (typeof opts.hwid === "string" && opts.hwid) {
+      return { id: assertHwid(opts.hwid), source: "caller", read: "caller", rawLeavesMachine: false };
+    }
+    const peeked = peekHwid({ userDataDir: opts.userDataDir, readFile });
+    if (!allowRead || peeked.read === "stored") return peeked;
+    return resolveHwidDetail({ userDataDir: opts.userDataDir, readFile, writeFile });
   }
 
   function decryptStored(store) {
@@ -96,18 +100,25 @@ function createLicenseSession(opts) {
       error = error || (err instanceof LicenseError ? { code: err.code, message: err.message } : { code: "missing_backend", message: String(err.message || err) });
     }
 
+    let mark = { id: "", source: null, read: "unread", rawLeavesMachine: false };
+    try {
+      mark = deviceMark(false);
+    } catch {
+      mark = { id: "", source: "hwid.txt", read: "rejected", rawLeavesMachine: false };
+    }
+
     return {
       unlocked: Boolean(payload),
       backendUrl,
       provider: store.provider || "steam",
       fields: store.fields && typeof store.fields === "object" ? store.fields : {},
-      hwid: (() => {
-        try {
-          return hwid();
-        } catch {
-          return "";
-        }
-      })(),
+      hwid: mark.id,
+      hwidMark: {
+        read: mark.read,
+        source: mark.source,
+        rawLeavesMachine: false,
+        phoneHome: "hash-on-unlock-and-bound-download",
+      },
       license: payload
         ? {
             jti: payload.jti,
@@ -132,7 +143,7 @@ function createLicenseSession(opts) {
     const store = load();
     const backendUrl = normalizeBackendUrl(input.backendUrl || store.backendUrl || defaultBackendUrl(env));
     const provider = typeof input.provider === "string" && input.provider ? input.provider : "steam";
-    const deviceId = hwid();
+    const deviceId = deviceMark(true).id;
     const secret = licenseSecret(env);
     if (!secret) {
       throw new LicenseError("missing_secret", "LICENSE_SECRET_KEY is missing; cannot decrypt the issued license");
@@ -187,10 +198,11 @@ function createLicenseSession(opts) {
     const store = storeArg || load();
     const secret = secretArg || licenseSecret(env);
     const payload = payloadArg || decryptLicense(store.license.ciphertext, store.license.iv, secret, { now });
-    const deviceId = deviceIdArg || hwid();
+    const bound = Boolean(payload.hwid);
+    const deviceId = deviceIdArg || (bound ? deviceMark(true).id : "");
     const backendUrl = normalizeBackendUrl(store.backendUrl || defaultBackendUrl(env));
 
-    if (payload.hwid && payload.hwid !== deviceId) {
+    if (bound && payload.hwid !== deviceId) {
       throw new LicenseError("hwid_mismatch", "hardware binding mismatch");
     }
 
@@ -238,7 +250,13 @@ function createLicenseSession(opts) {
     return publicStatus();
   }
 
-  return { status: publicStatus, unlock, download, clear, hwid };
+  return {
+    status: publicStatus,
+    unlock,
+    download,
+    clear,
+    hwid: () => deviceMark(true).id,
+  };
 }
 
 module.exports = { createLicenseSession, defaultBackendUrl, DEFAULT_BACKEND };

@@ -219,6 +219,24 @@ Rules already enforced in code:
 Recommended client practice (not enforced): a stable per-machine id that
 fits in 128 characters, sent on both verify and download.
 
+The ComputerPets overlay and blotter choose that string as follows. The
+server still does not hash, and it still requires an exact match.
+
+- They read a named operating-system id only when `hwid.txt` in the
+  user-data directory is missing and a bind is needed (verify, or a
+  download of a license that already has `hwid`). License status does
+  not perform that read.
+- Linux reads `/etc/machine-id`, then `/var/lib/dbus/machine-id`.
+  Windows reads `HKLM\SOFTWARE\Microsoft\Cryptography\MachineGuid`.
+  Mac reads `IOPlatformUUID`. If that read fails, the computer name is
+  the fallback. The name is a fingerprint too.
+- The stored and sent string is the hex SHA-256 of
+  `computerpets:` + platform token + `:` + that id. The raw id is not
+  sent. A non-empty `hwid.txt` is sent as-is and is not rewritten, so a
+  license already bound to that string stays bound.
+- The hash is still a stable fingerprint of the computer. Hashing is
+  not anonymity. The browser desk does not read a machine id.
+
 ---
 
 ## 6. Download

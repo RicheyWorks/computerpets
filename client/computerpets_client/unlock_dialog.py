@@ -56,6 +56,8 @@ class UnlockDialog(QDialog):
             "license contract, not a second overlay."
         )
         lead.setWordWrap(True)
+        self.mark = QLabel(self._mark_text(status))
+        self.mark.setWordWrap(True)
 
         self.backend = QLineEdit(status.get("backendUrl") or "http://127.0.0.1:8081")
         self.steam_id = QLineEdit((status.get("fields") or {}).get("steamId") or "")
@@ -106,13 +108,32 @@ class UnlockDialog(QDialog):
 
         layout = QVBoxLayout(self)
         layout.addWidget(lead)
+        layout.addWidget(self.mark)
         layout.addLayout(form)
         layout.addLayout(row)
         layout.addWidget(self.ok)
         layout.addWidget(self.err)
         layout.addWidget(buttons)
 
+    def _mark_text(self, status: dict[str, Any]) -> str:
+        mark = status.get("hwidMark") if isinstance(status, dict) else None
+        if isinstance(mark, dict) and mark.get("read") == "stored":
+            return (
+                "A license hash is already stored in hwid.txt. Unlock reuses it and does not "
+                "read the operating-system id again. The raw id is not sent. That hash is still "
+                "a device fingerprint."
+            )
+        return (
+            "Opening this window did not read the operating-system machine id. "
+            "The first Unlock reads Linux machine-id, Windows MachineGuid, or the Mac platform UUID, "
+            "hashes it, and stores that hash in hwid.txt. A hash already stored is reused, so an "
+            "existing license stays bound. The raw id is not sent. The house receives only the hash, "
+            "and only for unlock or a bound download. That hash is a device fingerprint."
+        )
+
     def _paint_status(self, status: dict[str, Any]) -> None:
+        if hasattr(self, "mark"):
+            self.mark.setText(self._mark_text(status))
         if status.get("unlocked") and status.get("license"):
             lic = status["license"]
             text = f"Unlocked — {lic['pet']} · {lic['jti']} · until {lic['validUntil']}"
