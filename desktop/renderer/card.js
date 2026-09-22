@@ -80,6 +80,7 @@
       currentAreaId: null,
       weatherTab: "current",
       favoriteAreaIds: [],
+      hereForecastAck: null,
       newsPrefs: [],
       currentNewsId: "world",
       newsTab: "popular",
@@ -180,6 +181,9 @@
     next.currentAreaId = areas.currentId;
     next.weatherTab = areas.tab || "current";
     next.favoriteAreaIds = areas.favoriteIds || [];
+    next.hereForecastAck = root.PetWeatherAreas && typeof root.PetWeatherAreas.stickHereForecastAck === "function"
+      ? root.PetWeatherAreas.stickHereForecastAck(raw, raw.hereForecastAck)
+      : null;
     const news = root.PetNews ? root.PetNews.parseNewsPrefs(raw) : { topics: [{ id: "world", name: "World", query: "" }], currentId: "world", tab: "popular", favorites: [] };
     next.newsPrefs = news.topics;
     next.currentNewsId = news.currentId;

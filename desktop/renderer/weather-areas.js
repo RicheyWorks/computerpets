@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A stored live pin is rounded on load. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. */
 (function (root) {
   const NO_AREA = "no area set";
   const AREA_LABEL = "Weather area";
@@ -13,6 +13,12 @@
   const HERE_HELD = "the place was not sent";
   const HERE_KEPT = "keeping the saved place";
   const HERE_SENT = "a place was sent to the forecast host";
+  const SAVED_HERE_ASK = "use this saved computer place for the forecast? this sends the saved place. it does not locate again.";
+  const SAVED_HERE_YES = "Use this saved place";
+  const SAVED_HERE_NO = "Don't send";
+  const SAVED_HERE_HELD = "the saved place was not sent";
+  const SAVED_HERE_SENT = "the saved place was sent to the forecast host";
+  const SAVED_HERE_WAIT = "saved place not sent";
   // A tenth of a degree is about 11 km. Rounding is not anonymity.
   const PLACE_STEP = 0.1;
   const CANT_REACH = "can't reach";
@@ -321,9 +327,59 @@
     return { sky, tempC, windKmh, label: skyLabel(sky, tempC), daily: days, source: "open-meteo" };
   }
 
-  function plateLine(areas, live, unread) {
+  /**
+   * A stored yes for one saved live pin. Digits must already be a tenth of a degree.
+   * A precise ack is not kept. This is not a locate and not a browser grant.
+   */
+  function hereForecastAckOf(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    const lat = num(raw.lat);
+    const lon = num(raw.lon);
+    if (lat == null || lon == null) return null;
+    const place = sharePlace(lat, lon);
+    if (!place) return null;
+    if (place.lat !== lat || place.lon !== lon) return null;
+    return { lat: place.lat, lon: place.lon };
+  }
+
+  /**
+   * A typed city may go to the forecast host. A saved live pin does not,
+   * until the keeper has acknowledged that exact place. The ack sticks for
+   * that pin. It is not a geolocation arm and not a reverse lookup.
+   * The same ack still sends on a later read. That is not a new question.
+   */
+  function forecastGate(areas, ack) {
+    const area = currentArea(parseAreas(areas));
+    if (!area) return { act: "none", area: null, ack: null, locate: false };
+    if (!isLiveFix(area)) return { act: "send", area, ack: null, locate: false };
+    const pin = sharePlace(area.lat, area.lon);
+    const saved = hereForecastAckOf(ack);
+    if (pin && saved && pin.lat === saved.lat && pin.lon === saved.lon) {
+      return { act: "send", area, ack: saved, locate: false };
+    }
+    return { act: "hold", area, ack: null, locate: false };
+  }
+
+  /** The rounded place of the current live pin, for the keeper's forecast yes. */
+  function ackSavedHere(areas) {
+    const area = currentArea(parseAreas(areas));
+    if (!area || !isLiveFix(area)) return null;
+    return sharePlace(area.lat, area.lon);
+  }
+
+  /**
+   * Keep an ack only while the current area is still that live pin.
+   * Clearing the pin or picking another area drops it.
+   */
+  function stickHereForecastAck(areas, ack) {
+    const gate = forecastGate(areas, ack);
+    return gate.act === "send" && gate.ack ? gate.ack : null;
+  }
+
+  function plateLine(areas, live, unread, held) {
     const area = currentArea(areas);
     if (!area) return NO_AREA;
+    if (held) return `${area.name} · ${SAVED_HERE_WAIT}`;
     if (unread) return `${area.name} · unread`;
     if (!live) return `${area.name} · looking up`;
     return `${area.name} · ${live.label}`;
@@ -343,6 +399,12 @@
     HERE_HELD,
     HERE_KEPT,
     HERE_SENT,
+    SAVED_HERE_ASK,
+    SAVED_HERE_YES,
+    SAVED_HERE_NO,
+    SAVED_HERE_HELD,
+    SAVED_HERE_SENT,
+    SAVED_HERE_WAIT,
     PLACE_STEP,
     CANT_REACH,
     FAVORITES_EMPTY,
@@ -370,6 +432,10 @@
     typedArea,
     locateChoice,
     locateGate,
+    hereForecastAckOf,
+    forecastGate,
+    ackSavedHere,
+    stickHereForecastAck,
     storedLivePinNeedsFuzz,
     reverseUrl,
     parseReverse,
