@@ -1,6 +1,6 @@
 /** Windows 10/11 top-level window bounds. Rects only. Mac/Linux stay a later door.
- * GetClassName stays inside this process so the taskbar and the desktop host
- * can be a shell bit. The class string is not written on the pipe.
+ * The taskbar and the desktop host are known shell handles. A keeper window's
+ * class is not copied. The shell bit on the pipe is 0 or 1.
  * Window text is not read. No folder is listed.
  */
 const { spawn } = require("child_process");
@@ -9,7 +9,6 @@ const Windows = require("./renderer/windows.js");
 const ENUM_SCRIPT = `
 Add-Type @"
 using System;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
@@ -19,7 +18,8 @@ public static class DeskWins {
   [DllImport("user32.dll")] [return: MarshalAs(UnmanagedType.Bool)] public static extern bool IsWindowVisible(IntPtr h);
   [DllImport("user32.dll")] [return: MarshalAs(UnmanagedType.Bool)] public static extern bool IsIconic(IntPtr h);
   [DllImport("user32.dll")] [return: MarshalAs(UnmanagedType.Bool)] public static extern bool GetWindowRect(IntPtr h, out RECT r);
-  [DllImport("user32.dll", CharSet=CharSet.Unicode)] public static extern int GetClassName(IntPtr h, StringBuilder s, int n);
+  [DllImport("user32.dll")] public static extern IntPtr GetShellWindow();
+  [DllImport("user32.dll", CharSet=CharSet.Unicode)] public static extern IntPtr FindWindowEx(IntPtr parent, IntPtr after, string cls, string title);
   [DllImport("user32.dll")] public static extern int GetWindowLong(IntPtr h, int n);
   [DllImport("dwmapi.dll")] public static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out int pvAttribute, int cbAttribute);
   public const int GWL_EXSTYLE = -20;
@@ -27,14 +27,35 @@ public static class DeskWins {
   public const int DWMWA_CLOAKED = 14;
   public struct RECT { public int Left; public int Top; public int Right; public int Bottom; }
 
+  static HashSet<IntPtr> ShellHandles() {
+    var set = new HashSet<IntPtr>();
+    IntPtr desk = GetShellWindow();
+    if (desk != IntPtr.Zero) set.Add(desk);
+    string[] names = new string[] {
+      "Shell_TrayWnd",
+      "Shell_SecondaryTrayWnd",
+      "NotifyIconOverflowWindow",
+      "Progman",
+      "WorkerW"
+    };
+    foreach (string name in names) {
+      IntPtr prev = IntPtr.Zero;
+      while (true) {
+        IntPtr h = FindWindowEx(IntPtr.Zero, prev, name, null);
+        if (h == IntPtr.Zero || h == prev) break;
+        set.Add(h);
+        prev = h;
+      }
+    }
+    return set;
+  }
+
   public static List<string> List() {
     var rows = new List<string>();
+    var shells = ShellHandles();
     EnumWindows((h, l) => {
       if (!IsWindowVisible(h)) return true;
       bool mini = IsIconic(h);
-      var sb = new StringBuilder(256);
-      GetClassName(h, sb, 256);
-      string cls = sb.ToString();
       int ex = GetWindowLong(h, GWL_EXSTYLE);
       bool tool = (ex & WS_EX_TOOLWINDOW) != 0;
       int cloaked = 0;
@@ -42,7 +63,7 @@ public static class DeskWins {
       RECT r;
       if (!GetWindowRect(h, out r)) return true;
       ulong id = unchecked((ulong)h.ToInt64());
-      bool shell = cls == "Shell_TrayWnd" || cls == "Shell_SecondaryTrayWnd" || cls == "NotifyIconOverflowWindow" || cls == "Progman" || cls == "WorkerW";
+      bool shell = shells.Contains(h);
       rows.Add(id + "\\t" + r.Left + "\\t" + r.Top + "\\t" + r.Right + "\\t" + r.Bottom + "\\t" + (mini ? "1" : "0") + "\\t" + (tool ? "1" : "0") + "\\t" + (cloaked != 0 ? "1" : "0") + "\\t" + (shell ? "1" : "0"));
       return true;
     }, IntPtr.Zero);
