@@ -3598,6 +3598,10 @@ if (hudRadioLocal) {
   });
 }
 if (weatherPlate) {
+  if (window.PetWeatherAreas && window.PetWeatherAreas.storedLivePinNeedsFuzz(card) && window.PetCard) {
+    card = window.PetCard.parseCard(card);
+    persistCard();
+  }
   function applyWeatherHouse(house) {
     Object.assign(card, window.PetWeatherAreas.toCardPatch(house));
     persistCard();
@@ -3686,74 +3690,121 @@ if (weatherPlate) {
         hits.innerHTML = `<li>${A.CANT_REACH}</li>`;
       });
   });
+  function showHereAsk(on) {
+    const ask = document.getElementById("weather-here-ask");
+    if (ask) ask.hidden = !on;
+    const line = document.getElementById("weather-here-ask-line");
+    const A = window.PetWeatherAreas;
+    if (line && A) line.textContent = A.HERE_ASK;
+  }
+  function keepTyped(gate) {
+    const A = window.PetWeatherAreas;
+    const truth = document.getElementById("weather-here-truth");
+    showHereAsk(false);
+    if (truth && A) truth.textContent = A.HERE_KEPT;
+    if (!A || !gate || !gate.area) return;
+    const current = A.currentArea(card);
+    if (!current || current.id !== gate.area.id) applyWeatherHouse(A.pickArea(card, gate.area.id));
+  }
+  function sendLiveFix() {
+    const A = window.PetWeatherAreas;
+    const truth = document.getElementById("weather-here-truth");
+    if (!A) return;
+    function keepHere(area) {
+      applyWeatherHouse(A.addArea(card, area));
+      if (truth) truth.textContent = A.HERE_SENT;
+    }
+    function failHere(line) {
+      if (truth) truth.textContent = line;
+    }
+    function unnamed(lat, lon) {
+      return { id: "here", name: "This computer", query: "this computer", lat, lon };
+    }
+    if (window.PetPresence && typeof window.PetPresence.ipPlace === "function" && window.PetPresence.ipPlace() != null) {
+      failHere(A.HERE_FAIL);
+      return;
+    }
+    const reader = window.PetPresence && window.PetPresence.readWeatherHere;
+    const deskApi = window.desk;
+    if (!navigator.geolocation || typeof reader !== "function") {
+      failHere(A.HERE_FAIL);
+      return;
+    }
+    reader(navigator.geolocation, {
+      arm() {
+        return deskApi && deskApi.armWeatherLocate ? deskApi.armWeatherLocate() : undefined;
+      },
+      clear() {
+        return deskApi && deskApi.clearWeatherLocate ? deskApi.clearWeatherLocate() : undefined;
+      },
+    }).then((fix) => {
+      if (!fix) {
+        failHere(A.HERE_FAIL);
+        return;
+      }
+      const place = A.sharePlace(fix.lat, fix.lon);
+      if (!place) {
+        failHere(A.HERE_FAIL);
+        return;
+      }
+      const url = A.reverseUrl(place.lat, place.lon);
+      if (!url) {
+        keepHere(unnamed(place.lat, place.lon));
+        return;
+      }
+      fetch(url, { cache: "no-store" })
+        .then((r) => r.json())
+        .then((json) => {
+          const named = A.parseReverse(json);
+          keepHere(
+            named
+              ? { id: "here", name: named.name, query: "this computer", lat: place.lat, lon: place.lon }
+              : unnamed(place.lat, place.lon),
+          );
+        })
+        .catch(() => keepHere(unnamed(place.lat, place.lon)));
+    });
+  }
   const hereBtn = document.getElementById("weather-here");
   if (hereBtn) {
     hereBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       const A = window.PetWeatherAreas;
-      const truth = document.getElementById("weather-here-truth");
       if (!A) return;
-      function keepHere(area) {
-        applyWeatherHouse(A.addArea(card, area));
-        if (truth) truth.textContent = A.HERE_SENT;
-      }
-      function failHere(line) {
-        if (truth) truth.textContent = line;
-      }
-      function unnamed(lat, lon) {
-        return { id: "here", name: "This computer", query: "this computer", lat, lon };
-      }
-      const choice = A.locateChoice(card);
-      if (!choice.locate) {
-        if (truth) truth.textContent = A.HERE_KEPT;
-        const current = A.currentArea(card);
-        if (!current || current.id !== choice.area.id) applyWeatherHouse(A.pickArea(card, choice.area.id));
+      const gate = A.locateGate(card, false);
+      if (gate.act === "keep") {
+        keepTyped(gate);
         return;
       }
-      if (window.PetPresence && typeof window.PetPresence.ipPlace === "function" && window.PetPresence.ipPlace() != null) {
-        failHere(A.HERE_FAIL);
+      const truth = document.getElementById("weather-here-truth");
+      if (truth) truth.textContent = "";
+      showHereAsk(true);
+    });
+  }
+  const hereYes = document.getElementById("weather-here-yes");
+  if (hereYes) {
+    hereYes.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const A = window.PetWeatherAreas;
+      if (!A) return;
+      const gate = A.locateGate(card, true);
+      if (gate.act !== "locate") {
+        if (gate.act === "keep") keepTyped(gate);
+        else showHereAsk(false);
         return;
       }
-      const reader = window.PetPresence && window.PetPresence.readWeatherHere;
-      const deskApi = window.desk;
-      if (!navigator.geolocation || typeof reader !== "function") {
-        failHere(A.HERE_FAIL);
-        return;
-      }
-      reader(navigator.geolocation, {
-        arm() {
-          return deskApi && deskApi.armWeatherLocate ? deskApi.armWeatherLocate() : undefined;
-        },
-        clear() {
-          return deskApi && deskApi.clearWeatherLocate ? deskApi.clearWeatherLocate() : undefined;
-        },
-      }).then((fix) => {
-        if (!fix) {
-          failHere(A.HERE_FAIL);
-          return;
-        }
-        const place = A.sharePlace(fix.lat, fix.lon);
-        if (!place) {
-          failHere(A.HERE_FAIL);
-          return;
-        }
-        const url = A.reverseUrl(place.lat, place.lon);
-        if (!url) {
-          keepHere(unnamed(place.lat, place.lon));
-          return;
-        }
-        fetch(url, { cache: "no-store" })
-          .then((r) => r.json())
-          .then((json) => {
-            const named = A.parseReverse(json);
-            keepHere(
-              named
-                ? { id: "here", name: named.name, query: "this computer", lat: place.lat, lon: place.lon }
-                : unnamed(place.lat, place.lon),
-            );
-          })
-          .catch(() => keepHere(unnamed(place.lat, place.lon)));
-      });
+      showHereAsk(false);
+      sendLiveFix();
+    });
+  }
+  const hereNo = document.getElementById("weather-here-no");
+  if (hereNo) {
+    hereNo.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const A = window.PetWeatherAreas;
+      const truth = document.getElementById("weather-here-truth");
+      showHereAsk(false);
+      if (truth && A) truth.textContent = A.HERE_HELD;
     });
   }
 }

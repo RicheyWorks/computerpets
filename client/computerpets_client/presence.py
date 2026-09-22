@@ -10,7 +10,8 @@ HOUSE_FILES = ("card.json", "mind.json")
 # then closes. The blotter does not read machine location, does not ask an
 # IP place service, and does not send a place to a forecast host. Weather
 # is the civil-day clock. There is no watcher and no silent re-query.
-# A cached origin grant is a desk limit. This process does not locate.
+# A cached origin grant is a desk limit. This process does not locate, so
+# it has no in-app locate confirm and no live pin to round.
 WEATHER_LOCATE_MS = 120_000
 _weather_locate_until = 0
 

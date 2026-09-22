@@ -110,7 +110,7 @@ export function ipPlace(..._ignored: unknown[]): IpPlace | null {
   return null;
 }
 
-/** One weather-button fix. Arms geolocation, asks once, then clears. Does not watch. A cached origin grant can still answer without a new prompt. */
+/** One weather-button fix. Arms geolocation, asks once, then clears. Does not watch. Call only after the in-app Send yes. A cached origin grant can still answer that call without a new browser prompt. This does not revoke the grant. */
 export function readWeatherHere(
   geo?: GeoLike,
   hooks?: WeatherLocateHooks | null,

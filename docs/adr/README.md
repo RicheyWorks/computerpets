@@ -34,6 +34,7 @@ address, or an API that is not on `main`.
 | [0013](0013-weather-locate-is-not-a-process-grant.md) | Weather location is a click, not a process grant | Accepted |
 | [0014](0014-weather-does-not-ask-an-ip-place.md) | Weather does not ask an IP place service | Accepted |
 | [0015](0015-weather-locate-sends-a-rounded-place.md) | A weather locate sends a rounded place, and a saved typed area wins | Accepted |
+| [0016](0016-weather-locate-waits-for-an-in-app-yes.md) | A live weather locate waits for an in-app yes | Accepted |
 
 ## How to add one
 
