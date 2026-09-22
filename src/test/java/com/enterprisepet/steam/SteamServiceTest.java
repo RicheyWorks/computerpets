@@ -351,21 +351,37 @@ class SteamServiceTest {
     // ====================== verify() Tests ======================
 
     @Test
-    @DisplayName("verify returns denied when required fields are missing")
-    void verify_missingRequiredFields_returnsDenied() {
+    @DisplayName("verify returns invalid when required fields are missing")
+    void verify_missingRequiredFields_returnsInvalid() {
         VerificationResult result = service.verify(Map.of("steamId", STEAM_ID));
 
         assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
         assertThat(result.reason()).contains("steamId and appId are required");
     }
 
     @Test
-    @DisplayName("verify(null) denies with the same required-field message")
-    void verify_nullRequest_returnsDenied() {
+    @DisplayName("verify(null) returns invalid with the same required-field message")
+    void verify_nullRequest_returnsInvalid() {
         VerificationResult result = service.verify(null);
 
         assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
         assertThat(result.reason()).contains("steamId and appId are required");
+    }
+
+    @Test
+    @DisplayName("verify returns invalid for non-numeric steamId without calling Steam")
+    void verify_malformedSteamId_returnsInvalid() {
+        VerificationResult result = service.verify(Map.of(
+                "steamId", "not-digits",
+                "appId", "123456"
+        ));
+
+        assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
+        assertThat(result.reason()).contains("SteamID64");
+        mockServer.verify();
     }
 
     @Test

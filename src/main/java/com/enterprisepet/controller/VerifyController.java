@@ -87,17 +87,19 @@ public class VerifyController {
     @Operation(
         summary = "Verify ownership and issue license",
         description = "Verifies ownership via the selected provider and returns an encrypted license + short-lived JWT. " +
-                "Optional body field `hwid` (max 128 chars) binds the license to a device; see docs/CLIENT-CONTRACT.md.",
+                "Optional body field `hwid` (max 128 chars) binds the license to a device; see docs/CLIENT-CONTRACT.md. " +
+                "Provider fields are fail-closed on length and charset before any outbound store call.",
         responses = {
             @ApiResponse(responseCode = "200", description = "Ownership verified successfully",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = com.enterprisepet.dto.VerifySuccessResponse.class),
                             examples = @ExampleObject(ref = "Success Response"))),
-            @ApiResponse(responseCode = "400", description = "Unknown petType, hwid too long, or invalid request",
+            @ApiResponse(responseCode = "400", description = "Unknown petType, hwid too long, or invalid provider fields",
                     content = @Content(mediaType = "application/json",
                             examples = {
                                     @ExampleObject(ref = "Unknown Pet Type"),
-                                    @ExampleObject(ref = "Hwid Too Long")
+                                    @ExampleObject(ref = "Hwid Too Long"),
+                                    @ExampleObject(ref = "Invalid Verify Fields")
                             })),
             @ApiResponse(responseCode = "403", description = "Ownership verification failed",
                     content = @Content(mediaType = "application/json",
@@ -149,6 +151,12 @@ public class VerifyController {
         }
 
         if (!result.verified()) {
+            if (result.clientError()) {
+                return ResponseEntity.status(400).body(Map.of(
+                    "error", result.reason() == null ? "invalid verify fields" : result.reason(),
+                    "provider", provider.key()
+                ));
+            }
             return ResponseEntity.status(403).body(Map.of(
                 "error", result.reason() == null ? "ownership not verified" : result.reason(),
                 "provider", provider.key()

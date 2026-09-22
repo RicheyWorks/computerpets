@@ -28,7 +28,6 @@ import java.time.Duration;
 import java.util.Base64;
 import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 /**
  * Verifies Epic Games Store ownership via the documented EOS Ecom Web API.
@@ -78,14 +77,6 @@ public class EpicService implements OwnershipProvider {
     static final String PLACEHOLDER_DEPLOYMENT_ID = "YOUR_EPIC_DEPLOYMENT_ID";
 
     private static final String DEFAULT_PLATFORM = "EPIC";
-
-    /** Epic Account IDs in the public Auth docs are 32-char hex. */
-    private static final Pattern ACCOUNT_ID = Pattern.compile("[0-9a-fA-F]{32}");
-
-    /** Sandbox / catalog item ids are hex or short product slugs; reject junk. */
-    private static final Pattern CATALOG_TOKEN = Pattern.compile("[A-Za-z0-9._-]{1,64}");
-
-    private static final Pattern PLATFORM = Pattern.compile("[A-Za-z]{2,16}");
 
     @Value("${epic.client-id}")
     private String clientId;
@@ -168,20 +159,9 @@ public class EpicService implements OwnershipProvider {
         String catalogItemId = typed.catalogItemId();
         String platform = typed.platform() == null ? DEFAULT_PLATFORM : typed.platform();
 
-        if (accountId == null || sandboxId == null || catalogItemId == null) {
-            return VerificationResult.denied("accountId, sandboxId, and catalogItemId are required");
-        }
-        if (!ACCOUNT_ID.matcher(accountId).matches()) {
-            return VerificationResult.denied("accountId must be a 32-character Epic Account ID");
-        }
-        if (!CATALOG_TOKEN.matcher(sandboxId).matches()) {
-            return VerificationResult.denied("sandboxId is not a valid Epic sandbox id");
-        }
-        if (!CATALOG_TOKEN.matcher(catalogItemId).matches()) {
-            return VerificationResult.denied("catalogItemId is not a valid Epic catalog item id");
-        }
-        if (!PLATFORM.matcher(platform).matches()) {
-            return VerificationResult.denied("platform must be a letter-only Epic platform code (default EPIC)");
+        Optional<String> shape = typed.invalidReason(platform);
+        if (shape.isPresent()) {
+            return VerificationResult.invalid(shape.get());
         }
         if (!isBlank(configuredSandboxId) && !configuredSandboxId.trim().equals(sandboxId)) {
             return VerificationResult.denied("sandboxId is not an official ComputerPets Epic sandbox");

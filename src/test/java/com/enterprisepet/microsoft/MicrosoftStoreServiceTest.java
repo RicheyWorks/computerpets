@@ -184,20 +184,35 @@ class MicrosoftStoreServiceTest {
     }
 
     @Test
-    @DisplayName("missing xstsToken is denied")
-    void verify_missingXstsToken_denied() {
+    @DisplayName("missing xstsToken is invalid")
+    void verify_missingXstsToken_invalid() {
         VerificationResult result = service.verify(Map.of("storeProductId", PRODUCT_ID));
         assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
         assertThat(result.reason()).contains("xstsToken and storeProductId are required");
         mockServer.verify();
     }
 
     @Test
-    @DisplayName("missing storeProductId is denied")
-    void verify_missingStoreProductId_denied() {
+    @DisplayName("missing storeProductId is invalid")
+    void verify_missingStoreProductId_invalid() {
         VerificationResult result = service.verify(Map.of("xstsToken", XSTS));
         assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
         assertThat(result.reason()).contains("xstsToken and storeProductId are required");
+        mockServer.verify();
+    }
+
+    @Test
+    @DisplayName("injection-shaped xstsToken is invalid without calling Collections")
+    void verify_injectionXstsToken_invalid() {
+        VerificationResult result = service.verify(Map.of(
+                "xstsToken", "bad\ntoken",
+                "storeProductId", PRODUCT_ID
+        ));
+        assertThat(result.verified()).isFalse();
+        assertThat(result.clientError()).isTrue();
+        assertThat(result.reason()).contains("xstsToken");
         mockServer.verify();
     }
 

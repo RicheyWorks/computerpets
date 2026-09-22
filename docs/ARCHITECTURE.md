@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-22 (Secret rotation cadence + dual-key verify — ADR 0065. Not DX12/Vulkan. Catalog 221.) |
+| **Last Updated** | 2026-09-22 (Provider verify field length/charset fail-closed — ADR 0066. Not DX12/Vulkan. Catalog 221.) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -252,6 +252,7 @@ flowchart TB
   - ~~CDN edge assumed to verify HMAC / redeem without a shipped worker.~~ Fail-closed edge redeem in `deploy/cdn/edge-redeem.js` calls house `GET /api/bundles/{pet}/redeem` before bytes ([0063](adr/0063-cdn-edge-redeem-verification.md)). Keeper associates the function on apply.
   - ~~Secrets are still accepted via plain environment variables / a Kubernetes `Secret`.~~ Prod refuses plain env / hand-filled Opaque Secret without `COMPUTERPETS_SECRETS_SOURCE` ∈ {`external-secrets`, `file`, `vault-agent`}; `verify-secret-operator.sh` is the deploy gate ([0064](adr/0064-secret-operator-prod-refuses-plain-env.md)). Local-dev keeps env / scaffolding `secret.yaml`.
   - ~~Secret rotation / HSM story is open.~~ Dual-key `*_PREVIOUS` verify/decrypt, documented 90d/180d cadence, optional `COMPUTERPETS_KEYS_ROTATED_AT`, KMS/HSM pointer without a live appliance (`verify-secret-rotation.sh`; [0065](adr/0065-secret-rotation-cadence-and-hsm.md)).
+  - ~~Input length/charset validation on provider verify fields is open.~~ Fail-closed bounds before RestClient / RPC; malformed → HTTP 400 (`VerifyFieldBounds`, [0066](adr/0066-provider-verify-field-bounds.md)). Trusted-proxy hardening for `X-Forwarded-For` remains open (see Current Weaknesses).
 
 This deployment view directly addresses the multi-instance and rate-limiting concerns already called out in the README and `AUDIT.md`.
 
@@ -262,7 +263,7 @@ This deployment view directly addresses the multi-instance and rate-limiting con
 ### 4.1 Presentation Layer – Controllers
 | Component              | Responsibility                                                                 | Technology          | Key Files                                      | Dependencies                          |
 |------------------------|--------------------------------------------------------------------------------|---------------------|------------------------------------------------|---------------------------------------|
-| `VerifyController`     | Provider discovery (`/providers`), ownership verification dispatch, license + JWT issuance | Spring Web          | `controller/VerifyController.java`             | `ProviderRegistry`, `LicenseService`, `JwtService`, `PetCatalog` |
+| `VerifyController`     | Provider discovery (`/providers`), ownership verification dispatch, license + JWT issuance; provider field shape → 400 before outbound calls ([0066](adr/0066-provider-verify-field-bounds.md)) | Spring Web          | `controller/VerifyController.java`             | `ProviderRegistry`, `LicenseService`, `JwtService`, `PetCatalog` |
 | `DownloadController`   | License + JWT cross-validation, delegation to bundle manifest generation       | Spring Web + Security | `controller/DownloadController.java`           | `LicenseService`, `PetBundleService`, `PetCatalog`, `SecurityContextHolder` |
 | `PetController`        | Public read-only catalog browsing (list, filter by rarity, detail)             | Spring Web          | `controller/PetController.java`                | `PetCatalog`                          |
 | `BundleController`     | Public artifact catalog (`GET /api/bundles/{petKey}`) and one-time grant redeem (`GET /api/bundles/{petKey}/redeem`) | Spring Web          | `bundle/BundleController.java`                 | `BundleCatalog`, `PetCatalog`, `DownloadGrantService` |
@@ -273,7 +274,8 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 | Component                  | Responsibility                                      | Technology | Key Files                                      | Dependencies                     |
 |----------------------------|-----------------------------------------------------|------------|------------------------------------------------|----------------------------------|
 | `OwnershipProvider`        | Contract for any ownership source                   | Java interface | `provider/OwnershipProvider.java`              | —                                |
-| `VerificationResult`       | Success/failure + owner id + optional `petKey` hint | Java record | `provider/VerificationResult.java`             | —                                |
+| `VerificationResult`       | Success / ownership deny / client-shape invalid (`clientError` → HTTP 400) + owner id + optional `petKey` | Java record | `provider/VerificationResult.java`             | —                                |
+| `VerifyFieldBounds`        | Fail-closed max length + charset for provider verify fields | Java utility | `provider/VerifyFieldBounds.java`              | —                                |
 | `ProviderRegistry`         | Spring-driven collection + key-based lookup         | Spring @Service | `provider/ProviderRegistry.java`               | `List<OwnershipProvider>` (DI)   |
 
 **Current implementations:**
@@ -556,7 +558,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 ### Security Considerations
 - **Good foundations**: AEAD encryption, short-lived tokens, claim binding, startup secret hygiene, no secrets in JWT bodies.
 - **Attack surface**: Public verify endpoints are the primary target. A compromised master key is catastrophic (full license forgery). CDN signature key compromise allows bundle theft for 15 min windows.
-- **Missing controls**: Real ownership verifiers, hardware binding, replay/revocation store, WAF in front of rate limiter, input length/charset validation on all provider fields, signed requests for machine clients. (Secret rotation / HSM story → [ADR 0065](adr/0065-secret-rotation-cadence-and-hsm.md).)
+- **Missing controls**: Real ownership verifiers, hardware binding, replay/revocation store, WAF in front of rate limiter, signed requests for machine clients. (Secret rotation / HSM story → [ADR 0065](adr/0065-secret-rotation-cadence-and-hsm.md). Input length/charset on provider verify fields → [ADR 0066](adr/0066-provider-verify-field-bounds.md).)
 - **Client trust model**: The desktop app must be considered semi-trusted for license decryption (the Python client is expected to hold the same `LICENSE_SECRET_KEY`). The architecture comment "never trust the desktop client" refers to not letting the client *generate* licenses.
 
 ### Extensibility & Future Refactoring Areas

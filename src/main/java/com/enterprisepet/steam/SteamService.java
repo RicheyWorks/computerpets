@@ -23,6 +23,7 @@ import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -112,8 +113,9 @@ public class SteamService implements OwnershipProvider {
     @Override
     public VerificationResult verify(Map<String, String> request) {
         SteamVerifyRequest typed = SteamVerifyRequest.from(request);
-        if (typed.steamId() == null || typed.appId() == null) {
-            return VerificationResult.denied("steamId and appId are required");
+        Optional<String> shape = typed.invalidReason();
+        if (shape.isPresent()) {
+            return VerificationResult.invalid(shape.get());
         }
         Set<String> houseAppIds = houseAppIds();
         if (houseAppIds.isEmpty()) {
