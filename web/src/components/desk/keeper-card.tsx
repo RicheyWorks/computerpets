@@ -54,7 +54,7 @@ import {
 } from "@/lib/pets/card";
 import { playDeskSound, playStep, playVoice } from "@/lib/pets/desk-audio";
 import { STEP_KINDS, STEP_LABELS, parseStep, stepOf } from "@/lib/pets/house-sounds";
-import { HOUSE_LOOP_LICENSE, MUSIC_PLUGINS, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_FIND, RADIO_LABEL, RADIO_LOCAL, RADIO_PLACEHOLDER, mergeStations, parseMusic, parseStations, playSrc, radioHonesty, radioMaySend, radioSearchUrls, rankStations, streamHonesty, streamMaySend, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
+import { HOUSE_LOOP_LICENSE, MUSIC_PLUGINS, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_FIND, RADIO_LABEL, RADIO_LOCAL, RADIO_PLACEHOLDER, parseMusic, playSrc, radioHonesty, radioMaySend, readRadioSearch, streamHonesty, streamMaySend, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
 import { SLEEP_AID_LABEL, SLEEP_AID_LICENSE, SLEEP_AID_MUTE_TRUTH, SLEEP_AID_PLUGINS, parseSleepAid, playSrc as sleepPlaySrc, type SleepAidPrefs } from "@/lib/pets/house-sleep";
 import { currentArea, parseAreas } from "@/lib/pets/weather-areas";
 import { FLY_BIRD_NAME } from "@/lib/pets/bird-fly";
@@ -164,38 +164,17 @@ export function KeeperCard({
     const line = radioHonesty();
     const shown = !!el && !!line && (el.textContent || "").includes(line);
     if (!radioMaySend(shown)) return;
-    const area = weatherRadioArea();
-    const urls = radioSearchUrls(query, area);
-    if (!urls.length) {
-      setStations([]);
-      setRadioUnread(false);
-      setRadioEmpty(true);
-      return;
-    }
-    void Promise.all(
-      urls.map((url) =>
-        fetch(url, { cache: "no-store", headers: { Accept: "application/json" } })
-          .then((r) => r.json())
-          .then((json) => parseStations(json))
-          .catch(() => null),
-      ),
-    )
-      .then((batches) => {
-        if (batches.every((b) => b == null)) {
-          setRadioUnread(true);
-          setRadioEmpty(false);
-          setStations([]);
-          return;
-        }
-        const merged = mergeStations(batches.filter((b): b is RadioStation[] => !!b));
-        const next = rankStations(merged, query, area).slice(0, 16);
-        setStations(next);
+    void readRadioSearch(line, query, weatherRadioArea())
+      .then((stations) => {
+        if (stations == null) return;
+        setStations(stations);
         setRadioUnread(false);
-        setRadioEmpty(!next.length);
+        setRadioEmpty(!stations.length);
       })
       .catch(() => {
         setRadioUnread(true);
         setRadioEmpty(false);
+        setStations([]);
       });
   }
 

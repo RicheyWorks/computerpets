@@ -1,4 +1,4 @@
-/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. A quote waits until the open quotes plate shows this computer's network address on that https request. CoinGecko + GeckoTerminal public APIs. No invented key. */
+/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. A quote waits until the open quotes plate shows this computer's network address on that https request. CoinGecko, GeckoTerminal, Yahoo, and a typed look-up also refuse inside the read wrappers when that painted line is missing. No invented key. */
 (function (root) {
   const MARKET_LABEL = "Quotes";
   const COIN_LABEL = "Coins";
@@ -617,10 +617,91 @@
   }
 
   const QUOTE_LOOK = `this look-up sends the typed name. ${sharedNet(QUOTE_HOST_NAME)}`;
+  const QUOTE_LEAD = "this quote sends the saved list.";
 
   function quoteLookMaySend(lineInView) {
     const net = sharedNet(QUOTE_HOST_NAME);
     return lineInView === true && !!net && QUOTE_LOOK.indexOf(net) !== -1;
+  }
+
+  function phraseNames(shown, hostLabel) {
+    if (typeof shown !== "string" || !hostLabel) return false;
+    const alone = sharedNet(hostLabel);
+    if (alone && shown.indexOf(alone) !== -1) return true;
+    const head = "this computer's network address goes with the https request to ";
+    const tail = ", as any client.";
+    let from = 0;
+    while (from < shown.length) {
+      const start = shown.indexOf(head, from);
+      if (start === -1) return false;
+      const end = shown.indexOf(tail, start);
+      if (end === -1) return false;
+      const phrase = shown.slice(start + head.length, end);
+      const parts = phrase.split(/, and |, | and /);
+      if (parts.some((part) => part.trim() === hostLabel)) return true;
+      from = end + tail.length;
+    }
+    return false;
+  }
+
+  function quoteHostMayLeave(shown, hostLabel) {
+    if (typeof shown !== "string" || !hostLabel || shown.indexOf(QUOTE_LEAD) === -1) return false;
+    return phraseNames(shown, hostLabel);
+  }
+
+  function lookMayLeave(shown) {
+    if (!QUOTE_LOOK) return false;
+    return typeof shown === "string" && shown.indexOf(QUOTE_LOOK) !== -1;
+  }
+
+  function readGeckoMany(shown, ids, fetchImpl) {
+    if (!quoteHostMayLeave(shown, QUOTE_HOST_NAME)) return Promise.resolve(null);
+    const url = geckoManyUrl(ids);
+    if (!url) return Promise.resolve(null);
+    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
+    return Promise.resolve(go(url)).then(function (res) {
+      return res && typeof res.json === "function" ? res.json() : null;
+    });
+  }
+
+  function readTerminal(shown, platform, address, fetchImpl) {
+    if (!quoteHostMayLeave(shown, TERMINAL_HOST_NAME)) return Promise.resolve(null);
+    const url = terminalTokenUrl(platform, address);
+    if (!url) return Promise.resolve(null);
+    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
+    return Promise.resolve(go(url)).then(function (res) {
+      return res && typeof res.json === "function" ? res.json() : null;
+    });
+  }
+
+  function readYahoo(shown, symbol, fetchImpl) {
+    if (!quoteHostMayLeave(shown, STOCK_HOST_NAME)) return Promise.resolve(null);
+    const url = yahooUrl(symbol);
+    if (!url) return Promise.resolve(null);
+    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
+    return Promise.resolve(go(url)).then(function (res) {
+      return res && typeof res.json === "function" ? res.json() : null;
+    });
+  }
+
+  function readNft(shown, geckoId, fetchImpl) {
+    if (!quoteHostMayLeave(shown, QUOTE_HOST_NAME)) return Promise.resolve(null);
+    const url = nftUrl(geckoId);
+    if (!url) return Promise.resolve(null);
+    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
+    return Promise.resolve(go(url)).then(function (res) {
+      return res && typeof res.json === "function" ? res.json() : null;
+    });
+  }
+
+  function readQuoteSearch(shown, query, fetchImpl) {
+    if (!lookMayLeave(shown)) return Promise.resolve(null);
+    const url = searchUrl(query);
+    if (!url) return Promise.resolve(null);
+    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
+    return Promise.resolve(go(url)).then(function (res) {
+      return res && typeof res.json === "function" ? res.json() : null;
+    });
   }
 
   function plateLine(market, live, unread) {
@@ -766,7 +847,16 @@
     quoteHonesty,
     quoteMaySend,
     QUOTE_LOOK,
+    QUOTE_LEAD,
     quoteLookMaySend,
+    phraseNames,
+    quoteHostMayLeave,
+    lookMayLeave,
+    readGeckoMany,
+    readTerminal,
+    readYahoo,
+    readNft,
+    readQuoteSearch,
     FAVORITES_EMPTY,
     MAX_FAVORITES,
     toggleFavoriteTicker,

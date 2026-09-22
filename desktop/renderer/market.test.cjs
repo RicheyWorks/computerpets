@@ -39,6 +39,49 @@ test("quotes name the network address and wait until that line is in view", () =
   assert.match(M.QUOTE_LOOK, /this look-up sends the typed name\. this computer's network address goes with the https request to the quote host, as any client\./);
 });
 
+test("quote wrappers refuse a fetch until the painted host line is present", async () => {
+  const quote = "this quote sends the saved list. this computer's network address goes with the https request to the quote host, as any client.";
+  const mixed = "this quote sends the saved list. this computer's network address goes with the https request to the quote host and the terminal host, as any client.";
+  const stock = "this quote sends the saved list. this computer's network address goes with the https request to the stock host, as any client.";
+  assert.equal(M.quoteHostMayLeave("", M.QUOTE_HOST_NAME), false);
+  assert.equal(M.quoteHostMayLeave(M.QUOTE_LOOK, M.QUOTE_HOST_NAME), false);
+  assert.equal(M.quoteHostMayLeave(quote, M.QUOTE_HOST_NAME), true);
+  assert.equal(M.quoteHostMayLeave(mixed, M.QUOTE_HOST_NAME), true);
+  assert.equal(M.quoteHostMayLeave(mixed, M.TERMINAL_HOST_NAME), true);
+  assert.equal(M.quoteHostMayLeave(quote, M.TERMINAL_HOST_NAME), false);
+  assert.equal(M.quoteHostMayLeave(stock, M.STOCK_HOST_NAME), true);
+  assert.equal(M.lookMayLeave(""), false);
+  assert.equal(M.lookMayLeave(quote), false);
+  assert.equal(M.lookMayLeave(M.QUOTE_LOOK), true);
+  let calls = 0;
+  const fake = async (url) => {
+    calls += 1;
+    return { json: async () => ({ ok: true, url: String(url) }) };
+  };
+  assert.equal(await M.readGeckoMany("", ["bitcoin"], fake), null);
+  assert.equal(await M.readGeckoMany(M.QUOTE_LOOK, ["bitcoin"], fake), null);
+  assert.equal(await M.readTerminal(quote, "solana", "So11111111111111111111111111111111111111112", fake), null);
+  assert.equal(await M.readYahoo(quote, "AAPL", fake), null);
+  assert.equal(await M.readQuoteSearch(quote, "pepe", fake), null);
+  assert.equal(calls, 0);
+  const gecko = await M.readGeckoMany(quote, ["bitcoin"], fake);
+  assert.equal(gecko.ok, true);
+  assert.match(gecko.url, /api\.coingecko\.com/);
+  assert.equal(calls, 1);
+  const term = await M.readTerminal(mixed, "solana", "So11111111111111111111111111111111111111112", fake);
+  assert.match(term.url, /api\.geckoterminal\.com/);
+  assert.equal(calls, 2);
+  const yahoo = await M.readYahoo(stock, "AAPL", fake);
+  assert.match(yahoo.url, /finance\.yahoo\.com/);
+  assert.equal(calls, 3);
+  const nft = await M.readNft(quote, "cryptopunks", fake);
+  assert.match(nft.url, /api\.coingecko\.com\/api\/v3\/nfts\//);
+  assert.equal(calls, 4);
+  const look = await M.readQuoteSearch(M.QUOTE_LOOK, "pepe", fake);
+  assert.match(look.url, /api\.coingecko\.com\/api\/v3\/search/);
+  assert.equal(calls, 5);
+});
+
 test("Quotes defaults seed ETH DOGE XLM plus majors", () => {
   const house = M.parseMarket({});
   const symbols = house.tickers.map((t) => t.symbol);

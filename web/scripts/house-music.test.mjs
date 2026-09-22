@@ -112,6 +112,30 @@ test("radio find names the network address before the search", () => {
   assert.equal(Overlay.radioMaySend(true), true);
 });
 
+test("radio search refuses a fetch until the radio-host line is present", async () => {
+  const line = M.RADIO_FIND;
+  assert.equal(M.radioSearchMayLeave(""), false);
+  assert.equal(M.radioSearchMayLeave("this quote sends the saved list. " + M.RADIO_NET), false);
+  assert.equal(M.radioSearchMayLeave(line), true);
+  assert.equal(Overlay.radioSearchMayLeave(""), false);
+  assert.equal(Overlay.radioSearchMayLeave(line), true);
+  let calls = 0;
+  const fake = async (url) => {
+    calls += 1;
+    assert.match(String(url), /radio-browser\.info/);
+    return { json: async () => [{ name: "KEXP", url_resolved: "https://example.test/kexp", stationuuid: "k1" }] };
+  };
+  assert.equal(await M.readRadioSearch("", "KEXP", null, fake), null);
+  assert.equal(await Overlay.readRadioSearch("", "KEXP", null, fake), null);
+  assert.equal(calls, 0);
+  const stations = await M.readRadioSearch(line, "KEXP", null, fake);
+  assert.equal(stations.length > 0, true);
+  assert.match(stations[0].name, /KEXP/);
+  assert.ok(calls >= 1);
+  const again = await Overlay.readRadioSearch(line, "KEXP", null, fake);
+  assert.equal(again[0].name, stations[0].name);
+});
+
 test("Radio Browser can return a station for a typed look-up", async (t) => {
   const url = M.radioSearchUrl("KEXP");
   try {

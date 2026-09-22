@@ -60,6 +60,7 @@ address, or an API that is not on `main`.
 | [0039](0039-unbound-download-names-the-backend-host.md) | An unbound download names the backend host before the POST leaves | Accepted |
 | [0040](0040-news-quotes-and-radio-wait-for-the-line-in-main.md) | News, quotes, and Radio Find wait for the painted line in main | Accepted |
 | [0041](0041-featured-page-waits-for-the-wikipedia-line.md) | The featured page waits for the wikipedia line | Accepted |
+| [0042](0042-desk-and-overlay-fetches-wait-for-the-painted-line.md) | Desk and overlay plate fetches wait for the painted line | Accepted |
 
 ## How to add one
 

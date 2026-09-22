@@ -1,4 +1,4 @@
-/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows this computer's network address on that https request. The featured page also refuses inside `readFeatured` when that wikipedia line is missing. Same map as desktop `news.js`. */
+/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows this computer's network address on that https request. The featured page also refuses inside `readFeatured` when that wikipedia line is missing. An RSS read refuses inside `readRss` when that news-host line is missing. Same map as desktop `news.js`. */
 import { clientNetLine } from "./weather-areas.ts";
 
 export const NEWS_SOURCE = "Wikipedia In the news";
@@ -371,11 +371,26 @@ export function featuredMayLeave(shown: unknown): boolean {
   return NEWS_WIKI_HONESTY.length > 0 && typeof shown === "string" && shown.includes(NEWS_WIKI_HONESTY);
 }
 
+/**
+ * A Google News RSS read leaves only when the painted line names the news host.
+ * A missing line, the wikipedia sentence, and a closed plate do not call fetch.
+ */
+export function rssMayLeave(shown: unknown): boolean {
+  return NEWS_RSS_HONESTY.length > 0 && typeof shown === "string" && shown.includes(NEWS_RSS_HONESTY);
+}
+
 type FeaturedFetch = (url: string) => Promise<{ json: () => Promise<unknown> }>;
+type RssFetch = (url: string) => Promise<{ text: () => Promise<string> }>;
 
 export function readFeatured(shown: unknown, fetchImpl: FeaturedFetch = fetch): Promise<unknown | null> {
   if (!featuredMayLeave(shown)) return Promise.resolve(null);
   return Promise.resolve(fetchImpl(newsUrl())).then((res) => res.json());
+}
+
+/** The only RSS fetch. A miss resolves to null and does not call fetch. */
+export function readRss(shown: unknown, url: string, fetchImpl: RssFetch = fetch): Promise<string | null> {
+  if (!rssMayLeave(shown) || !url) return Promise.resolve(null);
+  return Promise.resolve(fetchImpl(url)).then((res) => res.text());
 }
 
 export function sourceLine(topic?: NewsTopic | null, tab?: unknown) {

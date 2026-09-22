@@ -321,11 +321,6 @@ function lookupRadio(query, list, truth, music) {
   if (!M.radioMaySend || !M.radioMaySend(radioLineInView())) return;
   const area = radioArea();
   const q = String(query || "");
-  const urls = M.radioSearchUrls ? M.radioSearchUrls(q, area) : [];
-  if (!urls.length) {
-    fillRadioHits(list, truth, music, []);
-    return;
-  }
   const door = window.desk && window.desk.radioSearch;
   const work = door
     ? door(q, area, line).then((res) => {
@@ -333,18 +328,9 @@ function lookupRadio(query, list, truth, music) {
         if (row.held) return null;
         return Array.isArray(row.stations) ? row.stations : [];
       })
-    : Promise.all(
-        urls.map((url) =>
-          fetch(url, { cache: "no-store", headers: { Accept: "application/json" } })
-            .then((r) => r.json())
-            .then((json) => M.parseStations(json))
-            .catch(() => null),
-        ),
-      ).then((batches) => {
-        if (batches.every((b) => b == null)) throw new Error("unread");
-        const merged = M.mergeStations ? M.mergeStations(batches.filter(Boolean)) : batches.flat().filter(Boolean);
-        return M.rankStations ? M.rankStations(merged, q, area).slice(0, 16) : merged.slice(0, 16);
-      });
+    : M.readRadioSearch
+      ? M.readRadioSearch(line, q, area)
+      : Promise.resolve(null);
   work
     .then((stations) => {
       if (stations == null) return;
@@ -512,7 +498,7 @@ function fetchNews() {
           if (row.held) return null;
           return Array.isArray(row.items) ? row.items : [];
         })
-      : fetch(url).then((r) => r.text()).then((xml) => N.parseRss(xml));
+      : N.readRss(line, url).then((xml) => (xml == null ? null : N.parseRss(xml)));
     work.then((items) => { if (items == null) return; applyItems(items); }).catch(fail);
     return;
   }
@@ -525,7 +511,7 @@ function fetchNews() {
           if (row.held) return null;
           return Array.isArray(row.items) ? row.items : [];
         })
-      : fetch(url).then((r) => r.text()).then((xml) => N.parseRss(xml));
+      : N.readRss(line, url).then((xml) => (xml == null ? null : N.parseRss(xml)));
     work.then((items) => { if (items == null) return; applyItems(items); }).catch(fail);
     return;
   }
@@ -544,7 +530,7 @@ function fetchNews() {
             if (row.held) return null;
             return Array.isArray(row.items) ? row.items : [];
           })
-        : fetch(url).then((r) => r.text()).then((xml) => N.parseRss(xml));
+        : N.readRss(line, url).then((xml) => (xml == null ? null : N.parseRss(xml)));
     work.then((items) => { if (items == null) return; applyItems(items); }).catch(fail);
     return;
   }
@@ -596,14 +582,13 @@ function fetchMarket() {
   const jobs = [];
 
   if (geckoIds.length) {
-    const url = M.geckoManyUrl(geckoIds);
     const work = door && window.desk.marketQuotes
       ? window.desk.marketQuotes(geckoIds, line).then((res) => {
           const row = fromDesk(res);
           if (row.held) return null;
           return row.lives || {};
         })
-      : fetch(url).then((r) => r.json()).then((json) => M.parseGeckoMany(json));
+      : M.readGeckoMany(line, geckoIds).then((json) => (json == null ? null : M.parseGeckoMany(json)));
     jobs.push(
       work
         .then((lives) => {
@@ -619,18 +604,19 @@ function fetchMarket() {
   }
 
   for (const row of contracts) {
-    const url = M.terminalTokenUrl(row.platform || "solana", row.address);
     const work = door && window.desk.marketTerminal
       ? window.desk.marketTerminal(row, line).then((res) => {
           const rowRes = fromDesk(res);
           if (rowRes.held) return null;
           return rowRes.live || null;
         })
-      : fetch(url).then((r) => r.json()).then((json) => M.parseTerminalToken(json));
+      : M.readTerminal(line, row.platform || "solana", row.address).then((json) =>
+          json == null ? null : M.parseTerminalToken(json),
+        );
     jobs.push(
       work
         .then((live) => {
-          if (!live) return;
+          if (live == null) return;
           const key = row.platform + ":" + row.address;
           marketCoinLives[key] = live;
           marketCoinLives[row.address] = live;
@@ -649,7 +635,10 @@ function fetchMarket() {
           if (row.held) return { held: true };
           return row.live || null;
         })
-      : fetch(M.yahooUrl(ticker.symbol)).then((r) => r.json()).then((json) => M.parseYahoo(json));
+      : M.readYahoo(line, ticker.symbol).then((json) => {
+          if (json == null) return { held: true };
+          return M.parseYahoo(json);
+        });
     jobs.push(
       work.then((live) => {
         if (live && live.held) return;
@@ -667,7 +656,10 @@ function fetchMarket() {
           if (row.held) return { held: true };
           return row.live || null;
         })
-      : fetch(M.nftUrl(nft.geckoId)).then((r) => r.json()).then((json) => M.parseNftLive(json));
+      : M.readNft(line, nft.geckoId).then((json) => {
+          if (json == null) return { held: true };
+          return M.parseNftLive(json);
+        });
     jobs.push(
       work
         .then((live) => {
@@ -4284,8 +4276,7 @@ if (marketPlate) {
       const lookLine = window.PetMarket.QUOTE_LOOK || "";
       if (look && lookLine) look.textContent = lookLine;
       if (!window.PetMarket.quoteLookMaySend || !window.PetMarket.quoteLookMaySend(plateLineInView("market-body", "market-look-net", lookLine))) return;
-      const url = window.PetMarket.searchUrl(typed);
-      if (!url) {
+      if (!window.PetMarket.searchUrl(typed)) {
         if (truth) truth.textContent = "type a coin, ticker, or contract";
         return;
       }
@@ -4297,10 +4288,14 @@ if (marketPlate) {
             if (row.held) return null;
             return row;
           })
-        : fetch(url).then((r) => r.json()).then((json) => ({
-            coins: window.PetMarket.parseSearchCoins(json),
-            nfts: window.PetMarket.parseSearchNfts(json),
-          }));
+        : window.PetMarket.readQuoteSearch(lookLine, typed).then((json) =>
+            json == null
+              ? null
+              : {
+                  coins: window.PetMarket.parseSearchCoins(json),
+                  nfts: window.PetMarket.parseSearchNfts(json),
+                },
+          );
       work
         .then((res) => {
           if (!res) return;
@@ -4347,8 +4342,7 @@ if (marketPlate) {
       const lookLine = window.PetMarket.QUOTE_LOOK || "";
       if (look && lookLine) look.textContent = lookLine;
       if (!window.PetMarket.quoteLookMaySend || !window.PetMarket.quoteLookMaySend(plateLineInView("market-body", "market-look-net", lookLine))) return;
-      const url = window.PetMarket.searchUrl(typed);
-      if (!url) {
+      if (!window.PetMarket.searchUrl(typed)) {
         if (truth) truth.textContent = "type a collection name";
         return;
       }
@@ -4360,10 +4354,14 @@ if (marketPlate) {
             if (row.held) return null;
             return row;
           })
-        : fetch(url).then((r) => r.json()).then((json) => ({
-            coins: window.PetMarket.parseSearchCoins(json),
-            nfts: window.PetMarket.parseSearchNfts(json),
-          }));
+        : window.PetMarket.readQuoteSearch(lookLine, typed).then((json) =>
+            json == null
+              ? null
+              : {
+                  coins: window.PetMarket.parseSearchCoins(json),
+                  nfts: window.PetMarket.parseSearchNfts(json),
+                },
+          );
       work
         .then((res) => {
           if (!res) return;
