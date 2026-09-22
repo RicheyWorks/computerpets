@@ -65,6 +65,7 @@ address, or an API that is not on `main`.
 | [0044](0044-station-stream-and-cloud-talk-wait-for-the-painted-line.md) | A station stream and cloud talk wait for the painted line | Accepted |
 | [0045](0045-license-requests-wait-for-the-painted-line.md) | License requests wait for the painted line | Accepted |
 | [0046](0046-house-fonts-stay-on-this-computer.md) | House fonts stay on this computer | Accepted |
+| [0047](0047-stun-waits-for-the-painted-line.md) | A STUN host waits for the painted line | Accepted |
 
 ## How to add one
 
