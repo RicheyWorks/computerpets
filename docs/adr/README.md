@@ -43,6 +43,7 @@ address, or an API that is not on `main`.
 | [0022](0022-gemini-key-stays-off-the-query.md) | The overlay Gemini call does not put the plugin key on the query string | Accepted |
 | [0023](0023-pasted-key-query-is-dropped.md) | A pasted plugin URL drops a key query before the direct call | Accepted |
 | [0024](0024-desk-talk-drops-a-pasted-key-query.md) | Desk talk drops a pasted key query before the post | Accepted |
+| [0025](0025-listener-read-drops-a-pasted-key-query.md) | The listener read drops a pasted key query before the post | Accepted |
 
 ## How to add one
 
