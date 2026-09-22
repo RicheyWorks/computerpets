@@ -2,8 +2,21 @@
 
 from __future__ import annotations
 
+import time
+
 HOUSE_FILES = ("card.json", "mind.json")
-ALLOWED_PERMISSIONS = frozenset({"geolocation"})
+
+# Geolocation is not a standing grant. It opens only for one weather locate,
+# then closes. The blotter does not read machine location; weather is the
+# civil-day clock. There is no watcher and no silent re-query.
+WEATHER_LOCATE_MS = 120_000
+_weather_locate_until = 0
+
+
+def _now_ms(now: int = 0) -> int:
+    if isinstance(now, (int, float)) and now > 0:
+        return int(now)
+    return int(time.time() * 1000)
 
 
 def allow_navigation(url: str = "") -> bool:
@@ -11,8 +24,33 @@ def allow_navigation(url: str = "") -> bool:
     return False
 
 
-def allow_permission(permission: str) -> bool:
-    return permission in ALLOWED_PERMISSIONS
+def arm_weather_locate(now: int = 0) -> int:
+    """Open geolocation until clear_weather_locate or WEATHER_LOCATE_MS."""
+    global _weather_locate_until
+    base = _now_ms(now)
+    _weather_locate_until = base + WEATHER_LOCATE_MS
+    return _weather_locate_until
+
+
+def clear_weather_locate() -> None:
+    global _weather_locate_until
+    _weather_locate_until = 0
+
+
+def weather_locate_open(now: int = 0) -> bool:
+    return _weather_locate_until > _now_ms(now)
+
+
+def allow_permission(permission: str, now: int = 0) -> bool:
+    if permission != "geolocation":
+        return False
+    return weather_locate_open(now)
+
+
+def read_weather_here() -> None:
+    """The blotter does not read the machine location."""
+    clear_weather_locate()
+    return None
 
 
 def house_file(user_data_dir: str, name: str) -> str | None:

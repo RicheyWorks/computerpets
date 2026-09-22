@@ -17,7 +17,7 @@ Gifts and place marks are house objects (a ribboned box, a lure, a guest stood o
 This slice refuses the drop and the silent grants. It does not list the desktop.
 
 - Renderer navigation is refused (`will-navigate`, `will-redirect`, `will-frame-navigate`). New windows are denied. `loadFile` from main is not that path.
-- Permission requests and checks allow `geolocation` only. That is the weather button. Clipboard read, clipboard write, display capture, microphone and camera, and `fileSystem` stay denied.
+- Permission requests and checks deny clipboard read, clipboard write, display capture, microphone and camera, and `fileSystem`. A standing `geolocation` grant was the weather button; [0013](0013-weather-locate-is-not-a-process-grant.md) closes it when the click's locate ends.
 - A drag that carries `Files` or `text/uri-list` is cancelled. The handler does not read the path or the bytes. The same guard sits the overlay, the minds window, the living desk (including `/demo`), and the blotter. The blotter does not accept drops.
 - Window rows pushed to the glass are `id`, `x`, `y`, `width`, `height`. Titles and paths are dropped before send. The enumerator still does not call `GetWindowText`.
 - Overlay presence writes resolve only to `card.json` and `mind.json` under `userData`. Any other name, including `..` and a Desktop path, is not written.
@@ -28,5 +28,5 @@ This slice refuses the drop and the silent grants. It does not list the desktop.
 - License `hwid` still reads machine-id or MachineGuid. That is the license door, not presence.
 - The keeper's plugin key still sits in `mind.json`. It stays off the card.
 - The GUI harness may write `COMPUTERPETS_GUI_HARNESS_OUT`. That path is not presence.
-- Geolocation remains granted for the process once the page asks. The button is the keeper's ask. A later slice can bind the grant to that click.
+- Geolocation is not a standing process grant. [0013](0013-weather-locate-is-not-a-process-grant.md) opens it for the weather control and closes it after that locate. Electron cannot revoke a grant Chromium already cached in the renderer.
 - DirectX 12 / Vulkan is still open. This slice is not that engine.

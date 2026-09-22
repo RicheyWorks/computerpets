@@ -83,7 +83,78 @@
     return { record: false, keys: [] };
   }
 
-  const api = { hasHostFiles, install, classifyKey, recordKeystroke };
+  const WEATHER_LOCATE_MS = 120000;
+
+  function weatherLocateOptions() {
+    return { maximumAge: 0, timeout: WEATHER_LOCATE_MS, enableHighAccuracy: false };
+  }
+
+  function closeWeatherLocate(hooks) {
+    if (!hooks || typeof hooks.clear !== "function") return Promise.resolve();
+    try {
+      return Promise.resolve(hooks.clear()).then(
+        () => {},
+        () => {},
+      );
+    } catch {
+      return Promise.resolve();
+    }
+  }
+
+  /**
+   * One weather-button fix. Asks once, then clears the session grant.
+   * maximumAge is 0, so a cached fix is not a silent re-read.
+   */
+  function readWeatherHere(geo, hooks) {
+    let pending = Promise.resolve();
+    if (hooks && typeof hooks.arm === "function") {
+      try {
+        pending = Promise.resolve(hooks.arm());
+      } catch (err) {
+        pending = Promise.reject(err);
+      }
+    }
+    const opts = weatherLocateOptions();
+    return pending
+      .then(
+        () =>
+          new Promise((resolve) => {
+            if (!geo || typeof geo.getCurrentPosition !== "function") {
+              resolve(null);
+              return;
+            }
+            let settled = false;
+            const done = (value) => {
+              if (settled) return;
+              settled = true;
+              resolve(value);
+            };
+            try {
+              geo.getCurrentPosition(
+                (pos) => {
+                  const coords = pos && pos.coords;
+                  const lat = coords ? Number(coords.latitude) : NaN;
+                  const lon = coords ? Number(coords.longitude) : NaN;
+                  done(Number.isFinite(lat) && Number.isFinite(lon) ? { lat, lon } : null);
+                },
+                () => done(null),
+                opts,
+              );
+            } catch {
+              done(null);
+            }
+          }),
+      )
+      .then(
+        (fix) => closeWeatherLocate(hooks).then(() => fix),
+        (err) =>
+          closeWeatherLocate(hooks).then(() => {
+            throw err;
+          }),
+      );
+  }
+
+  const api = { hasHostFiles, install, classifyKey, recordKeystroke, readWeatherHere, weatherLocateOptions };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetPresence = api;
   if (typeof document !== "undefined") install(document);

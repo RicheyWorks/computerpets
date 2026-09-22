@@ -1,12 +1,16 @@
 """Presence does not open keeper files. Drops are not gifts."""
 
 from computerpets_client.presence import (
+    WEATHER_LOCATE_MS,
     allow_navigation,
     allow_permission,
+    arm_weather_locate,
     classify_key,
+    clear_weather_locate,
     host_path_label,
     house_file,
     list_host_folder,
+    read_weather_here,
     record_keystroke,
     refuse_file_drop,
     window_caption,
@@ -23,12 +27,20 @@ def test_house_files_stay_inside_user_data():
 
 
 def test_navigation_and_capture_stay_refused():
+    clear_weather_locate()
     assert allow_navigation("file:///home/keeper/homework.html") is False
     assert allow_navigation("https://evil.example") is False
-    assert allow_permission("geolocation") is True
+    assert allow_permission("geolocation", 1_000) is False
+    assert arm_weather_locate(1_000) == 1_000 + WEATHER_LOCATE_MS
+    assert allow_permission("geolocation", 1_000) is True
+    assert allow_permission("geolocation", 1_000 + WEATHER_LOCATE_MS) is False
+    clear_weather_locate()
+    assert allow_permission("geolocation", 1_500) is False
     assert allow_permission("clipboard-read") is False
     assert allow_permission("display-capture") is False
     assert allow_permission("fileSystem") is False
+    assert read_weather_here() is None
+    assert allow_permission("geolocation", 1_000) is False
 
 
 def test_user_folders_are_not_listed_and_titles_are_not_read():

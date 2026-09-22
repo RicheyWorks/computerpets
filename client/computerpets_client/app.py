@@ -33,9 +33,13 @@ from .gift import gift_line, leave_gift, pick_gift
 from .gpu import SPARK_H, SPARK_W, gpu_line, initial_sample, ink, read_local, remember, sparkline
 from .listener import listener_line
 from .presence import (
+    allow_permission,
+    arm_weather_locate,
     classify_key,
+    clear_weather_locate,
     host_path_label,
     list_host_folder,
+    read_weather_here,
     record_keystroke,
     refuse_file_drop,
     seal_widget,
@@ -1004,6 +1008,22 @@ def main(argv: list[str] | None = None) -> int:
             print("check failed: presence kept a keystroke log", file=sys.stderr)
             return 1
         print("ok: presence does not log keys outside a focused field")
+        clear_weather_locate()
+        if allow_permission("geolocation", 1_000):
+            print("check failed: geolocation is a standing grant", file=sys.stderr)
+            return 1
+        if read_weather_here() is not None or allow_permission("geolocation", 1_000):
+            print("check failed: blotter read a machine location", file=sys.stderr)
+            return 1
+        arm_weather_locate(1_000)
+        if not allow_permission("geolocation", 1_000):
+            print("check failed: weather locate did not open", file=sys.stderr)
+            return 1
+        clear_weather_locate()
+        if allow_permission("geolocation", 1_500):
+            print("check failed: weather locate stayed open", file=sys.stderr)
+            return 1
+        print("ok: presence does not keep a location grant")
         QTimer.singleShot(250, app.quit)
     return app.exec()
 
