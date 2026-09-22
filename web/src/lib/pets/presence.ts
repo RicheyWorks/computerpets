@@ -110,6 +110,11 @@ export function ipPlace(..._ignored: unknown[]): IpPlace | null {
   return null;
 }
 
+/** The desk does not read a machine id. License binding is the overlay and the blotter. */
+export function readMachineMark(): { read: false; raw: null; id: "" } {
+  return { read: false, raw: null, id: "" };
+}
+
 /** One weather-button fix. Arms geolocation, asks once, then clears. Does not watch. Call only after the in-app Send yes. A cached origin grant can still answer that call without a new browser prompt. This does not revoke the grant. */
 export function readWeatherHere(
   geo?: GeoLike,

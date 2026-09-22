@@ -6,7 +6,7 @@ const os = require("os");
 const path = require("path");
 const fs = require("fs");
 const { createLicenseSession } = require("./session.cjs");
-const { createContractTestDouble } = require("./contract-test-double.cjs");
+const { createContractTestDouble, encryptLicense } = require("./contract-test-double.cjs");
 const { LicenseError } = require("./errors.cjs");
 
 const SECRET = Buffer.alloc(32, 7).toString("base64");
@@ -121,5 +121,122 @@ describe("license session", () => {
     const status = session.status();
     assert.equal(status.unlocked, false);
     assert.equal(status.error.code, "decrypt_failed");
+  });
+
+  it("does not read the OS machine id for status, and sends only the hash on unlock", async () => {
+    const reads = [];
+    const files = new Map();
+    const readFile = (p) => {
+      const key = String(p);
+      reads.push(key);
+      if (key.endsWith("machine-id")) return "machine-aaa\n";
+      if (!files.has(key)) {
+        const err = new Error("ENOENT");
+        err.code = "ENOENT";
+        throw err;
+      }
+      return files.get(key);
+    };
+    const writeFile = (p, data) => {
+      files.set(String(p), String(data));
+    };
+    const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
+    const session = createLicenseSession({
+      userDataDir: path.join(os.tmpdir(), "cp-license-mark"),
+      env: { LICENSE_SECRET_KEY: SECRET, BUNDLE_SIGNING_KEY: SIGNING, COMPUTERPETS_BACKEND_URL: "http://127.0.0.1:8080" },
+      fetchImpl: backend.fetchImpl,
+      readFile,
+      writeFile,
+      mkdir: () => {},
+    });
+
+    const before = session.status();
+    assert.equal(before.hwid, "");
+    assert.equal(before.hwidMark.read, "unread");
+    assert.equal(before.hwidMark.rawLeavesMachine, false);
+    assert.equal(reads.some((item) => item.includes("machine-id")), false);
+
+    await session.unlock({
+      steamId: "76561198000000000",
+      appId: "123456",
+      petType: "red_panda",
+      provider: "steam",
+    });
+    const verify = backend.calls.find((call) => call.path === "/api/verify/steam");
+    assert.equal(verify.body.hwid, "eaa1f7bdd907e76c52b378ce67b87a05bb287933089e7adc50ca18399cbb53a4");
+    assert.equal(String(verify.body.hwid).includes("machine-aaa"), false);
+    assert.equal(session.status().hwidMark.read, "stored");
+    const machineReads = reads.filter((item) => item.includes("machine-id")).length;
+    session.status();
+    assert.equal(reads.filter((item) => item.includes("machine-id")).length, machineReads);
+  });
+
+  it("does not read a machine id when the license is unbound", async () => {
+    const now = Date.now();
+    const enc = encryptLicense(
+      {
+        jti: "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80",
+        owner: "76561198000000000",
+        pet: "red_panda",
+        validUntil: new Date(now + 86400_000).toISOString(),
+        issuedAt: new Date(now).toISOString(),
+        hwid: null,
+      },
+      SECRET
+    );
+    const reads = [];
+    const files = new Map();
+    const dir = path.join(os.tmpdir(), "cp-license-unbound");
+    const store = path.join(dir, "license.json");
+    files.set(
+      store,
+      JSON.stringify({
+        backendUrl: "http://127.0.0.1:8080",
+        license: { ciphertext: enc.ciphertext, iv: enc.iv },
+        auth: { token: "token" },
+      })
+    );
+    const posts = [];
+    const session = createLicenseSession({
+      userDataDir: dir,
+      env: { LICENSE_SECRET_KEY: SECRET, COMPUTERPETS_BACKEND_URL: "http://127.0.0.1:8080" },
+      readFile: (p) => {
+        const key = String(p);
+        reads.push(key);
+        if (key.includes("machine-id") || key.includes("MachineGuid")) throw new Error("os read");
+        if (!files.has(key)) {
+          const err = new Error("ENOENT");
+          err.code = "ENOENT";
+          throw err;
+        }
+        return files.get(key);
+      },
+      writeFile: (p, data) => {
+        files.set(String(p), String(data));
+      },
+      mkdir: () => {},
+      fetchImpl: async (url, init) => {
+        if (init && String(init.method || "GET").toUpperCase() === "POST") {
+          posts.push(JSON.parse(init.body));
+          return new Response(
+            JSON.stringify({
+              petKey: "red_panda",
+              downloadUrl:
+                "https://cdn.enterprisepet.example/bundles/red_panda.zip?owner=76561198000000000&jti=3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80&exp=1893456000&sig=abc",
+              expiresAt: "2030-01-01T00:00:00Z",
+              ttlSeconds: 900,
+              jti: "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80",
+            }),
+            { status: 200, headers: { "content-type": "application/json" } }
+          );
+        }
+        return new Response("zip", { status: 200 });
+      },
+    });
+    const downloaded = await session.download();
+    assert.equal(downloaded.jti, "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80");
+    assert.equal(posts.length, 1);
+    assert.equal(Object.prototype.hasOwnProperty.call(posts[0], "hwid"), false);
+    assert.equal(reads.some((item) => item.includes("machine-id")), false);
   });
 });

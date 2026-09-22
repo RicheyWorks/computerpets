@@ -244,3 +244,50 @@ def test_fails_closed_when_download_hwid_does_not_match():
             token=verified["auth"]["token"],
         )
     assert caught.value.code == "hwid_mismatch"
+
+
+def test_status_does_not_read_the_os_machine_id():
+    reads: list[str] = []
+    files: dict[str, str] = {}
+
+    def read(path: str) -> str:
+        reads.append(path)
+        if path.endswith("machine-id"):
+            return "machine-aaa\n"
+        if path not in files:
+            raise FileNotFoundError(path)
+        return files[path]
+
+    def write(path: str, data: str) -> None:
+        assert "machine-aaa" not in data
+        files[path] = data
+
+    backend = create_contract_test_double(license_secret=SECRET, signing_key=SIGNING)
+    session = create_license_session(
+        user_data_dir="/tmp/cp-license-mark",
+        env={
+            "LICENSE_SECRET_KEY": SECRET,
+            "BUNDLE_SIGNING_KEY": SIGNING,
+            "COMPUTERPETS_BACKEND_URL": "http://127.0.0.1:8080",
+        },
+        fetch_impl=backend["fetch_impl"],
+        read_file=read,
+        write_file=write,
+        mkdir=lambda _path: None,
+    )
+    before = session["status"]()
+    assert before["hwid"] == ""
+    assert before["hwidMark"]["read"] == "unread"
+    assert before["hwidMark"]["rawLeavesMachine"] is False
+    assert not any("machine-id" in item for item in reads)
+
+    session["unlock"](
+        {"steamId": "76561198000000000", "appId": "123456", "petType": "red_panda", "provider": "steam"}
+    )
+    verify = next(call for call in backend["calls"] if call["path"] == "/api/verify/steam")
+    assert verify["body"]["hwid"] == "eaa1f7bdd907e76c52b378ce67b87a05bb287933089e7adc50ca18399cbb53a4"
+    assert "machine-aaa" not in verify["body"]["hwid"]
+    assert session["status"]()["hwidMark"]["read"] == "stored"
+    machine_reads = [item for item in reads if "machine-id" in item]
+    session["status"]()
+    assert [item for item in reads if "machine-id" in item] == machine_reads
