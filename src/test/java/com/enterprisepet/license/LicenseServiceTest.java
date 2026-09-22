@@ -17,7 +17,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
- * Focused tests for the new revocation, usage recording, and hwid flows (Phase 2).
+ * Focused tests for revocation (soft-delete), usage recording, and audit hooks.
  */
 @ExtendWith(MockitoExtension.class)
 class LicenseServiceTest {
@@ -25,33 +25,39 @@ class LicenseServiceTest {
     @Mock
     private LicenseRepository licenseRepository;
 
+    @Mock
+    private LicenseAuditor auditor;
+
     private LicenseService licenseService;
 
     @BeforeEach
     void setUp() {
-        // Use the test constructor that skips expensive/validating @PostConstruct key setup.
-        licenseService = new LicenseService(licenseRepository, true);
+        licenseService = new LicenseService(
+            licenseRepository, new InMemoryRevocationIndex(), auditor, true);
     }
 
     @Test
-    void revoke_returnsTrue_onFirstCall_andPersists() {
+    void revoke_returnsTrue_onFirstCall_andSoftDeletes() {
         IssuedLicense lic = new IssuedLicense("owner1", "red_panda", "steam", Instant.now(), Instant.now().plusSeconds(3600));
         lic.setJti("test-jti-123");
 
         when(licenseRepository.findByJti("test-jti-123")).thenReturn(Optional.of(lic));
 
-        boolean first = licenseService.revoke("test-jti-123");
+        boolean first = licenseService.revoke("test-jti-123", LicenseAuditService.ACTOR_ADMIN);
         assertThat(first).isTrue();
 
         ArgumentCaptor<IssuedLicense> captor = ArgumentCaptor.forClass(IssuedLicense.class);
         verify(licenseRepository).save(captor.capture());
         assertThat(captor.getValue().getRevokedAt()).isNotNull();
+        assertThat(captor.getValue().getDeletedAt()).isNotNull();
+        assertThat(captor.getValue().getDeletedAt()).isEqualTo(captor.getValue().getRevokedAt());
+        verify(auditor).recordRevoked(any(IssuedLicense.class), eq(LicenseAuditService.ACTOR_ADMIN));
     }
 
     @Test
     void revoke_writesDenyList_afterPostgresSave() {
         RevocationIndex index = mock(RevocationIndex.class);
-        licenseService = new LicenseService(licenseRepository, index, true);
+        licenseService = new LicenseService(licenseRepository, index, auditor, true);
 
         IssuedLicense lic = new IssuedLicense("owner1", "red_panda", "steam", Instant.now(), Instant.now().plusSeconds(3600));
         lic.setJti("test-jti-123");
@@ -65,7 +71,7 @@ class LicenseServiceTest {
     @Test
     void revoke_stillSucceeds_whenDenyListWriteFails() {
         RevocationIndex index = mock(RevocationIndex.class);
-        licenseService = new LicenseService(licenseRepository, index, true);
+        licenseService = new LicenseService(licenseRepository, index, auditor, true);
 
         IssuedLicense lic = new IssuedLicense("owner1", "red_panda", "steam", Instant.now(), Instant.now().plusSeconds(3600));
         lic.setJti("test-jti-123");
@@ -78,30 +84,60 @@ class LicenseServiceTest {
     }
 
     @Test
-    void revoke_returnsFalse_whenAlreadyRevoked() {
+    void revoke_returnsFalse_whenAlreadyRevoked_andHealsDeletedAt() {
         IssuedLicense lic = new IssuedLicense("owner1", "red_panda", "steam", Instant.now(), Instant.now().plusSeconds(3600));
         lic.setJti("test-jti-123");
-        lic.setRevokedAt(Instant.now().minusSeconds(60));
+        Instant revoked = Instant.now().minusSeconds(60);
+        lic.setRevokedAt(revoked);
+        // Older row: revoked without deletedAt — heal on repeat revoke.
 
         when(licenseRepository.findByJti("test-jti-123")).thenReturn(Optional.of(lic));
 
         boolean result = licenseService.revoke("test-jti-123");
         assertThat(result).isFalse();
-        verify(licenseRepository, never()).save(any());
+        verify(licenseRepository).save(any(IssuedLicense.class));
+        assertThat(lic.getDeletedAt()).isEqualTo(revoked);
+        verify(auditor, never()).recordRevoked(any(), any());
     }
 
     @Test
-    void recordDownload_updatesLastUsedAt() {
+    void revoke_returnsFalse_whenAlreadySoftDeleted_withoutResave() {
+        IssuedLicense lic = new IssuedLicense("owner1", "red_panda", "steam", Instant.now(), Instant.now().plusSeconds(3600));
+        lic.setJti("test-jti-123");
+        Instant when = Instant.now().minusSeconds(60);
+        lic.setRevokedAt(when);
+        lic.setDeletedAt(when);
+
+        when(licenseRepository.findByJti("test-jti-123")).thenReturn(Optional.of(lic));
+
+        assertThat(licenseService.revoke("test-jti-123")).isFalse();
+        verify(licenseRepository, never()).save(any());
+        verify(auditor, never()).recordRevoked(any(), any());
+    }
+
+    @Test
+    void recordDownload_updatesLastUsedAt_andAudits_whenActive() {
         IssuedLicense lic = new IssuedLicense("owner1", "cat", "nft", Instant.now(), Instant.now().plusSeconds(3600));
         lic.setJti("jti-xyz");
 
-        when(licenseRepository.findByJti("jti-xyz")).thenReturn(Optional.of(lic));
+        when(licenseRepository.findByJtiAndDeletedAtIsNull("jti-xyz")).thenReturn(Optional.of(lic));
 
         licenseService.recordDownload("jti-xyz");
 
         ArgumentCaptor<IssuedLicense> captor = ArgumentCaptor.forClass(IssuedLicense.class);
         verify(licenseRepository).save(captor.capture());
         assertThat(captor.getValue().getLastUsedAt()).isNotNull();
+        verify(auditor).recordDownload(any(IssuedLicense.class));
+    }
+
+    @Test
+    void recordDownload_skipsSoftDeleted() {
+        when(licenseRepository.findByJtiAndDeletedAtIsNull("gone")).thenReturn(Optional.empty());
+
+        licenseService.recordDownload("gone");
+
+        verify(licenseRepository, never()).save(any());
+        verify(auditor, never()).recordDownload(any());
     }
 
     @Test
@@ -111,7 +147,7 @@ class LicenseServiceTest {
     }
 
     @Test
-    void findByOwner_trims_andDelegates() {
+    void findByOwner_trims_andDelegates_includingSoftDeleted() {
         IssuedLicense lic = new IssuedLicense("owner1", "cat", "steam", Instant.now(), Instant.now().plusSeconds(3600));
         when(licenseRepository.findTop50ByOwnerOrderByIssuedAtDesc("owner1")).thenReturn(List.of(lic));
 
@@ -121,10 +157,16 @@ class LicenseServiceTest {
     }
 
     @Test
+    void findActiveByOwner_excludesSoftDeleted() {
+        IssuedLicense lic = new IssuedLicense("owner1", "cat", "steam", Instant.now(), Instant.now().plusSeconds(3600));
+        when(licenseRepository.findTop50ByDeletedAtIsNullAndOwnerOrderByIssuedAtDesc("owner1"))
+            .thenReturn(List.of(lic));
+
+        assertThat(licenseService.findActiveByOwner("owner1")).containsExactly(lic);
+    }
+
+    @Test
     void hwid_isStored_whenProvidedOnIssue() {
-        // This exercises the new 5-arg overload path indirectly via the public API shape
-        // (full encryption test would require a valid master key in the test context).
-        // We at least verify the service accepts the parameter without blowing up at construction time.
         assertThat(licenseService).isNotNull();
     }
 }

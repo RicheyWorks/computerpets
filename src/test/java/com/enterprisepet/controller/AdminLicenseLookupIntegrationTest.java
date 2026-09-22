@@ -139,6 +139,8 @@ class AdminLicenseLookupIntegrationTest {
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(resp.getBody().get("revoked")).isEqualTo(true);
         assertThat(resp.getBody().get("revokedAt")).isNotNull();
+        assertThat(resp.getBody().get("deleted")).isEqualTo(true);
+        assertThat(resp.getBody().get("deletedAt")).isNotNull();
         assertThat(resp.getBody().get("lastUsedAt")).isNotNull();
         assertThat(resp.getBody().get("hwidBound")).isEqualTo(false);
     }

@@ -1,6 +1,7 @@
 package com.enterprisepet.controller;
 
 import com.enterprisepet.dto.LicenseAuditResponse;
+import com.enterprisepet.license.LicenseAuditService;
 import com.enterprisepet.license.LicenseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,7 +26,8 @@ import java.util.Map;
  * <p>Protected by a strong pre-shared admin key (X-Admin-Key header).
  * This is intentionally simple for Phase 2; production operators supply
  * {@code ADMIN_API_KEY} via env, {@code ADMIN_API_KEY_FILE}, or External Secrets
- * into the existing Opaque Secret (ADR 0056).
+ * into the existing Opaque Secret (ADR 0056). Revoke soft-deletes the ledger row
+ * (ADR 0058); it does not hard-wipe.
  */
 @RestController
 @RequestMapping("/api/admin")
@@ -89,7 +91,7 @@ public class AdminController {
             ));
         }
 
-        boolean revoked = licenseService.revoke(jti);
+        boolean revoked = licenseService.revoke(jti, LicenseAuditService.ACTOR_ADMIN);
         if (!revoked) {
             // Either not found or already revoked
             return ResponseEntity.status(404).body(Map.of(
@@ -101,7 +103,8 @@ public class AdminController {
 
         return ResponseEntity.ok(Map.of(
             "revoked", true,
-            "jti", jti
+            "jti", jti,
+            "softDeleted", true
         ));
     }
 
