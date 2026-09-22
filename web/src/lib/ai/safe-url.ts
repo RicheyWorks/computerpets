@@ -1,3 +1,4 @@
+import { stripSecretQuery } from "./secret-query.mjs";
 import type { MindKind } from "./types";
 
 const LOCAL_HOSTS = new Set(["127.0.0.1", "localhost", "::1"]);
@@ -27,50 +28,6 @@ export function sanitizeModel(raw: string | undefined, fallback: string) {
   if (value.includes("..") || value.includes("\\")) return fallback;
   if (!/^[a-zA-Z0-9._:/-]{1,80}$/.test(value)) return fallback;
   return value;
-}
-
-/** Query names that would put a plugin secret on the URL. Hyphens match underscores. */
-const SECRET_QUERY_NAMES = new Set([
-  "key",
-  "api_key",
-  "apikey",
-  "access_token",
-  "refresh_token",
-  "id_token",
-  "token",
-  "secret",
-  "client_secret",
-  "x_goog_api_key",
-  "x_api_key",
-  "auth",
-  "authorization",
-  "bearer",
-]);
-
-export function isSecretQueryName(name: string) {
-  const norm = name.trim().toLowerCase().replace(/-/g, "_");
-  return SECRET_QUERY_NAMES.has(norm);
-}
-
-function hashCarriesSecretQuery(hash: string) {
-  const body = hash.replace(/^#\??/, "");
-  if (!body) return false;
-  const params = new URLSearchParams(body);
-  let dirty = false;
-  params.forEach((_, name) => {
-    if (isSecretQueryName(name)) dirty = true;
-  });
-  return dirty;
-}
-
-/** Drop a pasted `key` / `api_key` (and the same kind of secret) before a direct plugin call. */
-export function stripSecretQuery(url: URL) {
-  const names = new Set<string>();
-  url.searchParams.forEach((_, name) => names.add(name));
-  for (const name of names) {
-    if (isSecretQueryName(name)) url.searchParams.delete(name);
-  }
-  if (hashCarriesSecretQuery(url.hash)) url.hash = "";
 }
 
 /**
