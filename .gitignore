@@ -13,6 +13,10 @@ backups/
 # Environment
 .env
 
+# Operator-mounted Docker secret files (keep secrets/README.md)
+secrets/*
+!secrets/README.md
+
 # Logs
 logs/
 *.log
