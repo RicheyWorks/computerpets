@@ -311,6 +311,12 @@ class ItchServiceTest {
         assertThat(result.reason()).isEqualTo("Itch.io ownership not found");
     }
 
+    @Test
+    @DisplayName("Itch RestClient uses a ten-second connect and read deadline")
+    void itchTimeoutMatchesSteam() {
+        assertThat(ItchService.ITCH_TIMEOUT).isEqualTo(java.time.Duration.ofSeconds(10));
+    }
+
     private void expectDownloadKeys(String json) {
         mockServer.expect(requestTo(org.hamcrest.Matchers.containsString("/download_keys")))
                 .andExpect(method(HttpMethod.GET))
