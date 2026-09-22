@@ -78,6 +78,8 @@ openssl rand -base64 24   # SPRING_DATASOURCE_PASSWORD (also POSTGRES_PASSWORD)
 | `JWT_SECRET_KEY` | Yes | Download JWTs (48+ bytes, base64) |
 | `BUNDLE_SIGNING_KEY` | Yes | HMAC download URLs |
 | `ADMIN_API_KEY` | Yes | `/api/admin/*` and house `/admin` (`X-Admin-Key`) |
+| `JWT_SECRET_KEY_PREVIOUS` / `BUNDLE_SIGNING_KEY_PREVIOUS` / `LICENSE_SECRET_KEY_PREVIOUS` / `ADMIN_API_KEY_PREVIOUS` | No | Dual-key window during rotation ([ADR 0065](../../docs/adr/0065-secret-rotation-cadence-and-hsm.md)). Unset after the window. |
+| `COMPUTERPETS_KEYS_ROTATED_AT` | No | Optional ISO-8601 stamp; when set on prod, max age 400 days |
 | `SPRING_DATASOURCE_USERNAME` | Yes | JDBC (must match `POSTGRES_USER`) |
 | `SPRING_DATASOURCE_PASSWORD` | Yes | JDBC (must match `POSTGRES_PASSWORD`) |
 | `SPRING_DATASOURCE_REPLICA_URL` | No | Optional managed Postgres **read** replica. Leave unset for the in-cluster single primary. Do not invent a replica Service. |

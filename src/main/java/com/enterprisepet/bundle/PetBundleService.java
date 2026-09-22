@@ -56,9 +56,18 @@ public class PetBundleService {
     @Value("${bundle.signing-key}")
     private String signingKey;
 
+    /**
+     * Optional previous HMAC key kept during a rotation window so outstanding
+     * signed URLs still verify. Sign always uses {@link #signingKey}. Blank = no
+     * dual-key. See ADR 0065.
+     */
+    @Value("${bundle.signing-key-previous:}")
+    private String previousSigningKey;
+
     private final BundleCatalog catalog;
 
     private SecretKeySpec signingKeySpec;
+    private SecretKeySpec previousSigningKeySpec;
 
     public PetBundleService(BundleCatalog catalog) {
         this.catalog = catalog == null ? BundleCatalog.empty() : catalog;
@@ -80,7 +89,31 @@ public class PetBundleService {
         }
         this.signingKeySpec = new SecretKeySpec(
             signingKey.getBytes(StandardCharsets.UTF_8), HMAC_ALGORITHM);
-        log.info("PetBundleService ready. baseUrl={}, ttl={}", bundleBaseUrl, DOWNLOAD_URL_TTL);
+        this.previousSigningKeySpec = decodePrevious(previousSigningKey);
+        log.info(
+                "PetBundleService ready. baseUrl={}, ttl={}, previousKey={}",
+                bundleBaseUrl,
+                DOWNLOAD_URL_TTL,
+                previousSigningKeySpec != null ? "yes" : "no");
+    }
+
+    private SecretKeySpec decodePrevious(String previous) {
+        if (previous == null || previous.isBlank()) {
+            return null;
+        }
+        for (String placeholder : PLACEHOLDER_KEYS) {
+            if (placeholder.equals(previous)) {
+                throw new IllegalStateException(
+                        "bundle.signing-key-previous looks like a placeholder ('" + placeholder
+                                + "'). Refusing to start (ADR 0065).");
+            }
+        }
+        if (previous.equals(signingKey)) {
+            throw new IllegalStateException(
+                    "bundle.signing-key-previous must differ from bundle.signing-key. "
+                            + "A no-op rotation leaves no verify window (ADR 0065).");
+        }
+        return new SecretKeySpec(previous.getBytes(StandardCharsets.UTF_8), HMAC_ALGORITHM);
     }
 
     /**
@@ -162,8 +195,14 @@ public class PetBundleService {
         if (petKey == null || petKey.isBlank() || owner == null || sig == null || sig.isBlank()) {
             return false;
         }
-        String expected = sign(macInput(petKey, owner, jti, expEpochSeconds));
-        return constantTimeEquals(expected, sig);
+        String input = macInput(petKey, owner, jti, expEpochSeconds);
+        if (constantTimeEquals(sign(input), sig)) {
+            return true;
+        }
+        if (previousSigningKeySpec == null) {
+            return false;
+        }
+        return constantTimeEquals(signWith(previousSigningKeySpec, input), sig);
     }
 
     static String macInput(String petKey, String owner, String jti, long expEpochSeconds) {
@@ -203,9 +242,13 @@ public class PetBundleService {
     }
 
     private String sign(String input) {
+        return signWith(signingKeySpec, input);
+    }
+
+    private static String signWith(SecretKeySpec keySpec, String input) {
         try {
             Mac mac = Mac.getInstance(HMAC_ALGORITHM);
-            mac.init(signingKeySpec);
+            mac.init(keySpec);
             byte[] sig = mac.doFinal(input.getBytes(StandardCharsets.UTF_8));
             return Base64.getUrlEncoder().withoutPadding().encodeToString(sig);
         } catch (Exception e) {

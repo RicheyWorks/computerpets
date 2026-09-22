@@ -4,6 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.env.MockEnvironment;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -17,6 +20,26 @@ class ProductionProfileGuardTest {
             String secretsSource,
             String allowPlainSecret,
             MockEnvironment environment) {
+        return guard(
+                microsoftDevMode,
+                rateLimitBackend,
+                datasourceUrl,
+                replicaDatasourceUrl,
+                secretsSource,
+                allowPlainSecret,
+                "",
+                environment);
+    }
+
+    private static ProductionProfileGuard guard(
+            boolean microsoftDevMode,
+            String rateLimitBackend,
+            String datasourceUrl,
+            String replicaDatasourceUrl,
+            String secretsSource,
+            String allowPlainSecret,
+            String keysRotatedAt,
+            MockEnvironment environment) {
         return new ProductionProfileGuard(
                 microsoftDevMode,
                 rateLimitBackend,
@@ -24,6 +47,7 @@ class ProductionProfileGuardTest {
                 replicaDatasourceUrl,
                 secretsSource,
                 allowPlainSecret,
+                keysRotatedAt,
                 environment);
     }
 
@@ -239,5 +263,60 @@ class ProductionProfileGuardTest {
                 new MockEnvironment());
 
         assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("prod accepts a fresh COMPUTERPETS_KEYS_ROTATED_AT stamp")
+    void freshKeysRotatedAt_passes() {
+        String stamp = Instant.now().minus(7, ChronoUnit.DAYS).toString();
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                stamp,
+                new MockEnvironment());
+
+        assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("prod refuses a stale COMPUTERPETS_KEYS_ROTATED_AT stamp")
+    void staleKeysRotatedAt_failsHard() {
+        String stamp = Instant.now().minus(401, ChronoUnit.DAYS).toString();
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                stamp,
+                new MockEnvironment());
+
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("COMPUTERPETS_KEYS_ROTATED_AT")
+                .hasMessageContaining("400");
+    }
+
+    @Test
+    @DisplayName("prod refuses an unparseable COMPUTERPETS_KEYS_ROTATED_AT stamp")
+    void unparseableKeysRotatedAt_failsHard() {
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                "last-tuesday",
+                new MockEnvironment());
+
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("ISO-8601");
     }
 }

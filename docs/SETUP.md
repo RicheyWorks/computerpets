@@ -128,6 +128,29 @@ docker compose -f docker-compose.yml -f docker-compose.secrets.yml up --build
 
 Keeper-local mind plugin keys (`mind.json` seal on the overlay, desk bridge) are not house production secrets — they stay on the keeper machine.
 
+### Secret rotation (ADR 0065)
+
+Injection and fail-closed prod attestation are done ([ADR 0056](adr/0056-house-secrets-from-file-mounts.md), [ADR 0064](adr/0064-secret-operator-prod-refuses-plain-env.md)). Scheduled rotation is the remaining §10 #13 contract:
+
+| Key | Suggested cadence | Dual-key env | Minimum dual-key window |
+|-----|-------------------|--------------|-------------------------|
+| `JWT_SECRET_KEY` | ~90 days | `JWT_SECRET_KEY_PREVIOUS` | ≥ JWT TTL (30m) + skew |
+| `BUNDLE_SIGNING_KEY` | ~90 days | `BUNDLE_SIGNING_KEY_PREVIOUS` | ≥ 15m download TTL + skew |
+| `ADMIN_API_KEY` | ~90 days | `ADMIN_API_KEY_PREVIOUS` | Operator cutover |
+| `LICENSE_SECRET_KEY` | ~180 days | `LICENSE_SECRET_KEY_PREVIOUS` | Until old sealed licenses expire or keepers re-verify (up to ~365d) |
+
+**Roll without downtime**
+
+1. Copy the retiring value into `NAME_PREVIOUS` (or `NAME_PREVIOUS_FILE` / External Secrets sibling key).
+2. Publish the new value as `NAME`.
+3. Set optional `COMPUTERPETS_KEYS_ROTATED_AT` to an ISO-8601 instant (e.g. `2026-09-22T12:00:00Z`). On `prod`, a set stamp older than 400 days refuses start.
+4. Rolling restart. Issue / sign / encrypt use **current only**. Verify / decrypt / admin accept **current, then previous**.
+5. After the window, unset `*_PREVIOUS`. Equal previous==current, placeholder previous, or blank current all refuse start.
+
+**HSM / KMS pointer** — Prefer AWS KMS CMK / CloudHSM / Vault Transit to generate and wrap material into the existing Secrets Manager shells (`deploy/terraform/modules/secrets`) or file mounts. The app still consumes key bytes after unwrap; this repo does not host a live HSM. Deploy gate: `./deploy/k8s/verify-secret-rotation.sh`.
+
+Clients that decrypt locally should also hold `LICENSE_SECRET_KEY_PREVIOUS` during the AES window. Opaque download ciphertext still works when only the backend keeps previous.
+
 ### 4. (Optional) Enable Microsoft Development Mode
 
 For local testing without real Microsoft authentication:
