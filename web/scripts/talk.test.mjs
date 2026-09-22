@@ -13,6 +13,8 @@ const C = await import(join(root, "src/lib/pets/care.ts"));
 const talkSrc = readFileSync(join(root, "src/lib/pets/talk.ts"), "utf8");
 const spendSrc = readFileSync(join(root, "src/lib/pets/talk-spend.ts"), "utf8");
 const postSrc = readFileSync(join(root, "src/lib/pets/talk-post.ts"), "utf8");
+const safeUrlSrc = readFileSync(join(root, "src/lib/ai/safe-url.ts"), "utf8");
+const secretQuerySrc = readFileSync(join(root, "src/lib/ai/secret-query.mjs"), "utf8");
 const mindPageSrc = readFileSync(join(root, "src/routes/mind.tsx"), "utf8");
 const overlayMind = readFileSync(join(repo, "desktop/renderer/mind.js"), "utf8");
 const overlayPet = readFileSync(join(repo, "desktop/renderer/pet.js"), "utf8");
@@ -145,6 +147,125 @@ test("house talk body never carries apiKey", () => {
   assert.deepEqual(Object.keys(P.mindForHouse({ plugin: "openai", apiKey: SECRET })).sort(), ["plugin"]);
 });
 
+const PASTED = "pasted-key-VALUE-should-not-ride";
+const PASTED_API = "pasted-api-key-VALUE-should-not-ride";
+const SECRET_QUERY = [
+  "key",
+  "api_key",
+  "api-key",
+  "apikey",
+  "access_token",
+  "refresh_token",
+  "id_token",
+  "token",
+  "secret",
+  "client_secret",
+  "x-goog-api-key",
+  "x-api-key",
+  "auth",
+  "authorization",
+  "bearer",
+];
+
+function pastedBase(originPath) {
+  const url = new URL(originPath);
+  for (const name of SECRET_QUERY) {
+    url.searchParams.set(name, name === "api_key" ? PASTED_API : `${PASTED}-${name}`);
+  }
+  url.searchParams.set("alt", "sse");
+  url.hash = `key=${PASTED}`;
+  return url.toString();
+}
+
+test("a pasted key query on the base URL is not in the posted talk body", () => {
+  const dirty = pastedBase("https://example.test/v1beta");
+  const body = P.talkBody({
+    message: "hello key",
+    hunger: 70,
+    mood: 72,
+    energy: 68,
+    hygiene: 80,
+    name: "Rui",
+    species: "red_panda",
+    speak: false,
+    mind: {
+      plugin: "google",
+      model: "gemini-2.5-flash",
+      baseUrl: dirty,
+      apiKey: SECRET,
+    },
+    voice: "none",
+  });
+  const wire = JSON.stringify(body);
+  assert.equal(wire.includes(PASTED), false);
+  assert.equal(wire.includes(PASTED_API), false);
+  assert.equal(wire.includes(SECRET), false);
+  assert.equal(wire.includes("apiKey"), false);
+  assert.equal(body.message, "hello key");
+  assert.equal(body.hunger, 70);
+  assert.equal(body.mind.model, "gemini-2.5-flash");
+  assert.equal(body.mind.plugin, "google");
+  assert.equal(body.mind.baseUrl, "https://example.test/v1beta?alt=sse");
+  assert.equal(body.mind.baseUrl.includes("key="), false);
+  assert.equal(body.mind.baseUrl.includes("api_key="), false);
+
+  const keyOnly = P.talkBody({
+    hunger: 1,
+    mood: 2,
+    energy: 3,
+    name: "Rui",
+    species: "red_panda",
+    mind: { plugin: "openai", baseUrl: `https://api.example.test/v1?key=${PASTED}` },
+  });
+  assert.equal(JSON.stringify(keyOnly).includes(PASTED), false);
+  assert.equal(keyOnly.mind.baseUrl, "https://api.example.test/v1");
+
+  const apiKeyOnly = P.talkBody({
+    hunger: 1,
+    mood: 2,
+    energy: 3,
+    name: "Rui",
+    species: "red_panda",
+    mind: { plugin: "openai", baseUrl: `https://api.example.test/v1?api_key=${PASTED_API}&alt=sse` },
+  });
+  assert.equal(JSON.stringify(apiKeyOnly).includes(PASTED_API), false);
+  assert.equal(apiKeyOnly.mind.baseUrl, "https://api.example.test/v1?alt=sse");
+
+  const clean = P.talkBody({
+    hunger: 1,
+    mood: 2,
+    energy: 3,
+    name: "Rui",
+    species: "red_panda",
+    mind: { plugin: "xai", model: "grok-4.5", baseUrl: "https://api.x.ai/v1?alt=sse#room" },
+  });
+  assert.equal(clean.mind.baseUrl, "https://api.x.ai/v1?alt=sse#room");
+  assert.equal(clean.mind.model, "grok-4.5");
+});
+
+test("a pasted key query that still arrives is dropped before the house keeps the talk body", () => {
+  const parsed = P.parseTalkBody({
+    message: "hello",
+    hunger: 70,
+    mood: 72,
+    energy: 68,
+    mind: {
+      plugin: "google",
+      model: "gemini-2.5-flash",
+      apiKey: SECRET,
+      baseUrl: `https://example.test/v1beta?key=${PASTED}&api_key=${PASTED_API}&alt=sse#key=${PASTED}`,
+    },
+  });
+  const wire = JSON.stringify(parsed);
+  assert.equal(wire.includes(PASTED), false);
+  assert.equal(wire.includes(PASTED_API), false);
+  assert.equal(wire.includes(SECRET), false);
+  assert.equal(wire.includes("apiKey"), false);
+  assert.equal(parsed.message, "hello");
+  assert.equal(parsed.mind.model, "gemini-2.5-flash");
+  assert.equal(parsed.mind.baseUrl, "https://example.test/v1beta?alt=sse");
+});
+
 test("a posted apiKey is dropped before the house spends it", () => {
   const parsed = P.parseTalkBody({
     apiKey: SECRET,
@@ -167,6 +288,25 @@ test("a posted apiKey is dropped before the house spends it", () => {
 test("desk and overlay talk do not put apiKey on a house body or query", () => {
   assert.match(postSrc, /delete copy\.apiKey/);
   assert.match(postSrc, /delete mindCopy\.apiKey/);
+  assert.match(postSrc, /scrubSecretQueryString/);
+  assert.match(postSrc, /secret-query\.mjs/);
+  assert.doesNotMatch(postSrc, /SECRET_QUERY_NAMES/);
+  assert.match(safeUrlSrc, /secret-query\.mjs/);
+  assert.doesNotMatch(safeUrlSrc, /SECRET_QUERY_NAMES/);
+  assert.match(secretQuerySrc, /export function scrubSecretQueryString/);
+  assert.match(secretQuerySrc, /export function stripSecretQuery/);
+  assert.match(secretQuerySrc, /SECRET_QUERY_NAMES/);
+  const sharedBlock = secretQuerySrc.slice(
+    secretQuerySrc.indexOf("export const SECRET_QUERY_NAMES"),
+    secretQuerySrc.indexOf("export function isSecretQueryName"),
+  );
+  const sharedNames = [...sharedBlock.matchAll(/"([a-z_]+)"/g)].map((m) => m[1]);
+  const overlayBlock = overlayMind.slice(
+    overlayMind.indexOf("const SECRET_QUERY_NAMES"),
+    overlayMind.indexOf("function isSecretQueryName"),
+  );
+  const overlayNames = [...overlayBlock.matchAll(/"([a-z_]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(overlayNames, sharedNames);
   assert.doesNotMatch(postSrc, /apiKey:\s*z\./);
   assert.doesNotMatch(postSrc, /URLSearchParams/);
   assert.doesNotMatch(postSrc, /searchParams/);
