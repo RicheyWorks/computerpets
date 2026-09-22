@@ -70,7 +70,7 @@ All critical items required before any public or limited production exposure hav
 - **2.3 Resilience Patterns**
   - [x] Circuit breakers + retries (Resilience4j) added for Steam, Microsoft, NFT, Itch, and Epic providers (with per-provider configuration in application.yml)
   - Timeouts and graceful degradation (in progress — fallbacks currently deny safely)
-    - [x] Overlay IPC news, quote, and radio reads time out at twelve seconds and return unread with an empty plate. The keeper line stays can't reach. A radio timeout does not call the next directory host. Weather forecast and geocode page wrappers time out the same way and flip unread / can't reach. Desk and overlay news, quote, and radio page wrappers (RSS, featured Wikipedia, CoinGecko, GeckoTerminal, Yahoo, Radio Find) time out the same way. Cloud talk and cloud voice page wrappers still have no deadline. Not a new host. Not invented weather. Catalog stays 221.
+    - [x] Overlay IPC news, quote, and radio reads time out at twelve seconds and return unread with an empty plate. The keeper line stays can't reach. A radio timeout does not call the next directory host. Weather forecast and geocode page wrappers time out the same way and flip unread / can't reach. Desk and overlay news, quote, and radio page wrappers (RSS, featured Wikipedia, CoinGecko, GeckoTerminal, Yahoo, Radio Find) time out the same way. Cloud talk and cloud voice page wrappers time out the same way and keep the house line or silence. Steam, Itch, and Epic RestClients time out at ten seconds and deny. Microsoft and NFT already time out. Resilience4j time limiter still open. Not a new host. Not invented weather or entitlements. Catalog stays 221.
   - [x] Microsoft Store verify uses Collections v9 `publisherQuery`; prod still refuses dev-mode; live Store ID is still a publish-time config, not invented here.
 
 - **2.4 Secret Management**
@@ -613,6 +613,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-09-22 (Phase 2.3: Cloud talk and cloud voice page wrappers time out and keep the house line or silence. Steam RestClient times out. Itch/Epic RestClient and Resilience4j time limiter still open. DX12/Vulkan was not started. Catalog 221.)
+**Last Updated:** 2026-09-22 (Phase 2.3: Itch and Epic RestClients time out and deny. Resilience4j time limiter still open. DX12/Vulkan was not started. Catalog 221.)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

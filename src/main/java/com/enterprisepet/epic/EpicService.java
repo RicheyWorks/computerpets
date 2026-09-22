@@ -16,11 +16,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import java.net.URLEncoder;
+import java.net.http.HttpClient;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Base64;
 import java.util.Map;
 import java.util.Optional;
@@ -64,6 +67,9 @@ import java.util.regex.Pattern;
 public class EpicService implements OwnershipProvider {
 
     private static final Logger log = LoggerFactory.getLogger(EpicService.class);
+
+    /** Connect and read deadline. Matches Steam and Microsoft Collections. A hang denies. */
+    static final Duration EPIC_TIMEOUT = Duration.ofSeconds(10);
 
     /** Rejected as an obvious leftover from documentation / application.yml. */
     static final String PLACEHOLDER_CLIENT_ID = "YOUR_EPIC_CLIENT_ID";
@@ -131,7 +137,13 @@ public class EpicService implements OwnershipProvider {
     @PostConstruct
     void init() {
         if (this.restClient == null) {
+            HttpClient httpClient = HttpClient.newBuilder()
+                    .connectTimeout(EPIC_TIMEOUT)
+                    .build();
+            JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
+            requestFactory.setReadTimeout(EPIC_TIMEOUT);
             this.restClient = ObservedRestClients.builder(observationRegistry)
+                    .requestFactory(requestFactory)
                     .baseUrl(apiBaseUrl)
                     .build();
         }
