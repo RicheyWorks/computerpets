@@ -54,7 +54,7 @@ import {
 } from "@/lib/pets/card";
 import { playDeskSound, playStep, playVoice } from "@/lib/pets/desk-audio";
 import { STEP_KINDS, STEP_LABELS, parseStep, stepOf } from "@/lib/pets/house-sounds";
-import { HOUSE_LOOP_LICENSE, MUSIC_PLUGINS, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_LABEL, RADIO_LOCAL, RADIO_PLACEHOLDER, mergeStations, parseMusic, parseStations, playSrc, radioSearchUrls, rankStations, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
+import { HOUSE_LOOP_LICENSE, MUSIC_PLUGINS, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_FIND, RADIO_LABEL, RADIO_LOCAL, RADIO_PLACEHOLDER, mergeStations, parseMusic, parseStations, playSrc, radioHonesty, radioMaySend, radioSearchUrls, rankStations, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
 import { SLEEP_AID_LABEL, SLEEP_AID_LICENSE, SLEEP_AID_MUTE_TRUTH, SLEEP_AID_PLUGINS, parseSleepAid, playSrc as sleepPlaySrc, type SleepAidPrefs } from "@/lib/pets/house-sleep";
 import { currentArea, parseAreas } from "@/lib/pets/weather-areas";
 import { FLY_BIRD_NAME } from "@/lib/pets/bird-fly";
@@ -152,6 +152,10 @@ export function KeeperCard({
   }
 
   function lookupRadio(query: string) {
+    const el = document.getElementById("hud-radio-net");
+    const line = radioHonesty();
+    const shown = !!el && !!line && (el.textContent || "").includes(line);
+    if (!radioMaySend(shown)) return;
     const area = weatherRadioArea();
     const urls = radioSearchUrls(query, area);
     if (!urls.length) {
@@ -628,6 +632,9 @@ export function KeeperCard({
                       lookupRadio(radioQ);
                     }}
                   >
+                    <p id="hud-radio-net" className="keeper-truth">
+                      {RADIO_FIND}
+                    </p>
                     <label>
                       {RADIO_LABEL}
                       <input

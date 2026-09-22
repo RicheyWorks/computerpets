@@ -1,4 +1,4 @@
-/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. No invented keys or headlines. */
+/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows this computer's network address on that https request. No invented keys or headlines. */
 (function (root) {
   const NEWS_SOURCE = "Wikipedia In the news";
   const TOPIC_SOURCE = "Google News";
@@ -289,6 +289,49 @@
     return items[0].title;
   }
 
+  function sharedNet(host) {
+    let areas = root.PetWeatherAreas;
+    if (!areas && typeof module !== "undefined" && module.exports) {
+      try {
+        areas = require("./weather-areas.js");
+        root.PetWeatherAreas = areas;
+      } catch (err) {
+        areas = null;
+      }
+    }
+    if (!areas || typeof areas.clientNetLine !== "function") return "";
+    return areas.clientNetLine(host);
+  }
+
+  const NEWS_RSS_NET = sharedNet("the news host");
+  const NEWS_WIKI_NET = sharedNet("the wikipedia host");
+  const NEWS_RSS_HONESTY = NEWS_RSS_NET ? `this news send reads the rss feed. ${NEWS_RSS_NET}` : "";
+  const NEWS_WIKI_HONESTY = NEWS_WIKI_NET ? `this news send reads the featured page. ${NEWS_WIKI_NET}` : "";
+
+  function newsSendKind(prefs) {
+    const house = parseNewsPrefs(prefs);
+    const tab = house.tab || "popular";
+    if (tab === "favorites") return "none";
+    if (tab === "popular" || tab === "x") return "rss";
+    const topic = currentTopic(house);
+    if (topic && topic.id !== WORLD_ID && topic.query) return "rss";
+    return "wiki";
+  }
+
+  function newsHonesty(prefs) {
+    const kind = newsSendKind(prefs);
+    if (kind === "rss") return NEWS_RSS_HONESTY;
+    if (kind === "wiki") return NEWS_WIKI_HONESTY;
+    return "";
+  }
+
+  function newsMaySend(prefs, lineInView) {
+    const line = newsHonesty(prefs);
+    const kind = newsSendKind(prefs);
+    const net = kind === "rss" ? NEWS_RSS_NET : kind === "wiki" ? NEWS_WIKI_NET : "";
+    return lineInView === true && !!net && line.indexOf(net) !== -1;
+  }
+
   function sourceLine(topic, tab) {
     const mode = tab == null || tab === "" ? "topics" : parseTab(tab);
     if (mode === "popular") return POPULAR_SOURCE;
@@ -346,6 +389,13 @@
     parseNews,
     newsLine,
     sourceLine,
+    NEWS_RSS_NET,
+    NEWS_WIKI_NET,
+    NEWS_RSS_HONESTY,
+    NEWS_WIKI_HONESTY,
+    newsSendKind,
+    newsHonesty,
+    newsMaySend,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetNews = api;

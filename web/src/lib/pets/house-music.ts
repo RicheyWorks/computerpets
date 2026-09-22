@@ -1,4 +1,5 @@
-/** Free music + radio for Rui. Same plugin store shape as the mind bus. Same map as desktop `house-music.js`. */
+/** Free music + radio for Rui. Same plugin store shape as the mind bus. Find waits until the radio form shows this computer's network address on that https request. Same map as desktop `house-music.js`. */
+import { clientNetLine } from "./weather-areas.ts";
 
 export const MUSIC_PLUGINS = [
   { id: "off" as const, name: "Quiet", blurb: "No music.", license: "" },
@@ -240,6 +241,21 @@ function localAreaParams(area?: RadioArea | null) {
 
 export function radioSearchUrl(query = "", area?: RadioArea | null) {
   return radioSearchUrls(query, area)[0] || "";
+}
+
+export const RADIO_NET = clientNetLine("the radio host");
+export const RADIO_FIND = `this find sends the station look-up. ${RADIO_NET}`;
+
+export function radioHonesty(): string {
+  return RADIO_FIND;
+}
+
+/**
+ * Radio Browser is called only when the keeper triggers Find or Local
+ * and that line is in view. A load does not search. This does not add a tracker.
+ */
+export function radioMaySend(lineInView: boolean): boolean {
+  return lineInView === true && RADIO_FIND.includes(RADIO_NET);
 }
 
 export function radioSearchUrls(query = "", area?: RadioArea | null) {
