@@ -164,7 +164,7 @@ The service runs as a Spring Boot executable JAR or the multi-stage `Dockerfile`
 - Redis-backed jti deny-list (`RevocationIndex`) shared across replicas. Postgres `IssuedLicense.revokedAt` / `deletedAt` remains the ledger (soft-delete on revoke; [0058](adr/0058-license-soft-delete-and-audit.md)); Redis is a fast deny so a replica that has not seen the row still rejects. If Redis is down, `LicenseService.validate` falls back to the ledger (it does not accept a revoked or soft-deleted license). HTTP download may still 503 from the rate-limit filter.
 - Critical secrets (`LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, `ADMIN_API_KEY`) load from environment variables or `NAME_FILE` mounts (`SecretFileEnvironmentPostProcessor`) with strict `@PostConstruct` startup validation that refuses to run on missing or placeholder values. Production operators use Docker secrets, Kubernetes External Secrets, or Vault agent templates — [ADR 0056](adr/0056-house-secrets-from-file-mounts.md). Secret values are never logged.
 - `ProductionProfileGuard` (`@Profile("prod")`) refuses Microsoft Store `dev-mode`, an in-memory rate-limit store, an H2 JDBC URL, and a misconfigured read-replica URL (same as primary / non-Postgres) even when environment variables try to override `application-prod.yml`.
-- `Dockerfile` + GitHub Actions GHCR publish + `deploy/k8s/` (Deployment/Service, in-cluster Postgres/Redis scaffolding, optional Ingress). Blue/green is two Deployments and a Service `color` selector — not a service mesh.
+- `Dockerfile` + GitHub Actions GHCR publish with keyless cosign (Sigstore) + `deploy/k8s/` (Deployment/Service, in-cluster Postgres/Redis scaffolding, optional Ingress). Prod deploy verifies the image digest or refuses ([0061](adr/0061-ghcr-image-signing.md)). Blue/green is two Deployments and a Service `color` selector — not a service mesh.
 - External dependencies (Alchemy, Microsoft Collections, Steam Web API, itch.io, Epic, future CDN) are called directly; Resilience4j circuit breakers, retries, and a shared ownership time limiter wrap the store providers.
 - The living desk (`web/`) and Electron overlay (`desktop/`) talk to this backend.
 
@@ -246,7 +246,7 @@ flowchart TB
 - **Current Gaps** (must be closed before production):
   - ~~No `Dockerfile` or multi-stage build.~~
   - ~~No Kubernetes manifests, Helm chart, or Kustomize overlays.~~ Manifests in `deploy/k8s/` (not Helm). In-cluster Postgres/Redis are compose-equivalent scaffolding, not a managed HA pair.
-  - CI publishes the image to GHCR; image signing is still open.
+  - ~~CI publishes the image to GHCR; image signing is still open.~~ Keyless cosign on every `main` GHCR publish; `deploy/k8s/verify-image-signature.sh` fail-closed verify for prod digests ([0061](adr/0061-ghcr-image-signing.md)).
   - ~~Actuator is not enabled.~~ Probes are `/actuator/health/liveness` and `/readiness` (permitted without a JWT).
   - No Terraform/Pulumi/Crossplane definitions for the surrounding infrastructure (managed Postgres, Redis, secrets, CDN, WAF).
   - Secrets are still accepted via plain environment variables / a Kubernetes `Secret` (acceptable only behind a proper secrets operator).
@@ -657,6 +657,7 @@ Goal: Prepare for horizontal scaling and real production traffic.
   - [x] Proper Spring profiles (`dev`, `staging`, `prod`)
   - [x] Kubernetes manifests (`deploy/k8s/`, Kustomize — not Helm)
   - [x] Blue/green: `computerpets-blue` / `computerpets-green` + Service `color` selector
+  - [x] GHCR image signing: keyless cosign on `main` publish + fail-closed digest verify ([0061](adr/0061-ghcr-image-signing.md))
 
 #### Phase 4: Client & Ecosystem Integration
 Goal: Deliver a complete, usable platform.

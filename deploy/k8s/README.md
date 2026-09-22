@@ -87,12 +87,34 @@ Microsoft Store product id; leave `STEAM_APP_ID` and
 
 ## Image
 
-CI publishes `ghcr.io/richeyworks/computerpets` (`main` and `sha-<git>`).
+CI publishes `ghcr.io/richeyworks/computerpets` (`main` and `sha-<git>`) and
+**signs the immutable digest** with keyless cosign (Sigstore Fulcio + Rekor)
+from `.github/workflows/ci.yml` ([ADR 0061](../../docs/adr/0061-ghcr-image-signing.md)).
+A publish that cannot sign or verify fails the job.
+
+**Prod path is fail-closed:** verify the digest before `kubectl set image`.
+Tag-only refs (`:main`, `:local`) are refused.
+
+```bash
+# Digest from the GHCR package UI, `cosign triangulate`, or CI log.
+IMAGE=ghcr.io/richeyworks/computerpets@sha256:<digest>
+./deploy/k8s/verify-image-signature.sh "$IMAGE"
+# then set image / kustomize newName+digest — never skip on prod
+```
+
+`COMPUTERPETS_ALLOW_UNSIGNED=1` skips cosign for local experiments only — never
+set it on the production path. Optional `COMPUTERPETS_COSIGN_KEY` points at a
+cosign public key for air-gapped keepers; keyless identity is the house default.
+
+Cluster admission: optional Kyverno scaffold in
+`image-signature-policy.example.yaml` (**not** in kustomization). Same honesty
+pattern as `external-secret.example.yaml`.
+
 Override the tag in `kustomization.yaml` or build locally:
 
 ```bash
 docker build -t ghcr.io/richeyworks/computerpets:local .
-# then set newTag: local in kustomization.yaml
+# then set newTag: local in kustomization.yaml (unsigned — not for prod)
 ```
 
 ## Probes
@@ -112,10 +134,12 @@ authenticated.
 
 Two Deployments, one Service. No mesh.
 
-1. Ship a new image on **green** and scale it up:
+1. Verify the signed digest, ship it on **green**, and scale it up:
    ```bash
+   IMAGE=ghcr.io/richeyworks/computerpets@sha256:<digest>
+   ./deploy/k8s/verify-image-signature.sh "$IMAGE"
    kubectl -n computerpets set image deploy/computerpets-green \
-     computerpets=ghcr.io/richeyworks/computerpets:<tag>
+     computerpets="$IMAGE"
    kubectl -n computerpets scale deploy/computerpets-green --replicas=2
    kubectl -n computerpets rollout status deploy/computerpets-green
    ```
@@ -130,7 +154,8 @@ Two Deployments, one Service. No mesh.
    ```
 
 Flip `color` back to `blue` the next time. Each Deployment still uses
-`RollingUpdate` (`maxUnavailable: 0`) for in-color patches.
+`RollingUpdate` (`maxUnavailable: 0`) for in-color patches. A missing or
+wrong signature must stop at step 1 — do not set image.
 
 ## `spring.profiles.active=prod`
 
