@@ -98,25 +98,82 @@ def test_reuses_a_stored_mark_without_reading_the_os():
     assert peeked["id"] == ""
 
 
-def test_windows_hostname_fallback_is_hashed():
-    from computerpets_client.license.hwid import describe_machine_marks, resolve_hwid_detail
+def test_windows_hostname_fallback_waits_for_a_yes():
+    from computerpets_client.license.hwid import WEAK_FALLBACK_MESSAGE, describe_machine_marks, resolve_hwid_detail
 
     def fail_reg(_cmd: str) -> str:
         raise OSError("no registry")
 
+    def miss(path: str) -> str:
+        raise FileNotFoundError(path)
+
     written: dict[str, str] = {}
+
+    try:
+        resolve_hwid_detail(
+            user_data_dir="/tmp/cp-hwid-host",
+            plat="windows",
+            read_file=miss,
+            write_file=lambda path, data: written.__setitem__(path, data),
+            exec_cmd=fail_reg,
+            hostname="KEEP-ME-SECRET",
+            fallback_id="do-not-mint",
+        )
+        raise AssertionError("expected LicenseError")
+    except LicenseError as err:
+        assert err.code == "hwid_needs_fallback_yes"
+        assert str(err) == WEAK_FALLBACK_MESSAGE
+    assert written == {}
+
     detail = resolve_hwid_detail(
         user_data_dir="/tmp/cp-hwid-host",
         plat="windows",
-        read_file=lambda path: (_ for _ in ()).throw(FileNotFoundError(path)),
+        read_file=miss,
         write_file=lambda path, data: written.__setitem__(path, data),
         exec_cmd=fail_reg,
         hostname="KEEP-ME-SECRET",
+        allow_weak_fallback=True,
     )
     assert detail["source"] == "hostname"
+    assert detail["id"] == "5640dd09c37971a09659282a53cc1357a58e6b3f13521a9e4e94768d39900f05"
     assert "KEEP-ME-SECRET" not in str(detail)
     assert "KEEP-ME-SECRET" not in next(iter(written.values()))
     assert len(str(detail["id"])) == 64
+
+    overlay = resolve_hwid_detail(
+        user_data_dir="/tmp/cp-hwid-host-win32",
+        plat="win32",
+        read_file=miss,
+        write_file=lambda path, data: None,
+        exec_cmd=fail_reg,
+        hostname="KEEP-ME-SECRET",
+        allow_weak_fallback=True,
+    )
+    assert overlay["id"] == "db23d6351ce1544f7e49e1b6b54524ec310ce159e7d76bc88acfbbf431567440"
+    assert overlay["id"] != detail["id"]
+
+    stored = resolve_hwid_detail(
+        user_data_dir="/tmp/cp-hwid-host",
+        plat="windows",
+        read_file=lambda path: written[path] if path.endswith("hwid.txt") else miss(path),
+        write_file=lambda path, data: (_ for _ in ()).throw(AssertionError((path, data))),
+        exec_cmd=fail_reg,
+        hostname="RENAMED",
+    )
+    assert stored["read"] == "stored"
+    assert stored["id"] == detail["id"]
+
+    random = resolve_hwid_detail(
+        user_data_dir="/tmp/cp-hwid-random",
+        plat="linux",
+        read_file=miss,
+        write_file=lambda path, data: written.__setitem__(path, data),
+        hostname="",
+        allow_weak_fallback=True,
+    )
+    assert random["source"] == "random"
+    assert len(str(random["id"])) == 64
+
     win = next(mark for mark in describe_machine_marks("windows") if mark["source"] == "machine-guid")
     assert win["where"] == "HKLM\\SOFTWARE\\Microsoft\\Cryptography"
     assert win["value"] == "MachineGuid"

@@ -239,4 +239,118 @@ describe("license session", () => {
     assert.equal(Object.prototype.hasOwnProperty.call(posts[0], "hwid"), false);
     assert.equal(reads.some((item) => item.includes("machine-id")), false);
   });
+
+  it("does not mint a computer-name mark or call verify until the keeper says yes", async () => {
+    const reads = [];
+    const files = new Map();
+    const dir = path.join(os.tmpdir(), "cp-license-weak");
+    const readFile = (p) => {
+      const key = String(p);
+      reads.push(key);
+      if (!files.has(key)) {
+        const err = new Error("ENOENT");
+        err.code = "ENOENT";
+        throw err;
+      }
+      return files.get(key);
+    };
+    const writeFile = (p, data) => {
+      files.set(String(p), String(data));
+    };
+    const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
+    const session = createLicenseSession({
+      userDataDir: dir,
+      env: { LICENSE_SECRET_KEY: SECRET, BUNDLE_SIGNING_KEY: SIGNING, COMPUTERPETS_BACKEND_URL: "http://127.0.0.1:8080" },
+      fetchImpl: backend.fetchImpl,
+      readFile,
+      writeFile,
+      mkdir: () => {},
+    });
+    await assert.rejects(
+      () =>
+        session.unlock({
+          steamId: "76561198000000000",
+          appId: "123456",
+          petType: "red_panda",
+          provider: "steam",
+        }),
+      (err) => err instanceof LicenseError && err.code === "hwid_needs_fallback_yes" && /computer name/.test(err.message) && /random id/.test(err.message)
+    );
+    assert.equal(backend.calls.length, 0);
+    assert.equal([...files.keys()].some((key) => key.endsWith("hwid.txt")), false);
+
+    const result = await session.unlock({
+      steamId: "76561198000000000",
+      appId: "123456",
+      petType: "red_panda",
+      provider: "steam",
+      allowWeakFallback: true,
+    });
+    const verify = backend.calls.find((call) => call.path === "/api/verify/steam");
+    assert.match(verify.body.hwid, /^[0-9a-f]{64}$/);
+    assert.equal(result.license.hwid, verify.body.hwid);
+    assert.equal([...files.keys()].some((key) => key.endsWith("hwid.txt")), true);
+    const callsAfterYes = backend.calls.length;
+    await session.unlock({
+      steamId: "76561198000000000",
+      appId: "123456",
+      petType: "red_panda",
+      provider: "steam",
+    });
+    assert.equal(backend.calls.length > callsAfterYes, true);
+    assert.equal(backend.calls.at(-2).body.hwid, verify.body.hwid);
+  });
+
+  it("does not mint a mark for a bound download until the keeper says yes", async () => {
+    const now = Date.now();
+    const enc = encryptLicense(
+      {
+        jti: "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80",
+        owner: "76561198000000000",
+        pet: "red_panda",
+        validUntil: new Date(now + 86400_000).toISOString(),
+        issuedAt: new Date(now).toISOString(),
+        hwid: "already-bound",
+      },
+      SECRET
+    );
+    const files = new Map();
+    const dir = path.join(os.tmpdir(), "cp-license-bound-weak");
+    files.set(
+      path.join(dir, "license.json"),
+      JSON.stringify({
+        backendUrl: "http://127.0.0.1:8080",
+        license: { ciphertext: enc.ciphertext, iv: enc.iv },
+        auth: { token: "token" },
+      })
+    );
+    const posts = [];
+    const session = createLicenseSession({
+      userDataDir: dir,
+      env: { LICENSE_SECRET_KEY: SECRET, COMPUTERPETS_BACKEND_URL: "http://127.0.0.1:8080" },
+      readFile: (p) => {
+        const key = String(p);
+        if (!files.has(key)) {
+          const err = new Error("ENOENT");
+          err.code = "ENOENT";
+          throw err;
+        }
+        return files.get(key);
+      },
+      writeFile: (p, data) => {
+        files.set(String(p), String(data));
+      },
+      mkdir: () => {},
+      fetchImpl: async (_url, init) => {
+        if (init && String(init.method || "GET").toUpperCase() === "POST") posts.push(JSON.parse(init.body));
+        return new Response("no", { status: 500 });
+      },
+    });
+    await assert.rejects(
+      () => session.download(),
+      (err) => err instanceof LicenseError && err.code === "hwid_needs_fallback_yes"
+    );
+    assert.equal(posts.length, 0);
+    assert.equal([...files.keys()].some((key) => key.endsWith("hwid.txt")), false);
+  });
 });

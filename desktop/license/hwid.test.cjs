@@ -6,7 +6,7 @@ const os = require("os");
 const path = require("path");
 const fs = require("fs");
 const { readFileSync } = require("node:fs");
-const { resolveHwid, resolveHwidDetail, peekHwid, describeMachineMarks, assertHwid, MAX_HWID_LENGTH } = require("./hwid.cjs");
+const { resolveHwid, resolveHwidDetail, peekHwid, describeMachineMarks, assertHwid, MAX_HWID_LENGTH, WEAK_FALLBACK_MESSAGE } = require("./hwid.cjs");
 const { LicenseError } = require("./errors.cjs");
 
 describe("hwid (CLIENT-CONTRACT §5)", () => {
@@ -135,9 +135,11 @@ describe("hwid (CLIENT-CONTRACT §5)", () => {
     assert.equal(describeMachineMarks("darwin").some((mark) => mark.source === "io-platform-uuid"), true);
   });
 
-  it("hashes a Windows hostname fallback and does not return the name", () => {
+  it("refuses a computer-name or random mark until the keeper says yes", () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cp-hwid-"));
-    const detail = resolveHwidDetail({
+    const file = path.join(dir, "hwid.txt");
+    let writes = 0;
+    const miss = {
       userDataDir: dir,
       platform: "win32",
       hostname: "KEEP-ME-SECRET",
@@ -149,12 +151,83 @@ describe("hwid (CLIENT-CONTRACT §5)", () => {
         err.code = "ENOENT";
         throw err;
       },
-      writeFile: (p, data) => fs.writeFileSync(p, data),
-    });
+      writeFile: () => {
+        writes += 1;
+      },
+    };
+    assert.throws(
+      () => resolveHwidDetail(miss),
+      (err) => err instanceof LicenseError && err.code === "hwid_needs_fallback_yes" && err.message === WEAK_FALLBACK_MESSAGE
+    );
+    assert.equal(writes, 0);
+    assert.equal(fs.existsSync(file), false);
+    assert.equal(WEAK_FALLBACK_MESSAGE.includes("KEEP-ME-SECRET"), false);
+
+    const detail = resolveHwidDetail({ ...miss, allowWeakFallback: true, writeFile: (p, data) => fs.writeFileSync(p, data) });
     assert.equal(detail.source, "hostname");
     assert.equal(detail.id, "db23d6351ce1544f7e49e1b6b54524ec310ce159e7d76bc88acfbbf431567440");
     assert.equal(JSON.stringify(detail).includes("KEEP-ME-SECRET"), false);
-    assert.equal(fs.readFileSync(path.join(dir, "hwid.txt"), "utf8").includes("KEEP-ME-SECRET"), false);
+    assert.equal(fs.readFileSync(file, "utf8").includes("KEEP-ME-SECRET"), false);
+
+    const blotter = resolveHwidDetail({
+      ...miss,
+      platform: "windows",
+      allowWeakFallback: true,
+      writeFile: () => {},
+    });
+    assert.notEqual(blotter.id, detail.id);
+    assert.equal(blotter.id, "5640dd09c37971a09659282a53cc1357a58e6b3f13521a9e4e94768d39900f05");
+
+    const again = resolveHwidDetail({
+      userDataDir: dir,
+      platform: "win32",
+      hostname: "RENAMED",
+      allowWeakFallback: false,
+      exec: () => {
+        throw new Error("no registry");
+      },
+      readFile: (p) => fs.readFileSync(p, "utf8"),
+      writeFile: () => {
+        throw new Error("stored mark must not be rewritten");
+      },
+    });
+    assert.equal(again.read, "stored");
+    assert.equal(again.id, detail.id);
+
+    const randomDir = fs.mkdtempSync(path.join(os.tmpdir(), "cp-hwid-"));
+    assert.throws(
+      () =>
+        resolveHwidDetail({
+          userDataDir: randomDir,
+          platform: "linux",
+          hostname: "",
+          fallbackId: "do-not-mint",
+          readFile: () => {
+            const err = new Error("ENOENT");
+            err.code = "ENOENT";
+            throw err;
+          },
+          writeFile: () => {
+            throw new Error("refused mark must not be written");
+          },
+        }),
+      (err) => err instanceof LicenseError && err.code === "hwid_needs_fallback_yes"
+    );
+    const random = resolveHwidDetail({
+      userDataDir: randomDir,
+      platform: "linux",
+      hostname: "",
+      allowWeakFallback: true,
+      readFile: () => {
+        const err = new Error("ENOENT");
+        err.code = "ENOENT";
+        throw err;
+      },
+      writeFile: (p, data) => fs.writeFileSync(p, data),
+    });
+    assert.equal(random.source, "random");
+    assert.match(random.id, /^[0-9a-f]{64}$/);
+    assert.equal(fs.readFileSync(path.join(randomDir, "hwid.txt"), "utf8"), random.id);
   });
 
   it("queries MachineGuid with the historical registry command", () => {
@@ -184,7 +257,13 @@ describe("hwid (CLIENT-CONTRACT §5)", () => {
       assert.match(src, /did not read/);
       assert.match(src, /raw id is not sent/);
       assert.match(src, /device fingerprint/);
+      assert.match(src, /If that named read fails/);
+      assert.match(src, /allowWeakFallback/);
+      assert.match(src, /hwid_needs_fallback_yes/);
+      assert.match(src, /Use the computer name, or a random id if there is no name/);
     }
+    assert.equal(settings.includes(WEAK_FALLBACK_MESSAGE), true);
+    assert.match(dialog, /WEAK_FALLBACK_MESSAGE/);
     assert.match(settings, /status\.hwidMark/);
     assert.equal(settings.includes("status.hwid)"), false);
   });

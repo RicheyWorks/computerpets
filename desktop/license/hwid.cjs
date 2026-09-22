@@ -50,16 +50,20 @@ const MACHINE_MARKS = Object.freeze([
     source: "hostname",
     kind: "hostname",
     where: "the computer name",
-    why: "Used only when the named OS mark cannot be read. The name is still a fingerprint, and a rename changes it.",
+    why: "Used only after an in-app yes, when the named OS mark cannot be read. The name is still a fingerprint, and a rename changes it.",
   }),
   Object.freeze({
     platform: "random",
     source: "random",
     kind: "uuid",
     where: "a local random id",
-    why: "Used when no OS mark and no fallback exist. Not stable if hwid.txt is deleted.",
+    why: "Used only after that same yes, when there is no computer name. Not stable if hwid.txt is deleted.",
   }),
 ]);
+
+/** Shown when Unlock would otherwise mint a computer-name or random mark. */
+const WEAK_FALLBACK_MESSAGE =
+  "This computer has no stable operating-system id. Unlock waits until you say yes before it hashes the computer name. If this computer has no name, that yes hashes a random id. A rename changes the computer-name hash. Deleting hwid.txt makes a random id a different mark.";
 
 /**
  * @param {unknown} hwid
@@ -139,6 +143,7 @@ function hashMark(raw, platform) {
 /**
  * Read one named OS mark. The raw string stays in this function's return
  * and must not be logged, stored, or sent. Callers hash it.
+ * A miss does not read the computer name.
  * @returns {{ raw: string | null, source: string | null }}
  */
 function readMachineSource(opts) {
@@ -181,11 +186,28 @@ function readMachineSource(opts) {
       const match = out.match(/MachineGuid\s+REG_SZ\s+([0-9a-fA-F-]+)/);
       return match ? { raw: match[1], source: "machine-guid" } : { raw: null, source: null };
     } catch {
-      return { raw: hostName(opts), source: "hostname" };
+      return { raw: null, source: null };
     }
   }
 
-  return { raw: hostName(opts), source: "hostname" };
+  return { raw: null, source: null };
+}
+
+/**
+ * Computer name, then a caller fallback, then a random id.
+ * Called only after the keeper says yes.
+ * An explicit empty hostname means this computer has no name.
+ * @returns {{ raw: string, source: string }}
+ */
+function weakMaterial(opts) {
+  if (typeof opts.hostname === "string") {
+    if (opts.hostname) return { raw: opts.hostname, source: "hostname" };
+  } else {
+    const name = hostName(opts);
+    if (name) return { raw: name, source: "hostname" };
+  }
+  if (opts.fallbackId) return { raw: String(opts.fallbackId), source: "fallback" };
+  return { raw: crypto.randomUUID(), source: "random" };
 }
 
 /**
@@ -199,6 +221,7 @@ function readMachineSource(opts) {
  *   exec?: typeof execSync,
  *   fallbackId?: string,
  *   hostname?: string,
+ *   allowWeakFallback?: boolean,
  * }} [opts]
  */
 function resolveHwidDetail(opts = {}) {
@@ -206,17 +229,16 @@ function resolveHwidDetail(opts = {}) {
   if (stored.read === "stored") return stored;
 
   const platform = opts.platform || process.platform;
-  const found = readMachineSource(opts);
+  const found = readMachineSource({ ...opts, platform });
   let raw = found.raw;
   let source = found.source;
   if (!raw) {
-    if (opts.fallbackId) {
-      raw = String(opts.fallbackId);
-      source = "fallback";
-    } else {
-      raw = crypto.randomUUID();
-      source = "random";
+    if (opts.allowWeakFallback !== true) {
+      throw new LicenseError("hwid_needs_fallback_yes", WEAK_FALLBACK_MESSAGE);
     }
+    const weak = weakMaterial(opts);
+    raw = weak.raw;
+    source = weak.source;
   }
   const id = hashMark(raw, platform);
   assertHwid(id);
@@ -248,6 +270,7 @@ function resolveHwid(opts = {}) {
 module.exports = {
   MAX_HWID_LENGTH,
   MACHINE_MARKS,
+  WEAK_FALLBACK_MESSAGE,
   assertHwid,
   describeMachineMarks,
   peekHwid,
