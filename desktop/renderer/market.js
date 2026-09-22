@@ -1,4 +1,4 @@
-/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. A quote waits until the open quotes plate shows this computer's network address on that https request. CoinGecko, GeckoTerminal, Yahoo, and a typed look-up also refuse inside the read wrappers when that painted line is missing. No invented key. */
+/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. A quote waits until the open quotes plate shows this computer's network address on that https request. CoinGecko, GeckoTerminal, Yahoo, and a typed look-up also refuse inside the read wrappers when that painted line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. No invented key. */
 (function (root) {
   const MARKET_LABEL = "Quotes";
   const COIN_LABEL = "Coins";
@@ -654,54 +654,104 @@
     return typeof shown === "string" && shown.indexOf(QUOTE_LOOK) !== -1;
   }
 
-  function readGeckoMany(shown, ids, fetchImpl) {
+  /** Twelve seconds covers headers and the body. Matches weather page and overlay plate IPC. */
+  const QUOTE_TIMEOUT_MS = 12_000;
+
+  /** A silent quote host. Callers flip the plate to unread / "can't reach". */
+  class QuoteTimeout extends Error {
+    constructor() {
+      super("quote request timed out");
+      this.name = "QuoteTimeout";
+    }
+  }
+
+  function isQuoteTimeout(err) {
+    return !!(
+      err &&
+      (err.name === "QuoteTimeout" ||
+        err.name === "AbortError" ||
+        err.name === "TimeoutError" ||
+        err.code === "ABORT_ERR")
+    );
+  }
+
+  /**
+   * One outbound quote JSON read. The timer covers headers and the body.
+   * A timeout rejects with QuoteTimeout. The caller does not get a body.
+   * A late body after the deadline is not parsed.
+   */
+  function readJson(url, fetchImpl, timeoutMs) {
+    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
+    if (typeof go !== "function") return Promise.reject(new QuoteTimeout());
+    const ms = typeof timeoutMs === "number" ? timeoutMs : QUOTE_TIMEOUT_MS;
+    const ctrl = new AbortController();
+    let settled = false;
+    let timer;
+
+    return new Promise(function (resolve, reject) {
+      timer = setTimeout(function () {
+        if (settled) return;
+        settled = true;
+        ctrl.abort();
+        reject(new QuoteTimeout());
+      }, ms);
+
+      Promise.resolve()
+        .then(function () {
+          return go(url, { signal: ctrl.signal });
+        })
+        .then(function (res) {
+          return res && typeof res.json === "function" ? res.json() : null;
+        })
+        .then(function (json) {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          resolve(json);
+        })
+        .catch(function (err) {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          if (isQuoteTimeout(err)) reject(new QuoteTimeout());
+          else reject(err);
+        });
+    });
+  }
+
+  function readGeckoMany(shown, ids, fetchImpl, timeoutMs) {
     if (!quoteHostMayLeave(shown, QUOTE_HOST_NAME)) return Promise.resolve(null);
     const url = geckoManyUrl(ids);
     if (!url) return Promise.resolve(null);
-    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
-    return Promise.resolve(go(url)).then(function (res) {
-      return res && typeof res.json === "function" ? res.json() : null;
-    });
+    return readJson(url, fetchImpl, timeoutMs);
   }
 
-  function readTerminal(shown, platform, address, fetchImpl) {
+  function readTerminal(shown, platform, address, fetchImpl, timeoutMs) {
     if (!quoteHostMayLeave(shown, TERMINAL_HOST_NAME)) return Promise.resolve(null);
     const url = terminalTokenUrl(platform, address);
     if (!url) return Promise.resolve(null);
-    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
-    return Promise.resolve(go(url)).then(function (res) {
-      return res && typeof res.json === "function" ? res.json() : null;
-    });
+    return readJson(url, fetchImpl, timeoutMs);
   }
 
-  function readYahoo(shown, symbol, fetchImpl) {
+  function readYahoo(shown, symbol, fetchImpl, timeoutMs) {
     if (!quoteHostMayLeave(shown, STOCK_HOST_NAME)) return Promise.resolve(null);
     const url = yahooUrl(symbol);
     if (!url) return Promise.resolve(null);
-    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
-    return Promise.resolve(go(url)).then(function (res) {
-      return res && typeof res.json === "function" ? res.json() : null;
-    });
+    return readJson(url, fetchImpl, timeoutMs);
   }
 
-  function readNft(shown, geckoId, fetchImpl) {
+  function readNft(shown, geckoId, fetchImpl, timeoutMs) {
     if (!quoteHostMayLeave(shown, QUOTE_HOST_NAME)) return Promise.resolve(null);
     const url = nftUrl(geckoId);
     if (!url) return Promise.resolve(null);
-    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
-    return Promise.resolve(go(url)).then(function (res) {
-      return res && typeof res.json === "function" ? res.json() : null;
-    });
+    return readJson(url, fetchImpl, timeoutMs);
   }
 
-  function readQuoteSearch(shown, query, fetchImpl) {
+  function readQuoteSearch(shown, query, fetchImpl, timeoutMs) {
     if (!lookMayLeave(shown)) return Promise.resolve(null);
     const url = searchUrl(query);
     if (!url) return Promise.resolve(null);
-    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
-    return Promise.resolve(go(url)).then(function (res) {
-      return res && typeof res.json === "function" ? res.json() : null;
-    });
+    return readJson(url, fetchImpl, timeoutMs);
   }
 
   function plateLine(market, live, unread) {
@@ -852,6 +902,8 @@
     phraseNames,
     quoteHostMayLeave,
     lookMayLeave,
+    QUOTE_TIMEOUT_MS,
+    QuoteTimeout,
     readGeckoMany,
     readTerminal,
     readYahoo,

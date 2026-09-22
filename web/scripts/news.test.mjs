@@ -143,6 +143,66 @@ test("featured page refuses a fetch until the wikipedia line is present", async 
   assert.equal(calls, 2);
 });
 
+test("featured page and RSS time out and deny a silent host", async () => {
+  assert.equal(N.NEWS_TIMEOUT_MS, 12_000);
+  assert.equal(Overlay.NEWS_TIMEOUT_MS, 12_000);
+  assert.equal(N.NewsTimeout.name, "NewsTimeout");
+  assert.equal(Overlay.NewsTimeout.name, "NewsTimeout");
+  const wiki = N.NEWS_WIKI_HONESTY;
+  const rss = N.NEWS_RSS_HONESTY;
+  const url = N.popularRssUrl();
+  const hang = () => new Promise(() => {});
+  const calls = [];
+  await assert.rejects(
+    () => N.readFeatured(wiki, (u) => (calls.push(u), hang()), 30),
+    (err) => err instanceof N.NewsTimeout && err.name === "NewsTimeout",
+  );
+  await assert.rejects(
+    () => Overlay.readFeatured(wiki, () => hang(), 30),
+    (err) => err instanceof Overlay.NewsTimeout,
+  );
+  await assert.rejects(
+    () => N.readRss(rss, url, (u) => (calls.push(u), hang()), 30),
+    (err) => err instanceof N.NewsTimeout,
+  );
+  await assert.rejects(
+    () => Overlay.readRss(rss, url, () => hang(), 30),
+    (err) => err instanceof Overlay.NewsTimeout,
+  );
+  assert.equal(calls.length, 2);
+
+  let fulfilled = null;
+  const late = N.readFeatured(
+    wiki,
+    () =>
+      new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ json: async () => ({ news: [{ story: "late" }] }) });
+        }, 80);
+      }),
+    20,
+  ).then(
+    (body) => {
+      fulfilled = body;
+      return body;
+    },
+    (err) => {
+      fulfilled = err;
+      throw err;
+    },
+  );
+  await assert.rejects(() => late, (err) => err instanceof N.NewsTimeout);
+  await new Promise((r) => setTimeout(r, 120));
+  assert.ok(fulfilled instanceof N.NewsTimeout);
+  assert.equal(fulfilled.name, "NewsTimeout");
+
+  const answered = await N.readFeatured(wiki, async () => ({
+    json: async () => ({ news: [] }),
+  }), 200);
+  assert.deepEqual(answered, { news: [] });
+  assert.equal(await N.readFeatured("", () => hang(), 30), null);
+});
+
 test("news RSS refuses a fetch until the news-host line is present", async () => {
   const rss = N.NEWS_RSS_HONESTY;
   assert.equal(rss, Overlay.NEWS_RSS_HONESTY);

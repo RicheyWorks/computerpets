@@ -1,4 +1,4 @@
-/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. A quote waits until the open quotes plate shows this computer's network address on that https request. CoinGecko, GeckoTerminal, Yahoo, and a typed look-up also refuse inside the read wrappers when that painted line is missing. Same map as desktop market.js. No invented key. */
+/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. A quote waits until the open quotes plate shows this computer's network address on that https request. CoinGecko, GeckoTerminal, Yahoo, and a typed look-up also refuse inside the read wrappers when that painted line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. Same map as desktop market.js. No invented key. */
 import { clientNetLine } from "./weather-areas.ts";
 
 export const MARKET_LABEL = "Quotes";
@@ -331,48 +331,131 @@ export function lookMayLeave(shown: unknown): boolean {
 
 type JsonFetch = (url: string, init?: RequestInit) => Promise<{ json: () => Promise<unknown> }>;
 
-function goJson(url: string, fetchImpl: JsonFetch): Promise<unknown> {
-  return Promise.resolve(fetchImpl(url)).then((res) => res.json());
+/** Twelve seconds covers headers and the body. Matches weather page and overlay plate IPC. */
+export const QUOTE_TIMEOUT_MS = 12_000;
+
+/** A silent quote host. Callers flip the plate to unread / "can't reach". */
+export class QuoteTimeout extends Error {
+  constructor() {
+    super("quote request timed out");
+    this.name = "QuoteTimeout";
+  }
 }
 
-export function readGeckoMany(shown: unknown, ids: string[], fetchImpl: JsonFetch = fetch): Promise<unknown | null> {
+function isQuoteTimeout(err: unknown): boolean {
+  if (!err || typeof err !== "object") return false;
+  const name = (err as { name?: string }).name;
+  const code = (err as { code?: string }).code;
+  return name === "QuoteTimeout" || name === "AbortError" || name === "TimeoutError" || code === "ABORT_ERR";
+}
+
+/**
+ * One outbound quote JSON read. The timer covers headers and the body.
+ * A timeout rejects with QuoteTimeout. The caller does not get a body.
+ * A late body after the deadline is not parsed.
+ */
+function readJson(
+  url: string,
+  fetchImpl: JsonFetch,
+  timeoutMs: number = QUOTE_TIMEOUT_MS,
+): Promise<unknown | null> {
+  if (typeof fetchImpl !== "function") return Promise.reject(new QuoteTimeout());
+
+  const ctrl = new AbortController();
+  let settled = false;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  return new Promise((resolve, reject) => {
+    timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      ctrl.abort();
+      reject(new QuoteTimeout());
+    }, timeoutMs);
+
+    Promise.resolve()
+      .then(() => fetchImpl(url, { signal: ctrl.signal }))
+      .then(async (res) => {
+        const json = res && typeof res.json === "function" ? await res.json() : null;
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(json);
+      })
+      .catch((err) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        if (isQuoteTimeout(err)) reject(new QuoteTimeout());
+        else reject(err);
+      });
+  });
+}
+
+/** The only CoinGecko many-id fetch. A miss resolves to null and does not call fetch. A hang rejects. */
+export function readGeckoMany(
+  shown: unknown,
+  ids: string[],
+  fetchImpl: JsonFetch = fetch,
+  timeoutMs: number = QUOTE_TIMEOUT_MS,
+): Promise<unknown | null> {
   if (!quoteHostMayLeave(shown, QUOTE_HOST_NAME)) return Promise.resolve(null);
   const url = geckoManyUrl(ids);
   if (!url) return Promise.resolve(null);
-  return goJson(url, fetchImpl);
+  return readJson(url, fetchImpl, timeoutMs);
 }
 
+/** The only GeckoTerminal token fetch. A miss resolves to null and does not call fetch. A hang rejects. */
 export function readTerminal(
   shown: unknown,
   platform: string,
   address: string,
   fetchImpl: JsonFetch = fetch,
+  timeoutMs: number = QUOTE_TIMEOUT_MS,
 ): Promise<unknown | null> {
   if (!quoteHostMayLeave(shown, TERMINAL_HOST_NAME)) return Promise.resolve(null);
   const url = terminalTokenUrl(platform, address);
   if (!url) return Promise.resolve(null);
-  return goJson(url, fetchImpl);
+  return readJson(url, fetchImpl, timeoutMs);
 }
 
-export function readYahoo(shown: unknown, symbol: string, fetchImpl: JsonFetch = fetch): Promise<unknown | null> {
+/** The only Yahoo chart fetch. A miss resolves to null and does not call fetch. A hang rejects. */
+export function readYahoo(
+  shown: unknown,
+  symbol: string,
+  fetchImpl: JsonFetch = fetch,
+  timeoutMs: number = QUOTE_TIMEOUT_MS,
+): Promise<unknown | null> {
   if (!quoteHostMayLeave(shown, STOCK_HOST_NAME)) return Promise.resolve(null);
   const url = yahooUrl(symbol);
   if (!url) return Promise.resolve(null);
-  return goJson(url, fetchImpl);
+  return readJson(url, fetchImpl, timeoutMs);
 }
 
-export function readNft(shown: unknown, geckoId: string, fetchImpl: JsonFetch = fetch): Promise<unknown | null> {
+/** The only NFT floor fetch. A miss resolves to null and does not call fetch. A hang rejects. */
+export function readNft(
+  shown: unknown,
+  geckoId: string,
+  fetchImpl: JsonFetch = fetch,
+  timeoutMs: number = QUOTE_TIMEOUT_MS,
+): Promise<unknown | null> {
   if (!quoteHostMayLeave(shown, QUOTE_HOST_NAME)) return Promise.resolve(null);
   const url = nftUrl(geckoId);
   if (!url) return Promise.resolve(null);
-  return goJson(url, fetchImpl);
+  return readJson(url, fetchImpl, timeoutMs);
 }
 
-export function readQuoteSearch(shown: unknown, query: string, fetchImpl: JsonFetch = fetch): Promise<unknown | null> {
+/** The only typed quote look-up. A miss resolves to null and does not call fetch. A hang rejects. */
+export function readQuoteSearch(
+  shown: unknown,
+  query: string,
+  fetchImpl: JsonFetch = fetch,
+  timeoutMs: number = QUOTE_TIMEOUT_MS,
+): Promise<unknown | null> {
   if (!lookMayLeave(shown)) return Promise.resolve(null);
   const url = searchUrl(query);
   if (!url) return Promise.resolve(null);
-  return goJson(url, fetchImpl);
+  return readJson(url, fetchImpl, timeoutMs);
 }
 export function addTicker(market: unknown, raw: unknown): MarketPrefs {
   const house = parseMarket(market);

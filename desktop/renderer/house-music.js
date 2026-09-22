@@ -1,4 +1,4 @@
-/** Free music + radio for Rui. Same plugin store shape as the mind bus. Find waits until the radio form shows this computer's network address on that https request. readRadioSearch also refuses when that painted line is missing. openStationStream refuses a station audio open when the painted stream-host line is missing. A house loop is not that open. */
+/** Free music + radio for Rui. Same plugin store shape as the mind bus. Find waits until the radio form shows this computer's network address on that https request. readRadioSearch also refuses when that painted line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can say can't reach. A late body is not parsed. A timeout does not call the next directory host. openStationStream refuses a station audio open when the painted stream-host line is missing. A house loop is not that open. */
 (function (root) {
   const MUSIC_PLUGINS = [
     { id: "off", name: "Quiet", blurb: "No music.", license: "" },
@@ -360,21 +360,84 @@
     return typeof shown === "string" && shown.indexOf(RADIO_FIND) !== -1;
   }
 
-  function readRadioSearch(shown, query, area, fetchImpl) {
+  /** Twelve seconds covers headers and the body. Matches weather page and overlay plate IPC. */
+  const RADIO_TIMEOUT_MS = 12_000;
+
+  /** A silent radio host. Callers flip the plate to unread / "can't reach". */
+  class RadioTimeout extends Error {
+    constructor() {
+      super("radio request timed out");
+      this.name = "RadioTimeout";
+    }
+  }
+
+  function isRadioTimeout(err) {
+    return !!(
+      err &&
+      (err.name === "RadioTimeout" ||
+        err.name === "AbortError" ||
+        err.name === "TimeoutError" ||
+        err.code === "ABORT_ERR")
+    );
+  }
+
+  /**
+   * One outbound radio JSON read. The timer covers headers and the body.
+   * A timeout rejects with RadioTimeout. The caller does not get a body.
+   * A late body after the deadline is not parsed.
+   */
+  function readRadioJson(url, fetchImpl, timeoutMs) {
+    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
+    if (typeof go !== "function") return Promise.reject(new RadioTimeout());
+    const ms = typeof timeoutMs === "number" ? timeoutMs : RADIO_TIMEOUT_MS;
+    const ctrl = new AbortController();
+    let settled = false;
+    let timer;
+
+    return new Promise(function (resolve, reject) {
+      timer = setTimeout(function () {
+        if (settled) return;
+        settled = true;
+        ctrl.abort();
+        reject(new RadioTimeout());
+      }, ms);
+
+      Promise.resolve()
+        .then(function () {
+          return go(url, { cache: "no-store", headers: { Accept: "application/json" }, signal: ctrl.signal });
+        })
+        .then(function (res) {
+          return res && typeof res.json === "function" ? res.json() : null;
+        })
+        .then(function (json) {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          resolve(json);
+        })
+        .catch(function (err) {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          if (isRadioTimeout(err)) reject(new RadioTimeout());
+          else reject(err);
+        });
+    });
+  }
+
+  function readRadioSearch(shown, query, area, fetchImpl, timeoutMs) {
     if (!radioSearchMayLeave(shown)) return Promise.resolve(null);
     const urls = radioSearchUrls(query, area);
     if (!urls.length) return Promise.resolve([]);
-    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
+    const ms = typeof timeoutMs === "number" ? timeoutMs : RADIO_TIMEOUT_MS;
     return Promise.all(
       urls.map(function (url) {
-        return Promise.resolve(go(url, { cache: "no-store", headers: { Accept: "application/json" } }))
-          .then(function (r) {
-            return r.json();
-          })
+        return readRadioJson(url, fetchImpl, ms)
           .then(function (json) {
             return parseStations(json);
           })
-          .catch(function () {
+          .catch(function (err) {
+            if (isRadioTimeout(err)) throw new RadioTimeout();
             return null;
           });
       }),
@@ -485,6 +548,8 @@
     radioHonesty,
     radioMaySend,
     radioSearchMayLeave,
+    RADIO_TIMEOUT_MS,
+    RadioTimeout,
     readRadioSearch,
     STREAM_HOST_NAME,
     streamHostName,

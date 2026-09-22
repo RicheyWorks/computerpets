@@ -1,4 +1,4 @@
-/** Free music + radio for Rui. Same plugin store shape as the mind bus. Find waits until the radio form shows this computer's network address on that https request. `readRadioSearch` also refuses when that painted line is missing. `openStationStream` refuses a station audio open when the painted stream-host line is missing. A house loop is not that open. Same map as desktop `house-music.js`. */
+/** Free music + radio for Rui. Same plugin store shape as the mind bus. Find waits until the radio form shows this computer's network address on that https request. `readRadioSearch` also refuses when that painted line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can say can't reach. A late body is not parsed. A timeout does not call the next directory host. `openStationStream` refuses a station audio open when the painted stream-host line is missing. A house loop is not that open. Same map as desktop `house-music.js`. */
 import { clientNetLine } from "./weather-areas.ts";
 
 export const MUSIC_PLUGINS = [
@@ -268,27 +268,92 @@ export function radioSearchMayLeave(shown: unknown): boolean {
 
 type RadioFetch = (url: string, init?: RequestInit) => Promise<{ json: () => Promise<unknown> }>;
 
+/** Twelve seconds covers headers and the body. Matches weather page and overlay plate IPC. */
+export const RADIO_TIMEOUT_MS = 12_000;
+
+/** A silent radio host. Callers flip the plate to unread / "can't reach". */
+export class RadioTimeout extends Error {
+  constructor() {
+    super("radio request timed out");
+    this.name = "RadioTimeout";
+  }
+}
+
+function isRadioTimeout(err: unknown): boolean {
+  if (!err || typeof err !== "object") return false;
+  const name = (err as { name?: string }).name;
+  const code = (err as { code?: string }).code;
+  return name === "RadioTimeout" || name === "AbortError" || name === "TimeoutError" || code === "ABORT_ERR";
+}
+
+/**
+ * One outbound radio JSON read. The timer covers headers and the body.
+ * A timeout rejects with RadioTimeout. The caller does not get a body.
+ * A late body after the deadline is not parsed.
+ */
+function readRadioJson(
+  url: string,
+  fetchImpl: RadioFetch,
+  timeoutMs: number = RADIO_TIMEOUT_MS,
+): Promise<unknown | null> {
+  if (typeof fetchImpl !== "function") return Promise.reject(new RadioTimeout());
+
+  const ctrl = new AbortController();
+  let settled = false;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  return new Promise((resolve, reject) => {
+    timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      ctrl.abort();
+      reject(new RadioTimeout());
+    }, timeoutMs);
+
+    Promise.resolve()
+      .then(() =>
+        fetchImpl(url, { cache: "no-store", headers: { Accept: "application/json" }, signal: ctrl.signal }),
+      )
+      .then(async (res) => {
+        const json = res && typeof res.json === "function" ? await res.json() : null;
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(json);
+      })
+      .catch((err) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        if (isRadioTimeout(err)) reject(new RadioTimeout());
+        else reject(err);
+      });
+  });
+}
+
 /**
  * The only Radio Browser search. A miss resolves to null and does not call fetch.
- * An empty URL list resolves to []. A total unread throws so the plate can say can't reach.
+ * An empty URL list resolves to []. A hang rejects. A timeout does not call the next directory host.
+ * A total unread throws so the plate can say can't reach.
  */
 export function readRadioSearch(
   shown: unknown,
   query = "",
   area?: RadioArea | null,
   fetchImpl: RadioFetch = fetch,
+  timeoutMs: number = RADIO_TIMEOUT_MS,
 ): Promise<RadioStation[] | null> {
   if (!radioSearchMayLeave(shown)) return Promise.resolve(null);
   const urls = radioSearchUrls(query, area);
   if (!urls.length) return Promise.resolve([]);
   return Promise.all(
     urls.map((url) =>
-      Promise.resolve(
-        fetchImpl(url, { cache: "no-store", headers: { Accept: "application/json" } }),
-      )
-        .then((r) => r.json())
+      readRadioJson(url, fetchImpl, timeoutMs)
         .then((json) => parseStations(json))
-        .catch(() => null),
+        .catch((err) => {
+          if (isRadioTimeout(err)) throw new RadioTimeout();
+          return null;
+        }),
     ),
   ).then((batches) => {
     if (batches.every((b) => b == null)) throw new Error("unread");

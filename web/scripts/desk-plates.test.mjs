@@ -90,5 +90,22 @@ test("Quotes crypto + NFT panes lockstep with overlay market helpers", () => {
   assert.ok(deskSrc.indexOf("if (!quoteMaySend") < deskSrc.indexOf("readGeckoMany(line"));
   assert.ok(deskSrc.indexOf("if (!quoteLookMaySend") < deskSrc.indexOf("readQuoteSearch("));
   assert.ok(Market.quoteHonesty(Market.parseMarket({})).includes(Weather.clientNetLine("the quote host")));
+  assert.equal(News.NEWS_TIMEOUT_MS, 12_000);
+  assert.equal(Market.QUOTE_TIMEOUT_MS, 12_000);
+  assert.equal(News.NewsTimeout.name, "NewsTimeout");
+  assert.equal(Market.QuoteTimeout.name, "QuoteTimeout");
+});
 
+test("desk quote wrappers time out and deny a silent host", async () => {
+  const quote = Market.quoteHonesty(Market.parseMarket({}));
+  const hang = () => new Promise(() => {});
+  await assert.rejects(
+    () => Market.readGeckoMany(quote, ["bitcoin"], () => hang(), 30),
+    (err) => err instanceof Market.QuoteTimeout,
+  );
+  await assert.rejects(
+    () => Market.readQuoteSearch(Market.QUOTE_LOOK, "pepe", () => hang(), 30),
+    (err) => err instanceof Market.QuoteTimeout,
+  );
+  assert.equal(await Market.readGeckoMany("", ["bitcoin"], () => hang(), 30), null);
 });
