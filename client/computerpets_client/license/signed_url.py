@@ -37,7 +37,7 @@ def parse_signed_download_url(url_string: str) -> dict[str, str | None]:
     if not url.scheme or not url.netloc:
         raise LicenseError("signed_url_invalid", "downloadUrl is not a URL")
     file = url.path.rstrip("/").split("/")[-1] if url.path else ""
-    pet_key = file[:-4] if file.endswith(".zip") else file
+    from_path = file[:-4] if file.endswith(".zip") else file
     query = parse_qs(url.query, keep_blank_values=True)
 
     def first(name: str) -> str | None:
@@ -45,6 +45,9 @@ def parse_signed_download_url(url_string: str) -> dict[str, str | None]:
         if not values:
             return None
         return unquote(values[0])
+
+    # Prefer pet= (catalog key) when present — catalog object paths are not {petKey}.zip.
+    pet_key = first("pet") or from_path
 
     return {
         "petKey": pet_key,

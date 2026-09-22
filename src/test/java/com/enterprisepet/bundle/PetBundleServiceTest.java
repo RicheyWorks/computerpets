@@ -45,6 +45,7 @@ class PetBundleServiceTest {
         // URLEncoder uses application/x-www-form-urlencoded (`:` → %3A)
         assertThat(url).contains("owner=steam%3Aowner");
         assertThat(url).contains("jti=jti-123");
+        assertThat(url).contains("pet=red_panda");
         assertThat(manifest.body().get("jti")).isEqualTo("jti-123");
 
         String exp = queryParam(uri.getRawQuery(), "exp");
@@ -88,6 +89,7 @@ class PetBundleServiceTest {
 
         URI uri = URI.create(manifest.downloadUrl());
         assertThat(uri.getPath()).isEqualTo("/bundles/red_panda-win-1.0.0.zip");
+        assertThat(manifest.downloadUrl()).contains("pet=red_panda");
         assertThat(manifest.body().get("version")).isEqualTo("1.0.0");
         assertThat(manifest.body().get("platform")).isEqualTo("win");
         assertThat(manifest.body().get("sha256")).isEqualTo(testSha);

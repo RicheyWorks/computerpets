@@ -34,7 +34,7 @@ def test_accepts_url_with_jti_and_matching_mac():
     sig = sign_download_mac(message, KEY)
     url = (
         "https://cdn.enterprisepet.example/bundles/red_panda.zip"
-        "?owner=steam%3Aowner&jti=3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80"
+        "?pet=red_panda&owner=steam%3Aowner&jti=3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80"
         f"&exp={exp}&sig={sig}"
     )
     parsed = verify_signed_download_url(
@@ -47,6 +47,34 @@ def test_accepts_url_with_jti_and_matching_mac():
         },
     )
     assert parsed["jti"] == "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80"
+    assert parsed["petKey"] == "red_panda"
+
+
+def test_prefers_pet_query_over_catalog_filename():
+    exp = 1755411300
+    message = download_mac_message(
+        {
+            "petKey": "red_panda",
+            "owner": "steam:owner",
+            "jti": "jti-1",
+            "exp": exp,
+        }
+    )
+    sig = sign_download_mac(message, KEY)
+    url = (
+        "https://cdn.enterprisepet.example/bundles/red_panda-win-1.0.0.zip"
+        f"?pet=red_panda&owner=steam%3Aowner&jti=jti-1&exp={exp}&sig={sig}"
+    )
+    parsed = verify_signed_download_url(
+        url,
+        {
+            "signingKey": KEY,
+            "jti": "jti-1",
+            "petKey": "red_panda",
+            "owner": "steam:owner",
+        },
+    )
+    assert parsed["petKey"] == "red_panda"
 
 
 def test_fails_closed_when_jti_missing():

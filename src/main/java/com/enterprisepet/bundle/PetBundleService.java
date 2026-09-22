@@ -109,20 +109,24 @@ public class PetBundleService {
 
         // jti must appear on the URL when it is in the MAC, otherwise an edge
         // worker cannot reconstruct petKey|owner|jti|exp from query params.
-        // Do not scrub owner/jti/exp/sig for presence theater.
+        // pet= carries the catalog key so edge redeem works when object-key is
+        // a catalog path (e.g. red_panda-win-1.0.0.zip), not only {petKey}.zip.
+        // Do not scrub owner/jti/exp/sig/pet for presence theater.
         String url = (jti == null || jti.isBlank())
             ? String.format(
-                "%s/%s?owner=%s&exp=%d&sig=%s",
+                "%s/%s?pet=%s&owner=%s&exp=%d&sig=%s",
                 stripTrailingSlash(bundleBaseUrl),
                 objectKey,
+                urlEncode(pet.key()),
                 urlEncode(owner),
                 expEpoch,
                 token
             )
             : String.format(
-                "%s/%s?owner=%s&jti=%s&exp=%d&sig=%s",
+                "%s/%s?pet=%s&owner=%s&jti=%s&exp=%d&sig=%s",
                 stripTrailingSlash(bundleBaseUrl),
                 objectKey,
+                urlEncode(pet.key()),
                 urlEncode(owner),
                 urlEncode(jti),
                 expEpoch,

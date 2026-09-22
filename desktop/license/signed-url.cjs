@@ -48,7 +48,9 @@ function parseSignedDownloadUrl(urlString) {
     throw new LicenseError("signed_url_invalid", "downloadUrl is not a URL");
   }
   const file = url.pathname.split("/").filter(Boolean).pop() || "";
-  const petKey = file.endsWith(".zip") ? file.slice(0, -4) : file;
+  const fromPath = file.endsWith(".zip") ? file.slice(0, -4) : file;
+  // Prefer pet= (catalog key) when present — catalog object paths are not {petKey}.zip.
+  const petKey = url.searchParams.get("pet") || fromPath;
   return {
     petKey,
     owner: url.searchParams.get("owner"),
