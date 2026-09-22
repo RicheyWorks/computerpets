@@ -153,6 +153,7 @@
     return Promise.resolve({ kept });
   }
 
+  // Same names as web/src/lib/ai/secret-query.mjs. Desk talk uses that module.
   const SECRET_QUERY_NAMES = new Set([
     "key",
     "api_key",
