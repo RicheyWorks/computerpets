@@ -66,6 +66,69 @@ export function hostPathLabel(value: unknown, consent?: boolean): string {
   return value.trim();
 }
 
+const FIELD_TAGS = new Set(["INPUT", "TEXTAREA", "SELECT"]);
+
+type KeyTarget = {
+  tagName?: string;
+  tag?: string;
+  isContentEditable?: boolean;
+  closest?: (selector: string) => unknown;
+};
+
+type KeyEventLike = {
+  key?: string;
+  focused?: boolean;
+  field?: boolean;
+  target?: EventTarget | KeyTarget | null;
+} | null;
+
+function targetOf(event: KeyEventLike): KeyTarget | null {
+  if (!event?.target || typeof event.target !== "object") return null;
+  return event.target as KeyTarget;
+}
+
+function isFocusedField(event: KeyEventLike): boolean {
+  if (!event || typeof event !== "object") return false;
+  if (event.focused === true || event.field === true) return true;
+  const target = targetOf(event);
+  if (!target) return false;
+  if (target.isContentEditable === true) return true;
+  const tag = String(target.tagName || target.tag || "").toUpperCase();
+  if (FIELD_TAGS.has(tag)) return true;
+  if (typeof target.closest === "function") {
+    try {
+      return Boolean(target.closest("input, textarea, select, [contenteditable='true']"));
+    } catch {
+      return false;
+    }
+  }
+  return false;
+}
+
+export type KeyNote = { record: false; field: boolean; toggle: false | "dismiss" };
+
+/**
+ * A key outside a focused field is not a presence log.
+ * A focused field keeps the character. This does not read it.
+ * Escape outside a field may dismiss a menu. The key text is not returned.
+ */
+function keyText(event: KeyEventLike): string {
+  if (!event || typeof event !== "object" || !("key" in event)) return "";
+  const value = event.key;
+  return typeof value === "string" ? value : "";
+}
+
+export function classifyKey(event: KeyEventLike): KeyNote {
+  if (isFocusedField(event)) return { record: false, field: true, toggle: false };
+  if (keyText(event) === "Escape") return { record: false, field: false, toggle: "dismiss" };
+  return { record: false, field: false, toggle: false };
+}
+
+/** Refuse a keystroke log. The buffer is not appended. The key is not returned. */
+export function recordKeystroke(_buffer?: unknown, _event?: KeyEventLike): { record: false; keys: [] } {
+  return { record: false, keys: [] };
+}
+
 export function installFileDropGuard(target: EventTarget): () => void {
   const onDrag = (event: Event) => {
     const drag = event as DragEvent;

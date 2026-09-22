@@ -3526,8 +3526,8 @@ function fieldOf(el) {
   return el && el.closest && el.closest("input, textarea, select");
 }
 document.addEventListener("keydown", (e) => {
-  if (e.key !== "Escape") return;
-  if (fieldOf(e.target)) return;
+  const note = window.PetPresence && window.PetPresence.classifyKey ? window.PetPresence.classifyKey(e) : null;
+  if (!note || note.record || note.field || note.toggle !== "dismiss") return;
   if (plantChoiceKey) {
     closePlantChoice();
     e.preventDefault();

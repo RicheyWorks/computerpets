@@ -66,7 +66,7 @@ import { colonyOf, colonyWord, isHivePlace, stampColony } from "@/lib/pets/hive"
 import { isPhone, isTablet, readSit, tabletOrient, type TabletOrient } from "@/lib/pets/tablet-desk";
 import { phoneOrient, type PhoneOrient } from "@/lib/pets/phone-desk";
 import { guestMarks, guestPick, guestTap, type GuestChoiceId } from "@/lib/pets/guest-choice";
-import { installFileDropGuard } from "@/lib/pets/presence";
+import { classifyKey, installFileDropGuard } from "@/lib/pets/presence";
 
 type DeskCare = "rest" | "clean" | "medicine" | "bath" | "praise";
 
@@ -653,7 +653,8 @@ export function CompanionRoom({
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (e.key !== "Escape") return;
+      const note = classifyKey(e);
+      if (note.record || note.field || note.toggle !== "dismiss") return;
       if (!choiceOpen) return;
       setChoiceOpen(false);
     }

@@ -60,5 +60,8 @@ test("Exit and Close dismiss marks are always last and wired in pet.js", () => {
   assert.match(petSrc, /picked === "close"/);
   assert.match(petSrc, /picked === "exit"/);
   assert.match(petSrc, /collapseKeeperCard\(\)/);
-  assert.match(petSrc, /e\.key !== "Escape"/);
+  assert.match(petSrc, /PetPresence\.classifyKey\(e\)/);
+  assert.match(petSrc, /note\.toggle !== "dismiss"/);
+  assert.match(petSrc, /closeChoice\(\)/);
+  assert.doesNotMatch(petSrc, /e\.key !== "Escape"/);
 });
