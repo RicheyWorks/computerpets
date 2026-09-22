@@ -88,6 +88,7 @@ address, or an API that is not on `main`.
 | [0067](0067-trusted-proxy-client-address.md) | Trusted-proxy client address (fail-closed XFF / Forwarded) | Accepted |
 | [0068](0068-discovery-rate-limit.md) | Discovery rate limit on `/api/pets` (fail-closed) | Accepted |
 | [0069](0069-bundle-catalog-rate-limit.md) | Bundle catalog rate limit on `GET /api/bundles/{petKey}` (fail-closed) | Accepted |
+| [0070](0070-machine-request-signature.md) | Signed machine verify requests (fail-closed HMAC, license key) | Accepted |
 
 ## How to add one
 

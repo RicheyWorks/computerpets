@@ -32,7 +32,8 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Public discovery / verification — clients call these BEFORE they have a JWT.
+                // Discovery reads stay anonymous. POST /api/verify is permitAll here and
+                // fail-closed in MachineRequestSignatureFilter (HMAC, not a license JWT).
                 // Liveness/readiness must stay anonymous: Kubernetes probes send no JWT.
                 .requestMatchers("/api/public/**",
                                  "/api/verify/**",

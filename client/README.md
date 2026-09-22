@@ -69,7 +69,7 @@ The verbs that already exist on the living desk and fit this cut. Treat uses the
 
 **Unlock…** → Steam is the first real provider shape (`steamId`, `appId`, `petType`, `hwid`):
 
-1. `POST /api/verify/steam`
+1. `POST /api/verify/steam` signed with `LICENSE_SECRET_KEY` (`X-ComputerPets-Timestamp`, `X-ComputerPets-Signature`, 300 second skew)
 2. AES-256-GCM decrypt (32-byte `LICENSE_SECRET_KEY`, **no KDF**, 12-byte IV, 16-byte tag appended, standard Base64)
 3. Device `hwid` on verify and, when bound, on download
 4. `POST /api/download/{pet}` with Bearer JWT, then GET of the HMAC-signed URL (`petKey|owner|jti|exp`)
@@ -81,7 +81,7 @@ The first Unlock reads Linux `machine-id`, Windows `MachineGuid`, or the Mac pla
 | Variable | Required | Meaning |
 |----------|----------|---------|
 | `COMPUTERPETS_BACKEND_URL` | yes* | Backend origin, no trailing slash. Default `http://127.0.0.1:8081` if unset. |
-| `LICENSE_SECRET_KEY` | yes | Same 32-byte standard Base64 key the backend uses. Needed to decrypt the issued license locally. |
+| `LICENSE_SECRET_KEY` | yes | Same 32-byte standard Base64 key the backend uses. Signs `POST /api/verify` and decrypts the issued license. |
 | `BUNDLE_SIGNING_KEY` | no | If set, the client also checks the CDN URL HMAC. Download still works without it — the backend already signed the URL. |
 | `COMPUTERPETS_CLIENT_HOME` | no | Override the user-data directory (`license.json`, `hwid.txt`, last-seen, care). |
 

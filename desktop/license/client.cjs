@@ -4,6 +4,7 @@ const { LicenseError } = require("./errors.cjs");
 const { assertHwid } = require("./hwid.cjs");
 const { verifySignedDownloadUrl } = require("./signed-url.cjs");
 const { acceptBundleBytes } = require("./bundle-zip.cjs");
+const { signMachineRequest } = require("./machine-sign.cjs");
 
 const DEFAULT_TIMEOUT_MS = 12_000;
 
@@ -69,8 +70,9 @@ function createLicenseClient(opts = {}) {
 
   /**
    * POST /api/verify/{provider} — body is a flat map of strings (Steam: steamId, appId, …).
+   * Signs the exact body bytes with LICENSE_SECRET_KEY (ADR 0070). Download stays Bearer JWT.
    */
-  async function verify({ backendUrl, provider, fields }) {
+  async function verify({ backendUrl, provider, fields, licenseSecret }) {
     const base = normalizeBackendUrl(backendUrl);
     if (typeof provider !== "string" || !/^[a-z0-9_]+$/.test(provider)) {
       throw new LicenseError("unknown_provider", "provider key is invalid");
@@ -89,10 +91,19 @@ function createLicenseClient(opts = {}) {
     }
     if (typeof body.hwid === "string") assertHwid(body.hwid);
 
-    const res = await request(`${base}/api/verify/${provider}`, {
+    const path = `/api/verify/${provider}`;
+    const bodyText = JSON.stringify(body);
+    const signed = signMachineRequest({
+      key: licenseSecret,
       method: "POST",
-      headers: jsonHeaders(),
-      body: JSON.stringify(body),
+      path,
+      query: "",
+      body: Buffer.from(bodyText, "utf8"),
+    });
+    const res = await request(`${base}${path}`, {
+      method: "POST",
+      headers: jsonHeaders(signed.headers),
+      body: bodyText,
     });
     const json = await readBody(res);
 
