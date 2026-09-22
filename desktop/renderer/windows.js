@@ -1,4 +1,7 @@
-/** Visible top-level window bounds. Rects only — never pixels. */
+/** Visible top-level window bounds. Rects only — never pixels, titles, or paths.
+ * Field 9 of an enum line is a shell bit (or a legacy class used only to set that bit).
+ * The class string is not kept. Extra columns are not titles and are not kept.
+ */
 (function (root) {
   const TASKBAR_CLASS = {
     Shell_TrayWnd: 1,
@@ -34,6 +37,8 @@
       const right = Number(p[3]);
       const bottom = Number(p[4]);
       if (![left, top, right, bottom].every(Number.isFinite)) continue;
+      const token = p[8];
+      const shell = token === "1" || Boolean(TASKBAR_CLASS[token]);
       rows.push({
         id: String(p[0]),
         left,
@@ -43,7 +48,7 @@
         minimized: p[5] === "1",
         tool: p[6] === "1",
         cloaked: p[7] === "1",
-        className: p.slice(8).join("\t"),
+        shell,
       });
     }
     return rows;
@@ -119,6 +124,7 @@
       if (row.minimized || row.iconic) continue;
       if (row.tool || row.toolWindow) continue;
       if (row.cloaked) continue;
+      if (row.shell) continue;
       const cls = String(row.className || row.class || "");
       if (TASKBAR_CLASS[cls]) continue;
       const box = rowBox(row, scale, work);

@@ -35,6 +35,8 @@ test("window-rect parsing sits work-area space and honors scale", () => {
   assert.equal(parsed[0].id, "4242");
   assert.equal(parsed[0].left, 200);
   assert.equal(parsed[0].minimized, false);
+  assert.equal(parsed[0].shell, false);
+  assert.equal(Object.prototype.hasOwnProperty.call(parsed[0], "className"), false);
 
   const [box] = W.takeRects(parsed, { workArea: WORK, scaleFactor: 1 });
   assert.equal(box.id, "4242");
@@ -80,14 +82,32 @@ test("Mac and Linux name the later door and do not invent rects", () => {
   assert.equal(W.laterDoor("linux"), "mac-linux-window-play");
 });
 
+test("enum lines keep a shell bit and drop titles, paths, and class names", () => {
+  const titled = W.parseEnumText(
+    "11\t100\t80\t500\t400\t0\t0\t0\t0\thomework.docx — Notepad\tC:\\Users\\keeper\\Desktop\\homework.docx\n",
+  );
+  assert.equal(titled[0].shell, false);
+  assert.equal(JSON.stringify(titled).includes("homework"), false);
+  assert.equal(JSON.stringify(titled).includes("Desktop"), false);
+  const shell = W.parseEnumText("12\t0\t0\t1600\t1080\t0\t0\t0\t1\n");
+  assert.equal(shell[0].shell, true);
+  assert.equal(W.takeRects(shell, { workArea: WORK }).length, 0);
+  const legacy = W.parseEnumText("13\t0\t940\t1600\t1080\t0\t0\t0\tShell_TrayWnd\n");
+  assert.equal(legacy[0].shell, true);
+  assert.equal(Object.prototype.hasOwnProperty.call(legacy[0], "className"), false);
+  assert.equal(W.takeRects(legacy, { workArea: WORK }).length, 0);
+});
+
 test("enum JSON from a fake run is parsed; a later platform stays empty", async () => {
-  const text = "11\t100\t80\t500\t400\t0\t0\t0\tNotepad\nEND\n";
+  const text = "11\t100\t80\t500\t400\t0\t0\t0\t0\nEND\n";
   const listed = await Enum.listRaw({
     platform: "win32",
     run: async () => text,
   });
   assert.equal(listed.later, null);
   assert.equal(listed.raw[0].id, "11");
+  assert.equal(listed.raw[0].shell, false);
+  assert.equal(JSON.stringify(listed.raw).includes("Notepad"), false);
   const later = await Enum.listRaw({ platform: "darwin" });
   assert.deepEqual(later.raw, []);
   assert.equal(later.later, "mac-linux-window-play");
@@ -113,7 +133,8 @@ test("the overlay asks main for window rects; it does not capture pixels", () =>
   assert.match(htmlSrc, /window-play\.js/);
   assert.match(enumSrc, /GetWindowRect/);
   assert.match(enumSrc, /IsIconic/);
-  assert.doesNotMatch(enumSrc, /desktopCapturer|PrintWindow|BitBlt|GetDC/);
+  assert.doesNotMatch(enumSrc, /desktopCapturer|PrintWindow|BitBlt|GetDC|GetWindowText/);
+  assert.doesNotMatch(enumSrc, /cls\.Replace/);
   assert.doesNotMatch(mainSrc, /desktopCapturer/);
   assert.doesNotMatch(petSrc, /desktopCapturer/);
 });

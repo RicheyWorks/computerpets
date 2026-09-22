@@ -33,6 +33,22 @@ test("a dropped file is not a gift and is not read", () => {
   assert.equal(plain.read, false);
 });
 
+test("the desk does not list user folders or read a window title", () => {
+  for (const folder of ["Desktop", "Documents", "Downloads", "/home/keeper/Projects"]) {
+    assert.deepEqual(P.listHostFolder(folder), { listed: false, names: [] });
+  }
+  const row = {
+    title: "homework.docx — Notepad",
+    document: "homework.docx",
+    path: "C:\\Users\\keeper\\Desktop\\homework.docx",
+  };
+  assert.equal(P.windowCaption(row), null);
+  assert.equal(P.hostPathLabel(row.path, false), "");
+  assert.equal(P.hostPathLabel(row.path, true), row.path);
+  const src = readFileSync(join(root, "src/lib/pets/presence.ts"), "utf8");
+  assert.doesNotMatch(src, /readdir|showDirectoryPicker|webkitdirectory|getDirectory/);
+});
+
 test("the living desk and /demo install the drop guard", () => {
   assert.match(room, /installFileDropGuard/);
   assert.match(demo, /CompanionRoom/);

@@ -1129,6 +1129,17 @@ def _desk_rows() -> list[Affordance]:
             notes="Fixture enum + work-area rects; budgie perch / cat ledge pick. No live HWND / multi-monitor.",
         ),
         Affordance(
+            "desk.presence",
+            "desk",
+            "Presence does not list folders or read window titles",
+            "presence.py / presence.cjs / presence.ts + windows-enum.cjs",
+            notes=(
+                "Offline: Desktop, Documents, Downloads, and any other host folder stay unlistable. "
+                "Window captions stay empty. A path is omitted unless consent is already true. "
+                "The enum pipe carries a shell bit, not a class name, title, or path."
+            ),
+        ),
+        Affordance(
             "desk.market.tickers",
             "desk",
             "Quotes add-any-ticker + watchlist persist",
@@ -1300,6 +1311,60 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("plants_place", domain="desk", action_id=aid)
     if local_id == "windows.perch":
         return _run_node_smoke("windows_perch", domain="desk", action_id=aid)
+    if local_id == "presence":
+        from .presence import host_path_label, list_host_folder, window_caption
+
+        desktop = list_host_folder("Desktop")
+        documents = list_host_folder(r"C:\Users\keeper\Documents")
+        downloads = list_host_folder("Downloads")
+        other = list_host_folder("/home/keeper/Projects")
+        row = {
+            "title": "homework.docx — Notepad",
+            "document": "homework.docx",
+            "path": r"C:\Users\keeper\Desktop\homework.docx",
+            "className": "CabinetWClass",
+        }
+        hidden = host_path_label(row["path"], False)
+        shown = host_path_label(row["path"], True)
+        enum_src = _read("desktop/windows-enum.cjs")
+        win_js = _read("desktop/renderer/windows.js")
+        win_ts = _read("web/src/lib/pets/windows.ts")
+        presence_js = _read("desktop/presence.cjs")
+        presence_ts = _read("web/src/lib/pets/presence.ts")
+        blotter = _read("client/computerpets_client/app.py")
+        checks = {
+            "desktop": desktop == {"listed": False, "names": []},
+            "documents": documents["listed"] is False and documents["names"] == [],
+            "downloads": downloads["names"] == [],
+            "other": other["listed"] is False and other["names"] == [],
+            "caption": window_caption(row) is None,
+            "omit": hidden == "" and "homework" not in hidden,
+            "consent": shown == row["path"],
+            "enum": (
+                "GetWindowText" not in enum_src
+                and "Get-ChildItem" not in enum_src
+                and "cls.Replace" not in enum_src
+                and 'shell ? "1" : "0"' in enum_src
+            ),
+            "parse": "className: p.slice" not in win_js and "className: p.slice" not in win_ts,
+            "surfaces": (
+                "function listHostFolder" in presence_js
+                and "export function listHostFolder" in presence_ts
+                and "def list_host_folder" in _read("client/computerpets_client/presence.py")
+                and "list_host_folder" in blotter
+                and "window_caption" in blotter
+            ),
+        }
+        failed = [name for name, ok in checks.items() if not ok]
+        return InvokeResult(
+            aid,
+            "desk",
+            not failed,
+            detail="presence " + ",".join(checks),
+            extras=checks,
+            trace=[f"presence.{name}={'ok' if ok else 'fail'}" for name, ok in checks.items()],
+            error=None if not failed else f"presence honesty drifted: {', '.join(failed)}",
+        )
     if local_id == "market.tickers":
         return _run_node_smoke("market_tickers", domain="desk", action_id=aid)
     if local_id == "news.x":
