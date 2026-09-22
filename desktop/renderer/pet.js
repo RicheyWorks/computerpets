@@ -164,6 +164,7 @@ let card = window.PetCard ? window.PetCard.load() : { collapsed: true, color: "i
 let offArmed = false;
 let voicesReady = [];
 let liveSky = null;
+let liveSkyKey = "";
 let weatherFetchGen = 0;
 let weatherUnread = false;
 let newsItems = [];
@@ -367,14 +368,29 @@ function paintHousePlates() {
   if (H.paintMarket) H.paintMarket(card, marketLive, marketUnread, { coinLives: marketCoinLives, nftLive, nftUnread });
 }
 
+function forecastLineInView() {
+  const body = document.getElementById("weather-body");
+  if (!body || body.hidden) return false;
+  const A = window.PetWeatherAreas;
+  if (!A) return false;
+  const areas = A.parseAreas(card);
+  return (areas.tab || "current") === "current";
+}
+
 function fetchWeather() {
   const A = window.PetWeatherAreas;
   if (!A) return;
   const gen = ++weatherFetchGen;
   const gate = A.forecastGate(card, card.hereForecastAck);
-  if (!gate || gate.act !== "send" || !gate.area) {
-    liveSky = null;
-    weatherUnread = false;
+  const net = document.getElementById("weather-forecast-net");
+  if (net && A.forecastHonesty) net.textContent = A.forecastHonesty(gate);
+  const key = gate && gate.area ? `${gate.area.id}:${gate.area.lat}:${gate.area.lon}` : "";
+  if (!A.forecastMaySend(gate, forecastLineInView())) {
+    if (!gate || gate.act !== "send" || liveSkyKey !== key) {
+      liveSky = null;
+      liveSkyKey = "";
+      weatherUnread = false;
+    }
     paintHousePlates();
     paintWeather();
     return;
@@ -382,6 +398,7 @@ function fetchWeather() {
   const url = A.forecastUrl(gate.area.lat, gate.area.lon);
   if (!url) return;
   liveSky = null;
+  liveSkyKey = "";
   weatherUnread = false;
   paintHousePlates();
   paintWeather();
@@ -390,6 +407,7 @@ function fetchWeather() {
     .then((json) => {
       if (gen !== weatherFetchGen) return;
       liveSky = A.parseForecast(json);
+      liveSkyKey = liveSky ? key : "";
       weatherUnread = !liveSky;
       paintHousePlates();
       paintWeather();
@@ -397,6 +415,7 @@ function fetchWeather() {
     .catch(() => {
       if (gen !== weatherFetchGen) return;
       liveSky = null;
+      liveSkyKey = "";
       weatherUnread = true;
       paintHousePlates();
       paintWeather();
@@ -3633,6 +3652,8 @@ if (weatherPlate) {
         body.hidden = !body.hidden;
         const open = !body.hidden;
         toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        if (open) fetchWeather();
+        else paintHousePlates();
       }
       return;
     }

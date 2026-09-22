@@ -387,7 +387,8 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.match(htmlSrc, /id="weather-saved-ask"/);
   assert.match(htmlSrc, /id="weather-saved-yes"/);
   assert.match(htmlSrc, /id="weather-saved-no"/);
-  assert.match(htmlSrc, /use this saved computer place for the forecast\? this sends the saved place\. it does not locate again\./);
+  assert.match(htmlSrc, /use this saved computer place for the forecast\? this sends the saved place\. this computer's network address goes with the https request, as any client\. it does not locate again\./);
+  assert.match(htmlSrc, /id="weather-forecast-net"/);
   const bodyAt = htmlSrc.indexOf('id="weather-body"');
   const savedAskAt = htmlSrc.indexOf('id="weather-saved-ask"');
   const newsAt = htmlSrc.indexOf('id="news-plate"');
@@ -396,6 +397,10 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   const fetchBody = petSrc.slice(fetchAt, fetchAt + 1600);
   assert.match(fetchBody, /forecastGate\(card, card\.hereForecastAck\)/);
   assert.ok(fetchBody.indexOf("forecastGate") < fetchBody.indexOf("forecastUrl"));
+  assert.match(fetchBody, /forecastMaySend/);
+  assert.match(fetchBody, /forecastLineInView/);
+  assert.ok(fetchBody.indexOf("forecastMaySend") < fetchBody.indexOf("forecastUrl"));
+  assert.ok(fetchBody.indexOf("forecastHonesty") < fetchBody.indexOf("forecastUrl"));
   assert.doesNotMatch(fetchBody, /reverseUrl|readWeatherHere|armWeatherLocate|getCurrentPosition|noteWeatherLocateYes/);
   const beatAt = petSrc.indexOf("setInterval(readHeartbeat");
   assert.doesNotMatch(petSrc.slice(beatAt, beatAt + 80), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
@@ -404,6 +409,7 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   const lifeAt = petSrc.indexOf("setInterval(() => {\n  if (document.hidden || !kind || !life)");
   assert.ok(lifeAt > petSrc.indexOf("function sendLiveFix"));
   assert.doesNotMatch(petSrc.slice(lifeAt), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
+  assert.doesNotMatch(petSrc.slice(lifeAt), /forecastUrl\(/);
   const savedYesAt = petSrc.indexOf('getElementById("weather-saved-yes")');
   const savedYesBody = petSrc.slice(savedYesAt, savedYesAt + 700);
   assert.match(savedYesBody, /forecastGate\(card, card\.hereForecastAck\)/);

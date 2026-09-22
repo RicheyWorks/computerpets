@@ -87,7 +87,21 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.equal(Overlay.locateGate(A.blankAreas(), false).act, "ask");
   assert.equal(Overlay.locateGate(A.blankAreas(), true).act, "locate");
   assert.equal(Overlay.locateGate(typed, true).act, "keep");
-  assert.equal(A.SAVED_HERE_ASK, "use this saved computer place for the forecast? this sends the saved place. it does not locate again.");
+  assert.equal(A.FORECAST_NET, "this computer's network address goes with the https request, as any client.");
+  assert.equal(Overlay.FORECAST_NET, A.FORECAST_NET);
+  assert.equal(
+    A.SAVED_HERE_ASK,
+    "use this saved computer place for the forecast? this sends the saved place. this computer's network address goes with the https request, as any client. it does not locate again.",
+  );
+  assert.ok(A.SAVED_HERE_ASK.includes(A.FORECAST_NET));
+  assert.equal(A.TYPED_FORECAST, `this forecast sends the named place. ${A.FORECAST_NET}`);
+  assert.equal(
+    A.SAVED_FORECAST_CONTINUE,
+    `this forecast continues the saved place you already allowed. ${A.FORECAST_NET} it does not locate again.`,
+  );
+  assert.equal(Overlay.TYPED_FORECAST, A.TYPED_FORECAST);
+  assert.equal(Overlay.SAVED_FORECAST_CONTINUE, A.SAVED_FORECAST_CONTINUE);
+  assert.equal(A.FORECAST_WAITS, "forecast waits");
   assert.equal(A.SAVED_HERE_YES, "Use this saved place");
   assert.equal(A.SAVED_HERE_NO, "Don't send");
   assert.equal(A.SAVED_HERE_HELD, "the saved place was not sent");
@@ -124,8 +138,20 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.deepEqual(A.stickHereForecastAck(savedHere, savedAck), savedAck);
   assert.equal(A.stickHereForecastAck(A.removeArea(savedHere, "here"), savedAck), null);
   assert.equal(A.ackSavedHere(typed), null);
+  assert.equal(A.forecastHonesty(A.forecastGate(typed, null)), A.TYPED_FORECAST);
+  assert.equal(A.forecastHonesty(A.forecastGate(savedHere, savedAck)), A.SAVED_FORECAST_CONTINUE);
+  assert.equal(A.forecastHonesty(A.forecastGate(savedHere, null)), "");
+  assert.equal(A.forecastMaySend(A.forecastGate(typed, null), false), false);
+  assert.equal(A.forecastMaySend(A.forecastGate(typed, null), true), true);
+  assert.equal(A.forecastMaySend(A.forecastGate(savedHere, savedAck), false), false);
+  assert.equal(A.forecastMaySend(A.forecastGate(savedHere, savedAck), true), true);
+  assert.equal(A.forecastMaySend(A.forecastGate(savedHere, null), true), false);
+  assert.equal(Overlay.forecastMaySend(A.forecastGate(typed, null), false), false);
+  assert.equal(Overlay.forecastHonesty(Overlay.forecastGate(savedHere, savedAck)), A.SAVED_FORECAST_CONTINUE);
   assert.equal(A.plateLine(savedHere, null, false, true), "This computer · saved place not sent");
   assert.equal(A.plateLine(typed, null, false, false), "Portland · looking up");
+  assert.equal(A.plateLine(typed, null, false, false, true), "Portland · forecast waits");
+  assert.equal(Overlay.plateLine(typed, null, false, false, true), "Portland · forecast waits");
   assert.equal(Overlay.plateLine(savedHere, null, false, true), A.plateLine(savedHere, null, false, true));
   const preciseHere = {
     weatherAreas: [{ id: "here", name: "This computer", query: "this computer", lat: 47.60621, lon: -122.33207 }],

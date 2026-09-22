@@ -136,6 +136,10 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   const gateAt = plates.indexOf("forecastGate(areas, card.hereForecastAck)");
   const forecastAt = plates.indexOf("forecastUrl(gate.area.lat, gate.area.lon)");
   assert.ok(gateAt > 0 && forecastAt > gateAt);
+  assert.match(forecastEffect, /forecastMaySend/);
+  assert.ok(forecastEffect.indexOf("forecastMaySend") < forecastEffect.indexOf("forecastUrl"));
+  assert.match(plates, /forecastHonesty/);
+  assert.match(plates, /id="weather-forecast-net"/);
   const openAt = plates.indexOf("{open ? (");
   const askAt = plates.indexOf('id="weather-saved-ask"');
   assert.ok(openAt > 0 && askAt > openAt);
@@ -143,6 +147,7 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   const tickAt = plates.indexOf("setInterval");
   assert.ok(tickAt > 0);
   assert.doesNotMatch(plates.slice(tickAt, tickAt + 240), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition/);
+  assert.doesNotMatch(plates.slice(tickAt, tickAt + 400), /forecastUrl/);
   assert.doesNotMatch(plates, /ipwho\.is|ip-api\.com|ipinfo\.io|ipapi\.co|ipPlaceUrl|parseIpPlace/);
   const src = readFileSync(join(root, "src/lib/pets/presence.ts"), "utf8");
   assert.doesNotMatch(src, /watchPosition/);

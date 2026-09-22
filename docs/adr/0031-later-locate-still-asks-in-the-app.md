@@ -30,7 +30,7 @@ This slice spends the in-app yes on one locate. It does not revoke a Chromium gr
 
 - Electron 35 still cannot revoke a geolocation grant Chromium already cached in the renderer. The in-app yes is not a revoke and not a browser prompt. After a fresh yes, that cached grant can still satisfy `getCurrentPosition` without a new OS or browser prompt. `maximumAge: 0` refuses a cached position. It does not flush the permission grant. A reload is the only flush of that renderer cache. This slice does not pretend otherwise.
 - The house still asks in the app for the next locate. A silent call does not run.
-- A forecast of an acknowledged saved pin, and a typed city, still go to the forecast host. Those paths do not locate. [0017](0017-saved-computer-place-waits-for-a-forecast-yes.md).
+- A forecast of an acknowledged saved pin, and a typed city, still go to the forecast host. Those paths do not locate. [0017](0017-saved-computer-place-waits-for-a-forecast-yes.md). A later one waits until the weather panel is open and the line names the network address. [0032](0032-later-forecast-names-the-network-address.md).
 - Rounding is about 11 km. It is not anonymity.
 - License `hwid` still reads a named machine id only when a bind needs it. A missing OS id still waits for its own yes. [0030](0030-missing-os-id-waits-for-a-yes.md). This slice does not change that door.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.

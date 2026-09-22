@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. Same map as desktop `weather-areas.js`. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line says this computer's network address goes with the https request. Same map as desktop `weather-areas.js`. */
 import type { Weather } from "./weather";
 
 export const NO_AREA = "no area set";
@@ -14,12 +14,17 @@ export const HERE_NO = "Don't send";
 export const HERE_HELD = "the place was not sent";
 export const HERE_KEPT = "keeping the saved place";
 export const HERE_SENT = "a place was sent to the forecast host";
-export const SAVED_HERE_ASK = "use this saved computer place for the forecast? this sends the saved place. it does not locate again.";
+/** Any HTTPS client shows its network address to the host. This is not a city lookup. */
+export const FORECAST_NET = "this computer's network address goes with the https request, as any client.";
+export const SAVED_HERE_ASK = `use this saved computer place for the forecast? this sends the saved place. ${FORECAST_NET} it does not locate again.`;
 export const SAVED_HERE_YES = "Use this saved place";
 export const SAVED_HERE_NO = "Don't send";
 export const SAVED_HERE_HELD = "the saved place was not sent";
 export const SAVED_HERE_SENT = "the saved place was sent to the forecast host";
 export const SAVED_HERE_WAIT = "saved place not sent";
+export const TYPED_FORECAST = `this forecast sends the named place. ${FORECAST_NET}`;
+export const SAVED_FORECAST_CONTINUE = `this forecast continues the saved place you already allowed. ${FORECAST_NET} it does not locate again.`;
+export const FORECAST_WAITS = "forecast waits";
 /** A tenth of a degree is about 11 km. Rounding is not anonymity. */
 export const PLACE_STEP = 0.1;
 export const CANT_REACH = "can't reach";
@@ -407,7 +412,10 @@ export function hereForecastAckOf(raw: unknown): HereForecastAck | null {
  * A typed city may go to the forecast host. A saved live pin does not,
  * until the keeper has acknowledged that exact place. The ack sticks for
  * that pin. It is not a geolocation arm and not a reverse lookup.
- * The same ack still sends on a later read. That is not a new question.
+ * The same ack still allows a later forecast. That is not a new question.
+ * The page calls `forecastMaySend` before the request, so a later read
+ * waits until the weather panel is open. `forecastHonesty` names the
+ * network address on that send. There is no forecast timer.
  */
 export function forecastGate(areas: unknown, ack?: unknown): ForecastGate {
   const area = currentArea(parseAreas(areas));
@@ -437,11 +445,32 @@ export function stickHereForecastAck(areas: unknown, ack?: unknown): HereForecas
   return gate.act === "send" && gate.ack ? gate.ack : null;
 }
 
-export function plateLine(areas: WeatherAreas | undefined, live: LiveSky | null | undefined, unread = false, held = false) {
+/**
+ * The forecast host is called only while the keeper can see the honesty line.
+ * A closed plate, a load, and the favorites tab are not that view.
+ * This does not ask again and does not locate.
+ */
+export function forecastMaySend(gate: ForecastGate, panelOpen: boolean): boolean {
+  return panelOpen === true && gate.act === "send" && gate.area != null;
+}
+
+/** The line in the open weather panel for a typed city or an acknowledged pin. */
+export function forecastHonesty(gate: ForecastGate): string {
+  if (gate.act !== "send" || !gate.area) return "";
+  return gate.ack ? SAVED_FORECAST_CONTINUE : TYPED_FORECAST;
+}
+
+export function plateLine(
+  areas: WeatherAreas | undefined,
+  live: LiveSky | null | undefined,
+  unread = false,
+  held = false,
+  waiting = false,
+) {
   const area = currentArea(areas);
   if (!area) return NO_AREA;
   if (held) return `${area.name} · ${SAVED_HERE_WAIT}`;
   if (unread) return `${area.name} · unread`;
-  if (!live) return `${area.name} · looking up`;
+  if (!live) return waiting ? `${area.name} · ${FORECAST_WAITS}` : `${area.name} · looking up`;
   return `${area.name} · ${live.label}`;
 }
