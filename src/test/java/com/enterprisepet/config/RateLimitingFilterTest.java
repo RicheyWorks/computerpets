@@ -17,13 +17,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 class RateLimitingFilterTest {
 
     private final RateLimitProperties properties = new RateLimitProperties();
+    private final ClientAddress trustLoopback =
+        new ClientAddress(TrustedProxyProperties.of("127.0.0.1/32", "::1/128"));
+    private final ClientAddress trustNone = new ClientAddress(TrustedProxyProperties.of());
 
     @Test
     @DisplayName("unmatched paths are not limited")
     void unmatchedPath_passesThrough() throws Exception {
         RateLimitingFilter filter = new RateLimitingFilter(
             (key, cap, period) -> { throw new AssertionError("store should not be called"); },
-            properties);
+            properties, trustNone);
         MockHttpServletResponse res = new MockHttpServletResponse();
         FilterChain chain = new MockFilterChain();
 
@@ -38,7 +41,7 @@ class RateLimitingFilterTest {
         AtomicInteger chainCalls = new AtomicInteger();
         RateLimitingFilter filter = new RateLimitingFilter(
             (key, cap, period) -> RateLimitBackend.Probe.allowed(9),
-            properties);
+            properties, trustNone);
         MockHttpServletRequest req = new MockHttpServletRequest("GET", "/api/verify/providers");
         MockHttpServletResponse res = new MockHttpServletResponse();
 
@@ -55,7 +58,7 @@ class RateLimitingFilterTest {
         AtomicInteger chainCalls = new AtomicInteger();
         RateLimitingFilter filter = new RateLimitingFilter(
             (key, cap, period) -> RateLimitBackend.Probe.denied(TimeUnit.SECONDS.toNanos(44)),
-            properties);
+            properties, trustNone);
         MockHttpServletResponse res = new MockHttpServletResponse();
 
         filter.doFilter(new MockHttpServletRequest("POST", "/api/verify/steam"), res,
@@ -81,7 +84,7 @@ class RateLimitingFilterTest {
                 throw new RateLimitStoreException("Redis rate limiter unavailable",
                     new IllegalStateException("connection refused"));
             },
-            properties);
+            properties, trustNone);
         MockHttpServletResponse res = new MockHttpServletResponse();
 
         filter.doFilter(new MockHttpServletRequest("GET", "/api/verify/providers"), res,
@@ -99,16 +102,35 @@ class RateLimitingFilterTest {
     }
 
     @Test
-    @DisplayName("X-Forwarded-For first hop is the bucket key")
-    void forwardedFor_isUsedAsClientId() throws Exception {
+    @DisplayName("trusted proxy: X-Forwarded-For first hop is the bucket key")
+    void trustedProxy_forwardedFor_isUsedAsClientId() throws Exception {
         AtomicInteger seen = new AtomicInteger();
         RateLimitingFilter filter = new RateLimitingFilter((key, cap, period) -> {
             assertThat(key).isEqualTo("203.0.113.9|verify");
             seen.incrementAndGet();
             return RateLimitBackend.Probe.allowed(8);
-        }, properties);
+        }, properties, trustLoopback);
         MockHttpServletRequest req = new MockHttpServletRequest("GET", "/api/verify/providers");
+        req.setRemoteAddr("127.0.0.1");
         req.addHeader("X-Forwarded-For", "203.0.113.9, 10.0.0.1");
+
+        filter.doFilter(req, new MockHttpServletResponse(), (request, response) -> {});
+
+        assertThat(seen.get()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("untrusted peer: X-Forwarded-For is ignored for the bucket key")
+    void untrustedPeer_xffIgnored() throws Exception {
+        AtomicInteger seen = new AtomicInteger();
+        RateLimitingFilter filter = new RateLimitingFilter((key, cap, period) -> {
+            assertThat(key).isEqualTo("198.51.100.7|verify");
+            seen.incrementAndGet();
+            return RateLimitBackend.Probe.allowed(8);
+        }, properties, trustNone);
+        MockHttpServletRequest req = new MockHttpServletRequest("GET", "/api/verify/providers");
+        req.setRemoteAddr("198.51.100.7");
+        req.addHeader("X-Forwarded-For", "203.0.113.9");
 
         filter.doFilter(req, new MockHttpServletResponse(), (request, response) -> {});
 

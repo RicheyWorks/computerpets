@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-22 (Provider verify field length/charset fail-closed — ADR 0066. Not DX12/Vulkan. Catalog 221.) |
+| **Last Updated** | 2026-09-22 (Trusted-proxy XFF / Forwarded fail-closed — ADR 0067. Not DX12/Vulkan. Catalog 221.) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -252,7 +252,8 @@ flowchart TB
   - ~~CDN edge assumed to verify HMAC / redeem without a shipped worker.~~ Fail-closed edge redeem in `deploy/cdn/edge-redeem.js` calls house `GET /api/bundles/{pet}/redeem` before bytes ([0063](adr/0063-cdn-edge-redeem-verification.md)). Keeper associates the function on apply.
   - ~~Secrets are still accepted via plain environment variables / a Kubernetes `Secret`.~~ Prod refuses plain env / hand-filled Opaque Secret without `COMPUTERPETS_SECRETS_SOURCE` ∈ {`external-secrets`, `file`, `vault-agent`}; `verify-secret-operator.sh` is the deploy gate ([0064](adr/0064-secret-operator-prod-refuses-plain-env.md)). Local-dev keeps env / scaffolding `secret.yaml`.
   - ~~Secret rotation / HSM story is open.~~ Dual-key `*_PREVIOUS` verify/decrypt, documented 90d/180d cadence, optional `COMPUTERPETS_KEYS_ROTATED_AT`, KMS/HSM pointer without a live appliance (`verify-secret-rotation.sh`; [0065](adr/0065-secret-rotation-cadence-and-hsm.md)).
-  - ~~Input length/charset validation on provider verify fields is open.~~ Fail-closed bounds before RestClient / RPC; malformed → HTTP 400 (`VerifyFieldBounds`, [0066](adr/0066-provider-verify-field-bounds.md)). Trusted-proxy hardening for `X-Forwarded-For` remains open (see Current Weaknesses).
+  - ~~Input length/charset validation on provider verify fields is open.~~ Fail-closed bounds before RestClient / RPC; malformed → HTTP 400 (`VerifyFieldBounds`, [0066](adr/0066-provider-verify-field-bounds.md)).
+  - ~~`X-Forwarded-For` trusted unconditionally.~~ Fail-closed trusted-proxy CIDRs; XFF / `Forwarded` only when `remoteAddr` matches (`ClientAddress`, [0067](adr/0067-trusted-proxy-client-address.md)).
 
 This deployment view directly addresses the multi-instance and rate-limiting concerns already called out in the README and `AUDIT.md`.
 
@@ -296,7 +297,8 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 
 ### 4.4 Cross-Cutting & Infrastructure
 - **`SecurityConfig`** + **`JwtAuthenticationFilter`**: Stateless JWT auth (permitAll on verify/pets/bundles, authenticated on download). Filter populates `SecurityContext` with a `Map` principal for claim access.
-- **`RateLimitingFilter`**: Token-bucket per-IP (10/min verify, 30/min download) using Bucket4j on Redis (`LettuceBasedProxyManager`). Respects `X-Forwarded-For`. Redis-down → 503 fail-closed.
+- **`RateLimitingFilter`**: Token-bucket per-IP (10/min verify, 30/min download) using Bucket4j on Redis (`LettuceBasedProxyManager`). Client IP via `ClientAddress` — XFF / `Forwarded` only from configured trusted-proxy CIDRs ([0067](adr/0067-trusted-proxy-client-address.md)). Redis-down → 503 fail-closed.
+- **`ClientAddress`**: Shared resolver for rate limits and download-grant IP binding. Empty `trusted-proxies.cidrs` = always `remoteAddr` (fail-closed).
 - **`RevocationIndex`**: Shared jti deny-list on the same Redis (`RedisRevocationIndex`, keys `revoked:jti:{jti}`). `InMemoryRevocationIndex` when `rate-limit.backend=memory`. Not a second ledger.
 - **`GlobalExceptionHandler`** (`@RestControllerAdvice`): Maps common Spring exceptions + catch-all to RFC 7807 `ProblemDetail`.
 - **`EnterprisePetBackendApplication`**: Standard `@SpringBootApplication`.
@@ -445,10 +447,12 @@ ComputerPets/
 │   │   │   │   ├── BundleCatalog.java
 │   │   │   │   └── PetBundleService.java
 │   │   │   ├── config/
+│   │   │   │   ├── ClientAddress.java
 │   │   │   │   ├── GlobalExceptionHandler.java
 │   │   │   │   ├── ProductionProfileGuard.java
 │   │   │   │   ├── SecretFileEnvironmentPostProcessor.java
 │   │   │   │   ├── RateLimitingFilter.java
+│   │   │   │   ├── TrustedProxyProperties.java
 │   │   │   │   └── SecurityConfig.java
 │   │   │   ├── controller/
 │   │   │   │   ├── DownloadController.java
@@ -544,7 +548,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 - No persistence → impossible to revoke a license or detect replays beyond the 365-day expiry.
 - ~~Rate-limit buckets are in-memory only~~ → Redis-backed Bucket4j (Lettuce).
 - ~~Distributed jti blacklist~~ → Redis `RevocationIndex` (deny-list after Postgres revoke). Redis-down validate falls back to the ledger.
-- `X-Forwarded-For` is trusted unconditionally (spoofing risk if not behind a trusted proxy).
+- ~~`X-Forwarded-For` is trusted unconditionally (spoofing risk if not behind a trusted proxy).~~ → Fail-closed `trusted-proxies.cidrs` ([ADR 0067](adr/0067-trusted-proxy-client-address.md)).
 - No authentication or rate limiting on some discovery endpoints in practice (all routes under `/api/verify` and `/api/pets` are public).
 - ~~**No tests, no contract tests against the external providers**~~ → **Basic unit tests added** for Steam, Microsoft, NFT, Itch, and Epic. Integration-style HTTP mocking is in place for Steam, Microsoft, Itch, and Epic.
 - ~~Default license key present in `application.yml`**~~ → **Completed**. The application now fails fast at startup if the committed default key is used (except under the 'test' profile). The fallback default was removed from `application.yml`.
@@ -558,7 +562,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 ### Security Considerations
 - **Good foundations**: AEAD encryption, short-lived tokens, claim binding, startup secret hygiene, no secrets in JWT bodies.
 - **Attack surface**: Public verify endpoints are the primary target. A compromised master key is catastrophic (full license forgery). CDN signature key compromise allows bundle theft for 15 min windows.
-- **Missing controls**: Real ownership verifiers, hardware binding, replay/revocation store, WAF in front of rate limiter, signed requests for machine clients. (Secret rotation / HSM story → [ADR 0065](adr/0065-secret-rotation-cadence-and-hsm.md). Input length/charset on provider verify fields → [ADR 0066](adr/0066-provider-verify-field-bounds.md).)
+- **Missing controls**: Real ownership verifiers, hardware binding, replay/revocation store, WAF in front of rate limiter, signed requests for machine clients. (Secret rotation / HSM story → [ADR 0065](adr/0065-secret-rotation-cadence-and-hsm.md). Input length/charset on provider verify fields → [ADR 0066](adr/0066-provider-verify-field-bounds.md). Trusted-proxy XFF → [ADR 0067](adr/0067-trusted-proxy-client-address.md).)
 - **Client trust model**: The desktop app must be considered semi-trusted for license decryption (the Python client is expected to hold the same `LICENSE_SECRET_KEY`). The architecture comment "never trust the desktop client" refers to not letting the client *generate* licenses.
 
 ### Extensibility & Future Refactoring Areas

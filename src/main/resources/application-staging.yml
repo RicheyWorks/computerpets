@@ -24,3 +24,8 @@ microsoft:
 
 rate-limit:
   backend: redis
+
+# Empty = fail-closed (remoteAddr only). Set TRUSTED_PROXY_CIDRS to the
+# staging load balancer / ingress ranges when XFF must be honoured (ADR 0067).
+trusted-proxies:
+  cidrs: ${TRUSTED_PROXY_CIDRS:}
