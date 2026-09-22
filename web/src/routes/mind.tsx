@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { MIND_PRESETS, VOICE_PRESETS, mindPreset } from "@/lib/ai/catalog";
-import { describeBinding, loadMindSettings, saveMindSettings } from "@/lib/ai/settings";
+import { describeBinding, describeKeyKept, saveMindSettings } from "@/lib/ai/settings";
 import { refreshMindSettings, useMindSettings } from "@/lib/ai/use-mind";
 import { LIVING_KINDS } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
@@ -37,8 +37,7 @@ function MindPage() {
 
   function write(next: MindSettings) {
     setDraft(next);
-    saveMindSettings(next);
-    refreshMindSettings();
+    void saveMindSettings(next).then(() => refreshMindSettings());
   }
 
   function setDefault(patch: Partial<MindBinding>) {
@@ -110,7 +109,9 @@ function MindPage() {
           Fourteen plugins. OpenAI-compatible, Claude, Gemini, Ollama, a custom webhook.
           Assign a house default or give each animal their own brain.
         </p>
-        <p className="text-sm text-subtle">{counts} mind{counts === 1 ? "" : "s"} in use · keys stay in this browser</p>
+        <p className="text-sm text-subtle">
+          {counts} mind{counts === 1 ? "" : "s"} in use · {describeKeyKept(live.keyKept)}
+        </p>
       </header>
 
       <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -168,6 +169,7 @@ function MindPage() {
                 className="h-11 w-full rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm"
               />
             </Field>
+            <p className="text-sm text-muted">{describeKeyKept(live.keyKept)}</p>
           ) : (
             <p className="text-sm text-muted">No key. This mind lives here.</p>
           )}

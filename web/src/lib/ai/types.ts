@@ -56,4 +56,6 @@ export type MindSettings = {
   default: MindBinding;
   voice: VoiceKind;
   pets: Record<string, MindBinding>;
+  /** Where the plugin key lives. Not a secret, and not written to browser storage. */
+  keyKept?: string;
 };

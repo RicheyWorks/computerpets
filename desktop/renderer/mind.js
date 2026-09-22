@@ -40,11 +40,60 @@
     };
   }
 
+  let pageMind = null;
+
+  function readStore(store) {
+    try {
+      if (!store || typeof store.getItem !== "function") return null;
+      const parsed = JSON.parse(store.getItem(KEY) || "null");
+      return parsed && typeof parsed === "object" ? parsed : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function plainKey(raw) {
+    if (!raw || typeof raw !== "object") return false;
+    const def = raw.default;
+    if (def && typeof def.apiKey === "string" && def.apiKey.trim()) return true;
+    const pets = raw.pets;
+    if (!pets || typeof pets !== "object") return false;
+    return Object.keys(pets).some((name) => {
+      const row = pets[name];
+      return row && typeof row.apiKey === "string" && row.apiKey.trim();
+    });
+  }
+
+  function scrubStore(store, drop) {
+    if (!store || typeof store.getItem !== "function") return;
+    try {
+      const raw = JSON.parse(store.getItem(KEY) || "null");
+      if (!raw || typeof raw !== "object") {
+        if (store.getItem(KEY)) store.removeItem(KEY);
+        return;
+      }
+      if (drop) {
+        store.removeItem(KEY);
+        return;
+      }
+      store.setItem(KEY, JSON.stringify(browserCopy(raw)));
+    } catch {
+      try {
+        store.removeItem(KEY);
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
   function scrubBrowser() {
     try {
-      const raw = JSON.parse(localStorage.getItem(KEY) || "null");
-      if (!raw || typeof raw !== "object") return;
-      localStorage.setItem(KEY, JSON.stringify(browserCopy(raw)));
+      scrubStore(localStorage, false);
+    } catch {
+      /* ignore */
+    }
+    try {
+      if (typeof sessionStorage !== "undefined") scrubStore(sessionStorage, true);
     } catch {
       /* ignore */
     }
@@ -54,23 +103,32 @@
     if (window.desk?.mindGet) {
       try {
         scrubBrowser();
+        pageMind = null;
         return window.desk.mindGet() || { default: { plugin: "local" }, voice: "browser", pets: {} };
       } catch {
         /* fall through */
       }
     }
-    try {
-      const raw = JSON.parse(localStorage.getItem(KEY) || "null");
-      return raw || { default: { plugin: "local" }, voice: "browser", pets: {} };
-    } catch {
-      return { default: { plugin: "local" }, voice: "browser", pets: {} };
-    }
+    if (pageMind) return pageMind;
+    const localRaw = readStore(typeof localStorage !== "undefined" ? localStorage : null);
+    const sessionRaw = readStore(typeof sessionStorage !== "undefined" ? sessionStorage : null);
+    const source = localRaw || sessionRaw || { default: { plugin: "local" }, voice: "browser", pets: {} };
+    scrubBrowser();
+    pageMind = source;
+    if (!pageMind.keyKept) pageMind.keyKept = plainKey(source) ? "none" : "empty";
+    return pageMind;
   }
 
   function save(next) {
     if (window.desk?.mindSet) {
+      pageMind = null;
       try {
         localStorage.setItem(KEY, JSON.stringify(browserCopy(next)));
+      } catch {
+        /* ignore */
+      }
+      try {
+        if (typeof sessionStorage !== "undefined") scrubStore(sessionStorage, true);
       } catch {
         /* ignore */
       }
@@ -79,12 +137,20 @@
         () => ({ kept: "none" }),
       );
     }
+    pageMind = next && typeof next === "object" ? next : { default: { plugin: "local" }, voice: "browser", pets: {} };
+    const kept = plainKey(pageMind) ? "none" : "empty";
+    pageMind.keyKept = kept;
     try {
-      localStorage.setItem(KEY, JSON.stringify(next));
+      localStorage.setItem(KEY, JSON.stringify(browserCopy(pageMind)));
     } catch {
       /* ignore */
     }
-    return Promise.resolve({ kept: "browser" });
+    try {
+      if (typeof sessionStorage !== "undefined") scrubStore(sessionStorage, true);
+    } catch {
+      /* ignore */
+    }
+    return Promise.resolve({ kept });
   }
 
   function safeUrl(raw, id) {
