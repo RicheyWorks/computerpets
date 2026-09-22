@@ -67,7 +67,7 @@ and [ADR 0056](adr/0056-house-secrets-from-file-mounts.md).
 
 | Variable                | Length     | Purpose                                      |
 |-------------------------|------------|----------------------------------------------|
-| `LICENSE_SECRET_KEY`    | 32 bytes   | Master AES-256-GCM key for encrypting licenses |
+| `LICENSE_SECRET_KEY`    | 32 bytes   | Master AES-256-GCM key for encrypting licenses. Also the HMAC key for `POST /api/verify` machine signatures ([ADR 0070](adr/0070-machine-request-signature.md)). |
 | `JWT_SECRET_KEY`        | 48+ bytes  | Signing key for short-lived JWT tokens       |
 | `BUNDLE_SIGNING_KEY`    | 48+ bytes  | HMAC key for signing temporary download URLs |
 | `ADMIN_API_KEY`         | 32+ bytes  | Pre-shared key for `/api/admin/*` and the house `/admin` ledger (`X-Admin-Key`) |

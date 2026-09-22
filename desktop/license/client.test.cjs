@@ -17,6 +17,7 @@ describe("license client (verify + download)", () => {
     const verified = await client.verify({
       backendUrl: "http://127.0.0.1:8080",
       provider: "steam",
+      licenseSecret: SECRET,
       fields: {
         steamId: "76561198000000000",
         appId: "123456",
@@ -34,6 +35,8 @@ describe("license client (verify + download)", () => {
     const verifyCall = backend.calls[0];
     assert.equal(verifyCall.method, "POST");
     assert.equal(verifyCall.path, "/api/verify/steam");
+    assert.ok(verifyCall.headers["X-ComputerPets-Timestamp"]);
+    assert.ok(verifyCall.headers["X-ComputerPets-Signature"]);
     assert.deepEqual(verifyCall.body, {
       steamId: "76561198000000000",
       appId: "123456",
@@ -67,6 +70,26 @@ describe("license client (verify + download)", () => {
     assert.ok(bundle.bytes > 0);
   });
 
+  it("fails closed when the license key is missing before verify leaves", async () => {
+    let called = false;
+    const client = createLicenseClient({
+      fetchImpl: async () => {
+        called = true;
+        return new Response("{}");
+      },
+    });
+    await assert.rejects(
+      () =>
+        client.verify({
+          backendUrl: "http://127.0.0.1:8080",
+          provider: "steam",
+          fields: { steamId: "1", appId: "2", hwid: "dev" },
+        }),
+      (err) => err instanceof LicenseError && err.code === "missing_secret"
+    );
+    assert.equal(called, false);
+  });
+
   it("fails closed when the backend is missing", async () => {
     const client = createLicenseClient({
       fetchImpl: async () => {
@@ -78,6 +101,7 @@ describe("license client (verify + download)", () => {
         client.verify({
           backendUrl: "http://127.0.0.1:9",
           provider: "steam",
+          licenseSecret: SECRET,
           fields: { steamId: "1", appId: "2", hwid: "dev" },
         }),
       (err) => err instanceof LicenseError && err.code === "unreachable"
@@ -103,6 +127,7 @@ describe("license client (verify + download)", () => {
         client.verify({
           backendUrl: "http://127.0.0.1:8080",
           provider: "steam",
+          licenseSecret: SECRET,
           fields: { steamId: "76561198000000000", appId: "123456", hwid: "dev" },
         }),
       (err) => err instanceof LicenseError && err.code === "denied"
@@ -115,6 +140,7 @@ describe("license client (verify + download)", () => {
     const verified = await client.verify({
       backendUrl: "http://127.0.0.1:8080",
       provider: "steam",
+      licenseSecret: SECRET,
       fields: { steamId: "1", appId: "2", petType: "red_panda", hwid: "dev" },
     });
     const jti = verified.auth.token.slice("test.".length);
@@ -141,6 +167,7 @@ describe("license client (verify + download)", () => {
     const verified = await client.verify({
       backendUrl: "http://127.0.0.1:8080",
       provider: "steam",
+      licenseSecret: SECRET,
       fields: { steamId: "1", appId: "2", petType: "red_panda", hwid: "device-abc-123" },
     });
 

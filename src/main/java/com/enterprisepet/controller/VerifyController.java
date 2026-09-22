@@ -87,6 +87,7 @@ public class VerifyController {
     @Operation(
         summary = "Verify ownership and issue license",
         description = "Verifies ownership via the selected provider and returns an encrypted license + short-lived JWT. " +
+                "Requires X-ComputerPets-Timestamp and X-ComputerPets-Signature (HMAC-SHA256, 300s skew, LICENSE_SECRET_KEY). " +
                 "Optional body field `hwid` (max 128 chars) binds the license to a device; see docs/CLIENT-CONTRACT.md. " +
                 "Provider fields are fail-closed on length and charset before any outbound store call.",
         responses = {
@@ -94,6 +95,7 @@ public class VerifyController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = com.enterprisepet.dto.VerifySuccessResponse.class),
                             examples = @ExampleObject(ref = "Success Response"))),
+            @ApiResponse(responseCode = "401", description = "Missing, skewed, or invalid machine signature"),
             @ApiResponse(responseCode = "400", description = "Unknown petType, hwid too long, or invalid provider fields",
                     content = @Content(mediaType = "application/json",
                             examples = {

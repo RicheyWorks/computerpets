@@ -80,6 +80,8 @@ spring:
 license:
   secret-key: "${LICENSE_SECRET_KEY:}"
   secret-key-previous: "${LICENSE_SECRET_KEY_PREVIOUS:}"
+  # The same string (UTF-8) is the HMAC key for POST /api/verify machine
+  # signatures (ADR 0070). Not a second secret. Previous verifies only.
 
 steam:
   api-key: "YOUR_STEAM_WEB_API_KEY"
