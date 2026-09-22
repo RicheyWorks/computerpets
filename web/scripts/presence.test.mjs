@@ -51,10 +51,15 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.equal(watched, 0);
   assert.equal(P.allowPermission("geolocation"), false);
   assert.equal(await P.readWeatherHere(undefined), null);
+  assert.equal(P.ipPlace(), null);
+  assert.equal(P.ipPlace(true), null);
   assert.match(plates, /readWeatherHere/);
+  assert.match(plates, /ipPlace\(/);
   assert.doesNotMatch(plates, /getCurrentPosition|watchPosition|maximumAge:\s*600/);
+  assert.doesNotMatch(plates, /ipwho\.is|ip-api\.com|ipinfo\.io|ipapi\.co|ipPlaceUrl|parseIpPlace/);
   const src = readFileSync(join(root, "src/lib/pets/presence.ts"), "utf8");
   assert.doesNotMatch(src, /watchPosition/);
+  assert.doesNotMatch(src, /ipwho\.is|ip-api\.com|ipinfo\.io|ipapi\.co|fetch\(/);
 });
 
 test("a dropped file is not a gift and is not read", () => {

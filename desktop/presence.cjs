@@ -15,6 +15,7 @@ const HOUSE_FILES = Object.freeze(["card.json", "mind.json"]);
  * empty, so a grant Chromium already cached in the renderer cannot be
  * revoked mid-session. This flag is the live check: false once the locate
  * ends or WEATHER_LOCATE_MS passes. Callers do not watch and do not re-query.
+ * An IP place service is not a fallback when that fix is missing.
  */
 const WEATHER_LOCATE_MS = 120_000;
 let weatherLocateUntil = 0;
@@ -89,6 +90,16 @@ function requestWeatherFix(geo, opts) {
       done(null);
     }
   });
+}
+
+/**
+ * IP place is not a location grant. There is no keeper control that asks
+ * to use the network's city, so this returns nothing. A consent argument
+ * does not open a lookup. Callers must not fetch a network city.
+ * @returns {null}
+ */
+function ipPlace() {
+  return null;
 }
 
 /**
@@ -274,6 +285,7 @@ module.exports = {
   clearWeatherLocate,
   weatherLocateOpen,
   weatherLocateOptions,
+  ipPlace,
   readWeatherHere,
   houseFile,
   scrubWindow,

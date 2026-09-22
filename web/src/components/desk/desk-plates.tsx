@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
-import { readWeatherHere } from "@/lib/pets/presence";
+import { ipPlace, readWeatherHere } from "@/lib/pets/presence";
 import {
   addArea,
   currentArea,
@@ -12,13 +12,11 @@ import {
   CANT_REACH as WEATHER_CANT_REACH,
   FAVORITES_EMPTY as WEATHER_FAVORITES_EMPTY,
   HERE_FAIL,
-  ipPlaceUrl,
   isFavorite,
   NO_AREA,
   parseAreas,
   parseForecast,
   parseGeocode,
-  parseIpPlace,
   parseReverse,
   pickArea,
   pickTab,
@@ -361,35 +359,29 @@ export function DeskWeatherPlate({
       add(area);
       setHereLine("");
     }
-    async function fromIp() {
-      try {
-        const json = await (await fetch(ipPlaceUrl())).json();
-        const place = parseIpPlace(json);
-        if (!place) {
-          setHereLine(HERE_FAIL);
-          return;
-        }
-        keep(place);
-      } catch {
-        setHereLine(WEATHER_CANT_REACH);
-      }
+    function unnamed(lat: number, lon: number): WeatherArea {
+      return { id: "here", name: "This computer", query: "this computer", lat, lon };
+    }
+    if (ipPlace() != null) {
+      setHereLine(HERE_FAIL);
+      return;
     }
     const fix = await readWeatherHere(typeof navigator === "undefined" ? undefined : navigator.geolocation);
     if (!fix) {
-      await fromIp();
+      setHereLine(HERE_FAIL);
       return;
     }
     const url = reverseUrl(fix.lat, fix.lon);
     if (!url) {
-      keep({ id: "here", name: "This computer", query: "this computer", lat: fix.lat, lon: fix.lon });
+      keep(unnamed(fix.lat, fix.lon));
       return;
     }
     try {
       const json = await (await fetch(url)).json();
       const named = parseReverse(json);
-      keep(named || { id: "here", name: "This computer", query: "this computer", lat: fix.lat, lon: fix.lon });
+      keep(named || unnamed(fix.lat, fix.lon));
     } catch {
-      await fromIp();
+      keep(unnamed(fix.lat, fix.lon));
     }
   }
 

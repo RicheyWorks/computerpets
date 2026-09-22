@@ -3700,23 +3700,17 @@ if (weatherPlate) {
       function failHere(line) {
         if (truth) truth.textContent = line;
       }
-      function fromIp() {
-        fetch(A.ipPlaceUrl(), { cache: "no-store" })
-          .then((r) => r.json())
-          .then((json) => {
-            const place = A.parseIpPlace(json);
-            if (!place) {
-              failHere(A.HERE_FAIL);
-              return;
-            }
-            keepHere(place);
-          })
-          .catch(() => failHere(A.CANT_REACH));
+      function unnamed(lat, lon) {
+        return { id: "here", name: "This computer", query: "this computer", lat, lon };
+      }
+      if (window.PetPresence && typeof window.PetPresence.ipPlace === "function" && window.PetPresence.ipPlace() != null) {
+        failHere(A.HERE_FAIL);
+        return;
       }
       const reader = window.PetPresence && window.PetPresence.readWeatherHere;
       const deskApi = window.desk;
       if (!navigator.geolocation || typeof reader !== "function") {
-        fromIp();
+        failHere(A.HERE_FAIL);
         return;
       }
       reader(navigator.geolocation, {
@@ -3728,21 +3722,21 @@ if (weatherPlate) {
         },
       }).then((fix) => {
         if (!fix) {
-          fromIp();
+          failHere(A.HERE_FAIL);
           return;
         }
         const url = A.reverseUrl(fix.lat, fix.lon);
         if (!url) {
-          keepHere({ id: "here", name: "This computer", query: "this computer", lat: fix.lat, lon: fix.lon });
+          keepHere(unnamed(fix.lat, fix.lon));
           return;
         }
         fetch(url, { cache: "no-store" })
           .then((r) => r.json())
           .then((json) => {
             const named = A.parseReverse(json);
-            keepHere(named || { id: "here", name: "This computer", query: "this computer", lat: fix.lat, lon: fix.lon });
+            keepHere(named || unnamed(fix.lat, fix.lon));
           })
-          .catch(() => fromIp());
+          .catch(() => keepHere(unnamed(fix.lat, fix.lon)));
       });
     });
   }
