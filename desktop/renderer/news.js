@@ -1,4 +1,4 @@
-/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows this computer's network address on that https request. The featured page also refuses inside readFeatured when that wikipedia line is missing. An RSS read refuses inside readRss when that news-host line is missing. No invented keys or headlines. */
+/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows this computer's network address on that https request. The featured page also refuses inside readFeatured when that wikipedia line is missing. An RSS read refuses inside readRss when that news-host line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. No invented keys or headlines. */
 (function (root) {
   const NEWS_SOURCE = "Wikipedia In the news";
   const TOPIC_SOURCE = "Google News";
@@ -342,20 +342,84 @@
     return typeof shown === "string" && shown.indexOf(NEWS_RSS_HONESTY) !== -1;
   }
 
-  function readFeatured(shown, fetchImpl) {
-    if (!featuredMayLeave(shown)) return Promise.resolve(null);
+  /** Twelve seconds covers headers and the body. Matches weather page and overlay plate IPC. */
+  const NEWS_TIMEOUT_MS = 12_000;
+
+  /** A silent news or wikipedia host. Callers flip the plate to unread / "can't reach". */
+  class NewsTimeout extends Error {
+    constructor() {
+      super("news request timed out");
+      this.name = "NewsTimeout";
+    }
+  }
+
+  function isNewsTimeout(err) {
+    return !!(
+      err &&
+      (err.name === "NewsTimeout" ||
+        err.name === "AbortError" ||
+        err.name === "TimeoutError" ||
+        err.code === "ABORT_ERR")
+    );
+  }
+
+  /**
+   * One outbound news read. The timer covers headers and the body.
+   * A timeout rejects with NewsTimeout. The caller does not get a body.
+   * A late body after the deadline is not parsed.
+   */
+  function readBody(url, fetchImpl, kind, timeoutMs) {
     const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
-    return Promise.resolve(go(newsUrl())).then(function (res) {
-      return res && typeof res.json === "function" ? res.json() : null;
+    if (typeof go !== "function") return Promise.reject(new NewsTimeout());
+    const ms = typeof timeoutMs === "number" ? timeoutMs : NEWS_TIMEOUT_MS;
+    const ctrl = new AbortController();
+    let settled = false;
+    let timer;
+
+    return new Promise(function (resolve, reject) {
+      timer = setTimeout(function () {
+        if (settled) return;
+        settled = true;
+        ctrl.abort();
+        reject(new NewsTimeout());
+      }, ms);
+
+      Promise.resolve()
+        .then(function () {
+          return go(url, { signal: ctrl.signal });
+        })
+        .then(function (res) {
+          if (kind === "json") {
+            return res && typeof res.json === "function" ? res.json() : null;
+          }
+          return res && typeof res.text === "function" ? res.text() : null;
+        })
+        .then(function (body) {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          resolve(body);
+        })
+        .catch(function (err) {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          if (isNewsTimeout(err)) reject(new NewsTimeout());
+          else reject(err);
+        });
     });
   }
 
-  function readRss(shown, url, fetchImpl) {
+  /** The only featured-page fetch. A miss resolves to null and does not call fetch. A hang rejects. */
+  function readFeatured(shown, fetchImpl, timeoutMs) {
+    if (!featuredMayLeave(shown)) return Promise.resolve(null);
+    return readBody(newsUrl(), fetchImpl, "json", timeoutMs);
+  }
+
+  /** The only RSS fetch. A miss resolves to null and does not call fetch. A hang rejects. */
+  function readRss(shown, url, fetchImpl, timeoutMs) {
     if (!rssMayLeave(shown) || !url) return Promise.resolve(null);
-    const go = typeof fetchImpl === "function" ? fetchImpl : fetch;
-    return Promise.resolve(go(url)).then(function (res) {
-      return res && typeof res.text === "function" ? res.text() : null;
-    });
+    return readBody(url, fetchImpl, "text", timeoutMs);
   }
 
   function sourceLine(topic, tab) {
@@ -424,6 +488,8 @@
     newsMaySend,
     featuredMayLeave,
     rssMayLeave,
+    NEWS_TIMEOUT_MS,
+    NewsTimeout,
     readFeatured,
     readRss,
   };
