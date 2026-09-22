@@ -29,6 +29,14 @@ public class IssuedLicense {
     @Column
     private Instant revokedAt;  // null if not revoked
 
+    /**
+     * Soft-delete stamp. Revoke sets this alongside {@link #revokedAt}; rows are
+     * never hard-wiped. Default operational queries exclude non-null values;
+     * admin lookup still returns the row with honest revoked copy.
+     */
+    @Column
+    private Instant deletedAt;
+
     @Column
     private Instant lastUsedAt;   // set on successful download (Phase 2.1 usage tracking)
 
@@ -69,6 +77,9 @@ public class IssuedLicense {
     public Instant getRevokedAt() { return revokedAt; }
     public void setRevokedAt(Instant revokedAt) { this.revokedAt = revokedAt; }
 
+    public Instant getDeletedAt() { return deletedAt; }
+    public void setDeletedAt(Instant deletedAt) { this.deletedAt = deletedAt; }
+
     public Instant getLastUsedAt() { return lastUsedAt; }
     public void setLastUsedAt(Instant lastUsedAt) { this.lastUsedAt = lastUsedAt; }
 
@@ -77,6 +88,15 @@ public class IssuedLicense {
 
     public boolean isRevoked() {
         return revokedAt != null;
+    }
+
+    public boolean isDeleted() {
+        return deletedAt != null;
+    }
+
+    /** Active for download / default listings: not revoked and not soft-deleted. */
+    public boolean isActive() {
+        return !isRevoked() && !isDeleted();
     }
 
     public boolean isExpired() {

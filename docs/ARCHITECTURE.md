@@ -161,7 +161,7 @@ The service runs as a Spring Boot executable JAR or the multi-stage `Dockerfile`
 - One JVM process listening on port 8081 (configurable via `server.port`). The living desk keeps 8080.
 - Spring profiles (`dev` / `staging` / `prod`) overlay the same `application.yml` keys. Default and `dev` keep H2 unless `SPRING_DATASOURCE_*` is set (`docker-compose.yml` already points `dev` at Postgres). `staging` and `prod` require Postgres and have no H2 fallback.
 - Redis-backed Bucket4j rate limiter (Lettuce / `bucket4j-redis`) shared across replicas. If Redis is down, verify/download fail closed with HTTP 503. `prod` refuses `RATE_LIMIT_BACKEND=memory`.
-- Redis-backed jti deny-list (`RevocationIndex`) shared across replicas. Postgres `IssuedLicense.revokedAt` remains the ledger; Redis is a fast deny so a replica that has not seen the row still rejects. If Redis is down, `LicenseService.validate` falls back to the ledger (it does not accept a revoked license). HTTP download may still 503 from the rate-limit filter.
+- Redis-backed jti deny-list (`RevocationIndex`) shared across replicas. Postgres `IssuedLicense.revokedAt` / `deletedAt` remains the ledger (soft-delete on revoke; [0058](adr/0058-license-soft-delete-and-audit.md)); Redis is a fast deny so a replica that has not seen the row still rejects. If Redis is down, `LicenseService.validate` falls back to the ledger (it does not accept a revoked or soft-deleted license). HTTP download may still 503 from the rate-limit filter.
 - Critical secrets (`LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, `ADMIN_API_KEY`) load from environment variables or `NAME_FILE` mounts (`SecretFileEnvironmentPostProcessor`) with strict `@PostConstruct` startup validation that refuses to run on missing or placeholder values. Production operators use Docker secrets, Kubernetes External Secrets, or Vault agent templates — [ADR 0056](adr/0056-house-secrets-from-file-mounts.md). Secret values are never logged.
 - `ProductionProfileGuard` (`@Profile("prod")`) refuses Microsoft Store `dev-mode`, an in-memory rate-limit store, and an H2 JDBC URL even when environment variables try to override `application-prod.yml`.
 - `Dockerfile` + GitHub Actions GHCR publish + `deploy/k8s/` (Deployment/Service, in-cluster Postgres/Redis scaffolding, optional Ingress). Blue/green is two Deployments and a Service `color` selector — not a service mesh.
@@ -299,10 +299,12 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 - **Observability (Phase 3.2)**: Micrometer Observation + `micrometer-tracing-bridge-otel`. HTTP server spans on `/api/verify/**` and `/api/download/**`; RestClient client spans for Steam/Itch/Epic/Microsoft; `eth_call` spans for NFT. Business timers `enterprisepet.verify` (provider + outcome), `enterprisepet.license.issue` (provider + pet + outcome; issuance rate after a verified grant), and `enterprisepet.download`. OTLP/HTTP export only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set. Prometheus remains `/actuator/prometheus`. [0057](adr/0057-license-issuance-observation.md).
 - **Config**: `application.yml` plus `application-dev.yml` / `application-staging.yml` / `application-prod.yml` (same YAML + env-var style). `@PostConstruct` guards refuse missing/weak/placeholder secrets. `ProductionProfileGuard` fail-hards the prod profile.
 
-### 4.5 Data & Persistence (Scaffolded, Not Yet Used)
-- Spring Data JPA + Hibernate configured for H2 (dev) / PostgreSQL (prod).
-- Zero `@Entity`, `@Repository`, or `JpaRepository` implementations exist today.
-- Intended future use: persistent `IssuedLicense` records, revocation lists, audit logs (see section 10).
+### 4.5 Data & Persistence
+- Spring Data JPA + Hibernate + Flyway for H2 (default/tests) / PostgreSQL (`staging` / `prod`).
+- `IssuedLicense` (`issued_licenses`): jti PK, owner, pet, provider, issued/expires, `revokedAt`, `deletedAt` (soft-delete on revoke — never hard-wiped), `lastUsedAt`, optional `hwid`. [0058](adr/0058-license-soft-delete-and-audit.md).
+- `LicenseAuditEvent` (`license_audit_events`): append-only ISSUED / REVOKED / DOWNLOAD stamps (who/what/when; no secret values).
+- Default operational queries exclude soft-deleted rows; admin lookup/list still return revoked tombstones with honest copy.
+- Redis `RevocationIndex` remains the fast deny; Postgres is the ledger.
 
 ---
 
@@ -338,8 +340,8 @@ This two-phase (verify → download) + dual-artifact (license + JWT) design prev
 
 #### 4.3 Admin lookup, audit, and revoke
 1. Operator opens the house `/admin` ledger (not in the public nav) and supplies `ADMIN_API_KEY` plus the license-service base URL. The key is sent as `X-Admin-Key` and kept in `sessionStorage` for the tab only.
-2. `GET /api/admin/licenses` (optional `owner`) and `GET /api/admin/licenses/{jti}` return persisted audit fields: owner, pet, provider, issued, last used, revoked.
-3. `POST /api/admin/revoke` `{ "jti" }` sets `revokedAt` in Postgres, then writes the jti to the shared Redis deny-list (TTL ≥ remaining license life + 1h). Subsequent `LicenseService.validate()` and `/api/download` fail closed (same 401). A replica that has not seen the row still denies via Redis.
+2. `GET /api/admin/licenses` (optional `owner`) and `GET /api/admin/licenses/{jti}` return persisted audit fields: owner, pet, provider, issued, last used, revoked, soft-deleted (`deletedAt`). Soft-deleted rows stay visible here with honest revoked copy.
+3. `POST /api/admin/revoke` `{ "jti" }` sets `revokedAt` + `deletedAt` in Postgres (soft-delete; no hard wipe), appends a `REVOKED` audit event, then writes the jti to the shared Redis deny-list (TTL ≥ remaining license life + 1h). Subsequent `LicenseService.validate()` and `/api/download` fail closed (same 401). A replica that has not seen the row still denies via Redis.
 
 All three routes are `permitAll` at the Spring Security layer; the controller rejects a missing or wrong key with 401. CORS is enabled only for `/api/admin/**` so the living desk can call a separate origin.
 
@@ -644,7 +646,7 @@ Goal: Prepare for horizontal scaling and real production traffic.
 
 - **3.2 Database & Persistence Maturity**
   - Add read replicas strategy and connection pooling tuning
-  - Implement soft deletion + audit logging for licenses
+  - [x] Soft deletion + audit logging for licenses (`deletedAt` on revoke; `license_audit_events` for ISSUED / REVOKED / DOWNLOAD; [0058](adr/0058-license-soft-delete-and-audit.md))
 
 - **3.3 Advanced Observability**
   - [x] Distributed tracing (Micrometer + OpenTelemetry / OTLP — Tempo, Jaeger, or any collector)

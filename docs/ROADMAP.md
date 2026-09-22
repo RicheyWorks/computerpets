@@ -31,10 +31,10 @@ All critical items required before any public or limited production exposure hav
 - [x] Custom health indicators (`SteamHealthIndicator`) + GlobalExceptionHandler with RFC 7807 ProblemDetails
 
 ### 1.2 Basic Persistence Layer
-- [x] JPA `IssuedLicense` entity with jti, owner, pet, provider, timestamps, `revokedAt`
-- [x] `LicenseRepository` (JpaRepository + `findByJti`)
+- [x] JPA `IssuedLicense` entity with jti, owner, pet, provider, timestamps, `revokedAt`, `deletedAt` (soft-delete; ADR 0058)
+- [x] `LicenseRepository` (JpaRepository + `findByJti` + active-only queries)
 - [x] Full revocation checks integrated into `LicenseService.validate()` (and issuance persistence)
-- [x] Flyway `V1__Create_issued_licenses_table.sql` migration + `ddl-auto=validate`
+- [x] Flyway migrations (`V1` issued licenses, `V2` hwid/lastUsed, `V3` soft-delete + `license_audit_events`) + `ddl-auto=validate`
 
 ### 1.3 CI/CD & Containerization
 - [x] GitHub Actions (`ci.yml`): build/test + separate GHCR publish job (multi-arch tags)
@@ -103,6 +103,10 @@ All critical items required before any public or limited production exposure hav
   - [x] Distributed tracing (Micrometer + OpenTelemetry)
   - [x] Custom business metrics (verification success rate, latency per provider)
   - [x] License issuance rate (`enterprisepet.license.issue` on verify→issue; provider + pet + outcome; ADR 0057)
+
+- **3.2b Database & Persistence Maturity**
+  - [x] Soft deletion + audit logging for licenses (`deletedAt` on revoke; `license_audit_events` ISSUED / REVOKED / DOWNLOAD; ADR 0058)
+  - [ ] Read replicas strategy and connection pooling tuning
 
 - **3.3 Deployment & Environments**
   - [x] Proper Spring profiles (`dev` / `staging` / `prod`)
@@ -614,6 +618,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-09-22 (Phase 2 complete. License issuance observation `enterprisepet.license.issue` — ADR 0057. DX12/Vulkan was not started. Catalog 221.)
+**Last Updated:** 2026-09-22 (License soft-delete + audit ledger — ADR 0058 / Flyway V3. DX12/Vulkan was not started. Catalog 221.)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.
