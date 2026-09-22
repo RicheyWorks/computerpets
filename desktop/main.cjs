@@ -12,6 +12,7 @@ const HouseMusic = require("./renderer/house-music.js");
 const PetNews = require("./renderer/news.js");
 const PetMarket = require("./renderer/market.js");
 const Presence = require("./presence.cjs");
+const PlateNet = require("./presence/plate-net.cjs");
 const MindSecret = require("./mind-secret.cjs");
 
 /** Buffffff opt-in: COMPUTERPETS_GUI_HARNESS=1 runs Electron smokes then quits. */
@@ -751,9 +752,18 @@ async function fetchRadioJson(url) {
   throw lastErr || new Error("unread");
 }
 
-ipcMain.handle("radio-search", async (_e, query, area) => {
+function heldPlate(extra) {
+  return { ok: false, error: "unnamed", ...extra };
+}
+
+function shownLine(value) {
+  return typeof value === "string" ? value : "";
+}
+
+ipcMain.handle("radio-search", async (_e, query, area, line) => {
   const urls = HouseMusic.radioSearchUrls(query, area);
   if (!urls.length) return { ok: true, stations: [] };
+  if (!PlateNet.mayFetch("radio", shownLine(line), urls)) return heldPlate({ stations: [] });
   const batches = await Promise.all(
     urls.map((url) =>
       fetchRadioJson(url)
@@ -778,22 +788,35 @@ async function fetchNewsRss(url) {
   }
 }
 
-ipcMain.handle("news-topic", async (_e, query) => fetchNewsRss(PetNews.topicRssUrl(query)));
+ipcMain.handle("news-topic", async (_e, query, line) => {
+  const url = PetNews.topicRssUrl(query);
+  if (!url) return { ok: true, items: [] };
+  if (!PlateNet.mayFetch("news", shownLine(line), [url])) return heldPlate({ items: [] });
+  return fetchNewsRss(url);
+});
 
 ipcMain.handle("news-feed", async (_e, opts) => {
   const kind = opts && typeof opts.kind === "string" ? opts.kind : "topic";
   const query = opts && typeof opts.query === "string" ? opts.query : "";
-  if (kind === "popular") return fetchNewsRss(PetNews.popularRssUrl());
-  if (kind === "x") return fetchNewsRss(PetNews.xTopicRssUrl(query || "news"));
-  return fetchNewsRss(PetNews.topicRssUrl(query));
+  const line = opts && typeof opts.line === "string" ? opts.line : "";
+  const url = kind === "popular"
+    ? PetNews.popularRssUrl()
+    : kind === "x"
+      ? PetNews.xTopicRssUrl(query || "news")
+      : PetNews.topicRssUrl(query);
+  if (!url) return { ok: true, items: [] };
+  if (!PlateNet.mayFetch("news", line, [url])) return heldPlate({ items: [] });
+  return fetchNewsRss(url);
 });
 
-ipcMain.handle("market-quote", async (_e, ticker) => {
+ipcMain.handle("market-quote", async (_e, ticker, line) => {
   const row = PetMarket.parseTicker(ticker);
   if (!row) return { ok: false, error: "unread", live: null };
   try {
     if (row.kind === "crypto" && row.address) {
       const url = PetMarket.terminalTokenUrl(row.platform || "solana", row.address);
+      if (!url) return { ok: false, error: "unread", live: null };
+      if (!PlateNet.mayFetch("terminal", shownLine(line), [url])) return heldPlate({ live: null });
       const res = await fetch(url);
       if (!res.ok) return { ok: false, error: "unread", live: null };
       const live = PetMarket.parseTerminalToken(await res.json());
@@ -801,12 +824,16 @@ ipcMain.handle("market-quote", async (_e, ticker) => {
     }
     if (row.kind === "crypto") {
       const url = PetMarket.geckoUrl(row.geckoId);
+      if (!url) return { ok: false, error: "unread", live: null };
+      if (!PlateNet.mayFetch("quote", shownLine(line), [url])) return heldPlate({ live: null });
       const res = await fetch(url);
       if (!res.ok) return { ok: false, error: "unread", live: null };
       const live = PetMarket.parseGecko(await res.json(), row.geckoId);
       return live ? { ok: true, live } : { ok: false, error: "unread", live: null };
     }
     const url = PetMarket.yahooUrl(row.symbol);
+    if (!url) return { ok: false, error: "unread", live: null };
+    if (!PlateNet.mayFetch("stock", shownLine(line), [url])) return heldPlate({ live: null });
     const res = await fetch(url);
     if (!res.ok) return { ok: false, error: "unread", live: null };
     const live = PetMarket.parseYahoo(await res.json());
@@ -816,10 +843,11 @@ ipcMain.handle("market-quote", async (_e, ticker) => {
   }
 });
 
-ipcMain.handle("market-quotes", async (_e, ids) => {
+ipcMain.handle("market-quotes", async (_e, ids, line) => {
   try {
     const url = PetMarket.geckoManyUrl(Array.isArray(ids) ? ids : []);
     if (!url) return { ok: true, lives: {} };
+    if (!PlateNet.mayFetch("quote", shownLine(line), [url])) return heldPlate({ lives: {} });
     const res = await fetch(url);
     if (!res.ok) return { ok: false, error: "unread", lives: {} };
     return { ok: true, lives: PetMarket.parseGeckoMany(await res.json()) };
@@ -828,11 +856,13 @@ ipcMain.handle("market-quotes", async (_e, ids) => {
   }
 });
 
-ipcMain.handle("market-terminal", async (_e, ticker) => {
+ipcMain.handle("market-terminal", async (_e, ticker, line) => {
   const row = PetMarket.parseTicker(ticker);
   if (!row || !row.address) return { ok: false, error: "unread", live: null };
   try {
     const url = PetMarket.terminalTokenUrl(row.platform || "solana", row.address);
+    if (!url) return { ok: false, error: "unread", live: null };
+    if (!PlateNet.mayFetch("terminal", shownLine(line), [url])) return heldPlate({ live: null });
     const res = await fetch(url);
     if (!res.ok) return { ok: false, error: "unread", live: null };
     const live = PetMarket.parseTerminalToken(await res.json());
@@ -842,10 +872,11 @@ ipcMain.handle("market-terminal", async (_e, ticker) => {
   }
 });
 
-ipcMain.handle("market-search", async (_e, query) => {
+ipcMain.handle("market-search", async (_e, query, line) => {
   try {
     const url = PetMarket.searchUrl(query);
     if (!url) return { ok: true, coins: [], nfts: [] };
+    if (!PlateNet.mayFetch("look", shownLine(line), [url])) return heldPlate({ coins: [], nfts: [] });
     const res = await fetch(url);
     if (!res.ok) return { ok: false, error: "unread", coins: [], nfts: [] };
     const json = await res.json();
@@ -855,11 +886,13 @@ ipcMain.handle("market-search", async (_e, query) => {
   }
 });
 
-ipcMain.handle("nft-quote", async (_e, nft) => {
+ipcMain.handle("nft-quote", async (_e, nft, line) => {
   const row = PetMarket.parseNftRow(nft);
   if (!row) return { ok: false, error: "unread", live: null };
   try {
     const url = PetMarket.nftUrl(row.geckoId);
+    if (!url) return { ok: false, error: "unread", live: null };
+    if (!PlateNet.mayFetch("quote", shownLine(line), [url])) return heldPlate({ live: null });
     const res = await fetch(url);
     if (!res.ok) return { ok: false, error: "unread", live: null };
     const live = PetMarket.parseNftLive(await res.json());

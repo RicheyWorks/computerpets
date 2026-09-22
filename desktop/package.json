@@ -6,7 +6,7 @@
   "main": "main.cjs",
   "scripts": {
     "start": "electron .",
-    "test": "node --test license/*.test.cjs renderer/*.test.cjs",
+    "test": "node --test license/*.test.cjs renderer/*.test.cjs presence/*.test.cjs",
     "dist": "electron-builder --win --mac --linux",
     "dist:win": "electron-builder --win",
     "dist:mac": "electron-builder --mac",
@@ -29,6 +29,8 @@
       "license/**/*.cjs",
       "!license/**/*.test.cjs",
       "!license/contract-test-double.cjs",
+      "presence/**/*.cjs",
+      "!presence/**/*.test.cjs",
       "renderer/**"
     ],
     "win": {
