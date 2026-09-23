@@ -131,6 +131,7 @@ address, or an API that is not on `main`.
 | [0110](0110-cluster-autoscaler-pending-lease.md) | A Pending Cluster Autoscaler pod never holds the lease (the Running leader remains the scaler; v1.36.1 acquires `leases/cluster-autoscaler` inside the container; `system-cluster-critical` stays; kind stays off the file) | Accepted |
 | [0111](0111-metrics-server-serving-cert-chain.md) | metrics-server serving cert chains to APIService `caBundle` and its DNS SAN is `metrics-server.kube-system.svc` (apply refuses otherwise; kind stays off the file) | Accepted |
 | [0112](0112-metrics-server-kubelet-ca-chain.md) | Kubelet leafs chain to ConfigMap `metrics-server-kubelet-ca` before that object is written (apply refuses a missing CA, a swapped CA, or `--kubelet-insecure-tls`; kind stays off the file) | Accepted |
+| [0113](0113-metrics-server-kubelet-san.md) | Kubelet leaf SAN covers the metrics-server dial address (`InternalIP`, then `ExternalIP`, then `Hostname`; apply refuses a miss; kind stays off the file; no dial) | Accepted |
 
 ## How to add one
 
