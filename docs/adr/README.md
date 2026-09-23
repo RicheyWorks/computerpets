@@ -122,6 +122,7 @@ address, or an API that is not on `main`.
 | [0101](0101-cluster-autoscaler-leader-scale.md) | The scheduled Cluster Autoscaler leader scales the underfilled zone (the standby is not the scaler; `least-waste` and similar per-zone groups stay; kind stays off the file) | Accepted |
 | [0102](0102-cluster-autoscaler-scale-up-salvo.md) | The leader scales another group in the same loop (`--salvo-scale-up=true`, budget `1m`; `least-waste` and similar groups stay; no priority expander ConfigMap; kind stays off the file) | Accepted |
 | [0103](0103-cluster-autoscaler-salvo-early-stop.md) | The salvo keeps the `1m` budget when a later option does not start (provision time and node-group backoff stay at the v1.36.1 defaults; the next main loop is the retry; kind stays off the file) | Accepted |
+| [0104](0104-per-zone-node-max.md) | Per-zone API node-group max is 20 (twice the HPA ceiling; Cluster Autoscaler reads Auto Scaling group `MaxSize` and cannot lift it; the old max of 10 is refused; kind stays off the file) | Accepted |
 
 ## How to add one
 

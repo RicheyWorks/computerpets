@@ -52,7 +52,7 @@ resources:
 # leaves the API Pending. Postgres and Redis do not tolerate the taint.
 # Multi-AZ workers are the node pool (ADR 0082), not this apply.
 # cluster-autoscaler.yaml (ADR 0083, ADR 0090, ADR 0091, ADR 0092,
-# ADR 0099, ADR 0101, ADR 0102, ADR 0103) is also not applied here. Kind and
+# ADR 0099, ADR 0101, ADR 0102, ADR 0103, ADR 0104) is also not applied here. Kind and
 # minikube set enable_node_pool=false and do not install the scaler,
 # its zone spread, or its disruption budget. That Deployment is two
 # replicas with leader election. The standby is not the scaler. The
@@ -62,6 +62,9 @@ resources:
 # The 1m budget stays. A budget that is already gone, a failed
 # snapshot update, or a scale-up that is not successful ends the
 # salvo. The next main loop is the retry (ADR 0103).
+# Each zone's node-group max is 20 (ADR 0104). The leader reads that
+# as the Auto Scaling group MaxSize. A zone at the old max of 10
+# cannot grow. Kind and minikube do not apply this file.
 # The zone item is DoNotSchedule on
 # topology.kubernetes.io/zone, maxSkew 1. One labeled zone still
 # schedules. A node that omits the zone label does not. Do not set

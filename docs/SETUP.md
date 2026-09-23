@@ -454,7 +454,7 @@ false. Do not run that patch on kind or minikube
 ([ADR 0096](adr/0096-system-daemon-api-pool-toleration.md),
 [ADR 0097](adr/0097-kube-proxy-toleration-hook.md)).
 Cluster Autoscaler grows those groups when pods are Pending. Each zone's
-max is at least the HPA ceiling of 10. Terraform ignores `desired_size`
+max is 20, twice the HPA ceiling of 10. Terraform ignores `desired_size`
 after create. `deploy/k8s/cluster-autoscaler.yaml` is not in this
 kustomization. Substitute `CLUSTER_NAME`, `AWS_REGION`, and the role ARN
 before applying it. `enable_node_pool=false` keeps the role off
@@ -479,6 +479,9 @@ The `1m` budget stays. A budget that is already gone, a failed snapshot
 update, or a scale-up that is not successful still ends that salvo.
 The next main loop is the retry
 ([ADR 0103](adr/0103-cluster-autoscaler-salvo-early-stop.md)).
+Each zone's node-group max is 20. The leader reads that as the Auto
+Scaling group `MaxSize` and cannot lift it
+([ADR 0104](adr/0104-per-zone-node-max.md)).
 `nodeSelector` also requires `kubernetes.io/os: linux` and
 `computerpets/node-pool: api`, so the hostname rule cannot be met by
 nodes outside those groups. Kind and minikube do not apply the file
