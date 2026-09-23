@@ -174,7 +174,7 @@ resource "aws_eks_node_group" "zone" {
   # topology.kubernetes.io/zone from the instance AZ.
   # metrics-server selects computerpets/node-pool=api (ADR 0089).
   # Cluster Autoscaler selects the same label (ADR 0091).
-  # The API Deployments do not.
+  # The API Deployments select the same label (ADR 0093).
   labels = {
     "computerpets/node-pool" = "api"
   }

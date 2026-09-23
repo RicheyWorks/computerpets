@@ -33,12 +33,20 @@ spec:
       # and a less-loaded zone, and still binds. DoNotSchedule on the zone
       # key would also reject nodes that omit topology.kubernetes.io/zone
       # (a local cluster). Prod should run workers in more than one zone.
-      # This repo does not provision that pool.
+      # Pool pin (ADR 0093). nodeSelector requires kubernetes.io/os=linux
+      # and computerpets/node-pool=api, the label the node pool already
+      # sets. Both spread items set nodeAffinityPolicy Honor so a node
+      # that fails that selector is not an empty domain. ScheduleAnyway
+      # stays. Kind and minikube apply this file. Their nodes omit the
+      # pool label unless a human adds it, so these pods stay Pending.
+      # Do not delete the pool key to make a laptop apply schedule.
+      # One labeled node still schedules both replicas.
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
           whenUnsatisfiable: ScheduleAnyway
           nodeTaintsPolicy: Honor
+          nodeAffinityPolicy: Honor
           labelSelector:
             matchLabels:
               app: computerpets
@@ -47,10 +55,14 @@ spec:
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: ScheduleAnyway
           nodeTaintsPolicy: Honor
+          nodeAffinityPolicy: Honor
           labelSelector:
             matchLabels:
               app: computerpets
               color: blue
+      nodeSelector:
+        kubernetes.io/os: linux
+        computerpets/node-pool: api
       initContainers:
         - name: wait-postgres
           image: postgres:16-alpine

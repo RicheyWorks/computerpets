@@ -1,6 +1,6 @@
 # 0080. API pod topology spread
 
-- **Status:** Accepted
+- **Status:** Accepted (the pool pin is [0093](0093-api-node-pool.md); `ScheduleAnyway` stays)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/deployment-blue.yaml`; `deploy/k8s/deployment-green.yaml`; `deploy/k8s/check-topology-spread.sh`
 
@@ -34,7 +34,7 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 
 ## Consequences
 
-- A laptop `kubectl apply -k deploy/k8s` still starts two API pods and an idle green Deployment. Those two pods may share a node. The scheduler is allowed to do that.
+- A laptop `kubectl apply -k deploy/k8s` applies both Deployments. API pods schedule only when a node carries `computerpets/node-pool=api` ([0093](0093-api-node-pool.md)). On one labeled node they may still share it, because `ScheduleAnyway` stays.
 - `nodeTaintsPolicy` is the Kubernetes 1.26 node-inclusion field (beta, on by default). A cluster that rejects the field cannot apply these Deployments. `ScheduleAnyway` is the part that keeps the pod schedulable when the skew cannot be met.
 - A keeper who applies `hpa.yaml` on a cluster with three schedulable nodes gets the floor of 3 preferred onto three hostnames. A pod still binds when the skew cannot be met, so a scale-up is not left Pending. The disruption budget can then evict one pod and keep two, including across a node drain, only when the remaining pods are actually on other nodes.
 - `ScheduleAnyway` is a preference, not a placement guarantee. One node, a failed score, or a node that cannot fit another pod can still co-locate every pod of the live color. A crash of that node is involuntary. The budget does not apply. On two nodes the floor is 2+1. Draining the node that holds two can evict one pod. The second eviction waits until a replacement is Ready elsewhere, or the budget blocks it.
