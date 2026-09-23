@@ -10,6 +10,7 @@
 # and does not patch caBundle. Do not set --kubelet-insecure-tls.
 # Certificates are not written into the repo. No live AWS apply.
 # The chain-only writer is metrics-server-kubelet-ca.sh (ADR 0112).
+# The port gate is metrics-server-kubelet-port.sh (ADR 0114). This file does not read kubeletEndpoint.port.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
