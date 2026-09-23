@@ -32,7 +32,7 @@ The no-kubelet-CA sentence in point 7 is the part [0086](0086-metrics-server-kub
 4. **Addon budget, not the API budget.** The same file adds `policy/v1` `PodDisruptionBudget` `metrics-server` in `kube-system` with `minAvailable: 1`. Voluntary disruption can drop the addon to one pod. `pdb.yaml` stays `minAvailable: 2` on `color=blue` in `computerpets`. `check-pdb.sh` still counts that API budget as the one house budget. This file is not that object.
 5. **Rolling update.** `maxUnavailable: 1` is the upstream HA value. `components.yaml` used `0`. With `replicas: 2`, the default `maxSurge` is 1. Required anti-affinity may need a free hostname before a surge pod binds.
 6. **Still out of the kustomization.** `kubectl apply -k deploy/k8s` does not install two metrics-server pods on a laptop. Blue stays `replicas: 2`. Green stays `replicas: 0`. Apply order is this file, then wait for `kubectl top`, then `hpa.yaml`.
-7. **Kubelet TLS stays on.** Args stay the upstream set. `--kubelet-insecure-tls` is not set. This file does not mount a kubelet CA. `insecureSkipTLSVerify: true` still appears once, on the APIService, for the addon's own serving cert minted in `/tmp`. That flag is not the kubelet scrape skip. The CA mount that replaces this sentence is [0086](0086-metrics-server-kubelet-ca.md).
+7. **Kubelet TLS stays on.** Args stay the upstream set. `--kubelet-insecure-tls` is not set. This file does not mount a kubelet CA. `insecureSkipTLSVerify: true` was the upstream hop for the cert minted in `/tmp`. That flag is not the kubelet scrape skip. The CA mount is [0086](0086-metrics-server-kubelet-ca.md). The serving-cert mount is [0087](0087-metrics-server-serving-cert.md).
 8. **Verify without a cluster.** `check-metrics-server.sh` fails when `replicas` is not 2, when pod anti-affinity is missing or only preferred, when `maxUnavailable` is not 1, when the addon budget is missing, when the tag floats, when `--kubelet-insecure-tls` is set, or when `kustomization.yaml` lists the file. `check-metrics-server.test.sh` proves the replica drop, the missing anti-affinity, and the three failures from [0084](0084-metrics-server.md). No `kubectl apply`.
 
 ## Consequences
@@ -41,6 +41,6 @@ The no-kubelet-CA sentence in point 7 is the part [0086](0086-metrics-server-kub
 - A one-node cluster that applies this file leaves the second pod Pending. Do not apply it on kind or minikube. Local `kubectl apply -k deploy/k8s` still starts two API pods and an idle green Deployment.
 - The API disruption budget is unchanged. The addon budget is a different object in `kube-system`.
 - Adding `--kubelet-insecure-tls`, floating the image tag, listing the file in `kustomization.yaml`, dropping to one replica, or removing the anti-affinity fails `check-metrics-server.sh`.
-- The APIService still skips verification of the addon's own serving cert. That is the upstream file. It does not skip kubelet verification.
+- The APIService skip in this paragraph is [0087](0087-metrics-server-serving-cert.md). It does not skip kubelet verification.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
 - **Next gap:** moved. The kubelet CA mount is [0086](0086-metrics-server-kubelet-ca.md).

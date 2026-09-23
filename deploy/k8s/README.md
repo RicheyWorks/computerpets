@@ -183,19 +183,29 @@ be read as load.
 **metrics-server** (the `metrics.k8s.io` API) is
 `metrics-server.yaml` ([ADR 0084](../../docs/adr/0084-metrics-server.md),
 [ADR 0085](../../docs/adr/0085-metrics-server-ha.md),
-[ADR 0086](../../docs/adr/0086-metrics-server-kubelet-ca.md)).
+[ADR 0086](../../docs/adr/0086-metrics-server-kubelet-ca.md),
+[ADR 0087](../../docs/adr/0087-metrics-server-serving-cert.md)).
 That file is also not in the kustomization. It runs two replicas with
-required hostname anti-affinity. Create the kubelet CA object, then
-apply it.
+required hostname anti-affinity. Create the kubelet CA object and the
+serving Secret, then apply it.
 `kubectl top pods -n computerpets` must show cpu and memory. Until that
 API answers, applying the HPA does not raise the replica count, so blue
 can stay at 2.
 
 ```bash
-# Prod only. Kubelet CA, then metrics-server, then the HPA after kubectl top answers.
+# Prod only. Kubelet CA and serving Secret, then metrics-server, then the
+# HPA after kubectl top answers.
 kubectl -n kube-system create configmap metrics-server-kubelet-ca \
   --from-file=ca.crt=/path/to/kubelet-serving-ca.crt
+kubectl -n kube-system create secret generic metrics-server-serving \
+  --from-file=tls.crt=/path/to/tls.crt \
+  --from-file=tls.key=/path/to/tls.key \
+  --from-file=ca.crt=/path/to/serving-ca.crt
 kubectl apply -f deploy/k8s/metrics-server.yaml
+CA_B64="$(kubectl -n kube-system get secret metrics-server-serving \
+  -o jsonpath='{.data.ca\.crt}')"
+kubectl patch apiservice v1beta1.metrics.k8s.io --type=merge \
+  -p "{\"spec\":{\"caBundle\":\"${CA_B64}\"}}"
 kubectl apply -f deploy/k8s/hpa.yaml
 ./deploy/k8s/check-hpa.sh
 ```
@@ -314,7 +324,7 @@ minor's latest patch instead. Do not commit a real account id.
 Zone spread stays `ScheduleAnyway`. Adding a node does not force a pod
 onto it.
 
-## metrics-server (ADR 0084, ADR 0085, ADR 0086)
+## metrics-server (ADR 0084, ADR 0085, ADR 0086, ADR 0087)
 
 `metrics-server.yaml` is **not** in the kustomization. `kubectl apply -k
 deploy/k8s` does not install it. Kind and minikube do not apply it.
@@ -343,17 +353,35 @@ object leaves the pods unstarted. A certificate that does not chain to
 the bundle still leaves `kubectl top` empty. Do not add the kubelet TLS
 skip.
 
-The APIService does set `insecureSkipTLSVerify: true` once. That is the
-upstream hop from the apiserver to the addon's own serving cert (minted
-in `/tmp`, not the cluster CA). It is not a kubelet skip.
+`insecureSkipTLSVerify` is not set. `--tls-cert-file` and
+`--tls-private-key-file` point at `/etc/metrics-server/serving/tls.crt`
+and `tls.key`, a read-only mount of Secret `metrics-server-serving`
+(keys `tls.crt` and `tls.key`, `optional: false`). This repo does not
+vendor that certificate or key. `--cert-dir=/tmp` stays in the upstream
+arg list and is ignored while both files are set, so the process does
+not mint a serving cert. The certificate DNS SAN must include
+`metrics-server.kube-system.svc`. A private CA is not a system root:
+after apply, set APIService `caBundle` from the Secret's `ca.crt`. Do
+not commit that field. A missing Secret leaves the pods unstarted. A
+private cert with an empty `caBundle` leaves `kubectl top` empty. Do
+not add `insecureSkipTLSVerify`.
 
-Create the CA object, then apply this file, before `hpa.yaml`.
+Create the CA object and the serving Secret, then apply this file,
+before `hpa.yaml`.
 
 ```bash
 # Prod only. Not part of kubectl apply -k.
 kubectl -n kube-system create configmap metrics-server-kubelet-ca \
   --from-file=ca.crt=/path/to/kubelet-serving-ca.crt
+kubectl -n kube-system create secret generic metrics-server-serving \
+  --from-file=tls.crt=/path/to/tls.crt \
+  --from-file=tls.key=/path/to/tls.key \
+  --from-file=ca.crt=/path/to/serving-ca.crt
 kubectl apply -f deploy/k8s/metrics-server.yaml
+CA_B64="$(kubectl -n kube-system get secret metrics-server-serving \
+  -o jsonpath='{.data.ca\.crt}')"
+kubectl patch apiservice v1beta1.metrics.k8s.io --type=merge \
+  -p "{\"spec\":{\"caBundle\":\"${CA_B64}\"}}"
 ./deploy/k8s/check-metrics-server.sh
 ```
 

@@ -35,6 +35,8 @@ copy_tree() {
     "${dest}/docs/adr/0085-metrics-server-ha.md"
   cp "${ROOT}/docs/adr/0086-metrics-server-kubelet-ca.md" \
     "${dest}/docs/adr/0086-metrics-server-kubelet-ca.md"
+  cp "${ROOT}/docs/adr/0087-metrics-server-serving-cert.md" \
+    "${dest}/docs/adr/0087-metrics-server-serving-cert.md"
   cp "${SCRIPT}" "${dest}/deploy/k8s/check-metrics-server.sh"
   chmod +x "${dest}/deploy/k8s/check-metrics-server.sh"
 }
@@ -116,6 +118,41 @@ sed -i \
   -e 's/name: metrics-server-kubelet-ca/secretName: metrics-server-kubelet-ca/' \
   "${BROKEN}/deploy/k8s/metrics-server.yaml"
 assert_exit 0 "check passes when the kubelet CA volume is a Secret" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# The APIService skip is the hop this gate exists to keep off.
+sed -i '/groupPriorityMinimum: 100/a\  insecureSkipTLSVerify: true' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when APIService TLS verification is skipped" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# Without the serving cert flag, the process can mint a cert in /tmp again.
+sed -i '/--tls-cert-file=/d' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when the serving cert flag is removed" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# One flag without the other is not a wired serving certificate.
+sed -i '/--tls-private-key-file=/d' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when the serving key flag is removed" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# A ConfigMap name is not the required Secret.
+sed -i 's/secretName: metrics-server-serving/name: metrics-server-serving/' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when the serving cert is not Secret metrics-server-serving" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# caBundle in this file would be a vendored trust anchor.
+sed -i '/groupPriorityMinimum: 100/a\  caBundle: LS0tLS1CRUdJTi' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when an APIService CA bundle is committed" \
   "${BROKEN}/deploy/k8s/check-metrics-server.sh"
 
 echo
