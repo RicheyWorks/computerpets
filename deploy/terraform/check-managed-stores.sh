@@ -43,7 +43,8 @@ for f in \
   "$TF/modules/cdn/main.tf" \
   "$TF/modules/waf/main.tf" \
   "$TF/modules/api_listener/main.tf" \
-  "$TF/modules/node_pool/main.tf"
+  "$TF/modules/node_pool/main.tf" \
+  "$TF/modules/cluster_autoscaler/main.tf"
 do
   need_file "$f"
 done
@@ -114,6 +115,17 @@ if [ -x "${TF}/check-api-listener-tls.sh" ]; then
   fi
 else
   bad "check-api-listener-tls.sh missing"
+fi
+
+echo "== Cluster Autoscaler (ADR 0083) =="
+if [ -x "${TF}/check-cluster-autoscaler.sh" ]; then
+  if "${TF}/check-cluster-autoscaler.sh"; then
+    ok "check-cluster-autoscaler.sh"
+  else
+    bad "check-cluster-autoscaler.sh"
+  fi
+else
+  bad "check-cluster-autoscaler.sh missing"
 fi
 
 echo "== API node pool (ADR 0082) =="

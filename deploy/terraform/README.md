@@ -24,7 +24,7 @@ deploy/terraform/
   main.tf / variables.tf / outputs.tf / versions.tf / providers.tf
   terraform.tfvars.example
   configmap-managed.example.yaml   # ConfigMap overlay after apply (not kustomized)
-  modules/postgres|redis|secrets|cdn|waf|api_listener|node_pool/
+  modules/postgres|redis|secrets|cdn|waf|api_listener|node_pool|cluster_autoscaler/
   check-managed-stores.sh          # deny-safe asserts + terraform validate
   check-managed-stores.test.sh
   check-waf-gate.sh                # JVM buckets == regional ACL (ADR 0074)
@@ -41,6 +41,9 @@ deploy/terraform/
   check-node-pool.sh               # private multi-AZ workers (ADR 0082)
   check-node-pool.test.sh
   node_pool.tftest.hcl
+  check-cluster-autoscaler.sh      # scale those groups; do not reset desired_size (ADR 0083)
+  check-cluster-autoscaler.test.sh
+  cluster_autoscaler.tftest.hcl
 ```
 
 ## Deny-safe defaults
@@ -58,6 +61,7 @@ deploy/terraform/
 | API listener TLS | **on** for the public ALB (`enable_api_listener_tls`, default true). HTTPS 443 forwards to the existing target group. Port 80 is `HTTP_301`. Plan **refuses** until the keeper-owned ALB ARN, an existing ACM certificate ARN, and the target group ARN are set. When the WAF is on, the listener ALB must be the same ARN. This root does not call ACM. The JVM stays HTTP on 8081 ([ADR 0077](../../docs/adr/0077-api-listener-tls.md)) |
 | Redis AUTH / TLS | **off** unless `redis_auth_token` is set (`TF_VAR_`, never in git). A token enables AUTH + transit encryption together. The app reads `REDIS_PASSWORD` / `REDIS_SSL` / `REDIS_AUTH_REQUIRED` ([ADR 0075](../../docs/adr/0075-redis-auth-and-transit-tls.md)) |
 | API node pool | **on** (`enable_node_pool`, default true). One private EKS managed node group per AZ, at least two, `min_size` 1, on-demand, no public IP, no SSH. Plan **refuses** an empty cluster name or a single zone. This root does not create the cluster or the subnets. EKS sets `topology.kubernetes.io/zone` from the instance AZ ([ADR 0082](../../docs/adr/0082-multi-az-node-pool.md)) |
+| Cluster Autoscaler | **on** when the node pool is on (`enable_cluster_autoscaler`, default true). IRSA for `kube-system/cluster-autoscaler` only. Each group's max is at least the HPA ceiling of 10. Terraform ignores `desired_size` after create. Plan **refuses** a missing OIDC provider ARN in `aws_region`. This root does not create the provider. Kind/minikube keep `enable_node_pool=false`, which skips the role. The manifest is not in the kustomization ([ADR 0083](../../docs/adr/0083-cluster-autoscaler.md)) |
 
 ## Operator flow
 
@@ -82,6 +86,7 @@ Then:
 8. Keep the ADR 0061 digest verify gate before `kubectl set image`.
 9. For a public API door, set `api_listener_alb_arn` to the same ALB as `waf_associate_alb_arn`, plus an ACM certificate ARN you already have and that ALB's target group. This root does not call ACM. Port 80 redirects to 443. Set `API_LISTENER_TLS_REQUIRED=true` and `API_PUBLIC_BASE_URL=https://<host>`. Leave both unset for in-cluster HTTP. Do not set `server.ssl` ([ADR 0077](../../docs/adr/0077-api-listener-tls.md)). `enable_api_listener_tls=false` is the explicit switch for no public listener.
 10. For multi-AZ API workers, set `eks_cluster_name` and `node_pool_subnets` to at least two **private** subnets in `aws_region` (one key per AZ). Plan refuses a single zone. Nodes do not get a public IP and SSH stays closed. This root does not create the cluster. `enable_node_pool=false` is the switch for kind or minikube. EKS sets `topology.kubernetes.io/zone` ([ADR 0082](../../docs/adr/0082-multi-az-node-pool.md)).
+11. Cluster Autoscaler grows those groups when pods are Pending. Set `eks_oidc_provider_arn` to the cluster's existing OIDC provider in `aws_region`. This root does not create it. Each zone's max is at least the HPA ceiling of 10. Terraform ignores `desired_size` after create. Apply `deploy/k8s/cluster-autoscaler.yaml` only after substituting `CLUSTER_NAME`, `AWS_REGION`, and `cluster_autoscaler_role_arn`. It is not in the kustomization. `enable_node_pool=false` keeps the role off ([ADR 0083](../../docs/adr/0083-cluster-autoscaler.md)).
 
 ## Local verify (no cloud account)
 
@@ -98,7 +103,9 @@ Then:
 ./deploy/terraform/check-api-listener-tls.test.sh
 ./deploy/terraform/check-node-pool.sh
 ./deploy/terraform/check-node-pool.test.sh
-terraform -chdir=deploy/terraform test    # mock provider; empty ALB ARN, empty ACM ARN, a short Redis token, a bad Postgres CA path, and a single-zone node pool must fail the plan
+./deploy/terraform/check-cluster-autoscaler.sh
+./deploy/terraform/check-cluster-autoscaler.test.sh
+terraform -chdir=deploy/terraform test    # mock provider; empty ALB ARN, empty ACM ARN, a short Redis token, a bad Postgres CA path, a single-zone node pool, and an empty OIDC ARN must fail the plan
 ```
 
 `check-managed-stores.sh` asserts deny-safe HCL + External Secrets name alignment,
