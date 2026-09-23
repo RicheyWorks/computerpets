@@ -37,6 +37,8 @@ copy_tree() {
     "${dest}/docs/adr/0086-metrics-server-kubelet-ca.md"
   cp "${ROOT}/docs/adr/0087-metrics-server-serving-cert.md" \
     "${dest}/docs/adr/0087-metrics-server-serving-cert.md"
+  cp "${ROOT}/docs/adr/0088-metrics-server-zone-spread.md" \
+    "${dest}/docs/adr/0088-metrics-server-zone-spread.md"
   cp "${SCRIPT}" "${dest}/deploy/k8s/check-metrics-server.sh"
   chmod +x "${dest}/deploy/k8s/check-metrics-server.sh"
 }
@@ -153,6 +155,27 @@ copy_tree "${BROKEN}"
 sed -i '/groupPriorityMinimum: 100/a\  caBundle: LS0tLS1CRUdJTi' \
   "${BROKEN}/deploy/k8s/metrics-server.yaml"
 assert_exit 1 "check fails when an APIService CA bundle is committed" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# Hostname anti-affinity alone still packs both pods into one zone.
+sed -i '/topologyKey: topology.kubernetes.io\/zone/d' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when the zone topology key is removed" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# DoNotSchedule leaves the second pod Pending on a single-zone cluster.
+sed -i 's/whenUnsatisfiable: ScheduleAnyway/whenUnsatisfiable: DoNotSchedule/' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when zone spread is DoNotSchedule" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# minDomains is enforced only with a hard action and strands a smaller cluster.
+sed -i '/whenUnsatisfiable: ScheduleAnyway/a\        minDomains: 2' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when zone spread sets minDomains" \
   "${BROKEN}/deploy/k8s/check-metrics-server.sh"
 
 echo

@@ -184,9 +184,12 @@ be read as load.
 `metrics-server.yaml` ([ADR 0084](../../docs/adr/0084-metrics-server.md),
 [ADR 0085](../../docs/adr/0085-metrics-server-ha.md),
 [ADR 0086](../../docs/adr/0086-metrics-server-kubelet-ca.md),
-[ADR 0087](../../docs/adr/0087-metrics-server-serving-cert.md)).
+[ADR 0087](../../docs/adr/0087-metrics-server-serving-cert.md),
+[ADR 0088](../../docs/adr/0088-metrics-server-zone-spread.md)).
 That file is also not in the kustomization. It runs two replicas with
-required hostname anti-affinity. Create the kubelet CA object and the
+required hostname anti-affinity and soft zone spread (`ScheduleAnyway`
+on `topology.kubernetes.io/zone`). A single-zone cluster still schedules
+both pods when two hostnames exist. Create the kubelet CA object and the
 serving Secret, then apply it.
 `kubectl top pods -n computerpets` must show cpu and memory. Until that
 API answers, applying the HPA does not raise the replica count, so blue
@@ -324,7 +327,7 @@ minor's latest patch instead. Do not commit a real account id.
 Zone spread stays `ScheduleAnyway`. Adding a node does not force a pod
 onto it.
 
-## metrics-server (ADR 0084, ADR 0085, ADR 0086, ADR 0087)
+## metrics-server (ADR 0084, ADR 0085, ADR 0086, ADR 0087, ADR 0088)
 
 `metrics-server.yaml` is **not** in the kustomization. `kubectl apply -k
 deploy/k8s` does not install it. Kind and minikube do not apply it.
@@ -337,8 +340,13 @@ and no floating tag.
 
 The Deployment sets `replicas: 2`. Pod anti-affinity is required on
 `kubernetes.io/hostname`, so the second pod stays Pending until a second
-node exists. Rolling update `maxUnavailable` is 1. An addon
-`PodDisruptionBudget` in `kube-system` keeps `minAvailable: 1`. That
+node exists. Beside that, `topologySpreadConstraints` prefers a different
+zone (`topology.kubernetes.io/zone`, `maxSkew: 1`, `whenUnsatisfiable:
+ScheduleAnyway`, `nodeTaintsPolicy: Honor`). `DoNotSchedule` is not set,
+and there is no required zone anti-affinity, so a single-zone cluster
+and nodes that omit the zone label still schedule. The preference can
+still place both pods in one zone. Rolling update `maxUnavailable` is 1.
+An addon `PodDisruptionBudget` in `kube-system` keeps `minAvailable: 1`. That
 budget is not `pdb.yaml`.
 
 `--kubelet-insecure-tls` is not set. Kubelet scrapes stay verified.

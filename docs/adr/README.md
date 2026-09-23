@@ -106,6 +106,7 @@ address, or an API that is not on `main`.
 | [0085](0085-metrics-server-ha.md) | High availability for metrics-server (replicas 2, required hostname anti-affinity; still not in the kustomization) | Accepted |
 | [0086](0086-metrics-server-kubelet-ca.md) | Kubelet CA for metrics-server (operator ConfigMap or Secret; `--kubelet-insecure-tls` stays off) | Accepted |
 | [0087](0087-metrics-server-serving-cert.md) | Serving certificate for metrics-server (operator Secret; `insecureSkipTLSVerify` stays off) | Accepted |
+| [0088](0088-metrics-server-zone-spread.md) | Soft zone spread for metrics-server beside required hostname anti-affinity (`ScheduleAnyway`; single-zone clusters still schedule) | Accepted |
 
 ## How to add one
 
