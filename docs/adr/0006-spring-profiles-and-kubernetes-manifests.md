@@ -83,7 +83,9 @@ No mesh.
   anti-affinity, hard zone spread (`DoNotSchedule` on
   `topology.kubernetes.io/zone`; one labeled zone still schedules), and leader election
   ([0090](0090-cluster-autoscaler-ha.md),
-  [0099](0099-cluster-autoscaler-zone-hard-spread.md)). `nodeSelector` requires
+  [0099](0099-cluster-autoscaler-zone-hard-spread.md)). The standby is not
+  the scaler. The scheduled leader raises the underfilled zone
+  ([0101](0101-cluster-autoscaler-leader-scale.md)). `nodeSelector` requires
   `computerpets/node-pool=api` and linux, so kind and minikube stay off
   the file ([0091](0091-cluster-autoscaler-node-pool.md)). Voluntary
   disruption keeps one of those pods (`minAvailable: 1`,
