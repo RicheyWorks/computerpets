@@ -18,8 +18,15 @@ resources:
 # on that shape: minAvailable 2 with only 2 pods blocks every voluntary eviction.
 # Hostname spread (ADR 0080) and zone spread (ADR 0081) are on the two API
 # pod templates, so this apply includes both. whenUnsatisfiable is
-# ScheduleAnyway: blue's 2 pods still schedule on a one-node or single-zone
-# cluster, including nodes that omit topology.kubernetes.io/zone.
+# ScheduleAnyway: on a labeled node, blue's 2 pods still schedule on a
+# one-node or single-zone cluster, including nodes that omit
+# topology.kubernetes.io/zone.
+# API pool pin (ADR 0093) is on both pod templates, so this apply includes
+# it. nodeSelector requires kubernetes.io/os=linux and
+# computerpets/node-pool=api. nodeAffinityPolicy is Honor. Kind and
+# minikube nodes omit the pool label unless a human adds it. The API pods
+# stay Pending until then. Do not delete the pool key to make a laptop
+# apply schedule. Postgres and Redis stay unpinned.
 # Multi-AZ workers are the node pool (ADR 0082), not this apply.
 # cluster-autoscaler.yaml (ADR 0083, ADR 0090, ADR 0091, ADR 0092) is
 # also not applied here. Kind and minikube set enable_node_pool=false

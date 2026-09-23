@@ -87,8 +87,11 @@ need_grep "$ADR" 'Catalog stays 221' "catalog stays 221"
 need_grep "$ADR" 'No Rui sprites' "no Rui sprites"
 need_grep "$BLUE" 'replicas: 2' "blue local replica count stays 2"
 need_grep "$GREEN" 'replicas: 0' "green stays the idle slot"
-need_not_grep "$BLUE" 'nodeSelector:' "blue is not pinned to the pool"
-need_not_grep "$GREEN" 'nodeSelector:' "green is not pinned to the pool"
+# API pool pin is ADR 0093. This check only requires the same label.
+need_grep "$BLUE" 'nodeSelector:' "blue is pinned to the pool (ADR 0093)"
+need_grep "$GREEN" 'nodeSelector:' "green is pinned to the pool (ADR 0093)"
+need_grep "$BLUE" 'computerpets/node-pool: api$' "blue selects the api pool label"
+need_grep "$GREEN" 'computerpets/node-pool: api$' "green selects the api pool label"
 
 python3 - "$MODULE" "$ROOT_MAIN" <<'PY'
 import pathlib, re, sys

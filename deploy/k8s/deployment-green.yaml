@@ -34,11 +34,18 @@ spec:
       # binds when the skew cannot be met. DoNotSchedule on the zone key
       # would leave that pod Pending on a single-zone cluster and on nodes
       # that omit topology.kubernetes.io/zone.
+      # Pool pin (ADR 0093). Same nodeSelector as blue: kubernetes.io/os=linux
+      # and computerpets/node-pool=api. Both spread items set
+      # nodeAffinityPolicy Honor. Kind and minikube apply this file. Their
+      # nodes omit the pool label unless a human adds it, so a scaled-up
+      # green pod stays Pending. Do not delete the pool key to make a
+      # laptop apply schedule. replicas stays 0.
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
           whenUnsatisfiable: ScheduleAnyway
           nodeTaintsPolicy: Honor
+          nodeAffinityPolicy: Honor
           labelSelector:
             matchLabels:
               app: computerpets
@@ -47,10 +54,14 @@ spec:
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: ScheduleAnyway
           nodeTaintsPolicy: Honor
+          nodeAffinityPolicy: Honor
           labelSelector:
             matchLabels:
               app: computerpets
               color: green
+      nodeSelector:
+        kubernetes.io/os: linux
+        computerpets/node-pool: api
       initContainers:
         - name: wait-postgres
           image: postgres:16-alpine

@@ -424,6 +424,14 @@ per availability zone, at least two ([ADR 0082](adr/0082-multi-az-node-pool.md))
 This kustomization does not create them. `enable_node_pool=false` is the
 local switch. The zone preference stays soft
 ([ADR 0081](adr/0081-api-pod-zone-spread.md)).
+Both API Deployments also require `kubernetes.io/os: linux` and
+`computerpets/node-pool: api`. Both spread items set
+`nodeAffinityPolicy: Honor`. Kind and minikube apply that selector.
+Their nodes omit the pool label unless you label one, and the API pods
+stay Pending until then. Do not delete the pool key to make a laptop
+apply schedule. One labeled node still schedules both blue pods.
+Postgres and Redis are not pinned
+([ADR 0093](adr/0093-api-node-pool.md)).
 Cluster Autoscaler grows those groups when pods are Pending. Each zone's
 max is at least the HPA ceiling of 10. Terraform ignores `desired_size`
 after create. `deploy/k8s/cluster-autoscaler.yaml` is not in this
@@ -440,8 +448,9 @@ IRSA service account. Only the leader changes desired capacity
 nodes outside those groups. Kind and minikube do not apply the file
 (`enable_node_pool=false` does not label their nodes). A single-zone
 set of labeled nodes still schedules both pods when two hostnames exist.
-The API Deployments do not select this label
-([ADR 0091](adr/0091-cluster-autoscaler-node-pool.md)).
+The API Deployments select the same label
+([ADR 0091](adr/0091-cluster-autoscaler-node-pool.md),
+[ADR 0093](adr/0093-api-node-pool.md)).
 The same file keeps one autoscaler pod during voluntary disruption
 (`minAvailable: 1`, selector `app=cluster-autoscaler`). `minAvailable: 2`
 is not used, because two replicas would then allow zero evictions. Kind

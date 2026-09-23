@@ -266,7 +266,9 @@ as blue's. There is no `minDomains`. The zone key is a second constraint
 ([ADR 0081](../../docs/adr/0081-api-pod-zone-spread.md)). Postgres and Redis
 are not constrained. Local `replicas` stay 2 and 0. This rule is on the
 pod template, so `kubectl apply -k` does apply it. It does not apply
-`hpa.yaml` or `pdb.yaml`.
+`hpa.yaml` or `pdb.yaml`. The pool pin is
+[ADR 0093](../../docs/adr/0093-api-node-pool.md). An unlabeled kind or
+minikube node leaves the API pods Pending.
 
 ```bash
 ./deploy/k8s/check-topology-spread.sh
@@ -295,7 +297,9 @@ no `minDomains`. A required zone anti-affinity is not set.
 (three when the floor of 3 should land one pod per zone). Cloud
 providers set the zone label. Private workers are one EKS managed node
 group per zone ([ADR 0082](../../docs/adr/0082-multi-az-node-pool.md)).
-This apply does not create them. A single-zone pool still schedules.
+This apply does not create them. A single-zone pool still schedules once
+the nodes carry `computerpets/node-pool=api`
+([ADR 0093](../../docs/adr/0093-api-node-pool.md)).
 Soft spread can still place every pod of the live color in one zone. A
 failure of that zone is not blocked by the budget.
 
@@ -305,6 +309,33 @@ failure of that zone is not blocked by the budget.
 
 A cutover does not patch the zone item. Scaling green uses the green
 template, which already has it.
+
+## API node pool pin (ADR 0093)
+
+Both API pod templates set `nodeSelector` to `kubernetes.io/os: linux`
+and `computerpets/node-pool: api`. That pool label is the one
+`deploy/terraform/modules/node_pool` already sets on each multi-AZ
+group, the same pair metrics-server and Cluster Autoscaler require.
+The selector is required. There is no `nodeAffinity` block. A node
+outside the groups does not receive an API pod.
+
+Both spread items set `nodeAffinityPolicy: Honor`, so hostname and zone
+skew count only nodes that match the selector. `whenUnsatisfiable`
+stays `ScheduleAnyway`. `DoNotSchedule` is not set. One labeled node
+still schedules both blue pods. A single labeled zone still schedules.
+HPA and PDB are unchanged. Postgres and Redis are not pinned.
+
+Kind and minikube apply these Deployments (`kubectl apply -k
+deploy/k8s`). Their nodes omit `computerpets/node-pool=api` unless a
+human labels one. The API pods stay Pending until then. That is the
+missing-label path. Do not delete the pool key to make a laptop apply
+schedule. Label the node when a local cluster should run the API.
+`enable_node_pool=false` does not add the label and does not remove
+the selector. Postgres and Redis still schedule on the unlabeled node.
+
+```bash
+./deploy/k8s/check-api-node-pool.sh
+```
 
 ## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092)
 
@@ -355,7 +386,8 @@ label their nodes. Applying the file there leaves both pods Pending.
 That is the feature-off path. Do not delete the pool key to make a
 laptop apply schedule. A single-zone cluster whose nodes do carry the
 label still schedules both pods when two hostnames exist, because the
-zone rule stays preferred. The API Deployments do not select this label.
+zone rule stays preferred. The API Deployments select the same label
+([ADR 0093](../../docs/adr/0093-api-node-pool.md)).
 
 The committed manifest uses three tokens: `CLUSTER_NAME`, `AWS_REGION`, and
 account `000000000000` on the role ARN. Substitute the cluster name, the
@@ -399,7 +431,8 @@ do not apply this file. `enable_node_pool=false` does not label their
 nodes, so applying the file there leaves both pods Pending. That is the
 feature-off path. A single-zone cluster whose nodes do carry the label
 still schedules both pods when two hostnames exist, because zone spread
-stays `ScheduleAnyway`. The API Deployments do not select this label.
+stays `ScheduleAnyway`. The API Deployments select the same label
+([ADR 0093](../../docs/adr/0093-api-node-pool.md)).
 Rolling update `maxUnavailable` is 1.
 An addon `PodDisruptionBudget` in `kube-system` keeps `minAvailable: 1`. That
 budget is not `pdb.yaml`.

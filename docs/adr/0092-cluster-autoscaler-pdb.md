@@ -1,6 +1,6 @@
 # 0092. Pod disruption budget for Cluster Autoscaler
 
-- **Status:** Accepted
+- **Status:** Accepted (the API pool pin is [0093](0093-api-node-pool.md); `minAvailable` stays)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/cluster-autoscaler.yaml`; `deploy/terraform/check-cluster-autoscaler.sh`
 
@@ -45,4 +45,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - The API budget is unchanged. A cutover still patches `pdb.yaml`'s color with the HPA.
 - Adding the file to `kustomization.yaml`, dropping the budget, raising `minAvailable` to 2, drifting the selector, dropping to one replica, removing required hostname anti-affinity, dropping either `nodeSelector` key, or turning leader election off fails `check-cluster-autoscaler.sh`.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** preferred zone anti-affinity can still place both Cluster Autoscaler pods in one zone. A zone failure is involuntary, so this budget does not apply. Required zone anti-affinity is not the follow-up: it would leave the standby Pending when only one zone remains. `ScheduleAnyway` can still place both metrics-server pods in one zone when the labeled pool is one zone or a labeled node omits `topology.kubernetes.io/zone`. API zone spread stays `ScheduleAnyway`, and the API Deployments are still not pinned to this label. A serving certificate that does not chain to `caBundle` (and is not a system root), or whose SAN is not `metrics-server.kube-system.svc`, still leaves `kubectl top` empty. A kubelet certificate that does not chain to `metrics-server-kubelet-ca` still leaves `kubectl top` empty.
+- **Next gap:** moved. The API pool pin is [0093](0093-api-node-pool.md).
