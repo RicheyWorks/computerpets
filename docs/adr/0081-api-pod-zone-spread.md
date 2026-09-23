@@ -1,6 +1,6 @@
 # 0081. API pod zone spread
 
-- **Status:** Accepted
+- **Status:** Accepted (the pool pin is [0093](0093-api-node-pool.md); `ScheduleAnyway` stays)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/deployment-blue.yaml`; `deploy/k8s/deployment-green.yaml`; `deploy/k8s/check-zone-spread.sh`
 
@@ -35,7 +35,7 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 
 ## Consequences
 
-- A laptop `kubectl apply -k deploy/k8s` still starts two API pods and an idle green Deployment. Those two pods may share a node and a zone. The scheduler is allowed to do that.
+- A laptop `kubectl apply -k deploy/k8s` applies both Deployments. API pods schedule only when a node carries `computerpets/node-pool=api` ([0093](0093-api-node-pool.md)). On one labeled node they may still share that node and zone, because `ScheduleAnyway` stays.
 - `nodeTaintsPolicy` is the same Kubernetes 1.26 field as the hostname item. A cluster that rejects the field cannot apply these Deployments. `ScheduleAnyway` is the part that keeps the pod schedulable when the zone skew cannot be met, including when the label is absent.
 - A keeper who applies `hpa.yaml` on a cluster whose workers already span three zones gets the floor of 3 preferred onto three zones and, within a zone, onto different hostnames. A pod still binds when either skew cannot be met. On two zones the floor prefers 2+1. Draining the zone that holds two can evict one pod. The second eviction waits until a replacement is Ready elsewhere, or the budget blocks it. A crash of a zone is not a voluntary disruption.
 - `ScheduleAnyway` is a preference, not a placement guarantee. One zone, nodes that omit the label, a failed score, or a zone that cannot fit another pod can still co-locate every pod of the live color. A failure of that zone is involuntary. The budget does not apply.

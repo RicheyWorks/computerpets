@@ -86,7 +86,7 @@
 # this file there leaves both pods Pending. That is the feature-off path.
 # A single-zone cluster whose nodes do carry the label still schedules
 # both pods when two hostnames exist, because zone spread stays
-# ScheduleAnyway. The API Deployments do not select this label.
+# ScheduleAnyway. The API Deployments select the same label (ADR 0093).
 apiVersion: v1
 kind: ServiceAccount
 metadata:

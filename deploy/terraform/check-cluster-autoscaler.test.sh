@@ -138,10 +138,10 @@ assert_exit 1 "check fails when the node pool label value drifts" \
   "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
 
 copy_tree "${BROKEN}"
-# The API colors stay unpinned. This slice pins the scaler only.
-printf '\nnodeSelector:\n  computerpets/node-pool: api\n' \
-  >> "${BROKEN}/deploy/k8s/deployment-blue.yaml"
-assert_exit 1 "check fails when blue gains a pool nodeSelector" \
+# The API colors select the same pool (ADR 0093). Dropping the key fails.
+sed -i '/computerpets\/node-pool: api/d' \
+  "${BROKEN}/deploy/k8s/deployment-blue.yaml"
+assert_exit 1 "check fails when blue drops the pool nodeSelector" \
   "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
 
 copy_tree "${BROKEN}"

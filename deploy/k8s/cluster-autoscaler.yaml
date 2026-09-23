@@ -40,8 +40,8 @@
 # Required hostname anti-affinity then needs two hostnames inside that
 # pool. Nodes outside the groups do not satisfy it. Zone anti-affinity
 # stays preferred, so a single-zone set of labeled nodes still schedules
-# both pods when two hostnames exist. The API Deployments do not select
-# this label.
+# both pods when two hostnames exist. The API Deployments select the
+# same label (ADR 0093).
 #
 # Disruption budget (ADR 0092). policy/v1 PodDisruptionBudget
 # cluster-autoscaler in kube-system. minAvailable is 1. The selector is
