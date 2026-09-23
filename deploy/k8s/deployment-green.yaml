@@ -1,5 +1,6 @@
-# Idle color. Scale up, wait Ready, then patch the Service selector to color=green.
-# See deploy/k8s/README.md. Same probes, secrets, and prod profile as blue.
+# Idle color. Not an HPA target (ADR 0078). Scale up, wait Ready, then patch
+# the Service selector to color=green. See deploy/k8s/README.md.
+# Same probes, secrets, and prod profile as blue.
 apiVersion: apps/v1
 kind: Deployment
 metadata:

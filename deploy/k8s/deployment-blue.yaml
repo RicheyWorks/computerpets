@@ -7,6 +7,8 @@ metadata:
     app: computerpets
     color: blue
 spec:
+  # Local/dev count. The prod floor is deploy/k8s/hpa.yaml (ADR 0078),
+  # which is not applied by the kustomization.
   replicas: 2
   selector:
     matchLabels:
