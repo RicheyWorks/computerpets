@@ -19,6 +19,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Issues and validates short-lived HMAC-signed JWTs used to authenticate the
@@ -102,17 +103,25 @@ public class JwtService {
         }
     }
 
+    /** Configured bearer lifetime. Claim keys live this long plus {@link DownloadJwtStore#SKEW_SECONDS}. */
+    public long ttlSeconds() {
+        return ttl.toSeconds();
+    }
+
     /**
-     * Issues a JWT scoped to a specific (owner, pet, provider) triple. The TTL is
-     * intentionally short — long enough for the client to fetch the bundle, not so
-     * long that a stolen token grants weeks of access.
+     * Issues a JWT scoped to a specific (owner, pet, provider) triple and a fresh
+     * {@code jti}. The TTL is intentionally short — long enough for the client to
+     * fetch the bundle, not so long that a stolen token grants weeks of access.
+     * {@code POST /api/download} claims that {@code jti} once (ADR 0073).
      */
     public IssuedToken issue(String owner, String petKey, String providerKey) {
         Instant now = Instant.now();
         Instant exp = now.plus(ttl);
+        String jti = UUID.randomUUID().toString();
         String token = Jwts.builder()
             .issuer(issuer)
             .subject(owner)
+            .id(jti)
             .claim(CLAIM_PET, petKey)
             .claim(CLAIM_PROVIDER, providerKey)
             .issuedAt(Date.from(now))
@@ -160,12 +169,21 @@ public class JwtService {
     public static String petOf(Claims c)      { return c.get(CLAIM_PET, String.class); }
     public static String providerOf(Claims c) { return c.get(CLAIM_PROVIDER, String.class); }
 
-    /** Visible to filter for building a Spring Security principal. */
+    /** Visible to filter for building a Spring Security principal. Includes {@code jti} when the token has one. */
     public static Map<String, Object> principalFrom(Claims c) {
+        String jti = c.getId();
+        if (jti == null || jti.isBlank()) {
+            return Map.of(
+                "sub", c.getSubject(),
+                "pet", petOf(c),
+                "provider", providerOf(c)
+            );
+        }
         return Map.of(
             "sub", c.getSubject(),
             "pet", petOf(c),
-            "provider", providerOf(c)
+            "provider", providerOf(c),
+            "jti", jti
         );
     }
 }

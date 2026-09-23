@@ -7,6 +7,7 @@ package com.enterprisepet.security;
  * grants when {@code rate-limit.backend=redis}. Process memory when that
  * backend is {@code memory}. TTL matches the 300 second signature skew so a
  * nonce cannot be reused while the captured timestamp would still verify.
+ * Download bearers are a different key ({@code download:jwt:{jti}}, ADR 0073).
  */
 public interface RequestReplayStore {
 
