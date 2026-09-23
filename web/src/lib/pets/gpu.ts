@@ -1,4 +1,4 @@
-/** Desktop-local GPU sense. The browser has no sensor, so this page stays unread and the sparkline stays empty. Windows and Linux nvidia-smi share the line. Linux amdgpu sysfs uses that line when nvidia-smi does not, including hwmon temperature labeled edge and power labeled PPT. i915 and xe utilization comes from two DRM fdinfo reads when that percent is honest; otherwise INTEL_EMPTY. Mac reads IOAccelerator into that same line. */
+/** Desktop-local GPU sense. The browser has no sensor, so this page stays unread and the sparkline stays empty. Windows and Linux nvidia-smi share the line. Linux amdgpu sysfs uses that line when nvidia-smi does not, including hwmon temperature labeled edge and power labeled PPT. i915 and xe utilization comes from two DRM fdinfo reads when that percent is honest; otherwise INTEL_EMPTY. Device VRAM used and total on that line stay unread. Mac reads IOAccelerator into that same line. */
 
 export const STALE_MS = 20000;
 export const LATER_DOOR = "unsupported";

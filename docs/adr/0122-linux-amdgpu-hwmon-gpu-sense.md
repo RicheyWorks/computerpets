@@ -1,6 +1,6 @@
 # 0122. Linux reads amdgpu temperature and power from hwmon
 
-- **Status:** Accepted
+- **Status:** Accepted (Intel device VRAM fail-closed moved to [0123](0123-linux-intel-device-vram-gpu-sense.md))
 - **Date:** 2026-09-23
 - **Code:** `desktop/gpu-probe.sh`, `desktop/gpu-sense.cjs`, `desktop/renderer/gpu.js`, `web/src/lib/pets/gpu.ts`, `client/computerpets_client/gpu.py`
 
