@@ -128,6 +128,7 @@ address, or an API that is not on `main`.
 | [0107](0107-api-hostname-ceiling.md) | HPA ceiling matches the six healthy API hostnames (`maxReplicas` 6; two zones times `min_size` 3; the old ceiling of 10 is refused; `min_size` stays 3; no `minDomains`; kind stays off the HPA and the pool) | Accepted (one Ready zone ceiling superseded in part by 0108) |
 | [0108](0108-api-single-zone-hostname-ceiling.md) | One Ready zone holds the HPA ceiling (`maxReplicas` 3, equal to `minReplicas` and to `min_size` 3; the ceiling of 6 is refused; eight, ten, twelve, and twenty node bills are refused; no `minDomains`; kind stays off the HPA and the pool) | Accepted |
 | [0109](0109-per-zone-node-max-floor.md) | Per-zone API node-group max stays 20, above a one-zone floor of 8 (`maxReplicas` 3 + Cluster Autoscaler 2 + metrics-server 2 + one drain node; twice the new ceiling is 6 and is refused; the live set binds on `min_size` 3, so `MaxLimitReached` at 20 is unreachable; kind stays off the file) | Accepted |
+| [0110](0110-cluster-autoscaler-pending-lease.md) | A Pending Cluster Autoscaler pod never holds the lease (the Running leader remains the scaler; v1.36.1 acquires `leases/cluster-autoscaler` inside the container; `system-cluster-critical` stays; kind stays off the file) | Accepted |
 
 ## How to add one
 

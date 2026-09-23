@@ -46,8 +46,10 @@
 # Two pods share one ServiceAccount and one IRSA role. Only the leader
 # changes desired capacity. The standby waits on the kube-system Lease
 # named cluster-autoscaler. The standby is not the scaler (ADR 0101).
-# A Pending replica does not hold the lease. The scheduled leader still
-# raises desired capacity on the underfilled zone's Auto Scaling group.
+# A Pending replica never holds the lease (ADR 0110). v1.36.1 acquires
+# leases/cluster-autoscaler inside the running container.
+# The Running leader remains the scaler. The scheduled leader still raises desired
+# capacity on the underfilled zone's Auto Scaling group.
 # --balance-similar-node-groups=true, --expander=least-waste, and
 # --skip-nodes-with-system-pods=false stay. --namespace=kube-system is
 # the lease namespace, not a pod filter. --salvo-scale-up=true runs
@@ -249,6 +251,9 @@ spec:
           value: api
           effect: NoSchedule
       serviceAccountName: cluster-autoscaler
+      # ADR 0110. system-cluster-critical can preempt a priority-0 pod so
+      # this replica can become Running and then take the lease. It does
+      # not start a Pending container. system-node-critical is not used.
       priorityClassName: system-cluster-critical
       automountServiceAccountToken: true
       securityContext:
@@ -284,6 +289,10 @@ spec:
           # drain node). Twice the HPA ceiling is 6 and is refused.
           # This set binds on min_size 3, so MaxLimitReached at 20
           # is unreachable. Do not set minDomains.
+          # ADR 0110. A Pending pod never holds the lease. The Running
+          # leader remains the scaler. Lease duration, renew deadline,
+          # and retry period stay at the v1.36.1 defaults, unset here.
+          # No flag hands the lease to a container that has not started.
           # ADR 0105. Each zone's min_size was 2. Two healthy zones were
           # four API hostnames. One unhealthy zone still stacked 2 and 1.
           # ADR 0106. Each zone's min_size is 3. One Ready zone is three

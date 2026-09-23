@@ -468,7 +468,10 @@ Zone spread is `DoNotSchedule` on `topology.kubernetes.io/zone`
 still schedules when two hostnames exist. A node that omits the zone
 label does not. Kind and minikube do not apply the file. Do not set
 minDomains. Required zone anti-affinity is not set. Leader election
-stays on. Both pods use the one
+stays on. A Pending replica never holds the lease. The Running leader
+remains the scaler
+([ADR 0110](adr/0110-cluster-autoscaler-pending-lease.md)).
+Both pods use the one
 IRSA service account. Only the leader changes desired capacity. The standby is not the scaler.
 `--balance-similar-node-groups=true` and `--expander=least-waste` stay,
 so the scheduled leader can raise the underfilled zone's group.
