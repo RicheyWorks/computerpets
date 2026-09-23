@@ -1,10 +1,10 @@
 /** Top-level window bounds. Rects only.
  * Windows 10/11 uses the shell-handle walk below. Linux X11 uses libxcb.
- * Mac stays a later door and does not invent rects.
+ * Mac uses Accessibility from /usr/bin/osascript. An untrusted helper stays empty.
  * The taskbar and the desktop host are known shell handles. A Linux dock or
- * desktop is a window-type bit, not a class string. A keeper window's class
- * is not copied. The shell bit on the pipe is 0 or 1.
- * Window text is not read. No folder is listed.
+ * desktop is a window-type bit, not a class string. A Mac Dock or menu-bar host
+ * is a bundle bit, not a name. A keeper window's class is not copied. The shell
+ * bit on the pipe is 0 or 1. Window text is not read. No folder is listed.
  */
 const { spawn } = require("child_process");
 const Windows = require("./renderer/windows.js");
@@ -443,18 +443,214 @@ while True:
     answer()
 `;
 
+/** Same bits as windows.js macWindowBits. Arrays are injected so the lists cannot drift. */
+const MAC_CLASSIFY_JS = `
+function listed(arr, item) {
+  var i;
+  for (i = 0; i < arr.length; i++) if (arr[i] === item) return true;
+  return false;
+}
+function classify(subrole, bundle, minimized, appHidden) {
+  var shell = listed(SHELL, bundle) ? 1 : 0;
+  var tool = 0;
+  if (shell === 0 && (listed(TOOL_SUB, subrole) || listed(TOOL_BUNDLE, bundle))) tool = 1;
+  return { mini: minimized ? 1 : 0, tool: tool, cloaked: appHidden ? 1 : 0, shell: shell };
+}
+`;
+
+function macEnumScript() {
+  const shell = JSON.stringify(Windows.MAC_SHELL_BUNDLES);
+  const toolSub = JSON.stringify(Windows.MAC_TOOL_SUBROLES);
+  const toolBundle = JSON.stringify(Windows.MAC_TOOL_BUNDLES);
+  return `
+var SHELL = ${shell};
+var TOOL_SUB = ${toolSub};
+var TOOL_BUNDLE = ${toolBundle};
+${MAC_CLASSIFY_JS}
+var ready = false;
+function boot() {
+  try {
+    ObjC.import("Cocoa");
+    try { ObjC.import("ApplicationServices"); } catch (errImport) {}
+    try {
+      ObjC.bindFunction("dlopen", ["void*", ["string", "int"]]);
+      $.dlopen("/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices", 1);
+    } catch (errOpen) {}
+    ObjC.bindFunction("AXIsProcessTrusted", ["bool", []]);
+    ObjC.bindFunction("AXUIElementCreateApplication", ["id", ["unsigned int"]]);
+    ObjC.bindFunction("AXUIElementCopyAttributeValue", ["int", ["id", "id", "id*"]]);
+    ObjC.bindFunction("_AXUIElementGetWindow", ["int", ["id", "void*"]]);
+    ObjC.bindFunction("AXValueGetValue", ["bool", ["id", "int", "void*"]]);
+    ObjC.bindFunction("CFArrayGetCount", ["long", ["id"]]);
+    ObjC.bindFunction("CFArrayGetValueAtIndex", ["id", ["id", "long"]]);
+    ObjC.bindFunction("CFRelease", ["void", ["id"]]);
+    ObjC.bindFunction("malloc", ["void*", ["int"]]);
+    ObjC.bindFunction("memset", ["void*", ["void*", "int", "int"]]);
+    ObjC.bindFunction("free", ["void", ["void*"]]);
+    ready = true;
+  } catch (err) {
+    ready = false;
+  }
+}
+boot();
+function writeLine(line) {
+  var handle = $.NSFileHandle.fileHandleWithStandardOutput;
+  var str = $.NSString.alloc.initWithUTF8String(String(line) + "\\n");
+  handle.writeData(str.dataUsingEncoding($.NSUTF8StringEncoding));
+}
+function readU32(ptr) {
+  var n = 0;
+  var i;
+  for (i = 0; i < 4; i++) n += (ptr[i] & 255) * Math.pow(256, i);
+  return n;
+}
+function readF64(ptr, offset) {
+  var buffer = new ArrayBuffer(8);
+  var view = new Uint8Array(buffer);
+  var i;
+  for (i = 0; i < 8; i++) view[i] = ptr[offset + i] & 255;
+  return new Float64Array(buffer)[0];
+}
+function axCopy(el, name) {
+  var slot = Ref();
+  var err = $.AXUIElementCopyAttributeValue(el, name, slot);
+  if (err !== 0 || !slot[0]) return null;
+  return slot[0];
+}
+function axPoint(value) {
+  if (!value) return null;
+  var buf = $.malloc(16);
+  $.memset(buf, 0, 16);
+  var ok = $.AXValueGetValue(value, 1, buf);
+  var x = ok ? readF64(buf, 0) : NaN;
+  var y = ok ? readF64(buf, 8) : NaN;
+  $.free(buf);
+  $.CFRelease(value);
+  if (x !== x || y !== y) return null;
+  return { x: x, y: y };
+}
+function axSize(value) {
+  if (!value) return null;
+  var buf = $.malloc(16);
+  $.memset(buf, 0, 16);
+  var ok = $.AXValueGetValue(value, 2, buf);
+  var w = ok ? readF64(buf, 0) : NaN;
+  var h = ok ? readF64(buf, 8) : NaN;
+  $.free(buf);
+  $.CFRelease(value);
+  if (w !== w || h !== h) return null;
+  return { w: w, h: h };
+}
+function axString(el, name) {
+  var value = axCopy(el, name);
+  if (!value) return "";
+  var text = "";
+  try { text = String(ObjC.unwrap(value)); } catch (err) { text = ""; }
+  $.CFRelease(value);
+  return text;
+}
+function axBool(el, name) {
+  var value = axCopy(el, name);
+  if (!value) return false;
+  var flag = false;
+  try { flag = !!ObjC.unwrap(value); } catch (err) { flag = false; }
+  $.CFRelease(value);
+  return flag;
+}
+function oneWindow(el, bundle, hidden) {
+  if (!el) return null;
+  var idBuf = $.malloc(4);
+  $.memset(idBuf, 0, 4);
+  var idErr = $._AXUIElementGetWindow(el, idBuf);
+  var wid = idErr === 0 ? readU32(idBuf) : 0;
+  $.free(idBuf);
+  if (!wid) return null;
+  var role = axString(el, "AXRole");
+  if (role && role !== "AXWindow") return null;
+  var pos = axPoint(axCopy(el, "AXPosition"));
+  var size = axSize(axCopy(el, "AXSize"));
+  if (!pos || !size) return null;
+  if (!(size.w > 0) || !(size.h > 0)) return null;
+  var sub = axString(el, "AXSubrole");
+  var mini = axBool(el, "AXMinimized");
+  var bits = classify(sub, bundle, mini, hidden);
+  var left = Math.round(pos.x);
+  var top = Math.round(pos.y);
+  var right = Math.round(pos.x + size.w);
+  var bottom = Math.round(pos.y + size.h);
+  return [wid, left, top, right, bottom, bits.mini, bits.tool, bits.cloaked, bits.shell].join("\\t");
+}
+function listRows() {
+  if (!ready) return [];
+  if (!$.AXIsProcessTrusted()) return [];
+  var rows = [];
+  var seen = {};
+  var apps = $.NSWorkspace.sharedWorkspace.runningApplications;
+  var count = Number(apps.count);
+  var i;
+  for (i = 0; i < count; i++) {
+    var app = apps.objectAtIndex(i);
+    var pid = Number(app.processIdentifier);
+    if (!pid) continue;
+    var hidden = false;
+    try { hidden = !!app.isHidden; } catch (err) { hidden = false; }
+    var bundle = "";
+    try {
+      if (app.bundleIdentifier) bundle = String(ObjC.unwrap(app.bundleIdentifier));
+    } catch (err2) { bundle = ""; }
+    var appEl = $.AXUIElementCreateApplication(pid);
+    if (!appEl) continue;
+    var windows = axCopy(appEl, "AXWindows");
+    $.CFRelease(appEl);
+    if (!windows) continue;
+    var n = 0;
+    try { n = Number($.CFArrayGetCount(windows)); } catch (err3) { n = 0; }
+    var j;
+    for (j = 0; j < n; j++) {
+      var line = oneWindow($.CFArrayGetValueAtIndex(windows, j), bundle, hidden);
+      if (!line) continue;
+      var id = line.split("\\t")[0];
+      if (seen[id]) continue;
+      seen[id] = 1;
+      rows.push(line);
+    }
+    $.CFRelease(windows);
+  }
+  return rows;
+}
+function answer() {
+  var rows = [];
+  try { rows = listRows(); } catch (err) { rows = []; }
+  var i;
+  for (i = 0; i < rows.length; i++) writeLine(rows[i]);
+  writeLine("END");
+}
+var input = $.NSFileHandle.fileHandleWithStandardInput;
+while (true) {
+  var data = input.availableData;
+  if (!data || Number(data.length) === 0) break;
+  var text = "";
+  try {
+    text = String(ObjC.unwrap($.NSString.alloc.initWithDataEncoding(data, $.NSUTF8StringEncoding)));
+  } catch (err) { text = ""; }
+  if (text.indexOf("quit") >= 0) break;
+  answer();
+}
+`;
+}
+
 let pump = null;
 let pumpBuf = "";
+let pumpKey = "";
 /** @type {{ ok: (text: string) => void, err: (err: Error) => void } | null} */
 let pumpWait = null;
 
-function isLinuxPlatform(platform) {
-  return platform === "linux" || /^Linux/i.test(String(platform || ""));
-}
-
 function enumCommand(platform) {
-  if (isLinuxPlatform(platform)) {
+  if (Windows.isLinux(platform)) {
     return { cmd: "python3", args: ["-u", "-c", LINUX_ENUM_SCRIPT] };
+  }
+  if (Windows.isMac(platform)) {
+    return { cmd: "/usr/bin/osascript", args: ["-l", "JavaScript", "-e", macEnumScript()] };
   }
   return {
     cmd: "powershell.exe",
@@ -462,10 +658,19 @@ function enumCommand(platform) {
   };
 }
 
+function pumpKeyFor(platform) {
+  if (Windows.isMac(platform)) return "mac";
+  if (Windows.isLinux(platform)) return "linux";
+  return "win";
+}
+
 function ensurePump(spawnFn, platform, env) {
+  const key = pumpKeyFor(platform);
+  if (pump && pumpKey !== key) disposePump();
   if (pump) return pump;
   const spawnImpl = spawnFn || spawn;
   const spec = enumCommand(platform);
+  pumpKey = key;
   pump = spawnImpl(spec.cmd, spec.args, {
     windowsHide: true,
     stdio: ["pipe", "pipe", "pipe"],
@@ -486,15 +691,21 @@ function ensurePump(spawnFn, platform, env) {
     });
   }
   if (pump.stderr) pump.stderr.setEncoding("utf8");
-  pump.on("exit", () => {
-    pump = null;
-    if (pumpWait) {
-      const wait = pumpWait;
-      pumpWait = null;
-      wait.err(new Error("window enum exited"));
+  const child = pump;
+  const fail = (err) => {
+    const current = pump === child;
+    if (current) {
+      pump = null;
+      pumpKey = "";
     }
-  });
-  return pump;
+    if (!current || !pumpWait) return;
+    const wait = pumpWait;
+    pumpWait = null;
+    wait.err(err instanceof Error ? err : new Error("window enum failed"));
+  };
+  child.on("error", fail);
+  child.on("exit", () => fail(new Error("window enum exited")));
+  return child;
 }
 
 function runPumpTick(opts) {
@@ -547,25 +758,29 @@ async function listRaw(opts) {
 }
 
 function disposePump() {
-  if (!pump) return;
-  try {
-    pump.stdin && pump.stdin.write("quit\n");
-  } catch {
-    /* ignore */
-  }
-  try {
-    pump.kill();
-  } catch {
-    /* ignore */
-  }
+  const child = pump;
   pump = null;
+  pumpKey = "";
   pumpWait = null;
   pumpBuf = "";
+  if (!child) return;
+  try {
+    child.stdin && child.stdin.write("quit\n");
+  } catch {
+    /* ignore */
+  }
+  try {
+    child.kill();
+  } catch {
+    /* ignore */
+  }
 }
 
 module.exports = {
   ENUM_SCRIPT,
   LINUX_ENUM_SCRIPT,
+  MAC_CLASSIFY_JS,
+  macEnumScript,
   enumCommand,
   listRaw,
   runPumpTick,

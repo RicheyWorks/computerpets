@@ -1,7 +1,9 @@
 const assert = require("node:assert/strict");
 const { EventEmitter } = require("node:events");
+const { execFileSync } = require("node:child_process");
 const { existsSync } = require("node:fs");
-const { readFileSync } = require("node:fs");
+const { readFileSync, writeFileSync } = require("node:fs");
+const { tmpdir } = require("node:os");
 const { join } = require("node:path");
 const { spawn } = require("node:child_process");
 const { test } = require("node:test");
@@ -75,18 +77,62 @@ test("the overlay hwnd, minimized, taskbar, and cloaked rows are not targets", (
   assert.equal(W.takeRects([raw({ id: overlayId })], { workArea: WORK, skipIds: [overlayId] }).length, 0);
 });
 
-test("Linux enumerates and Mac names the later door without inventing rects", () => {
+test("Windows, Linux, and Mac enumerate and do not name a later door", () => {
   assert.equal(W.enumeratesOn("win32"), true);
   assert.equal(W.enumeratesOn("Win32"), true);
   assert.equal(W.enumeratesOn("linux"), true);
   assert.equal(W.enumeratesOn("Linux"), true);
-  assert.equal(W.enumeratesOn("darwin"), false);
+  assert.equal(W.enumeratesOn("darwin"), true);
+  assert.equal(W.enumeratesOn("Mac"), true);
   assert.equal(W.laterDoor("win32"), null);
   assert.equal(W.laterDoor("linux"), null);
-  assert.equal(W.laterDoor("darwin"), "mac-window-play");
-  assert.equal(W.laterDoor("Mac"), "mac-window-play");
+  assert.equal(W.laterDoor("darwin"), null);
+  assert.equal(W.laterDoor("Mac"), null);
+  assert.equal(W.LATER_DOOR, null);
   assert.equal(W.isLinux("linux"), true);
   assert.equal(W.isMac("darwin"), true);
+});
+
+test("a Mac media source id is the window number, and a view pointer is not", () => {
+  assert.equal(W.cgWindowIdFromMediaSource("window:1869:0"), "1869");
+  assert.equal(W.cgWindowIdFromMediaSource("window:1869:1"), "1869");
+  assert.equal(W.cgWindowIdFromMediaSource("window:-1:0"), "");
+  assert.equal(W.cgWindowIdFromMediaSource("window:0:0"), "");
+  assert.equal(W.cgWindowIdFromMediaSource("1869"), "");
+  assert.equal(W.cgWindowIdFromMediaSource(""), "");
+});
+
+test("Mac shell, tool, minimized, and hidden bits match the helper", () => {
+  const classify = new Function(
+    "SHELL",
+    "TOOL_SUB",
+    "TOOL_BUNDLE",
+    `${Enum.MAC_CLASSIFY_JS}\nreturn classify;`,
+  )(W.MAC_SHELL_BUNDLES, W.MAC_TOOL_SUBROLES, W.MAC_TOOL_BUNDLES);
+  const cases = [
+    ["AXStandardWindow", "com.example.notes", false, false, { minimized: false, tool: false, cloaked: false, shell: false }],
+    ["AXFloatingWindow", "com.example.notes", false, false, { minimized: false, tool: true, cloaked: false, shell: false }],
+    ["AXSystemFloatingWindow", "com.example.notes", false, false, { minimized: false, tool: true, cloaked: false, shell: false }],
+    ["AXDialog", "com.example.notes", false, false, { minimized: false, tool: true, cloaked: false, shell: false }],
+    ["AXSystemDialog", "com.example.notes", false, false, { minimized: false, tool: true, cloaked: false, shell: false }],
+    ["AXUnknown", "com.example.notes", false, false, { minimized: false, tool: true, cloaked: false, shell: false }],
+    ["AXStandardWindow", "com.apple.dock", false, false, { minimized: false, tool: false, cloaked: false, shell: true }],
+    ["AXFloatingWindow", "com.apple.dock", false, false, { minimized: false, tool: false, cloaked: false, shell: true }],
+    ["AXStandardWindow", "com.apple.WindowServer", false, false, { minimized: false, tool: false, cloaked: false, shell: true }],
+    ["AXStandardWindow", "com.apple.SystemUIServer", false, false, { minimized: false, tool: false, cloaked: false, shell: true }],
+    ["AXStandardWindow", "com.apple.controlcenter", false, false, { minimized: false, tool: false, cloaked: false, shell: true }],
+    ["", "com.apple.notificationcenterui", false, false, { minimized: false, tool: true, cloaked: false, shell: false }],
+    ["AXStandardWindow", "com.example.notes", true, false, { minimized: true, tool: false, cloaked: false, shell: false }],
+    ["AXStandardWindow", "com.example.notes", false, true, { minimized: false, tool: false, cloaked: true, shell: false }],
+  ];
+  for (const [sub, bundle, mini, hidden, expect] of cases) {
+    assert.deepEqual(W.macWindowBits(sub, bundle, mini, hidden), expect);
+    const bits = classify(sub, bundle, mini, hidden);
+    assert.equal(bits.mini, expect.minimized ? 1 : 0);
+    assert.equal(bits.tool, expect.tool ? 1 : 0);
+    assert.equal(bits.cloaked, expect.cloaked ? 1 : 0);
+    assert.equal(bits.shell, expect.shell ? 1 : 0);
+  }
 });
 
 test("enum lines keep a shell bit and drop titles, paths, and class names", () => {
@@ -105,7 +151,7 @@ test("enum lines keep a shell bit and drop titles, paths, and class names", () =
   assert.equal(W.takeRects(legacy, { workArea: WORK }).length, 0);
 });
 
-test("enum JSON from a fake run is parsed; a later platform stays empty", async () => {
+test("enum text from a fake run is parsed on Windows, Mac, and Linux", async () => {
   const text = "11\t100\t80\t500\t400\t0\t0\t0\t0\nEND\n";
   const listed = await Enum.listRaw({
     platform: "win32",
@@ -115,9 +161,13 @@ test("enum JSON from a fake run is parsed; a later platform stays empty", async 
   assert.equal(listed.raw[0].id, "11");
   assert.equal(listed.raw[0].shell, false);
   assert.equal(JSON.stringify(listed.raw).includes("Notepad"), false);
-  const later = await Enum.listRaw({ platform: "darwin" });
-  assert.deepEqual(later.raw, []);
-  assert.equal(later.later, "mac-window-play");
+  const mac = await Enum.listRaw({
+    platform: "darwin",
+    run: async () => text,
+  });
+  assert.equal(mac.later, null);
+  assert.equal(mac.raw[0].id, "11");
+  assert.equal(mac.raw[0].shell, false);
   const linux = await Enum.listRaw({
     platform: "linux",
     run: async () => text,
@@ -138,9 +188,13 @@ test("the overlay asks main for window rects; it does not capture pixels", () =>
   assert.match(mainSrc, /windows-enum/);
   assert.match(mainSrc, /windowEnumsHere/);
   assert.match(mainSrc, /Desk\.isLinux/);
+  assert.match(mainSrc, /Desk\.isMac/);
   assert.match(mainSrc, /takeRects/);
   assert.match(mainSrc, /skipIds/);
   assert.match(mainSrc, /hwndFromHandle/);
+  assert.match(mainSrc, /getMediaSourceId/);
+  assert.match(mainSrc, /cgWindowIdFromMediaSource/);
+  assert.match(mainSrc, /isMac\(process\.platform\) \? 1/);
   assert.match(mainSrc, /webContents\.send\("windows"/);
   assert.match(preloadSrc, /onWindows/);
   assert.match(petSrc, /onWindows/);
@@ -163,7 +217,23 @@ test("the overlay asks main for window rects; it does not capture pixels", () =>
   assert.match(enumSrc, /_NET_WM_WINDOW_TYPE_DESKTOP/);
   assert.equal(Enum.enumCommand("linux").cmd, "python3");
   assert.equal(Enum.enumCommand("win32").cmd, "powershell.exe");
+  assert.equal(Enum.enumCommand("darwin").cmd, "/usr/bin/osascript");
+  assert.deepEqual(Enum.enumCommand("darwin").args.slice(0, 3), ["-l", "JavaScript", "-e"]);
   assert.doesNotMatch(Enum.LINUX_ENUM_SCRIPT, /WM_NAME|_NET_WM_NAME|WM_CLASS|_NET_WM_ICON_NAME|XFetchName|xcb_get_atom_name/);
+  const macSrc = Enum.macEnumScript();
+  assert.match(macSrc, /AXIsProcessTrusted/);
+  assert.match(macSrc, /_AXUIElementGetWindow/);
+  assert.match(macSrc, /AXWindows/);
+  assert.match(macSrc, /AXPosition/);
+  assert.match(macSrc, /AXSize/);
+  assert.match(macSrc, /AXMinimized/);
+  assert.match(macSrc, /AXSubrole/);
+  assert.match(macSrc, /AXRole/);
+  assert.doesNotMatch(macSrc, /AXTitle|kCGWindowName|CGWindowListCopyWindowInfo|AXTrustedCheckOptionPrompt|AXIsProcessTrustedWithOptions/);
+  for (const name of W.MAC_SHELL_BUNDLES) assert.match(macSrc, new RegExp(name.replace(/\./g, "\\.")));
+  const checked = join(tmpdir(), "computerpets-mac-window-enum.js");
+  writeFileSync(checked, macSrc);
+  execFileSync(process.execPath, ["--check", checked], { stdio: "pipe" });
 });
 
 function fakePump(text) {
@@ -212,18 +282,59 @@ test("linux pump spawns python3 and windows pump still spawns powershell", async
   Enum.disposePump();
 });
 
-test("darwin does not spawn an enumerator", async () => {
-  let called = false;
+test("darwin pump spawns osascript and parses the nine-field pipe", async () => {
+  Enum.disposePump();
+  const text = "11\t80\t90\t400\t290\t0\t0\t0\t0\nEND\n";
+  let cmd = "";
+  const listed = await Enum.listRaw({
+    platform: "darwin",
+    spawn(bin) {
+      cmd = bin;
+      return fakePump(text);
+    },
+  });
+  assert.equal(cmd, "/usr/bin/osascript");
+  assert.equal(listed.later, null);
+  assert.equal(listed.raw[0].id, "11");
+  assert.equal(listed.raw[0].left, 80);
+  assert.equal(listed.raw[0].shell, false);
+  const taken = W.takeRects(listed.raw, { workArea: { x: 0, y: 0, width: 1280, height: 800 }, scaleFactor: 1 });
+  assert.equal(taken[0].id, "11");
+  assert.equal(taken[0].width, 320);
+  assert.equal(taken[0].height, 200);
+  Enum.disposePump();
+});
+
+test("a missing Mac helper stays empty and does not invent rows", async () => {
+  Enum.disposePump();
   const listed = await Enum.listRaw({
     platform: "darwin",
     spawn() {
-      called = true;
-      return fakePump("");
+      const stdout = new EventEmitter();
+      stdout.setEncoding = () => {};
+      const stderr = new EventEmitter();
+      stderr.setEncoding = () => {};
+      const child = new EventEmitter();
+      child.stdout = stdout;
+      child.stderr = stderr;
+      child.stdin = { write() { return true; } };
+      child.kill = () => {};
+      setImmediate(() => child.emit("error", Object.assign(new Error("spawn ENOENT"), { code: "ENOENT" })));
+      return child;
     },
   });
-  assert.equal(called, false);
+  assert.equal(listed.later, null);
   assert.deepEqual(listed.raw, []);
-  assert.equal(listed.later, "mac-window-play");
+  Enum.disposePump();
+});
+
+test("off a Mac the real helper does not invent rows", async () => {
+  if (process.platform === "darwin") return;
+  Enum.disposePump();
+  const listed = await Enum.listRaw({ platform: "darwin", timeoutMs: 2000 });
+  Enum.disposePump();
+  assert.equal(listed.later, null);
+  assert.deepEqual(listed.raw, []);
 });
 
 const X11_FIXTURE = `

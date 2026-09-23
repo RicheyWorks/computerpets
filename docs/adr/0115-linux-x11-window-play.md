@@ -41,4 +41,4 @@ This slice does not reopen presence/CSP, Hikari, bundle zip, cosign, CDN, secret
 - The helper does not read a title or a class. A title planted on a window does not appear on the pipe.
 - Mac window play is still open. Do not invent Mac rectangles in this door.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** Mac window play (`mac-window-play`). The overlay lists windows on Windows 10/11 and on Linux X11. That door does not play a window on a Mac, and it is not faked. Wayland without an X11 display stays empty and is not the next slice. Do not start Pane. Do not start DirectX 12, Vulkan, or Solana. Catalog stays 221.
+- **Next gap:** moved. Mac Accessibility lists real rectangles ([0116](0116-mac-accessibility-window-play.md)). This X11 list stays. Wayland without an X11 display stays empty. Do not start Pane. Do not start DirectX 12, Vulkan, or Solana. Catalog stays 221.
