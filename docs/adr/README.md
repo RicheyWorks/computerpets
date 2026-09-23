@@ -97,6 +97,7 @@ address, or an API that is not on `main`.
 | [0076](0076-postgres-transit-tls.md) | Postgres transit TLS (`sslmode` + `rds.force_ssl`; prod fails closed when half-set) | Accepted |
 | [0077](0077-api-listener-tls.md) | API listener TLS (Ingress cert-manager or ACM HTTPS listener; prod fails closed when required) | Accepted |
 | [0078](0078-horizontal-pod-autoscaling.md) | Horizontal pod autoscaling for the API (prod HPA; local apply stays unscaled) | Accepted |
+| [0079](0079-pod-disruption-budget.md) | Pod disruption budget for the live API color (prod PDB; local apply omits it) | Accepted |
 
 ## How to add one
 

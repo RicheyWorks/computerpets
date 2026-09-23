@@ -407,6 +407,10 @@ Prod API replica count is `deploy/k8s/hpa.yaml` (min 3, max 10), applied
 on its own after metrics-server answers `kubectl top`. It is not in the
 kustomization. Local `kubectl apply -k` stays at blue 2 / green 0
 ([ADR 0078](adr/0078-horizontal-pod-autoscaling.md)).
+Prod voluntary disruption of that live color keeps 2 pods
+(`deploy/k8s/pdb.yaml`), also applied on its own, and only after that
+floor is actually running. It is not in the kustomization
+([ADR 0079](adr/0079-pod-disruption-budget.md)).
 
 Prefer External Secrets Operator or Vault Agent to fill
 `computerpets-secrets` rather than committing values into `secret.yaml`.
