@@ -121,27 +121,42 @@ def test_stale_drops_the_old_numbers():
     assert "62" not in gpu_line(stale)
 
 
-def test_mac_and_linux_are_explicit_and_ignore_numbers():
+def test_linux_reads_nvidia_and_mac_stays_closed():
     assert senses_on("win32")
+    assert senses_on("linux")
     assert is_mac("darwin")
     assert is_linux("linux")
     assert later_door("win32") is None
+    assert later_door("linux") is None
     assert later_door("darwin") == LATER_DOOR
-    assert later_door("linux") == LATER_DOOR
-    for platform in ("darwin", "linux"):
-        sample = sample_from_probe(
-            {"nvidiaCsv": "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5"},
-            platform=platform,
-            now_ms=NOW,
-        )
-        assert sample["status"] == "unsupported"
-        assert sample["tempC"] is None
-        assert sample["utilPercent"] is None
-        assert gpu_line(sample) == "GPU unread · mac-linux-gpu-sense"
-    assert read_local(platform="linux", now_ms=NOW)["status"] == "unsupported"
+    assert LATER_DOOR == "mac-gpu-sense"
+    linux = sample_from_probe(
+        {"nvidiaCsv": "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5"},
+        platform="linux",
+        now_ms=NOW,
+    )
+    assert linux["status"] == "read"
+    assert linux["source"] == "nvidia-smi"
+    assert linux["tempC"] == 62
+    assert gpu_line(linux) == VALID_LINE
+    mac = sample_from_probe(
+        {"nvidiaCsv": "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5"},
+        platform="darwin",
+        now_ms=NOW,
+    )
+    assert mac["status"] == "unsupported"
+    assert mac["tempC"] is None
+    assert mac["utilPercent"] is None
+    assert gpu_line(mac) == "GPU unread · mac-gpu-sense"
+    live = read_local(platform="linux", now_ms=NOW)
+    assert live["status"] in {"read", "unread", "malformed"}
+    if live["status"] != "read":
+        assert live["utilPercent"] is None
+        assert live["tempC"] is None
+        assert "0%" not in gpu_line(live)
     assert read_local(platform="darwin", now_ms=NOW)["reason"] == LATER_DOOR
     initial = initial_sample(platform="linux", now_ms=NOW)
-    assert initial["status"] == "unsupported"
+    assert initial["status"] == "unread"
     assert "0%" not in gpu_line(initial)
 
 
@@ -212,19 +227,18 @@ def test_unread_malformed_and_unsupported_sparklines_stay_empty():
     assert sparkline([], malformed, NOW)["path"] == ""
     assert sparkline(prior, malformed, NOW + 2000)["empty"] is True
 
-    for platform in ("darwin", "linux"):
-        sample = sample_from_probe(
-            {"nvidiaCsv": "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5"},
-            platform=platform,
-            now_ms=NOW,
-        )
-        assert sample["status"] == "unsupported"
-        assert remember([], sample, NOW) == []
-        spark = sparkline([], sample, NOW)
-        assert spark["empty"] is True
-        assert spark["path"] == ""
-        assert spark["ink"] == UNREAD_INK
-        assert spark["history"] == []
+    mac = sample_from_probe(
+        {"nvidiaCsv": "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5"},
+        platform="darwin",
+        now_ms=NOW,
+    )
+    assert mac["status"] == "unsupported"
+    assert remember([], mac, NOW) == []
+    spark = sparkline([], mac, NOW)
+    assert spark["empty"] is True
+    assert spark["path"] == ""
+    assert spark["ink"] == UNREAD_INK
+    assert spark["history"] == []
 
 
 def test_stale_samples_clear_the_sparkline():

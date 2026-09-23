@@ -1,10 +1,12 @@
-"""Desktop-local GPU sense. Real Windows readings only. Mac/Linux stay dark.
+"""Desktop-local GPU sense. Windows and Linux nvidia-smi. Mac stays dark.
 
 Spring Boot is not the pet's GPU. There is no ``/metrics/gpu`` door.
-Temperature, utilization, memory, and power come from nvidia-smi or Windows
-GPU performance counters. A missing, malformed, stale, or non-Windows reading
-stays unread. A real zero from the hardware is kept. The sparkline is a trail of
-those read samples and stays empty until two fresh utilization points exist.
+Temperature, utilization, memory, and power come from nvidia-smi, or from
+Windows GPU performance counters. Linux runs the same nvidia-smi query and
+does not read amdgpu or Intel sysfs. Mac stays ``mac-gpu-sense`` and does not
+spawn. A missing, malformed, or stale reading stays unread. A real zero from
+the hardware is kept. The sparkline is a trail of those read samples and stays
+empty until two fresh utilization points exist.
 """
 
 from __future__ import annotations
@@ -17,7 +19,7 @@ import time
 from pathlib import Path
 
 STALE_MS = 20000
-LATER_DOOR = "mac-linux-gpu-sense"
+LATER_DOOR = "mac-gpu-sense"
 SOURCES = ("nvidia-smi", "pdh", "nvidia-smi+pdh")
 METRIC_KEYS = ("tempC", "utilPercent", "memoryUsedBytes", "memoryTotalBytes", "powerWatts")
 _NA = re.compile(r"^\[?\s*(n/a|not supported)\s*\]?$", re.I)
@@ -30,9 +32,13 @@ _HEADER = re.compile(r"^name\s*,", re.I)
 _3D = re.compile(r"engtype_3D", re.I)
 
 
-def senses_on(platform: str | None) -> bool:
+def is_windows(platform: str | None) -> bool:
     text = platform or ""
     return text == "win32" or bool(_WIN.search(text))
+
+
+def senses_on(platform: str | None) -> bool:
+    return is_windows(platform) or is_linux(platform)
 
 
 def is_mac(platform: str | None) -> bool:
@@ -706,6 +712,10 @@ def probe_script() -> Path:
     return Path(__file__).resolve().parents[2] / "desktop" / "gpu-probe.ps1"
 
 
+def linux_probe_script() -> Path:
+    return Path(__file__).resolve().parents[2] / "desktop" / "gpu-probe.sh"
+
+
 def initial_sample(platform: str | None = None, now_ms=None) -> dict:
     plat = sys.platform if platform is None else platform
     now = _stamp(now_ms if now_ms is not None else time.time() * 1000)
@@ -720,11 +730,16 @@ def read_local(platform: str | None = None, now_ms=None) -> dict:
     if not senses_on(plat):
         return present({"status": "unsupported", "platform": plat, "readAtMs": now}, now)
     try:
-        script = probe_script()
-        if not script.is_file():
-            raise FileNotFoundError(script)
-        proc = subprocess.run(
-            [
+        if is_linux(plat):
+            script = linux_probe_script()
+            if not script.is_file():
+                raise FileNotFoundError(script)
+            command = ["/bin/sh", str(script)]
+        else:
+            script = probe_script()
+            if not script.is_file():
+                raise FileNotFoundError(script)
+            command = [
                 "powershell.exe",
                 "-NoProfile",
                 "-NonInteractive",
@@ -732,7 +747,9 @@ def read_local(platform: str | None = None, now_ms=None) -> dict:
                 "Bypass",
                 "-File",
                 str(script),
-            ],
+            ]
+        proc = subprocess.run(
+            command,
             capture_output=True,
             text=True,
             timeout=8,

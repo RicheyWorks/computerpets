@@ -1,12 +1,12 @@
-/** Desktop-local GPU sense. Real Windows readings only. Mac/Linux stay dark. Sparkline is real samples only. */
+/** Desktop-local GPU sense. Windows and Linux nvidia-smi. Mac stays mac-gpu-sense. Sparkline is real samples only. */
 (function (root) {
   const STALE_MS = 20000;
-  const LATER_DOOR = "mac-linux-gpu-sense";
+  const LATER_DOOR = "mac-gpu-sense";
   const SOURCES = ["nvidia-smi", "pdh", "nvidia-smi+pdh"];
   const METRIC_KEYS = ["tempC", "utilPercent", "memoryUsedBytes", "memoryTotalBytes", "powerWatts"];
 
   function sensesOn(platform) {
-    return platform === "win32" || /^Win/i.test(String(platform || ""));
+    return platform === "win32" || /^Win/i.test(String(platform || "")) || isLinux(platform);
   }
 
   function isMac(platform) {

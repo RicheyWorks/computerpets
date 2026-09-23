@@ -28,11 +28,13 @@ const VALID_LINE = "GPU NVIDIA GeForce RTX 4070 · 62°C · 14% · 3.1 GiB/12 Gi
 
 test("the browser contract matches the overlay: valid, missing, malformed, stale, unsupported", () => {
   assert.equal(sensesOn("win32"), true);
+  assert.equal(sensesOn("linux"), true);
   assert.equal(isMac("darwin"), true);
   assert.equal(isLinux("linux"), true);
   assert.equal(laterDoor("darwin"), LATER_DOOR);
-  assert.equal(laterDoor("linux"), LATER_DOOR);
+  assert.equal(laterDoor("linux"), null);
   assert.equal(laterDoor("win32"), null);
+  assert.equal(LATER_DOOR, "mac-gpu-sense");
   assert.equal(STALE_MS, 20000);
 
   const valid = sampleFromProbe(
@@ -83,10 +85,13 @@ test("the browser contract matches the overlay: valid, missing, malformed, stale
     { platform: "linux", nowMs: NOW },
   );
   assert.equal(mac.status, "unsupported");
-  assert.equal(linux.status, "unsupported");
-  assert.equal(gpuLine(mac), "GPU unread · mac-linux-gpu-sense");
+  assert.equal(linux.status, "read");
+  assert.equal(linux.tempC, 62);
+  assert.equal(linux.utilPercent, 14);
+  assert.equal(gpuLine(mac), "GPU unread · mac-gpu-sense");
+  assert.equal(gpuLine(linux), VALID_LINE);
   assert.equal(mac.tempC, null);
-  assert.equal(linux.powerWatts, null);
+  assert.equal(linux.powerWatts, 48.5);
 });
 
 function at(util, when) {

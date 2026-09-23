@@ -1,7 +1,7 @@
-/** Desktop-local GPU sense. The browser has no sensor, so this page stays unread and the sparkline stays empty. */
+/** Desktop-local GPU sense. The browser has no sensor, so this page stays unread and the sparkline stays empty. Windows and Linux nvidia-smi share the line. Mac stays mac-gpu-sense. */
 
 export const STALE_MS = 20000;
-export const LATER_DOOR = "mac-linux-gpu-sense";
+export const LATER_DOOR = "mac-gpu-sense";
 
 const SOURCES = ["nvidia-smi", "pdh", "nvidia-smi+pdh"] as const;
 const METRIC_KEYS = ["tempC", "utilPercent", "memoryUsedBytes", "memoryTotalBytes", "powerWatts"] as const;
@@ -38,7 +38,7 @@ type NvidiaRow = {
 };
 
 export function sensesOn(platform: string | null | undefined) {
-  return platform === "win32" || /^Win/i.test(String(platform || ""));
+  return platform === "win32" || /^Win/i.test(String(platform || "")) || isLinux(platform);
 }
 
 export function isMac(platform: string | null | undefined) {
