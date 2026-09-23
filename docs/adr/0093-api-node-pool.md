@@ -44,4 +44,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - `nodeAffinityPolicy` is the same Kubernetes field family as `nodeTaintsPolicy`. A cluster that rejects the field cannot apply these Deployments.
 - Dropping either selector key, setting `nodeAffinityPolicy: Ignore`, adding `nodeAffinity`, adding `DoNotSchedule`, or pinning Postgres or Redis fails `check-api-node-pool.sh`.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** the API node pool has no taint, so pods that do not select `computerpets/node-pool=api` can still schedule onto those workers. `ScheduleAnyway` can still place every live API pod in one labeled zone. Preferred zone anti-affinity can still place both Cluster Autoscaler pods in one zone. Required zone anti-affinity is not the follow-up. A serving certificate that does not chain to `caBundle` (and is not a system root), or whose SAN is not `metrics-server.kube-system.svc`, still leaves `kubectl top` empty. A kubelet certificate that does not chain to `metrics-server-kubelet-ca` still leaves `kubectl top` empty.
+- **Next gap:** moved. The API pool taint is [0094](0094-api-pool-taint.md).
