@@ -57,3 +57,11 @@ enable_node_pool        = true
 #   "us-east-1a" = "subnet-0123456789abcdef0"
 #   "us-east-1b" = "subnet-0123456789abcdef1"
 # }
+
+# Cluster Autoscaler (ADR 0083). On when the node pool is on. Plan refuses
+# an empty OIDC ARN. This root does not create the provider. The issuer
+# host must be oidc.eks.<aws_region>.amazonaws.com. Kind/minikube set
+# enable_node_pool = false and the role stays off. Terraform ignores
+# desired_size after create. Each zone's max is at least the HPA ceiling.
+enable_cluster_autoscaler = true
+# eks_oidc_provider_arn = "arn:aws:iam::000000000000:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/AAAA1111BBBB2222CCCC3333DDDD4444"

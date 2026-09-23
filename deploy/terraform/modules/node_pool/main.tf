@@ -39,9 +39,11 @@ locals {
   # This module does not create an EKS cluster, a VPC, or a subnet.
   # It does not stamp topology.kubernetes.io/zone. EKS sets that label
   # from the instance placement AZ. One subnet per group keeps that AZ.
+  # desired-size-owner=cluster-autoscaler (ADR 0083). Create still uses 1.
+  # hpa-max-replicas=10. Each group's max_size is at least that ceiling.
   min_size_per_zone     = 1
   desired_size_per_zone = 1
-  max_size_per_zone     = 4
+  max_size_per_zone     = 10
   root_volume_gib       = 20
 
   zones_ok = (
@@ -57,6 +59,21 @@ locals {
   )
   cluster_ok = can(regex("^[A-Za-z0-9][A-Za-z0-9_-]{0,99}$", var.cluster_name))
   ready      = local.zones_ok && local.cluster_ok
+
+  # Node-group tags do not reach the managed Auto Scaling group.
+  # Cluster Autoscaler discovers that group by these two tags (ADR 0083).
+  ca_discovery_tags = local.cluster_ok ? {
+    "k8s.io/cluster-autoscaler/enabled"             = "true"
+    "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
+  } : {}
+
+  ca_asg_tag_pairs = local.ready ? {
+    for pair in setproduct(sort(keys(var.subnets)), sort(keys(local.ca_discovery_tags))) :
+    "${pair[0]}|${pair[1]}" => {
+      zone = pair[0]
+      key  = pair[1]
+    }
+  } : {}
 
   worker_policies = local.ready ? toset([
     "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
@@ -133,9 +150,17 @@ resource "aws_eks_node_group" "zone" {
   capacity_type   = "ON_DEMAND"
 
   scaling_config {
-    min_size     = local.min_size_per_zone
+    min_size = local.min_size_per_zone
+    # Create-time size only. Cluster Autoscaler owns it afterwards.
     desired_size = local.desired_size_per_zone
     max_size     = local.max_size_per_zone
+  }
+
+  # A later apply must not write desired_size back to 1 (ADR 0083).
+  # min_size and max_size stay Terraform-owned. lifecycle cannot be
+  # conditional, so this ignore stays even if the autoscaler flag is off.
+  lifecycle {
+    ignore_changes = [scaling_config[0].desired_size]
   }
 
   launch_template {
@@ -156,6 +181,22 @@ resource "aws_eks_node_group" "zone" {
   }
 
   depends_on = [aws_iam_role_policy_attachment.worker]
+}
+
+# EKS CreateNodegroup tags stay on the node group. They are not copied
+# onto the Auto Scaling group the managed node group creates. Cluster
+# Autoscaler only looks at the group (ADR 0083). propagate_at_launch is
+# false so the tag is not also an instance tag.
+resource "aws_autoscaling_group_tag" "cluster_autoscaler" {
+  for_each = local.ca_asg_tag_pairs
+
+  autoscaling_group_name = one(one(aws_eks_node_group.zone[each.value.zone].resources).autoscaling_groups).name
+
+  tag {
+    key                 = each.value.key
+    value               = local.ca_discovery_tags[each.value.key]
+    propagate_at_launch = false
+  }
 }
 
 output "attached" {
@@ -204,4 +245,14 @@ output "zone_label_source" {
 
 output "capacity_type" {
   value = "ON_DEMAND"
+}
+
+output "desired_size_owner" {
+  description = "cluster-autoscaler. Terraform ignores desired_size after create (ADR 0083)."
+  value       = "cluster-autoscaler"
+}
+
+output "cluster_autoscaler_asg_tag_count" {
+  description = "Discovery tags applied to the managed Auto Scaling groups. Two per zone."
+  value       = length(aws_autoscaling_group_tag.cluster_autoscaler)
 }

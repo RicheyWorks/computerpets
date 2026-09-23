@@ -75,6 +75,7 @@ All critical items required before any public or limited production exposure hav
   - [x] API hostname spread — both Deployments set `topologySpreadConstraints` on `kubernetes.io/hostname` (`maxSkew: 1`, `ScheduleAnyway`, `nodeTaintsPolicy: Honor`, selector scoped to that color). Not `DoNotSchedule`. Not a required anti-affinity. Local replica counts stay blue 2 / green 0 (ADR 0080). Catalog stays 221.
   - [x] API zone spread — both Deployments add `topology.kubernetes.io/zone` (`maxSkew: 1`, `ScheduleAnyway`, `nodeTaintsPolicy: Honor`). Not `DoNotSchedule`. Prod expects at least two availability zones. Local replica counts stay blue 2 / green 0 (ADR 0081). Catalog stays 221.
   - [x] Multi-AZ API node pool — one private EKS managed node group per availability zone, at least two, on a keeper-owned cluster. No public IP. No SSH. Plan refuses a single zone. EKS sets the zone label from the instance AZ. This root does not create the cluster (ADR 0082). Catalog stays 221.
+  - [x] Cluster Autoscaler — grows those node groups when pods are Pending. Per-zone max is at least the HPA ceiling of 10. Terraform ignores `desired_size` after create. IRSA trusts only `kube-system/cluster-autoscaler`. The manifest is not in the kustomization. Kind/minikube stay off (ADR 0083). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload
@@ -141,6 +142,7 @@ All critical items required before any public or limited production exposure hav
   - [x] API hostname spread — soft `topologySpreadConstraints` on `kubernetes.io/hostname` for both colors (`ScheduleAnyway`). A one-node local apply still schedules (ADR 0080). Catalog stays 221.
   - [x] API zone spread — soft `topologySpreadConstraints` on `topology.kubernetes.io/zone` for both colors (`ScheduleAnyway`). A single-zone local apply still schedules. Prod expects at least two availability zones (ADR 0081). Catalog stays 221.
   - [x] Multi-AZ API node pool — private workers, one managed node group per AZ, at least two. No public IP. No SSH. The cluster stays the keeper's (ADR 0082). Catalog stays 221.
+  - [x] Cluster Autoscaler — scales those groups when pods are Pending. Max per zone is at least the HPA ceiling. Terraform ignores desired size after create. Not in the kustomization (ADR 0083). Catalog stays 221.
 
 ---
 

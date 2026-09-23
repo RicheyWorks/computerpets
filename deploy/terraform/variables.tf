@@ -285,6 +285,29 @@ variable "node_pool_subnets" {
   }
 }
 
+variable "enable_cluster_autoscaler" {
+  type        = bool
+  description = "Plan the Cluster Autoscaler IRSA role for the API node groups (ADR 0083). Requires enable_node_pool and eks_oidc_provider_arn. Kind/minikube set enable_node_pool=false, which skips this role even when the flag stays true. Set false only when those groups must not be scaled by this role."
+  default     = true
+}
+
+variable "eks_oidc_provider_arn" {
+  type        = string
+  description = "Keeper-owned EKS OIDC provider ARN for Cluster Autoscaler IRSA (ADR 0083). Required for plan/apply when enable_node_pool and enable_cluster_autoscaler are both true. Empty is accepted by terraform validate only. This root does not create the provider. The issuer host must be oidc.eks.<aws_region>.amazonaws.com."
+  default     = ""
+
+  validation {
+    condition = (
+      var.eks_oidc_provider_arn == "" ||
+      can(regex(
+        "^arn:aws:iam::[0-9]{12}:oidc-provider/oidc\\.eks\\.[a-z0-9-]+\\.amazonaws\\.com/id/[A-Z0-9]{32}$",
+        var.eks_oidc_provider_arn
+      ))
+    )
+    error_message = "eks_oidc_provider_arn must be empty (validate-only) or an EKS OIDC provider ARN (arn:aws:iam::ACCOUNT:oidc-provider/oidc.eks.<region>.amazonaws.com/id/<32 chars>)."
+  }
+}
+
 variable "node_pool_instance_types" {
   type        = list(string)
   description = "Instance types for each zone's node group (ADR 0082). Default t3.medium. GPU, Inferentia, Trainium, and VT families are refused."
