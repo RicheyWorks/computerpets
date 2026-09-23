@@ -7,7 +7,8 @@ When that binary is missing, the Linux probe reads amdgpu sysfs into the
 same line. Temperature is the hwmon channel labeled ``edge``. Power is the
 hwmon channel labeled ``PPT``. An unlabeled channel stays unread. i915 and
 xe utilization comes from two DRM fdinfo reads when that percent is honest;
-otherwise the section stays ``INTEL_EMPTY``.
+otherwise the section stays ``INTEL_EMPTY``. Device VRAM used and total on
+that line stay unread. There is no upstream used and total pair.
 Mac runs ``ioreg`` on IOAccelerator
 PerformanceStatistics and prints that same line. A missing tool stays unread.
 Temperature and power on Mac and on the fdinfo line stay unread. A missing,
