@@ -72,6 +72,9 @@ No mesh.
   ([0084](0084-metrics-server.md), [0085](0085-metrics-server-ha.md),
   [0086](0086-metrics-server-kubelet-ca.md),
   [0087](0087-metrics-server-serving-cert.md),
-  [0088](0088-metrics-server-zone-spread.md)).
-  That manifest is not in this kustomization. A single-zone apply still
-  schedules both pods when two hostnames exist.
+  [0088](0088-metrics-server-zone-spread.md),
+  [0089](0089-metrics-server-node-pool.md)).
+  That manifest is not in this kustomization. `nodeSelector` requires
+  `computerpets/node-pool=api`, so kind and minikube stay off the file.
+  A single-zone set of labeled nodes still schedules both pods when two
+  hostnames exist.
