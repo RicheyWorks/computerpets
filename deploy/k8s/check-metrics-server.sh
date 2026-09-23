@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ADR 0084 / 0085 / 0086 / 0087 / 0088 / 0089 — metrics-server install
-# path, two replicas, required hostname anti-affinity, soft zone spread,
+# path, two replicas, required hostname anti-affinity, hard zone spread,
 # a fail-closed kubelet CA mount, a fail-closed serving-cert Secret, and
 # a required pin to the multi-AZ API node-pool label.
 # No cluster. Does not kubectl apply. The manifest stays out of kustomize.
@@ -19,6 +19,7 @@ ADR86="${ROOT}/docs/adr/0086-metrics-server-kubelet-ca.md"
 ADR87="${ROOT}/docs/adr/0087-metrics-server-serving-cert.md"
 ADR88="${ROOT}/docs/adr/0088-metrics-server-zone-spread.md"
 ADR89="${ROOT}/docs/adr/0089-metrics-server-node-pool.md"
+ADR98="${ROOT}/docs/adr/0098-metrics-server-zone-hard-spread.md"
 POOL="${ROOT}/deploy/terraform/modules/node_pool/main.tf"
 PASS=0
 FAIL=0
@@ -94,6 +95,7 @@ need_file "$ADR86"
 need_file "$ADR87"
 need_file "$ADR88"
 need_file "$ADR89"
+need_file "$ADR98"
 need_file "$POOL"
 need_absent "${ROOT}/deploy/k8s/Chart.yaml"
 need_absent "${ROOT}/deploy/k8s/metrics-server/values.yaml"
@@ -127,13 +129,13 @@ need_grep_body "$MS" 'topologyKey: kubernetes.io/hostname$' "anti-affinity topol
 need_grep_body "$MS" 'topologySpreadConstraints:' "zone spread is set"
 need_grep_body "$MS" 'topologyKey: topology\.kubernetes\.io/zone$' "zone spread topology is the zone label"
 need_grep_body "$MS" 'maxSkew: 1$' "zone spread maxSkew is 1"
-need_grep_body "$MS" 'whenUnsatisfiable: ScheduleAnyway$' "zone spread still schedules"
+need_grep_body "$MS" 'whenUnsatisfiable: DoNotSchedule$' "zone spread is DoNotSchedule"
+need_not_grep_body "$MS" 'whenUnsatisfiable: ScheduleAnyway$' "zone spread is not ScheduleAnyway"
 need_grep_body "$MS" 'nodeTaintsPolicy: Honor$' "zone spread honors taints"
 need_grep_body "$MS" 'nodeAffinityPolicy: Honor$' "zone spread counts only selected nodes"
 need_not_grep_body "$MS" 'nodeAffinityPolicy: Ignore$' "zone spread does not count nodes outside the selector"
 need_grep_body "$MS" 'computerpets/node-pool: api$' "nodeSelector requires the api pool label"
 need_grep_body "$MS" 'kubernetes.io/os: linux$' "nodeSelector still requires linux"
-need_not_grep_body "$MS" 'DoNotSchedule' "zone spread is not a hard failure"
 need_not_grep_body "$MS" 'minDomains:' "zone spread has no zone floor"
 need_not_grep_body "$MS" 'operator: NotIn$' "node selector is not inverted"
 need_not_grep_body "$MS" 'operator: DoesNotExist$' "node selector does not match a missing key"
@@ -186,9 +188,12 @@ if [ -f "$MS" ]; then
   host_key="$(yaml_body "$MS" | grep -c 'topologyKey: kubernetes.io/hostname' || true)"
   if [ "${host_key}" = "1" ]; then ok "hostname anti-affinity key appears once"
   else bad "expected one hostname topology key (found ${host_key})"; fi
+  hard_count="$(yaml_body "$MS" | grep -c 'whenUnsatisfiable: DoNotSchedule' || true)"
+  if [ "${hard_count}" = "1" ]; then ok "DoNotSchedule appears once"
+  else bad "expected one DoNotSchedule (found ${hard_count})"; fi
   soft_count="$(yaml_body "$MS" | grep -c 'whenUnsatisfiable: ScheduleAnyway' || true)"
-  if [ "${soft_count}" = "1" ]; then ok "ScheduleAnyway appears once"
-  else bad "expected one ScheduleAnyway (found ${soft_count})"; fi
+  if [ "${soft_count}" = "0" ]; then ok "ScheduleAnyway is absent"
+  else bad "expected no ScheduleAnyway (found ${soft_count})"; fi
   pool_sel="$(yaml_body "$MS" | grep -c 'computerpets/node-pool: api' || true)"
   if [ "${pool_sel}" = "1" ]; then ok "pool label selector appears once"
   else bad "expected one computerpets/node-pool: api (found ${pool_sel})"; fi
@@ -335,8 +340,17 @@ need_grep "$ADR88" 'kubelet-insecure-tls' "zone ADR forbids the kubelet TLS skip
 need_grep "$ADR88" 'Catalog stays 221' "zone ADR keeps catalog 221"
 need_grep "$ADR88" 'not in the kustomization' "zone ADR keeps the file out of kustomize"
 need_grep "$README" 'ADR 0088' "README names ADR 0088"
+need_grep "$README" 'ADR 0098' "README names ADR 0098"
 need_grep "$README" 'topology.kubernetes.io/zone' "README names the zone key"
-need_grep "$README" 'ScheduleAnyway' "README names the soft zone action"
+need_grep "$README" 'DoNotSchedule' "README names the hard zone action"
+need_grep "$README" 'One labeled zone still schedules' "README is honest about one zone"
+need_grep "$ADR98" 'DoNotSchedule' "hard zone ADR names DoNotSchedule"
+need_grep "$ADR98" 'One labeled zone still schedules' "hard zone ADR is honest about one zone"
+need_grep "$ADR98" 'Do not set minDomains' "hard zone ADR refuses minDomains"
+need_grep "$ADR98" 'replicas: 2' "hard zone ADR keeps two replicas"
+need_grep "$ADR98" 'Catalog stays 221' "hard zone ADR keeps catalog 221"
+need_grep "$ADR98" 'not in the kustomization' "hard zone ADR keeps the file out of kustomize"
+need_grep "$ADR98" 'No Rui sprites' "hard zone ADR has no Rui sprites"
 need_grep "$ADR89" 'computerpets/node-pool' "pool ADR names the pool label"
 need_grep "$ADR89" 'nodeAffinityPolicy' "pool ADR names nodeAffinityPolicy"
 need_grep "$ADR89" 'ScheduleAnyway' "pool ADR keeps the soft zone action"
@@ -408,7 +422,8 @@ while i < len(lines):
 check(len(spread) == 1, "one topology spread item")
 item = spread[0] if spread else []
 check("nodeAffinityPolicy: Honor" in item, "spread item sets nodeAffinityPolicy Honor")
-check("whenUnsatisfiable: ScheduleAnyway" in item, "spread item stays ScheduleAnyway")
+check("whenUnsatisfiable: DoNotSchedule" in item, "spread item is DoNotSchedule")
+check("whenUnsatisfiable: ScheduleAnyway" not in item, "spread item is not ScheduleAnyway")
 check("topologyKey: topology.kubernetes.io/zone" in item, "spread item stays on the zone key")
 check("nodeTaintsPolicy: Honor" in item, "spread item still honors taints")
 if failed:
