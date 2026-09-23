@@ -4,11 +4,13 @@ Spring Boot is not the pet's GPU. There is no ``/metrics/gpu`` door.
 Temperature, utilization, memory, and power come from nvidia-smi, or from
 Windows GPU performance counters. Linux runs the same nvidia-smi query.
 When that binary is missing, the Linux probe reads amdgpu sysfs into the
-same line. i915 and xe utilization comes from two DRM fdinfo reads when
-that percent is honest; otherwise the section stays ``INTEL_EMPTY``.
+same line. Temperature is the hwmon channel labeled ``edge``. Power is the
+hwmon channel labeled ``PPT``. An unlabeled channel stays unread. i915 and
+xe utilization comes from two DRM fdinfo reads when that percent is honest;
+otherwise the section stays ``INTEL_EMPTY``.
 Mac runs ``ioreg`` on IOAccelerator
 PerformanceStatistics and prints that same line. A missing tool stays unread.
-Temperature and power on Mac, on the amdgpu line, and on the fdinfo line stay unread. A missing,
+Temperature and power on Mac and on the fdinfo line stay unread. A missing,
 malformed, or stale reading stays unread. A real zero from the hardware is
 kept. The sparkline is a trail of those read samples and stays empty until
 two fresh utilization points exist.

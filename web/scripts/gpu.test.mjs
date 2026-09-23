@@ -121,6 +121,14 @@ test("the browser contract matches the overlay: valid, missing, malformed, stale
   assert.equal(amd.tempC, null);
   assert.equal(amd.powerWatts, null);
   assert.equal(gpuLine(amd), "GPU amdgpu 1002:73BF · unread · 37% · 2 GiB/8 GiB · unread");
+  const amdHot = sampleFromProbe(
+    parseProbeText(["NVIDIA_ABSENT", "AMDGPU", "amdgpu 1002:73BF, 45.5, 37, 2048, 8192, 33", "ENDAMDGPU", "ENGINE_ABSENT", "MEMORY_ABSENT", "END"].join("\n")),
+    { platform: "linux", nowMs: NOW },
+  );
+  assert.equal(amdHot.source, "amdgpu");
+  assert.equal(amdHot.tempC, 45.5);
+  assert.equal(amdHot.powerWatts, 33);
+  assert.equal(gpuLine(amdHot), "GPU amdgpu 1002:73BF · 45.5°C · 37% · 2 GiB/8 GiB · 33 W");
   const emptyAmd = sampleFromProbe(parseProbeText(["NVIDIA_ABSENT", "AMDGPU_EMPTY", "ENGINE_ABSENT", "MEMORY_ABSENT", "END"].join("\n")), {
     platform: "linux",
     nowMs: NOW,
