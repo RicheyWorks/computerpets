@@ -596,17 +596,114 @@ test("the visit guest and the desk /demo pet paint on the shared canvas and stay
   assert.doesNotMatch(htmlSrc, /<img id="guest"/);
   assert.match(petSrc, /paintActor\(guestEl, [^;]*"guest"\)/);
   assert.doesNotMatch(petSrc, /guestEl\.src\s*=/);
-  assert.match(roomSrc, /spriteSurface=\{demoWindow\}/);
+  assert.match(roomSrc, /\bspriteSurface\b/);
+  assert.doesNotMatch(roomSrc, /spriteSurface=\{demoWindow\}/);
   assert.match(livingSrc, /spriteSurface \? \(/);
   assert.match(livingSrc, /<canvas/);
   assert.match(livingSrc, /paintDemoFrame\(canvasRef\.current, src\)/);
   assert.match(livingSrc, /<img/);
   assert.match(demoPaintSrc, /paintHeld/);
-  assert.match(demoPaintSrc, /BOX\.host/);
+  assert.match(demoPaintSrc, /"host"/);
   assert.doesNotMatch(demoPaintSrc, /\.src\s*=/);
   assert.doesNotMatch(demoPaintSrc, /setAttribute\(\s*"src"/);
   assert.doesNotMatch(demoPaintSrc, /getContext\(\s*["']webgl/);
   assert.doesNotMatch(livingSrc, /getContext\(\s*["']webgl/);
   assert.match(gateSrc, /0128/);
+  assert.match(gateSrc, /0129/);
   assert.doesNotMatch(gateSrc, /paintHeld/);
+});
+
+test("the living desk room pet and desk Sip, Brick, called guests, and plants paint on the shared canvas and stay blank when it refuses", () => {
+  const roomSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "companion-room.tsx"), "utf8");
+  const livingSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "living-pet.tsx"), "utf8");
+  const sipSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "bird-fly.tsx"), "utf8");
+  const brickSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "robin-fly.tsx"), "utf8");
+  const calledSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "called-guests.tsx"), "utf8");
+  const plantSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "desk-plants.tsx"), "utf8");
+  const paintSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "desk-sprite-surface.ts"), "utf8");
+  const visitSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "house-visit.tsx"), "utf8");
+  const floorSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "house-floor.tsx"), "utf8");
+  const hiveSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "hive-den.tsx"), "utf8");
+  const blotterSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "blotter-guests.tsx"), "utf8");
+
+  assert.match(roomSrc, /\bspriteSurface\b/);
+  assert.doesNotMatch(roomSrc, /spriteSurface=\{demoWindow\}/);
+  assert.match(livingSrc, /paintDemoFrame\(canvasRef\.current, src\)/);
+  assert.match(sipSrc, /paintSipFrame/);
+  assert.match(sipSrc, /<canvas/);
+  assert.doesNotMatch(sipSrc, /<img/);
+  assert.doesNotMatch(sipSrc, /\.src\s*=/);
+  assert.match(brickSrc, /paintBrickFrame/);
+  assert.match(brickSrc, /<canvas/);
+  assert.doesNotMatch(brickSrc, /<img/);
+  assert.doesNotMatch(brickSrc, /setAttribute\(\s*"src"/);
+  assert.match(calledSrc, /paintCalledFrame/);
+  assert.match(calledSrc, /<canvas/);
+  assert.doesNotMatch(calledSrc, /<img/);
+  assert.doesNotMatch(calledSrc, /setAttribute\(\s*"src"/);
+  assert.match(plantSrc, /paintPlantFrame/);
+  assert.match(plantSrc, /<canvas/);
+  assert.doesNotMatch(plantSrc, /<img/);
+  assert.match(paintSrc, /paintHeld/);
+  assert.match(paintSrc, /"sip"/);
+  assert.match(paintSrc, /"brick"/);
+  assert.match(paintSrc, /"called"/);
+  assert.match(paintSrc, /"plant"/);
+  assert.match(paintSrc, /"host"/);
+  assert.doesNotMatch(paintSrc, /\.src\s*=/);
+  assert.doesNotMatch(paintSrc, /getContext\(\s*["']webgl/);
+  assert.doesNotMatch(visitSrc, /spriteSurface/);
+  assert.doesNotMatch(floorSrc, /spriteSurface/);
+  assert.doesNotMatch(hiveSrc, /spriteSurface/);
+  assert.doesNotMatch(blotterSrc, /spriteSurface/);
+
+  const Image = imagesFrom(fixture.frames);
+  const opts = { OffscreenCanvas: null, Image, devicePixelRatio: 1 };
+  const sipCtx = fake2d();
+  const sip = fakeCanvas().provide("2d", sipCtx);
+  const sipPaint = Surface.paintHeld(sip, fixture.frames[0].src, Object.assign({ cssSize: Surface.BOX.sip }, opts));
+  assert.equal(sipPaint.ok, true);
+  assert.equal(sip.dataset.surface, "canvas");
+  assert.equal(sip.width, 112);
+  assert.deepEqual(drawCall(sipCtx)[0].slice(1), [fixture.frames[0].src, 28, 0, 56, 112]);
+
+  const brick = fakeCanvas().provide("2d", fake2d());
+  const brickPaint = Surface.paintHeld(brick, fixture.frames[1].src, Object.assign({ cssSize: Surface.BOX.brick }, opts));
+  assert.equal(brickPaint.ok, true);
+  assert.equal(brick.dataset.frame, fixture.frames[1].src);
+  assert.equal(brick.width, 112);
+
+  const called = fakeCanvas().provide("2d", fake2d());
+  const calledPaint = Surface.paintHeld(called, fixture.frames[0].src, Object.assign({ cssSize: Surface.BOX.called }, opts));
+  assert.equal(calledPaint.ok, true);
+  assert.equal(called.width, 128);
+
+  const plant = fakeCanvas().provide("2d", fake2d());
+  const plantPaint = Surface.paintHeld(plant, fixture.frames[1].src, Object.assign({ cssSize: Surface.BOX.plant }, opts));
+  assert.equal(plantPaint.ok, true);
+  assert.equal(plant.width, 128);
+
+  const room = fakeCanvas().provide("2d", fake2d());
+  const roomSrcFrame = "/sprites/cat/idle/1.png";
+  const roomImage = imagesFrom(fixture.frames.concat([{ src: roomSrcFrame, width: 80, height: 160 }]));
+  const roomPaint = Surface.paintHeld(room, roomSrcFrame, { OffscreenCanvas: null, Image: roomImage, devicePixelRatio: 1, cssSize: Surface.BOX.host });
+  assert.equal(roomPaint.ok, true);
+  assert.equal(room.dataset.frame, roomSrcFrame);
+  assert.equal(room.width, 176);
+
+  for (const node of [sip, brick, called, plant, room]) {
+    const closed = fakeCanvas();
+    closed.src = "keep";
+    closed.setAttribute = () => {
+      throw new Error("img-src");
+    };
+    const refused = Surface.paintHeld(closed, fixture.frames[0].src, Object.assign({ cssSize: node.width }, opts));
+    assert.equal(refused.ok, false);
+    assert.equal(closed.dataset.surface, "refused");
+    assert.equal(closed.dataset.frame, undefined);
+    assert.equal(closed.src, "keep");
+  }
+  assert.match(gateSrc, /0129/);
+  assert.doesNotMatch(gateSrc, /paintHeld/);
+  assert.doesNotMatch(gateSrc, /getContext\(\s*["']webgl/);
 });

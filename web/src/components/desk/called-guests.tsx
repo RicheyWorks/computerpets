@@ -20,6 +20,7 @@ import {
 import { traitFor } from "@/lib/pets/traits";
 import type { DeskWindow } from "@/lib/pets/windows";
 import { firstGrassBound, loadPlants } from "@/lib/pets/desk-plants";
+import { paintCalledFrame } from "@/lib/pets/desk-sprite-surface";
 
 export function CalledGuests({
   keys,
@@ -124,14 +125,10 @@ export function CalledGuests({
             frame.current[key] = ((frame.current[key] || 0) + 1) % imgs.length;
           }
         }
-        const img = el.querySelector("img");
-        if (img && imgs.length) {
+        const art = el.querySelector("canvas");
+        if (art instanceof HTMLCanvasElement && imgs.length) {
           const src = imgs[(frame.current[key] || 0) % imgs.length] || imgs[0];
-          if (src && img.getAttribute("src") !== src) img.setAttribute("src", src);
-          img.style.objectFit = "contain";
-          img.style.objectPosition = "bottom";
-          img.style.border = "0";
-          img.style.background = "transparent";
+          if (src) paintCalledFrame(art, src);
         }
       }
       if (!walkers.current.length) {
@@ -164,7 +161,17 @@ export function CalledGuests({
               walkers.current = walkers.current.map((row) => (row.key === key ? dismissCalled(row)! : row));
             }}
           >
-            <img alt={guest.name} src={src} className="h-full w-full border-0 bg-transparent object-contain object-bottom shadow-none outline-none" draggable={false} />
+            <canvas
+              role="img"
+              aria-label={guest.name}
+              data-surface="pending"
+              ref={(node) => {
+                if (!node || node.dataset.seed === "1" || !src) return;
+                node.dataset.seed = "1";
+                paintCalledFrame(node, src);
+              }}
+              className="pointer-events-none block h-full w-full border-0 bg-transparent shadow-none outline-none"
+            />
           </button>
         );
       })}

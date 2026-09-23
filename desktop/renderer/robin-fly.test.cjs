@@ -43,7 +43,8 @@ test("robin dest loads one real frame, not an empty src or two dest rects", () =
   assert.deepEqual(G.walkersOf(["hummingbird", "robin", "cat"], "red_panda"), ["cat"]);
   assert.doesNotMatch(visitSrc, /if \(hidden \|\| phase === "wait" \|\| phase === "gone"\) return null;/);
   assert.match(visitSrc, /guest\.key === ROBIN_KEY/);
-  assert.match(calledSrc, /object-contain object-bottom/);
+  assert.match(calledSrc, /paintCalledFrame/);
+  assert.doesNotMatch(calledSrc, /<img/);
 });
 
 test("robin flies, flaps, lands, stays, sings, and leaves", () => {
