@@ -209,7 +209,7 @@ check("setproduct(sort(keys(var.subnets)), sort(keys(local.ca_discovery_tags)))"
       "discovery tags cover every zone")
 mins = re.findall(r"(?m)^[ \t]*min_size_per_zone\s*=\s*(\d+)\s*$", pool_code)
 maxes = re.findall(r"(?m)^[ \t]*max_size_per_zone\s*=\s*(\d+)\s*$", pool_code)
-check(mins == ["1"], "min size per zone stays 1")
+check(mins == ["2"], "min size per zone is 2 (ADR 0105)")
 check(maxes == ["20"] and int(maxes[0]) > int(mins[0]),
       "max size per zone is 20, above the floor")
 check('resource "aws_autoscaling_group"' not in pool_code, "no raw single ASG")

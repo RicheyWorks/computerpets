@@ -282,6 +282,19 @@ lighter hostname has no remaining capacity, the pod stays Pending until
 that hostname can take it. Cluster Autoscaler can add a node. This
 apply does not change the scaler.
 
+That 2 and 1 placement is what two hostnames allow. It is not the
+healthy pool. Each API zone's `min_size` is 2, and the create-time
+`desired_size` is 2
+([ADR 0105](../../docs/adr/0105-api-hostname-floor.md)).
+Two healthy zones are four hostnames. Zone hard spread puts at most
+two of the three floor pods in one zone, and that zone's two hostnames
+place them 1 and 1. The HPA floor stays 3 because the disruption
+budget keeps 2. A floor of 2 would stall a voluntary eviction. The old
+per-zone floor of 1 is refused. Kind and minikube do not plan the pool.
+One hostname on a laptop still schedules. Do not set `minDomains`.
+Required hostname anti-affinity is not set. One unhealthy zone still
+places the floor as 2 and 1 on that zone's two hostnames.
+
 The zone key is a second constraint
 ([ADR 0081](../../docs/adr/0081-api-pod-zone-spread.md)). Its action is
 `DoNotSchedule` ([ADR 0095](../../docs/adr/0095-api-zone-hard-spread.md)).
@@ -296,6 +309,8 @@ zone value also leaves them Pending.
 ./deploy/k8s/check-topology-spread.sh
 ./deploy/k8s/check-api-hostname-hard-spread.sh
 ./deploy/k8s/check-api-hostname-hard-spread.test.sh
+./deploy/k8s/check-api-hostname-floor.sh
+./deploy/k8s/check-api-hostname-floor.test.sh
 ```
 
 A cutover does not patch this. Scaling green creates pods from the
@@ -434,7 +449,9 @@ Auto Scaling groups behind the per-zone node groups. Each group's max is
 20, twice the HPA ceiling of 10
 ([ADR 0104](../../docs/adr/0104-per-zone-node-max.md)).
 The leader reads that number from the group's `MaxSize`. It does not
-raise it. The minimum stays 1. Terraform ignores `desired_size`
+raise it. The minimum is 2 per zone
+([ADR 0105](../../docs/adr/0105-api-hostname-floor.md)).
+Terraform ignores `desired_size`
 after the first apply. `--balance-similar-node-groups=true` keeps the two
 zones from drifting apart. Scale-down still reads `poddisruptionbudgets`.
 
@@ -480,8 +497,10 @@ defaults. A budget that is already gone, a failed snapshot update, or
 a scale-up that is not successful still ends that salvo. The next
 main loop is the retry
 ([ADR 0103](../../docs/adr/0103-cluster-autoscaler-salvo-early-stop.md)).
-A zone already at 20 still cannot grow. On two hostnames the HPA floor
-is still 2 and 1.
+A zone already at 20 still cannot grow. Two healthy zones at min 2 are
+four hostnames, so the HPA floor is not 2 and 1
+([ADR 0105](../../docs/adr/0105-api-hostname-floor.md)).
+One unhealthy zone still places that floor as 2 and 1.
 Do not set `minDomains`.
 Required zone anti-affinity is not set. Required hostname anti-affinity
 is not the follow-up.
