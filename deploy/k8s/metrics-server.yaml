@@ -1,5 +1,5 @@
 # metrics-server so hpa.yaml can read CPU and memory (ADR 0084, ADR 0085,
-# ADR 0086, ADR 0087, ADR 0088, ADR 0089, ADR 0098, ADR 0111).
+# ADR 0086, ADR 0087, ADR 0088, ADR 0089, ADR 0098, ADR 0111, ADR 0112).
 # Not in kustomization.yaml. Local/dev `kubectl apply -k deploy/k8s` does
 # not install this. Kind and minikube do not apply this file. There is no
 # overlay directory. No Helm chart.
@@ -55,15 +55,22 @@
 # --kubelet-certificate-authority=/etc/metrics-server/kubelet-ca/ca.crt.
 # That path is a read-only mount of ConfigMap metrics-server-kubelet-ca
 # in kube-system, key ca.crt, optional: false. This file does not create
-# that object and does not contain a certificate. Create it before apply:
-#   kubectl -n kube-system create configmap metrics-server-kubelet-ca \
-#     --from-file=ca.crt=/path/to/kubelet-serving-ca.crt
+# that object and does not contain a certificate.
+# ADR 0112 writes that ConfigMap only after every supplied kubelet leaf
+# chains to ca.crt. A missing CA, a swapped CA, or --kubelet-insecure-tls
+# refuses apply before kubectl. Kind and minikube do not receive it.
+# Do not commit the certificate. A missing object leaves the pods unstarted.
+#   OUT="$(mktemp -d)"
+#   # keeper copies ca.crt and kubelet.crt (and kubelet-*.crt) into "$OUT"
+#   ./deploy/k8s/metrics-server-kubelet-ca.sh verify "$OUT"
+#   COMPUTERPETS_METRICS_KUBELET_CA_APPLY=1 \
+#     ./deploy/k8s/metrics-server-kubelet-ca.sh apply "$OUT"
 # A Secret with the same name, key, and optional: false is the equivalent
-# volume source when the bundle is already a Secret. hostPath is not.
-# The flag replaces the in-cluster CA for kubelet scrapes. Put the CA
-# that signed the kubelet serving certificates in that object. A
-# certificate that does not chain to it still leaves kubectl top empty.
-# A missing object leaves the pods unstarted.
+# hand substitution when the bundle is already a Secret. This apply writes
+# the ConfigMap the manifest mounts. hostPath is not.
+# The flag replaces the in-cluster CA for kubelet scrapes. A certificate
+# that does not chain to that CA is not written. Do not add
+# --kubelet-insecure-tls.
 #
 # The Deployment sets replicas: 2. Anti-affinity is required on
 # kubernetes.io/hostname, so the second pod stays Pending until a second

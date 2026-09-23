@@ -194,7 +194,8 @@ be read as load.
 [ADR 0088](../../docs/adr/0088-metrics-server-zone-spread.md),
 [ADR 0089](../../docs/adr/0089-metrics-server-node-pool.md),
 [ADR 0098](../../docs/adr/0098-metrics-server-zone-hard-spread.md),
-[ADR 0111](../../docs/adr/0111-metrics-server-serving-cert-chain.md)).
+[ADR 0111](../../docs/adr/0111-metrics-server-serving-cert-chain.md),
+[ADR 0112](../../docs/adr/0112-metrics-server-kubelet-ca-chain.md)).
 That file is also not in the kustomization. It runs two replicas with
 required hostname anti-affinity and hard zone spread (`DoNotSchedule`
 on `topology.kubernetes.io/zone`, `maxSkew` 1). One labeled zone still
@@ -204,24 +205,32 @@ the zone count on those nodes. Kind and minikube do not apply it
 (`enable_node_pool=false` does not label their nodes). A single-zone
 set of labeled nodes still schedules both pods when two hostnames exist
 and the nodes carry one zone value.
-Create the kubelet CA object, then let
-`metrics-server-serving-cert.sh` mint the serving leaf and write
+Let `metrics-server-kubelet-ca.sh` write ConfigMap
+`metrics-server-kubelet-ca` only after every supplied kubelet leaf
+chains to that CA ([ADR 0112](../../docs/adr/0112-metrics-server-kubelet-ca-chain.md)),
+then let `metrics-server-serving-cert.sh` mint the serving leaf and write
 `caBundle` ([ADR 0111](../../docs/adr/0111-metrics-server-serving-cert-chain.md)).
 `kubectl top pods -n computerpets` must show cpu and memory. Until that
 API answers, applying the HPA does not raise the replica count, so blue
 can stay at 2.
 
 ```bash
-# Prod only. Not kind or minikube. The serving script refuses a leaf
-# that does not chain to ca.crt, or whose DNS SAN is not
-# metrics-server.kube-system.svc, before any kubectl (ADR 0111).
-kubectl -n kube-system create configmap metrics-server-kubelet-ca \
-  --from-file=ca.crt=/path/to/kubelet-serving-ca.crt
+# Prod only. Not kind or minikube. The kubelet CA script refuses a
+# missing CA, a leaf that does not chain to ca.crt, or
+# --kubelet-insecure-tls, before any kubectl (ADR 0112). The serving
+# script refuses a leaf that does not chain to ca.crt, or whose DNS SAN
+# is not metrics-server.kube-system.svc, before any kubectl (ADR 0111).
+KUBELET="$(mktemp -d)"
+# keeper copies ca.crt and kubelet.crt (and kubelet-*.crt) into "$KUBELET"
+./deploy/k8s/metrics-server-kubelet-ca.sh verify "$KUBELET"
+COMPUTERPETS_METRICS_KUBELET_CA_APPLY=1 \
+  ./deploy/k8s/metrics-server-kubelet-ca.sh apply "$KUBELET"
 OUT="$(mktemp -d)"
 ./deploy/k8s/metrics-server-serving-cert.sh render "$OUT"
 COMPUTERPETS_METRICS_SERVING_APPLY=1 \
   ./deploy/k8s/metrics-server-serving-cert.sh apply "$OUT"
 kubectl apply -f deploy/k8s/hpa.yaml
+./deploy/k8s/check-metrics-server-kubelet-ca.sh
 ./deploy/k8s/check-metrics-server-serving-cert.sh
 ./deploy/k8s/check-hpa.sh
 ```
@@ -608,7 +617,7 @@ the scale-up is not successful, the pods still waiting use the next
 main loop
 ([ADR 0103](../../docs/adr/0103-cluster-autoscaler-salvo-early-stop.md)).
 
-## metrics-server (ADR 0084, ADR 0085, ADR 0086, ADR 0087, ADR 0088, ADR 0089, ADR 0098)
+## metrics-server (ADR 0084, ADR 0085, ADR 0086, ADR 0087, ADR 0088, ADR 0089, ADR 0098, ADR 0111, ADR 0112)
 
 `metrics-server.yaml` is **not** in the kustomization. `kubectl apply -k
 deploy/k8s` does not install it. Kind and minikube do not apply it.
@@ -658,12 +667,14 @@ budget is not `pdb.yaml`.
 `/etc/metrics-server/kubelet-ca/ca.crt`, a read-only mount of ConfigMap
 `metrics-server-kubelet-ca` (key `ca.crt`, `optional: false`). This repo
 does not vendor that certificate. A Secret with the same name, key, and
-`optional: false` is the equivalent volume source. `hostPath` is not.
-The flag replaces the in-cluster CA for kubelet scrapes, so the object
-must be the CA that signed the kubelet serving certificates. A missing
-object leaves the pods unstarted. A certificate that does not chain to
-the bundle still leaves `kubectl top` empty. Do not add the kubelet TLS
-skip.
+`optional: false` is the equivalent hand substitution. `hostPath` is not.
+The flag replaces the in-cluster CA for kubelet scrapes.
+`metrics-server-kubelet-ca.sh` writes that ConfigMap only after every
+supplied kubelet leaf chains to `ca.crt`
+([ADR 0112](../../docs/adr/0112-metrics-server-kubelet-ca-chain.md)).
+A missing CA, a swapped CA, or `--kubelet-insecure-tls` refuses apply
+before `kubectl`. A missing object leaves the pods unstarted. Do not add
+the kubelet TLS skip.
 
 `insecureSkipTLSVerify` is not set. `--tls-cert-file` and
 `--tls-private-key-file` point at `/etc/metrics-server/serving/tls.crt`
@@ -681,19 +692,26 @@ before `kubectl`. Do not commit the certificate, the key, or
 `caBundle`. A missing Secret leaves the pods unstarted. Do not add
 `insecureSkipTLSVerify`. Do not add `--kubelet-insecure-tls`.
 
-Create the kubelet CA object, then run
-`metrics-server-serving-cert.sh` before `hpa.yaml`. That script applies
-this file only after the serving leaf chains to `ca.crt` and the DNS
-SAN is `metrics-server.kube-system.svc`.
+Run `metrics-server-kubelet-ca.sh` before
+`metrics-server-serving-cert.sh`, and that script before `hpa.yaml`.
+The kubelet script writes ConfigMap `metrics-server-kubelet-ca` and does
+not apply this file. The serving script applies this file only after the
+serving leaf chains to `ca.crt` and the DNS SAN is
+`metrics-server.kube-system.svc`.
 
 ```bash
 # Prod only. Not part of kubectl apply -k. Not kind or minikube.
-kubectl -n kube-system create configmap metrics-server-kubelet-ca \
-  --from-file=ca.crt=/path/to/kubelet-serving-ca.crt
+KUBELET="$(mktemp -d)"
+# keeper copies ca.crt and kubelet.crt (and kubelet-*.crt) into "$KUBELET"
+./deploy/k8s/metrics-server-kubelet-ca.sh verify "$KUBELET"
+COMPUTERPETS_METRICS_KUBELET_CA_APPLY=1 \
+  ./deploy/k8s/metrics-server-kubelet-ca.sh apply "$KUBELET"
 OUT="$(mktemp -d)"
 ./deploy/k8s/metrics-server-serving-cert.sh render "$OUT"
 COMPUTERPETS_METRICS_SERVING_APPLY=1 \
   ./deploy/k8s/metrics-server-serving-cert.sh apply "$OUT"
+./deploy/k8s/check-metrics-server-kubelet-ca.sh
+./deploy/k8s/check-metrics-server-kubelet-ca.test.sh
 ./deploy/k8s/check-metrics-server-serving-cert.sh
 ./deploy/k8s/check-metrics-server-serving-cert.test.sh
 ./deploy/k8s/check-metrics-server.sh
