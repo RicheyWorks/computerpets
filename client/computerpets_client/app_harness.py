@@ -1589,6 +1589,11 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
         malformed = parse_sample(0)
         stale = present(valid, now + STALE_MS + 1)
         linux = sample_from_probe({"nvidiaCsv": csv}, platform="linux", now_ms=now)
+        amd = sample_from_probe(
+            {"amdgpuCsv": "amdgpu 1002:73BF, [N/A], 37, 2048, 8192, [N/A]"},
+            platform="linux",
+            now_ms=now,
+        )
         darwin = sample_from_probe({"nvidiaCsv": csv}, platform="darwin", now_ms=now)
         overlay = _read("desktop/renderer/index.html")
         card = _read("web/src/components/desk/keeper-card.tsx")
@@ -1610,6 +1615,7 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
             "malformed": malformed["status"] == "malformed" and malformed["utilPercent"] is None and "0%" not in gpu_line(malformed),
             "stale": stale["status"] == "stale" and stale["tempC"] is None and "62" not in gpu_line(stale),
             "linux": linux["status"] == "read" and linux["tempC"] == 62 and linux["utilPercent"] == 14 and later_door("linux") is None and senses_on("linux"),
+            "amdgpu": amd["status"] == "read" and amd["source"] == "amdgpu" and amd["utilPercent"] == 37 and amd["tempC"] is None and amd["powerWatts"] is None and "0%" not in gpu_line(amd),
             "darwin": darwin["status"] == "read" and darwin["source"] == "ioaccelerator" and darwin["tempC"] == 62 and darwin["utilPercent"] == 14 and later_door("darwin") is None and senses_on("darwin"),
             "history": len(history) == 2 and history[0]["utilPercent"] == 14 and history[1]["utilPercent"] == 40 and trail["path"] == "M1 11.3 L71 8.2" and trail["empty"] is False,
             "unread_spark": remember([], missing, now) == [] and sparkline([], missing, now)["path"] == "" and sparkline([], missing, now)["ink"] == UNREAD_INK,
