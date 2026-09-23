@@ -17,7 +17,13 @@ metadata:
 data:
   SPRING_PROFILES_ACTIVE: prod
   COMPUTERPETS_SECRETS_SOURCE: external-secrets
-  SPRING_DATASOURCE_URL: jdbc:postgresql://REPLACE_WITH_TF_OUTPUT:5432/computerpets
+  # terraform spring_datasource_url already includes ?sslmode=require
+  # (or verify-full&sslrootcert=... when postgres_ssl_root_cert is set).
+  SPRING_DATASOURCE_URL: jdbc:postgresql://REPLACE_WITH_TF_OUTPUT:5432/computerpets?sslmode=require
+  POSTGRES_SSL_REQUIRED: "true"
+  # When postgres_ssl_root_cert was set, the URL uses verify-full and this
+  # path is the same PEM the operator mounted. This repo does not ship a CA.
+  # POSTGRES_SSL_ROOT_CERT: /etc/ssl/rds-ca.pem
   REDIS_HOST: REPLACE_WITH_TF_OUTPUT
   REDIS_PORT: "6379"
   RATE_LIMIT_BACKEND: redis
@@ -28,5 +34,6 @@ data:
   # REDIS_AUTH_REQUIRED: "true"
   MICROSOFT_DEV_MODE: "false"
   SERVER_PORT: "8081"
-  # Optional read replica (ADR 0059) — set only when a managed replica exists:
-  # SPRING_DATASOURCE_REPLICA_URL: jdbc:postgresql://REPLACE_REPLICA:5432/computerpets
+  # Optional read replica (ADR 0059) — set only when a managed replica exists.
+  # Use the same sslmode as the primary (ADR 0076). Do not invent a replica host.
+  # SPRING_DATASOURCE_REPLICA_URL: jdbc:postgresql://REPLACE_REPLICA:5432/computerpets?sslmode=require

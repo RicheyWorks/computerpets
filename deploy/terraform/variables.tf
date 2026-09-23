@@ -111,6 +111,24 @@ variable "postgres_username" {
   sensitive   = false
 }
 
+variable "postgres_ssl_root_cert" {
+  type        = string
+  description = "Optional path on the app host to the RDS CA bundle (ADR 0076). Empty jdbc_url uses sslmode=require and the parameter group sets rds.force_ssl=1. A path switches the JDBC URL to sslmode=verify-full. Not a secret. Do not commit a bundle."
+  default     = ""
+
+  validation {
+    condition = (
+      var.postgres_ssl_root_cert == "" ||
+      (
+        can(regex("^/[A-Za-z0-9._/-]+$", var.postgres_ssl_root_cert)) &&
+        !strcontains(var.postgres_ssl_root_cert, "..") &&
+        !strcontains(var.postgres_ssl_root_cert, "//")
+      )
+    )
+    error_message = "postgres_ssl_root_cert must be empty or an absolute local path (no '..', space, query, or URL). Do not invent a CA bundle."
+  }
+}
+
 variable "redis_node_type" {
   type        = string
   description = "ElastiCache node type."

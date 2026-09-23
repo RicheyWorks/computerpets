@@ -38,4 +38,4 @@ This slice does not reopen presence/CSP, Hikari/replica, bundle zip, cosign, CDN
 - The token can sit in Terraform state. Do not commit it. Do not print plan output that expands sensitive values into a log you keep.
 - Peer verification uses the JVM truststore. ElastiCache certificates are Amazon Trust Services. A JVM without that root fails the handshake closed. There is no switch to disable verify.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** Postgres transit TLS. The RDS module encrypts storage and does not set `rds.force_ssl`. `jdbc_url` is `jdbc:postgresql://host:5432/db` with no `sslmode=require`. Not started here.
+- **Next gap:** Postgres transit TLS landed as [0076](0076-postgres-transit-tls.md). Not started in this ADR.

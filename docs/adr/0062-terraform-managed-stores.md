@@ -1,6 +1,6 @@
 # 0062. Terraform for managed Postgres, Redis, secrets, CDN, and WAF stubs
 
-- **Status:** Accepted (WAF association superseded by [0074](0074-waf-in-front-of-rate-limiter.md); Redis AUTH/TLS optional path added by [0075](0075-redis-auth-and-transit-tls.md); Postgres, secrets, and CDN in this ADR still stand)
+- **Status:** Accepted (WAF association superseded by [0074](0074-waf-in-front-of-rate-limiter.md); Redis AUTH/TLS optional path added by [0075](0075-redis-auth-and-transit-tls.md); Postgres transit TLS added by [0076](0076-postgres-transit-tls.md); secrets and CDN in this ADR still stand)
 - **Date:** 2026-09-22
 - **Code:** `deploy/terraform/` (root + `modules/{postgres,redis,secrets,cdn,waf}`); `check-managed-stores.sh`
 

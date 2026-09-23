@@ -9,6 +9,7 @@ metadata:
   namespace: computerpets
 data:
   SPRING_PROFILES_ACTIVE: prod
+  # In-cluster Postgres has no TLS. Leave POSTGRES_SSL_REQUIRED unset (ADR 0076).
   SPRING_DATASOURCE_URL: jdbc:postgresql://computerpets-postgres:5432/computerpets
   REDIS_HOST: computerpets-redis
   REDIS_PORT: "6379"
