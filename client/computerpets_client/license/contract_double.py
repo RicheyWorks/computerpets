@@ -40,6 +40,7 @@ def create_contract_test_double(
     cdn_bytes: bytes | None = None,
 ) -> dict[str, Any]:
     issued: dict[str, dict[str, Any]] = {}
+    used_bearers: set[str] = set()
     revoked = revoked_jtis if revoked_jtis is not None else set()
     deny = set(deny_steam_ids or [])
     calls: list[dict[str, Any]] = []
@@ -129,6 +130,9 @@ def create_contract_test_double(
                     403,
                     {"error": "hardware binding mismatch", "hint": "This license is bound to a specific device"},
                 )
+            if token in used_bearers:
+                return json_response(409, {"error": "download token already used"})
+            used_bearers.add(token)
             exp = int(time.time()) + 900
             message = download_mac_message(
                 {

@@ -3,7 +3,10 @@ package com.enterprisepet.controller;
 import com.enterprisepet.license.LicenseService;
 import com.enterprisepet.license.LicenseService.LicensePayload;
 import com.enterprisepet.license.RevocationIndex;
+import com.enterprisepet.security.DownloadJwtStore;
 import com.enterprisepet.security.JwtService;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,8 +23,10 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Date;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -132,6 +137,76 @@ class DownloadControllerIntegrationTest {
         assertThat(downloadUrl).contains("/red_panda.zip?");
         // Empty bundle.catalog: signed URL only — no invented hash.
         assertThat(resp.getBody()).doesNotContainKeys("sha256", "version", "platform", "filename");
+        String tokenJti = jwtService.parse(issuedJwt.token()).orElseThrow().getId();
+        assertThat(tokenJti).matches(DownloadJwtStore.JTI);
+        assertThat(resp.getBody().get("jti")).isNotEqualTo(tokenJti);
+    }
+
+    @Test
+    @DisplayName("POST /api/download/{pet} returns 409 when the same bearer mints a second URL")
+    void download_secondUseOfSameBearer_is409() {
+        var enc = licenseService.issueLicense(validOwner, validPet, validProvider, 1, null);
+        var issuedJwt = jwtService.issue(validOwner, validPet, validProvider);
+        HttpEntity<Map<String, String>> req = new HttpEntity<>(
+            licenseBody(enc.ciphertext(), enc.iv(), null),
+            authHeaders(issuedJwt.token())
+        );
+
+        ResponseEntity<Map> first = restTemplate.postForEntity(
+            "/api/download/" + validPet, req, Map.class);
+        ResponseEntity<Map> second = restTemplate.postForEntity(
+            "/api/download/" + validPet, req, Map.class);
+
+        assertThat(first.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(first.getBody().get("downloadUrl")).isNotNull();
+        assertThat(second.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(String.valueOf(second.getBody().get("error"))).isEqualTo("download token already used");
+        assertThat(second.getBody()).doesNotContainKey("downloadUrl");
+    }
+
+    @Test
+    @DisplayName("POST /api/download/{pet} returns 401 when the bearer has no jti")
+    void download_bearerWithoutJti_is401() {
+        var enc = licenseService.issueLicense(validOwner, validPet, validProvider, 1, null);
+        Instant now = Instant.now();
+        String token = Jwts.builder()
+            .issuer("enterprisepet-backend")
+            .subject(validOwner)
+            .claim(JwtService.CLAIM_PET, validPet)
+            .claim(JwtService.CLAIM_PROVIDER, validProvider)
+            .issuedAt(Date.from(now))
+            .expiration(Date.from(now.plus(Duration.ofMinutes(30))))
+            .signWith(Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8)))
+            .compact();
+
+        HttpEntity<Map<String, String>> req = new HttpEntity<>(
+            licenseBody(enc.ciphertext(), enc.iv(), null),
+            authHeaders(token)
+        );
+
+        ResponseEntity<Map> resp = restTemplate.postForEntity(
+            "/api/download/" + validPet, req, Map.class);
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(String.valueOf(resp.getBody().get("error"))).isEqualTo("download token has no jti");
+    }
+
+    @Test
+    @DisplayName("POST /api/download/{pet} does not spend the bearer when the pet mismatches")
+    void download_petMismatch_doesNotSpendBearer() {
+        var enc = licenseService.issueLicense(validOwner, validPet, validProvider, 1, null);
+        var issuedJwt = jwtService.issue(validOwner, validPet, validProvider);
+        HttpEntity<Map<String, String>> req = new HttpEntity<>(
+            licenseBody(enc.ciphertext(), enc.iv(), null),
+            authHeaders(issuedJwt.token())
+        );
+
+        ResponseEntity<Map> mismatch = restTemplate.postForEntity("/api/download/cat", req, Map.class);
+        ResponseEntity<Map> ok = restTemplate.postForEntity("/api/download/" + validPet, req, Map.class);
+
+        assertThat(mismatch.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(ok.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(ok.getBody().get("downloadUrl")).isNotNull();
     }
 
     @Test

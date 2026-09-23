@@ -12,6 +12,9 @@ import com.enterprisepet.license.LicenseService.LicensePayload;
 import com.enterprisepet.observability.VerificationTelemetry;
 import com.enterprisepet.pet.PetCatalog;
 import com.enterprisepet.pet.PetType;
+import com.enterprisepet.security.DownloadJwtStore;
+import com.enterprisepet.security.DownloadJwtStoreUnavailableException;
+import com.enterprisepet.security.JwtService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -51,19 +54,25 @@ public class DownloadController {
     private final PetCatalog petCatalog;
     private final VerificationTelemetry telemetry;
     private final ClientAddress clientAddress;
+    private final JwtService jwtService;
+    private final DownloadJwtStore downloadJwtStore;
 
     public DownloadController(LicenseService licenseService,
                               PetBundleService bundleService,
                               DownloadGrantService grantService,
                               PetCatalog petCatalog,
                               VerificationTelemetry telemetry,
-                              ClientAddress clientAddress) {
+                              ClientAddress clientAddress,
+                              JwtService jwtService,
+                              DownloadJwtStore downloadJwtStore) {
         this.licenseService = licenseService;
         this.bundleService = bundleService;
         this.grantService = grantService;
         this.petCatalog = petCatalog;
         this.telemetry = telemetry;
         this.clientAddress = clientAddress;
+        this.jwtService = jwtService;
+        this.downloadJwtStore = downloadJwtStore;
     }
 
     /**
@@ -73,8 +82,10 @@ public class DownloadController {
      *          (hwid only if the license is bound; platform optional)
      * 200:     { "petKey": ..., "downloadUrl": ..., "expiresAt": ..., "jti": ..., ... }
      * 400:     unknown petKey
-     * 401:     license missing / expired / tampered / revoked (Spring Security handles missing JWT separately)
+     * 401:     license missing / expired / tampered / revoked, or the bearer has no jti
+     *          (Spring Security handles a missing or invalid JWT separately)
      * 403:     JWT and license disagree, pet mismatch, or hardware binding mismatch
+     * 409:     this bearer jti already minted a download URL
      */
     @Operation(
         summary = "Download pet bundle",
@@ -98,9 +109,11 @@ public class DownloadController {
             @ApiResponse(responseCode = "400", description = "Unknown pet key",
                     content = @Content(mediaType = "application/json",
                             examples = @ExampleObject(ref = "Unknown Pet Type"))),
-            @ApiResponse(responseCode = "401", description = "License invalid, expired, tampered, or revoked",
+            @ApiResponse(responseCode = "401", description = "License invalid, expired, tampered, or revoked, or download token has no jti",
                     content = @Content(mediaType = "application/json",
                             examples = @ExampleObject(ref = "Download License Invalid"))),
+            @ApiResponse(responseCode = "409", description = "Download token already used to mint a URL",
+                    content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "403", description = "License/pet, JWT/license, or hardware binding mismatch",
                     content = @Content(mediaType = "application/json",
                             examples = {
@@ -177,7 +190,15 @@ public class DownloadController {
             }
         }
 
-        // Phase 2.1: record usage, bind signed URL to this jti, register one-time grant (+ IP).
+        // The bearer jti is single-use (ADR 0073). Claim it before any grant is minted
+        // so a captured token cannot POST again inside jwt.ttl-minutes. A failed license
+        // check above does not claim, so a mismatch can be corrected with the same bearer.
+        ResponseEntity<?> spent = claimDownloadToken(principal);
+        if (spent != null) {
+            return spent;
+        }
+
+        // Phase 2.1: record usage, bind signed URL to the license jti, register one-time grant (+ IP).
         licenseService.recordDownload(license.jti());
         String platform = firstNonBlank(body.platform(), queryPlatform);
         var manifest = bundleService.manifestFor(pet, license.owner(), license.jti(), platform);
@@ -190,6 +211,47 @@ public class DownloadController {
             ));
         }
         return ResponseEntity.ok(manifest.body());
+    }
+
+    /**
+     * Claim the bearer {@code jti} once. {@code null} means the mint may continue.
+     * A response is the honest refusal (401 / 409 / 503) and no URL is returned.
+     */
+    private ResponseEntity<?> claimDownloadToken(Map<String, Object> principal) {
+        String tokenJti = principal == null ? null : stringClaim(principal.get("jti"));
+        if (tokenJti == null) {
+            return ResponseEntity.status(401).body(Map.of(
+                "error", "download token has no jti"
+            ));
+        }
+        if (!DownloadJwtStore.isJti(tokenJti)) {
+            return ResponseEntity.status(401).body(Map.of(
+                "error", "download token jti invalid"
+            ));
+        }
+        try {
+            DownloadJwtStore.Claim claim = downloadJwtStore.claim(
+                    tokenJti, jwtService.ttlSeconds() + DownloadJwtStore.SKEW_SECONDS);
+            if (claim == DownloadJwtStore.Claim.REPLAY) {
+                return ResponseEntity.status(409).body(Map.of(
+                    "error", "download token already used",
+                    "hint", "Verify again for a new download token."
+                ));
+            }
+            return null;
+        } catch (DownloadJwtStoreUnavailableException e) {
+            return ResponseEntity.status(503).body(Map.of(
+                "error", "download token store unavailable",
+                "hint", "Retry shortly. A signed URL is not returned when the download token cannot be claimed."
+            ));
+        }
+    }
+
+    private static String stringClaim(Object value) {
+        if (!(value instanceof String s) || s.isBlank()) {
+            return null;
+        }
+        return s;
     }
 
     /** Returns the JWT-derived principal map, or null if the context has none. */

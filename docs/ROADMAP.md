@@ -65,6 +65,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Signed machine verify — `POST /api/verify/{provider}` requires HMAC-SHA256 (`X-ComputerPets-Timestamp`, `X-ComputerPets-Signature`, 300s skew, `LICENSE_SECRET_KEY`). Download stays the license JWT. Redeem stays the URL HMAC (ADR 0070). Catalog stays 221.
   - [x] Signed admin requests — every `/api/admin/**` method except OPTIONS requires HMAC-SHA256 (`computerpets-admin-v1`, 300s skew, `ADMIN_API_KEY`). A static `X-Admin-Key` is refused (ADR 0071). Catalog stays 221.
   - [x] Single-use nonce — signed admin and machine requests send `X-ComputerPets-Nonce` (in the MAC). Replay inside 300 seconds is **401**. The nonce store shares Redis with the rate limiter (`replay:nonce:…`, `SET NX EX 300`). Store down is **503** (ADR 0072). Catalog stays 221.
+  - [x] Single-use download JWT — `JwtService` mints `jti`. `POST /api/download` claims `download:jwt:{jti}` once (`SET NX`, TTL `jwt.ttl-minutes` + 60s). A second mint is **409**. A bearer with no `jti` is **401**. Store down is **503**. Unlock still sends the bearer; it does not add a jti field (ADR 0073). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload
@@ -630,6 +631,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-09-22 (Secret rotation cadence + dual-key verify — ADR 0065. DX12/Vulkan was not started. Catalog 221.)
+**Last Updated:** 2026-09-23 (Single-use download JWT — ADR 0073. DX12/Vulkan was not started. Catalog 221.)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.
