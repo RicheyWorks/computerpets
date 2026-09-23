@@ -1,5 +1,5 @@
 # metrics-server so hpa.yaml can read CPU and memory (ADR 0084, ADR 0085,
-# ADR 0086, ADR 0087).
+# ADR 0086, ADR 0087, ADR 0088).
 # Not in kustomization.yaml. Local/dev `kubectl apply -k deploy/k8s` does
 # not install this. Kind and minikube do not apply this file. There is no
 # overlay directory. No Helm chart.
@@ -15,8 +15,9 @@
 # PodDisruptionBudget (minAvailable 1). It is not a second chart.
 # The kubelet CA argument, volume, and volumeMount are additions
 # (ADR 0086). The serving-cert arguments, volume, and volumeMount are
-# additions (ADR 0087). insecureSkipTLSVerify is not set. None of those
-# are in that upstream file.
+# additions (ADR 0087). insecureSkipTLSVerify is not set. Soft zone
+# spread is an addition (ADR 0088). None of those are in that upstream
+# file.
 #
 # Apply this before hpa.yaml. The APIService is v1beta1.metrics.k8s.io.
 # Until `kubectl top pods -n computerpets` shows cpu and memory, the HPA
@@ -66,6 +67,14 @@
 # kubernetes.io/hostname, so the second pod stays Pending until a second
 # node exists. Kind and minikube do not apply this file. The addon budget
 # is not pdb.yaml.
+#
+# Zone spread (ADR 0088) sits beside that hostname rule. The constraint
+# is topology.kubernetes.io/zone, maxSkew 1, whenUnsatisfiable
+# ScheduleAnyway, nodeTaintsPolicy Honor. It prefers a different zone
+# and still binds when every schedulable node is in one zone or omits
+# the zone label. It is not a required zone anti-affinity. That required
+# rule would leave the second pod Pending on a single-zone cluster.
+# DoNotSchedule is not set, for the same reason.
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -209,6 +218,14 @@ spec:
             namespaces:
             - kube-system
             topologyKey: kubernetes.io/hostname
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+        nodeTaintsPolicy: Honor
+        labelSelector:
+          matchLabels:
+            k8s-app: metrics-server
       containers:
       - args:
         - --cert-dir=/tmp

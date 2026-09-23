@@ -57,4 +57,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - A missing Secret leaves the pods unstarted. Local `kubectl apply -k deploy/k8s` still does not install metrics-server.
 - Adding `insecureSkipTLSVerify`, adding `--kubelet-insecure-tls`, making either volume optional, vendoring a PEM, committing `caBundle`, floating the image tag, or listing the file in `kustomization.yaml` fails `check-metrics-server.sh`.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** required anti-affinity is still hostname-only, so both metrics-server pods can still land in one zone. A serving certificate that does not chain to `caBundle` (and is not a system root), or whose SAN is not `metrics-server.kube-system.svc`, still leaves `kubectl top` empty. A kubelet certificate that does not chain to `metrics-server-kubelet-ca` still leaves `kubectl top` empty. API zone spread stays `ScheduleAnyway`. Cluster Autoscaler still only adds a node for pods that are already Pending.
+- **Next gap:** moved. Zone spread for this addon is [0088](0088-metrics-server-zone-spread.md).
