@@ -48,6 +48,11 @@ spring:
         idle-timeout: ${HIKARI_IDLE_TIMEOUT:600000}
         max-lifetime: ${HIKARI_MAX_LIFETIME:1800000}
         leak-detection-threshold: ${HIKARI_LEAK_DETECTION_THRESHOLD:0}
+    # Transit TLS for managed RDS (ADR 0076). Default off: local H2, compose,
+    # and in-cluster Postgres stay cleartext. Prod refuses a half-set pair.
+    # verify-full only when POSTGRES_SSL_ROOT_CERT names a PEM CA bundle.
+    ssl-required: ${POSTGRES_SSL_REQUIRED:false}
+    ssl-root-cert: ${POSTGRES_SSL_ROOT_CERT:}
   h2:
     console:
       enabled: true

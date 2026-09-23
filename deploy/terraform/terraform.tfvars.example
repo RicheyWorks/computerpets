@@ -21,6 +21,11 @@ enable_secrets  = true
 enable_cdn      = true
 enable_waf      = true
 
+# Postgres transit TLS (ADR 0076) is on for every provisioned RDS instance
+# (rds.force_ssl=1, jdbc sslmode=require). To switch the URL to verify-full,
+# set postgres_ssl_root_cert only after you mount a real PEM. Leave it unset
+# here. This file does not name a bundle.
+
 # Redis AUTH (ADR 0075). Leave unset for the AUTH-less cache cluster.
 # When you want AUTH + transit TLS, export TF_VAR_redis_auth_token
 # (openssl rand -hex 16). Do not write the token in this file.

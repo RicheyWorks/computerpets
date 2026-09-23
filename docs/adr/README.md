@@ -94,6 +94,7 @@ address, or an API that is not on `main`.
 | [0073](0073-download-jwt-single-use.md) | Single-use download JWT (`jti` claimed once per bearer) | Accepted |
 | [0074](0074-waf-in-front-of-rate-limiter.md) | Regional WAF in front of the rate limiter (fail-closed ALB association) | Accepted |
 | [0075](0075-redis-auth-and-transit-tls.md) | Redis AUTH and transit TLS (optional; prod fails closed when required) | Accepted |
+| [0076](0076-postgres-transit-tls.md) | Postgres transit TLS (`sslmode` + `rds.force_ssl`; prod fails closed when half-set) | Accepted |
 
 ## How to add one
 

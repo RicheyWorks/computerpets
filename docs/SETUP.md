@@ -174,7 +174,7 @@ invent a live Store id.
 | *(none)* | `mvn spring-boot:run`, tests | H2 in `application.yml` | Redis default; tests overlay `memory` | env, default false | on |
 | `dev` | `SPRING_PROFILES_ACTIVE=dev` (docker-compose) | H2 unless `SPRING_DATASOURCE_*` is set (compose sets Postgres) | Redis default; `RATE_LIMIT_BACKEND=memory` allowed | env, default false | on |
 | `staging` | `SPRING_PROFILES_ACTIVE=staging` | Postgres required (`SPRING_DATASOURCE_URL` / user / password) | `rate-limit.backend=redis` | false in the file (env can still override) | off |
-| `prod` | `SPRING_PROFILES_ACTIVE=prod` | Postgres required | Redis required | **false**, fail-hard if env turns it on | off |
+| `prod` | `SPRING_PROFILES_ACTIVE=prod` | Postgres required. TLS is all-or-nothing: unset for in-cluster cleartext, or `POSTGRES_SSL_REQUIRED=true` with `sslmode=require` / `verify-full` ([ADR 0076](adr/0076-postgres-transit-tls.md)) | Redis required | **false**, fail-hard if env turns it on | off |
 
 Same YAML + environment-variable style as `application.yml`. There is no second config format.
 
@@ -182,7 +182,8 @@ Same YAML + environment-variable style as `application.yml`. There is no second 
 # Local, explicit dev profile (still H2 unless you set SPRING_DATASOURCE_*)
 mvn spring-boot:run -Dspring-boot.run.profiles=dev
 
-# Production shape — will not start without Postgres URL, Redis, and real secrets
+# Production shape — will not start without Postgres URL, Redis, and real secrets.
+# Local Postgres has no TLS: leave POSTGRES_SSL_REQUIRED unset.
 export SPRING_PROFILES_ACTIVE=prod
 export SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/computerpets
 export SPRING_DATASOURCE_USERNAME=computerpets
@@ -190,6 +191,7 @@ export SPRING_DATASOURCE_PASSWORD=...
 ```
 
 `prod` also rejects `RATE_LIMIT_BACKEND=memory` and `jdbc:h2:` URLs even if you set them in the environment.
+Managed RDS is different: set `POSTGRES_SSL_REQUIRED=true` and use the terraform JDBC URL (`sslmode=require`, or `sslmode=verify-full` when `POSTGRES_SSL_ROOT_CERT` names a PEM you mounted). A half-set pair refuses to start ([ADR 0076](adr/0076-postgres-transit-tls.md)).
 
 ---
 
@@ -348,7 +350,9 @@ The Electron overlay is still `cd desktop && npm start`.
 | `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` | No | empty | Full traces URL if you already have `/v1/traces`. Overrides the base URL when set. |
 | `TRACING_SAMPLING_PROBABILITY` | No | 1.0 | Micrometer sampling rate (`0.0`–`1.0`). |
 | `SPRING_PROFILES_ACTIVE` | No | *(none)* | `dev` / `staging` / `prod`. `prod` is the fail-hard production shape. |
-| `SPRING_DATASOURCE_URL` | `staging` / `prod` | H2 in default/`dev` | Postgres JDBC URL. Required when those profiles are active. |
+| `SPRING_DATASOURCE_URL` | `staging` / `prod` | H2 in default/`dev` | Postgres JDBC URL. Required when those profiles are active. Managed RDS includes `sslmode=require` (or `verify-full`). Local and in-cluster omit it (ADR 0076). |
+| `POSTGRES_SSL_REQUIRED` | No | false | When true on `prod`, the JDBC URL must use `sslmode=require`, or `verify-full` if `POSTGRES_SSL_ROOT_CERT` is set. Leave unset for compose and in-cluster Postgres. Half-set refuses start (ADR 0076). |
+| `POSTGRES_SSL_ROOT_CERT` | No | empty | Absolute path to a PEM CA bundle on the app host. Empty keeps `sslmode=require`. Set only when the URL uses `sslmode=verify-full` and `sslrootcert` is that same path. This repo does not ship a bundle. |
 | `SPRING_DATASOURCE_USERNAME` | `staging` / `prod` | `sa` (H2) | Postgres user. |
 | `SPRING_DATASOURCE_PASSWORD` | `staging` / `prod` | empty (H2) | Postgres password. |
 | `SPRING_DATASOURCE_REPLICA_URL` | No | empty | Optional Postgres **read** replica JDBC URL. Blank = primary only. Must differ from the primary URL. Do not invent a cloud replica. Writes never route here (ADR 0059). |
@@ -389,6 +393,10 @@ In-cluster Redis stays AUTH-less: leave `REDIS_PASSWORD`, `REDIS_SSL`, and
 `REDIS_PASSWORD_FILE`). Generate the token with `openssl rand -hex 16`
 (hex avoids the ElastiCache-forbidden `/`, `@`, `"`, and space). Do not put
 the token in the ConfigMap ([ADR 0075](adr/0075-redis-auth-and-transit-tls.md)).
+In-cluster Postgres stays cleartext: leave `POSTGRES_SSL_REQUIRED` unset.
+Managed RDS sets that flag and uses the terraform URL (`sslmode=require`, or
+`verify-full` when you mount a CA and set `POSTGRES_SSL_ROOT_CERT`). Do not
+invent a CA bundle ([ADR 0076](adr/0076-postgres-transit-tls.md)).
 
 Prefer External Secrets Operator or Vault Agent to fill
 `computerpets-secrets` rather than committing values into `secret.yaml`.
@@ -420,7 +428,13 @@ ConfigMap overlay example. Local verify does not need a cloud account:
 
 ```bash
 ./deploy/terraform/check-managed-stores.sh
+./deploy/terraform/check-postgres-tls.sh
 ```
+
+Managed Postgres sets `rds.force_ssl=1`. `spring_datasource_url` includes
+`sslmode=require` unless `postgres_ssl_root_cert` names a PEM path, in which
+case the URL uses `verify-full`. Pair that with `POSTGRES_SSL_REQUIRED=true`
+([ADR 0076](adr/0076-postgres-transit-tls.md)).
 
 A real `terraform apply` is the keeper's AWS account — not CI.
 While `enable_waf` is true (the default), set `waf_associate_alb_arn` to the

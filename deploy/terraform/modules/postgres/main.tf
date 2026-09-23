@@ -39,10 +39,40 @@ variable "username" {
   type = string
 }
 
+# Empty jdbc_url uses sslmode=require. A local CA bundle path uses
+# sslmode=verify-full. This is not a secret and is not an RDS setting.
+variable "ssl_root_cert" {
+  type        = string
+  default     = ""
+  description = "Optional app-host path to the RDS CA bundle. Empty = sslmode=require. Non-empty = sslmode=verify-full (ADR 0076)."
+
+  validation {
+    condition = (
+      var.ssl_root_cert == "" ||
+      (
+        can(regex("^/[A-Za-z0-9._/-]+$", var.ssl_root_cert)) &&
+        !strcontains(var.ssl_root_cert, "..") &&
+        !strcontains(var.ssl_root_cert, "//")
+      )
+    )
+    error_message = "ssl_root_cert must be empty or an absolute local path (no '..', space, query, or URL). Do not invent a CA bundle (ADR 0076)."
+  }
+}
+
 locals {
   name = "${var.project_name}-${var.environment}-pg"
   # Plan-friendly: skip AWS resources until networking is named.
-  provision = var.vpc_id != "" && length(var.private_subnet_ids) > 0
+  provision     = var.vpc_id != "" && length(var.private_subnet_ids) > 0
+  engine_major  = regex("^([0-9]+)", var.engine_version)[0]
+  ssl_root_cert = trimspace(var.ssl_root_cert)
+  # require encrypts without checking the server certificate. verify-full
+  # checks the CA and the hostname when the operator mounted a bundle.
+  sslmode = local.ssl_root_cert == "" ? "require" : "verify-full"
+  jdbc_query = (
+    local.sslmode == "require"
+    ? "sslmode=require"
+    : "sslmode=verify-full&sslrootcert=${local.ssl_root_cert}"
+  )
 }
 
 resource "aws_security_group" "postgres" {
@@ -89,6 +119,27 @@ resource "aws_db_subnet_group" "postgres" {
   }
 }
 
+# postgres-tls ADR 0076: every provisioned instance forces SSL.
+# rds.force_ssl is dynamic on RDS PostgreSQL; immediate does not by itself
+# schedule a reboot. First attach of this group to an existing instance can.
+resource "aws_db_parameter_group" "postgres" {
+  count = local.provision ? 1 : 0
+
+  name        = "${local.name}-params"
+  family      = "postgres${local.engine_major}"
+  description = "ComputerPets RDS Postgres — rds.force_ssl=1 (ADR 0076)"
+
+  parameter {
+    name         = "rds.force_ssl"
+    value        = "1"
+    apply_method = "immediate"
+  }
+
+  tags = {
+    Name = "${local.name}-params"
+  }
+}
+
 resource "aws_db_instance" "postgres" {
   count = local.provision ? 1 : 0
 
@@ -110,6 +161,7 @@ resource "aws_db_instance" "postgres" {
 
   db_subnet_group_name   = aws_db_subnet_group.postgres[0].name
   vpc_security_group_ids = [aws_security_group.postgres[0].id]
+  parameter_group_name   = aws_db_parameter_group.postgres[0].name
   publicly_accessible    = var.publicly_accessible
   multi_az               = var.environment == "prod"
 
@@ -130,6 +182,22 @@ resource "aws_db_instance" "postgres" {
     precondition {
       condition     = var.publicly_accessible == false
       error_message = "postgres publicly_accessible must be false (deny-safe). Public RDS is not an accepted ComputerPets production shape."
+    }
+  }
+}
+
+# Plan-time gate. require and verify-full are the only managed modes.
+# A CA path without verify-full, or verify-full without a path, cannot plan.
+resource "terraform_data" "postgres_transit_tls" {
+  input = local.sslmode
+
+  lifecycle {
+    precondition {
+      condition = (
+        (local.ssl_root_cert == "" && local.sslmode == "require") ||
+        (local.ssl_root_cert != "" && local.sslmode == "verify-full")
+      )
+      error_message = "Postgres transit TLS is fail-closed (ADR 0076). An empty CA path uses sslmode=require. A CA path uses sslmode=verify-full. A mixed pair is refused."
     }
   }
 }
@@ -156,12 +224,28 @@ output "username" {
 }
 
 output "jdbc_url" {
-  description = "SPRING_DATASOURCE_URL shape for ConfigMap overlay."
+  description = "SPRING_DATASOURCE_URL shape for ConfigMap overlay. Includes sslmode (ADR 0076)."
   value = local.provision ? format(
-    "jdbc:postgresql://%s:5432/%s",
+    "jdbc:postgresql://%s:5432/%s?%s",
     aws_db_instance.postgres[0].address,
     var.db_name,
+    local.jdbc_query,
   ) : ""
+}
+
+output "sslmode" {
+  description = "JDBC sslmode baked into jdbc_url when provisioned. require, or verify-full when a CA path is set."
+  value       = local.provision ? local.sslmode : ""
+}
+
+output "jdbc_query" {
+  description = "Query string appended to jdbc_url. Known at plan time (no hostname)."
+  value       = local.jdbc_query
+}
+
+output "force_ssl" {
+  description = "True when the parameter group sets rds.force_ssl=1."
+  value       = local.provision
 }
 
 output "master_user_secret_arn" {

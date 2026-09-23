@@ -2,8 +2,11 @@ package com.enterprisepet.config;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.springframework.mock.env.MockEnvironment;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -11,6 +14,9 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ProductionProfileGuardTest {
+
+    @TempDir
+    Path tempDir;
 
     private static ProductionProfileGuard guard(
             boolean microsoftDevMode,
@@ -442,5 +448,67 @@ class ProductionProfileGuardTest {
         assertThatThrownBy(g::rejectUnsafeProductionSettings)
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("ISO-8601");
+    }
+
+    @Test
+    @DisplayName("prod refuses Postgres SSL required without sslmode")
+    void postgresSslRequiredWithoutMode_failsClosed() {
+        MockEnvironment env = new MockEnvironment();
+        env.setProperty("POSTGRES_SSL_REQUIRED", "true");
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                env);
+
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("all-or-nothing")
+                .hasMessageContaining("POSTGRES_SSL_REQUIRED");
+    }
+
+    @Test
+    @DisplayName("prod accepts sslmode=require when Postgres SSL is required")
+    void postgresSslRequire_passes() {
+        MockEnvironment env = new MockEnvironment();
+        env.setProperty("POSTGRES_SSL_REQUIRED", "true");
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets?sslmode=require",
+                "jdbc:postgresql://replica:5432/computerpets?sslmode=require",
+                "external-secrets",
+                "false",
+                env);
+
+        assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("prod accepts verify-full when the CA bundle is a PEM")
+    void postgresVerifyFull_passes() throws Exception {
+        Path pem = tempDir.resolve("rds-ca.pem");
+        Files.writeString(pem, """
+                -----BEGIN CERTIFICATE-----
+                MIIB
+                -----END CERTIFICATE-----
+                """);
+        MockEnvironment env = new MockEnvironment();
+        env.setProperty("POSTGRES_SSL_REQUIRED", "true");
+        env.setProperty("POSTGRES_SSL_ROOT_CERT", pem.toString());
+        String url = "jdbc:postgresql://db:5432/computerpets?sslmode=verify-full&sslrootcert=" + pem;
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                url,
+                "",
+                "external-secrets",
+                "false",
+                env);
+
+        assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
     }
 }

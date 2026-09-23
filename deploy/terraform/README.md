@@ -32,6 +32,9 @@ deploy/terraform/
   check-redis-auth.sh              # Lettuce AUTH/TLS == ElastiCache token (ADR 0075)
   check-redis-auth.test.sh
   redis_auth.tftest.hcl
+  check-postgres-tls.sh            # JDBC sslmode == rds.force_ssl (ADR 0076)
+  check-postgres-tls.test.sh
+  postgres_tls.tftest.hcl
 ```
 
 ## Deny-safe defaults
@@ -45,6 +48,7 @@ deploy/terraform/
 | Secrets Manager | **shells only** — names match External Secrets `remoteRef` keys |
 | Bundle bucket | Block public ACLs; CloudFront OAC only. Edge redeem: `deploy/cdn/` ([ADR 0063](../../docs/adr/0063-cdn-edge-redeem-verification.md)). Not the API WAF |
 | API WAF | Regional ACL, default **block**, four buckets matching `RateLimitingFilter` (10/30/60/60 per minute). Plan **refuses** an empty ALB ARN ([ADR 0074](../../docs/adr/0074-waf-in-front-of-rate-limiter.md)) |
+| Postgres transit TLS | **on** for every provisioned RDS instance. Parameter group `rds.force_ssl=1`. `jdbc_url` is `sslmode=require`, or `verify-full` when `postgres_ssl_root_cert` is an absolute PEM path. The app flag is `POSTGRES_SSL_REQUIRED` ([ADR 0076](../../docs/adr/0076-postgres-transit-tls.md)) |
 | Redis AUTH / TLS | **off** unless `redis_auth_token` is set (`TF_VAR_`, never in git). A token enables AUTH + transit encryption together. The app reads `REDIS_PASSWORD` / `REDIS_SSL` / `REDIS_AUTH_REQUIRED` ([ADR 0075](../../docs/adr/0075-redis-auth-and-transit-tls.md)) |
 
 ## Operator flow
@@ -66,7 +70,8 @@ Then:
 4. Set `BUNDLE_BASE_URL` from the CDN output.
 5. Confirm `waf_associate_alb_arn` was the API application load balancer (health check `/actuator/health` or `/actuator/health/liveness`). Do not attach this ACL to the bundle CloudFront distribution. `enable_waf=false` is the explicit switch for no edge gate; the JVM filter remains.
 6. If `redis_auth_enabled` is true, set `REDIS_SSL=true` and `REDIS_AUTH_REQUIRED=true`, and inject the same token as `REDIS_PASSWORD` or `REDIS_PASSWORD_FILE` (`openssl rand -hex 16`). Leave all three unset when the output is false.
-7. Keep the ADR 0061 digest verify gate before `kubectl set image`.
+7. Set `POSTGRES_SSL_REQUIRED=true` with `spring_datasource_url`. That URL is `sslmode=require` unless you set `postgres_ssl_root_cert` to a PEM you mounted (then `verify-full` and `POSTGRES_SSL_ROOT_CERT`). Do not invent a CA bundle. In-cluster Postgres leaves the flag unset ([ADR 0076](../../docs/adr/0076-postgres-transit-tls.md)).
+8. Keep the ADR 0061 digest verify gate before `kubectl set image`.
 
 ## Local verify (no cloud account)
 
@@ -77,7 +82,9 @@ Then:
 ./deploy/terraform/check-waf-gate.test.sh
 ./deploy/terraform/check-redis-auth.sh
 ./deploy/terraform/check-redis-auth.test.sh
-terraform -chdir=deploy/terraform test    # mock provider; empty ALB ARN and a short Redis token must fail the plan
+./deploy/terraform/check-postgres-tls.sh
+./deploy/terraform/check-postgres-tls.test.sh
+terraform -chdir=deploy/terraform test    # mock provider; empty ALB ARN, a short Redis token, and a bad Postgres CA path must fail the plan
 ```
 
 `check-managed-stores.sh` asserts deny-safe HCL + External Secrets name alignment,
