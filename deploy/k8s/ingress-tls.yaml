@@ -1,0 +1,35 @@
+# Public prod API listener (ADR 0077). Not in kustomization.yaml.
+# Apply only when cert-manager and a ClusterIssuer you already run are
+# installed. Change computerpets-prod to that issuer's name. Change the host.
+# This file does not create a ClusterIssuer, does not register an ACME
+# account, and does not request an ACM certificate.
+# The JVM stays HTTP on 8081 (backend-protocol HTTP). TLS terminates here.
+# Local/dev stays on ingress.yaml or the Service. No nginx rate-limit
+# annotations (ADR 0074). The outer gate is still the regional WAF.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: computerpets
+  namespace: computerpets
+  annotations:
+    cert-manager.io/cluster-issuer: computerpets-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - computerpets.example
+      secretName: computerpets-api-tls
+  rules:
+    - host: computerpets.example
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: computerpets
+                port:
+                  name: http

@@ -15,11 +15,12 @@ aws_region   = "us-east-1"
 postgres_publicly_accessible = false
 write_house_secret_values    = false
 
-enable_postgres = true
-enable_redis    = true
-enable_secrets  = true
-enable_cdn      = true
-enable_waf      = true
+enable_postgres         = true
+enable_redis            = true
+enable_secrets          = true
+enable_cdn              = true
+enable_waf              = true
+enable_api_listener_tls = true
 
 # Postgres transit TLS (ADR 0076) is on for every provisioned RDS instance
 # (rds.force_ssl=1, jdbc sslmode=require). To switch the URL to verify-full,
@@ -35,3 +36,12 @@ enable_waf      = true
 # Empty is validate-only. Use the API application load balancer, not an NLB
 # and not the bundle CloudFront distribution.
 # waf_associate_alb_arn = "arn:aws:elasticloadbalancing:us-east-1:000000000000:loadbalancer/app/computerpets/example"
+
+# Public API listener TLS (ADR 0077). Required for plan/apply while
+# enable_api_listener_tls is true. Use the same ALB as waf_associate_alb_arn.
+# The certificate ARN is one you already have. This root does not call ACM
+# and does not invent a domain. Leave these commented until then.
+# Port 80 redirects to 443. The pods stay HTTP on 8081.
+# api_listener_alb_arn = "arn:aws:elasticloadbalancing:us-east-1:000000000000:loadbalancer/app/computerpets/example"
+# api_listener_certificate_arn = "arn:aws:acm:us-east-1:000000000000:certificate/example"
+# api_listener_target_group_arn = "arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/computerpets/example"

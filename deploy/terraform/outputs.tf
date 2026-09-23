@@ -47,6 +47,21 @@ output "house_secret_names" {
   value       = try(module.secrets[0].secret_names, [])
 }
 
+output "api_listener_https_port" {
+  description = "443 when the HTTPS listener is planned. 0 when enable_api_listener_tls is false (ADR 0077)."
+  value       = try(module.api_listener[0].https_port, 0)
+}
+
+output "api_listener_cleartext_forward" {
+  description = "False when the module is on: port 80 redirects. Null when the module is off."
+  value       = try(module.api_listener[0].cleartext_forward, null)
+}
+
+output "api_listener_http_redirect_status" {
+  description = "HTTP_301 when the redirect listener is planned. Empty otherwise."
+  value       = try(module.api_listener[0].http_redirect_status, "")
+}
+
 output "waf_web_acl_arn" {
   description = "Regional API WAF ACL ARN. Plan refuses to apply unless waf_associate_alb_arn is the API ALB (ADR 0074)."
   value       = try(module.waf[0].web_acl_arn, "")
@@ -64,5 +79,6 @@ output "k8s_wiring_hint" {
     6. If redis_auth_enabled is true, set REDIS_SSL=true and REDIS_AUTH_REQUIRED=true and inject REDIS_PASSWORD (or REDIS_PASSWORD_FILE) from the same token. Do not put the token in the ConfigMap or in git. If it is false, leave those unset.
     7. Set POSTGRES_SSL_REQUIRED=true with spring_datasource_url. That URL is sslmode=require unless postgres_ssl_root_cert was set (then verify-full). Mount that PEM and set POSTGRES_SSL_ROOT_CERT to the same path. Do not invent a CA bundle. In-cluster Postgres leaves the flag unset.
     8. Keep verifying GHCR digests (ADR 0061) before kubectl set image.
+    9. For a public API door, set api_listener_alb_arn (same value as waf_associate_alb_arn), api_listener_certificate_arn (an ACM certificate you already have — this root does not call ACM), and api_listener_target_group_arn. Port 80 redirects to 443. Then set API_LISTENER_TLS_REQUIRED=true and API_PUBLIC_BASE_URL=https://<your host>. Leave both unset for in-cluster HTTP. Do not set server.ssl (ADR 0077).
   EOT
 }

@@ -38,4 +38,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - `sslmode=require` does not authenticate the server. A network path that can present any certificate still can, until the operator mounts the RDS CA and uses `verify-full`. This repo does not vendor that bundle. A wrong PEM fails the handshake closed. There is no switch to disable verify once `verify-full` is selected.
 - Staging does not run `ProductionProfileGuard`. A staging URL without `sslmode` against this RDS fails when the pool connects.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** API listener TLS. `deploy/k8s/ingress.yaml` has no `tls` block and no certificate. The JVM listens on 8081 without `server.ssl`. This root does not create an ACM certificate or an HTTPS listener. The WAF attaches to an ALB the keeper already has. Not started here.
+- **Next gap:** API listener TLS landed as [0077](0077-api-listener-tls.md). Not started in this ADR.

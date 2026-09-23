@@ -511,4 +511,63 @@ class ProductionProfileGuardTest {
 
         assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
     }
+
+    @Test
+    @DisplayName("prod accepts an https public origin when API listener TLS is required")
+    void apiListenerHttps_passes() {
+        MockEnvironment env = new MockEnvironment();
+        env.setProperty("API_LISTENER_TLS_REQUIRED", "true");
+        env.setProperty("API_PUBLIC_BASE_URL", "https://computerpets.example");
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                env);
+
+        assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("prod refuses a cleartext public origin when API listener TLS is required")
+    void apiListenerCleartext_failsClosed() {
+        MockEnvironment env = new MockEnvironment();
+        env.setProperty("API_LISTENER_TLS_REQUIRED", "true");
+        env.setProperty("API_PUBLIC_BASE_URL", "http://computerpets.example");
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                env);
+
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("cleartext")
+                .hasMessageContaining("ADR 0077");
+    }
+
+    @Test
+    @DisplayName("prod refuses a JVM keystore even when the public listener flag is unset")
+    void apiListenerKeystore_failsClosed() {
+        MockEnvironment env = new MockEnvironment();
+        env.setProperty("SERVER_SSL_KEY_STORE", "/etc/ssl/api.p12");
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                env);
+
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("server.ssl")
+                .hasMessageContaining("ADR 0077");
+    }
 }
