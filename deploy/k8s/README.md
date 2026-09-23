@@ -457,7 +457,7 @@ No live AWS apply.
 ./deploy/k8s/check-api-pool-taint.test.sh
 ```
 
-## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092, ADR 0099, ADR 0101, ADR 0102, ADR 0103, ADR 0104)
+## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092, ADR 0099, ADR 0101, ADR 0102, ADR 0103, ADR 0104, ADR 0109)
 
 `cluster-autoscaler.yaml` is **not** in the kustomization. `kubectl apply -k
 deploy/k8s` does not install it. Kind and minikube set
@@ -467,10 +467,16 @@ The prod scaler runs in `kube-system` and changes desired capacity on the
 Auto Scaling groups behind the per-zone node groups. Each group's max is
 20
 ([ADR 0104](../../docs/adr/0104-per-zone-node-max.md)).
+The one-zone floor under that cap is 8: the HPA ceiling of 3, plus both
+Cluster Autoscaler pods, plus both metrics-server pods, plus one drain
+node. Twice the new ceiling is 6 and is under that floor. The live set
+binds on the per-zone minimum of 3, so `MaxLimitReached` at 20 is
+unreachable in this design
+([ADR 0109](../../docs/adr/0109-per-zone-node-max-floor.md)).
 The HPA ceiling is 3, so one Ready zone holds it at one pod per hostname
 ([ADR 0108](../../docs/adr/0108-api-single-zone-hostname-ceiling.md)).
-The leader reads that number from the group's `MaxSize`. It does not
-raise it. The minimum is 3 per zone
+The leader reads that number from the group's `MaxSize`
+(`DescribeAutoScalingGroups`). It does not raise it. The minimum is 3 per zone
 ([ADR 0106](../../docs/adr/0106-api-single-zone-hostname-floor.md)).
 Terraform ignores `desired_size`
 after the first apply. `--balance-similar-node-groups=true` keeps the two
@@ -518,7 +524,9 @@ defaults. A budget that is already gone, a failed snapshot update, or
 a scale-up that is not successful still ends that salvo. The next
 main loop is the retry
 ([ADR 0103](../../docs/adr/0103-cluster-autoscaler-salvo-early-stop.md)).
-A zone already at 20 still cannot grow. One Ready zone at min 3 is
+`MaxLimitReached` at 20 is unreachable for this set
+([ADR 0109](../../docs/adr/0109-per-zone-node-max-floor.md)).
+One Ready zone at min 3 is
 three hostnames, so the HPA floor is 1 and 1 and 1
 ([ADR 0106](../../docs/adr/0106-api-single-zone-hostname-floor.md)).
 Above the floor, ten pods on six healthy hostnames still share nodes.
@@ -572,6 +580,8 @@ minor's latest patch instead. Do not commit a real account id.
 ./deploy/k8s/check-cluster-autoscaler-salvo-early-stop.test.sh
 ./deploy/k8s/check-cluster-autoscaler-zone-max.sh
 ./deploy/k8s/check-cluster-autoscaler-zone-max.test.sh
+./deploy/k8s/check-cluster-autoscaler-zone-max-floor.sh
+./deploy/k8s/check-cluster-autoscaler-zone-max-floor.test.sh
 ```
 
 Zone spread for the API colors stays the item in those Deployments.

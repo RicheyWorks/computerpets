@@ -50,10 +50,17 @@ locals {
   # ten for 5, twelve for 6, twenty for 10. Those bills are refused.
   # zone-max-nodes=20. ADR 0104 sized that as twice the old ceiling
   # of 10. The max stays 20. It is not twice this ceiling.
-  # Cluster Autoscaler reads the managed Auto Scaling group's MaxSize.
-  # It does not read this local. eks:UpdateNodegroupConfig is denied,
-  # so the leader cannot lift this ceiling. A zone at max is skipped
-  # (MaxLimitReached). Hard zone spread will not use the other zone.
+  # zone-max-floor=8. ADR 0109. One Ready zone at one pod per node is
+  # maxReplicas 3, plus Cluster Autoscaler 2, plus metrics-server 2,
+  # plus one drain node. Twice this ceiling is 6, which is under that
+  # floor and is refused. The named pods without the drain node are 7
+  # and are refused. The HPA ceiling used as a node max is 3 and is
+  # refused. 20 stays above the floor. The cap is not the bill.
+  # Cluster Autoscaler reads the managed Auto Scaling group's MaxSize
+  # (DescribeAutoScalingGroups). It does not read this local.
+  # eks:UpdateNodegroupConfig is denied, so the leader cannot lift
+  # this ceiling. The live set binds on min_size 3, so desired stays
+  # under MaxSize and MaxLimitReached at 20 is unreachable.
   # hpa-min-replicas=3. pdb-min-available=2. min-availability-zones=2.
   # hostname-floor-nodes=6. min-size-per-zone=3 (ADR 0106).
   # single-zone-hostname-floor=3. surviving-zones=1.
