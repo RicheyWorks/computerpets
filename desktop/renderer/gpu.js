@@ -1,12 +1,12 @@
-/** Desktop-local GPU sense. Windows and Linux nvidia-smi. Mac stays mac-gpu-sense. Sparkline is real samples only. */
+/** Desktop-local GPU sense. Windows and Linux nvidia-smi. Mac reads IOAccelerator into the same line. Sparkline is real samples only. */
 (function (root) {
   const STALE_MS = 20000;
-  const LATER_DOOR = "mac-gpu-sense";
-  const SOURCES = ["nvidia-smi", "pdh", "nvidia-smi+pdh"];
+  const LATER_DOOR = "unsupported";
+  const SOURCES = ["nvidia-smi", "pdh", "nvidia-smi+pdh", "ioaccelerator"];
   const METRIC_KEYS = ["tempC", "utilPercent", "memoryUsedBytes", "memoryTotalBytes", "powerWatts"];
 
   function sensesOn(platform) {
-    return platform === "win32" || /^Win/i.test(String(platform || "")) || isLinux(platform);
+    return platform === "win32" || /^Win/i.test(String(platform || "")) || isLinux(platform) || isMac(platform);
   }
 
   function isMac(platform) {
@@ -368,7 +368,7 @@
       return blank("unread", "missing", platform, nowMs);
     }
     let chosen = nvidiaBest || pdhBest;
-    let source = nvidiaBest ? "nvidia-smi" : "pdh";
+    let source = nvidiaBest ? (isMac(platform) ? "ioaccelerator" : "nvidia-smi") : "pdh";
     if (nvidiaBest && pdhBest && nvidiaCount === 1 && pdhCount === 1) {
       chosen = {
         index: nvidiaBest.index,
@@ -386,10 +386,10 @@
           filled = true;
         }
       });
-      source = filled ? "nvidia-smi+pdh" : "nvidia-smi";
+      source = filled ? "nvidia-smi+pdh" : (isMac(platform) ? "ioaccelerator" : "nvidia-smi");
     } else if (nvidiaBest) {
       chosen = nvidiaBest;
-      source = "nvidia-smi";
+      source = isMac(platform) ? "ioaccelerator" : "nvidia-smi";
     } else {
       chosen = pdhBest;
       source = "pdh";
