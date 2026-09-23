@@ -243,6 +243,12 @@ variable "api_listener_target_group_arn" {
   }
 }
 
+variable "reassert_kube_proxy_toleration" {
+  type        = bool
+  description = "Probe DaemonSet kube-proxy on plan and reassert API pool coverage on apply when it drifted (ADR 0097). Default false so CI, terraform test, kind, and minikube do not call kubectl. Set true only with an EKS kubeconfig. A kind or minikube context fails the plan. Do not taint a kind or minikube node."
+  default     = false
+}
+
 variable "enable_node_pool" {
   type        = bool
   description = "Provision one private EKS managed node group per availability zone (ADR 0082). Plan/apply refuses to continue unless eks_cluster_name is set and node_pool_subnets has at least two private subnets in aws_region. This root does not create the cluster. Set false only for local kind/minikube, where this root should not create workers."
