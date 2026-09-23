@@ -39,19 +39,27 @@ locals {
   # This module does not create an EKS cluster, a VPC, or a subnet.
   # It does not stamp topology.kubernetes.io/zone. EKS sets that label
   # from the instance placement AZ. One subnet per group keeps that AZ.
-  # desired-size-owner=cluster-autoscaler (ADR 0083). Create still uses 1.
+  # desired-size-owner=cluster-autoscaler (ADR 0083). Create uses the floor.
   # hpa-max-replicas=10. The HPA ceiling is pods, not spare nodes.
   # zone-max-nodes=20. Twice that ceiling (ADR 0104).
   # Cluster Autoscaler reads the managed Auto Scaling group's MaxSize.
   # It does not read this local. eks:UpdateNodegroupConfig is denied,
   # so the leader cannot lift this ceiling. A zone at max is skipped
   # (MaxLimitReached). Hard zone spread will not use the other zone.
+  # hpa-min-replicas=3. pdb-min-available=2. min-availability-zones=2.
+  # hostname-floor-nodes=4. min-size-per-zone=2 (ADR 0105).
+  # Zone hard spread puts ceil(3/2)=2 floor pods in one healthy zone.
+  # Hostname hard spread is maxSkew 1, so that zone needs 2 hostnames
+  # or those two pods share a node. Two healthy zones times this floor
+  # is 4, which covers the HPA min. The old floor of 1 is 2 hostnames
+  # and lands the HPA min as 2 and 1. Nothing stays Pending, so the
+  # leader does not add the third node. Do not set minDomains.
   # api-pool-taint ADR 0094
   # taint-key=computerpets/node-pool
   # taint-value=api
   # taint-effect=NO_SCHEDULE
-  min_size_per_zone     = 1
-  desired_size_per_zone = 1
+  min_size_per_zone     = 2
+  desired_size_per_zone = 2
   max_size_per_zone     = 20
   root_volume_gib       = 20
 
@@ -165,7 +173,8 @@ resource "aws_eks_node_group" "zone" {
     max_size     = local.max_size_per_zone
   }
 
-  # A later apply must not write desired_size back to 1 (ADR 0083).
+  # A later apply must not write desired_size back to the create-time
+  # floor (ADR 0083, ADR 0105).
   # min_size and max_size stay Terraform-owned. lifecycle cannot be
   # conditional, so this ignore stays even if the autoscaler flag is off.
   lifecycle {

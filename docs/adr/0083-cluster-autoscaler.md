@@ -1,6 +1,6 @@
 # 0083. Cluster Autoscaler for the multi-AZ API node groups
 
-- **Status:** Accepted (replica count and anti-affinity are [0090](0090-cluster-autoscaler-ha.md); the pool pin is [0091](0091-cluster-autoscaler-node-pool.md); the disruption budget is [0092](0092-cluster-autoscaler-pdb.md); the running leader's scale path is [0101](0101-cluster-autoscaler-leader-scale.md); the same-loop second group is [0102](0102-cluster-autoscaler-scale-up-salvo.md); the salvo early stop is [0103](0103-cluster-autoscaler-salvo-early-stop.md); the per-zone max is [0104](0104-per-zone-node-max.md); IRSA, discovery tags, and the kustomize exclusion stay)
+- **Status:** Accepted (replica count and anti-affinity are [0090](0090-cluster-autoscaler-ha.md); the pool pin is [0091](0091-cluster-autoscaler-node-pool.md); the disruption budget is [0092](0092-cluster-autoscaler-pdb.md); the running leader's scale path is [0101](0101-cluster-autoscaler-leader-scale.md); the same-loop second group is [0102](0102-cluster-autoscaler-scale-up-salvo.md); the salvo early stop is [0103](0103-cluster-autoscaler-salvo-early-stop.md); the per-zone max is [0104](0104-per-zone-node-max.md); the per-zone floor is [0105](0105-api-hostname-floor.md); IRSA, discovery tags, and the kustomize exclusion stay)
 - **Date:** 2026-09-23
 - **Code:** `deploy/terraform/modules/cluster_autoscaler/main.tf`; `deploy/terraform/modules/node_pool/main.tf`; `deploy/k8s/cluster-autoscaler.yaml`; `deploy/terraform/check-cluster-autoscaler.sh`
 
