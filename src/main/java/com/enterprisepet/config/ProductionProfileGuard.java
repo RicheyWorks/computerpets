@@ -110,10 +110,86 @@ public class ProductionProfileGuard {
             }
         }
         rejectPlainEnvSecrets();
+        rejectUnsafeRedisAuth();
         rejectStaleKeysRotatedAt();
         log.info(
-                "Production profile guard passed (Postgres, Redis, microsoft.dev-mode=false, secrets source={}).",
+                "Production profile guard passed (Postgres, Redis auth={}, ssl={}, microsoft.dev-mode=false, secrets source={}).",
+                redisAuthRequired() ? "required" : "off",
+                redisSsl() ? "on" : "off",
                 plainSecretAllowed() ? "plain-local-override" : secretsSource.toLowerCase(Locale.ROOT));
+    }
+
+    /**
+     * Prod Redis AUTH is all-or-nothing (ADR 0075). Unset password, SSL, and
+     * {@code REDIS_AUTH_REQUIRED} keeps the AUTH-less in-cluster node. If any
+     * one is set, all three must be set. A missing password is fail-closed.
+     * File-source prod also requires {@code REDIS_PASSWORD_FILE}. The password
+     * value is never logged.
+     */
+    void rejectUnsafeRedisAuth() {
+        if (!RateLimitProperties.BACKEND_REDIS.equalsIgnoreCase(rateLimitBackend)) {
+            return;
+        }
+        boolean authRequired = redisAuthRequired();
+        boolean ssl = redisSsl();
+        boolean hasPassword = !redisPassword().isBlank();
+        if (!authRequired && !ssl && !hasPassword) {
+            return;
+        }
+        if (!authRequired || !ssl || !hasPassword) {
+            throw new IllegalStateException(
+                    "Redis AUTH on prod is all-or-nothing (ADR 0075). "
+                            + "Set REDIS_AUTH_REQUIRED=true, REDIS_SSL=true, and REDIS_PASSWORD "
+                            + "(or REDIS_PASSWORD_FILE) together. "
+                            + "Leave all three unset for the AUTH-less in-cluster Redis. "
+                            + "Refusing a half-configured node (auth-required=" + authRequired
+                            + ", ssl=" + ssl + ", password=" + (hasPassword ? "set" : "missing") + ").");
+        }
+        if ("file".equals(secretsSource.toLowerCase(Locale.ROOT)) && !plainSecretAllowed()) {
+            String filePath = environment.getProperty("REDIS_PASSWORD_FILE");
+            if (filePath == null || filePath.isBlank()) {
+                throw new IllegalStateException(
+                        "COMPUTERPETS_SECRETS_SOURCE=file requires REDIS_PASSWORD_FILE on prod "
+                                + "when Redis AUTH is on. Mount the token and set the path. "
+                                + "Missing path refuses start — do not invent a token (ADR 0075).");
+            }
+        }
+    }
+
+    private boolean redisAuthRequired() {
+        return flag("rate-limit.redis.auth-required", "REDIS_AUTH_REQUIRED");
+    }
+
+    private boolean redisSsl() {
+        return flag("rate-limit.redis.ssl", "REDIS_SSL");
+    }
+
+    private String redisPassword() {
+        String fromBinding = environment.getProperty("rate-limit.redis.password");
+        if (fromBinding != null && !fromBinding.isBlank()) {
+            return fromBinding;
+        }
+        String fromEnv = environment.getProperty("REDIS_PASSWORD");
+        return fromEnv == null ? "" : fromEnv;
+    }
+
+    private boolean flag(String primary, String fallback) {
+        String value = environment.getProperty(primary);
+        if (value == null || value.isBlank()) {
+            value = environment.getProperty(fallback);
+        }
+        return truthy(value);
+    }
+
+    private static boolean truthy(String value) {
+        if (value == null) {
+            return false;
+        }
+        String normalized = value.trim().toLowerCase(Locale.ROOT);
+        return "true".equals(normalized)
+                || "1".equals(normalized)
+                || "yes".equals(normalized)
+                || "on".equals(normalized);
     }
 
     /**

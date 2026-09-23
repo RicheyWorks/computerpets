@@ -114,7 +114,7 @@ Phase 2.4 / ADR 0064 — three operator shapes, one deny-safe contract ([ADR 005
 
 **Prod attestation:** `ProductionProfileGuard` refuses to start on `prod` unless `COMPUTERPETS_SECRETS_SOURCE` is set (or local-only `COMPUTERPETS_ALLOW_PLAIN_SECRET=1`). When source is `file`, the four critical `*_FILE` paths are required. Deploy gate: `./deploy/k8s/verify-secret-operator.sh`.
 
-**Precedence:** non-blank `NAME` wins over `NAME_FILE`. If `NAME_FILE` is set and the path is missing or unreadable, the process **refuses to start**. Optional storefront keys (`STEAM_API_KEY`, `ITCH_API_KEY`, `EPIC_*`, `ETHEREUM_RPC_URL`) may use the same `*_FILE` pattern; blank or placeholder still **fails closed** at verify (no invented entitlement).
+**Precedence:** non-blank `NAME` wins over `NAME_FILE`. If `NAME_FILE` is set and the path is missing or unreadable, the process **refuses to start**. Optional storefront keys (`STEAM_API_KEY`, `ITCH_API_KEY`, `EPIC_*`, `ETHEREUM_RPC_URL`) may use the same `*_FILE` pattern; blank or placeholder still **fails closed** at verify (no invented entitlement). `REDIS_PASSWORD_FILE` uses that same loader. It is required on `prod` only when Redis AUTH is on and `COMPUTERPETS_SECRETS_SOURCE=file` ([ADR 0075](adr/0075-redis-auth-and-transit-tls.md)).
 
 ```bash
 # Docker secrets overlay (files gitignored — see secrets/README.md)
@@ -338,6 +338,9 @@ The Electron overlay is still `cd desktop && npm start`.
 | `REDIS_HOST`              | No       | localhost | Redis hostname for shared verify/download rate limits, the jti deny-list, and download grants |
 | `REDIS_PORT`              | No       | 6379 | Redis port |
 | `REDIS_TIMEOUT`           | No       | 200ms | Lettuce command/connect timeout for the rate-limit store |
+| `REDIS_PASSWORD`          | No       | empty | Redis AUTH token. Unset for compose and in-cluster Redis. Also `REDIS_PASSWORD_FILE` (ADR 0075) |
+| `REDIS_SSL`               | No       | false | Transit TLS on the same Lettuce client (`rediss`, peer verified). Default false |
+| `REDIS_AUTH_REQUIRED`     | No       | false | When true, a blank password or `REDIS_SSL=false` refuses to start. On `prod`, password, SSL, and this flag are all-or-nothing |
 | `RATE_LIMIT_BACKEND`      | No       | redis | `redis` (default, shared) or `memory` (tests / single local process only) |
 | `RATE_LIMIT_FAIL_CLOSED_RETRY_AFTER` | No | 5 | `Retry-After` seconds when Redis is down (HTTP 503) |
 | `TRUSTED_PROXY_CIDRS`     | No       | empty; `dev` → loopback | Comma/whitespace CIDRs allowed to present `X-Forwarded-For` / `Forwarded`. Empty = always `remoteAddr` (ADR 0067). |
@@ -380,8 +383,12 @@ kubectl apply -k deploy/k8s
 
 Required Secret keys: `LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`,
 `BUNDLE_SIGNING_KEY`, `ADMIN_API_KEY`, plus Postgres username/password.
-Redis has no password setting in the app — only `REDIS_HOST` /
-`REDIS_PORT` on the ConfigMap.
+In-cluster Redis stays AUTH-less: leave `REDIS_PASSWORD`, `REDIS_SSL`, and
+`REDIS_AUTH_REQUIRED` unset. Managed ElastiCache with a token sets all three
+(`REDIS_SSL=true`, `REDIS_AUTH_REQUIRED=true`, password from the Secret or
+`REDIS_PASSWORD_FILE`). Generate the token with `openssl rand -hex 16`
+(hex avoids the ElastiCache-forbidden `/`, `@`, `"`, and space). Do not put
+the token in the ConfigMap ([ADR 0075](adr/0075-redis-auth-and-transit-tls.md)).
 
 Prefer External Secrets Operator or Vault Agent to fill
 `computerpets-secrets` rather than committing values into `secret.yaml`.
@@ -648,7 +655,7 @@ ethereum:
 
 ### Rate limiter returns 503
 **Problem**: `/api/verify/**`, `/api/download/**`, or `/api/pets` returns 503 with `Rate limiter unavailable`  
-**Solution**: Redis is the default store and the filter fail-closes when it cannot be reached. Start Redis (`docker compose up redis` or a local `redis-server`) and set `REDIS_HOST` / `REDIS_PORT`, or set `RATE_LIMIT_BACKEND=memory` for a single local process.
+**Solution**: Redis is the default store and the filter fail-closes when it cannot be reached. Start Redis (`docker compose up redis` or a local `redis-server`) and set `REDIS_HOST` / `REDIS_PORT`, or set `RATE_LIMIT_BACKEND=memory` for a single local process. If the node requires AUTH, set `REDIS_PASSWORD` (or `REDIS_PASSWORD_FILE`), `REDIS_SSL=true`, and `REDIS_AUTH_REQUIRED=true`. A required password that is missing refuses to start ([ADR 0075](adr/0075-redis-auth-and-transit-tls.md)).
 
 ### Port Already in Use
 **Problem**: Port 8081 is occupied  

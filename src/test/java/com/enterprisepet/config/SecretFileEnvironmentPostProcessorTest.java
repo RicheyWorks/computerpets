@@ -96,6 +96,23 @@ class SecretFileEnvironmentPostProcessorTest {
     }
 
     @Test
+    @DisplayName("loads REDIS_PASSWORD from REDIS_PASSWORD_FILE when env is blank")
+    void loadsRedisPasswordFromFile() throws Exception {
+        Path file = tempDir.resolve("redis-password");
+        Files.writeString(file, "plan-fixture-token\n", StandardCharsets.UTF_8);
+
+        StandardEnvironment env = new StandardEnvironment();
+        env.getPropertySources().addFirst(new MapPropertySource("test", Map.of(
+                "REDIS_PASSWORD_FILE", file.toString()
+        )));
+
+        processor.postProcessEnvironment(env, application);
+
+        assertThat(env.getProperty("REDIS_PASSWORD")).isEqualTo("plan-fixture-token");
+        assertThat(SecretFileEnvironmentPostProcessor.SECRET_ENV_NAMES).contains("REDIS_PASSWORD");
+    }
+
+    @Test
     @DisplayName("optional STEAM_API_KEY_FILE loads and binds as steam.api-key via relaxed names")
     void optionalSteamFileBindsRelaxed() throws Exception {
         Path file = tempDir.resolve("steam");

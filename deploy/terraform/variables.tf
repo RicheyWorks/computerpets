@@ -123,6 +123,28 @@ variable "redis_engine_version" {
   default     = "7.1"
 }
 
+variable "redis_auth_token" {
+  type        = string
+  description = "ElastiCache AUTH token (ADR 0075). Empty keeps the AUTH-less cache cluster used by compose and in-cluster redis.yaml. Non-empty enables AUTH and transit encryption on a single-node replication group. Pass as TF_VAR_redis_auth_token. Never commit the token. It is stored in Terraform state because ElastiCache requires it at create — use an encrypted backend."
+  default     = ""
+  sensitive   = true
+
+  validation {
+    condition = (
+      var.redis_auth_token == "" ||
+      (
+        length(var.redis_auth_token) >= 16 &&
+        length(var.redis_auth_token) <= 128 &&
+        can(regex("^[!-~]+$", var.redis_auth_token)) &&
+        !strcontains(var.redis_auth_token, "@") &&
+        !strcontains(var.redis_auth_token, "\"") &&
+        !strcontains(var.redis_auth_token, "/")
+      )
+    )
+    error_message = "redis_auth_token must be empty or 16-128 printable ASCII characters excluding space, @, \", and / (ElastiCache AUTH rules). Do not commit the token."
+  }
+}
+
 variable "cdn_price_class" {
   type        = string
   description = "CloudFront price class for the bundle CDN stub."

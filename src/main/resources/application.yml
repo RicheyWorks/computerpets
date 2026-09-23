@@ -230,9 +230,14 @@ rate-limit:
   redis:
     # Single shared Lettuce connection (not a Hikari-style pool). Timeout is
     # the pool-tuning knob for rate-limit / jti deny-list / download grants.
+    # Password and TLS are optional (ADR 0075). Unset keeps compose / in-cluster
+    # Redis AUTH-less and cleartext. Prod refuses a half-set trio.
     host: ${REDIS_HOST:localhost}
     port: ${REDIS_PORT:6379}
     timeout: ${REDIS_TIMEOUT:200ms}
+    password: ${REDIS_PASSWORD:}
+    ssl: ${REDIS_SSL:false}
+    auth-required: ${REDIS_AUTH_REQUIRED:false}
 
 # -----------------------------------------------------------------------------
 # Trusted proxies (client IP / X-Forwarded-For)

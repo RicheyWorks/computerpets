@@ -21,6 +21,11 @@ enable_secrets  = true
 enable_cdn      = true
 enable_waf      = true
 
+# Redis AUTH (ADR 0075). Leave unset for the AUTH-less cache cluster.
+# When you want AUTH + transit TLS, export TF_VAR_redis_auth_token
+# (openssl rand -hex 16). Do not write the token in this file.
+# The app then needs REDIS_PASSWORD, REDIS_SSL=true, REDIS_AUTH_REQUIRED=true.
+
 # Required for plan/apply while enable_waf is true (ADR 0074).
 # Empty is validate-only. Use the API application load balancer, not an NLB
 # and not the bundle CloudFront distribution.

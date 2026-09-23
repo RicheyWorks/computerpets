@@ -50,6 +50,7 @@ public final class SecretFileEnvironmentPostProcessor implements EnvironmentPost
             "ADMIN_API_KEY_PREVIOUS",
             "SPRING_DATASOURCE_PASSWORD",
             "POSTGRES_PASSWORD",
+            "REDIS_PASSWORD",
             "STEAM_API_KEY",
             "ITCH_API_KEY",
             "EPIC_CLIENT_ID",
