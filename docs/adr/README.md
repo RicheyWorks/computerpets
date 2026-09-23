@@ -134,6 +134,7 @@ address, or an API that is not on `main`.
 | [0113](0113-metrics-server-kubelet-san.md) | Kubelet leaf SAN covers the metrics-server dial address (`InternalIP`, then `ExternalIP`, then `Hostname`; apply refuses a miss; kind stays off the file; no dial) | Accepted |
 | [0114](0114-metrics-server-kubelet-port.md) | Kubelet `kubeletEndpoint.port` is the port metrics-server dials (non-zero status port, otherwise 10250; that port must be the listen port; apply refuses a miss; kind stays off the file; no dial) | Accepted |
 | [0115](0115-linux-x11-window-play.md) | Linux X11 lists top-level window rectangles for pet window play (rects only; Mac stays `mac-window-play`) | Accepted |
+| [0116](0116-mac-accessibility-window-play.md) | Mac Accessibility lists top-level window rectangles for pet window play (window number, not the view pointer; untrusted stays empty) | Accepted |
 
 ## How to add one
 

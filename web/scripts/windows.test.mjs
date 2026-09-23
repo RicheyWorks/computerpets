@@ -31,11 +31,22 @@ test("web and overlay parse the same window TSV", () => {
   assert.equal(taken[0].y, 80);
   assert.deepEqual(Object.keys(taken[0]).sort(), ["height", "id", "width", "x", "y"]);
   assert.equal(Overlay.laterDoor("darwin"), W.LATER_DOOR);
+  assert.equal(W.LATER_DOOR, null);
   assert.equal(W.enumeratesOn("win32"), true);
   assert.equal(W.enumeratesOn("linux"), true);
+  assert.equal(W.enumeratesOn("darwin"), true);
   assert.equal(W.laterDoor("linux"), null);
-  assert.equal(W.laterDoor("darwin"), "mac-window-play");
+  assert.equal(W.laterDoor("darwin"), null);
   assert.equal(Overlay.enumeratesOn("linux"), true);
+  assert.equal(Overlay.enumeratesOn("darwin"), true);
+  assert.deepEqual(Overlay.MAC_SHELL_BUNDLES, W.MAC_SHELL_BUNDLES);
+  assert.deepEqual(Overlay.MAC_TOOL_SUBROLES, W.MAC_TOOL_SUBROLES);
+  assert.deepEqual(Overlay.MAC_TOOL_BUNDLES, W.MAC_TOOL_BUNDLES);
+  assert.equal(W.cgWindowIdFromMediaSource("window:1869:0"), "1869");
+  assert.equal(W.cgWindowIdFromMediaSource("window:-1:0"), "");
+  assert.equal(W.macWindowBits("AXStandardWindow", "com.apple.dock", false, false).shell, true);
+  assert.equal(W.macWindowBits("AXFloatingWindow", "com.example.notes", false, false).tool, true);
+  assert.equal(Overlay.macWindowBits("AXStandardWindow", "com.apple.dock", false, false).shell, true);
 });
 
 test("overlay-self and the taskbar never become a climb target", () => {

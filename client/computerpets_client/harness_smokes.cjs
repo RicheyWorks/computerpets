@@ -857,7 +857,10 @@ function windowsPerch() {
   if (W.laterDoor("win32") !== null) return fail("win32 should enumerate", {});
   if (W.laterDoor("linux") !== null) return fail("linux should enumerate", {});
   if (!W.enumeratesOn("linux")) return fail("linux enumeratesOn", {});
-  if (W.laterDoor("darwin") !== W.LATER_DOOR) return fail("darwin later door drifted", {});
+  if (!W.enumeratesOn("darwin")) return fail("darwin enumeratesOn", {});
+  if (W.laterDoor("darwin") !== null) return fail("darwin later door drifted", {});
+  if (W.cgWindowIdFromMediaSource("window:1869:0") !== "1869") return fail("mac window number", {});
+  if (W.cgWindowIdFromMediaSource("window:-1:0") !== "") return fail("mac window number refused", {});
 
   const fixture = [{ id: "8", x: 200, y: 80, width: 700, height: 580 }];
   if (P.playFor("budgie") !== "perch") return fail("budgie playFor should be perch", { got: P.playFor("budgie") });
