@@ -43,4 +43,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - Postgres and Redis stay at one replica with no zone spread. They are scaffolding, not the API.
 - Re-applying the Deployments does not retarget the HPA or the PDB.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** Soft zone spread does not create a second zone. This repo ships no cluster and no node pool, so every node can still carry one `topology.kubernetes.io/zone` value, or none. `ScheduleAnyway` still binds the live pods into that single domain. A failure of that zone is involuntary, and the disruption budget does not apply. `DoNotSchedule` is not the fix: it strands a local cluster and any node that omits the zone label. Not started here.
+- **Next gap:** Closed for the worker pool by [0082](0082-multi-az-node-pool.md). The zone constraint stays soft.

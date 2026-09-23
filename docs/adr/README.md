@@ -100,6 +100,7 @@ address, or an API that is not on `main`.
 | [0079](0079-pod-disruption-budget.md) | Pod disruption budget for the live API color (prod PDB; local apply omits it) | Accepted |
 | [0080](0080-api-pod-topology-spread.md) | Soft hostname topology spread for the API colors (ScheduleAnyway; local replica counts unchanged) | Accepted |
 | [0081](0081-api-pod-zone-spread.md) | Soft zone topology spread beside hostname (ScheduleAnyway; single-zone clusters still schedule) | Accepted |
+| [0082](0082-multi-az-node-pool.md) | Private multi-AZ API node pool (one managed node group per zone; no public IP; no SSH) | Accepted |
 
 ## How to add one
 

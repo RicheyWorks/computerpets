@@ -42,7 +42,8 @@ for f in \
   "$TF/modules/secrets/main.tf" \
   "$TF/modules/cdn/main.tf" \
   "$TF/modules/waf/main.tf" \
-  "$TF/modules/api_listener/main.tf"
+  "$TF/modules/api_listener/main.tf" \
+  "$TF/modules/node_pool/main.tf"
 do
   need_file "$f"
 done
@@ -113,6 +114,17 @@ if [ -x "${TF}/check-api-listener-tls.sh" ]; then
   fi
 else
   bad "check-api-listener-tls.sh missing"
+fi
+
+echo "== API node pool (ADR 0082) =="
+if [ -x "${TF}/check-node-pool.sh" ]; then
+  if "${TF}/check-node-pool.sh"; then
+    ok "check-node-pool.sh"
+  else
+    bad "check-node-pool.sh"
+  fi
+else
+  bad "check-node-pool.sh missing"
 fi
 
 echo "== WAF live gate (ADR 0074) =="

@@ -243,6 +243,67 @@ variable "api_listener_target_group_arn" {
   }
 }
 
+variable "enable_node_pool" {
+  type        = bool
+  description = "Provision one private EKS managed node group per availability zone (ADR 0082). Plan/apply refuses to continue unless eks_cluster_name is set and node_pool_subnets has at least two private subnets in aws_region. This root does not create the cluster. Set false only for local kind/minikube, where this root should not create workers."
+  default     = true
+}
+
+variable "eks_cluster_name" {
+  type        = string
+  description = "Keeper-owned EKS cluster name for the API node groups (ADR 0082). Required for plan/apply when enable_node_pool is true. Empty is accepted by terraform validate only. This root does not create the cluster."
+  default     = ""
+
+  validation {
+    condition = (
+      var.eks_cluster_name == "" ||
+      can(regex("^[A-Za-z0-9][A-Za-z0-9_-]{0,99}$", var.eks_cluster_name))
+    )
+    error_message = "eks_cluster_name must be empty (validate-only) or an EKS cluster name (letters, digits, hyphen, underscore)."
+  }
+}
+
+variable "node_pool_subnets" {
+  type        = map(string)
+  description = "Private subnet id per availability zone for the API node groups (ADR 0082). Keys are AZ names in aws_region (us-east-1a). At least two zones. Values are distinct subnet ids. Empty is accepted by terraform validate only. This root does not create subnets."
+  default     = {}
+
+  validation {
+    condition = (
+      length(var.node_pool_subnets) == 0 ||
+      (
+        length(var.node_pool_subnets) >= 2 &&
+        length(distinct(values(var.node_pool_subnets))) == length(var.node_pool_subnets) &&
+        alltrue([
+          for az, subnet in var.node_pool_subnets :
+          can(regex("^[a-z]{2}-[a-z]+-[0-9][a-z]$", az)) &&
+          can(regex("^subnet-([0-9a-f]{8}|[0-9a-f]{17})$", subnet))
+        ])
+      )
+    )
+    error_message = "node_pool_subnets must be empty (validate-only) or at least two distinct private subnet ids keyed by availability zone (us-east-1a = \"subnet-\" plus 8 or 17 hex characters)."
+  }
+}
+
+variable "node_pool_instance_types" {
+  type        = list(string)
+  description = "Instance types for each zone's node group (ADR 0082). Default t3.medium. GPU, Inferentia, Trainium, and VT families are refused."
+  default     = ["t3.medium"]
+
+  validation {
+    condition = (
+      length(var.node_pool_instance_types) >= 1 &&
+      length(var.node_pool_instance_types) <= 4 &&
+      alltrue([
+        for t in var.node_pool_instance_types :
+        can(regex("^[a-z][0-9][a-z]?\\.(nano|micro|small|medium|large|xlarge|[0-9]+xlarge|metal)$", t)) &&
+        !can(regex("^(p|g|vt|dl|inf|trn)", t))
+      ])
+    )
+    error_message = "node_pool_instance_types must be 1-4 general-purpose sizes (for example t3.medium). GPU, Inferentia, Trainium, and VT families are refused."
+  }
+}
+
 variable "write_house_secret_values" {
   type        = bool
   description = "NEVER enable for normal applies. When true, Terraform would write secret versions (state risk). Default false: shells only."

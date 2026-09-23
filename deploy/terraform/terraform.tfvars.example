@@ -21,6 +21,7 @@ enable_secrets          = true
 enable_cdn              = true
 enable_waf              = true
 enable_api_listener_tls = true
+enable_node_pool        = true
 
 # Postgres transit TLS (ADR 0076) is on for every provisioned RDS instance
 # (rds.force_ssl=1, jdbc sslmode=require). To switch the URL to verify-full,
@@ -45,3 +46,14 @@ enable_api_listener_tls = true
 # api_listener_alb_arn = "arn:aws:elasticloadbalancing:us-east-1:000000000000:loadbalancer/app/computerpets/example"
 # api_listener_certificate_arn = "arn:aws:acm:us-east-1:000000000000:certificate/example"
 # api_listener_target_group_arn = "arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/computerpets/example"
+
+# API workers (ADR 0082). Required for plan/apply while enable_node_pool is
+# true. At least two private subnets, one per availability zone in aws_region.
+# This root does not create the cluster, the VPC, or the subnets. No public
+# IP. No SSH. Leave these commented until then. Set enable_node_pool = false
+# for kind or minikube.
+# eks_cluster_name = "computerpets"
+# node_pool_subnets = {
+#   "us-east-1a" = "subnet-0123456789abcdef0"
+#   "us-east-1b" = "subnet-0123456789abcdef1"
+# }
