@@ -69,6 +69,44 @@ test("Windows, Linux, and Mac sense; another platform stays unsupported", () => 
   assert.equal(amd.powerWatts, null);
   assert.equal(amd.memoryUsedBytes, 2048 * 1024 * 1024);
   assert.equal(G.gpuLine(amd), "GPU amdgpu 1002:73BF · unread · 37% · 2 GiB/8 GiB · unread");
+  const intel = G.sampleFromProbe(
+    probe([
+      "NVIDIA_ABSENT",
+      "AMDGPU_ABSENT",
+      "INTEL",
+      "i915 8086:9A49, [N/A], 50, [N/A], [N/A], [N/A]",
+      "ENDINTEL",
+      "ENGINE_ABSENT",
+      "MEMORY_ABSENT",
+      "END",
+    ].join("\n")),
+    { platform: "linux", nowMs: NOW },
+  );
+  assert.equal(intel.status, "read");
+  assert.equal(intel.source, "fdinfo");
+  assert.equal(intel.name, "i915 8086:9A49");
+  assert.equal(intel.utilPercent, 50);
+  assert.equal(intel.tempC, null);
+  assert.equal(intel.powerWatts, null);
+  assert.equal(intel.memoryUsedBytes, null);
+  assert.equal(intel.memoryTotalBytes, null);
+  assert.equal(G.gpuLine(intel), "GPU i915 8086:9A49 · unread · 50% · unread · unread");
+  const preferAmd = G.sampleFromProbe(
+    {
+      amdgpuCsv: "amdgpu 1002:73BF, [N/A], 37, 2048, 8192, [N/A]",
+      intelCsv: "i915 8086:9A49, [N/A], 50, [N/A], [N/A], [N/A]",
+    },
+    { platform: "linux", nowMs: NOW },
+  );
+  assert.equal(preferAmd.source, "amdgpu");
+  assert.equal(preferAmd.utilPercent, 37);
+  const clamped = G.sampleFromProbe(
+    { intelCsv: "i915 8086:9A49, [N/A], 101, [N/A], [N/A], [N/A]" },
+    { platform: "linux", nowMs: NOW },
+  );
+  assert.equal(clamped.status, "malformed");
+  assert.equal(clamped.utilPercent, null);
+  assert.doesNotMatch(G.gpuLine(clamped), /101|100%|0%/);
   const preferNvidia = G.sampleFromProbe(
     {
       nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5",
@@ -394,9 +432,12 @@ test("the probe script never plants a zero, and the HUD stays lockstep", () => {
   assert.match(linuxProbe, /INTEL_EMPTY/);
   assert.match(linuxProbe, /rc6_residency_ms/);
   assert.match(linuxProbe, /idle_residency_ms/);
-  assert.doesNotMatch(linuxProbe, /mem_busy_percent|mem_info_gtt|temp1_input|intel_gpu_top|busy_ns|\bsleep\b/);
+  assert.match(linuxProbe, /drm-engine-render/);
+  assert.match(linuxProbe, /drm-cycles-rcs/);
+  assert.doesNotMatch(linuxProbe, /mem_busy_percent|mem_info_gtt|temp1_input|intel_gpu_top|busy_ns|debugfs|perf_event|\/sys\/kernel\/debug/);
   assert.match(webGpu, /ioaccelerator/);
   assert.match(webGpu, /amdgpu/);
+  assert.match(webGpu, /fdinfo/);
   assert.match(webGpu, /STALE_MS = 20000/);
   assert.match(webGpu, /export function remember/);
   assert.match(webGpu, /export function sparkline/);
@@ -407,6 +448,7 @@ test("the probe script never plants a zero, and the HUD stays lockstep", () => {
   assert.doesNotMatch(cardSrc, /M1 11\.3/);
   assert.match(pySrc, /ioaccelerator/);
   assert.match(pySrc, /amdgpu/);
+  assert.match(pySrc, /fdinfo/);
   assert.match(pySrc, /STALE_MS = 20000/);
   assert.match(pySrc, /def remember/);
   assert.match(pySrc, /def sparkline/);

@@ -246,7 +246,12 @@ test("the Linux probe script names nvidia-smi and amdgpu sysfs and does not inve
   assert.match(text, /ENGINE_ABSENT/);
   assert.match(text, /MEMORY_ABSENT/);
   assert.match(text, /\/sys\/class\/drm/);
-  assert.doesNotMatch(text, /powermetrics|ioreg |intel_gpu_top|busy_ns|rps_cur_freq|mem_busy_percent|mem_info_gtt|temp1_input|debugfs|\/proc\/|\bsleep\b/);
+  assert.match(text, /drm-engine-render/);
+  assert.match(text, /drm-cycles-rcs/);
+  assert.match(text, /drm-total-cycles-rcs/);
+  assert.match(text, /\/proc/);
+  assert.match(text, /\bsleep\b/);
+  assert.doesNotMatch(text, /powermetrics|ioreg |intel_gpu_top|busy_ns|rps_cur_freq|mem_busy_percent|mem_info_gtt|temp1_input|debugfs|perf_event|\/sys\/kernel\/debug/);
   assert.doesNotMatch(text, /tempC\s*=\s*0/);
   assert.doesNotMatch(text, /utilPercent\s*=\s*0/);
   const emptyRoot = mkdtempSync(join(tmpdir(), "gpu-empty-"));
@@ -537,6 +542,212 @@ test("Linux i915 and xe sysfs stay unread and do not paint a percent or a memory
     assert.doesNotMatch(Gpu.gpuLine(plantedSample), /12%|0%/);
   } finally {
     rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("Linux DRM fdinfo prints i915 and xe utilization from two reads and fails closed otherwise", () => {
+  function card(root, name, driver, pci, slot) {
+    const dev = join(root, name, "device");
+    mkdirSync(dev, { recursive: true });
+    symlinkSync(driver, join(dev, "driver"));
+    const lines = [`DRIVER=${driver}`];
+    if (pci) lines.push(`PCI_ID=${pci}`);
+    if (slot) lines.push(`PCI_SLOT_NAME=${slot}`);
+    writeFileSync(join(dev, "uevent"), `${lines.join("\n")}\n`);
+  }
+  function client(root, pid, fd, body) {
+    const file = join(root, String(pid), "fdinfo", String(fd));
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, body);
+  }
+  function i915Body(render, extras = {}) {
+    const id = extras.id == null ? 7 : extras.id;
+    const cap = extras.cap == null ? 1 : extras.cap;
+    const pdev = extras.pdev || "0000:00:02.0";
+    return [
+      "drm-driver:\ti915",
+      `drm-pdev:\t${pdev}`,
+      `drm-client-id:\t${id}`,
+      `drm-engine-render:\t${render} ns`,
+      "drm-engine-copy:\t999 ns",
+      `drm-engine-capacity-render:\t${cap}`,
+      "drm-total-resident-vram:\t999999999",
+      "",
+    ].join("\n");
+  }
+  function xeBody(cycles, total, extras = {}) {
+    const id = extras.id == null ? 6 : extras.id;
+    const pdev = extras.pdev || "0000:00:02.0";
+    return [
+      "drm-driver:\txe",
+      `drm-pdev:\t${pdev}`,
+      `drm-client-id:\t${id}`,
+      `drm-cycles-rcs:\t${cycles}`,
+      `drm-total-cycles-rcs:\t${total}`,
+      "drm-cycles-bcs:\t99999",
+      "drm-total-cycles-bcs:\t99999",
+      "drm-cycles-rcs0:\t888888",
+      "drm-total-cycles-rcs0:\t888888",
+      "",
+    ].join("\n");
+  }
+  const root = mkdtempSync(join(tmpdir(), "gpu-fd-"));
+  const first = mkdtempSync(join(tmpdir(), "gpu-fd1-"));
+  const second = mkdtempSync(join(tmpdir(), "gpu-fd2-"));
+  try {
+    card(root, "card0", "i915", "8086:9A49", "0000:00:02.0");
+    card(root, "card0-DP-1", "i915", "8086:FFFF", "0000:00:02.1");
+    writeSysfsFile(root, "card0/gt/gt0/rc6_residency_ms", "812345\n");
+    client(first, 10, 3, i915Body(1000, { id: 7 }));
+    client(first, 11, 4, i915Body(4000, { id: 8 }));
+    client(first, 12, 5, i915Body(50, { id: 3, pdev: "0000:00:03.0" }));
+    client(second, 10, 3, i915Body(25001000, { id: 7 }));
+    client(second, 11, 4, i915Body(25004000, { id: 8 }));
+    client(second, 19, 9, i915Body("900000000000", { id: 99 }));
+    const text = runLinuxProbe({
+      GPU_SYSFS_ROOT: root,
+      GPU_PROC_ROOT: first,
+      GPU_FDINFO_ROOT_2: second,
+      GPU_FDINFO_INTERVAL_NS: "100000000",
+    });
+    assert.match(text, /NVIDIA_ABSENT/);
+    assert.match(text, /AMDGPU_ABSENT/);
+    assert.match(text, /INTEL\n/);
+    assert.match(text, /i915 8086:9A49, \[N\/A\], 50, \[N\/A\], \[N\/A\], \[N\/A\]/);
+    assert.match(text, /ENDINTEL/);
+    assert.doesNotMatch(text, /999999999|900000000000|812345|888888|FFFF|0000:00:03/);
+    assert.doesNotMatch(text, /, 0,/);
+    const sample = Gpu.sampleFromProbe(Gpu.parseProbeText(text), { platform: "linux", nowMs: NOW });
+    assert.equal(sample.status, "read");
+    assert.equal(sample.source, "fdinfo");
+    assert.equal(sample.name, "i915 8086:9A49");
+    assert.equal(sample.utilPercent, 50);
+    assert.equal(sample.tempC, null);
+    assert.equal(sample.powerWatts, null);
+    assert.equal(sample.memoryUsedBytes, null);
+    assert.equal(sample.memoryTotalBytes, null);
+    assert.equal(Gpu.gpuLine(sample), "GPU i915 8086:9A49 · unread · 50% · unread · unread");
+
+    const xeRoot = mkdtempSync(join(tmpdir(), "gpu-xe-"));
+    const xe1 = mkdtempSync(join(tmpdir(), "gpu-xe1-"));
+    const xe2 = mkdtempSync(join(tmpdir(), "gpu-xe2-"));
+    try {
+      card(xeRoot, "card1", "xe", "8086:E20B", "0000:00:02.0");
+      client(xe1, 4, 3, xeBody(100, 1000));
+      client(xe2, 4, 3, xeBody(400000100, 1000001000));
+      const xeText = runLinuxProbe({
+        GPU_SYSFS_ROOT: xeRoot,
+        GPU_PROC_ROOT: xe1,
+        GPU_FDINFO_ROOT_2: xe2,
+        GPU_FDINFO_INTERVAL_NS: "100000000",
+      });
+      assert.match(xeText, /xe 8086:E20B, \[N\/A\], 40, \[N\/A\], \[N\/A\], \[N\/A\]/);
+      assert.doesNotMatch(xeText, /888888|99999/);
+      const xeSample = Gpu.sampleFromProbe(Gpu.parseProbeText(xeText), { platform: "linux", nowMs: NOW });
+      assert.equal(xeSample.source, "fdinfo");
+      assert.equal(xeSample.utilPercent, 40);
+      assert.equal(xeSample.memoryUsedBytes, null);
+      assert.equal(Gpu.gpuLine(xeSample), "GPU xe 8086:E20B · unread · 40% · unread · unread");
+      client(xe2, 4, 3, xeBody(100, 50001000));
+      const idleXe = runLinuxProbe({
+        GPU_SYSFS_ROOT: xeRoot,
+        GPU_PROC_ROOT: xe1,
+        GPU_FDINFO_ROOT_2: xe2,
+        GPU_FDINFO_INTERVAL_NS: "100000000",
+      });
+      assert.match(idleXe, /xe 8086:E20B, \[N\/A\], 0, \[N\/A\], \[N\/A\], \[N\/A\]/);
+      const idleSample = Gpu.sampleFromProbe(Gpu.parseProbeText(idleXe), { platform: "linux", nowMs: NOW });
+      assert.equal(idleSample.utilPercent, 0);
+      assert.equal(idleSample.tempC, null);
+      assert.equal(idleSample.memoryUsedBytes, null);
+    } finally {
+      rmSync(xeRoot, { recursive: true, force: true });
+      rmSync(xe1, { recursive: true, force: true });
+      rmSync(xe2, { recursive: true, force: true });
+    }
+
+    const wide1 = mkdtempSync(join(tmpdir(), "gpu-wide1-"));
+    const wide2 = mkdtempSync(join(tmpdir(), "gpu-wide2-"));
+    try {
+      client(wide1, 1, 3, i915Body(0, { cap: 2 }));
+      client(wide2, 1, 3, i915Body(100000000, { cap: 2 }));
+      const wide = runLinuxProbe({
+        GPU_SYSFS_ROOT: root,
+        GPU_PROC_ROOT: wide1,
+        GPU_FDINFO_ROOT_2: wide2,
+        GPU_FDINFO_INTERVAL_NS: "100000000",
+      });
+      assert.match(wide, /i915 8086:9A49, \[N\/A\], 50, \[N\/A\], \[N\/A\], \[N\/A\]/);
+      client(wide2, 1, 3, i915Body(200000001, { cap: 1 }));
+      client(wide1, 1, 3, i915Body(0, { cap: 1 }));
+      const over = runLinuxProbe({
+        GPU_SYSFS_ROOT: root,
+        GPU_PROC_ROOT: wide1,
+        GPU_FDINFO_ROOT_2: wide2,
+        GPU_FDINFO_INTERVAL_NS: "100000000",
+      });
+      assert.match(over, /INTEL_EMPTY/);
+      assert.doesNotMatch(over, /ENDINTEL|100%|, 100,/);
+      client(wide2, 1, 3, i915Body(10));
+      const rewind = runLinuxProbe({
+        GPU_SYSFS_ROOT: root,
+        GPU_PROC_ROOT: wide2,
+        GPU_FDINFO_ROOT_2: wide1,
+        GPU_FDINFO_INTERVAL_NS: "100000000",
+      });
+      assert.match(rewind, /INTEL_EMPTY/);
+      assert.doesNotMatch(rewind, /ENDINTEL/);
+      const zeroGap = runLinuxProbe({
+        GPU_SYSFS_ROOT: root,
+        GPU_PROC_ROOT: wide1,
+        GPU_FDINFO_ROOT_2: wide2,
+        GPU_FDINFO_INTERVAL_NS: "0",
+      });
+      assert.match(zeroGap, /INTEL_EMPTY/);
+      assert.doesNotMatch(zeroGap, /ENDINTEL/);
+      client(wide1, 1, 3, "drm-driver:\ti915\ndrm-pdev:\t0000:00:02.0\ndrm-client-id:\t7\ndrm-engine-copy:\t10 ns\n");
+      client(wide2, 1, 3, "drm-driver:\ti915\ndrm-pdev:\t0000:00:02.0\ndrm-client-id:\t7\ndrm-engine-copy:\t90 ns\n");
+      const missing = runLinuxProbe({
+        GPU_SYSFS_ROOT: root,
+        GPU_PROC_ROOT: wide1,
+        GPU_FDINFO_ROOT_2: wide2,
+        GPU_FDINFO_INTERVAL_NS: "100000000",
+      });
+      assert.match(missing, /INTEL_EMPTY/);
+      assert.doesNotMatch(missing, /, 0,|ENDINTEL/);
+      const started = Date.now();
+      const fast = runLinuxProbe({
+        GPU_SYSFS_ROOT: root,
+        GPU_PROC_ROOT: wide1,
+        GPU_FDINFO_INTERVAL_MS: "0",
+      });
+      assert.ok(Date.now() - started < 500);
+      assert.match(fast, /INTEL_EMPTY/);
+      client(wide1, 1, 3, i915Body("00000000000000000042"));
+      const slept = Date.now();
+      const live = runLinuxProbe({
+        GPU_SYSFS_ROOT: root,
+        GPU_PROC_ROOT: wide1,
+        GPU_FDINFO_INTERVAL_MS: "40",
+        GPU_FDINFO_INTERVAL_NS: "100000000",
+      });
+      const elapsed = Date.now() - slept;
+      assert.ok(elapsed >= 30);
+      assert.ok(elapsed < 2500);
+      assert.match(live, /i915 8086:9A49, \[N\/A\], 0, \[N\/A\], \[N\/A\], \[N\/A\]/);
+      assert.doesNotMatch(live, /999999999|812345/);
+      const liveSample = Gpu.sampleFromProbe(Gpu.parseProbeText(live), { platform: "linux", nowMs: NOW });
+      assert.equal(liveSample.utilPercent, 0);
+      assert.equal(liveSample.memoryUsedBytes, null);
+      assert.doesNotMatch(Gpu.gpuLine(liveSample), /0 MiB|0°C|0 W/);
+    } finally {
+      rmSync(wide1, { recursive: true, force: true });
+      rmSync(wide2, { recursive: true, force: true });
+    }
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+    rmSync(first, { recursive: true, force: true });
+    rmSync(second, { recursive: true, force: true });
   }
 });
 
