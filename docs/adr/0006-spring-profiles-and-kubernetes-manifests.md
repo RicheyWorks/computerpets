@@ -65,3 +65,5 @@ No mesh.
   ([0082](0082-multi-az-node-pool.md)). This kustomization does not create them.
 - Cluster Autoscaler grows those groups when pods are Pending
   ([0083](0083-cluster-autoscaler.md)). It is not in this kustomization.
+- Resource metrics for the HPA are upstream metrics-server v0.9.0
+  ([0084](0084-metrics-server.md)). That manifest is not in this kustomization.
