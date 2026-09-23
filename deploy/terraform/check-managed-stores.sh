@@ -81,6 +81,17 @@ need_grep "$TF/outputs.tf" 'spring_datasource_url' "root output spring_datasourc
 need_grep "$TF/outputs.tf" 'redis_host' "root output redis_host"
 need_grep "$TF/outputs.tf" 'bundle_base_url' "root output bundle_base_url"
 
+echo "== Postgres transit TLS (ADR 0076) =="
+if [ -x "${TF}/check-postgres-tls.sh" ]; then
+  if "${TF}/check-postgres-tls.sh"; then
+    ok "check-postgres-tls.sh"
+  else
+    bad "check-postgres-tls.sh"
+  fi
+else
+  bad "check-postgres-tls.sh missing"
+fi
+
 echo "== Redis AUTH + transit TLS (ADR 0075) =="
 if [ -x "${TF}/check-redis-auth.sh" ]; then
   if "${TF}/check-redis-auth.sh"; then
