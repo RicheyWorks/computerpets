@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # ADR 0081 — zone spread beside the hostname constraint (ADR 0080).
-# The zone action is DoNotSchedule (ADR 0095). Hostname stays
-# ScheduleAnyway. No minDomains, so one labeled zone still schedules.
-# No cluster. Does not kubectl apply. Local replica counts stay put.
-# A node that omits topology.kubernetes.io/zone is skipped. That is
-# honest. Do not flip the zone item back to ScheduleAnyway.
+# The zone action is DoNotSchedule (ADR 0095). Hostname is DoNotSchedule
+# (ADR 0100). No minDomains, so one labeled zone still schedules and one
+# hostname still schedules. No cluster. Does not kubectl apply. Local
+# replica counts stay put. A node that omits topology.kubernetes.io/zone
+# is skipped. That is honest. Do not flip the zone item back to
+# ScheduleAnyway.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -109,11 +110,11 @@ check_zone() {
   fi
   host="$(constraint_item "$file" "kubernetes.io/hostname")"
   if [ -n "${host}" ] \
-    && printf '%s\n' "${host}" | grep -q 'whenUnsatisfiable: ScheduleAnyway' \
+    && printf '%s\n' "${host}" | grep -q 'whenUnsatisfiable: DoNotSchedule' \
     && printf '%s\n' "${host}" | grep -q "color: ${color}"; then
-    ok "${name} keeps the hostname constraint beside zone"
+    ok "${name} keeps the hard hostname constraint beside zone"
   else
-    bad "${name} keeps the hostname constraint beside zone"
+    bad "${name} keeps the hard hostname constraint beside zone"
   fi
   zone_keys="$(grep -c 'topologyKey: topology.kubernetes.io/zone' "$file" || true)"
   if [ "${zone_keys}" = "1" ]; then ok "${name} has one zone key"
@@ -144,7 +145,7 @@ need_grep "$BLUE" 'replicas: 2' "blue local replica count stays 2"
 need_grep "$GREEN" 'replicas: 0' "green stays the idle slot"
 need_grep "$SVC" 'color: blue' "Service default live color is still blue"
 need_grep "$KUSTOM" 'ADR 0081' "kustomize comment records zone spread"
-need_grep "$KUSTOM" 'ScheduleAnyway' "kustomize comment records the soft rule"
+need_grep "$KUSTOM" 'ADR 0100' "kustomize comment records hard hostname spread"
 need_not_grep "$KUSTOM" '^[[:space:]]*-[[:space:]]*hpa\.yaml[[:space:]]*$' "kustomization still omits hpa.yaml"
 need_not_grep "$KUSTOM" '^[[:space:]]*-[[:space:]]*pdb\.yaml[[:space:]]*$' "kustomization still omits pdb.yaml"
 
@@ -181,10 +182,10 @@ if command -v kubectl >/dev/null 2>&1; then
     host_n="$(grep -c 'topologyKey: kubernetes.io/hostname' "${kust_out}" || true)"
     soft_n="$(grep -c 'whenUnsatisfiable: ScheduleAnyway' "${kust_out}" || true)"
     hard_n="$(grep -c 'whenUnsatisfiable: DoNotSchedule' "${kust_out}" || true)"
-    if [ "${zone_n}" = "2" ] && [ "${host_n}" = "2" ] && [ "${soft_n}" = "2" ] && [ "${hard_n}" = "2" ]; then
-      ok "kustomize output keeps hard zone spread beside soft hostname"
+    if [ "${zone_n}" = "2" ] && [ "${host_n}" = "2" ] && [ "${soft_n}" = "0" ] && [ "${hard_n}" = "4" ]; then
+      ok "kustomize output keeps hard zone spread beside hard hostname"
     else
-      bad "kustomize output keeps hard zone spread beside soft hostname (zone=${zone_n} host=${host_n} soft=${soft_n} hard=${hard_n})"
+      bad "kustomize output keeps hard zone spread beside hard hostname (zone=${zone_n} host=${host_n} soft=${soft_n} hard=${hard_n})"
     fi
   else
     bad "kubectl kustomize deploy/k8s failed"

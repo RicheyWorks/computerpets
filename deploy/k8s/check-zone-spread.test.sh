@@ -42,7 +42,7 @@ cp "${SCRIPT}" "${BROKEN}/deploy/k8s/check-zone-spread.sh"
 chmod +x "${BROKEN}/deploy/k8s/check-zone-spread.sh"
 
 # Soft zone spread lets every live pod pile into one labeled zone.
-# Only the zone item is flipped; hostname stays soft.
+# Only the zone item is flipped. Hostname stays DoNotSchedule (ADR 0100).
 sed -i '/topologyKey: topology.kubernetes.io\/zone/{n;s/whenUnsatisfiable: DoNotSchedule/whenUnsatisfiable: ScheduleAnyway/;}' \
   "${BROKEN}/deploy/k8s/deployment-blue.yaml"
 assert_exit 1 "check fails when the blue zone constraint is ScheduleAnyway" \
