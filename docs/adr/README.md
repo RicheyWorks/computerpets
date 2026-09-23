@@ -142,7 +142,8 @@ address, or an API that is not on `main`.
 | [0121](0121-linux-intel-fdinfo-gpu-sense.md) | Linux i915 and xe render utilization comes from two DRM fdinfo reads in one probe (rewind, zero interval, and a missing file stay unread) | Accepted (amdgpu hwmon temperature and power moved to 0122) |
 | [0122](0122-linux-amdgpu-hwmon-gpu-sense.md) | Linux amdgpu temperature and power come from the card hwmon when the label is `edge` or `PPT` (an unlabeled channel, junction, memory, and a power cap stay unread) | Accepted (Intel device VRAM fail-closed moved to 0123) |
 | [0123](0123-linux-intel-device-vram-gpu-sense.md) | Linux i915 and xe device VRAM used and total stay unread (no upstream used and total pair; a query zero without CAP_PERFMON is not a sample) | Accepted (Mac temperature and power fail-closed moved to 0124) |
-| [0124](0124-mac-gpu-temp-power.md) | Mac GPU temperature and power stay unread (IOAccelerator has no degree or watt; a planted key stays off the line; powermetrics, IOReport, and AppleSMC are not read) | Accepted |
+| [0124](0124-mac-gpu-temp-power.md) | Mac GPU temperature and power stay unread (IOAccelerator has no degree or watt; a planted key stays off the line; powermetrics, IOReport, and AppleSMC are not read) | Accepted (Chromium overlay GPU path moved to 0125) |
+| [0125](0125-chromium-overlay-gpu-path.md) | The overlay opens on Chromium's GPU compositor, or it stays closed (software fallback needs `gpu-path.json` `expect: software`; unread and off stay closed) | Accepted |
 
 ## How to add one
 
