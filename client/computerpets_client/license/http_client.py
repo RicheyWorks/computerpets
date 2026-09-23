@@ -207,6 +207,12 @@ def create_license_client(
             raise LicenseError("denied", payload.get("error") or "download forbidden", payload)
         if res.status == 429:
             raise LicenseError("unreachable", "download rate limited", payload)
+        if res.status == 409:
+            raise LicenseError(
+                "download_failed",
+                payload.get("error") or "download token already used",
+                payload,
+            )
         if not res.ok:
             raise LicenseError("download_failed", payload.get("error") or f"download failed ({res.status})", payload)
         if not isinstance(payload.get("downloadUrl"), str) or not payload["downloadUrl"]:

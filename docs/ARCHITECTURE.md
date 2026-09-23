@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-22 (Single-use nonce on signed admin and machine requests — ADR 0072. Not DX12/Vulkan. Catalog 221.) |
+| **Last Updated** | 2026-09-23 (Single-use download JWT — ADR 0073. Not DX12/Vulkan. Catalog 221.) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -164,6 +164,7 @@ The service runs as a Spring Boot executable JAR or the multi-stage `Dockerfile`
 - Redis-backed Bucket4j rate limiter (Lettuce / `bucket4j-redis`) shared across replicas. If Redis is down, verify, download, discovery, and bundle-catalog reads fail closed with HTTP 503. `prod` refuses `RATE_LIMIT_BACKEND=memory`. Redis uses a single Lettuce connection keyed by `REDIS_TIMEOUT` (not a second Hikari-style pool). Signed `GET /api/bundles/{pet}/redeem` is not on the catalog bucket ([0069](adr/0069-bundle-catalog-rate-limit.md)).
 - Redis-backed jti deny-list (`RevocationIndex`) shared across replicas. Postgres `IssuedLicense.revokedAt` / `deletedAt` remains the ledger (soft-delete on revoke; [0058](adr/0058-license-soft-delete-and-audit.md)); Redis is a fast deny so a replica that has not seen the row still rejects. If Redis is down, `LicenseService.validate` falls back to the ledger (it does not accept a revoked or soft-deleted license). HTTP download may still 503 from the rate-limit filter.
 - Redis-backed single-use nonces for signed admin and machine requests (`replay:nonce:{admin|machine}:{nonce}`, TTL 300s, `SET NX`). Redis down fails closed with HTTP 503. Not the jti deny-list and not a download grant ([0072](adr/0072-signed-request-nonce.md)).
+- Redis-backed single-use download JWTs (`download:jwt:{jti}`, TTL `jwt.ttl-minutes` + 60s, `SET NX`). A second mint is HTTP 409. Redis down fails closed with HTTP 503. Not the nonce store and not `download:grant:*` ([0073](adr/0073-download-jwt-single-use.md)).
 - Critical secrets (`LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, `ADMIN_API_KEY`) load from environment variables or `NAME_FILE` mounts (`SecretFileEnvironmentPostProcessor`) with strict `@PostConstruct` startup validation that refuses to run on missing or placeholder values. Production operators use Docker secrets, Kubernetes External Secrets, or Vault agent templates — [ADR 0056](adr/0056-house-secrets-from-file-mounts.md). Optional `*_PREVIOUS` dual-key material keeps verify/decrypt alive during a scheduled rotation ([ADR 0065](adr/0065-secret-rotation-cadence-and-hsm.md)). Secret values are never logged.
 - `ProductionProfileGuard` (`@Profile("prod")`) refuses Microsoft Store `dev-mode`, an in-memory rate-limit store, an H2 JDBC URL, a misconfigured read-replica URL (same as primary / non-Postgres), and **plain env / hand-filled Opaque Secret** unless `COMPUTERPETS_SECRETS_SOURCE` is `external-secrets`, `file`, or `vault-agent` ([ADR 0064](adr/0064-secret-operator-prod-refuses-plain-env.md)). Optional `COMPUTERPETS_KEYS_ROTATED_AT` stamps older than 400 days refuse when set ([ADR 0065](adr/0065-secret-rotation-cadence-and-hsm.md)). Local scaffolding may set `COMPUTERPETS_ALLOW_PLAIN_SECRET=1` (never on the real prod path).
 - `Dockerfile` + GitHub Actions GHCR publish with keyless cosign (Sigstore) + `deploy/k8s/` (Deployment/Service, in-cluster Postgres/Redis scaffolding, optional Ingress). Prod deploy verifies the image digest or refuses ([0061](adr/0061-ghcr-image-signing.md)). Blue/green is two Deployments and a Service `color` selector — not a service mesh.
@@ -292,7 +293,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 | Component             | Responsibility                                                                 | Technology                  | Key Files                              | Dependencies                     |
 |-----------------------|--------------------------------------------------------------------------------|-----------------------------|----------------------------------------|----------------------------------|
 | `LicenseService`      | Issue & validate AES-256-GCM encrypted JSON license payloads (jti, owner, pet, timestamps); revoke writes Postgres then the shared deny-list | BouncyCastle GCMBlockCipher + Jackson | `license/LicenseService.java`          | `LicenseRepository`, `RevocationIndex`, Spring @Value, ObjectMapper, SecureRandom |
-| `JwtService`          | Issue short-lived (default 30 min) HS256 JWTs carrying owner/pet/provider claims; parse & validate | JJWT 0.12 + Spring @Value   | `security/JwtService.java`             | SecretKey from config            |
+| `JwtService`          | Issue short-lived (default 30 min) HS256 JWTs carrying owner/pet/provider plus a `jti`; parse & validate | JJWT 0.12 + Spring @Value   | `security/JwtService.java`             | SecretKey from config            |
 | `PetBundleService`    | Generate 15-minute HMAC-SHA256 signed CDN download URLs bound to (petKey, owner, jti, expiry); optional catalog metadata; verify MAC on redeem | javax.crypto.Mac + Spring   | `bundle/PetBundleService.java`, `bundle/BundleCatalog.java`, `bundle/BundleZipContract.java` | Signing key + `bundle.catalog` |
 | `DownloadGrantService` / `DownloadGrantIndex` | Issue one-time IP-bound grants on `jti`+`exp`; atomic redeem for edge/`GET /api/bundles/{pet}/redeem` | Redis SETEX + Lua (or in-memory) | `bundle/DownloadGrantService.java`, `bundle/RedisDownloadGrantIndex.java` | Same Redis as rate limits |
 | `PetCatalog` / `PetType` | Static catalog of 210 living kinds across 4 rarity tiers; lookup + grouping utilities   | Java enum + Spring @Service | `pet/PetType.java`, `pet/PetCatalog.java` | —                                |
@@ -303,6 +304,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 - **`ClientAddress`**: Shared resolver for rate limits and download-grant IP binding. Empty `trusted-proxies.cidrs` = always `remoteAddr` (fail-closed).
 - **`RevocationIndex`**: Shared jti deny-list on the same Redis (`RedisRevocationIndex`, keys `revoked:jti:{jti}`). `InMemoryRevocationIndex` when `rate-limit.backend=memory`. Not a second ledger.
 - **`RequestReplayStore`**: Single-use nonce for signed admin and machine requests on that same Redis (`replay:nonce:{surface}:{nonce}`, TTL 300s). In-memory when `rate-limit.backend=memory`. Store down → 503 ([0072](adr/0072-signed-request-nonce.md)).
+- **`DownloadJwtStore`**: Single-use claim for the download bearer `jti` on that same Redis (`download:jwt:{jti}`, TTL `jwt.ttl-minutes` + 60s). In-memory when `rate-limit.backend=memory`. Second mint → 409. Store down → 503 ([0073](adr/0073-download-jwt-single-use.md)).
 - **`GlobalExceptionHandler`** (`@RestControllerAdvice`): Maps common Spring exceptions + catch-all to RFC 7807 `ProblemDetail`.
 - **`EnterprisePetBackendApplication`**: Standard `@SpringBootApplication`.
 - **Observability (Phase 3.2)**: Micrometer Observation + `micrometer-tracing-bridge-otel`. HTTP server spans on `/api/verify/**` and `/api/download/**`; RestClient client spans for Steam/Itch/Epic/Microsoft; `eth_call` spans for NFT. Business timers `enterprisepet.verify` (provider + outcome), `enterprisepet.license.issue` (provider + pet + outcome; issuance rate after a verified grant), and `enterprisepet.download`. OTLP/HTTP export only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set. Prometheus remains `/actuator/prometheus`. [0057](adr/0057-license-issuance-observation.md).
@@ -327,7 +329,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 3. Client calls `POST /api/verify/{provider}` with provider-specific fields + optional `petType`, plus `X-ComputerPets-Timestamp`, `X-ComputerPets-Nonce`, and `X-ComputerPets-Signature` (HMAC over method, path, query, time, nonce, and body; [0070](adr/0070-machine-request-signature.md), [0072](adr/0072-signed-request-nonce.md)). GET provider discovery stays unsigned.
 4. `VerifyController` resolves the provider, calls `OwnershipProvider.verify(Map)`, and on success:
    - Invokes `LicenseService.issueLicense(...)` → produces `EncryptedLicense` (base64 ciphertext + IV + expiry).
-   - Invokes `JwtService.issue(...)` → produces short-lived bearer token scoped to `(owner, pet, provider)`.
+   - Invokes `JwtService.issue(...)` → produces a short-lived bearer token scoped to `(owner, pet, provider)` with a fresh `jti`.
 5. Client receives sealed license + JWT + pet metadata. The ciphertext is opaque; the client stores it verbatim.
 
 Rate limiting and basic validation occur before provider dispatch. Provider exceptions surface as 502.
@@ -340,7 +342,8 @@ Rate limiting and basic validation occur before provider dispatch. Provider exce
    - Calls `LicenseService.validate(ciphertext, iv)` → decrypts, checks expiry and authenticity via GCM tag, then the Redis deny-list, then the Postgres ledger.
    - Compares `license.pet` against path variable.
    - If JWT present in context, performs claim cross-check: `jwt.sub == license.owner && jwt.pet == license.pet`.
-4. On success, `PetBundleService.manifestFor(...)` signs `petKey|owner|jti|exp` with HMAC-SHA256 and returns a CDN URL containing `pet`, `owner`, `jti`, `exp`, and `sig` query parameters.
+   - Claims the bearer `jti` once (`download:jwt:{jti}`). A second mint is 409. A bearer with no `jti` is 401 ([0073](adr/0073-download-jwt-single-use.md)).
+4. On success, `PetBundleService.manifestFor(...)` signs `petKey|owner|jti|exp` with HMAC-SHA256 and returns a CDN URL containing `pet`, `owner`, `jti`, `exp`, and `sig` query parameters. The URL `jti` is the license id, not the bearer `jti`.
 5. Client downloads the actual `.zip` from the CDN. The edge worker (`deploy/cdn/edge-redeem.js`) calls house redeem first; bytes are served only when `{ "allowed": true }` ([0063](adr/0063-cdn-edge-redeem-verification.md)).
 
 This two-phase (verify → download) + dual-artifact (license + JWT) design prevents:
@@ -393,6 +396,7 @@ sequenceDiagram
     D->>L: validate(ciphertext, iv)
     L-->>D: LicensePayload{jti, owner, pet, validUntil}
     D->>D: assert pet matches && (JWT absent or claims match license)
+    D->>D: claim bearer jti once (409 if already used)
     D->>B: manifestFor(pet, owner)
     B-->>D: BundleManifest{downloadUrl: "https://cdn.../red_panda.zip?pet=...&owner=...&jti=...&exp=...&sig=HMAC...", ttlSeconds:900, ...}
     D-->>C: 200 {petKey, downloadUrl, expiresAt, ttlSeconds, ...}
@@ -565,7 +569,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 ### Security Considerations
 - **Good foundations**: AEAD encryption, short-lived tokens, claim binding, startup secret hygiene, no secrets in JWT bodies.
 - **Attack surface**: Public verify endpoints are the primary target. A compromised master key is catastrophic (full license forgery). CDN signature key compromise allows bundle theft for 15 min windows.
-- **Missing controls**: Real ownership verifiers, hardware binding, replay/revocation store, WAF in front of rate limiter. (Secret rotation / HSM story → [ADR 0065](adr/0065-secret-rotation-cadence-and-hsm.md). Input length/charset on provider verify fields → [ADR 0066](adr/0066-provider-verify-field-bounds.md). Trusted-proxy XFF → [ADR 0067](adr/0067-trusted-proxy-client-address.md). `/api/pets` discovery rate limit → [ADR 0068](adr/0068-discovery-rate-limit.md). Bundle catalog rate limit → [ADR 0069](adr/0069-bundle-catalog-rate-limit.md). Signed machine verify → [ADR 0070](adr/0070-machine-request-signature.md). Signed admin requests → [ADR 0071](adr/0071-admin-request-signature.md). Signed admin and machine requests are single-use for 300 seconds → [ADR 0072](adr/0072-signed-request-nonce.md). A download JWT can still be presented again until `jwt.ttl-minutes` (default 30); it has no `jti`. WAF in front of the rate limiter remains the Terraform stub in [ADR 0062](adr/0062-terraform-managed-stores.md).)
+- **Missing controls**: Real ownership verifiers, hardware binding, replay/revocation store, WAF in front of rate limiter. (Secret rotation / HSM story → [ADR 0065](adr/0065-secret-rotation-cadence-and-hsm.md). Input length/charset on provider verify fields → [ADR 0066](adr/0066-provider-verify-field-bounds.md). Trusted-proxy XFF → [ADR 0067](adr/0067-trusted-proxy-client-address.md). `/api/pets` discovery rate limit → [ADR 0068](adr/0068-discovery-rate-limit.md). Bundle catalog rate limit → [ADR 0069](adr/0069-bundle-catalog-rate-limit.md). Signed machine verify → [ADR 0070](adr/0070-machine-request-signature.md). Signed admin requests → [ADR 0071](adr/0071-admin-request-signature.md). Signed admin and machine requests are single-use for 300 seconds → [ADR 0072](adr/0072-signed-request-nonce.md). A download JWT `jti` is claimed once → [ADR 0073](adr/0073-download-jwt-single-use.md). WAF in front of the rate limiter remains the Terraform stub in [ADR 0062](adr/0062-terraform-managed-stores.md). Redis still has no AUTH token and no transit TLS (that same ADR).
 - **Client trust model**: The desktop app must be considered semi-trusted for license decryption (the Python client is expected to hold the same `LICENSE_SECRET_KEY`). The architecture comment "never trust the desktop client" refers to not letting the client *generate* licenses.
 
 ### Extensibility & Future Refactoring Areas

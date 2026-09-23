@@ -88,6 +88,36 @@ def test_unlocks_against_mocked_backend_using_published_contract():
     assert "hwid" not in gets[0]["body"]
 
 
+def test_second_download_with_the_same_bearer_is_409():
+    backend = create_contract_test_double(license_secret=SECRET, signing_key=SIGNING)
+    client = create_license_client(fetch_impl=backend["fetch_impl"])
+    verified = client["verify"](
+        backend_url="http://127.0.0.1:8080",
+        provider="steam",
+        license_secret=SECRET,
+        fields={
+            "steamId": "76561198000000000",
+            "appId": "123456",
+            "petType": "red_panda",
+        },
+    )
+    kwargs = dict(
+        backend_url="http://127.0.0.1:8080",
+        pet_key="red_panda",
+        ciphertext=verified["license"]["ciphertext"],
+        iv=verified["license"]["iv"],
+        token=verified["auth"]["token"],
+        expect={"owner": "76561198000000000", "petKey": "red_panda"},
+        signing_key=SIGNING,
+    )
+    first = client["download"](**kwargs)
+    assert first["downloadUrl"]
+    with pytest.raises(LicenseError) as caught:
+        client["download"](**kwargs)
+    assert caught.value.code == "download_failed"
+    assert str(caught.value) == "download token already used"
+
+
 def test_fails_closed_without_license_secret_no_always_licensed_stub():
     backend = create_contract_test_double(license_secret=SECRET, signing_key=SIGNING)
     session = session_for(backend, {"LICENSE_SECRET_KEY": "", "COMPUTERPETS_LICENSE_SECRET_KEY": ""})
