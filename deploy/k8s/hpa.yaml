@@ -1,7 +1,8 @@
-# Prod API autoscaler (ADR 0078, ceiling ADR 0107). Not in kustomization.yaml.
-# maxReplicas is 6: two zones times min_size 3. A healthy pool holds
-# that ceiling at one pod per hostname. The old ceiling of 10 stacked
-# as 2, 2, 2, 2, 1, and 1 and is refused. minReplicas stays 3.
+# Prod API autoscaler (ADR 0078, ceiling ADR 0108). Not in kustomization.yaml.
+# maxReplicas is 3: one Ready zone times min_size 3, and the HPA floor.
+# That zone holds the ceiling at one pod per hostname. The ADR 0107
+# ceiling of 6 stacked as 2, 2, and 2 on that zone and is refused.
+# Raising min_size to keep a higher ceiling is refused. minReplicas stays 3.
 # Local/dev `kubectl apply -k deploy/k8s` keeps computerpets-blue at
 # replicas: 2 and computerpets-green at replicas: 0. There is no overlay
 # directory. This file is the prod apply, same pattern as ingress-tls.yaml.
@@ -37,7 +38,7 @@ spec:
     kind: Deployment
     name: computerpets-blue
   minReplicas: 3
-  maxReplicas: 6
+  maxReplicas: 3
   metrics:
     - type: Resource
       resource:
