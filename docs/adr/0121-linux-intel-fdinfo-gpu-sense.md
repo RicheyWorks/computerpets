@@ -1,6 +1,6 @@
 # 0121. Linux reads i915 and xe render utilization from DRM fdinfo
 
-- **Status:** Accepted
+- **Status:** Accepted (amdgpu hwmon temperature and power moved to [0122](0122-linux-amdgpu-hwmon-gpu-sense.md))
 - **Date:** 2026-09-23
 - **Code:** `desktop/gpu-probe.sh`, `desktop/gpu-sense.cjs`, `desktop/renderer/gpu.js`, `web/src/lib/pets/gpu.ts`, `client/computerpets_client/gpu.py`
 

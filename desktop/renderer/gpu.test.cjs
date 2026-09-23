@@ -69,6 +69,21 @@ test("Windows, Linux, and Mac sense; another platform stays unsupported", () => 
   assert.equal(amd.powerWatts, null);
   assert.equal(amd.memoryUsedBytes, 2048 * 1024 * 1024);
   assert.equal(G.gpuLine(amd), "GPU amdgpu 1002:73BF · unread · 37% · 2 GiB/8 GiB · unread");
+  const amdHot = G.sampleFromProbe(
+    { amdgpuCsv: "amdgpu 1002:73BF, 45.5, 37, 2048, 8192, 33" },
+    { platform: "linux", nowMs: NOW },
+  );
+  assert.equal(amdHot.source, "amdgpu");
+  assert.equal(amdHot.tempC, 45.5);
+  assert.equal(amdHot.powerWatts, 33);
+  assert.equal(G.gpuLine(amdHot), "GPU amdgpu 1002:73BF · 45.5°C · 37% · 2 GiB/8 GiB · 33 W");
+  const amdZero = G.sampleFromProbe(
+    { amdgpuCsv: "amdgpu 1002:73BF, 0, [N/A], [N/A], [N/A], 0" },
+    { platform: "linux", nowMs: NOW },
+  );
+  assert.equal(amdZero.tempC, 0);
+  assert.equal(amdZero.powerWatts, 0);
+  assert.equal(amdZero.utilPercent, null);
   const intel = G.sampleFromProbe(
     probe([
       "NVIDIA_ABSENT",

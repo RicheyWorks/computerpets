@@ -246,6 +246,9 @@ test("the Linux probe script names nvidia-smi and amdgpu sysfs and does not inve
   assert.match(text, /ENGINE_ABSENT/);
   assert.match(text, /MEMORY_ABSENT/);
   assert.match(text, /\/sys\/class\/drm/);
+  assert.match(text, /hwmon/);
+  assert.match(text, /edge/);
+  assert.match(text, /PPT/);
   assert.match(text, /drm-engine-render/);
   assert.match(text, /drm-cycles-rcs/);
   assert.match(text, /drm-total-cycles-rcs/);
@@ -462,6 +465,204 @@ test("Linux amdgpu sysfs prints the shared line and ignores Intel and decoys", a
   } finally {
     rmSync(root, { recursive: true, force: true });
     rmSync(bin, { recursive: true, force: true });
+  }
+});
+
+test("Linux amdgpu hwmon copies edge temperature and PPT power and leaves the other channels unread", async () => {
+  const root = mkdtempSync(join(tmpdir(), "gpu-hwmon-"));
+  try {
+    amdCard(root, "card0", {
+      pci: "1002:73BF",
+      files: {
+        gpu_busy_percent: "37\n",
+        mem_info_vram_used: "2147483648\n",
+        mem_info_vram_total: "8589934592\n",
+        "hwmon/hwmon0/temp1_label": "edge\n",
+        "hwmon/hwmon0/temp1_input": "45500\n",
+        "hwmon/hwmon0/temp2_label": "junction\n",
+        "hwmon/hwmon0/temp2_input": "90000\n",
+        "hwmon/hwmon0/temp3_label": "mem\n",
+        "hwmon/hwmon0/temp3_input": "70000\n",
+        "hwmon/hwmon0/power1_label": "PPT\n",
+        "hwmon/hwmon0/power1_input": "48500000\n",
+        "hwmon/hwmon0/power1_average": "33000000\n",
+        "hwmon/hwmon0/power1_cap": "180000000\n",
+      },
+    });
+    const text = runLinuxProbe({ GPU_SYSFS_ROOT: root });
+    assert.match(text, /amdgpu 1002:73BF, 45\.5, 37, 2048, 8192, 48\.5/);
+    assert.doesNotMatch(text, /90|70|33|180|45500|48500000|33000000|90000|70000|180000000/);
+    assert.doesNotMatch(text, /^INTEL/m);
+    const sample = Gpu.sampleFromProbe(Gpu.parseProbeText(text), { platform: "linux", nowMs: NOW });
+    assert.equal(sample.status, "read");
+    assert.equal(sample.source, "amdgpu");
+    assert.equal(sample.tempC, 45.5);
+    assert.equal(sample.utilPercent, 37);
+    assert.equal(sample.powerWatts, 48.5);
+    assert.equal(Gpu.gpuLine(sample), "GPU amdgpu 1002:73BF · 45.5°C · 37% · 2 GiB/8 GiB · 48.5 W");
+
+    const averageOnly = mkdtempSync(join(tmpdir(), "gpu-hwmon-avg-"));
+    try {
+      amdCard(averageOnly, "card0", {
+        pci: "1002:73BF",
+        files: {
+          gpu_busy_percent: "12\n",
+          "hwmon/hwmon0/temp1_label": "edge\n",
+          "hwmon/hwmon0/temp1_input": "45000\n",
+          "hwmon/hwmon0/power1_label": "PPT\n",
+          "hwmon/hwmon0/power1_average": "33000000\n",
+          "hwmon/hwmon0/power1_cap": "180000000\n",
+        },
+      });
+      const avgText = runLinuxProbe({ GPU_SYSFS_ROOT: averageOnly });
+      assert.match(avgText, /amdgpu 1002:73BF, 45, 12, \[N\/A\], \[N\/A\], 33/);
+      assert.doesNotMatch(avgText, /180|45000|33000000/);
+      const avgSample = Gpu.sampleFromProbe(Gpu.parseProbeText(avgText), { platform: "linux", nowMs: NOW });
+      assert.equal(avgSample.tempC, 45);
+      assert.equal(avgSample.powerWatts, 33);
+    } finally {
+      rmSync(averageOnly, { recursive: true, force: true });
+    }
+
+    const unlabeled = mkdtempSync(join(tmpdir(), "gpu-hwmon-plain-"));
+    try {
+      amdCard(unlabeled, "card0", {
+        pci: "1002:73BF",
+        files: {
+          gpu_busy_percent: "8\n",
+          "hwmon/hwmon0/temp1_input": "45000\n",
+          "hwmon/hwmon0/power1_average": "33000000\n",
+        },
+      });
+      const plain = runLinuxProbe({ GPU_SYSFS_ROOT: unlabeled });
+      assert.match(plain, /amdgpu 1002:73BF, \[N\/A\], 8, \[N\/A\], \[N\/A\], \[N\/A\]/);
+      assert.doesNotMatch(plain, /45|33|45000|33000000/);
+    } finally {
+      rmSync(unlabeled, { recursive: true, force: true });
+    }
+
+    const split = mkdtempSync(join(tmpdir(), "gpu-hwmon-split-"));
+    try {
+      amdCard(split, "card0", {
+        pci: "1002:164E",
+        files: {
+          gpu_busy_percent: "4\n",
+          "hwmon/hwmon0/power1_label": "slowPPT\n",
+          "hwmon/hwmon0/power1_average": "17000000\n",
+          "hwmon/hwmon0/power2_label": "fastPPT\n",
+          "hwmon/hwmon0/power2_average": "19000000\n",
+          "hwmon/hwmon0/temp2_label": "junction\n",
+          "hwmon/hwmon0/temp2_input": "88000\n",
+        },
+      });
+      const splitText = runLinuxProbe({ GPU_SYSFS_ROOT: split });
+      assert.match(splitText, /amdgpu 1002:164E, \[N\/A\], 4, \[N\/A\], \[N\/A\], \[N\/A\]/);
+      assert.doesNotMatch(splitText, /17|19|88|17000000|19000000|88000/);
+    } finally {
+      rmSync(split, { recursive: true, force: true });
+    }
+
+    const closed = mkdtempSync(join(tmpdir(), "gpu-hwmon-closed-"));
+    try {
+      amdCard(closed, "card0", {
+        pci: "1002:73BF",
+        files: {
+          gpu_busy_percent: "6\n",
+          "hwmon/hwmon0/temp1_label": "edge\n",
+          "hwmon/hwmon0/temp1_input": "200000\n",
+          "hwmon/hwmon0/power1_label": "PPT\n",
+          "hwmon/hwmon0/power1_average": "2500000000\n",
+        },
+      });
+      const hot = runLinuxProbe({ GPU_SYSFS_ROOT: closed });
+      assert.match(hot, /amdgpu 1002:73BF, \[N\/A\], 6, \[N\/A\], \[N\/A\], \[N\/A\]/);
+      assert.doesNotMatch(hot, /200|2500|200000|2500000000/);
+      amdCard(closed, "card1", {
+        pci: "1002:164E",
+        files: {
+          "hwmon/hwmon0/temp1_label": "edge\n",
+          "hwmon/hwmon0/temp1_input": "0\n",
+          "hwmon/hwmon0/power1_label": "PPT\n",
+          "hwmon/hwmon0/power1_average": "0\n",
+        },
+      });
+      const zero = runLinuxProbe({ GPU_SYSFS_ROOT: closed });
+      assert.match(zero, /amdgpu 1002:164E, 0, \[N\/A\], \[N\/A\], \[N\/A\], 0/);
+      const zeroSample = Gpu.sampleFromProbe(Gpu.parseProbeText(zero), { platform: "linux", nowMs: NOW });
+      assert.equal(zeroSample.name, "amdgpu 1002:164E");
+      assert.equal(zeroSample.tempC, 0);
+      assert.equal(zeroSample.powerWatts, 0);
+      assert.equal(zeroSample.utilPercent, null);
+      assert.equal(Gpu.gpuLine(zeroSample), "GPU amdgpu 1002:164E · 0°C · unread · unread · 0 W");
+    } finally {
+      rmSync(closed, { recursive: true, force: true });
+    }
+
+    const twice = mkdtempSync(join(tmpdir(), "gpu-hwmon-twice-"));
+    try {
+      amdCard(twice, "card0", {
+        pci: "1002:73BF",
+        files: {
+          gpu_busy_percent: "9\n",
+          "hwmon/hwmon0/temp1_label": "edge\n",
+          "hwmon/hwmon0/temp1_input": "45000\n",
+          "hwmon/hwmon1/temp1_label": "edge\n",
+          "hwmon/hwmon1/temp1_input": "46000\n",
+          "hwmon/hwmon0/power1_label": "PPT\n",
+          "hwmon/hwmon0/power1_average": "33000000\n",
+          "hwmon/hwmon1/power1_label": "PPT\n",
+          "hwmon/hwmon1/power1_input": "34000000\n",
+        },
+      });
+      const two = runLinuxProbe({ GPU_SYSFS_ROOT: twice });
+      assert.match(two, /amdgpu 1002:73BF, \[N\/A\], 9, \[N\/A\], \[N\/A\], \[N\/A\]/);
+      assert.doesNotMatch(two, /45|46|33|34|45000|46000|33000000|34000000/);
+    } finally {
+      rmSync(twice, { recursive: true, force: true });
+    }
+
+    const onlyHeat = mkdtempSync(join(tmpdir(), "gpu-hwmon-heat-"));
+    try {
+      amdCard(onlyHeat, "card0", {
+        pci: "1002:73BF",
+        files: {
+          "hwmon/hwmon0/temp1_label": "edge\n",
+          "hwmon/hwmon0/temp1_input": "41000\n",
+        },
+      });
+      const intel = join(onlyHeat, "card1", "device");
+      mkdirSync(intel, { recursive: true });
+      symlinkSync("i915", join(intel, "driver"));
+      writeFileSync(join(intel, "uevent"), "PCI_ID=8086:9A49\n");
+      writeSysfsFile(intel, "hwmon/hwmon0/temp1_label", "edge\n");
+      writeSysfsFile(intel, "hwmon/hwmon0/temp1_input", "61000\n");
+      const heat = runLinuxProbe({ GPU_SYSFS_ROOT: onlyHeat });
+      assert.match(heat, /amdgpu 1002:73BF, 41, \[N\/A\], \[N\/A\], \[N\/A\], \[N\/A\]/);
+      assert.doesNotMatch(heat, /^INTEL/m);
+      assert.doesNotMatch(heat, /61|61000|8086/);
+    } finally {
+      rmSync(onlyHeat, { recursive: true, force: true });
+    }
+
+    const linked = mkdtempSync(join(tmpdir(), "gpu-hwmon-link-"));
+    try {
+      amdCard(linked, "card0", { pci: "1002:73BF", files: { gpu_busy_percent: "11\n" } });
+      const sensor = join(linked, "class-hwmon");
+      mkdirSync(sensor, { recursive: true });
+      writeFileSync(join(sensor, "temp1_label"), "edge\n");
+      writeFileSync(join(sensor, "temp1_input"), "42000\n");
+      writeFileSync(join(sensor, "power1_label"), "PPT\n");
+      writeFileSync(join(sensor, "power1_average"), "21000000\n");
+      mkdirSync(join(linked, "card0", "device", "hwmon"), { recursive: true });
+      symlinkSync(sensor, join(linked, "card0", "device", "hwmon", "hwmon0"));
+      const linkText = runLinuxProbe({ GPU_SYSFS_ROOT: linked });
+      assert.match(linkText, /amdgpu 1002:73BF, 42, 11, \[N\/A\], \[N\/A\], 21/);
+      assert.doesNotMatch(linkText, /42000|21000000/);
+    } finally {
+      rmSync(linked, { recursive: true, force: true });
+    }
+  } finally {
+    rmSync(root, { recursive: true, force: true });
   }
 });
 
