@@ -130,6 +130,7 @@ address, or an API that is not on `main`.
 | [0109](0109-per-zone-node-max-floor.md) | Per-zone API node-group max stays 20, above a one-zone floor of 8 (`maxReplicas` 3 + Cluster Autoscaler 2 + metrics-server 2 + one drain node; twice the new ceiling is 6 and is refused; the live set binds on `min_size` 3, so `MaxLimitReached` at 20 is unreachable; kind stays off the file) | Accepted |
 | [0110](0110-cluster-autoscaler-pending-lease.md) | A Pending Cluster Autoscaler pod never holds the lease (the Running leader remains the scaler; v1.36.1 acquires `leases/cluster-autoscaler` inside the container; `system-cluster-critical` stays; kind stays off the file) | Accepted |
 | [0111](0111-metrics-server-serving-cert-chain.md) | metrics-server serving cert chains to APIService `caBundle` and its DNS SAN is `metrics-server.kube-system.svc` (apply refuses otherwise; kind stays off the file) | Accepted |
+| [0112](0112-metrics-server-kubelet-ca-chain.md) | Kubelet leafs chain to ConfigMap `metrics-server-kubelet-ca` before that object is written (apply refuses a missing CA, a swapped CA, or `--kubelet-insecure-tls`; kind stays off the file) | Accepted |
 
 ## How to add one
 
