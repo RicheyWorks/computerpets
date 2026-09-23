@@ -19,7 +19,7 @@ Each issued signed URL is an open **download grant** keyed by `jti` + `exp` in t
 
 ## Consequences
 
-- Replay of a spent download link denies with clear API copy. A fresh `POST /api/download` issues a new `exp` and a new grant.
+- Replay of a spent download link denies with clear API copy. A fresh `POST /api/download` with a new bearer issues a new `exp` and a new grant. The same download JWT cannot mint a second URL ([0073](0073-download-jwt-single-use.md)).
 - Redis is a runtime dependency for one-time download grants in `prod`, same as rate limits. Grant-store failure denies issue and redeem.
 - Operators behind a trusted proxy must forward the real client address on redeem or IP binding will fail closed against the edge address.
 - [0003](0003-redis-rate-limit-and-jti-denylist.md) still owns revoke; this slice does not move the deny-list.

@@ -234,16 +234,23 @@ Authorization: Bearer <auth.token>
 | Subject (`sub`) | owner id |
 | `pet` | pet catalog key |
 | `prv` | provider key (`steam`, `nft`, `microsoft`, `itch`, `epic`) |
+| `jti` | UUID minted with the bearer. Not the license `jti` |
 | `iat` / `exp` | issued-at / expiry |
 | Default TTL | 30 minutes (`jwt.ttl-minutes`) |
 
 The JWT signing key is the **UTF-8 bytes of `JWT_SECRET_KEY`**, not a
 Base64 decode of that string. Clients do not need the JWT secret — they
-only replay the token. Download cross-checks `sub` and `pet` against the
-decrypted license (403 `auth token does not match license` on mismatch).
+only replay the token. They do not send `jti` as its own header or body
+field. Download cross-checks `sub` and `pet` against the decrypted
+license (403 `auth token does not match license` on mismatch).
 
 A missing or invalid Bearer on `/api/download/**` is rejected by Spring
-Security (401 or 403) before the license is examined.
+Security (401 or 403) before the license is examined. A bearer with no
+`jti` is **401** `download token has no jti`. The first successful
+download claims `download:jwt:{jti}` for `jwt.ttl-minutes` plus 60
+seconds ([ADR 0073](adr/0073-download-jwt-single-use.md)). A second mint
+with that same bearer is **409** `download token already used`. Verify
+again for a new token. A pet, hwid, or owner mismatch does not spend it.
 
 ---
 
@@ -385,10 +392,13 @@ request.
 | Status | `error` |
 |--------|---------|
 | 400 | `unknown petType` |
-| 401 | `license missing, expired, or tampered` (also revoked / unknown `jti`) |
+| 401 | `license missing, expired, or tampered` (also revoked / unknown license `jti`) |
+| 401 | `download token has no jti` / `download token jti invalid` |
 | 403 | `license is not valid for the requested pet` |
 | 403 | `hardware binding mismatch` |
 | 403 | `auth token does not match license` |
+| 409 | `download token already used` |
+| 503 | `download token store unavailable` |
 
 ---
 
@@ -471,8 +481,9 @@ The grant is keyed by `jti`+`exp`. First success:
 | 503 | `download grant store unavailable` | Retry; bytes are not served when the grant cannot be checked. |
 
 A second redeem of the **same** grant denies. The house does not silently
-re-open it. A fresh `POST /api/download/{petKey}` issues a new `exp` and a
-new grant.
+re-open it. A fresh `POST /api/download/{petKey}` with a **new** bearer
+issues a new `exp` and a new grant. The same download JWT cannot mint a
+second URL ([ADR 0073](adr/0073-download-jwt-single-use.md)).
 
 IP binding uses the same client-address rule as rate limits: `remoteAddr`,
 or — only when the peer is a configured trusted proxy — the first

@@ -40,6 +40,7 @@ function json(status, body, headers = {}) {
  */
 function createContractTestDouble(cfg) {
   const issued = new Map();
+  const usedBearers = new Set();
   const revoked = cfg.revokedJtis || new Set();
   const deny = new Set(cfg.denySteamIds || []);
   const signingKey = cfg.signingKey || "test-bundle-signing-key-not-a-placeholder";
@@ -128,6 +129,10 @@ function createContractTestDouble(cfg) {
           return json(403, { error: "hardware binding mismatch", hint: "This license is bound to a specific device" });
         }
       }
+      if (usedBearers.has(token)) {
+        return json(409, { error: "download token already used" });
+      }
+      usedBearers.add(token);
       const exp = Math.floor(Date.now() / 1000) + 900;
       const message = downloadMacMessage({
         petKey,

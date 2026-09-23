@@ -172,6 +172,9 @@ function createLicenseClient(opts = {}) {
     if (res.status === 429) {
       throw new LicenseError("unreachable", "download rate limited", json);
     }
+    if (res.status === 409) {
+      throw new LicenseError("download_failed", json.error || "download token already used", json);
+    }
     if (!res.ok) {
       throw new LicenseError("download_failed", json.error || `download failed (${res.status})`, json);
     }

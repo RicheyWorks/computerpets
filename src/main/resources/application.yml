@@ -174,6 +174,7 @@ microsoft:
 # JWT auth — short-lived bearer token issued alongside the encrypted license.
 # secret-key is REQUIRED; no default. Generate with: openssl rand -base64 48
 # secret-key-previous is optional dual-key verify material during rotation (ADR 0065).
+# The token carries jti. POST /api/download claims it once (ADR 0073).
 jwt:
   secret-key: "${JWT_SECRET_KEY:}"
   secret-key-previous: "${JWT_SECRET_KEY_PREVIOUS:}"
@@ -212,8 +213,9 @@ admin:
 # Rate limiting (Phase 3.1)
 # -----------------------------------------------------------------------------
 # Default store is Redis so every app replica shares the same per-IP buckets
-# (10/min verify, 30/min download), the jti deny-list, and signed-request
-# nonces (replay:nonce:*, 300s). If Redis is down
+# (10/min verify, 30/min download), the jti deny-list, signed-request
+# nonces (replay:nonce:*, 300s), and single-use download JWTs
+# (download:jwt:{jti}, ADR 0073). If Redis is down
 # the rate-limit filter fail-closes with HTTP 503 + Retry-After — it does
 # not silently lift the limit. License validate then falls back to Postgres.
 # Set RATE_LIMIT_BACKEND=memory only for tests or a single local process.

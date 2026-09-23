@@ -71,6 +71,32 @@ describe("license client (verify + download)", () => {
     assert.ok(bundle.bytes > 0);
   });
 
+  it("a second download with the same bearer is 409", async () => {
+    const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
+    const client = createLicenseClient({ fetchImpl: backend.fetchImpl });
+    const verified = await client.verify({
+      backendUrl: "http://127.0.0.1:8080",
+      provider: "steam",
+      licenseSecret: SECRET,
+      fields: { steamId: "76561198000000000", appId: "123456", petType: "red_panda" },
+    });
+    const download = {
+      backendUrl: "http://127.0.0.1:8080",
+      petKey: "red_panda",
+      ciphertext: verified.license.ciphertext,
+      iv: verified.license.iv,
+      token: verified.auth.token,
+      expect: { owner: "76561198000000000", petKey: "red_panda" },
+      signingKey: SIGNING,
+    };
+    const first = await client.download(download);
+    assert.match(first.downloadUrl, /[?&]jti=/);
+    await assert.rejects(
+      () => client.download(download),
+      (err) => err instanceof LicenseError && err.code === "download_failed" && err.message === "download token already used"
+    );
+  });
+
   it("fails closed when the license key is missing before verify leaves", async () => {
     let called = false;
     const client = createLicenseClient({

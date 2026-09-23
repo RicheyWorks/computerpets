@@ -36,4 +36,4 @@ This slice does not reopen presence/CSP, Hikari/replica, bundle zip, cosign, Ter
 - Two honest calls need two nonces. A retry signs again.
 - The nonce store is not the download-grant index and not the jti deny-list. Those keys stay as they are.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** a download JWT is still reusable until `jwt.ttl-minutes` (default 30). It has no `jti` and is not single-use, so a captured bearer can `POST /api/download` again and mint another one-time URL. The signed URL itself is already one-time. WAF in front of the rate limiter remains the Terraform stub ([0062](0062-terraform-managed-stores.md)), not a live gate on this JVM. Not started here.
+- **Next gap:** landed as [0073](0073-download-jwt-single-use.md). Not started in this ADR.
