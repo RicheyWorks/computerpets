@@ -110,10 +110,46 @@ assert_exit 1 "check fails when leader election is turned off" \
   "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
 
 copy_tree "${BROKEN}"
-# The zone preference is soft. Dropping it is still a failed placement contract.
+# Hostname anti-affinity alone still packs both pods into one zone.
 sed -i '/topologyKey: topology.kubernetes.io\/zone/d' \
   "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml"
-assert_exit 1 "check fails when the soft zone anti-affinity is removed" \
+assert_exit 1 "check fails when the zone spread key is removed" \
+  "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
+
+copy_tree "${BROKEN}"
+# ScheduleAnyway lets both replicas pile into one labeled zone.
+sed -i 's/whenUnsatisfiable: DoNotSchedule/whenUnsatisfiable: ScheduleAnyway/' \
+  "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml"
+assert_exit 1 "check fails when zone spread is ScheduleAnyway" \
+  "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
+
+copy_tree "${BROKEN}"
+# minDomains 2 treats a single labeled zone as an empty second domain.
+sed -i '/whenUnsatisfiable: DoNotSchedule/a\          minDomains: 2' \
+  "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml"
+assert_exit 1 "check fails when zone spread sets minDomains" \
+  "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
+
+copy_tree "${BROKEN}"
+# Required zone anti-affinity leaves the second pod Pending in one zone.
+python3 - "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml" <<'PY'
+import pathlib, sys
+path = pathlib.Path(sys.argv[1])
+text = path.read_text()
+old = "              topologyKey: kubernetes.io/hostname\n"
+new = """              topologyKey: kubernetes.io/hostname
+            - labelSelector:
+                matchLabels:
+                  app: cluster-autoscaler
+              namespaces:
+                - kube-system
+              topologyKey: topology.kubernetes.io/zone
+"""
+if text.count(old) != 1:
+    raise SystemExit(f"hostname term count {text.count(old)}")
+path.write_text(text.replace(old, new, 1))
+PY
+assert_exit 1 "check fails when zone anti-affinity is required" \
   "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
 
 copy_tree "${BROKEN}"

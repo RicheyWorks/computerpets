@@ -77,8 +77,10 @@ No mesh.
   ([0082](0082-multi-az-node-pool.md)). This kustomization does not create them.
 - Cluster Autoscaler grows those groups when pods are Pending
   ([0083](0083-cluster-autoscaler.md)). Two replicas, required hostname
-  anti-affinity, preferred zone anti-affinity, and leader election
-  ([0090](0090-cluster-autoscaler-ha.md)). `nodeSelector` requires
+  anti-affinity, hard zone spread (`DoNotSchedule` on
+  `topology.kubernetes.io/zone`; one labeled zone still schedules), and leader election
+  ([0090](0090-cluster-autoscaler-ha.md),
+  [0099](0099-cluster-autoscaler-zone-hard-spread.md)). `nodeSelector` requires
   `computerpets/node-pool=api` and linux, so kind and minikube stay off
   the file ([0091](0091-cluster-autoscaler-node-pool.md)). Voluntary
   disruption keeps one of those pods (`minAvailable: 1`,

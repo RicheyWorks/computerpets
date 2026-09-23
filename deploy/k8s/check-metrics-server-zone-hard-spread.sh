@@ -7,7 +7,8 @@
 # anti-affinity. One labeled zone still schedules. A node that omits
 # the zone label does not. Kind and minikube do not apply this file.
 # The pool selector and the taint toleration stay. Cluster Autoscaler
-# zone anti-affinity stays preferred.
+# zone spread is DoNotSchedule (ADR 0099). Required zone anti-affinity
+# is not set.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -59,10 +60,10 @@ need_not_grep "$KUSTOM" '^[[:space:]]*-[[:space:]]*metrics-server\.yaml[[:space:
 need_grep "$KUSTOM" 'ADR 0098' "kustomize comment names the hard zone spread"
 need_grep "$KUSTOM" 'One labeled zone still schedules' "kustomize comment is honest about one zone"
 need_grep "$KUSTOM" 'Do not set minDomains' "kustomize comment refuses minDomains"
-need_grep "$CA" 'preferredDuringSchedulingIgnoredDuringExecution' "cluster-autoscaler zone rule stays preferred"
+need_grep "$CA" 'whenUnsatisfiable: DoNotSchedule' "cluster-autoscaler zone spread is DoNotSchedule (ADR 0099)"
 need_grep "$CA" 'topologyKey: topology.kubernetes.io/zone' "cluster-autoscaler still names the zone key"
-need_not_grep "$CA" 'topologySpreadConstraints:' "cluster-autoscaler has no topology spread constraint"
-need_not_grep "$CA" 'DoNotSchedule' "cluster-autoscaler zone rule is not DoNotSchedule"
+need_grep "$CA" 'topologySpreadConstraints:' "cluster-autoscaler zone rule is a spread constraint"
+need_not_grep "$CA" 'preferredDuringSchedulingIgnoredDuringExecution' "cluster-autoscaler has no preferred zone term"
 
 echo "== docs =="
 need_grep "$README" 'ADR 0098' "README names ADR 0098"
@@ -155,24 +156,25 @@ ca = next(doc for doc in ca_docs if isinstance(doc, dict)
           and doc.get("kind") == "Deployment"
           and (doc.get("metadata") or {}).get("name") == "cluster-autoscaler")
 ca_pod = ((ca.get("spec") or {}).get("template") or {}).get("spec") or {}
-check("topologySpreadConstraints" not in ca_pod,
-      "parsed cluster-autoscaler has no topology spread")
+ca_constraints = ca_pod.get("topologySpreadConstraints") or []
+check(len(ca_constraints) == 1, "parsed cluster-autoscaler has one zone spread constraint")
+if ca_constraints:
+    item = ca_constraints[0]
+    check(item.get("topologyKey") == "topology.kubernetes.io/zone",
+          "parsed cluster-autoscaler spread key is the zone")
+    check(item.get("whenUnsatisfiable") == "DoNotSchedule",
+          "parsed cluster-autoscaler zone spread is DoNotSchedule (ADR 0099)")
+    check("minDomains" not in item, "parsed cluster-autoscaler has no minDomains")
 ca_affinity = ((ca_pod.get("affinity") or {}).get("podAntiAffinity") or {})
 ca_required = ca_affinity.get("requiredDuringSchedulingIgnoredDuringExecution") or []
 ca_preferred = ca_affinity.get("preferredDuringSchedulingIgnoredDuringExecution") or []
 ca_req_keys = [item.get("topologyKey") for item in ca_required if isinstance(item, dict)]
-ca_pref_keys = []
-for item in ca_preferred:
-    if not isinstance(item, dict):
-        continue
-    term = item.get("podAffinityTerm") or {}
-    ca_pref_keys.append(term.get("topologyKey"))
 check(ca_req_keys == ["kubernetes.io/hostname"],
       "parsed cluster-autoscaler required anti-affinity is hostname only")
 check("topology.kubernetes.io/zone" not in ca_req_keys,
       "parsed cluster-autoscaler zone anti-affinity is not required")
-check(ca_pref_keys == ["topology.kubernetes.io/zone"],
-      "parsed cluster-autoscaler preferred anti-affinity is the zone key")
+check(ca_preferred == [],
+      "parsed cluster-autoscaler has no preferred zone anti-affinity")
 
 if failed:
     sys.exit(1)
