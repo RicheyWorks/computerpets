@@ -132,6 +132,7 @@ address, or an API that is not on `main`.
 | [0111](0111-metrics-server-serving-cert-chain.md) | metrics-server serving cert chains to APIService `caBundle` and its DNS SAN is `metrics-server.kube-system.svc` (apply refuses otherwise; kind stays off the file) | Accepted |
 | [0112](0112-metrics-server-kubelet-ca-chain.md) | Kubelet leafs chain to ConfigMap `metrics-server-kubelet-ca` before that object is written (apply refuses a missing CA, a swapped CA, or `--kubelet-insecure-tls`; kind stays off the file) | Accepted |
 | [0113](0113-metrics-server-kubelet-san.md) | Kubelet leaf SAN covers the metrics-server dial address (`InternalIP`, then `ExternalIP`, then `Hostname`; apply refuses a miss; kind stays off the file; no dial) | Accepted |
+| [0114](0114-metrics-server-kubelet-port.md) | Kubelet `kubeletEndpoint.port` is the port metrics-server dials (non-zero status port, otherwise 10250; that port must be the listen port; apply refuses a miss; kind stays off the file; no dial) | Accepted |
 
 ## How to add one
 

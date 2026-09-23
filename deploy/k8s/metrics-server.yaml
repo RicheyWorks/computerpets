@@ -1,6 +1,6 @@
 # metrics-server so hpa.yaml can read CPU and memory (ADR 0084, ADR 0085,
 # ADR 0086, ADR 0087, ADR 0088, ADR 0089, ADR 0098, ADR 0111, ADR 0112,
-# ADR 0113).
+# ADR 0113, ADR 0114).
 # Not in kustomization.yaml. Local/dev `kubectl apply -k deploy/k8s` does
 # not install this. Kind and minikube do not apply this file. There is no
 # overlay directory. No Helm chart.
@@ -75,6 +75,17 @@
 #   ./deploy/k8s/metrics-server-kubelet-san.sh verify "$OUT"
 #   COMPUTERPETS_METRICS_KUBELET_SAN_APPLY=1 \
 #     ./deploy/k8s/metrics-server-kubelet-san.sh apply "$OUT"
+# ADR 0114 writes that ConfigMap only after the SAN verify passes and
+# each node's kubeletEndpoint.port is the port metrics-server dials.
+# A non-zero status port is that dial. A zero would dial 10250 and is
+# refused. The dial port must be the kubelet listen port. The script
+# does not connect to a node. Do not set --kubelet-port. Kind and
+# minikube do not receive it.
+#   OUT="$(mktemp -d)"
+#   # keeper copies ca.crt and nodes/<name>/{kubelet.crt,addresses,kubelet-port}
+#   ./deploy/k8s/metrics-server-kubelet-port.sh verify "$OUT"
+#   COMPUTERPETS_METRICS_KUBELET_PORT_APPLY=1 \
+#     ./deploy/k8s/metrics-server-kubelet-port.sh apply "$OUT"
 # A Secret with the same name, key, and optional: false is the equivalent
 # hand substitution when the bundle is already a Secret. This apply writes
 # the ConfigMap the manifest mounts. hostPath is not.
