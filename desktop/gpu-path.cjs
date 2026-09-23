@@ -1,4 +1,4 @@
-/** Overlay draw path. Pets are DOM sprite frames. Chromium's GPU process composites that window. This is not a shader engine, not DirectX 12, and not Vulkan. */
+/** Overlay window gate. The host pet draws on a canvas Chromium composites (ADR 0126). This file still opens the glass only for hardware gpu_compositing. Not a shader engine, not DirectX 12, and not Vulkan. */
 const path = require("path");
 
 const FILE = "gpu-path.json";
