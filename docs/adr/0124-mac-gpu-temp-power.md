@@ -1,6 +1,6 @@
 # 0124. Mac GPU temperature and power stay unread
 
-- **Status:** Accepted
+- **Status:** Accepted (Chromium overlay GPU path moved to [0125](0125-chromium-overlay-gpu-path.md))
 - **Date:** 2026-09-23
 - **Code:** `desktop/gpu-probe-mac.sh`, `desktop/gpu-sense.test.cjs`, `desktop/renderer/gpu.js`, `web/src/lib/pets/gpu.ts`, `client/computerpets_client/gpu.py`
 
@@ -42,4 +42,4 @@ This slice does not reopen presence/CSP, Hikari, bundle zip, cosign, CDN, secret
 - Non-English Windows counter fields stay unread when the English counter path does not resolve. That was already [0008](0008-desktop-local-gpu-sense.md).
 - Wayland without an X11 display stays empty. That is [0115](0115-linux-x11-window-play.md). Windows virtual desktops stay a later door. Neither blocks this probe.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** a real GPU path. DirectX 12 / Vulkan, or an honest Chromium GPU path that still feels like the ad. The overlay is Electron/Chromium. The blotter is Qt OpenGL. GPU sensing is not that engine. Do not start it in this slice. Do not start Pane. Do not start Solana. Catalog stays 221.
+- **Next gap:** the overlay's Chromium compositor check is [0125](0125-chromium-overlay-gpu-path.md). Do not start DirectX 12, Vulkan, Solana, or Pane. Catalog stays 221.

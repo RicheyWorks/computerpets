@@ -8,6 +8,7 @@ const Roster = require("./renderer/roster-load.js");
 const Windows = require("./renderer/windows.js");
 const WindowEnum = require("./windows-enum.cjs");
 const GpuSense = require("./gpu-sense.cjs");
+const GpuPath = require("./gpu-path.cjs");
 const HouseMusic = require("./renderer/house-music.js");
 const PetNews = require("./renderer/news.js");
 const PetMarket = require("./renderer/market.js");
@@ -57,6 +58,8 @@ function licenseIpc(fn) {
   };
 }
 
+/** @type {Awaited<ReturnType<typeof GpuPath.gate>> | null} */
+let gpuGate = null;
 /** @type {BrowserWindow | null} */
 let win = null;
 /** @type {BrowserWindow | null} */
@@ -261,6 +264,40 @@ function careMenu() {
   ];
 }
 
+function acceptSoftwareCompositing() {
+  if (!GpuPath.writeExpect(app.getPath("userData"), fs, "software")) return;
+  app.relaunch();
+  app.quit();
+}
+
+function requireHardwareCompositing() {
+  if (!GpuPath.writeExpect(app.getPath("userData"), fs, "hardware")) return;
+  app.relaunch();
+  app.quit();
+}
+
+function gpuPathRows() {
+  if (!gpuGate || !gpuGate.open) return [];
+  const rows = [{ label: gpuGate.label, enabled: false }];
+  if (gpuGate.path === "software") {
+    rows.push({ label: "Require hardware compositing", click: () => requireHardwareCompositing() });
+  }
+  rows.push({ type: "separator" });
+  return rows;
+}
+
+function refusedTrayTemplate() {
+  const rows = [
+    { label: gpuGate.label, enabled: false },
+    { type: "separator" },
+  ];
+  if (gpuGate.reason === "software-refused") {
+    rows.push({ label: "Allow software compositing", click: () => acceptSoftwareCompositing() });
+  }
+  rows.push({ label: "Quit", click: () => app.quit() });
+  return rows;
+}
+
 function statusLabel() {
   const bits = [currentName(), lastVitals.stage, lastVitals.vital];
   if (lastVitals.mess) bits.push(`mess ${lastVitals.mess}`);
@@ -270,6 +307,7 @@ function statusLabel() {
 
 function trayTemplate() {
   return [
+    ...gpuPathRows(),
     { label: statusLabel(), enabled: false },
     { type: "separator" },
     { label: "On the desk", submenu: deskPickMenu() },
@@ -316,11 +354,23 @@ function macAppMenu() {
 }
 
 function refreshMenus() {
-  tray?.setContextMenu(Menu.buildFromTemplate(trayTemplate()));
-  tray?.setToolTip(statusLabel() + " — ComputerPets");
-  if (Desk.appMenu(process.platform)) {
+  const refused = gpuGate && !gpuGate.open;
+  const template = refused ? refusedTrayTemplate() : trayTemplate();
+  tray?.setContextMenu(Menu.buildFromTemplate(template));
+  tray?.setToolTip(refused ? gpuGate.label : statusLabel() + " — ComputerPets");
+  if (!Desk.appMenu(process.platform)) return;
+  if (!refused) {
     Menu.setApplicationMenu(Menu.buildFromTemplate(macAppMenu()));
+    return;
   }
+  const mac = [
+    { label: gpuGate.label, enabled: false },
+    { label: "Quit", click: () => app.quit() },
+  ];
+  if (gpuGate.reason === "software-refused") {
+    mac.splice(1, 0, { label: "Allow software compositing", click: () => acceptSoftwareCompositing() });
+  }
+  Menu.setApplicationMenu(Menu.buildFromTemplate(mac));
 }
 
 /** The Mac floor sits under the menu bar and above the dock, on the desk under the cursor. */
@@ -584,9 +634,27 @@ async function runGuiHarnessSmokes(target) {
 }
 
 function bootDesk() {
-  app.whenReady().then(() => {
+  app.whenReady().then(async () => {
     loadRoster();
     if (process.platform === "darwin") app.dock?.hide();
+    try {
+      gpuGate = await GpuPath.gate(app, fs);
+    } catch {
+      gpuGate = GpuPath.decide("hardware", { kind: "unread" });
+    }
+    if (!gpuGate.open) {
+      if (GUI_HARNESS) {
+        writeGuiHarnessResult({
+          ok: false,
+          error: gpuGate.reason,
+          results: { "gui.gpu_path": { ok: false, detail: gpuGate.label } },
+        });
+        app.quit();
+        return;
+      }
+      createTray();
+      return;
+    }
     createWindow();
     if (!GUI_HARNESS) {
       createTray();
