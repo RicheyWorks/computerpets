@@ -306,7 +306,7 @@ failure of that zone is not blocked by the budget.
 A cutover does not patch the zone item. Scaling green uses the green
 template, which already has it.
 
-## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091)
+## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092)
 
 `cluster-autoscaler.yaml` is **not** in the kustomization. `kubectl apply -k
 deploy/k8s` does not install it. Kind and minikube set
@@ -333,7 +333,17 @@ Leader election stays on: `--leader-elect=true`, lock `leases`, name
 `cluster-autoscaler`. The ClusterRole can create leases and update that
 named lease. Both pods use ServiceAccount `cluster-autoscaler` and the
 one IRSA role. Only the leader calls `SetDesiredCapacity`. There is no
-second role and no PodDisruptionBudget in this file.
+second role.
+
+The same file adds a `policy/v1` `PodDisruptionBudget` named
+`cluster-autoscaler` in `kube-system`. `minAvailable` is 1. The selector
+is `app: cluster-autoscaler`, the same `matchLabels` as the Deployment.
+`minAvailable` 2 is not used: with two replicas it would allow zero
+voluntary evictions. One pod can drain while the other holds or takes
+the lease. A node crash is not blocked. Kind and minikube do not apply
+this file, so they do not install this budget
+([ADR 0092](../../docs/adr/0092-cluster-autoscaler-pdb.md)). The API
+budget in `pdb.yaml` is unchanged.
 
 `nodeSelector` requires `kubernetes.io/os: linux` and
 `computerpets/node-pool: api`. That second label is the one the node

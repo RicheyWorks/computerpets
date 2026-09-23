@@ -68,7 +68,9 @@ No mesh.
   anti-affinity, preferred zone anti-affinity, and leader election
   ([0090](0090-cluster-autoscaler-ha.md)). `nodeSelector` requires
   `computerpets/node-pool=api` and linux, so kind and minikube stay off
-  the file ([0091](0091-cluster-autoscaler-node-pool.md)). It is not in
+  the file ([0091](0091-cluster-autoscaler-node-pool.md)). Voluntary
+  disruption keeps one of those pods (`minAvailable: 1`,
+  [0092](0092-cluster-autoscaler-pdb.md)). It is not in
   this kustomization.
 - Resource metrics for the HPA are upstream metrics-server v0.9.0, two
   replicas with required hostname anti-affinity, soft zone spread
