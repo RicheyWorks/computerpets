@@ -1,8 +1,8 @@
-/** Desktop-local GPU sense. Windows and Linux nvidia-smi. Linux amdgpu sysfs uses the same line when nvidia-smi does not. i915 and xe sysfs stay INTEL_EMPTY. Mac reads IOAccelerator into that line. Sparkline is real samples only. */
+/** Desktop-local GPU sense. Windows and Linux nvidia-smi. Linux amdgpu sysfs uses the same line when nvidia-smi does not. i915 and xe utilization comes from two DRM fdinfo reads when that percent is honest; otherwise INTEL_EMPTY. Mac reads IOAccelerator into that line. Sparkline is real samples only. */
 (function (root) {
   const STALE_MS = 20000;
   const LATER_DOOR = "unsupported";
-  const SOURCES = ["nvidia-smi", "pdh", "nvidia-smi+pdh", "ioaccelerator", "amdgpu"];
+  const SOURCES = ["nvidia-smi", "pdh", "nvidia-smi+pdh", "ioaccelerator", "amdgpu", "fdinfo"];
   const METRIC_KEYS = ["tempC", "utilPercent", "memoryUsedBytes", "memoryTotalBytes", "powerWatts"];
 
   function sensesOn(platform) {
@@ -355,23 +355,26 @@
     if (probe.malformed) return blank("malformed", "malformed", platform, nowMs);
     const nvidia = parseNvidiaCsv(probe.nvidiaCsv);
     const amd = parseNvidiaCsv(probe.amdgpuCsv);
+    const intel = parseNvidiaCsv(probe.intelCsv);
     const pdh = reducePdh(probe.engines, probe.adapterMemory);
     const nvidiaRows = nvidia.malformed ? [] : nvidia.rows;
     const amdRows = amd.malformed ? [] : amd.rows;
+    const intelRows = intel.malformed ? [] : intel.rows;
     const pdhRows = pdh.malformed ? [] : pdh.rows;
     const nvidiaBest = pickBest(nvidiaRows);
     const amdBest = pickBest(amdRows);
+    const intelBest = pickBest(intelRows);
     const pdhBest = pickBest(pdhRows);
     const nvidiaCount = nvidiaRows.filter(rowHasMetric).length;
     const pdhCount = pdhRows.filter(rowHasMetric).length;
-    if (!nvidiaBest && !amdBest && !pdhBest) {
-      if (nvidia.malformed || amd.malformed || pdh.malformed || nvidia.rejected || amd.rejected || pdh.rejected) {
+    if (!nvidiaBest && !amdBest && !intelBest && !pdhBest) {
+      if (nvidia.malformed || amd.malformed || intel.malformed || pdh.malformed || nvidia.rejected || amd.rejected || intel.rejected || pdh.rejected) {
         return blank("malformed", "malformed", platform, nowMs);
       }
       return blank("unread", "missing", platform, nowMs);
     }
-    let chosen = nvidiaBest || amdBest || pdhBest;
-    let source = nvidiaBest ? (isMac(platform) ? "ioaccelerator" : "nvidia-smi") : (amdBest ? "amdgpu" : "pdh");
+    let chosen = nvidiaBest || amdBest || intelBest || pdhBest;
+    let source = nvidiaBest ? (isMac(platform) ? "ioaccelerator" : "nvidia-smi") : (amdBest ? "amdgpu" : (intelBest ? "fdinfo" : "pdh"));
     if (nvidiaBest && pdhBest && nvidiaCount === 1 && pdhCount === 1) {
       chosen = {
         index: nvidiaBest.index,
@@ -396,6 +399,9 @@
     } else if (amdBest) {
       chosen = amdBest;
       source = "amdgpu";
+    } else if (intelBest) {
+      chosen = intelBest;
+      source = "fdinfo";
     } else {
       chosen = pdhBest;
       source = "pdh";
@@ -422,11 +428,13 @@
     if (!lines.some((line) => line.trim() === "END")) return { malformed: true };
     let nvidiaCsv = null;
     let amdgpuCsv = null;
+    let intelCsv = null;
     let engines = null;
     let adapterMemory = null;
     let mode = null;
     const nvidiaLines = [];
     const amdgpuLines = [];
+    const intelLines = [];
     for (let i = 0; i < lines.length; i++) {
       const tag = lines[i].trim();
       if (tag === "END") break;
@@ -474,6 +482,16 @@
         mode = null;
         continue;
       }
+      if (tag === "INTEL") {
+        mode = "intel";
+        intelLines.length = 0;
+        continue;
+      }
+      if (tag === "ENDINTEL") {
+        intelCsv = intelLines.join("\n");
+        mode = null;
+        continue;
+      }
       if (tag === "ENGINE_ABSENT") {
         engines = null;
         mode = null;
@@ -504,6 +522,7 @@
       }
       if (mode === "nvidia") nvidiaLines.push(tag);
       else if (mode === "amdgpu") amdgpuLines.push(tag);
+      else if (mode === "intel") intelLines.push(tag);
       else if (mode === "engine") {
         const bits = lines[i].split("\t");
         if (bits.length !== 2) return { malformed: true };
@@ -523,7 +542,7 @@
         });
       }
     }
-    return { nvidiaCsv, amdgpuCsv, engines, adapterMemory, malformed: false };
+    return { nvidiaCsv, amdgpuCsv, intelCsv, engines, adapterMemory, malformed: false };
   }
 
   const READ_INK = "#9a9288";
