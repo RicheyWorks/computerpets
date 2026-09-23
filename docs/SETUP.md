@@ -454,7 +454,9 @@ false. Do not run that patch on kind or minikube
 ([ADR 0096](adr/0096-system-daemon-api-pool-toleration.md),
 [ADR 0097](adr/0097-kube-proxy-toleration-hook.md)).
 Cluster Autoscaler grows those groups when pods are Pending. Each zone's
-max is 20. The HPA ceiling is 3, so one Ready zone holds it at one pod per hostname
+max is 20, above a one-zone floor of 8
+([ADR 0109](adr/0109-per-zone-node-max-floor.md)).
+The HPA ceiling is 3, so one Ready zone holds it at one pod per hostname
 ([ADR 0108](adr/0108-api-single-zone-hostname-ceiling.md)). Terraform ignores `desired_size`
 after create. `deploy/k8s/cluster-autoscaler.yaml` is not in this
 kustomization. Substitute `CLUSTER_NAME`, `AWS_REGION`, and the role ARN
@@ -483,6 +485,9 @@ The next main loop is the retry
 Each zone's node-group max is 20. The leader reads that as the Auto
 Scaling group `MaxSize` and cannot lift it
 ([ADR 0104](adr/0104-per-zone-node-max.md)).
+The one-zone floor under that cap is 8. The live set binds on `min_size` 3,
+so `MaxLimitReached` at 20 is unreachable in this design
+([ADR 0109](adr/0109-per-zone-node-max-floor.md)).
 `nodeSelector` also requires `kubernetes.io/os: linux` and
 `computerpets/node-pool: api`, so the hostname rule cannot be met by
 nodes outside those groups. Kind and minikube do not apply the file

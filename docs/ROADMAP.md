@@ -100,6 +100,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Single-zone API hostname floor — each zone's `min_size` is 3 and the create-time `desired_size` is 3. One Ready zone is three hostnames, so the HPA floor of 3 is 1 and 1 and 1. The zone gate stays two. The floor of 2 is refused. Kind and minikube do not plan the pool. Do not set minDomains (ADR 0106). Catalog stays 221.
   - [x] API hostname ceiling — `maxReplicas` is 6, two zones times `min_size` 3. A healthy pool holds that ceiling at one pod per hostname. The old ceiling of 10 is refused. `min_size` stays 3. `max_size` stays 20. Kind and minikube do not apply the HPA. Do not set minDomains (ADR 0107). Catalog stays 221.
   - [x] Single-zone API hostname ceiling — `maxReplicas` is 3, equal to the HPA floor and to `min_size` 3. One Ready zone holds that ceiling at one pod per hostname. The ceiling of 6 is refused. Eight, ten, twelve, and twenty node bills are refused. Kind and minikube do not apply the HPA. Do not set minDomains (ADR 0108). Catalog stays 221.
+  - [x] Per-zone max floor — `max_size` stays 20, above a one-zone floor of 8 (HPA ceiling 3 + Cluster Autoscaler 2 + metrics-server 2 + one drain node). Twice the new ceiling is 6 and is refused. The live set binds on `min_size` 3, so MaxLimitReached at 20 is unreachable. Kind and minikube do not apply the file. Do not set minDomains (ADR 0109). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload
@@ -191,6 +192,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Single-zone API hostname floor — each zone's `min_size` is 3 and the create-time `desired_size` is 3. One Ready zone is three hostnames, so the HPA floor of 3 is 1 and 1 and 1. The zone gate stays two. The floor of 2 is refused. Kind and minikube do not plan the pool. Do not set minDomains (ADR 0106). Catalog stays 221.
   - [x] API hostname ceiling — `maxReplicas` is 6, two zones times `min_size` 3. A healthy pool holds that ceiling at one pod per hostname. The old ceiling of 10 is refused. `min_size` stays 3. `max_size` stays 20. Kind and minikube do not apply the HPA. Do not set minDomains (ADR 0107). Catalog stays 221.
   - [x] Single-zone API hostname ceiling — `maxReplicas` is 3, equal to the HPA floor and to `min_size` 3. One Ready zone holds that ceiling at one pod per hostname. The ceiling of 6 is refused. Eight, ten, twelve, and twenty node bills are refused. Kind and minikube do not apply the HPA. Do not set minDomains (ADR 0108). Catalog stays 221.
+  - [x] Per-zone max floor — `max_size` stays 20, above a one-zone floor of 8 (HPA ceiling 3 + Cluster Autoscaler 2 + metrics-server 2 + one drain node). Twice the new ceiling is 6 and is refused. The live set binds on `min_size` 3, so MaxLimitReached at 20 is unreachable. Kind and minikube do not apply the file. Do not set minDomains (ADR 0109). Catalog stays 221.
 
 ---
 
