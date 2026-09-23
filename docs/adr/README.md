@@ -92,6 +92,7 @@ address, or an API that is not on `main`.
 | [0071](0071-admin-request-signature.md) | Signed admin requests (fail-closed HMAC, admin key) | Accepted |
 | [0072](0072-signed-request-nonce.md) | Single-use nonce for signed admin and machine requests | Accepted |
 | [0073](0073-download-jwt-single-use.md) | Single-use download JWT (`jti` claimed once per bearer) | Accepted |
+| [0074](0074-waf-in-front-of-rate-limiter.md) | Regional WAF in front of the rate limiter (fail-closed ALB association) | Accepted |
 
 ## How to add one
 

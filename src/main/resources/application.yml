@@ -222,6 +222,8 @@ admin:
 # Per-IP defaults live in RateLimitingFilter (not env-tunable capacities):
 #   verify 10/min, download 30/min (grant issue), discovery 60/min on /api/pets,
 #   bundles 60/min on GET /api/bundles/{petKey}. Signed /redeem is excluded (ADR 0069).
+# Edge gate in front of these buckets is the regional WAF on the API ALB (ADR 0074).
+# Capacities stay in RateLimitingFilter, not in a Terraform rate variable.
 rate-limit:
   backend: ${RATE_LIMIT_BACKEND:redis}
   fail-closed-retry-after-seconds: ${RATE_LIMIT_FAIL_CLOSED_RETRY_AFTER:5}

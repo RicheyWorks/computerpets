@@ -63,7 +63,7 @@ resource "aws_cloudfront_origin_access_control" "bundles" {
 resource "aws_cloudfront_distribution" "bundles" {
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = "ComputerPets pet bundle CDN stub (edge redeem: deploy/cdn/edge-redeem.js — ADR 0063)"
+  comment             = "ComputerPets pet bundle CDN. Edge redeem ADR 0063. API WAF is the ALB (ADR 0074)."
   price_class         = var.price_class
   default_root_object = ""
 

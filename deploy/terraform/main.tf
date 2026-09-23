@@ -5,9 +5,10 @@
 #   external-secret…     — ESO contract for computerpets-secrets
 #   (no deploy/terraform prior to this slice)
 #
-# This root wires Postgres, Redis, secret shells, CDN, and WAF stubs that match
-# what the house already expects. Deny-safe defaults: no public DBs, no house
-# crypto in tfvars/state. AWS is the reference provider; keepers may fork.
+# This root wires Postgres, Redis, secret shells, CDN, and the regional API
+# WAF (ADR 0074). Deny-safe defaults: no public DBs, no house crypto in
+# tfvars/state, WAF plan refuses an empty ALB ARN. AWS is the reference
+# provider; keepers may fork.
 
 locals {
   networking_ready = var.vpc_id != "" && length(var.private_subnet_ids) > 0
@@ -64,8 +65,28 @@ module "waf" {
   count  = var.enable_waf ? 1 : 0
   source = "./modules/waf"
 
-  project_name       = var.project_name
-  environment        = var.environment
-  rate_limit         = var.waf_rate_limit
-  associate_alb_arn  = var.waf_associate_alb_arn
+  project_name      = var.project_name
+  environment       = var.environment
+  associate_alb_arn = var.waf_associate_alb_arn
+}
+
+# Plan-time gate the test suite can name. The module association carries the
+# same precondition; this root object fails the plan when enable_waf is on
+# and the ARN is missing or is not an application load balancer.
+resource "terraform_data" "waf_association_gate" {
+  input = var.waf_associate_alb_arn
+
+  lifecycle {
+    precondition {
+      condition = (
+        !var.enable_waf ||
+        (
+          length(var.waf_associate_alb_arn) > 0 &&
+          startswith(var.waf_associate_alb_arn, "arn:aws:elasticloadbalancing:") &&
+          strcontains(var.waf_associate_alb_arn, ":loadbalancer/app/")
+        )
+      )
+      error_message = "WAF association is fail-closed (ADR 0074). Set waf_associate_alb_arn to the API application load balancer ARN (arn:aws:elasticloadbalancing:…:loadbalancer/app/…). An unassociated ACL is not in front of the rate limiter. Set enable_waf=false only when you intentionally have no edge gate."
+    }
+  }
 }
