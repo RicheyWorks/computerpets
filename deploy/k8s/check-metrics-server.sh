@@ -274,7 +274,7 @@ need_not_grep "$KUSTOM" '^[[:space:]]*-[[:space:]]*metrics-server\.yaml[[:space:
 need_grep "$KUSTOM" 'metrics-server\.yaml' "kustomization comment names the omitted file"
 need_grep "$HPA" 'metrics-server\.yaml' "hpa.yaml names the install path"
 need_grep "$HPA" 'minReplicas: 3' "HPA floor stays 3"
-need_grep "$HPA" 'maxReplicas: 10' "HPA ceiling stays 10"
+need_grep "$HPA" 'maxReplicas: 6' "HPA ceiling stays 6"
 need_not_grep "$HPA" 'image:.*metrics-server' "hpa.yaml does not embed the addon image"
 need_grep "$BLUE" 'replicas: 2' "blue local replica count stays 2"
 need_grep "$GREEN" 'replicas: 0' "green stays the idle slot"

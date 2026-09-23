@@ -57,7 +57,7 @@ need_grep "$HPA" '^kind: HorizontalPodAutoscaler$' "kind is HorizontalPodAutosca
 need_grep "$HPA" 'name: computerpets-blue' "scale target is the blue API deployment"
 need_grep "$HPA" 'kind: Deployment' "scale target is a Deployment"
 need_grep "$HPA" 'minReplicas: 3' "floor is 3"
-need_grep "$HPA" 'maxReplicas: 10' "ceiling is 10"
+need_grep "$HPA" 'maxReplicas: 6' "ceiling is 6"
 need_grep "$HPA" 'name: cpu' "cpu is a metric"
 need_grep "$HPA" 'averageUtilization: 70' "cpu target is 70 percent of the request"
 need_grep "$HPA" 'name: memory' "memory is a metric"

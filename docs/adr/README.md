@@ -124,7 +124,8 @@ address, or an API that is not on `main`.
 | [0103](0103-cluster-autoscaler-salvo-early-stop.md) | The salvo keeps the `1m` budget when a later option does not start (provision time and node-group backoff stay at the v1.36.1 defaults; the next main loop is the retry; kind stays off the file) | Accepted |
 | [0104](0104-per-zone-node-max.md) | Per-zone API node-group max is 20 (twice the HPA ceiling; Cluster Autoscaler reads Auto Scaling group `MaxSize` and cannot lift it; the old max of 10 is refused; kind stays off the file) | Accepted (min of 1 superseded in part by 0105) |
 | [0105](0105-api-hostname-floor.md) | Two hostnames per API zone for the HPA floor (`min_size` 2 and create-time `desired_size` 2; two healthy zones are four hostnames; HPA min stays 3 because the PDB keeps 2; the old floor of 1 is refused; no `minDomains`; kind stays off the pool) | Accepted (single-zone floor superseded in part by 0106) |
-| [0106](0106-api-single-zone-hostname-floor.md) | Three hostnames in the one Ready API zone (`min_size` 3 and create-time `desired_size` 3; one Ready zone holds the HPA floor as 1 and 1 and 1; the zone gate stays two; the floor of 2 is refused; no `minDomains`; kind stays off the pool) | Accepted |
+| [0106](0106-api-single-zone-hostname-floor.md) | Three hostnames in the one Ready API zone (`min_size` 3 and create-time `desired_size` 3; one Ready zone holds the HPA floor as 1 and 1 and 1; the zone gate stays two; the floor of 2 is refused; no `minDomains`; kind stays off the pool) | Accepted (healthy-pool ceiling superseded in part by 0107) |
+| [0107](0107-api-hostname-ceiling.md) | HPA ceiling matches the six healthy API hostnames (`maxReplicas` 6; two zones times `min_size` 3; the old ceiling of 10 is refused; `min_size` stays 3; no `minDomains`; kind stays off the HPA and the pool) | Accepted |
 
 ## How to add one
 

@@ -120,7 +120,7 @@ assert_exit 1 "check fails when min drops below 1" \
 
 copy_tree "${BROKEN}"
 replace_once "${BROKEN}/deploy/k8s/hpa.yaml" \
-  "  maxReplicas: 10" \
+  "  maxReplicas: 6" \
   "  maxReplicas: 21"
 assert_exit 1 "check fails when the HPA pod ceiling exceeds the zone max" \
   "${BROKEN}/deploy/k8s/check-cluster-autoscaler-zone-max.sh"

@@ -97,7 +97,7 @@ need_file "$KUSTOM"
 
 echo "== node group ceiling and desired size =="
 need_grep "$POOL" 'desired-size-owner=cluster-autoscaler' "node pool names the desired-size owner"
-need_grep "$POOL" 'hpa-max-replicas=10' "node pool names the HPA ceiling"
+need_grep "$POOL" 'hpa-max-replicas=6' "node pool names the HPA ceiling"
 need_grep "$POOL" 'max_size_per_zone[[:space:]]*=[[:space:]]*20' "max size per zone is 20"
 need_grep "$POOL" 'desired_size_per_zone[[:space:]]*=[[:space:]]*3' "create-time desired size is 3 (ADR 0106)"
 need_grep "$POOL" 'min_size_per_zone[[:space:]]*=[[:space:]]*3' "min size per zone is 3 (ADR 0106)"
@@ -106,7 +106,7 @@ need_grep "$POOL" 'aws_autoscaling_group_tag" "cluster_autoscaler"' "discovery t
 need_grep "$POOL" 'k8s.io/cluster-autoscaler/enabled' "enabled discovery tag is present"
 need_grep "$POOL" '"owned"' "cluster discovery tag value is owned"
 need_grep "$POOL" 'propagate_at_launch[[:space:]]*=[[:space:]]*false' "discovery tags are not instance tags"
-need_grep "$HPA" 'maxReplicas: 10' "HPA ceiling is still 10"
+need_grep "$HPA" 'maxReplicas: 6' "HPA ceiling is still 6"
 need_not_grep "$POOL" 'SetDesiredCapacity' "node role is not granted desired-capacity writes"
 need_not_grep "$POOL" 'AssumeRoleWithWebIdentity' "node role is not the autoscaler role"
 need_not_grep "$POOL" 'resource "aws_autoscaling_group"' "node pool does not declare a raw ASG"
@@ -265,7 +265,7 @@ hpa_max = re.findall(r"(?m)^[ \t]*maxReplicas:[ \t]*(\d+)[ \t]*$", hpa)
 sizes = re.findall(r"(?m)^[ \t]*max_size_per_zone[ \t]*=[ \t]*(\d+)[ \t]*$", pool_code)
 desired = re.findall(r"(?m)^[ \t]*desired_size_per_zone[ \t]*=[ \t]*(\d+)[ \t]*$", pool_code)
 mins = re.findall(r"(?m)^[ \t]*min_size_per_zone[ \t]*=[ \t]*(\d+)[ \t]*$", pool_code)
-check(hpa_max == ["10"], "HPA file has one ceiling and it is 10")
+check(hpa_max == ["6"], "HPA file has one ceiling and it is 6")
 check(len(sizes) == 1 and int(sizes[0]) >= int(hpa_max[0] if hpa_max else "999"),
       "node-group max is at least the HPA ceiling")
 check(desired == ["3"], "create-time desired size is 3 (ADR 0106)")

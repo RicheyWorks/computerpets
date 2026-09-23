@@ -92,7 +92,7 @@ need_grep "$README" 'standby is not the scaler' "README says the standby is not 
 need_grep "$KUSTOM" 'ADR 0101' "kustomize comment names the leader scale path"
 need_not_grep "$KUSTOM" '^[[:space:]]*-[[:space:]]*cluster-autoscaler\.yaml[[:space:]]*$' "kustomization still omits cluster-autoscaler"
 need_not_grep_body "$MANIFEST" 'minDomains:' "zone spread does not set minDomains"
-need_grep "$HPA" 'maxReplicas: 10' "HPA ceiling is still 10"
+need_grep "$HPA" 'maxReplicas: 6' "HPA ceiling is still 6"
 
 python3 - "$MANIFEST" "$POOL" "$CA" "$ROOT_MAIN" <<'PY'
 import pathlib, re, sys

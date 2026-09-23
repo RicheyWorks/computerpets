@@ -175,7 +175,10 @@ blue `replicas: 2`, green `replicas: 0`. Postgres and Redis stay at 1.
 
 The prod autoscaler targets Deployment `computerpets-blue` only
 (the Service's default live color). `minReplicas` is 3. `maxReplicas`
-is 10. CPU scales at 70% of the `250m` request. Memory scales at an
+is 6 ([ADR 0107](../../docs/adr/0107-api-hostname-ceiling.md)). That is
+two zones times `min_size` 3, so a healthy pool holds the ceiling at
+one pod per hostname. The old ceiling of 10 stacked on those six
+hostnames and is refused. CPU scales at 70% of the `250m` request. Memory scales at an
 absolute `800Mi` (above the `512Mi` request, under the `1Gi` limit),
 not at a percent of the request. A JVM that sits on its heap must not
 be read as load.
@@ -316,6 +319,8 @@ zone value also leaves them Pending.
 ./deploy/k8s/check-api-hostname-floor.test.sh
 ./deploy/k8s/check-api-single-zone-hostname-floor.sh
 ./deploy/k8s/check-api-single-zone-hostname-floor.test.sh
+./deploy/k8s/check-api-hostname-ceiling.sh
+./deploy/k8s/check-api-hostname-ceiling.test.sh
 ```
 
 A cutover does not patch this. Scaling green creates pods from the
@@ -451,8 +456,10 @@ deploy/k8s` does not install it. Kind and minikube set
 
 The prod scaler runs in `kube-system` and changes desired capacity on the
 Auto Scaling groups behind the per-zone node groups. Each group's max is
-20, twice the HPA ceiling of 10
+20
 ([ADR 0104](../../docs/adr/0104-per-zone-node-max.md)).
+The HPA ceiling is 6, so six healthy hostnames hold it at one pod each
+([ADR 0107](../../docs/adr/0107-api-hostname-ceiling.md)).
 The leader reads that number from the group's `MaxSize`. It does not
 raise it. The minimum is 3 per zone
 ([ADR 0106](../../docs/adr/0106-api-single-zone-hostname-floor.md)).
