@@ -342,6 +342,7 @@ test("Sip, Brick, called guests, and plants use the same contain-bottom boxes", 
   assert.equal(Surface.BOX.brick, 112);
   assert.equal(Surface.BOX.called, 128);
   assert.equal(Surface.BOX.plant, 128);
+  assert.equal(Surface.BOX.guest, 128);
   assert.equal(Robin.DEST_PX, Surface.BOX.brick);
   assert.equal(Plants.DEST_PX, Surface.BOX.plant);
   assert.equal(Call.GUEST_DEST, Surface.BOX.called);
@@ -349,6 +350,8 @@ test("Sip, Brick, called guests, and plants use the same contain-bottom boxes", 
   assert.deepEqual(Surface.fitContainBottom(160, 80, 112), { x: 0, y: 56, w: 112, h: 56 });
   assert.deepEqual(Surface.fitContainBottom(80, 160, 128), { x: 32, y: 0, w: 64, h: 128 });
   assert.deepEqual(Surface.fitContainBottom(160, 80, 128), { x: 0, y: 64, w: 128, h: 64 });
+  assert.match(styleSrc, /#guest\s*\{[^}]*width:\s*128px/);
+  assert.match(styleSrc, /#guest\s*\{[^}]*height:\s*128px/);
   assert.match(styleSrc, /#bird\s*\{[^}]*width:\s*112px/);
   assert.match(styleSrc, /#bird\s*\{[^}]*height:\s*112px/);
   assert.match(styleSrc, /#robin\s*\{[^}]*width:\s*112px/);
@@ -356,12 +359,15 @@ test("Sip, Brick, called guests, and plants use the same contain-bottom boxes", 
   assert.match(styleSrc, /\.desk-plant\s*\{[^}]*width:\s*128px/);
   assert.match(htmlSrc, /<canvas id="bird" data-hit data-surface="pending"/);
   assert.match(htmlSrc, /<canvas id="robin" data-hit data-surface="pending"/);
-  assert.match(htmlSrc, /<img id="guest"/);
+  assert.match(htmlSrc, /<canvas id="guest" data-hit data-surface="pending"/);
+  assert.doesNotMatch(htmlSrc, /<img id="guest"/);
   assert.doesNotMatch(htmlSrc, /<img id="bird"/);
   assert.doesNotMatch(htmlSrc, /<img id="robin"/);
   assert.match(petSrc, /paintActor\(birdEl,/);
   assert.match(petSrc, /paintActor\(robinEl,/);
   assert.match(petSrc, /paintActor\(node, src, "plant"\)/);
+  assert.match(petSrc, /paintActor\(guestEl,/);
+  assert.doesNotMatch(petSrc, /guestEl\.src\s*=/);
   assert.match(petSrc, /createElement\("canvas"\)/);
   assert.doesNotMatch(petSrc, /birdEl\.src\s*=/);
   assert.doesNotMatch(petSrc, /robinEl\.setAttribute\(\s*"src"/);
@@ -373,6 +379,7 @@ test("Sip, Brick, called guests, and plants use the same contain-bottom boxes", 
   assert.doesNotMatch(callSrc, /setAttribute\(\s*"src"/);
   assert.match(gateSrc, /0126/);
   assert.match(gateSrc, /0127/);
+  assert.match(gateSrc, /0128/);
   assert.doesNotMatch(gateSrc, /paintHeld/);
   assert.doesNotMatch(surfaceSrc, /getContext\(\s*["']webgl/);
 });
@@ -527,4 +534,79 @@ test("called guests paint a catalog frame on a canvas and do not assign an img s
   assert.equal(plain.src, "keep");
   assert.equal(plain.dataset.surface, "refused");
   assert.equal(plain.dataset.frame, undefined);
+});
+
+test("the visit guest and the desk /demo pet paint on the shared canvas and stay blank when it refuses", () => {
+  const livingSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "living-pet.tsx"), "utf8");
+  const roomSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "companion-room.tsx"), "utf8");
+  const demoPaintSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "desk-sprite-surface.ts"), "utf8");
+  assert.equal(Surface.BOX.guest, 128);
+  assert.equal(Surface.catalogFrame("/sprites/cat/idle/1.png"), true);
+  assert.equal(Surface.catalogFrame("sprites/cat/idle/1.png"), true);
+  assert.equal(Surface.catalogFrame("//sprites/cat/idle/1.png"), false);
+  assert.equal(Surface.catalogFrame("https://example.test/sprites/cat/idle/1.png"), false);
+  assert.equal(Surface.catalogFrame("/sprites/../secret.png"), false);
+
+  const guestCtx = fake2d();
+  const guest = fakeCanvas().provide("2d", guestCtx);
+  guest.src = "";
+  guest.setAttribute = (name) => {
+    if (name === "src") throw new Error("img-src");
+  };
+  const demoSrc = "/sprites/cat/idle/1.png";
+  const Image = imagesFrom(fixture.frames.concat([{ src: demoSrc, width: 80, height: 160 }]));
+  const opts = { OffscreenCanvas: null, Image, devicePixelRatio: 1 };
+  const guestPaint = Surface.paintHeld(guest, fixture.frames[0].src, Object.assign({ cssSize: Surface.BOX.guest }, opts));
+  assert.equal(guestPaint.ok, true);
+  assert.equal(guest.dataset.surface, "canvas");
+  assert.equal(guest.dataset.frame, fixture.frames[0].src);
+  assert.equal(guest.width, 128);
+  assert.deepEqual(drawCall(guestCtx)[0].slice(1), [fixture.frames[0].src, 32, 0, 64, 128]);
+  assert.equal(guest.src, "");
+
+  const demoCtx = fake2d();
+  const demo = fakeCanvas().provide("2d", demoCtx);
+  demo.src = "";
+  demo.setAttribute = (name) => {
+    if (name === "src") throw new Error("img-src");
+  };
+  const demoPaint = Surface.paintHeld(demo, demoSrc, Object.assign({ cssSize: Surface.BOX.host }, opts));
+  assert.equal(demoPaint.ok, true);
+  assert.equal(demo.dataset.surface, "canvas");
+  assert.equal(demo.dataset.frame, demoSrc);
+  assert.equal(demo.width, 176);
+  assert.deepEqual(drawCall(demoCtx)[0].slice(1), [demoSrc, 44, 0, 88, 176]);
+  const cached = Surface.paintHeld(demo, demoSrc, Object.assign({ cssSize: Surface.BOX.host }, opts));
+  assert.equal(cached.cached, true);
+  assert.equal(drawCall(demoCtx).length, 1);
+
+  const closed = fakeCanvas();
+  closed.src = "keep";
+  closed.setAttribute = () => {
+    throw new Error("img-src");
+  };
+  const refused = Surface.paintHeld(closed, demoSrc, Object.assign({ cssSize: Surface.BOX.host }, opts));
+  assert.equal(refused.ok, false);
+  assert.equal(refused.reason, "canvas-context");
+  assert.equal(closed.dataset.surface, "refused");
+  assert.equal(closed.dataset.frame, undefined);
+  assert.equal(closed.src, "keep");
+
+  assert.match(htmlSrc, /<canvas id="guest" data-hit data-surface="pending"/);
+  assert.doesNotMatch(htmlSrc, /<img id="guest"/);
+  assert.match(petSrc, /paintActor\(guestEl, [^;]*"guest"\)/);
+  assert.doesNotMatch(petSrc, /guestEl\.src\s*=/);
+  assert.match(roomSrc, /spriteSurface=\{demoWindow\}/);
+  assert.match(livingSrc, /spriteSurface \? \(/);
+  assert.match(livingSrc, /<canvas/);
+  assert.match(livingSrc, /paintDemoFrame\(canvasRef\.current, src\)/);
+  assert.match(livingSrc, /<img/);
+  assert.match(demoPaintSrc, /paintHeld/);
+  assert.match(demoPaintSrc, /BOX\.host/);
+  assert.doesNotMatch(demoPaintSrc, /\.src\s*=/);
+  assert.doesNotMatch(demoPaintSrc, /setAttribute\(\s*"src"/);
+  assert.doesNotMatch(demoPaintSrc, /getContext\(\s*["']webgl/);
+  assert.doesNotMatch(livingSrc, /getContext\(\s*["']webgl/);
+  assert.match(gateSrc, /0128/);
+  assert.doesNotMatch(gateSrc, /paintHeld/);
 });

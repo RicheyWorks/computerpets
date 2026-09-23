@@ -1,6 +1,6 @@
 # 0127. Sip, Brick, called guests, and plants draw on the same canvas
 
-- **Status:** Accepted
+- **Status:** Accepted (visit guest and desk `/demo` pet moved to [0128](0128-chromium-visit-and-demo-sprites.md))
 - **Date:** 2026-09-23
 - **Code:** `desktop/renderer/sprite-surface.js`, `desktop/renderer/pet.js`, `desktop/renderer/call-guests.js`, `desktop/renderer/sprite-surface.test.cjs`
 
@@ -22,13 +22,13 @@ This slice does not reopen presence/CSP, Hikari, bundle zip, cosign, CDN, secret
 2. **Which surface.** The same rule as the host pet. When `OffscreenCanvas` can create a 2d context and the visible canvas can take a bitmap, the frame is drawn offscreen and transferred. When `OffscreenCanvas` is missing or its constructor throws, the visible canvas 2d context draws the same fit. Sip and Brick are `<canvas id="bird">` and `<canvas id="robin">`. Called guests and plants are canvases created for those nodes. None of them is a WebGL context.
 3. **What stays closed.** No canvas, no image decoder, an OffscreenCanvas whose 2d context is null, or a bitmap renderer that cannot take the bitmap: `data-surface` is `refused`, `data-frame` is unset, and the overlay does not assign an `img` src. A decode error or a zero-size bitmap does not claim the frame. A frame that already painted stays until a later good frame replaces it. Width and height attributes are not written onto a canvas, because that clears the backing store this surface owns.
 4. **What the gate still is.** `gpu-path.cjs` is unchanged except the cross-link. `gpu_compositing`, `softwareRendering`, and the software GL names still open or close the glass. This module does not read `getGPUFeatureStatus()` or `getGPUInfo()`. It does not pass `--use-angle`. A software accept still means the window may open. It does not turn a refused canvas into an `img`.
-5. **What stays an image.** The visit guest `#guest` and the desk `/demo` pet stay `img` elements. The blotter stays the Qt OpenGL viewport. Catalog stays 221.
+5. **What stayed an image in this slice.** The visit guest `#guest` and the desk `/demo` pet were still `img` elements. They draw on this same canvas now ([0128](0128-chromium-visit-and-demo-sprites.md)). The living desk outside `/demo`, and Sip, Brick, called guests, and plants on that desk, stay image elements. The blotter stays the Qt OpenGL viewport. Catalog stays 221.
 
 ## Consequences
 
 - A keeper whose compositor is hardware-accelerated, and whose Chromium can create the canvas, sees Sip, Brick, a called guest, and a plant on that surface. The tray still says `Chromium GPU compositor` when the gate is hardware.
 - A keeper whose canvas context cannot be created does not get an `img` that pretends to be that surface. The node stays blank.
 - OffscreenCanvas is the preferred surface. It is not a shader and not a texture API this tree owns. WebGL is not opened.
-- The visit guest and the desk pet are still image elements.
+- The visit guest and the desk `/demo` pet draw on this same canvas ([0128](0128-chromium-visit-and-demo-sprites.md)).
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** the visit guest on the overlay and the desk `/demo` pet are still image elements. A later slice can draw those same catalog sprites on this canvas. The hardware gate still applies. Do not start DirectX 12, Vulkan, Solana, or Pane. Catalog stays 221.
+- **Next gap:** the living desk outside `/demo` still draws the room pet as an image, and Sip, Brick, called guests, and plants on that desk stay image elements. A later slice can draw those same catalog sprites on this canvas. The hardware gate still applies to the overlay. Do not start DirectX 12, Vulkan, Solana, or Pane. Catalog stays 221.

@@ -145,7 +145,8 @@ address, or an API that is not on `main`.
 | [0124](0124-mac-gpu-temp-power.md) | Mac GPU temperature and power stay unread (IOAccelerator has no degree or watt; a planted key stays off the line; powermetrics, IOReport, and AppleSMC are not read) | Accepted (Chromium overlay GPU path moved to 0125) |
 | [0125](0125-chromium-overlay-gpu-path.md) | The overlay opens on Chromium's GPU compositor, or it stays closed (software fallback needs `gpu-path.json` `expect: software`; unread and off stay closed) | Accepted (host pet frame moved to 0126) |
 | [0126](0126-chromium-sprite-surface.md) | The host pet draws on a canvas Chromium composites (OffscreenCanvas when that context exists; a missing context stays blank; the 0125 gate still opens the glass) | Accepted (Sip, Brick, called guests, and plants moved to 0127) |
-| [0127](0127-chromium-overlay-company-sprites.md) | Sip, Brick, called guests, and plants draw on that same canvas (the 0125 gate still opens the glass; a missing context stays blank) | Accepted |
+| [0127](0127-chromium-overlay-company-sprites.md) | Sip, Brick, called guests, and plants draw on that same canvas (the 0125 gate still opens the glass; a missing context stays blank) | Accepted (visit guest and desk `/demo` pet moved to 0128) |
+| [0128](0128-chromium-visit-and-demo-sprites.md) | The visit guest and the desk `/demo` pet draw on that same canvas (the 0125 gate still opens the glass; a missing context stays blank) | Accepted |
 
 ## How to add one
 
