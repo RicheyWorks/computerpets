@@ -6,7 +6,8 @@
 #   (no deploy/terraform prior to this slice)
 #
 # This root wires Postgres, Redis, secret shells, CDN, the regional API
-# WAF (ADR 0074), and the API HTTPS listener (ADR 0077). Deny-safe defaults:
+# WAF (ADR 0074), the API HTTPS listener (ADR 0077), and private multi-AZ
+# API workers (ADR 0082). Deny-safe defaults:
 # no public DBs, no house crypto in tfvars/state, WAF plan refuses an empty
 # ALB ARN, listener plan refuses a missing ACM certificate. This root does
 # not call ACM. AWS is the reference provider; keepers may fork.
@@ -84,6 +85,18 @@ module "api_listener" {
   target_group_arn = var.api_listener_target_group_arn
 }
 
+module "node_pool" {
+  count  = var.enable_node_pool ? 1 : 0
+  source = "./modules/node_pool"
+
+  project_name   = var.project_name
+  environment    = var.environment
+  aws_region     = var.aws_region
+  cluster_name   = var.eks_cluster_name
+  subnets        = var.node_pool_subnets
+  instance_types = var.node_pool_instance_types
+}
+
 # Plan-time gate the test suite can name. The module association carries the
 # same precondition; this root object fails the plan when enable_waf is on
 # and the ARN is missing or is not an application load balancer.
@@ -137,6 +150,41 @@ resource "terraform_data" "api_listener_tls_gate" {
         )
       )
       error_message = "API listener TLS is fail-closed (ADR 0077). Set api_listener_alb_arn to the keeper-owned API ALB, api_listener_certificate_arn to an existing ACM certificate ARN, and api_listener_target_group_arn to that ALB's target group. This root does not create an ACM certificate and does not create the ALB. Port 80 redirects to 443. When enable_waf is true the listener ALB must be waf_associate_alb_arn. Set enable_api_listener_tls=false only when you intentionally have no public TLS listener (local or in-cluster HTTP)."
+    }
+  }
+}
+
+# Plan-time gate for the API worker node pool (ADR 0082). One managed node
+# group per private subnet, at least two availability zones. This root does
+# not create the EKS cluster, the VPC, or the subnets. Empty defaults pass
+# terraform validate; plan refuses them while enable_node_pool is true.
+resource "terraform_data" "node_pool_gate" {
+  input = {
+    enabled = var.enable_node_pool
+    cluster = var.eks_cluster_name
+    subnets = var.node_pool_subnets
+    region  = var.aws_region
+  }
+
+  lifecycle {
+    precondition {
+      condition = (
+        !var.enable_node_pool ||
+        (
+          length(trimspace(var.eks_cluster_name)) > 0 &&
+          can(regex("^[A-Za-z0-9][A-Za-z0-9_-]{0,99}$", var.eks_cluster_name)) &&
+          length(var.node_pool_subnets) >= 2 &&
+          length(distinct(values(var.node_pool_subnets))) == length(var.node_pool_subnets) &&
+          alltrue([
+            for az, subnet in var.node_pool_subnets :
+            length(az) == length(var.aws_region) + 1 &&
+            startswith(az, var.aws_region) &&
+            can(regex("^[a-z]{2}-[a-z]+-[0-9][a-z]$", az)) &&
+            can(regex("^subnet-([0-9a-f]{8}|[0-9a-f]{17})$", subnet))
+          ])
+        )
+      )
+      error_message = "API node pool is fail-closed (ADR 0082). Set eks_cluster_name to the keeper-owned EKS cluster and node_pool_subnets to at least two private subnet ids keyed by availability zone in aws_region (us-east-1a = \"subnet-…\"). One group per zone, no public IP, no SSH. This root does not create the cluster, the VPC, or the subnets. Set enable_node_pool=false only when you intentionally have no workers here (local kind or minikube)."
     }
   }
 }

@@ -10,6 +10,7 @@ variables {
   enable_cdn              = false
   enable_waf              = true
   enable_api_listener_tls = false
+  enable_node_pool        = false
 }
 
 run "empty_alb_arn_is_refused" {

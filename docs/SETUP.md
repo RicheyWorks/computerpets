@@ -419,8 +419,10 @@ Local replica counts stay 2 and 0
 They also prefer different zones (`topology.kubernetes.io/zone`, same
 `maxSkew`, `ScheduleAnyway`, and `nodeTaintsPolicy: Honor`). Hard zone
 spread is not set, so a single-zone cluster and nodes that omit the zone
-label still schedule. Prod should run workers in at least two availability
-zones. This repo does not provision that pool
+label still schedule. Prod workers are one private EKS managed node group
+per availability zone, at least two ([ADR 0082](adr/0082-multi-az-node-pool.md)).
+This kustomization does not create them. `enable_node_pool=false` is the
+local switch. The zone preference stays soft
 ([ADR 0081](adr/0081-api-pod-zone-spread.md)).
 
 Prefer External Secrets Operator or Vault Agent to fill
