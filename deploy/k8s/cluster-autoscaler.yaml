@@ -279,6 +279,11 @@ spec:
           # ADR 0104. Each zone's max_size is 20. The leader reads that
           # as the Auto Scaling group MaxSize. It does not raise it.
           # --max-nodes-total stays unset.
+          # ADR 0109. That 20 stays above a one-zone floor of 8
+          # (HPA ceiling 3 + these 2 pods + metrics-server 2 + one
+          # drain node). Twice the HPA ceiling is 6 and is refused.
+          # This set binds on min_size 3, so MaxLimitReached at 20
+          # is unreachable. Do not set minDomains.
           # ADR 0105. Each zone's min_size was 2. Two healthy zones were
           # four API hostnames. One unhealthy zone still stacked 2 and 1.
           # ADR 0106. Each zone's min_size is 3. One Ready zone is three
