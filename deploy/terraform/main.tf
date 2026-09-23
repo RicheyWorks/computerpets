@@ -28,6 +28,7 @@ module "postgres" {
   instance_class       = var.postgres_instance_class
   db_name              = var.postgres_db_name
   username             = var.postgres_username
+  ssl_root_cert        = var.postgres_ssl_root_cert
 }
 
 module "redis" {

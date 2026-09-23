@@ -13,6 +13,7 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
       - SERVER_PORT=8081
       # Database (wins over the H2 default in application.yml / application-dev.yml)
+      # Local Postgres has no TLS. Leave POSTGRES_SSL_REQUIRED unset (ADR 0076).
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/computerpets
       - SPRING_DATASOURCE_USERNAME=computerpets
       - SPRING_DATASOURCE_PASSWORD=password

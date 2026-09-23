@@ -68,6 +68,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Single-use download JWT — `JwtService` mints `jti`. `POST /api/download` claims `download:jwt:{jti}` once (`SET NX`, TTL `jwt.ttl-minutes` + 60s). A second mint is **409**. A bearer with no `jti` is **401**. Store down is **503**. Unlock still sends the bearer; it does not add a jti field (ADR 0073). Catalog stays 221.
   - [x] Regional WAF in front of those buckets — default block, 10/30/60/60 per minute on the API ALB, signed redeem excluded. Plan refuses an empty ALB ARN (ADR 0074). Catalog stays 221.
   - [x] Redis AUTH and transit TLS — optional `REDIS_PASSWORD` / `REDIS_PASSWORD_FILE` and `REDIS_SSL` on the one Lettuce client. Prod fails closed when AUTH is required and the password is missing. ElastiCache enables AUTH and transit encryption together when `redis_auth_token` is set (ADR 0075). Catalog stays 221.
+  - [x] Postgres transit TLS — managed JDBC `sslmode=require` (or `verify-full` when a CA path is set) and RDS `rds.force_ssl=1`. Prod refuses a half-set pair. Local and in-cluster Postgres stay cleartext (ADR 0076). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload
@@ -116,6 +117,7 @@ All critical items required before any public or limited production exposure hav
 - **3.2b Database & Persistence Maturity**
   - [x] Soft deletion + audit logging for licenses (`deletedAt` on revoke; `license_audit_events` ISSUED / REVOKED / DOWNLOAD; ADR 0058)
   - [x] Hikari pool defaults + optional deny-safe read replica (`SPRING_DATASOURCE_REPLICA_URL`; ADR 0059)
+  - [x] Postgres transit TLS — `sslmode=require` or `verify-full` on the managed JDBC URL; `rds.force_ssl=1`; prod fails closed when half-set (ADR 0076)
 
 - **3.3 Deployment & Environments**
   - [x] Proper Spring profiles (`dev` / `staging` / `prod`)
@@ -634,6 +636,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-09-23 (Redis AUTH and transit TLS — ADR 0075. DX12/Vulkan was not started. Catalog 221.)
+**Last Updated:** 2026-09-23 (Postgres transit TLS — ADR 0076. DX12/Vulkan was not started. Catalog 221.)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

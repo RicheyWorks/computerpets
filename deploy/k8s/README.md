@@ -97,6 +97,12 @@ and `REDIS_TIMEOUT` stay on the ConfigMap. Optional managed AUTH
 `REDIS_SSL=true` plus `REDIS_AUTH_REQUIRED=true`. Do not invent a token
 in git. `openssl rand -hex 16` matches the ElastiCache character rules.
 
+In-cluster Postgres has no TLS. Leave `POSTGRES_SSL_REQUIRED` unset. The
+managed URL from terraform includes `sslmode=require` (or `verify-full` when
+a CA path is set). Set `POSTGRES_SSL_REQUIRED=true` with that URL. Mount a
+real PEM before setting `POSTGRES_SSL_ROOT_CERT`. Do not invent a bundle
+([ADR 0076](../../docs/adr/0076-postgres-transit-tls.md)).
+
 Optional provider env (add to the Secret or ConfigMap if you have real
 values — do not invent a collection address, itch game id, or Epic
 sandbox): `STEAM_API_KEY`, `STEAM_APP_ID`, `MICROSOFT_PRODUCT_ID`,

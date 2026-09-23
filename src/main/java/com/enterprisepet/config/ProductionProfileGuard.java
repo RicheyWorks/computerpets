@@ -20,9 +20,11 @@ import java.util.Set;
  * {@code prod}. Environment variables outrank {@code application-prod.yml}, so
  * this guard exists to catch {@code MICROSOFT_DEV_MODE=true},
  * {@code RATE_LIMIT_BACKEND=memory}, an H2 {@code SPRING_DATASOURCE_URL},
- * a misconfigured {@code SPRING_DATASOURCE_REPLICA_URL}, plain env
- * {@code Secret} injection without an External Secrets / {@code *_FILE} /
- * Vault-agent operator attestation ([ADR 0064](../../docs/adr/0064-secret-operator-prod-refuses-plain-env.md)),
+ * a misconfigured {@code SPRING_DATASOURCE_REPLICA_URL}, a half-configured
+ * Postgres TLS pair ([ADR 0076](../../docs/adr/0076-postgres-transit-tls.md)),
+ * plain env {@code Secret} injection without an External Secrets /
+ * {@code *_FILE} / Vault-agent operator attestation
+ * ([ADR 0064](../../docs/adr/0064-secret-operator-prod-refuses-plain-env.md)),
  * or a stale optional {@code COMPUTERPETS_KEYS_ROTATED_AT} stamp
  * ([ADR 0065](../../docs/adr/0065-secret-rotation-cadence-and-hsm.md)).
  */
@@ -109,14 +111,52 @@ public class ProductionProfileGuard {
                     + "Unset SPRING_DATASOURCE_REPLICA_URL or point it at a Postgres read replica.");
             }
         }
+        rejectUnsafePostgresTls();
         rejectPlainEnvSecrets();
         rejectUnsafeRedisAuth();
         rejectStaleKeysRotatedAt();
         log.info(
-                "Production profile guard passed (Postgres, Redis auth={}, ssl={}, microsoft.dev-mode=false, secrets source={}).",
+                "Production profile guard passed (Postgres ssl={}, Redis auth={}, ssl={}, microsoft.dev-mode=false, secrets source={}).",
+                postgresSslLabel(),
                 redisAuthRequired() ? "required" : "off",
                 redisSsl() ? "on" : "off",
                 plainSecretAllowed() ? "plain-local-override" : secretsSource.toLowerCase(Locale.ROOT));
+    }
+
+    /**
+     * Prod Postgres TLS is all-or-nothing (ADR 0076). Unset
+     * {@code POSTGRES_SSL_REQUIRED} and {@code POSTGRES_SSL_ROOT_CERT}, and a
+     * JDBC URL with no {@code sslmode}, keeps in-cluster cleartext. Managed
+     * RDS sets the flag and {@code sslmode=require}, or {@code verify-full}
+     * when a CA bundle path is set. A mixed pair refuses start. The CA path
+     * is never logged.
+     */
+    void rejectUnsafePostgresTls() {
+        PostgresJdbcSsl.rejectHalfConfigured(
+                datasourceUrl,
+                replicaDatasourceUrl,
+                postgresSslRequired(),
+                postgresSslRootCert());
+    }
+
+    private boolean postgresSslRequired() {
+        return flag("spring.datasource.ssl-required", "POSTGRES_SSL_REQUIRED");
+    }
+
+    private String postgresSslRootCert() {
+        String fromBinding = environment.getProperty("spring.datasource.ssl-root-cert");
+        if (fromBinding != null && !fromBinding.isBlank()) {
+            return fromBinding.trim();
+        }
+        String fromEnv = environment.getProperty("POSTGRES_SSL_ROOT_CERT");
+        return fromEnv == null ? "" : fromEnv.trim();
+    }
+
+    private String postgresSslLabel() {
+        if (!postgresSslRequired()) {
+            return "off";
+        }
+        return postgresSslRootCert().isBlank() ? "require" : "verify-full";
     }
 
     /**
