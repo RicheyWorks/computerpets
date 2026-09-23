@@ -32,7 +32,10 @@ test("web and overlay parse the same window TSV", () => {
   assert.deepEqual(Object.keys(taken[0]).sort(), ["height", "id", "width", "x", "y"]);
   assert.equal(Overlay.laterDoor("darwin"), W.LATER_DOOR);
   assert.equal(W.enumeratesOn("win32"), true);
-  assert.equal(W.laterDoor("linux"), "mac-linux-window-play");
+  assert.equal(W.enumeratesOn("linux"), true);
+  assert.equal(W.laterDoor("linux"), null);
+  assert.equal(W.laterDoor("darwin"), "mac-window-play");
+  assert.equal(Overlay.enumeratesOn("linux"), true);
 });
 
 test("overlay-self and the taskbar never become a climb target", () => {

@@ -14,7 +14,8 @@ export const TASKBAR_CLASS: Record<string, number> = {
 
 export const MIN_W = 80;
 export const MIN_H = 80;
-export const LATER_DOOR = "mac-linux-window-play";
+/** Mac window play is still a later door. Linux X11 enumerates. Do not invent Mac rects. */
+export const LATER_DOOR = "mac-window-play";
 
 export type RawWindow = {
   id?: string;
@@ -48,14 +49,27 @@ export type DeskWindow = {
 
 export type WorkArea = { x: number; y: number; width: number; height: number };
 
-export function enumeratesOn(platform: string | undefined) {
+export function isWindows(platform: string | undefined) {
   return platform === "win32" || /^Win/i.test(String(platform || ""));
 }
 
-/** Mac and Linux window play is a later door. Do not invent rects there. */
+export function isLinux(platform: string | undefined) {
+  return platform === "linux" || /^Linux/i.test(String(platform || ""));
+}
+
+export function isMac(platform: string | undefined) {
+  return platform === "darwin" || /^Mac/i.test(String(platform || ""));
+}
+
+export function enumeratesOn(platform: string | undefined) {
+  return isWindows(platform) || isLinux(platform);
+}
+
+/** A Mac does not invent window rects. Linux and Windows enumerate. */
 export function laterDoor(platform: string | undefined) {
   if (enumeratesOn(platform)) return null;
-  return LATER_DOOR;
+  if (isMac(platform)) return LATER_DOOR;
+  return null;
 }
 
 export function parseEnumText(text: string | undefined) {
