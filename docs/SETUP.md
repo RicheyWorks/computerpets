@@ -430,6 +430,12 @@ after create. `deploy/k8s/cluster-autoscaler.yaml` is not in this
 kustomization. Substitute `CLUSTER_NAME`, `AWS_REGION`, and the role ARN
 before applying it. `enable_node_pool=false` keeps the role off
 ([ADR 0083](adr/0083-cluster-autoscaler.md)).
+Resource metrics for that HPA are `deploy/k8s/metrics-server.yaml`
+(upstream v0.9.0, APIService `v1beta1.metrics.k8s.io`). It is not in
+this kustomization. Apply it before `hpa.yaml`, and only after
+`kubectl top` shows cpu and memory does the replica count move.
+`--kubelet-insecure-tls` is not set
+([ADR 0084](adr/0084-metrics-server.md)).
 
 Prefer External Secrets Operator or Vault Agent to fill
 `computerpets-secrets` rather than committing values into `secret.yaml`.
