@@ -1,6 +1,6 @@
 # 0093. Pin the API Deployments to the multi-AZ API node pool
 
-- **Status:** Accepted
+- **Status:** Accepted (the selector stays; zone `whenUnsatisfiable` is `DoNotSchedule` in [0095](0095-api-zone-hard-spread.md))
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/deployment-blue.yaml`; `deploy/k8s/deployment-green.yaml`; `deploy/k8s/check-api-node-pool.sh`
 

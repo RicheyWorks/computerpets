@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-# ADR 0081 — soft zone spread beside the hostname constraint (ADR 0080).
+# ADR 0081 — zone spread beside the hostname constraint (ADR 0080).
+# The zone action is DoNotSchedule (ADR 0095). Hostname stays
+# ScheduleAnyway. No minDomains, so one labeled zone still schedules.
 # No cluster. Does not kubectl apply. Local replica counts stay put.
-# DoNotSchedule is refused: it strands a single-zone cluster and nodes
-# that omit topology.kubernetes.io/zone.
+# A node that omits topology.kubernetes.io/zone is skipped. That is
+# honest. Do not flip the zone item back to ScheduleAnyway.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -85,13 +87,14 @@ check_zone() {
   ok "${name} has a zone topologySpreadConstraints item"
   if printf '%s\n' "${zone}" | grep -q 'maxSkew: 1' \
     && printf '%s\n' "${zone}" | grep -q 'topologyKey: topology.kubernetes.io/zone' \
-    && printf '%s\n' "${zone}" | grep -q 'whenUnsatisfiable: ScheduleAnyway' \
+    && printf '%s\n' "${zone}" | grep -q 'whenUnsatisfiable: DoNotSchedule' \
     && printf '%s\n' "${zone}" | grep -q 'nodeTaintsPolicy: Honor' \
+    && printf '%s\n' "${zone}" | grep -q 'nodeAffinityPolicy: Honor' \
     && printf '%s\n' "${zone}" | grep -q 'app: computerpets' \
     && printf '%s\n' "${zone}" | grep -q "color: ${color}"; then
-    ok "${name} soft-spreads color=${color} across zones"
+    ok "${name} hard-spreads color=${color} across zones"
   else
-    bad "${name} soft-spreads color=${color} across zones"
+    bad "${name} hard-spreads color=${color} across zones"
   fi
   if [ "${color}" = "blue" ]; then other="green"; else other="blue"; fi
   if printf '%s\n' "${zone}" | grep -q "color: ${other}"; then
@@ -99,10 +102,10 @@ check_zone() {
   else
     ok "${name} zone selector is not the other color"
   fi
-  if printf '%s\n' "${zone}" | grep -qE 'DoNotSchedule|minDomains:|matchLabelKeys:'; then
-    bad "${name} zone constraint stays soft, with no minDomains"
+  if printf '%s\n' "${zone}" | grep -qE 'ScheduleAnyway|minDomains:|matchLabelKeys:'; then
+    bad "${name} zone constraint is DoNotSchedule, with no minDomains"
   else
-    ok "${name} zone constraint stays soft, with no minDomains"
+    ok "${name} zone constraint is DoNotSchedule, with no minDomains"
   fi
   host="$(constraint_item "$file" "kubernetes.io/hostname")"
   if [ -n "${host}" ] \
@@ -131,8 +134,8 @@ need_file "$HOST_ADR"
 echo "== zone spread contract =="
 check_zone "$BLUE" blue "blue"
 check_zone "$GREEN" green "green"
-need_not_grep "$BLUE" 'whenUnsatisfiable: DoNotSchedule' "blue does not hard-fail an unspreadable zone"
-need_not_grep "$GREEN" 'whenUnsatisfiable: DoNotSchedule' "green does not hard-fail an unspreadable zone"
+need_grep "$BLUE" 'whenUnsatisfiable: DoNotSchedule' "blue zone spread is DoNotSchedule"
+need_grep "$GREEN" 'whenUnsatisfiable: DoNotSchedule' "green zone spread is DoNotSchedule"
 need_not_grep "$POSTGRES" 'topology.kubernetes.io/zone' "postgres scaffolding is not zone-spread"
 need_not_grep "$REDIS" 'topology.kubernetes.io/zone' "redis scaffolding is not zone-spread"
 
@@ -177,11 +180,11 @@ if command -v kubectl >/dev/null 2>&1; then
     zone_n="$(grep -c 'topologyKey: topology.kubernetes.io/zone' "${kust_out}" || true)"
     host_n="$(grep -c 'topologyKey: kubernetes.io/hostname' "${kust_out}" || true)"
     soft_n="$(grep -c 'whenUnsatisfiable: ScheduleAnyway' "${kust_out}" || true)"
-    if [ "${zone_n}" = "2" ] && [ "${host_n}" = "2" ] && [ "${soft_n}" = "4" ] \
-      && ! grep -q 'whenUnsatisfiable: DoNotSchedule' "${kust_out}"; then
-      ok "kustomize output keeps soft zone spread beside hostname"
+    hard_n="$(grep -c 'whenUnsatisfiable: DoNotSchedule' "${kust_out}" || true)"
+    if [ "${zone_n}" = "2" ] && [ "${host_n}" = "2" ] && [ "${soft_n}" = "2" ] && [ "${hard_n}" = "2" ]; then
+      ok "kustomize output keeps hard zone spread beside soft hostname"
     else
-      bad "kustomize output keeps soft zone spread beside hostname (zone=${zone_n} host=${host_n} soft=${soft_n})"
+      bad "kustomize output keeps hard zone spread beside soft hostname (zone=${zone_n} host=${host_n} soft=${soft_n} hard=${hard_n})"
     fi
   else
     bad "kubectl kustomize deploy/k8s failed"

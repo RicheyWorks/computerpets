@@ -3,7 +3,8 @@
 # No cluster. Does not kubectl apply. No terraform apply.
 # Kind and minikube apply these Deployments. Nodes that omit the pool
 # label leave the API pods Pending. Do not delete the pool key for a laptop.
-# Hostname and zone spread stay ScheduleAnyway. HPA and PDB stay put.
+# Hostname spread stays ScheduleAnyway. Zone spread is DoNotSchedule
+# (ADR 0095). HPA and PDB stay put.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -87,10 +88,10 @@ done
 
 need_not_grep "$BLUE" 'nodeAffinityPolicy: Ignore' "blue does not ignore node affinity"
 need_not_grep "$GREEN" 'nodeAffinityPolicy: Ignore' "green does not ignore node affinity"
-need_not_grep "$BLUE" 'whenUnsatisfiable: DoNotSchedule' "blue spread stays soft"
-need_not_grep "$GREEN" 'whenUnsatisfiable: DoNotSchedule' "green spread stays soft"
-need_grep "$BLUE" 'whenUnsatisfiable: ScheduleAnyway' "blue keeps ScheduleAnyway"
-need_grep "$GREEN" 'whenUnsatisfiable: ScheduleAnyway' "green keeps ScheduleAnyway"
+need_grep "$BLUE" 'whenUnsatisfiable: ScheduleAnyway' "blue hostname stays ScheduleAnyway"
+need_grep "$GREEN" 'whenUnsatisfiable: ScheduleAnyway' "green hostname stays ScheduleAnyway"
+need_grep "$BLUE" 'whenUnsatisfiable: DoNotSchedule' "blue zone spread is DoNotSchedule"
+need_grep "$GREEN" 'whenUnsatisfiable: DoNotSchedule' "green zone spread is DoNotSchedule"
 need_grep "$BLUE" 'topologyKey: kubernetes.io/hostname' "blue keeps the hostname key"
 need_grep "$GREEN" 'topologyKey: kubernetes.io/hostname' "green keeps the hostname key"
 need_grep "$BLUE" 'topologyKey: topology.kubernetes.io/zone' "blue keeps the zone key"
@@ -164,11 +165,15 @@ for path, color, replicas in (
     check(len(constraints) == 2, f"parsed {color} has two spread constraints")
     got_keys = [item.get("topologyKey") for item in constraints]
     check(got_keys == keys, f"parsed {color} spread keys stay hostname then zone")
+    actions = {
+        "kubernetes.io/hostname": "ScheduleAnyway",
+        "topology.kubernetes.io/zone": "DoNotSchedule",
+    }
     for item in constraints:
         key = item.get("topologyKey")
         check(item.get("maxSkew") == 1, f"parsed {color} {key} maxSkew is 1")
-        check(item.get("whenUnsatisfiable") == "ScheduleAnyway",
-              f"parsed {color} {key} stays ScheduleAnyway")
+        check(item.get("whenUnsatisfiable") == actions.get(key),
+              f"parsed {color} {key} whenUnsatisfiable is {actions.get(key)}")
         check(item.get("nodeTaintsPolicy") == "Honor",
               f"parsed {color} {key} nodeTaintsPolicy stays Honor")
         check(item.get("nodeAffinityPolicy") == "Honor",
