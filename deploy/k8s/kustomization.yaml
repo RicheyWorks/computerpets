@@ -85,10 +85,12 @@ resources:
 # minDomains. Required zone anti-affinity is not set. The budget is
 # minAvailable 1.
 # metrics-server.yaml (ADR 0084, ADR 0085, ADR 0086, ADR 0087, ADR 0088,
-# ADR 0089, ADR 0098, ADR 0111) is also not applied here. The serving
-# cert chains to APIService caBundle and its DNS SAN is
+# ADR 0089, ADR 0098, ADR 0111, ADR 0112) is also not applied here. The
+# serving cert chains to APIService caBundle and its DNS SAN is
 # metrics-server.kube-system.svc. Kind and minikube do not apply that
-# cert. Its zone item is DoNotSchedule on
+# cert. The kubelet CA ConfigMap is written only after each supplied
+# leaf chains to it (ADR 0112). Kind and minikube do not apply that CA.
+# Its zone item is DoNotSchedule on
 # topology.kubernetes.io/zone, maxSkew 1. One labeled
 # zone still schedules. A node that omits the zone label does not.
 # Do not set minDomains. Kind and minikube do not apply the file.

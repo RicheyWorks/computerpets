@@ -1,6 +1,6 @@
 # 0086. Kubelet CA for metrics-server
 
-- **Status:** Accepted (the APIService `insecureSkipTLSVerify` clause is superseded in part by [0087](0087-metrics-server-serving-cert.md); the kubelet CA mount stays)
+- **Status:** Accepted (the APIService `insecureSkipTLSVerify` clause is superseded in part by [0087](0087-metrics-server-serving-cert.md); the unguarded ConfigMap create is superseded in part by [0112](0112-metrics-server-kubelet-ca-chain.md); the kubelet CA mount stays)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/metrics-server.yaml`; `deploy/k8s/check-metrics-server.sh`
 
@@ -45,4 +45,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - Adding `--kubelet-insecure-tls`, making the volume optional, vendoring a PEM, floating the image tag, or listing the file in `kustomization.yaml` fails `check-metrics-server.sh`.
 - The APIService skip in this paragraph is [0087](0087-metrics-server-serving-cert.md). It does not skip kubelet verification.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** moved. The serving certificate is [0087](0087-metrics-server-serving-cert.md).
+- **Next gap:** moved. The serving certificate is [0087](0087-metrics-server-serving-cert.md). The kubelet chain gate is [0112](0112-metrics-server-kubelet-ca-chain.md).
