@@ -43,4 +43,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - A zone failure still leaves the other zone's minimum of one. Replacing a lost node at the current desired size is the managed node group's job. The budget does not apply to that crash.
 - Green stays at 0 until a human scales it. This scaler does not wake the idle color.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** `hpa.yaml` still does not raise the replica count until `metrics.k8s.io` answers, and this repo still does not install metrics-server. Cluster Autoscaler adds a node for pods that are already Pending. Without that addon, CPU and memory never ask for the ceiling, and the groups stay at one worker per zone unless some other pod is unschedulable. Zone spread stays `ScheduleAnyway`, so a new pod can still land in the zone that already has room. The EKS control plane, the OIDC provider, and the private subnets stay the keeper's. Not started here.
+- **Next gap:** moved. The resource-metrics addon is [0084](0084-metrics-server.md).

@@ -23,6 +23,9 @@ resources:
 # Multi-AZ workers are the node pool (ADR 0082), not this apply.
 # cluster-autoscaler.yaml (ADR 0083) is also not applied here. Kind and
 # minikube set enable_node_pool=false and do not install the scaler.
+# metrics-server.yaml (ADR 0084) is also not applied here. The HPA does
+# not raise replicas until that API answers. Kind and minikube do not
+# install it.
 images:
   - name: ghcr.io/richeyworks/computerpets
     newTag: main

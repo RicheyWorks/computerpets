@@ -180,14 +180,16 @@ absolute `800Mi` (above the `512Mi` request, under the `1Gi` limit),
 not at a percent of the request. A JVM that sits on its heap must not
 be read as load.
 
-**metrics-server** (the `metrics.k8s.io` API) has to already be on the
-cluster. This repo does not install it, and it does not vendor the
-addon manifest. `kubectl top pods -n computerpets` must show cpu and
-memory. Until that API answers, applying the HPA does not raise the
-replica count, so blue can stay at 2.
+**metrics-server** (the `metrics.k8s.io` API) is
+`metrics-server.yaml` ([ADR 0084](../../docs/adr/0084-metrics-server.md)).
+That file is also not in the kustomization. Apply it first.
+`kubectl top pods -n computerpets` must show cpu and memory. Until that
+API answers, applying the HPA does not raise the replica count, so blue
+can stay at 2.
 
 ```bash
-# Prod only, after metrics-server answers kubectl top.
+# Prod only. metrics-server first, then the HPA after kubectl top answers.
+kubectl apply -f deploy/k8s/metrics-server.yaml
 kubectl apply -f deploy/k8s/hpa.yaml
 ./deploy/k8s/check-hpa.sh
 ```
@@ -305,6 +307,34 @@ minor's latest patch instead. Do not commit a real account id.
 
 Zone spread stays `ScheduleAnyway`. Adding a node does not force a pod
 onto it.
+
+## metrics-server (ADR 0084)
+
+`metrics-server.yaml` is **not** in the kustomization. `kubectl apply -k
+deploy/k8s` does not install it. Kind and minikube do not apply it.
+
+The file is upstream [components.yaml v0.9.0](https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.9.0/components.yaml).
+Image `registry.k8s.io/metrics-server/metrics-server:v0.9.0`. The
+APIService is `v1beta1.metrics.k8s.io`. That is the API `hpa.yaml` reads
+for CPU and memory. Namespace is `kube-system`. There is no Helm chart
+and no floating tag.
+
+`--kubelet-insecure-tls` is not set. Kubelet scrapes stay verified. The
+APIService does set `insecureSkipTLSVerify: true` once. That is the
+upstream hop from the apiserver to the addon's own serving cert (minted
+in `/tmp`, not the cluster CA). It is not a kubelet skip.
+
+The Deployment does not set `replicas`, so it stays one pod. Upstream
+`high-availability-1.21+.yaml` is not this file. Apply this before
+`hpa.yaml`. If `kubectl top` is empty, do not add the kubelet TLS skip.
+
+```bash
+# Prod only. Not part of kubectl apply -k.
+kubectl apply -f deploy/k8s/metrics-server.yaml
+./deploy/k8s/check-metrics-server.sh
+```
+
+Do not add `metrics-server.yaml` to `kustomization.yaml`.
 
 ## Blue / green
 
