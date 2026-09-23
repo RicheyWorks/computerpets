@@ -454,15 +454,22 @@ kustomization. Substitute `CLUSTER_NAME`, `AWS_REGION`, and the role ARN
 before applying it. `enable_node_pool=false` keeps the role off
 ([ADR 0083](adr/0083-cluster-autoscaler.md)).
 The Deployment is two replicas. Hostname anti-affinity is required.
-Zone anti-affinity is preferred, so a single zone still schedules when
-two hostnames exist. Leader election stays on. Both pods use the one
+Zone spread is `DoNotSchedule` on `topology.kubernetes.io/zone`
+(`maxSkew` 1, Honor policies, `minDomains` unset). One labeled zone
+still schedules when two hostnames exist. A node that omits the zone
+label does not. Kind and minikube do not apply the file. Do not set
+minDomains. Required zone anti-affinity is not set. Leader election
+stays on. Both pods use the one
 IRSA service account. Only the leader changes desired capacity
-([ADR 0090](adr/0090-cluster-autoscaler-ha.md)).
+([ADR 0090](adr/0090-cluster-autoscaler-ha.md),
+[ADR 0099](adr/0099-cluster-autoscaler-zone-hard-spread.md)).
 `nodeSelector` also requires `kubernetes.io/os: linux` and
 `computerpets/node-pool: api`, so the hostname rule cannot be met by
 nodes outside those groups. Kind and minikube do not apply the file
-(`enable_node_pool=false` does not label their nodes). A single-zone
-set of labeled nodes still schedules both pods when two hostnames exist.
+(`enable_node_pool=false` does not label their nodes and does not set a
+zone). A single-zone set of labeled nodes that also carry one zone value
+still schedules both pods when two hostnames exist. A pool label without
+the zone label leaves both pods Pending.
 The API Deployments select the same label
 ([ADR 0091](adr/0091-cluster-autoscaler-node-pool.md),
 [ADR 0093](adr/0093-api-node-pool.md)).

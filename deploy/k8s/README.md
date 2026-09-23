@@ -401,7 +401,7 @@ No live AWS apply.
 ./deploy/k8s/check-api-pool-taint.test.sh
 ```
 
-## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092)
+## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092, ADR 0099)
 
 `cluster-autoscaler.yaml` is **not** in the kustomization. `kubectl apply -k
 deploy/k8s` does not install it. Kind and minikube set
@@ -416,11 +416,17 @@ zones from drifting apart. Scale-down still reads `poddisruptionbudgets`.
 The Deployment sets `replicas: 2`. Pod anti-affinity is required on
 `kubernetes.io/hostname` for `app: cluster-autoscaler` in `kube-system`,
 so the second pod stays Pending until a second node exists. Beside that,
-pod anti-affinity prefers a different zone (`topology.kubernetes.io/zone`,
-weight 100). That preference is not required, and there is no
-`topologySpreadConstraints` item, so a single-zone cluster still
-schedules both pods when two hostnames exist. Do not apply this file on
-kind or minikube. Rolling update is `maxUnavailable: 1` and `maxSurge: 0`,
+`topologySpreadConstraints` hard-spreads zones
+(`topology.kubernetes.io/zone`, `maxSkew: 1`, `whenUnsatisfiable:
+DoNotSchedule`, `nodeTaintsPolicy: Honor`, `nodeAffinityPolicy: Honor`)
+([ADR 0099](../../docs/adr/0099-cluster-autoscaler-zone-hard-spread.md)).
+`minDomains` is unset. Do not set `minDomains`. There is no preferred
+zone anti-affinity term and no required zone anti-affinity term. On two
+or more labeled zones that can take a pod, the two replicas cannot share
+one zone. One labeled zone still schedules both pods when two hostnames
+exist. A node that omits `topology.kubernetes.io/zone` does not. Kind and
+minikube do not apply this file. Do not apply it there to invent a second
+zone. Rolling update is `maxUnavailable: 1` and `maxSurge: 0`,
 so a replacement uses a hostname that is already free instead of asking
 for a third node while both pods are up.
 
@@ -448,9 +454,11 @@ hostname anti-affinity then needs two hostnames inside that pool. Kind
 and minikube do not apply this file. `enable_node_pool=false` does not
 label their nodes. Applying the file there leaves both pods Pending.
 That is the feature-off path. Do not delete the pool key to make a
-laptop apply schedule. A single-zone cluster whose nodes do carry the
-label still schedules both pods when two hostnames exist, because the
-zone rule stays preferred. The API Deployments select the same label
+laptop apply schedule. A pool label without `topology.kubernetes.io/zone`
+also leaves both pods Pending. A single-zone cluster whose nodes do carry the
+label and one `topology.kubernetes.io/zone` value still schedules both
+pods when two hostnames exist. One domain keeps skew at 1. Hard spread
+does not invent a second zone. The API Deployments select the same label
 ([ADR 0093](../../docs/adr/0093-api-node-pool.md)).
 The pod template tolerates the API pool taint
 ([ADR 0094](../../docs/adr/0094-api-pool-taint.md)).
@@ -463,10 +471,15 @@ minor's latest patch instead. Do not commit a real account id.
 
 ```bash
 ./deploy/terraform/check-cluster-autoscaler.sh
+./deploy/terraform/check-cluster-autoscaler.test.sh
+./deploy/k8s/check-cluster-autoscaler-zone-hard-spread.sh
+./deploy/k8s/check-cluster-autoscaler-zone-hard-spread.test.sh
 ```
 
-Zone spread stays `ScheduleAnyway`. Adding a node does not force a pod
-onto it.
+Zone spread for the API colors stays the item in those Deployments.
+Adding a node does not force a pod onto it. The scaler's own zone item
+is `DoNotSchedule`. If the lighter zone cannot fit the second scaler
+pod, that pod stays Pending and does not hold the lease.
 
 ## metrics-server (ADR 0084, ADR 0085, ADR 0086, ADR 0087, ADR 0088, ADR 0089, ADR 0098)
 

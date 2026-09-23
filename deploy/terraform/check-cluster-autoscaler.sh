@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
-# ADR 0083 / 0090 / 0091 / 0092 — Cluster Autoscaler for the multi-AZ API
-# node groups, two replicas, required hostname anti-affinity, preferred
-# zone anti-affinity, leader election on the leases lock, a required
-# nodeSelector on computerpets/node-pool=api plus linux, and a
-# PodDisruptionBudget with minAvailable 1 whose selector matches the
-# Deployment. No cloud account. Does not terraform apply. Does not
-# kubectl apply. Kind/minikube stay off. Terraform must not reset
-# desired_size.
+# ADR 0083 / 0090 / 0091 / 0092 / 0099 — Cluster Autoscaler for the
+# multi-AZ API node groups, two replicas, required hostname anti-affinity,
+# hard zone spread (DoNotSchedule, maxSkew 1, Honor policies, no
+# minDomains), leader election on the leases lock, a required nodeSelector
+# on computerpets/node-pool=api plus linux, and a PodDisruptionBudget with
+# minAvailable 1 whose selector matches the Deployment. Zone anti-affinity
+# is not required and is not preferred. No cloud account. Does not
+# terraform apply. Does not kubectl apply. Kind/minikube stay off.
+# Terraform must not reset desired_size.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -155,18 +156,28 @@ need_not_grep_body "$MANIFEST" '^  replicas: 1$' "Deployment is not a single rep
 need_grep_body "$MANIFEST" 'maxUnavailable: 1' "rolling update can drop one pod"
 need_grep_body "$MANIFEST" 'maxSurge: 0' "rolling update does not ask for a third hostname"
 need_grep_body "$MANIFEST" 'requiredDuringSchedulingIgnoredDuringExecution:' "hostname anti-affinity is required"
-need_grep_body "$MANIFEST" 'preferredDuringSchedulingIgnoredDuringExecution:' "zone anti-affinity is preferred"
+need_grep_body "$MANIFEST" 'topologySpreadConstraints:' "zone spread is set"
+need_grep_body "$MANIFEST" 'whenUnsatisfiable: DoNotSchedule$' "zone spread is DoNotSchedule"
+need_grep_body "$MANIFEST" 'maxSkew: 1$' "zone spread maxSkew is 1"
+need_grep_body "$MANIFEST" 'nodeAffinityPolicy: Honor$' "zone spread honors node affinity"
+need_grep_body "$MANIFEST" 'nodeTaintsPolicy: Honor$' "zone spread honors taints"
 need_grep_body "$MANIFEST" 'topologyKey: kubernetes.io/hostname$' "required topology is hostname"
-need_grep_body "$MANIFEST" 'topologyKey: topology.kubernetes.io/zone$' "preferred topology is zone"
+need_grep_body "$MANIFEST" 'topologyKey: topology.kubernetes.io/zone$' "spread topology is zone"
 need_grep_body "$MANIFEST" '--leader-elect=true' "leader election is explicitly on"
 need_grep_body "$MANIFEST" '--leader-elect-resource-lock=leases' "leader lock is leases"
 need_grep_body "$MANIFEST" '--leader-elect-resource-name=cluster-autoscaler' "leader lock name matches the lease RBAC"
 need_not_grep_body "$MANIFEST" '--leader-elect=false' "leader election is not turned off"
-need_not_grep_body "$MANIFEST" 'topologySpreadConstraints:' "zone preference is anti-affinity, not a spread constraint"
-need_not_grep_body "$MANIFEST" 'DoNotSchedule' "zone preference is not a hard schedule gate"
+need_not_grep_body "$MANIFEST" 'preferredDuringSchedulingIgnoredDuringExecution:' "zone rule is spread, not a preference"
+need_not_grep_body "$MANIFEST" 'minDomains:' "zone spread does not set minDomains"
+need_not_grep_body "$MANIFEST" 'whenUnsatisfiable: ScheduleAnyway$' "zone spread is not ScheduleAnyway"
 need_grep "$MANIFEST" 'enable_node_pool=false' "manifest names the kind switch"
 need_grep "$MANIFEST" 'feature-off path' "manifest names the kind leave-off"
 need_grep "$MANIFEST" 'Do not delete the pool key' "manifest refuses dropping the pool key for laptops"
+need_grep "$MANIFEST" 'ADR 0099' "manifest names the hard zone spread"
+need_grep "$MANIFEST" 'One labeled zone still schedules' "manifest is honest about one zone"
+need_grep "$MANIFEST" 'Do not set minDomains' "manifest refuses minDomains"
+need_grep "$MANIFEST" 'Kind and minikube' "manifest names kind and minikube"
+need_grep "$MANIFEST" 'Required zone anti-affinity is not set' "manifest does not require zone anti-affinity"
 need_grep_body "$MANIFEST" 'nodeSelector:' "pod template has a nodeSelector"
 need_grep_body "$MANIFEST" 'kubernetes.io/os: linux$' "nodeSelector requires linux"
 need_grep_body "$MANIFEST" 'computerpets/node-pool: api$' "nodeSelector requires the api pool label"
@@ -329,7 +340,24 @@ check(rolling.get("maxSurge") == 0, "parsed maxSurge is 0")
 
 pod = ((spec.get("template") or {}).get("spec") or {})
 check(pod.get("serviceAccountName") == "cluster-autoscaler", "pods use the IRSA service account")
-check("topologySpreadConstraints" not in pod, "pod spec has no topology spread constraint")
+constraints = pod.get("topologySpreadConstraints") or []
+check(len(constraints) == 1, "pod spec has one topology spread constraint")
+if constraints:
+    item = constraints[0]
+    check(item.get("topologyKey") == "topology.kubernetes.io/zone",
+          "parsed zone spread key is the zone")
+    check(item.get("whenUnsatisfiable") == "DoNotSchedule",
+          "parsed zone spread is DoNotSchedule")
+    check(item.get("maxSkew") == 1, "parsed zone spread maxSkew is 1")
+    check(item.get("nodeAffinityPolicy") == "Honor",
+          "parsed zone spread nodeAffinityPolicy is Honor")
+    check(item.get("nodeTaintsPolicy") == "Honor",
+          "parsed zone spread nodeTaintsPolicy is Honor")
+    check("minDomains" not in item, "parsed zone spread has no minDomains")
+    check("matchLabelKeys" not in item, "parsed zone spread has no matchLabelKeys")
+    labels = ((item.get("labelSelector") or {}).get("matchLabels") or {})
+    check(labels == {"app": "cluster-autoscaler"},
+          "parsed zone spread selects app=cluster-autoscaler")
 check(pod.get("nodeSelector") == {
     "kubernetes.io/os": "linux",
     "computerpets/node-pool": "api",
@@ -353,12 +381,7 @@ check(all(term_app(term) == "cluster-autoscaler" for term in required) and len(r
 check(all(term.get("namespaces") == ["kube-system"] for term in required),
       "required anti-affinity is limited to kube-system")
 
-preferred_zones = []
-for item in preferred:
-    term = item.get("podAffinityTerm") or {}
-    preferred_zones.append((item.get("weight"), term_key(term), term_app(term), term.get("namespaces")))
-check(preferred_zones == [(100, "topology.kubernetes.io/zone", "cluster-autoscaler", ["kube-system"])],
-      "preferred anti-affinity is zone weight 100 in kube-system")
+check(preferred == [], "zone anti-affinity is not preferred")
 check("topology.kubernetes.io/zone" not in req_keys, "zone anti-affinity is not required")
 
 containers = pod.get("containers") or []
