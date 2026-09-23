@@ -11,6 +11,7 @@ variables {
   enable_cdn              = false
   enable_waf              = false
   enable_api_listener_tls = true
+  enable_node_pool        = false
 }
 
 run "empty_certificate_arn_is_refused" {

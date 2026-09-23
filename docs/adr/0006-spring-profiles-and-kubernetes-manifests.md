@@ -61,3 +61,5 @@ No mesh.
 - Each API color also prefers different zones (`ScheduleAnyway` on
   `topology.kubernetes.io/zone`). A single-zone cluster still schedules
   ([0081](0081-api-pod-zone-spread.md)).
+- Private workers in at least two zones are the node pool
+  ([0082](0082-multi-az-node-pool.md)). This kustomization does not create them.

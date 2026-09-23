@@ -268,10 +268,11 @@ no `minDomains`. A required zone anti-affinity is not set.
 
 **Prod expectation:** schedulable workers in at least two availability zones
 (three when the floor of 3 should land one pod per zone). Cloud
-providers set the zone label. This repo does not provision the node
-pool. A single-zone pool still schedules. Soft spread can still place
-every pod of the live color in one zone. A failure of that zone is not
-blocked by the budget.
+providers set the zone label. Private workers are one EKS managed node
+group per zone ([ADR 0082](../../docs/adr/0082-multi-az-node-pool.md)).
+This apply does not create them. A single-zone pool still schedules.
+Soft spread can still place every pod of the live color in one zone. A
+failure of that zone is not blocked by the budget.
 
 ```bash
 ./deploy/k8s/check-zone-spread.sh

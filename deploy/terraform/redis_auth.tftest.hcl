@@ -11,6 +11,7 @@ variables {
   enable_cdn              = false
   enable_waf              = false
   enable_api_listener_tls = false
+  enable_node_pool        = false
   vpc_id                  = "vpc-0123456789abcdef0"
   private_subnet_ids      = ["subnet-aaa", "subnet-bbb"]
   app_cidr_blocks         = ["10.0.0.0/16"]
