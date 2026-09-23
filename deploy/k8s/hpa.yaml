@@ -1,0 +1,56 @@
+# Prod API autoscaler (ADR 0078). Not in kustomization.yaml.
+# Local/dev `kubectl apply -k deploy/k8s` keeps computerpets-blue at
+# replicas: 2 and computerpets-green at replicas: 0. There is no overlay
+# directory. This file is the prod apply, same pattern as ingress-tls.yaml.
+#
+# Requires metrics-server (the metrics.k8s.io API). This file does not
+# install it. `kubectl top pods -n computerpets` must show cpu and memory.
+# Until that API answers, applying this object does not raise the replica
+# count, so blue can stay at 2.
+#
+# Targets computerpets-blue, the Service's default live color. Green is the
+# idle slot (replicas: 0). A resource HPA cannot scale a deployment that
+# has no pods. Postgres and Redis are not targets.
+# After a cutover, patch scaleTargetRef to computerpets-green before
+# scaling blue to 0. Re-applying this file points the autoscaler back at
+# blue. See deploy/k8s/README.md.
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: computerpets
+  namespace: computerpets
+  labels:
+    app: computerpets
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: computerpets-blue
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: AverageValue
+          averageValue: 800Mi
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+        - type: Pods
+          value: 2
+          periodSeconds: 60
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 60

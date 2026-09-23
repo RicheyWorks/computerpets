@@ -39,4 +39,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - The policy `ELBSecurityPolicy-TLS13-1-2-2021-06` does not pin a certificate fingerprint. Renewal stays with the keeper's ACM certificate.
 - Forgetting the JVM flag on a hand-applied HTTP ingress does not fail the process. The terraform plan is what refuses a cleartext public ALB when the module is on.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** Horizontal pod autoscaling. The deployment diagram says 3+ replicas with HPA. `deploy/k8s/deployment-blue.yaml` is a fixed `replicas: 2`. There is no `HorizontalPodAutoscaler`. Not started here.
+- **Next gap:** Horizontal pod autoscaling landed as [0078](0078-horizontal-pod-autoscaling.md). Not started in this ADR.
