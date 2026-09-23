@@ -18,41 +18,57 @@ function probe(body) {
   return G.parseProbeText(body);
 }
 
-test("Windows and Linux sense; Mac names the later door and does not invent numbers", () => {
+test("Windows, Linux, and Mac sense; another platform stays unsupported", () => {
   assert.equal(G.sensesOn("win32"), true);
   assert.equal(G.sensesOn("Windows"), true);
   assert.equal(G.sensesOn("linux"), true);
   assert.equal(G.sensesOn("Linux"), true);
+  assert.equal(G.sensesOn("darwin"), true);
+  assert.equal(G.sensesOn("Mac"), true);
   assert.equal(G.laterDoor("win32"), null);
   assert.equal(G.laterDoor("linux"), null);
+  assert.equal(G.laterDoor("darwin"), null);
   assert.equal(G.isMac("darwin"), true);
   assert.equal(G.isLinux("linux"), true);
-  assert.equal(G.laterDoor("darwin"), "mac-gpu-sense");
-  assert.equal(G.LATER_DOOR, "mac-gpu-sense");
+  assert.equal(G.laterDoor("freebsd"), "unsupported");
+  assert.equal(G.LATER_DOOR, "unsupported");
   assert.equal(G.STALE_MS, 20000);
   const mac = G.sampleFromProbe(
-    { nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5" },
+    { nvidiaCsv: "Apple M2, [N/A], 16, 542, [N/A], [N/A]" },
     { platform: "darwin", nowMs: NOW },
   );
   const linux = G.sampleFromProbe(
     { nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5" },
     { platform: "linux", nowMs: NOW },
   );
-  assert.equal(mac.status, "unsupported");
+  const other = G.sampleFromProbe(
+    { nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5" },
+    { platform: "freebsd", nowMs: NOW },
+  );
+  assert.equal(mac.status, "read");
+  assert.equal(mac.source, "ioaccelerator");
+  assert.equal(mac.name, "Apple M2");
+  assert.equal(mac.utilPercent, 16);
+  assert.equal(mac.tempC, null);
+  assert.equal(mac.powerWatts, null);
+  assert.equal(mac.memoryTotalBytes, null);
+  assert.equal(G.gpuLine(mac), "GPU Apple M2 · unread · 16% · 542 MiB/unread · unread");
   assert.equal(linux.status, "read");
   assert.equal(linux.source, "nvidia-smi");
   assert.equal(linux.tempC, 62);
   assert.equal(linux.utilPercent, 14);
-  assert.equal(G.gpuLine(mac), "GPU unread · mac-gpu-sense");
   assert.equal(G.gpuLine(linux), VALID_LINE);
-  assert.equal(mac.tempC, null);
-  assert.doesNotMatch(G.gpuLine(mac), /62|14%|0%/);
+  assert.equal(other.status, "unsupported");
+  assert.equal(other.tempC, null);
+  assert.equal(G.gpuLine(other), "GPU unread · unsupported");
+  assert.doesNotMatch(G.gpuLine(other), /62|14%|0%/);
   const second = G.sampleFromProbe(
-    { nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 40, 3200, 12288, 48.5" },
-    { platform: "linux", nowMs: NOW + 1000 },
+    { nvidiaCsv: "Apple M2, [N/A], 40, 542, [N/A], [N/A]" },
+    { platform: "darwin", nowMs: NOW + 1000 },
   );
-  const history = G.remember(G.remember([], linux, NOW), second, NOW + 1000);
-  assert.equal(G.sparkline(history, second, NOW + 1000).path, "M1 11.3 L71 8.2");
+  const history = G.remember(G.remember([], mac, NOW), second, NOW + 1000);
+  assert.equal(history.length, 2);
+  assert.equal(G.sparkline(history, second, NOW + 1000).empty, false);
 });
 
 test("a valid nvidia reading keeps real zeros and skips a second GPU", () => {
@@ -293,7 +309,7 @@ test("unread, malformed, and unsupported sparklines stay empty", () => {
 
   const mac = G.sampleFromProbe(
     { nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5" },
-    { platform: "darwin", nowMs: NOW },
+    { platform: "freebsd", nowMs: NOW },
   );
   assert.equal(mac.status, "unsupported");
   assert.deepEqual(G.remember([], mac, NOW), []);
@@ -345,11 +361,14 @@ test("the probe script never plants a zero, and the HUD stays lockstep", () => {
   assert.doesNotMatch(styleSrc, /\.gpu-spark[\s\S]{0,400}#8fa08a/);
   assert.match(preloadSrc, /onGpu/);
   assert.match(mainSrc, /gpu-sense/);
+  const macProbe = readFileSync(join(__dirname, "..", "gpu-probe-mac.sh"), "utf8");
   const webGpu = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "gpu.ts"), "utf8");
   const cardSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "keeper-card.tsx"), "utf8");
   const pySrc = readFileSync(join(__dirname, "..", "..", "client", "computerpets_client", "gpu.py"), "utf8");
   const appSrc = readFileSync(join(__dirname, "..", "..", "client", "computerpets_client", "app.py"), "utf8");
-  assert.match(webGpu, /mac-gpu-sense/);
+  assert.match(macProbe, /IOAccelerator/);
+  assert.doesNotMatch(macProbe, /powermetrics|sudo/);
+  assert.match(webGpu, /ioaccelerator/);
   assert.match(webGpu, /STALE_MS = 20000/);
   assert.match(webGpu, /export function remember/);
   assert.match(webGpu, /export function sparkline/);
@@ -358,7 +377,7 @@ test("the probe script never plants a zero, and the HUD stays lockstep", () => {
   assert.match(cardSrc, /sparkline\(\[\], UNREAD_GPU, 0\)/);
   assert.match(cardSrc, /data-spark=/);
   assert.doesNotMatch(cardSrc, /M1 11\.3/);
-  assert.match(pySrc, /mac-gpu-sense/);
+  assert.match(pySrc, /ioaccelerator/);
   assert.match(pySrc, /STALE_MS = 20000/);
   assert.match(pySrc, /def remember/);
   assert.match(pySrc, /def sparkline/);

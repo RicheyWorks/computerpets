@@ -1,6 +1,6 @@
 # 0117. Linux reads nvidia-smi for desktop-local GPU sense
 
-- **Status:** Accepted
+- **Status:** Accepted (the Mac stays-dark clause is superseded in part by [0118](0118-mac-ioaccelerator-gpu-sense.md))
 - **Date:** 2026-09-23
 - **Code:** `desktop/gpu-probe.sh`, `desktop/gpu-sense.cjs`, `desktop/renderer/gpu.js`, `web/src/lib/pets/gpu.ts`, `client/computerpets_client/gpu.py`
 

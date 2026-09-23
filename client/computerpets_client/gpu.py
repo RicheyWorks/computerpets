@@ -1,12 +1,14 @@
-"""Desktop-local GPU sense. Windows and Linux nvidia-smi. Mac stays dark.
+"""Desktop-local GPU sense. Windows and Linux nvidia-smi. Mac reads IOAccelerator.
 
 Spring Boot is not the pet's GPU. There is no ``/metrics/gpu`` door.
 Temperature, utilization, memory, and power come from nvidia-smi, or from
 Windows GPU performance counters. Linux runs the same nvidia-smi query and
-does not read amdgpu or Intel sysfs. Mac stays ``mac-gpu-sense`` and does not
-spawn. A missing, malformed, or stale reading stays unread. A real zero from
-the hardware is kept. The sparkline is a trail of those read samples and stays
-empty until two fresh utilization points exist.
+does not read amdgpu or Intel sysfs. Mac runs ``ioreg`` on IOAccelerator
+PerformanceStatistics and prints that same line. A missing tool stays unread.
+Temperature and power on Mac stay unread. A missing, malformed, or stale
+reading stays unread. A real zero from the hardware is kept. The sparkline is
+a trail of those read samples and stays empty until two fresh utilization
+points exist.
 """
 
 from __future__ import annotations
@@ -19,8 +21,8 @@ import time
 from pathlib import Path
 
 STALE_MS = 20000
-LATER_DOOR = "mac-gpu-sense"
-SOURCES = ("nvidia-smi", "pdh", "nvidia-smi+pdh")
+LATER_DOOR = "unsupported"
+SOURCES = ("nvidia-smi", "pdh", "nvidia-smi+pdh", "ioaccelerator")
 METRIC_KEYS = ("tempC", "utilPercent", "memoryUsedBytes", "memoryTotalBytes", "powerWatts")
 _NA = re.compile(r"^\[?\s*(n/a|not supported)\s*\]?$", re.I)
 _NUM = re.compile(r"^-?\d+(\.\d+)?$")
@@ -38,7 +40,7 @@ def is_windows(platform: str | None) -> bool:
 
 
 def senses_on(platform: str | None) -> bool:
-    return is_windows(platform) or is_linux(platform)
+    return is_windows(platform) or is_linux(platform) or is_mac(platform)
 
 
 def is_mac(platform: str | None) -> bool:
@@ -596,10 +598,10 @@ def sample_from_probe(probe, *, platform: str | None, now_ms) -> dict:
             if chosen[key] is None and pdh_best.get(key) is not None:
                 chosen[key] = pdh_best[key]
                 filled = True
-        source = "nvidia-smi+pdh" if filled else "nvidia-smi"
+        source = "nvidia-smi+pdh" if filled else ("ioaccelerator" if is_mac(platform) else "nvidia-smi")
     elif nvidia_best:
         chosen = nvidia_best
-        source = "nvidia-smi"
+        source = "ioaccelerator" if is_mac(platform) else "nvidia-smi"
     else:
         chosen = pdh_best
         source = "pdh"
@@ -716,6 +718,10 @@ def linux_probe_script() -> Path:
     return Path(__file__).resolve().parents[2] / "desktop" / "gpu-probe.sh"
 
 
+def mac_probe_script() -> Path:
+    return Path(__file__).resolve().parents[2] / "desktop" / "gpu-probe-mac.sh"
+
+
 def initial_sample(platform: str | None = None, now_ms=None) -> dict:
     plat = sys.platform if platform is None else platform
     now = _stamp(now_ms if now_ms is not None else time.time() * 1000)
@@ -730,7 +736,12 @@ def read_local(platform: str | None = None, now_ms=None) -> dict:
     if not senses_on(plat):
         return present({"status": "unsupported", "platform": plat, "readAtMs": now}, now)
     try:
-        if is_linux(plat):
+        if is_mac(plat):
+            script = mac_probe_script()
+            if not script.is_file():
+                raise FileNotFoundError(script)
+            command = ["/bin/sh", str(script)]
+        elif is_linux(plat):
             script = linux_probe_script()
             if not script.is_file():
                 raise FileNotFoundError(script)

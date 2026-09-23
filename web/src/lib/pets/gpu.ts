@@ -1,9 +1,9 @@
-/** Desktop-local GPU sense. The browser has no sensor, so this page stays unread and the sparkline stays empty. Windows and Linux nvidia-smi share the line. Mac stays mac-gpu-sense. */
+/** Desktop-local GPU sense. The browser has no sensor, so this page stays unread and the sparkline stays empty. Windows and Linux nvidia-smi share the line. Mac reads IOAccelerator into that same line. */
 
 export const STALE_MS = 20000;
-export const LATER_DOOR = "mac-gpu-sense";
+export const LATER_DOOR = "unsupported";
 
-const SOURCES = ["nvidia-smi", "pdh", "nvidia-smi+pdh"] as const;
+const SOURCES = ["nvidia-smi", "pdh", "nvidia-smi+pdh", "ioaccelerator"] as const;
 const METRIC_KEYS = ["tempC", "utilPercent", "memoryUsedBytes", "memoryTotalBytes", "powerWatts"] as const;
 
 export type GpuSource = (typeof SOURCES)[number];
@@ -38,7 +38,7 @@ type NvidiaRow = {
 };
 
 export function sensesOn(platform: string | null | undefined) {
-  return platform === "win32" || /^Win/i.test(String(platform || "")) || isLinux(platform);
+  return platform === "win32" || /^Win/i.test(String(platform || "")) || isLinux(platform) || isMac(platform);
 }
 
 export function isMac(platform: string | null | undefined) {
@@ -528,7 +528,7 @@ export function sampleFromProbe(probe: unknown, opts: { platform?: string | null
     return blank("unread", "missing", platform || null, nowMs);
   }
   let chosen = (nvidiaBest || pdhBest) as NvidiaRow;
-  let source: GpuSource = nvidiaBest ? "nvidia-smi" : "pdh";
+  let source: GpuSource = nvidiaBest ? (isMac(platform) ? "ioaccelerator" : "nvidia-smi") : "pdh";
   if (nvidiaBest && pdhBest && nvidiaCount === 1 && pdhCount === 1) {
     chosen = {
       index: nvidiaBest.index,
@@ -547,7 +547,7 @@ export function sampleFromProbe(probe: unknown, opts: { platform?: string | null
         filled = true;
       }
     });
-    source = filled ? "nvidia-smi+pdh" : "nvidia-smi";
+    source = filled ? "nvidia-smi+pdh" : (isMac(platform) ? "ioaccelerator" : "nvidia-smi");
   }
   if (nowMs == null) return blank("malformed", "malformed", platform || null, null);
   return parseSample({
