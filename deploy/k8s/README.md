@@ -51,13 +51,20 @@ Local-dev keeps env / `.env.example` and plain `docker-compose.yml`.
 | Deployment | `computerpets-green` | Idle slot (`replicas: 0`, `color=green`) |
 | Service | `computerpets` | Selects `app=computerpets,color=blue` |
 
-`ingress.yaml` is **not** in the kustomization. Apply it only if you have
-an Ingress controller. It has no nginx rate-limit annotations. The outer
-gate is the regional WAF on the API ALB
+`ingress.yaml` is **not** in the kustomization. It is the local/dev HTTP
+door and has no `tls` block. Public prod is `ingress-tls.yaml` (also not
+in the kustomization): cert-manager annotation, TLS redirect, HTTP to the
+pod ([ADR 0077](../../docs/adr/0077-api-listener-tls.md)). Apply it only
+when that ClusterIssuer already exists. Change the issuer name and the
+host. It does not create an ACME account. Neither file has nginx
+rate-limit annotations. The outer gate is the regional WAF on the API ALB
 ([ADR 0074](../../docs/adr/0074-waf-in-front-of-rate-limiter.md)). The JVM
 filter stays the inner bucket. Point `TRUSTED_PROXY_CIDRS` at the ALB
 subnet so that bucket sees the client
 ([ADR 0067](../../docs/adr/0067-trusted-proxy-client-address.md)).
+The Service stays HTTP on 8081. Leave `API_LISTENER_TLS_REQUIRED` unset
+for this in-cluster door. Set it, with `API_PUBLIC_BASE_URL=https://<host>`,
+only for the public listener. Do not set `server.ssl`.
 
 In-cluster Postgres and Redis are scaffolding, the same as compose. A
 real production cluster should point `SPRING_DATASOURCE_URL` and

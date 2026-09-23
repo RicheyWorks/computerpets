@@ -41,7 +41,8 @@ for f in \
   "$TF/modules/redis/main.tf" \
   "$TF/modules/secrets/main.tf" \
   "$TF/modules/cdn/main.tf" \
-  "$TF/modules/waf/main.tf"
+  "$TF/modules/waf/main.tf" \
+  "$TF/modules/api_listener/main.tf"
 do
   need_file "$f"
 done
@@ -101,6 +102,17 @@ if [ -x "${TF}/check-redis-auth.sh" ]; then
   fi
 else
   bad "check-redis-auth.sh missing"
+fi
+
+echo "== API listener TLS (ADR 0077) =="
+if [ -x "${TF}/check-api-listener-tls.sh" ]; then
+  if "${TF}/check-api-listener-tls.sh"; then
+    ok "check-api-listener-tls.sh"
+  else
+    bad "check-api-listener-tls.sh"
+  fi
+else
+  bad "check-api-listener-tls.sh missing"
 fi
 
 echo "== WAF live gate (ADR 0074) =="

@@ -12,6 +12,7 @@ services:
       # application-dev.yml: show-sql + H2 console; compose overrides the DB to Postgres.
       - SPRING_PROFILES_ACTIVE=dev
       - SERVER_PORT=8081
+      # API listener stays HTTP on 8081. No server.ssl (ADR 0077).
       # Database (wins over the H2 default in application.yml / application-dev.yml)
       # Local Postgres has no TLS. Leave POSTGRES_SSL_REQUIRED unset (ADR 0076).
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/computerpets

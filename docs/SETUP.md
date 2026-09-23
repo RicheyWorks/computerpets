@@ -353,6 +353,8 @@ The Electron overlay is still `cd desktop && npm start`.
 | `SPRING_DATASOURCE_URL` | `staging` / `prod` | H2 in default/`dev` | Postgres JDBC URL. Required when those profiles are active. Managed RDS includes `sslmode=require` (or `verify-full`). Local and in-cluster omit it (ADR 0076). |
 | `POSTGRES_SSL_REQUIRED` | No | false | When true on `prod`, the JDBC URL must use `sslmode=require`, or `verify-full` if `POSTGRES_SSL_ROOT_CERT` is set. Leave unset for compose and in-cluster Postgres. Half-set refuses start (ADR 0076). |
 | `POSTGRES_SSL_ROOT_CERT` | No | empty | Absolute path to a PEM CA bundle on the app host. Empty keeps `sslmode=require`. Set only when the URL uses `sslmode=verify-full` and `sslrootcert` is that same path. This repo does not ship a bundle. |
+| `API_LISTENER_TLS_REQUIRED` | No | false | When true on `prod`, `API_PUBLIC_BASE_URL` must be an `https` origin on port 443. Leave unset for compose and the in-cluster Service. A JVM keystore is refused either way (ADR 0077). |
+| `API_PUBLIC_BASE_URL` | No | empty | Public origin, `https://<host>`. Set only with `API_LISTENER_TLS_REQUIRED`. Do not invent a live hostname. |
 | `SPRING_DATASOURCE_USERNAME` | `staging` / `prod` | `sa` (H2) | Postgres user. |
 | `SPRING_DATASOURCE_PASSWORD` | `staging` / `prod` | empty (H2) | Postgres password. |
 | `SPRING_DATASOURCE_REPLICA_URL` | No | empty | Optional Postgres **read** replica JDBC URL. Blank = primary only. Must differ from the primary URL. Do not invent a cloud replica. Writes never route here (ADR 0059). |
@@ -397,6 +399,10 @@ In-cluster Postgres stays cleartext: leave `POSTGRES_SSL_REQUIRED` unset.
 Managed RDS sets that flag and uses the terraform URL (`sslmode=require`, or
 `verify-full` when you mount a CA and set `POSTGRES_SSL_ROOT_CERT`). Do not
 invent a CA bundle ([ADR 0076](adr/0076-postgres-transit-tls.md)).
+The in-cluster Service stays HTTP on 8081. Leave `API_LISTENER_TLS_REQUIRED`
+unset. A public door uses `deploy/k8s/ingress-tls.yaml` or the ALB HTTPS
+listener and sets that flag with `API_PUBLIC_BASE_URL=https://<host>`. Do
+not set `server.ssl` ([ADR 0077](adr/0077-api-listener-tls.md)).
 
 Prefer External Secrets Operator or Vault Agent to fill
 `computerpets-secrets` rather than committing values into `secret.yaml`.
@@ -413,8 +419,11 @@ then flip the selector after green is Ready. Unsigned or tag-only refs are
 refused on the prod path ([ADR 0061](adr/0061-ghcr-image-signing.md)). Full
 commands are in [deploy/k8s/README.md](../deploy/k8s/README.md).
 
-Optional `ingress.yaml` is not in the kustomization; apply it only if
-you have an Ingress controller. Optional Kyverno image-signature policy:
+Optional `ingress.yaml` is the local/dev HTTP door and is not in the
+kustomization. Public prod is `ingress-tls.yaml` (also not in the
+kustomization): cert-manager TLS, redirect to HTTPS, HTTP to the pod
+([ADR 0077](adr/0077-api-listener-tls.md)). Change the issuer name to one
+you already run. Optional Kyverno image-signature policy:
 `deploy/k8s/image-signature-policy.example.yaml` (not in kustomization).
 
 ### Managed stores (Terraform)
@@ -429,12 +438,21 @@ ConfigMap overlay example. Local verify does not need a cloud account:
 ```bash
 ./deploy/terraform/check-managed-stores.sh
 ./deploy/terraform/check-postgres-tls.sh
+./deploy/terraform/check-api-listener-tls.sh
 ```
 
 Managed Postgres sets `rds.force_ssl=1`. `spring_datasource_url` includes
 `sslmode=require` unless `postgres_ssl_root_cert` names a PEM path, in which
 case the URL uses `verify-full`. Pair that with `POSTGRES_SSL_REQUIRED=true`
 ([ADR 0076](adr/0076-postgres-transit-tls.md)).
+
+While `enable_api_listener_tls` is true (the default), set
+`api_listener_alb_arn` (the same API ALB), `api_listener_certificate_arn`
+(an ACM certificate you already have — this root does not call ACM), and
+`api_listener_target_group_arn`. Port 80 redirects to 443. The pods stay
+HTTP on 8081. Then set `API_LISTENER_TLS_REQUIRED=true` and
+`API_PUBLIC_BASE_URL=https://<host>`
+([ADR 0077](adr/0077-api-listener-tls.md)).
 
 A real `terraform apply` is the keeper's AWS account — not CI.
 While `enable_waf` is true (the default), set `waf_associate_alb_arn` to the

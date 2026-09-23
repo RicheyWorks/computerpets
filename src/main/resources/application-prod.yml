@@ -5,7 +5,10 @@
 # (external-secrets | file | vault-agent), leave a set
 # COMPUTERPETS_KEYS_ROTATED_AT stamp older than 400 days, or half-configure
 # Postgres TLS (POSTGRES_SSL_REQUIRED vs sslmode). See ADR 0064, ADR 0065, and ADR 0076.
-# Missing SPRING_DATASOURCE_* fails placeholder resolution before the guard.
+# API listener TLS (ADR 0077): leave API_LISTENER_TLS_REQUIRED unset for the
+# in-cluster Service. Set it, with API_PUBLIC_BASE_URL=https://<host>, only
+# when the public door is ingress-tls.yaml or the ALB HTTPS listener.
+# server.ssl stays off. Missing SPRING_DATASOURCE_* fails placeholder resolution before the guard.
 # In-cluster Postgres leaves POSTGRES_SSL_REQUIRED unset. Managed RDS sets it
 # and uses the terraform JDBC URL (sslmode=require, or verify-full).
 spring:
