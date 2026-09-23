@@ -4,10 +4,11 @@
 # directory. This file is the prod apply, same pattern as ingress-tls.yaml.
 #
 # Requires metrics-server (the metrics.k8s.io API). This file does not
-# install it. Apply metrics-server.yaml first (ADR 0084). That file is
-# also outside this kustomization. `kubectl top pods -n computerpets` must
-# show cpu and memory. Until that API answers, applying this object does
-# not raise the replica count, so blue can stay at 2.
+# install it. Apply metrics-server.yaml first (ADR 0084, ADR 0085). That
+# file is also outside this kustomization. It runs two replicas. `kubectl
+# top pods -n computerpets` must show cpu and memory. Until that API
+# answers, applying this object does not raise the replica count, so blue
+# can stay at 2.
 #
 # Targets computerpets-blue, the Service's default live color. Green is the
 # idle slot (replicas: 0). A resource HPA cannot scale a deployment that

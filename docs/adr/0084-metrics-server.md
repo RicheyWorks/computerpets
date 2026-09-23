@@ -1,6 +1,6 @@
 # 0084. metrics-server for API resource metrics
 
-- **Status:** Accepted
+- **Status:** Accepted (the one-pod clause is superseded in part by [0085](0085-metrics-server-ha.md); the install path, the pin, and kubelet TLS stay)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/metrics-server.yaml`; `deploy/k8s/check-metrics-server.sh`
 
@@ -24,6 +24,8 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 
 **The resource-metrics addon is `deploy/k8s/metrics-server.yaml`. It is upstream metrics-server `components.yaml` v0.9.0. It is not in the kustomization. Local apply does not install it. Kubelet scrapes stay verified. `hpa.yaml` still does not raise replicas until that API answers.**
 
+The one-pod clause in point 6 is the part [0085](0085-metrics-server-ha.md) replaces. The same file is now that high-availability asset. The install path, the pin, and kubelet TLS in this ADR are unchanged.
+
 1. **Pinned upstream file.** The objects below the header are [components.yaml v0.9.0](https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.9.0/components.yaml). Image `registry.k8s.io/metrics-server/metrics-server:v0.9.0`. That release tracks Kubernetes 1.34+ and depends on 1.36.2, the same minor line as the Cluster Autoscaler image. `:latest` is not used. There is no Helm chart.
 2. **The API the HPA reads.** One `APIService` named `v1beta1.metrics.k8s.io`, group `metrics.k8s.io`, version `v1beta1`. CPU and memory on `hpa.yaml` are `Resource` metrics. They do not move until this API answers. `kubectl top pods -n computerpets` is the keeper's check.
 3. **Not in the kustomization.** Same pattern as `hpa.yaml` and `pdb.yaml`. `kubectl apply -k deploy/k8s` does not install it. Kind and minikube do not apply it. The addon namespace is `kube-system`, not `computerpets`. Apply order is this file, then wait for `kubectl top`, then `hpa.yaml`.
@@ -40,4 +42,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - The APIService still skips verification of the addon's own serving cert. That is the upstream components file. It does not skip kubelet verification.
 - One metrics-server pod is a single point of failure for the HPA signal. This slice does not pretend otherwise.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** the vendored Deployment does not set `replicas`, so metrics-server stays one pod. Upstream `high-availability-1.21+.yaml` (v0.9.0, replicas 2, pod anti-affinity) is not this file. If that pod is not Ready, `metrics.k8s.io` stops answering and `hpa.yaml` does not raise the replica count. The APIService still uses upstream `insecureSkipTLSVerify: true` for the addon's own serving cert. A kubelet certificate the addon does not trust still leaves `kubectl top` empty; this file does not mount a kubelet CA and does not add `--kubelet-insecure-tls`. Zone spread stays `ScheduleAnyway`. Cluster Autoscaler still only adds a node for pods that are already Pending. Not started here.
+- **Next gap:** moved. High availability for this addon is [0085](0085-metrics-server-ha.md).

@@ -76,7 +76,8 @@ All critical items required before any public or limited production exposure hav
   - [x] API zone spread — both Deployments add `topology.kubernetes.io/zone` (`maxSkew: 1`, `ScheduleAnyway`, `nodeTaintsPolicy: Honor`). Not `DoNotSchedule`. Prod expects at least two availability zones. Local replica counts stay blue 2 / green 0 (ADR 0081). Catalog stays 221.
   - [x] Multi-AZ API node pool — one private EKS managed node group per availability zone, at least two, on a keeper-owned cluster. No public IP. No SSH. Plan refuses a single zone. EKS sets the zone label from the instance AZ. This root does not create the cluster (ADR 0082). Catalog stays 221.
   - [x] Cluster Autoscaler — grows those node groups when pods are Pending. Per-zone max is at least the HPA ceiling of 10. Terraform ignores `desired_size` after create. IRSA trusts only `kube-system/cluster-autoscaler`. The manifest is not in the kustomization. Kind/minikube stay off (ADR 0083). Catalog stays 221.
-  - [x] metrics-server — `deploy/k8s/metrics-server.yaml` is upstream v0.9.0 so `hpa.yaml` can read CPU and memory. Not in the kustomization. Kubelet TLS stays verified. One pod. Apply before the HPA (ADR 0084). Catalog stays 221.
+  - [x] metrics-server — `deploy/k8s/metrics-server.yaml` is upstream v0.9.0 so `hpa.yaml` can read CPU and memory. Not in the kustomization. Kubelet TLS stays verified. Apply before the HPA (ADR 0084). Catalog stays 221.
+  - [x] metrics-server high availability — same manifest is upstream `high-availability-1.21+.yaml` v0.9.0. `replicas: 2`, required pod anti-affinity on `kubernetes.io/hostname`, addon PDB `minAvailable: 1`. Not in the kustomization. No `--kubelet-insecure-tls`. No kubelet CA mount (ADR 0085). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload
@@ -144,7 +145,8 @@ All critical items required before any public or limited production exposure hav
   - [x] API zone spread — soft `topologySpreadConstraints` on `topology.kubernetes.io/zone` for both colors (`ScheduleAnyway`). A single-zone local apply still schedules. Prod expects at least two availability zones (ADR 0081). Catalog stays 221.
   - [x] Multi-AZ API node pool — private workers, one managed node group per AZ, at least two. No public IP. No SSH. The cluster stays the keeper's (ADR 0082). Catalog stays 221.
   - [x] Cluster Autoscaler — scales those groups when pods are Pending. Max per zone is at least the HPA ceiling. Terraform ignores desired size after create. Not in the kustomization (ADR 0083). Catalog stays 221.
-  - [x] metrics-server — upstream v0.9.0 components manifest, not in the kustomization. HPA resource metrics stay dark until `kubectl top` answers. Kubelet TLS stays verified (ADR 0084). Catalog stays 221.
+  - [x] metrics-server — upstream v0.9.0 manifest, not in the kustomization. HPA resource metrics stay dark until `kubectl top` answers. Kubelet TLS stays verified (ADR 0084). Catalog stays 221.
+  - [x] metrics-server high availability — `replicas: 2` and required hostname anti-affinity, plus an addon PDB that keeps one pod. Still not in the kustomization. No kubelet TLS skip and no kubelet CA mount (ADR 0085). Catalog stays 221.
 
 ---
 

@@ -81,12 +81,19 @@ else
   bad "selector is the live blue API color"
 fi
 
+# Addon budget is metrics-server.yaml (ADR 0085). This count is the API budget.
 pdb_count=0
 if [ -d "${ROOT}/deploy/k8s" ]; then
-  pdb_count="$(grep -l '^kind: PodDisruptionBudget$' "${ROOT}/deploy/k8s/"*.yaml 2>/dev/null | wc -l | tr -d ' ')"
+  pdb_count="$(
+    grep -l '^kind: PodDisruptionBudget$' "${ROOT}/deploy/k8s/"*.yaml 2>/dev/null \
+      | grep -v '/metrics-server\.yaml$' \
+      | wc -l \
+      | tr -d ' ' \
+    || true
+  )"
 fi
-if [ "${pdb_count}" = "1" ]; then ok "one PodDisruptionBudget in deploy/k8s"
-else bad "expected one PodDisruptionBudget in deploy/k8s (found ${pdb_count})"; fi
+if [ "${pdb_count}" = "1" ]; then ok "one API PodDisruptionBudget in deploy/k8s"
+else bad "expected one API PodDisruptionBudget in deploy/k8s (found ${pdb_count})"; fi
 
 need_not_grep "$KUSTOM" '^[[:space:]]*-[[:space:]]*pdb\.yaml[[:space:]]*$' "kustomization does not list pdb.yaml"
 

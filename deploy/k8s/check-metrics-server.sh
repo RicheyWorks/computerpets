@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ADR 0084 — metrics-server install path for HPA resource metrics.
+# ADR 0084 / 0085 — metrics-server install path, two replicas, required anti-affinity.
 # No cluster. Does not kubectl apply. The manifest stays out of kustomize.
 set -euo pipefail
 
@@ -11,6 +11,7 @@ BLUE="${ROOT}/deploy/k8s/deployment-blue.yaml"
 GREEN="${ROOT}/deploy/k8s/deployment-green.yaml"
 README="${ROOT}/deploy/k8s/README.md"
 ADR="${ROOT}/docs/adr/0084-metrics-server.md"
+ADR85="${ROOT}/docs/adr/0085-metrics-server-ha.md"
 PASS=0
 FAIL=0
 
@@ -80,12 +81,13 @@ need_file "$BLUE"
 need_file "$GREEN"
 need_file "$README"
 need_file "$ADR"
+need_file "$ADR85"
 need_absent "${ROOT}/deploy/k8s/Chart.yaml"
 need_absent "${ROOT}/deploy/k8s/metrics-server/values.yaml"
 
 echo "== upstream install contract =="
 need_grep "$MS" 'Not in kustomization.yaml' "manifest says it stays out of kustomize"
-need_grep "$MS" 'releases/download/v0\.9\.0/components\.yaml' "header cites upstream v0.9.0 components.yaml"
+need_grep "$MS" 'releases/download/v0\.9\.0/high-availability-1\.21\+\.yaml' "header cites upstream v0.9.0 high-availability-1.21+.yaml"
 need_grep_body "$MS" '^kind: Deployment$' "kind includes a Deployment"
 need_grep_body "$MS" '^kind: APIService$' "kind includes an APIService"
 need_grep_body "$MS" 'name: metrics-server$' "addon name is metrics-server"
@@ -103,7 +105,15 @@ need_grep_body "$MS" 'readOnlyRootFilesystem: true' "root filesystem is read-onl
 need_grep_body "$MS" 'allowPrivilegeEscalation: false' "privilege escalation is off"
 need_grep_body "$MS" 'priorityClassName: system-cluster-critical' "priority class is system-cluster-critical"
 need_grep_body "$MS" 'serviceAccountName: metrics-server' "service account is metrics-server"
-need_not_grep_body "$MS" '^[[:space:]]*replicas:' "Deployment stays one pod (no replicas field)"
+need_grep_body "$MS" '^  replicas: 2$' "Deployment replicas is 2"
+need_not_grep_body "$MS" '^  replicas: 1$' "Deployment is not a single replica"
+need_grep_body "$MS" 'podAntiAffinity:' "pod anti-affinity is set"
+need_grep_body "$MS" 'requiredDuringSchedulingIgnoredDuringExecution:' "anti-affinity is required"
+need_not_grep_body "$MS" 'preferredDuringSchedulingIgnoredDuringExecution:' "anti-affinity is not a preference"
+need_grep_body "$MS" 'topologyKey: kubernetes.io/hostname$' "anti-affinity topology is hostname"
+need_grep_body "$MS" '^      maxUnavailable: 1$' "rolling update maxUnavailable is 1"
+need_grep_body "$MS" '^kind: PodDisruptionBudget$' "addon disruption budget is present"
+need_grep_body "$MS" '^  minAvailable: 1$' "addon budget keeps one pod"
 need_not_grep_body "$MS" 'hostNetwork:[[:space:]]*true' "no host network"
 need_not_grep_body "$MS" 'hostPID:[[:space:]]*true' "no host PID"
 need_not_grep_body "$MS" 'privileged:[[:space:]]*true' "no privileged container"
@@ -118,6 +128,15 @@ if [ -f "$MS" ]; then
   deploy_count="$(yaml_body "$MS" | grep -c '^kind: Deployment$' || true)"
   if [ "${deploy_count}" = "1" ]; then ok "one Deployment"
   else bad "expected one Deployment (found ${deploy_count})"; fi
+  replica_count="$(yaml_body "$MS" | grep -c '^  replicas: 2$' || true)"
+  if [ "${replica_count}" = "1" ]; then ok "replicas 2 appears once"
+  else bad "expected one replicas: 2 (found ${replica_count})"; fi
+  affinity_count="$(yaml_body "$MS" | grep -c 'podAntiAffinity:' || true)"
+  if [ "${affinity_count}" = "1" ]; then ok "one podAntiAffinity"
+  else bad "expected one podAntiAffinity (found ${affinity_count})"; fi
+  pdb_count="$(yaml_body "$MS" | grep -c '^kind: PodDisruptionBudget$' || true)"
+  if [ "${pdb_count}" = "1" ]; then ok "one addon PodDisruptionBudget"
+  else bad "expected one addon PodDisruptionBudget (found ${pdb_count})"; fi
 fi
 
 echo "== stays out of local apply =="
@@ -133,13 +152,21 @@ need_grep "$GREEN" 'replicas: 0' "green stays the idle slot"
 echo "== docs =="
 need_grep "$README" 'metrics-server\.yaml' "README names the manifest"
 need_grep "$README" 'ADR 0084' "README names ADR 0084"
+need_grep "$README" 'ADR 0085' "README names ADR 0085"
 need_grep "$README" 'v0\.9\.0' "README names the pinned tag"
+need_grep "$README" 'replicas: 2' "README names two replicas"
 need_grep "$README" 'kubelet-insecure-tls' "README forbids the kubelet TLS skip"
 need_grep "$ADR" 'v0\.9\.0' "ADR names the pinned tag"
 need_grep "$ADR" 'metrics\.k8s\.io' "ADR names the API group"
 need_grep "$ADR" 'kubelet-insecure-tls' "ADR forbids the kubelet TLS skip"
 need_grep "$ADR" 'Catalog stays 221' "catalog stays 221"
 need_grep "$ADR" 'not in the kustomization' "ADR keeps the file out of kustomize"
+need_grep "$ADR85" 'replicas: 2' "HA ADR names two replicas"
+need_grep "$ADR85" 'anti-affinity' "HA ADR names anti-affinity"
+need_grep "$ADR85" 'high-availability-1.21+' "HA ADR names the upstream file"
+need_grep "$ADR85" 'kubelet-insecure-tls' "HA ADR forbids the kubelet TLS skip"
+need_grep "$ADR85" 'Catalog stays 221' "HA ADR keeps catalog 221"
+need_grep "$ADR85" 'not in the kustomization' "HA ADR keeps the file out of kustomize"
 
 if command -v kubectl >/dev/null 2>&1; then
   if kubectl apply --dry-run=client --validate=false -f "$MS" >/dev/null 2>&1; then
