@@ -50,6 +50,8 @@ copy_tree() {
   cp "${ROOT}/deploy/k8s/README.md" "${dest}/deploy/k8s/README.md"
   cp "${ROOT}/docs/adr/0083-cluster-autoscaler.md" \
     "${dest}/docs/adr/0083-cluster-autoscaler.md"
+  cp "${ROOT}/docs/adr/0090-cluster-autoscaler-ha.md" \
+    "${dest}/docs/adr/0090-cluster-autoscaler-ha.md"
   cp "${SCRIPT}" "${dest}/deploy/terraform/check-cluster-autoscaler.sh"
   chmod +x "${dest}/deploy/terraform/check-cluster-autoscaler.sh"
 }
@@ -80,6 +82,34 @@ copy_tree "${BROKEN}"
 sed -i '/- deployment-green.yaml/a\  - cluster-autoscaler.yaml' \
   "${BROKEN}/deploy/k8s/kustomization.yaml"
 assert_exit 1 "check fails when kustomize would apply the autoscaler" \
+  "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
+
+copy_tree "${BROKEN}"
+# One replica stops adding nodes until that pod is back.
+sed -i 's/replicas: 2/replicas: 1/' \
+  "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml"
+assert_exit 1 "check fails when the autoscaler drops to one replica" \
+  "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
+
+copy_tree "${BROKEN}"
+# Without the hostname rule both pods can land on the node that then dies.
+sed -i '/topologyKey: kubernetes.io\/hostname/d' \
+  "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml"
+assert_exit 1 "check fails when hostname anti-affinity is removed" \
+  "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
+
+copy_tree "${BROKEN}"
+# Both replicas would call SetDesiredCapacity if the election flag is off.
+sed -i 's/--leader-elect=true/--leader-elect=false/' \
+  "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml"
+assert_exit 1 "check fails when leader election is turned off" \
+  "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
+
+copy_tree "${BROKEN}"
+# The zone preference is soft. Dropping it is still a failed placement contract.
+sed -i '/topologyKey: topology.kubernetes.io\/zone/d' \
+  "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml"
+assert_exit 1 "check fails when the soft zone anti-affinity is removed" \
   "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
 
 echo

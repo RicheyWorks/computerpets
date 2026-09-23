@@ -1,4 +1,6 @@
 # Cluster Autoscaler for the private multi-AZ API node groups (ADR 0083).
+# High availability is ADR 0090: two replicas, required hostname
+# anti-affinity, preferred zone anti-affinity, leader election on.
 # Not in kustomization.yaml. Local/dev `kubectl apply -k deploy/k8s` does
 # not install this. Kind and minikube set enable_node_pool=false and do
 # not apply this file. There is no overlay directory.
@@ -17,6 +19,11 @@
 # ignores desired_size after create. min stays 1 per zone. max is at least
 # the HPA ceiling. Scale-down still honors PodDisruptionBudgets.
 # Karpenter is not installed.
+#
+# Two pods share one ServiceAccount and one IRSA role. Only the leader
+# changes desired capacity. The standby waits on the kube-system Lease
+# named cluster-autoscaler. A one-node cluster that applies this file
+# leaves the second pod Pending. Do not apply it on kind or minikube.
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -136,15 +143,38 @@ metadata:
   labels:
     app: cluster-autoscaler
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: cluster-autoscaler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0
   template:
     metadata:
       labels:
         app: cluster-autoscaler
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: cluster-autoscaler
+              namespaces:
+                - kube-system
+              topologyKey: kubernetes.io/hostname
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: cluster-autoscaler
+                namespaces:
+                  - kube-system
+                topologyKey: topology.kubernetes.io/zone
       serviceAccountName: cluster-autoscaler
       priorityClassName: system-cluster-critical
       automountServiceAccountToken: true
@@ -161,6 +191,9 @@ spec:
             - ./cluster-autoscaler
             - --cloud-provider=aws
             - --namespace=kube-system
+            - --leader-elect=true
+            - --leader-elect-resource-lock=leases
+            - --leader-elect-resource-name=cluster-autoscaler
             - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled=true,k8s.io/cluster-autoscaler/CLUSTER_NAME=owned
             - --balance-similar-node-groups=true
             - --skip-nodes-with-system-pods=false
