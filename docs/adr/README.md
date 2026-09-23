@@ -136,12 +136,13 @@ address, or an API that is not on `main`.
 | [0115](0115-linux-x11-window-play.md) | Linux X11 lists top-level window rectangles for pet window play (rects only; Mac stays `mac-window-play`) | Accepted |
 | [0116](0116-mac-accessibility-window-play.md) | Mac Accessibility lists top-level window rectangles for pet window play (window number, not the view pointer; untrusted stays empty) | Accepted |
 | [0117](0117-linux-nvidia-gpu-sense.md) | Linux reads nvidia-smi for desktop-local GPU sense (same line protocol as Windows; Mac stays `mac-gpu-sense`) | Accepted (Mac clause superseded in part by 0118; amdgpu-unread clause superseded in part by 0119) |
-| [0118](0118-mac-ioaccelerator-gpu-sense.md) | Mac reads IOAccelerator PerformanceStatistics for desktop-local GPU sense (same line protocol; missing tool stays unread; powermetrics is not called) | Accepted (amdgpu clause superseded in part by 0119) |
+| [0118](0118-mac-ioaccelerator-gpu-sense.md) | Mac reads IOAccelerator PerformanceStatistics for desktop-local GPU sense (same line protocol; missing tool stays unread; powermetrics is not called) | Accepted (amdgpu clause superseded in part by 0119; temperature and power fail-closed moved to 0124) |
 | [0119](0119-linux-amdgpu-sysfs-gpu-sense.md) | Linux reads amdgpu sysfs into the same GPU line when nvidia-smi does not print one (missing file stays unread; Intel sysfs stays unread) | Accepted (Intel clause superseded in part by 0120) |
 | [0120](0120-linux-intel-sysfs-gpu-sense.md) | Linux i915 and xe sysfs stay unread (`INTEL_EMPTY`; RC6, GT idle, frequency, and a lone capacity file are not the line) | Accepted (fdinfo render utilization moved to 0121) |
 | [0121](0121-linux-intel-fdinfo-gpu-sense.md) | Linux i915 and xe render utilization comes from two DRM fdinfo reads in one probe (rewind, zero interval, and a missing file stay unread) | Accepted (amdgpu hwmon temperature and power moved to 0122) |
 | [0122](0122-linux-amdgpu-hwmon-gpu-sense.md) | Linux amdgpu temperature and power come from the card hwmon when the label is `edge` or `PPT` (an unlabeled channel, junction, memory, and a power cap stay unread) | Accepted (Intel device VRAM fail-closed moved to 0123) |
-| [0123](0123-linux-intel-device-vram-gpu-sense.md) | Linux i915 and xe device VRAM used and total stay unread (no upstream used and total pair; a query zero without CAP_PERFMON is not a sample) | Accepted |
+| [0123](0123-linux-intel-device-vram-gpu-sense.md) | Linux i915 and xe device VRAM used and total stay unread (no upstream used and total pair; a query zero without CAP_PERFMON is not a sample) | Accepted (Mac temperature and power fail-closed moved to 0124) |
+| [0124](0124-mac-gpu-temp-power.md) | Mac GPU temperature and power stay unread (IOAccelerator has no degree or watt; a planted key stays off the line; powermetrics, IOReport, and AppleSMC are not read) | Accepted |
 
 ## How to add one
 

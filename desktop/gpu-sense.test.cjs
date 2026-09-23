@@ -157,7 +157,46 @@ test("the Mac probe names IOAccelerator and does not ask for root", () => {
   assert.match(text, /In use system memory/);
   assert.match(text, /NVIDIA_ABSENT/);
   assert.match(text, /NVIDIA_EMPTY/);
+  assert.match(text, /GPU Energy/);
+  assert.match(text, /Tg05/);
+  assert.match(text, /thermalPressureLevel/);
+  assert.match(text, /AppleSMC/);
+  assert.match(text, /IOReport/);
   assert.doesNotMatch(text, /powermetrics|sudo|nvidia-smi|\/sys\/class\/drm/);
+});
+
+test("Mac temperature and power keys stay off the shared line", () => {
+  const only = runMacProbe([
+    "+-o AGXAccelerator  <class AGXAccelerator, id 0x1, registered>",
+    "{ \"PerformanceStatistics\" = {\"Temperature\"=72,\"GPU Temperature\"=68,\"die temperature\"=70,\"dieTemp\"=71,\"Power\"=18.4,\"GPU Power\"=19,\"GPU Energy\"=0,\"watts\"=12,\"Tg05\"=61.2,\"Tg0D\"=64,\"thermalPressureLevel\"=0} }",
+    "",
+  ].join("\n"));
+  assert.match(only, /NVIDIA_EMPTY/);
+  assert.doesNotMatch(only, /[0-9]/);
+  assert.doesNotMatch(only, /, 0,/);
+  const onlySample = Gpu.sampleFromProbe(Gpu.parseProbeText(only), { platform: "darwin", nowMs: NOW });
+  assert.equal(onlySample.status, "unread");
+  assert.equal(onlySample.tempC, null);
+  assert.equal(onlySample.powerWatts, null);
+  assert.equal(Gpu.gpuLine(onlySample), "GPU unread");
+
+  const beside = runMacProbe([
+    "+-o AGXAccelerator  <class AGXAccelerator, id 0x1, registered>",
+    "  |   \"model\" = <\"Apple M2\">",
+    "{ \"PerformanceStatistics\" = {\"Device Utilization %\"=16,\"In use system memory\"=568164352,\"Temperature\"=72,\"Power\"=18.4,\"GPU Energy\"=0,\"Tg05\"=61.2} }",
+    "",
+  ].join("\n"));
+  assert.match(beside, /Apple M2, \[N\/A\], 16, 542, \[N\/A\], \[N\/A\]/);
+  assert.doesNotMatch(beside, /72|18\.4|61\.2/);
+  assert.doesNotMatch(beside, /, 0,/);
+  const sample = Gpu.sampleFromProbe(Gpu.parseProbeText(beside), { platform: "darwin", nowMs: NOW });
+  assert.equal(sample.status, "read");
+  assert.equal(sample.source, "ioaccelerator");
+  assert.equal(sample.utilPercent, 16);
+  assert.equal(sample.tempC, null);
+  assert.equal(sample.powerWatts, null);
+  assert.equal(Gpu.gpuLine(sample), "GPU Apple M2 · unread · 16% · 542 MiB/unread · unread");
+  assert.doesNotMatch(Gpu.gpuLine(sample), /72°C|18\.4 W|0°C|0 W/);
 });
 
 test("a platform without a probe does not spawn", async () => {
