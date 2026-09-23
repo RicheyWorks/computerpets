@@ -17,4 +17,5 @@ data:
   # Optional: comma CIDRs for X-Forwarded-For / Forwarded (ADR 0067). Empty = remoteAddr only.
   # TRUSTED_PROXY_CIDRS: "10.0.0.0/8"
   MICROSOFT_DEV_MODE: "false"
+  # Public listener TLS stays off. The Service is HTTP on 8081 (ADR 0077).
   SERVER_PORT: "8081"

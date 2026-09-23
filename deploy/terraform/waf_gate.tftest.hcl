@@ -4,11 +4,12 @@
 mock_provider "aws" {}
 
 variables {
-  enable_postgres = false
-  enable_redis    = false
-  enable_secrets  = false
-  enable_cdn      = false
-  enable_waf      = true
+  enable_postgres         = false
+  enable_redis            = false
+  enable_secrets          = false
+  enable_cdn              = false
+  enable_waf              = true
+  enable_api_listener_tls = false
 }
 
 run "empty_alb_arn_is_refused" {

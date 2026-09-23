@@ -10,7 +10,8 @@ resources:
   - deployment-blue.yaml
   - deployment-green.yaml
   - service.yaml
-# ingress.yaml is optional (needs a controller). Apply it separately.
+# ingress.yaml (HTTP, local/dev) and ingress-tls.yaml (public HTTPS, ADR 0077)
+# are optional. Neither is applied by this kustomization.
 images:
   - name: ghcr.io/richeyworks/computerpets
     newTag: main

@@ -1,5 +1,7 @@
-# Optional. Not included in kustomization.yaml — apply only if you have
-# an Ingress controller. Change the host.
+# Optional local/dev door. Not included in kustomization.yaml — apply only
+# if you have an Ingress controller and you are not publishing the API.
+# This file has no tls block. Public prod is ingress-tls.yaml (ADR 0077).
+# Change the host.
 # No nginx rate-limit annotations (ADR 0074). The outer gate is the regional
 # WAF on the API ALB. The JVM RateLimitingFilter stays the inner bucket.
 apiVersion: networking.k8s.io/v1

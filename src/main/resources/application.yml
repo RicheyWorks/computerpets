@@ -7,6 +7,17 @@
 # can sit at both doors. They do not share one.
 server:
   port: 8081
+  # server.ssl stays off (ADR 0077). No keystore. Pod and local stay HTTP.
+  # Public TLS terminates at ingress-tls.yaml or the ALB HTTPS listener.
+  ssl:
+    enabled: false
+
+# Public API listener TLS (ADR 0077). Default off: local, compose, and the
+# in-cluster Service stay HTTP on 8081. When the flag is on, prod requires
+# API_PUBLIC_BASE_URL to be an https origin on port 443. Do not set a keystore.
+api-listener:
+  tls-required: ${API_LISTENER_TLS_REQUIRED:false}
+  public-base-url: ${API_PUBLIC_BASE_URL:}
 
 spring:
   application:
