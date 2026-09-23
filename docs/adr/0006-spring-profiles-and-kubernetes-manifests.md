@@ -50,10 +50,10 @@ No mesh.
   A hosted Vault cluster is still the keeper's infrastructure.
 - Helm values and a service mesh are non-goals until the app outgrows
   one Deployment and a selector flip.
-- Prod API replica count is the HPA in `hpa.yaml` (min 3, max 6, not in this
+- Prod API replica count is the HPA in `hpa.yaml` (min 3, max 3, not in this
   kustomization). Local apply stays blue 2 / green 0
   ([0078](0078-horizontal-pod-autoscaling.md),
-  [0107](0107-api-hostname-ceiling.md)).
+  [0108](0108-api-single-zone-hostname-ceiling.md)).
 - Voluntary disruption of that live color keeps 2 pods (`pdb.yaml`, also
   not in this kustomization) ([0079](0079-pod-disruption-budget.md)).
 - Each API color hard-spreads hostnames (`DoNotSchedule` on

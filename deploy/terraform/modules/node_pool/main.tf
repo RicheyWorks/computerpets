@@ -40,15 +40,16 @@ locals {
   # It does not stamp topology.kubernetes.io/zone. EKS sets that label
   # from the instance placement AZ. One subnet per group keeps that AZ.
   # desired-size-owner=cluster-autoscaler (ADR 0083). Create uses the floor.
-  # hpa-max-replicas=6. hostname-ceiling-pods=6 (ADR 0107).
-  # Two healthy zones times min_size 3. The old ceiling of 10 is
-  # 2, 2, 2, 2, 1, and 1 under hostname maxSkew 1, so those pods
-  # share nodes and nothing stays Pending. A ceiling of 7 is the
-  # same shape with one extra. A ceiling under 6 leaves a paid
-  # hostname empty. Raising min_size to 5 (ten nodes) or to 10
-  # (twenty nodes) would keep the old ceiling and is refused.
+  # hpa-max-replicas=3. hostname-ceiling-pods=3 (ADR 0108).
+  # single-zone-hostname-ceiling=3. refused-ceiling-nodes-per-pod=2.
+  # One Ready zone times min_size 3, and the HPA floor. The ADR 0107
+  # ceiling of 6 is 2, 2, and 2 under hostname maxSkew 1, so those
+  # pods share nodes and nothing stays Pending. A ceiling of 4 or 5
+  # on this floor stacks the same way. Matching min_size to a higher
+  # ceiling bills two always-on nodes per extra pod: eight for 4,
+  # ten for 5, twelve for 6, twenty for 10. Those bills are refused.
   # zone-max-nodes=20. ADR 0104 sized that as twice the old ceiling
-  # of 10. The max stays 20. It is no longer twice this ceiling.
+  # of 10. The max stays 20. It is not twice this ceiling.
   # Cluster Autoscaler reads the managed Auto Scaling group's MaxSize.
   # It does not read this local. eks:UpdateNodegroupConfig is denied,
   # so the leader cannot lift this ceiling. A zone at max is skipped
