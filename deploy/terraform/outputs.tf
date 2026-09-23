@@ -17,6 +17,16 @@ output "redis_port" {
   value = "6379"
 }
 
+output "redis_auth_enabled" {
+  description = "True when managed Redis was created with AUTH and transit TLS (ADR 0075). The token is not an output."
+  value       = try(module.redis[0].auth_enabled, false)
+}
+
+output "redis_transit_encryption_enabled" {
+  description = "True when the app must set REDIS_SSL=true. Paired with redis_auth_enabled."
+  value       = try(module.redis[0].transit_encryption_enabled, false)
+}
+
 output "bundle_base_url" {
   description = "Suggested BUNDLE_BASE_URL when CDN is provisioned."
   value       = try(module.cdn[0].bundle_base_url, "")
@@ -41,6 +51,7 @@ output "k8s_wiring_hint" {
     3. Point ConfigMap SPRING_DATASOURCE_URL / REDIS_HOST at the outputs above; drop in-cluster postgres/redis Deployments.
     4. Set BUNDLE_BASE_URL to bundle_base_url output.
     5. Set waf_associate_alb_arn to the API ALB before apply (ADR 0074). Health check path is /actuator/health or /actuator/health/liveness.
-    6. Keep verifying GHCR digests (ADR 0061) before kubectl set image.
+    6. If redis_auth_enabled is true, set REDIS_SSL=true and REDIS_AUTH_REQUIRED=true and inject REDIS_PASSWORD (or REDIS_PASSWORD_FILE) from the same token. Do not put the token in the ConfigMap or in git. If it is false, leave those unset.
+    7. Keep verifying GHCR digests (ADR 0061) before kubectl set image.
   EOT
 }

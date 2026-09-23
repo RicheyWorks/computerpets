@@ -303,6 +303,130 @@ class ProductionProfileGuardTest {
     }
 
     @Test
+    @DisplayName("prod accepts the AUTH-less in-cluster Redis when the trio is unset")
+    void redisAuthUnset_passes() {
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                new MockEnvironment());
+
+        assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("prod accepts Redis AUTH when password, SSL, and the required flag are set")
+    void redisAuthTrio_passes() {
+        MockEnvironment env = new MockEnvironment();
+        env.setProperty("REDIS_AUTH_REQUIRED", "true");
+        env.setProperty("REDIS_SSL", "true");
+        env.setProperty("REDIS_PASSWORD", "plan-fixture-token");
+
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                env);
+
+        assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("prod refuses Redis AUTH when the password is required and missing")
+    void redisAuthRequiredWithoutPassword_failsClosed() {
+        MockEnvironment env = new MockEnvironment();
+        env.setProperty("REDIS_AUTH_REQUIRED", "true");
+        env.setProperty("REDIS_SSL", "true");
+
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                env);
+
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("REDIS_PASSWORD")
+                .hasMessageContaining("password=missing")
+                .hasMessageNotContaining("plan-fixture-token");
+    }
+
+    @Test
+    @DisplayName("prod refuses a Redis password without TLS")
+    void redisPasswordWithoutSsl_failsClosed() {
+        MockEnvironment env = new MockEnvironment();
+        env.setProperty("REDIS_PASSWORD", "plan-fixture-token");
+
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                env);
+
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("all-or-nothing")
+                .hasMessageContaining("password=set")
+                .hasMessageNotContaining("plan-fixture-token");
+    }
+
+    @Test
+    @DisplayName("prod file source requires REDIS_PASSWORD_FILE when AUTH is on")
+    void fileSourceAuthWithoutPasswordFile_failsClosed() {
+        MockEnvironment env = envWithFileMounts();
+        env.setProperty("REDIS_AUTH_REQUIRED", "true");
+        env.setProperty("REDIS_SSL", "true");
+        env.setProperty("REDIS_PASSWORD", "plan-fixture-token");
+
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "file",
+                "false",
+                env);
+
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("REDIS_PASSWORD_FILE")
+                .hasMessageNotContaining("plan-fixture-token");
+    }
+
+    @Test
+    @DisplayName("prod file source accepts REDIS_PASSWORD_FILE when AUTH is on")
+    void fileSourceAuthWithPasswordFile_passes() {
+        MockEnvironment env = envWithFileMounts();
+        env.setProperty("REDIS_AUTH_REQUIRED", "true");
+        env.setProperty("REDIS_SSL", "true");
+        env.setProperty("REDIS_PASSWORD", "plan-fixture-token");
+        env.setProperty("REDIS_PASSWORD_FILE", "/run/secrets/redis_password");
+
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "file",
+                "false",
+                env);
+
+        assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
+    }
+
+    @Test
     @DisplayName("prod refuses an unparseable COMPUTERPETS_KEYS_ROTATED_AT stamp")
     void unparseableKeysRotatedAt_failsHard() {
         ProductionProfileGuard g = guard(

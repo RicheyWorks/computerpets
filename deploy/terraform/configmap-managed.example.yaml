@@ -21,6 +21,11 @@ data:
   REDIS_HOST: REPLACE_WITH_TF_OUTPUT
   REDIS_PORT: "6379"
   RATE_LIMIT_BACKEND: redis
+  # In-cluster redis.yaml is AUTH-less: leave SSL and AUTH_REQUIRED unset.
+  # Managed ElastiCache with redis_auth_enabled (ADR 0075): set both to true.
+  # The token is REDIS_PASSWORD on the Secret (or REDIS_PASSWORD_FILE), not here.
+  # REDIS_SSL: "true"
+  # REDIS_AUTH_REQUIRED: "true"
   MICROSOFT_DEV_MODE: "false"
   SERVER_PORT: "8081"
   # Optional read replica (ADR 0059) — set only when a managed replica exists:

@@ -68,6 +68,18 @@ public class RateLimitProperties {
         private String host = "localhost";
         private int port = 6379;
         private Duration timeout = Duration.ofMillis(200);
+        /**
+         * Optional AUTH secret ({@code REDIS_PASSWORD} or {@code REDIS_PASSWORD_FILE}).
+         * Blank keeps the AUTH-less local / in-cluster Redis (ADR 0075).
+         */
+        private String password = "";
+        /** Transit TLS ({@code REDIS_SSL}). Default false so compose Redis stays plain. */
+        private boolean ssl;
+        /**
+         * When true, a blank password or {@code ssl=false} refuses to start.
+         * Default false so local and in-cluster Redis keep booting.
+         */
+        private boolean authRequired;
 
         public String getHost() {
             return host;
@@ -91,6 +103,39 @@ public class RateLimitProperties {
 
         public void setTimeout(Duration timeout) {
             this.timeout = timeout == null ? Duration.ofMillis(200) : timeout;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password == null ? "" : password;
+        }
+
+        public boolean hasPassword() {
+            return password != null && !password.isBlank();
+        }
+
+        /** Copy for Lettuce. Caller zeroes the copy after {@code withPassword}. */
+        public char[] passwordChars() {
+            return hasPassword() ? password.toCharArray() : new char[0];
+        }
+
+        public boolean isSsl() {
+            return ssl;
+        }
+
+        public void setSsl(boolean ssl) {
+            this.ssl = ssl;
+        }
+
+        public boolean isAuthRequired() {
+            return authRequired;
+        }
+
+        public void setAuthRequired(boolean authRequired) {
+            this.authRequired = authRequired;
         }
     }
 }
