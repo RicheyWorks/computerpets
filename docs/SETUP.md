@@ -466,9 +466,12 @@ still schedules when two hostnames exist. A node that omits the zone
 label does not. Kind and minikube do not apply the file. Do not set
 minDomains. Required zone anti-affinity is not set. Leader election
 stays on. Both pods use the one
-IRSA service account. Only the leader changes desired capacity
+IRSA service account. Only the leader changes desired capacity. The standby is not the scaler.
+`--balance-similar-node-groups=true` and `--expander=least-waste` stay,
+so the scheduled leader can raise the underfilled zone's group
 ([ADR 0090](adr/0090-cluster-autoscaler-ha.md),
-[ADR 0099](adr/0099-cluster-autoscaler-zone-hard-spread.md)).
+[ADR 0099](adr/0099-cluster-autoscaler-zone-hard-spread.md),
+[ADR 0101](adr/0101-cluster-autoscaler-leader-scale.md)).
 `nodeSelector` also requires `kubernetes.io/os: linux` and
 `computerpets/node-pool: api`, so the hostname rule cannot be met by
 nodes outside those groups. Kind and minikube do not apply the file

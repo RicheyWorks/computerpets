@@ -423,7 +423,7 @@ No live AWS apply.
 ./deploy/k8s/check-api-pool-taint.test.sh
 ```
 
-## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092, ADR 0099)
+## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092, ADR 0099, ADR 0101)
 
 `cluster-autoscaler.yaml` is **not** in the kustomization. `kubectl apply -k
 deploy/k8s` does not install it. Kind and minikube set
@@ -456,7 +456,17 @@ Leader election stays on: `--leader-elect=true`, lock `leases`, name
 `cluster-autoscaler`. The ClusterRole can create leases and update that
 named lease. Both pods use ServiceAccount `cluster-autoscaler` and the
 one IRSA role. Only the leader calls `SetDesiredCapacity`. There is no
-second role.
+second role. The standby is not the scaler
+([ADR 0101](../../docs/adr/0101-cluster-autoscaler-leader-scale.md)).
+A Pending replica does not hold the lease. The scheduled leader still
+raises desired capacity on the underfilled zone's Auto Scaling group.
+`--balance-similar-node-groups=true` and `--expander=least-waste` stay.
+`--skip-nodes-with-system-pods=false` stays. That flag is scale-down.
+`--namespace=kube-system` is the lease namespace, not a pod filter.
+There is no scheduler allow-list and no `--nodes` list. The node pool
+is one similar group per zone, at least two. Do not set `minDomains`.
+Required zone anti-affinity is not set. Required hostname anti-affinity
+is not the follow-up.
 
 The same file adds a `policy/v1` `PodDisruptionBudget` named
 `cluster-autoscaler` in `kube-system`. `minAvailable` is 1. The selector
@@ -496,12 +506,17 @@ minor's latest patch instead. Do not commit a real account id.
 ./deploy/terraform/check-cluster-autoscaler.test.sh
 ./deploy/k8s/check-cluster-autoscaler-zone-hard-spread.sh
 ./deploy/k8s/check-cluster-autoscaler-zone-hard-spread.test.sh
+./deploy/k8s/check-cluster-autoscaler-leader-scale.sh
+./deploy/k8s/check-cluster-autoscaler-leader-scale.test.sh
 ```
 
 Zone spread for the API colors stays the item in those Deployments.
 Adding a node does not force a pod onto it. The scaler's own zone item
 is `DoNotSchedule`. If the lighter zone cannot fit the second scaler
-pod, that pod stays Pending and does not hold the lease.
+pod, that pod stays Pending and does not hold the lease. The standby is
+not the scaler. The scheduled leader raises desired capacity on the
+underfilled zone's group
+([ADR 0101](../../docs/adr/0101-cluster-autoscaler-leader-scale.md)).
 
 ## metrics-server (ADR 0084, ADR 0085, ADR 0086, ADR 0087, ADR 0088, ADR 0089, ADR 0098)
 

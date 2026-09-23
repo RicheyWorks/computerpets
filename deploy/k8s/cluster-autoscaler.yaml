@@ -43,8 +43,14 @@
 #
 # Two pods share one ServiceAccount and one IRSA role. Only the leader
 # changes desired capacity. The standby waits on the kube-system Lease
-# named cluster-autoscaler. A one-node cluster that applies this file
-# leaves the second pod Pending. Do not apply it on kind or minikube.
+# named cluster-autoscaler. The standby is not the scaler (ADR 0101).
+# A Pending replica does not hold the lease. The scheduled leader still
+# raises desired capacity on the underfilled zone's Auto Scaling group.
+# --balance-similar-node-groups=true, --expander=least-waste, and
+# --skip-nodes-with-system-pods=false stay. --namespace=kube-system is
+# the lease namespace, not a pod filter. A one-node cluster that applies
+# this file leaves the second pod Pending. Do not apply it on kind or
+# minikube.
 #
 # Pool pin (ADR 0091). nodeSelector requires kubernetes.io/os=linux and
 # computerpets/node-pool=api, the label modules/node_pool already sets.
@@ -242,6 +248,13 @@ spec:
         - name: cluster-autoscaler
           image: registry.k8s.io/autoscaling/cluster-autoscaler:v1.36.1
           imagePullPolicy: IfNotPresent
+          # ADR 0101. The standby is not the scaler. Only the replica that
+          # holds the lease calls SetDesiredCapacity. Similar per-zone
+          # groups stay balanced. least-waste is the only expander.
+          # skip-nodes-with-system-pods stays false. That flag is
+          # scale-down. It is not a filter of kube-system Pending pods.
+          # --namespace=kube-system is the lease namespace. There is no
+          # scheduler allow-list and no --nodes list. Do not set minDomains.
           command:
             - ./cluster-autoscaler
             - --cloud-provider=aws
