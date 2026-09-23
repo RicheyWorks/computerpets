@@ -1,6 +1,6 @@
 # 0125. The overlay opens on Chromium's GPU compositor or it stays closed
 
-- **Status:** Accepted
+- **Status:** Accepted (host pet frame moved to [0126](0126-chromium-sprite-surface.md))
 - **Date:** 2026-09-23
 - **Code:** `desktop/gpu-path.cjs`, `desktop/main.cjs`, `desktop/gpu-path.test.cjs`
 
@@ -30,7 +30,7 @@ This slice does not reopen presence/CSP, Hikari, bundle zip, cosign, CDN, secret
 
 **The overlay glass opens when Chromium's GPU compositor is hardware-accelerated. A software fallback keeps it closed while hardware is expected. `gpu-path.json` defaults to `{"expect":"hardware"}`. `expect` `software` is the explicit accept of a software fallback, and the tray says so. An unread or off compositor stays closed either way.**
 
-1. **What draws.** Pets stay DOM sprite frames. Chromium's GPU process composites the transparent window. That is the path. It is not a shader engine.
+1. **What draws.** This decision drew pets as DOM sprite frames. The host pet frame is now a canvas Chromium composites ([0126](0126-chromium-sprite-surface.md)). Chromium's GPU process still composites the transparent window. The glass gate below is unchanged. It is not a shader engine.
 2. **What opens.** `gpu_compositing` is one of the hardware tokens above, `softwareRendering` is not `true`, and the GL renderer is not a software name. `enabled_readback` is still hardware. The label is `Chromium GPU compositor`.
 3. **What stays closed.** Software compositing, a software GL renderer, or `softwareRendering: true` refuses the window when `expect` is `hardware`. The tray says `Software compositing. Overlay closed.` and offers `Allow software compositing`, which writes `expect` `software` and relaunches. A missing status says `Compositor unread. Overlay closed.` An off compositor says `GPU compositing off. Overlay closed.` Those two do not offer the software accept, because that accept would not open them.
 4. **What software accept means.** `expect` `software` opens a real software fallback and labels it `Chromium software compositing (accepted)`. The same file can require hardware again from the tray. If the compositor is actually hardware, the label stays the hardware one. Unread and off stay closed.
@@ -42,8 +42,8 @@ This slice does not reopen presence/CSP, Hikari, bundle zip, cosign, CDN, secret
 - A keeper whose Chromium compositor is hardware-accelerated gets the same glass as before, with the tray naming `Chromium GPU compositor`.
 - A keeper whose Chromium fell back to SwiftShader, llvmpipe, or software compositing does not get a glass that pretends to be that path. The tray is the control that accepts the fallback on purpose.
 - A hung or empty GPU info read stays closed. That is unread, not a guessed accelerator.
-- Pet frames are still `img` elements. This slice does not upload them as GPU textures and does not create a WebGL context for them.
+- The host pet frame moved to a canvas Chromium composites ([0126](0126-chromium-sprite-surface.md)). This slice did not create a WebGL context.
 - ANGLE's Direct3D 11 or Metal string is Chromium's choice. This tree does not request DirectX 12 or Vulkan.
 - The GUI harness quits with the refusal instead of waiting out the smoke when the glass stays closed.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** the sprite frames themselves are still image elements. Chromium composites the window; it does not upload those frames as textures. A later slice can draw the same sprites on a surface Chromium already composites, and this gate still applies. Do not start DirectX 12, Vulkan, Solana, or Pane. Catalog stays 221.
+- **Next gap:** the host pet draws on a canvas Chromium composites ([0126](0126-chromium-sprite-surface.md)). Do not start DirectX 12, Vulkan, Solana, or Pane. Catalog stays 221.
