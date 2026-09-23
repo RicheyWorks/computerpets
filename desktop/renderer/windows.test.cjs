@@ -1,6 +1,9 @@
 const assert = require("node:assert/strict");
+const { EventEmitter } = require("node:events");
+const { existsSync } = require("node:fs");
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
+const { spawn } = require("node:child_process");
 const { test } = require("node:test");
 const W = require("./windows.js");
 const Enum = require("../windows-enum.cjs");
@@ -72,14 +75,18 @@ test("the overlay hwnd, minimized, taskbar, and cloaked rows are not targets", (
   assert.equal(W.takeRects([raw({ id: overlayId })], { workArea: WORK, skipIds: [overlayId] }).length, 0);
 });
 
-test("Mac and Linux name the later door and do not invent rects", () => {
+test("Linux enumerates and Mac names the later door without inventing rects", () => {
   assert.equal(W.enumeratesOn("win32"), true);
   assert.equal(W.enumeratesOn("Win32"), true);
+  assert.equal(W.enumeratesOn("linux"), true);
+  assert.equal(W.enumeratesOn("Linux"), true);
   assert.equal(W.enumeratesOn("darwin"), false);
-  assert.equal(W.enumeratesOn("linux"), false);
   assert.equal(W.laterDoor("win32"), null);
-  assert.equal(W.laterDoor("darwin"), "mac-linux-window-play");
-  assert.equal(W.laterDoor("linux"), "mac-linux-window-play");
+  assert.equal(W.laterDoor("linux"), null);
+  assert.equal(W.laterDoor("darwin"), "mac-window-play");
+  assert.equal(W.laterDoor("Mac"), "mac-window-play");
+  assert.equal(W.isLinux("linux"), true);
+  assert.equal(W.isMac("darwin"), true);
 });
 
 test("enum lines keep a shell bit and drop titles, paths, and class names", () => {
@@ -110,7 +117,14 @@ test("enum JSON from a fake run is parsed; a later platform stays empty", async 
   assert.equal(JSON.stringify(listed.raw).includes("Notepad"), false);
   const later = await Enum.listRaw({ platform: "darwin" });
   assert.deepEqual(later.raw, []);
-  assert.equal(later.later, "mac-linux-window-play");
+  assert.equal(later.later, "mac-window-play");
+  const linux = await Enum.listRaw({
+    platform: "linux",
+    run: async () => text,
+  });
+  assert.equal(linux.later, null);
+  assert.equal(linux.raw[0].id, "11");
+  assert.equal(linux.raw[0].shell, false);
 });
 
 test("hwnd buffer reads as the skip id", () => {
@@ -122,6 +136,8 @@ test("hwnd buffer reads as the skip id", () => {
 
 test("the overlay asks main for window rects; it does not capture pixels", () => {
   assert.match(mainSrc, /windows-enum/);
+  assert.match(mainSrc, /windowEnumsHere/);
+  assert.match(mainSrc, /Desk\.isLinux/);
   assert.match(mainSrc, /takeRects/);
   assert.match(mainSrc, /skipIds/);
   assert.match(mainSrc, /hwndFromHandle/);
@@ -142,4 +158,291 @@ test("the overlay asks main for window rects; it does not capture pixels", () =>
   assert.doesNotMatch(enumSrc, /cls\.Replace/);
   assert.doesNotMatch(mainSrc, /desktopCapturer/);
   assert.doesNotMatch(petSrc, /desktopCapturer/);
+  assert.match(enumSrc, /_NET_CLIENT_LIST/);
+  assert.match(enumSrc, /_NET_WM_WINDOW_TYPE_DOCK/);
+  assert.match(enumSrc, /_NET_WM_WINDOW_TYPE_DESKTOP/);
+  assert.equal(Enum.enumCommand("linux").cmd, "python3");
+  assert.equal(Enum.enumCommand("win32").cmd, "powershell.exe");
+  assert.doesNotMatch(Enum.LINUX_ENUM_SCRIPT, /WM_NAME|_NET_WM_NAME|WM_CLASS|_NET_WM_ICON_NAME|XFetchName|xcb_get_atom_name/);
+});
+
+function fakePump(text) {
+  const stdout = new EventEmitter();
+  stdout.setEncoding = () => {};
+  const stderr = new EventEmitter();
+  stderr.setEncoding = () => {};
+  const child = new EventEmitter();
+  child.stdout = stdout;
+  child.stderr = stderr;
+  child.stdin = {
+    write(chunk) {
+      if (String(chunk).startsWith("tick")) setImmediate(() => stdout.emit("data", text));
+      return true;
+    },
+  };
+  child.kill = () => {};
+  return child;
+}
+
+test("linux pump spawns python3 and windows pump still spawns powershell", async () => {
+  Enum.disposePump();
+  const text = "11\t100\t80\t500\t400\t0\t0\t0\t0\nEND\n";
+  let linuxCmd = "";
+  const linux = await Enum.listRaw({
+    platform: "linux",
+    spawn(cmd) {
+      linuxCmd = cmd;
+      return fakePump(text);
+    },
+  });
+  assert.equal(linuxCmd, "python3");
+  assert.equal(linux.later, null);
+  assert.equal(linux.raw[0].id, "11");
+  Enum.disposePump();
+  let winCmd = "";
+  const win = await Enum.listRaw({
+    platform: "win32",
+    spawn(cmd) {
+      winCmd = cmd;
+      return fakePump(text);
+    },
+  });
+  assert.equal(winCmd, "powershell.exe");
+  assert.equal(win.raw[0].id, "11");
+  Enum.disposePump();
+});
+
+test("darwin does not spawn an enumerator", async () => {
+  let called = false;
+  const listed = await Enum.listRaw({
+    platform: "darwin",
+    spawn() {
+      called = true;
+      return fakePump("");
+    },
+  });
+  assert.equal(called, false);
+  assert.deepEqual(listed.raw, []);
+  assert.equal(listed.later, "mac-window-play");
+});
+
+const X11_FIXTURE = `
+import ctypes
+import ctypes.util
+import sys
+
+XA_WINDOW = 33
+XA_ATOM = 4
+XA_STRING = 31
+
+class Screen(ctypes.Structure):
+    _fields_ = [
+        ("root", ctypes.c_uint32),
+        ("default_colormap", ctypes.c_uint32),
+        ("white_pixel", ctypes.c_uint32),
+        ("black_pixel", ctypes.c_uint32),
+        ("current_input_masks", ctypes.c_uint32),
+        ("width_in_pixels", ctypes.c_uint16),
+        ("height_in_pixels", ctypes.c_uint16),
+        ("width_in_millimeters", ctypes.c_uint16),
+        ("height_in_millimeters", ctypes.c_uint16),
+        ("min_installed_maps", ctypes.c_uint16),
+        ("max_installed_maps", ctypes.c_uint16),
+        ("root_visual", ctypes.c_uint32),
+        ("backing_stores", ctypes.c_uint8),
+        ("save_unders", ctypes.c_uint8),
+        ("root_depth", ctypes.c_uint8),
+        ("allowed_depths_len", ctypes.c_uint8),
+    ]
+
+class ScreenIter(ctypes.Structure):
+    _fields_ = [("data", ctypes.POINTER(Screen)), ("rem", ctypes.c_int), ("index", ctypes.c_int)]
+
+class Cookie(ctypes.Structure):
+    _fields_ = [("sequence", ctypes.c_uint)]
+
+class InternReply(ctypes.Structure):
+    _fields_ = [
+        ("response_type", ctypes.c_uint8),
+        ("pad0", ctypes.c_uint8),
+        ("sequence", ctypes.c_uint16),
+        ("length", ctypes.c_uint32),
+        ("atom", ctypes.c_uint32),
+    ]
+
+def main():
+    xcb = ctypes.CDLL(ctypes.util.find_library("xcb") or "libxcb.so.1")
+    libc = ctypes.CDLL(None)
+    libc.free.argtypes = [ctypes.c_void_p]
+    xcb.xcb_connect.restype = ctypes.c_void_p
+    xcb.xcb_connect.argtypes = [ctypes.c_char_p, ctypes.POINTER(ctypes.c_int)]
+    xcb.xcb_connection_has_error.restype = ctypes.c_int
+    xcb.xcb_connection_has_error.argtypes = [ctypes.c_void_p]
+    xcb.xcb_disconnect.argtypes = [ctypes.c_void_p]
+    xcb.xcb_flush.restype = ctypes.c_int
+    xcb.xcb_flush.argtypes = [ctypes.c_void_p]
+    xcb.xcb_get_setup.restype = ctypes.c_void_p
+    xcb.xcb_get_setup.argtypes = [ctypes.c_void_p]
+    xcb.xcb_setup_roots_iterator.restype = ScreenIter
+    xcb.xcb_setup_roots_iterator.argtypes = [ctypes.c_void_p]
+    xcb.xcb_screen_next.argtypes = [ctypes.POINTER(ScreenIter)]
+    xcb.xcb_generate_id.restype = ctypes.c_uint32
+    xcb.xcb_generate_id.argtypes = [ctypes.c_void_p]
+    xcb.xcb_intern_atom.restype = Cookie
+    xcb.xcb_intern_atom.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16, ctypes.c_char_p]
+    xcb.xcb_intern_atom_reply.restype = ctypes.POINTER(InternReply)
+    xcb.xcb_intern_atom_reply.argtypes = [ctypes.c_void_p, Cookie, ctypes.c_void_p]
+    xcb.xcb_create_window.argtypes = [
+        ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint32, ctypes.c_uint32,
+        ctypes.c_int16, ctypes.c_int16, ctypes.c_uint16, ctypes.c_uint16,
+        ctypes.c_uint16, ctypes.c_uint16, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_void_p,
+    ]
+    xcb.xcb_map_window.argtypes = [ctypes.c_void_p, ctypes.c_uint32]
+    xcb.xcb_change_property.argtypes = [
+        ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint32, ctypes.c_uint32,
+        ctypes.c_uint32, ctypes.c_uint8, ctypes.c_uint32, ctypes.c_void_p,
+    ]
+    screen_i = ctypes.c_int(0)
+    conn = xcb.xcb_connect(None, ctypes.byref(screen_i))
+    if not conn or xcb.xcb_connection_has_error(conn):
+        sys.stderr.write("no display\\n")
+        sys.exit(1)
+    setup = xcb.xcb_get_setup(conn)
+    it = xcb.xcb_setup_roots_iterator(setup)
+    step = 0
+    while step < int(screen_i.value):
+        xcb.xcb_screen_next(ctypes.byref(it))
+        step += 1
+    screen = it.data.contents
+    root = int(screen.root)
+
+    def intern(name):
+        raw = name.encode("ascii")
+        cookie = xcb.xcb_intern_atom(conn, 0, len(raw), raw)
+        reply = xcb.xcb_intern_atom_reply(conn, cookie, None)
+        value = int(reply.contents.atom)
+        libc.free(reply)
+        return value
+
+    client_list = intern("_NET_CLIENT_LIST")
+    type_atom = intern("_NET_WM_WINDOW_TYPE")
+    dock = intern("_NET_WM_WINDOW_TYPE_DOCK")
+    wm_state = intern("WM_STATE")
+    wm_name = intern("WM_NAME")
+
+    def make(x, y, w, h, mapped):
+        wid = int(xcb.xcb_generate_id(conn))
+        xcb.xcb_create_window(conn, int(screen.root_depth), wid, root, x, y, w, h, 0, 1, int(screen.root_visual), 0, None)
+        if mapped:
+            xcb.xcb_map_window(conn, wid)
+        return wid
+
+    normal = make(80, 90, 320, 200, True)
+    panel = make(0, 0, 1280, 100, True)
+    iconic = make(400, 120, 220, 180, True)
+    title = b"homework-secret-title"
+    xcb.xcb_change_property(conn, 0, normal, wm_name, XA_STRING, 8, len(title), title)
+    dock_id = (ctypes.c_uint32 * 1)(dock)
+    xcb.xcb_change_property(conn, 0, panel, type_atom, XA_ATOM, 32, 1, ctypes.cast(dock_id, ctypes.c_void_p))
+    state = (ctypes.c_uint32 * 2)(3, 0)
+    xcb.xcb_change_property(conn, 0, iconic, wm_state, wm_state, 32, 2, ctypes.cast(state, ctypes.c_void_p))
+    ids = (ctypes.c_uint32 * 3)(normal, panel, iconic)
+    xcb.xcb_change_property(conn, 0, root, client_list, XA_WINDOW, 32, 3, ctypes.cast(ids, ctypes.c_void_p))
+    xcb.xcb_flush(conn)
+    sys.stdout.write(str(normal) + "\\n")
+    sys.stdout.flush()
+    # Stay connected. The server drops a client's windows when that client leaves.
+    while True:
+        line = sys.stdin.readline()
+        if line == "" or line.strip() == "quit":
+            break
+    xcb.xcb_disconnect(conn)
+
+if __name__ == "__main__":
+    main()
+`;
+
+function pickDisplay() {
+  for (let n = 80; n < 140; n += 1) {
+    if (!existsSync("/tmp/.X11-unix/X" + n)) return ":" + n;
+  }
+  return ":97";
+}
+
+function readLine(stream) {
+  return new Promise((resolve, reject) => {
+    let buf = "";
+    const onData = (chunk) => {
+      buf += chunk;
+      const mark = buf.indexOf("\n");
+      if (mark < 0) return;
+      stream.off("data", onData);
+      resolve(buf.slice(0, mark).trim());
+    };
+    stream.on("data", onData);
+    stream.on("error", reject);
+  });
+}
+
+test("an X11 client rect is listed and a dock, an iconic window, and a title are not perches", async (t) => {
+  if (!existsSync("/usr/bin/Xvfb")) {
+    t.skip("Xvfb is not installed");
+    return;
+  }
+  const display = pickDisplay();
+  const xvfb = spawn("Xvfb", [display, "-screen", "0", "1280x800x24", "-nolisten", "tcp", "-noreset"], {
+    stdio: "ignore",
+  });
+  let planter = null;
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  try {
+    const env = { ...process.env, DISPLAY: display };
+    planter = spawn("python3", ["-u", "-c", X11_FIXTURE], { env, stdio: ["pipe", "pipe", "pipe"] });
+    planter.stderr.setEncoding("utf8");
+    let planterErr = "";
+    planter.stderr.on("data", (chunk) => {
+      planterErr += chunk;
+    });
+    planter.stdout.setEncoding("utf8");
+    const normalId = await readLine(planter.stdout);
+    if (!normalId) throw new Error(planterErr || "fixture did not plant a window");
+    Enum.disposePump();
+    const listed = await Enum.listRaw({ platform: "linux", env, timeoutMs: 4000 });
+    Enum.disposePump();
+    try {
+      planter.stdin.write("quit\n");
+    } catch {
+      /* ignore */
+    }
+    assert.equal(listed.later, null);
+    assert.equal(JSON.stringify(listed.raw).includes("homework-secret-title"), false);
+    const normal = listed.raw.find((row) => row.id === normalId);
+    assert.ok(normal, "normal client missing");
+    assert.equal(normal.left, 80);
+    assert.equal(normal.top, 90);
+    assert.equal(normal.right, 400);
+    assert.equal(normal.bottom, 290);
+    assert.equal(normal.shell, false);
+    assert.equal(normal.minimized, false);
+    assert.equal(normal.tool, false);
+    const taken = W.takeRects(listed.raw, {
+      workArea: { x: 0, y: 0, width: 1280, height: 800 },
+      scaleFactor: 1,
+    });
+    assert.deepEqual(taken.map((row) => row.id), [normalId]);
+    assert.equal(taken[0].width, 320);
+    assert.equal(taken[0].height, 200);
+  } finally {
+    Enum.disposePump();
+    try {
+      planter && planter.kill();
+    } catch {
+      /* ignore */
+    }
+    try {
+      xvfb.kill();
+    } catch {
+      /* ignore */
+    }
+  }
 });

@@ -14,16 +14,30 @@
 
   const MIN_W = 80;
   const MIN_H = 80;
-  const LATER_DOOR = "mac-linux-window-play";
+  /** Mac window play is still a later door. Linux X11 enumerates. Do not invent Mac rects. */
+  const LATER_DOOR = "mac-window-play";
 
-  function enumeratesOn(platform) {
+  function isWindows(platform) {
     return platform === "win32" || /^Win/i.test(String(platform || ""));
   }
 
-  /** Mac and Linux window play is a later door. Do not invent rects there. */
+  function isLinux(platform) {
+    return platform === "linux" || /^Linux/i.test(String(platform || ""));
+  }
+
+  function isMac(platform) {
+    return platform === "darwin" || /^Mac/i.test(String(platform || ""));
+  }
+
+  function enumeratesOn(platform) {
+    return isWindows(platform) || isLinux(platform);
+  }
+
+  /** A Mac does not invent window rects. Linux and Windows enumerate. */
   function laterDoor(platform) {
     if (enumeratesOn(platform)) return null;
-    return LATER_DOOR;
+    if (isMac(platform)) return LATER_DOOR;
+    return null;
   }
 
   function parseEnumText(text) {
@@ -144,6 +158,9 @@
     MIN_W,
     MIN_H,
     LATER_DOOR,
+    isWindows,
+    isLinux,
+    isMac,
     enumeratesOn,
     laterDoor,
     parseEnumText,
