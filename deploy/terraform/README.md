@@ -27,6 +27,8 @@ deploy/terraform/
   modules/postgres|redis|secrets|cdn|waf/
   check-managed-stores.sh          # deny-safe asserts + terraform validate
   check-managed-stores.test.sh
+  check-waf-gate.sh                # JVM buckets == regional ACL (ADR 0074)
+  check-waf-gate.test.sh
 ```
 
 ## Deny-safe defaults
@@ -38,7 +40,8 @@ deploy/terraform/
 | Postgres/Redis resources | **skipped** until `vpc_id` + `private_subnet_ids` are set |
 | House crypto in tfvars / state | **refused** (`write_house_secret_values` must stay false) |
 | Secrets Manager | **shells only** — names match External Secrets `remoteRef` keys |
-| Bundle bucket | Block public ACLs; CloudFront OAC only. Edge redeem: `deploy/cdn/` ([ADR 0063](../../docs/adr/0063-cdn-edge-redeem-verification.md)) |
+| Bundle bucket | Block public ACLs; CloudFront OAC only. Edge redeem: `deploy/cdn/` ([ADR 0063](../../docs/adr/0063-cdn-edge-redeem-verification.md)). Not the API WAF |
+| API WAF | Regional ACL, default **block**, four buckets matching `RateLimitingFilter` (10/30/60/60 per minute). Plan **refuses** an empty ALB ARN ([ADR 0074](../../docs/adr/0074-waf-in-front-of-rate-limiter.md)) |
 | Redis AUTH / TLS | **off** — the app has no Redis password setting (same honesty as k8s README) |
 
 ## Operator flow
@@ -46,6 +49,7 @@ deploy/terraform/
 ```bash
 cd deploy/terraform
 cp terraform.tfvars.example terraform.tfvars   # fill vpc / subnets / app CIDRs
+# waf_associate_alb_arn must be the API ALB before plan (ADR 0074)
 terraform init
 terraform plan                                 # needs AWS creds for a real plan
 terraform apply                                # keeper's account — not CI
@@ -57,7 +61,7 @@ Then:
 2. Apply a copy of `deploy/k8s/external-secret.example.yaml`.
 3. Point the ConfigMap at terraform outputs (`configmap-managed.example.yaml`); drop in-cluster Postgres/Redis Deployments.
 4. Set `BUNDLE_BASE_URL` from the CDN output.
-5. Optionally set `waf_associate_alb_arn`.
+5. Confirm `waf_associate_alb_arn` was the API application load balancer (health check `/actuator/health` or `/actuator/health/liveness`). Do not attach this ACL to the bundle CloudFront distribution. `enable_waf=false` is the explicit switch for no edge gate; the JVM filter remains.
 6. Keep the ADR 0061 digest verify gate before `kubectl set image`.
 
 ## Local verify (no cloud account)
@@ -65,6 +69,9 @@ Then:
 ```bash
 ./deploy/terraform/check-managed-stores.sh
 ./deploy/terraform/check-managed-stores.test.sh
+./deploy/terraform/check-waf-gate.sh
+./deploy/terraform/check-waf-gate.test.sh
+terraform -chdir=deploy/terraform test    # mock provider; empty ALB ARN must fail the plan
 ```
 
 `check-managed-stores.sh` asserts deny-safe HCL + External Secrets name alignment,
