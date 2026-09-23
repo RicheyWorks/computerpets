@@ -1,5 +1,5 @@
 # metrics-server so hpa.yaml can read CPU and memory (ADR 0084, ADR 0085,
-# ADR 0086, ADR 0087, ADR 0088).
+# ADR 0086, ADR 0087, ADR 0088, ADR 0089).
 # Not in kustomization.yaml. Local/dev `kubectl apply -k deploy/k8s` does
 # not install this. Kind and minikube do not apply this file. There is no
 # overlay directory. No Helm chart.
@@ -16,8 +16,8 @@
 # The kubelet CA argument, volume, and volumeMount are additions
 # (ADR 0086). The serving-cert arguments, volume, and volumeMount are
 # additions (ADR 0087). insecureSkipTLSVerify is not set. Soft zone
-# spread is an addition (ADR 0088). None of those are in that upstream
-# file.
+# spread is an addition (ADR 0088). The nodeSelector pool pin is an
+# addition (ADR 0089). None of those are in that upstream file.
 #
 # Apply this before hpa.yaml. The APIService is v1beta1.metrics.k8s.io.
 # Until `kubectl top pods -n computerpets` shows cpu and memory, the HPA
@@ -75,6 +75,18 @@
 # the zone label. It is not a required zone anti-affinity. That required
 # rule would leave the second pod Pending on a single-zone cluster.
 # DoNotSchedule is not set, for the same reason.
+#
+# Pool pin (ADR 0089). nodeSelector requires kubernetes.io/os=linux and
+# computerpets/node-pool=api. That second label is the one
+# modules/node_pool already sets on each multi-AZ group. It is required,
+# not a preferred node affinity. A preference would still admit other
+# linux nodes. nodeAffinityPolicy is Honor, so the soft zone rule counts
+# only nodes that match this selector. Kind and minikube do not apply
+# this file. enable_node_pool=false does not label their nodes. Applying
+# this file there leaves both pods Pending. That is the feature-off path.
+# A single-zone cluster whose nodes do carry the label still schedules
+# both pods when two hostnames exist, because zone spread stays
+# ScheduleAnyway. The API Deployments do not select this label.
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -223,6 +235,7 @@ spec:
         topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: ScheduleAnyway
         nodeTaintsPolicy: Honor
+        nodeAffinityPolicy: Honor
         labelSelector:
           matchLabels:
             k8s-app: metrics-server
@@ -281,8 +294,12 @@ spec:
         - mountPath: /etc/metrics-server/serving
           name: serving-cert
           readOnly: true
+      # ADR 0089. Both keys are required. The pool label is the one
+      # modules/node_pool sets. Kind and minikube omit it and do not
+      # apply this file.
       nodeSelector:
         kubernetes.io/os: linux
+        computerpets/node-pool: api
       priorityClassName: system-cluster-critical
       serviceAccountName: metrics-server
       volumes:

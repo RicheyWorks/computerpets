@@ -23,8 +23,9 @@ resources:
 # Multi-AZ workers are the node pool (ADR 0082), not this apply.
 # cluster-autoscaler.yaml (ADR 0083) is also not applied here. Kind and
 # minikube set enable_node_pool=false and do not install the scaler.
-# metrics-server.yaml (ADR 0084, ADR 0085, ADR 0086, ADR 0087, ADR 0088)
-# is also not applied here. Its zone preference is ScheduleAnyway.
+# metrics-server.yaml (ADR 0084, ADR 0085, ADR 0086, ADR 0087, ADR 0088,
+# ADR 0089) is also not applied here. Its zone preference is
+# ScheduleAnyway. Its nodeSelector requires computerpets/node-pool=api.
 # The Deployment in that file is two replicas. Kind and minikube do not
 # install it. The HPA does not raise replicas until that API answers.
 images:

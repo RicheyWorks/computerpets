@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# ADR 0084 / 0085 / 0086 / 0087 / 0088 — metrics-server install path, two
-# replicas, required hostname anti-affinity, soft zone spread, a
-# fail-closed kubelet CA mount, and a fail-closed serving-cert Secret.
+# ADR 0084 / 0085 / 0086 / 0087 / 0088 / 0089 — metrics-server install
+# path, two replicas, required hostname anti-affinity, soft zone spread,
+# a fail-closed kubelet CA mount, a fail-closed serving-cert Secret, and
+# a required pin to the multi-AZ API node-pool label.
 # No cluster. Does not kubectl apply. The manifest stays out of kustomize.
 set -euo pipefail
 
@@ -17,6 +18,8 @@ ADR85="${ROOT}/docs/adr/0085-metrics-server-ha.md"
 ADR86="${ROOT}/docs/adr/0086-metrics-server-kubelet-ca.md"
 ADR87="${ROOT}/docs/adr/0087-metrics-server-serving-cert.md"
 ADR88="${ROOT}/docs/adr/0088-metrics-server-zone-spread.md"
+ADR89="${ROOT}/docs/adr/0089-metrics-server-node-pool.md"
+POOL="${ROOT}/deploy/terraform/modules/node_pool/main.tf"
 PASS=0
 FAIL=0
 
@@ -90,6 +93,8 @@ need_file "$ADR85"
 need_file "$ADR86"
 need_file "$ADR87"
 need_file "$ADR88"
+need_file "$ADR89"
+need_file "$POOL"
 need_absent "${ROOT}/deploy/k8s/Chart.yaml"
 need_absent "${ROOT}/deploy/k8s/metrics-server/values.yaml"
 
@@ -124,8 +129,14 @@ need_grep_body "$MS" 'topologyKey: topology\.kubernetes\.io/zone$' "zone spread 
 need_grep_body "$MS" 'maxSkew: 1$' "zone spread maxSkew is 1"
 need_grep_body "$MS" 'whenUnsatisfiable: ScheduleAnyway$' "zone spread still schedules"
 need_grep_body "$MS" 'nodeTaintsPolicy: Honor$' "zone spread honors taints"
+need_grep_body "$MS" 'nodeAffinityPolicy: Honor$' "zone spread counts only selected nodes"
+need_not_grep_body "$MS" 'nodeAffinityPolicy: Ignore$' "zone spread does not count nodes outside the selector"
+need_grep_body "$MS" 'computerpets/node-pool: api$' "nodeSelector requires the api pool label"
+need_grep_body "$MS" 'kubernetes.io/os: linux$' "nodeSelector still requires linux"
 need_not_grep_body "$MS" 'DoNotSchedule' "zone spread is not a hard failure"
 need_not_grep_body "$MS" 'minDomains:' "zone spread has no zone floor"
+need_not_grep_body "$MS" 'operator: NotIn$' "node selector is not inverted"
+need_not_grep_body "$MS" 'operator: DoesNotExist$' "node selector does not match a missing key"
 need_grep_body "$MS" '^      maxUnavailable: 1$' "rolling update maxUnavailable is 1"
 need_grep_body "$MS" '^kind: PodDisruptionBudget$' "addon disruption budget is present"
 need_grep_body "$MS" '^  minAvailable: 1$' "addon budget keeps one pod"
@@ -178,6 +189,18 @@ if [ -f "$MS" ]; then
   soft_count="$(yaml_body "$MS" | grep -c 'whenUnsatisfiable: ScheduleAnyway' || true)"
   if [ "${soft_count}" = "1" ]; then ok "ScheduleAnyway appears once"
   else bad "expected one ScheduleAnyway (found ${soft_count})"; fi
+  pool_sel="$(yaml_body "$MS" | grep -c 'computerpets/node-pool: api' || true)"
+  if [ "${pool_sel}" = "1" ]; then ok "pool label selector appears once"
+  else bad "expected one computerpets/node-pool: api (found ${pool_sel})"; fi
+  os_sel="$(yaml_body "$MS" | grep -c 'kubernetes.io/os: linux' || true)"
+  if [ "${os_sel}" = "1" ]; then ok "linux nodeSelector appears once"
+  else bad "expected one kubernetes.io/os: linux (found ${os_sel})"; fi
+  affinity_pol="$(yaml_body "$MS" | grep -c 'nodeAffinityPolicy: Honor' || true)"
+  if [ "${affinity_pol}" = "1" ]; then ok "nodeAffinityPolicy Honor appears once"
+  else bad "expected one nodeAffinityPolicy: Honor (found ${affinity_pol})"; fi
+  selector_count="$(yaml_body "$MS" | grep -c 'nodeSelector:' || true)"
+  if [ "${selector_count}" = "1" ]; then ok "one nodeSelector"
+  else bad "expected one nodeSelector (found ${selector_count})"; fi
   pdb_count="$(yaml_body "$MS" | grep -c '^kind: PodDisruptionBudget$' || true)"
   if [ "${pdb_count}" = "1" ]; then ok "one addon PodDisruptionBudget"
   else bad "expected one addon PodDisruptionBudget (found ${pdb_count})"; fi
@@ -250,6 +273,11 @@ need_grep "$HPA" 'maxReplicas: 10' "HPA ceiling stays 10"
 need_not_grep "$HPA" 'image:.*metrics-server' "hpa.yaml does not embed the addon image"
 need_grep "$BLUE" 'replicas: 2' "blue local replica count stays 2"
 need_grep "$GREEN" 'replicas: 0' "green stays the idle slot"
+need_not_grep "$BLUE" 'nodeSelector:' "blue is not pinned to the pool"
+need_not_grep "$GREEN" 'nodeSelector:' "green is not pinned to the pool"
+need_not_grep "$BLUE" 'computerpets/node-pool' "blue does not select the pool label"
+need_not_grep "$GREEN" 'computerpets/node-pool' "green does not select the pool label"
+need_grep "$POOL" '"computerpets/node-pool"[[:space:]]*=[[:space:]]*"api"' "node pool label is computerpets/node-pool=api"
 
 echo "== docs =="
 need_grep "$README" 'metrics-server\.yaml' "README names the manifest"
@@ -308,6 +336,83 @@ need_grep "$ADR88" 'not in the kustomization' "zone ADR keeps the file out of ku
 need_grep "$README" 'ADR 0088' "README names ADR 0088"
 need_grep "$README" 'topology.kubernetes.io/zone' "README names the zone key"
 need_grep "$README" 'ScheduleAnyway' "README names the soft zone action"
+need_grep "$ADR89" 'computerpets/node-pool' "pool ADR names the pool label"
+need_grep "$ADR89" 'nodeAffinityPolicy' "pool ADR names nodeAffinityPolicy"
+need_grep "$ADR89" 'ScheduleAnyway' "pool ADR keeps the soft zone action"
+need_grep "$ADR89" 'kubernetes.io/hostname' "pool ADR keeps hostname anti-affinity"
+need_grep "$ADR89" 'enable_node_pool=false' "pool ADR names the kind switch"
+need_grep "$ADR89" 'Pending' "pool ADR names the unlabeled Pending path"
+need_grep "$ADR89" 'replicas: 2' "pool ADR keeps two replicas"
+need_grep "$ADR89" 'insecureSkipTLSVerify' "pool ADR keeps serving verification"
+need_grep "$ADR89" 'kubelet-insecure-tls' "pool ADR forbids the kubelet TLS skip"
+need_grep "$ADR89" 'Catalog stays 221' "pool ADR keeps catalog 221"
+need_grep "$ADR89" 'not in the kustomization' "pool ADR keeps the file out of kustomize"
+need_grep "$ADR89" 'No Rui sprites' "pool ADR has no Rui sprites"
+need_grep "$README" 'ADR 0089' "README names ADR 0089"
+need_grep "$README" 'computerpets/node-pool' "README names the pool label"
+need_grep "$README" 'nodeAffinityPolicy' "README names nodeAffinityPolicy"
+need_grep "$README" 'enable_node_pool=false' "README names the kind switch"
+
+python3 - "$MS" <<'PY'
+import pathlib, sys
+text = pathlib.Path(sys.argv[1]).read_text()
+body = "\n".join(line.split("#", 1)[0].rstrip() for line in text.splitlines())
+lines = body.splitlines()
+failed = False
+
+def check(cond, name):
+    global failed
+    if cond:
+        print(f"ok - {name}")
+    else:
+        print(f"not ok - {name}")
+        failed = True
+
+selectors = []
+i = 0
+while i < len(lines):
+    if lines[i] == "      nodeSelector:":
+        block = []
+        i += 1
+        while i < len(lines) and (lines[i].startswith("        ") or lines[i].strip() == ""):
+            if lines[i].strip():
+                block.append(lines[i].strip())
+            i += 1
+        selectors.append(block)
+        continue
+    i += 1
+
+check(len(selectors) == 1, "one pod nodeSelector block")
+keys = selectors[0] if selectors else []
+check(keys == ["kubernetes.io/os: linux", "computerpets/node-pool: api"],
+      "nodeSelector is linux plus the api pool label")
+
+spread = []
+i = 0
+while i < len(lines):
+    if lines[i] == "      topologySpreadConstraints:":
+        i += 1
+        while i < len(lines) and lines[i].startswith("      - "):
+            # list item starts here; following fields are indented further
+            item = [lines[i][len("      - "):].strip()]
+            i += 1
+            while i < len(lines) and (lines[i].startswith("        ") and not lines[i].startswith("      - ")):
+                item.append(lines[i].strip())
+                i += 1
+            spread.append(item)
+            continue
+        break
+    i += 1
+
+check(len(spread) == 1, "one topology spread item")
+item = spread[0] if spread else []
+check("nodeAffinityPolicy: Honor" in item, "spread item sets nodeAffinityPolicy Honor")
+check("whenUnsatisfiable: ScheduleAnyway" in item, "spread item stays ScheduleAnyway")
+check("topologyKey: topology.kubernetes.io/zone" in item, "spread item stays on the zone key")
+check("nodeTaintsPolicy: Honor" in item, "spread item still honors taints")
+if failed:
+    sys.exit(1)
+PY
 
 if command -v kubectl >/dev/null 2>&1; then
   if kubectl apply --dry-run=client --validate=false -f "$MS" >/dev/null 2>&1; then
