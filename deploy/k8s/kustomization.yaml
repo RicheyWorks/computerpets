@@ -20,6 +20,7 @@ resources:
 # pod templates, so this apply includes both. whenUnsatisfiable is
 # ScheduleAnyway: blue's 2 pods still schedule on a one-node or single-zone
 # cluster, including nodes that omit topology.kubernetes.io/zone.
+# Multi-AZ workers are the node pool (ADR 0082), not this apply.
 images:
   - name: ghcr.io/richeyworks/computerpets
     newTag: main

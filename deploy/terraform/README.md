@@ -24,7 +24,7 @@ deploy/terraform/
   main.tf / variables.tf / outputs.tf / versions.tf / providers.tf
   terraform.tfvars.example
   configmap-managed.example.yaml   # ConfigMap overlay after apply (not kustomized)
-  modules/postgres|redis|secrets|cdn|waf|api_listener/
+  modules/postgres|redis|secrets|cdn|waf|api_listener|node_pool/
   check-managed-stores.sh          # deny-safe asserts + terraform validate
   check-managed-stores.test.sh
   check-waf-gate.sh                # JVM buckets == regional ACL (ADR 0074)
@@ -38,6 +38,9 @@ deploy/terraform/
   check-api-listener-tls.sh        # edge HTTPS; pod stays HTTP (ADR 0077)
   check-api-listener-tls.test.sh
   api_listener_tls.tftest.hcl
+  check-node-pool.sh               # private multi-AZ workers (ADR 0082)
+  check-node-pool.test.sh
+  node_pool.tftest.hcl
 ```
 
 ## Deny-safe defaults
@@ -54,6 +57,7 @@ deploy/terraform/
 | Postgres transit TLS | **on** for every provisioned RDS instance. Parameter group `rds.force_ssl=1`. `jdbc_url` is `sslmode=require`, or `verify-full` when `postgres_ssl_root_cert` is an absolute PEM path. The app flag is `POSTGRES_SSL_REQUIRED` ([ADR 0076](../../docs/adr/0076-postgres-transit-tls.md)) |
 | API listener TLS | **on** for the public ALB (`enable_api_listener_tls`, default true). HTTPS 443 forwards to the existing target group. Port 80 is `HTTP_301`. Plan **refuses** until the keeper-owned ALB ARN, an existing ACM certificate ARN, and the target group ARN are set. When the WAF is on, the listener ALB must be the same ARN. This root does not call ACM. The JVM stays HTTP on 8081 ([ADR 0077](../../docs/adr/0077-api-listener-tls.md)) |
 | Redis AUTH / TLS | **off** unless `redis_auth_token` is set (`TF_VAR_`, never in git). A token enables AUTH + transit encryption together. The app reads `REDIS_PASSWORD` / `REDIS_SSL` / `REDIS_AUTH_REQUIRED` ([ADR 0075](../../docs/adr/0075-redis-auth-and-transit-tls.md)) |
+| API node pool | **on** (`enable_node_pool`, default true). One private EKS managed node group per AZ, at least two, `min_size` 1, on-demand, no public IP, no SSH. Plan **refuses** an empty cluster name or a single zone. This root does not create the cluster or the subnets. EKS sets `topology.kubernetes.io/zone` from the instance AZ ([ADR 0082](../../docs/adr/0082-multi-az-node-pool.md)) |
 
 ## Operator flow
 
@@ -77,6 +81,7 @@ Then:
 7. Set `POSTGRES_SSL_REQUIRED=true` with `spring_datasource_url`. That URL is `sslmode=require` unless you set `postgres_ssl_root_cert` to a PEM you mounted (then `verify-full` and `POSTGRES_SSL_ROOT_CERT`). Do not invent a CA bundle. In-cluster Postgres leaves the flag unset ([ADR 0076](../../docs/adr/0076-postgres-transit-tls.md)).
 8. Keep the ADR 0061 digest verify gate before `kubectl set image`.
 9. For a public API door, set `api_listener_alb_arn` to the same ALB as `waf_associate_alb_arn`, plus an ACM certificate ARN you already have and that ALB's target group. This root does not call ACM. Port 80 redirects to 443. Set `API_LISTENER_TLS_REQUIRED=true` and `API_PUBLIC_BASE_URL=https://<host>`. Leave both unset for in-cluster HTTP. Do not set `server.ssl` ([ADR 0077](../../docs/adr/0077-api-listener-tls.md)). `enable_api_listener_tls=false` is the explicit switch for no public listener.
+10. For multi-AZ API workers, set `eks_cluster_name` and `node_pool_subnets` to at least two **private** subnets in `aws_region` (one key per AZ). Plan refuses a single zone. Nodes do not get a public IP and SSH stays closed. This root does not create the cluster. `enable_node_pool=false` is the switch for kind or minikube. EKS sets `topology.kubernetes.io/zone` ([ADR 0082](../../docs/adr/0082-multi-az-node-pool.md)).
 
 ## Local verify (no cloud account)
 
@@ -91,7 +96,9 @@ Then:
 ./deploy/terraform/check-postgres-tls.test.sh
 ./deploy/terraform/check-api-listener-tls.sh
 ./deploy/terraform/check-api-listener-tls.test.sh
-terraform -chdir=deploy/terraform test    # mock provider; empty ALB ARN, empty ACM ARN, a short Redis token, and a bad Postgres CA path must fail the plan
+./deploy/terraform/check-node-pool.sh
+./deploy/terraform/check-node-pool.test.sh
+terraform -chdir=deploy/terraform test    # mock provider; empty ALB ARN, empty ACM ARN, a short Redis token, a bad Postgres CA path, and a single-zone node pool must fail the plan
 ```
 
 `check-managed-stores.sh` asserts deny-safe HCL + External Secrets name alignment,
