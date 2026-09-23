@@ -146,7 +146,8 @@
     if (!img) return false;
     const style = destStyle();
     if (img.style) Object.assign(img.style, style);
-    if (img.setAttribute) {
+    // Width and height attributes clear a canvas backing store. The sprite surface owns that bitmap.
+    if (img.setAttribute && typeof img.getContext !== "function") {
       img.setAttribute("width", String(DEST_PX));
       img.setAttribute("height", String(DEST_PX));
     }

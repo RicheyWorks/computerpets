@@ -1,4 +1,4 @@
-/** Overlay window gate. The host pet draws on a canvas Chromium composites (ADR 0126). This file still opens the glass only for hardware gpu_compositing. Not a shader engine, not DirectX 12, and not Vulkan. */
+/** Overlay window gate. The host pet, Sip, Brick, called guests, and plants draw on a canvas Chromium composites (ADR 0126, ADR 0127). This file still opens the glass only for hardware gpu_compositing. Not a shader engine, not DirectX 12, and not Vulkan. */
 const path = require("path");
 
 const FILE = "gpu-path.json";

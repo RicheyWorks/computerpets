@@ -42,8 +42,9 @@ test("Dee notices Rui, hop-steps in, sits a real frame, then leaves", () => {
   assert.ok(src.includes("chickadee/sit/"));
   assert.notEqual(src, "");
   const img = { src: "", dataset: {}, setAttribute(name, value) { this[name] = value; }, getAttribute(name) { return this[name] || ""; } };
-  assert.equal(Call.assignSrc(img, src), true);
-  assert.notEqual(img.src, "");
+  assert.equal(Call.assignSrc(img, src), false);
+  assert.equal(img.src, "");
+  assert.equal(img.dataset.surface, "refused");
   assert.equal(Call.shouldTell(dee), true);
   assert.equal(Call.tellLine(dee), Call.DEE_RUI_LINE);
   dee = Call.stepCalled(dee, 2, 800, flags);

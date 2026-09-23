@@ -332,3 +332,199 @@ test("the host pet element is the canvas and pet.js does not assign an img src",
   assert.doesNotMatch(petSrc, /createCanvas/);
   assert.doesNotMatch(petSrc, /getContext\(\s*["']webgl/);
 });
+
+test("Sip, Brick, called guests, and plants use the same contain-bottom boxes", () => {
+  const Robin = require("./robin-fly.js");
+  const Plants = require("./desk-plants.js");
+  const Call = require("./call-guests.js");
+  assert.equal(Surface.BOX.host, 176);
+  assert.equal(Surface.BOX.sip, 112);
+  assert.equal(Surface.BOX.brick, 112);
+  assert.equal(Surface.BOX.called, 128);
+  assert.equal(Surface.BOX.plant, 128);
+  assert.equal(Robin.DEST_PX, Surface.BOX.brick);
+  assert.equal(Plants.DEST_PX, Surface.BOX.plant);
+  assert.equal(Call.GUEST_DEST, Surface.BOX.called);
+  assert.deepEqual(Surface.fitContainBottom(80, 160, 112), { x: 28, y: 0, w: 56, h: 112 });
+  assert.deepEqual(Surface.fitContainBottom(160, 80, 112), { x: 0, y: 56, w: 112, h: 56 });
+  assert.deepEqual(Surface.fitContainBottom(80, 160, 128), { x: 32, y: 0, w: 64, h: 128 });
+  assert.deepEqual(Surface.fitContainBottom(160, 80, 128), { x: 0, y: 64, w: 128, h: 64 });
+  assert.match(styleSrc, /#bird\s*\{[^}]*width:\s*112px/);
+  assert.match(styleSrc, /#bird\s*\{[^}]*height:\s*112px/);
+  assert.match(styleSrc, /#robin\s*\{[^}]*width:\s*112px/);
+  assert.match(styleSrc, /\.called-guest\s*\{[^}]*width:\s*128px/);
+  assert.match(styleSrc, /\.desk-plant\s*\{[^}]*width:\s*128px/);
+  assert.match(htmlSrc, /<canvas id="bird" data-hit data-surface="pending"/);
+  assert.match(htmlSrc, /<canvas id="robin" data-hit data-surface="pending"/);
+  assert.match(htmlSrc, /<img id="guest"/);
+  assert.doesNotMatch(htmlSrc, /<img id="bird"/);
+  assert.doesNotMatch(htmlSrc, /<img id="robin"/);
+  assert.match(petSrc, /paintActor\(birdEl,/);
+  assert.match(petSrc, /paintActor\(robinEl,/);
+  assert.match(petSrc, /paintActor\(node, src, "plant"\)/);
+  assert.match(petSrc, /createElement\("canvas"\)/);
+  assert.doesNotMatch(petSrc, /birdEl\.src\s*=/);
+  assert.doesNotMatch(petSrc, /robinEl\.setAttribute\(\s*"src"/);
+  assert.doesNotMatch(petSrc, /createElement\(\s*"img"\s*\)/);
+  const callSrc = readFileSync(join(__dirname, "call-guests.js"), "utf8");
+  assert.match(callSrc, /createElement\("canvas"\)/);
+  assert.match(callSrc, /paintHeld/);
+  assert.doesNotMatch(callSrc, /createElement\(\s*"img"\s*\)/);
+  assert.doesNotMatch(callSrc, /setAttribute\(\s*"src"/);
+  assert.match(gateSrc, /0126/);
+  assert.match(gateSrc, /0127/);
+  assert.doesNotMatch(gateSrc, /paintHeld/);
+  assert.doesNotMatch(surfaceSrc, /getContext\(\s*["']webgl/);
+});
+
+test("paintHeld draws Sip and a plant on separate canvases and refuses a closed one", () => {
+  const sipCtx = fake2d();
+  const plantCtx = fake2d();
+  const sip = fakeCanvas().provide("2d", sipCtx);
+  const plant = fakeCanvas().provide("2d", plantCtx);
+  const Image = imagesFrom(fixture.frames);
+  const opts = { OffscreenCanvas: null, Image, devicePixelRatio: 1 };
+  const sipPaint = Surface.paintHeld(sip, fixture.frames[0].src, Object.assign({ cssSize: Surface.BOX.sip }, opts));
+  assert.equal(sipPaint.ok, true);
+  assert.equal(sip.dataset.surface, "canvas");
+  assert.equal(sip.width, 112);
+  assert.deepEqual(drawCall(sipCtx)[0].slice(1), [fixture.frames[0].src, 28, 0, 56, 112]);
+  const plantPaint = Surface.paintHeld(plant, fixture.frames[1].src, Object.assign({ cssSize: Surface.BOX.plant }, opts));
+  assert.equal(plantPaint.ok, true);
+  assert.equal(plant.dataset.frame, fixture.frames[1].src);
+  assert.deepEqual(drawCall(plantCtx)[0].slice(1), [fixture.frames[1].src, 0, 64, 128, 64]);
+  assert.equal(drawCall(sipCtx).length, 1);
+  assert.equal(Image.loads.length, 2);
+  const again = Surface.paintHeld(sip, fixture.frames[0].src, Object.assign({ cssSize: Surface.BOX.sip }, opts));
+  assert.equal(again.cached, true);
+  assert.equal(drawCall(sipCtx).length, 1);
+
+  const closed = fakeCanvas();
+  closed.src = "";
+  closed.setAttribute = () => {
+    throw new Error("img-src");
+  };
+  const refused = Surface.paintHeld(closed, fixture.frames[0].src, Object.assign({ cssSize: Surface.BOX.brick }, opts));
+  assert.equal(refused.ok, false);
+  assert.equal(refused.reason, "canvas-context");
+  assert.equal(closed.dataset.surface, "refused");
+  assert.equal(closed.dataset.frame, undefined);
+  assert.equal(closed.src, "");
+
+  const noImage = fakeCanvas().provide("2d", fake2d());
+  const missing = Surface.paintHeld(noImage, fixture.frames[0].src, {
+    OffscreenCanvas: null,
+    Image: null,
+    cssSize: Surface.BOX.sip,
+    devicePixelRatio: 1,
+  });
+  assert.equal(missing.reason, "no-image");
+  assert.equal(noImage.dataset.surface, "refused");
+  assert.equal(noImage.dataset.frame, undefined);
+});
+
+test("a dead offscreencanvas and a bitmap transfer miss stay closed for company sprites", () => {
+  function Offscreen() {}
+  Offscreen.prototype.getContext = () => null;
+  const onscreen = fake2d();
+  const dead = fakeCanvas().provide("2d", onscreen).provide("bitmaprenderer", { transferFromImageBitmap() {} });
+  const deadPaint = Surface.paintHeld(dead, fixture.frames[0].src, {
+    OffscreenCanvas: Offscreen,
+    Image: imagesFrom(fixture.frames),
+    cssSize: Surface.BOX.called,
+    devicePixelRatio: 1,
+  });
+  assert.equal(deadPaint.ok, false);
+  assert.equal(deadPaint.reason, "offscreencanvas-context");
+  assert.equal(dead.dataset.surface, "refused");
+  assert.equal(dead.dataset.frame, undefined);
+  assert.equal(onscreen.calls.length, 0);
+
+  const ctx = fake2d();
+  const canvas = fakeCanvas().provide("bitmaprenderer", {}).provide("2d", ctx);
+  const missed = Surface.paintHeld(canvas, fixture.frames[0].src, {
+    OffscreenCanvas: FakeOffscreen(fake2d()),
+    Image: imagesFrom(fixture.frames),
+    cssSize: Surface.BOX.sip,
+    devicePixelRatio: 1,
+  });
+  assert.equal(missed.ok, false);
+  assert.equal(missed.reason, "bitmaprenderer");
+  assert.equal(canvas.dataset.surface, "refused");
+  assert.equal(drawCall(ctx).length, 0);
+});
+
+test("called guests paint a catalog frame on a canvas and do not assign an img src", () => {
+  const Call = require("./call-guests.js");
+  const ctx = fake2d();
+  const canvas = fakeCanvas().provide("2d", ctx);
+  canvas.className = "";
+  canvas.alt = "";
+  canvas.style = {};
+  canvas.draggable = false;
+  canvas.addEventListener = () => {};
+  canvas.setAttribute = (name, value) => {
+    if (name === "src") throw new Error("img-src");
+    canvas[name] = value;
+  };
+  canvas.getAttribute = (name) => canvas[name] || "";
+  const Image = imagesFrom(fixture.frames);
+  const surface = { Image, OffscreenCanvas: null, devicePixelRatio: 1 };
+  const src = fixture.frames[0].src;
+  assert.equal(Call.assignSrc(canvas, src, surface), true);
+  assert.equal(canvas.dataset.frame, src);
+  assert.equal(canvas.dataset.surface, "canvas");
+  assert.equal(Call.assignSrc(canvas, src, surface), false);
+  assert.equal(drawCall(ctx).length, 1);
+  assert.deepEqual(drawCall(ctx)[0].slice(1), [src, 32, 0, 64, 128]);
+  assert.equal(Call.assignSrc(canvas, fixture.frames[1].src, surface), true);
+  assert.deepEqual(drawCall(ctx).at(-1).slice(1), [fixture.frames[1].src, 0, 64, 128, 64]);
+
+  const nodes = [];
+  const root = {
+    children: nodes,
+    appendChild(el) {
+      nodes.push(el);
+      return el;
+    },
+    removeChild(el) {
+      const i = nodes.indexOf(el);
+      if (i >= 0) nodes.splice(i, 1);
+      return el;
+    },
+  };
+  const guestCtx = fake2d();
+  function createImg() {
+    const el = fakeCanvas().provide("2d", guestCtx);
+    el.className = "";
+    el.alt = "";
+    el.style = {};
+    el.draggable = false;
+    el.addEventListener = () => {};
+    el.remove = () => root.removeChild(el);
+    el.setAttribute = (name, value) => {
+      if (name === "src") throw new Error("img-src");
+      el[name] = value;
+    };
+    el.getAttribute = (name) => el[name] || "";
+    return el;
+  }
+  const guests = [{ ...Call.beginCalled("cat", 800, 0, 1), name: "Miso", frame: 0, sprites: { idle: [src] } }];
+  const painted = Call.syncCalledPaint(root, guests, { createImg, surface });
+  assert.equal(painted.added, 1);
+  assert.equal(nodes[0].dataset.frame, src);
+  assert.equal(nodes[0].dataset.surface, "canvas");
+  assert.equal(nodes[0].className, "called-guest");
+  assert.equal(drawCall(guestCtx).length, 1);
+  const kept = nodes[0];
+  const again = Call.syncCalledPaint(root, guests, { createImg, surface });
+  assert.equal(again.reused, 1);
+  assert.equal(again.added, 0);
+  assert.strictEqual(nodes[0], kept);
+
+  const plain = { src: "keep", dataset: {}, setAttribute() { throw new Error("img-src"); } };
+  assert.equal(Call.assignSrc(plain, src, surface), false);
+  assert.equal(plain.src, "keep");
+  assert.equal(plain.dataset.surface, "refused");
+  assert.equal(plain.dataset.frame, undefined);
+});
