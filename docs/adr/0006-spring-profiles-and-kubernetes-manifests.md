@@ -58,3 +58,6 @@ No mesh.
 - Each API color prefers different nodes (`topologySpreadConstraints`,
   `ScheduleAnyway` on `kubernetes.io/hostname`). Local replica counts
   stay blue 2 / green 0 ([0080](0080-api-pod-topology-spread.md)).
+- Each API color also prefers different zones (`ScheduleAnyway` on
+  `topology.kubernetes.io/zone`). A single-zone cluster still schedules
+  ([0081](0081-api-pod-zone-spread.md)).

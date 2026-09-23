@@ -99,6 +99,7 @@ address, or an API that is not on `main`.
 | [0078](0078-horizontal-pod-autoscaling.md) | Horizontal pod autoscaling for the API (prod HPA; local apply stays unscaled) | Accepted |
 | [0079](0079-pod-disruption-budget.md) | Pod disruption budget for the live API color (prod PDB; local apply omits it) | Accepted |
 | [0080](0080-api-pod-topology-spread.md) | Soft hostname topology spread for the API colors (ScheduleAnyway; local replica counts unchanged) | Accepted |
+| [0081](0081-api-pod-zone-spread.md) | Soft zone topology spread beside hostname (ScheduleAnyway; single-zone clusters still schedule) | Accepted |
 
 ## How to add one
 
