@@ -54,6 +54,8 @@ copy_tree() {
     "${dest}/docs/adr/0090-cluster-autoscaler-ha.md"
   cp "${ROOT}/docs/adr/0091-cluster-autoscaler-node-pool.md" \
     "${dest}/docs/adr/0091-cluster-autoscaler-node-pool.md"
+  cp "${ROOT}/docs/adr/0092-cluster-autoscaler-pdb.md" \
+    "${dest}/docs/adr/0092-cluster-autoscaler-pdb.md"
   cp "${SCRIPT}" "${dest}/deploy/terraform/check-cluster-autoscaler.sh"
   chmod +x "${dest}/deploy/terraform/check-cluster-autoscaler.sh"
 }
@@ -140,6 +142,58 @@ copy_tree "${BROKEN}"
 printf '\nnodeSelector:\n  computerpets/node-pool: api\n' \
   >> "${BROKEN}/deploy/k8s/deployment-blue.yaml"
 assert_exit 1 "check fails when blue gains a pool nodeSelector" \
+  "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
+
+copy_tree "${BROKEN}"
+# minAvailable 2 with replicas 2 allows zero voluntary evictions.
+python3 - "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml" <<'PY'
+import pathlib, sys
+path = pathlib.Path(sys.argv[1])
+text = path.read_text()
+marker = "kind: PodDisruptionBudget"
+idx = text.rfind(marker)
+if idx < 0:
+    raise SystemExit("pdb missing")
+head, tail = text[:idx], text[idx:]
+tail = tail.replace("minAvailable: 1", "minAvailable: 2", 1)
+path.write_text(head + tail)
+PY
+assert_exit 1 "check fails when minAvailable would block every eviction" \
+  "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
+
+copy_tree "${BROKEN}"
+# A selector that is not the Deployment selector does not protect these pods.
+python3 - "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml" <<'PY'
+import pathlib, sys
+path = pathlib.Path(sys.argv[1])
+text = path.read_text()
+marker = "kind: PodDisruptionBudget"
+idx = text.rfind(marker)
+if idx < 0:
+    raise SystemExit("pdb missing")
+head, tail = text[:idx], text[idx:]
+old = "  selector:\n    matchLabels:\n      app: cluster-autoscaler\n"
+new = "  selector:\n    matchLabels:\n      app: other\n"
+if old not in tail:
+    raise SystemExit("pdb selector missing")
+path.write_text(head + tail.replace(old, new, 1))
+PY
+assert_exit 1 "check fails when the budget selector drifts from the Deployment" \
+  "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
+
+copy_tree "${BROKEN}"
+# Without the budget a drain of the leader's node drops that pod.
+python3 - "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml" <<'PY'
+import pathlib, sys
+path = pathlib.Path(sys.argv[1])
+text = path.read_text()
+marker = "\n---\napiVersion: policy/v1\nkind: PodDisruptionBudget\n"
+idx = text.rfind(marker)
+if idx < 0:
+    raise SystemExit("pdb missing")
+path.write_text(text[:idx].rstrip() + "\n")
+PY
+assert_exit 1 "check fails when the autoscaler budget is removed" \
   "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
 
 echo
