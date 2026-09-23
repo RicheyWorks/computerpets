@@ -11,7 +11,8 @@ otherwise the section stays ``INTEL_EMPTY``. Device VRAM used and total on
 that line stay unread. There is no upstream used and total pair.
 Mac runs ``ioreg`` on IOAccelerator
 PerformanceStatistics and prints that same line. A missing tool stays unread.
-Temperature and power on Mac and on the fdinfo line stay unread. A missing,
+Temperature and power on Mac stay unread, including a planted key or a zero.
+Temperature and power on the fdinfo line stay unread. A missing,
 malformed, or stale reading stays unread. A real zero from the hardware is
 kept. The sparkline is a trail of those read samples and stays empty until
 two fresh utilization points exist.

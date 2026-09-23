@@ -2,10 +2,14 @@
 # Mac GPU probe. Reads IOAccelerator PerformanceStatistics and prints the
 # line protocol the desktop parsers already understand.
 # A missing ioreg is ABSENT, not a zero. A dictionary with no accepted field
-# is EMPTY. Temperature and power are not in this dictionary, so those fields
-# stay [N/A]. Alloc system memory is not capacity and is not copied.
-# Renderer and tiler percents are not device utilization.
-# Linux amdgpu and Intel sysfs are a later probe, not this script.
+# is EMPTY. Temperature and power stay [N/A]. Alloc system memory is not
+# capacity and is not copied. Renderer and tiler percents are not device
+# utilization. The published dictionary has no temperature key and no power
+# key. A planted Temperature, GPU Temperature, die temperature, dieTemp,
+# Power, GPU Power, GPU Energy, watts, Tg05, Tg0D, or thermalPressureLevel
+# value, including a zero, is not copied and does not open a row.
+# AppleSMC live keys are not in this ioreg dump. IOReport is not linked.
+# A root power sampler is not called. Linux sysfs is not this script.
 ioreg_bin=$(command -v ioreg 2>/dev/null || true)
 if [ -z "$ioreg_bin" ]; then
   printf '%s\n' "NVIDIA_ABSENT" "ENGINE_ABSENT" "MEMORY_ABSENT" "END"
@@ -173,6 +177,7 @@ function parse_stats(inner,    i, n, c, key, val, end) {
         i++
       }
     }
+    if (refused_field(key)) continue
     if (!is_num(val)) continue
     if ((val + 0) < 0) continue
     if (key == "Device Utilization %" && (val + 0) <= 100) st_util = val
@@ -185,6 +190,9 @@ function parse_stats(inner,    i, n, c, key, val, end) {
 function field_or_na(v) {
   if (v == "") return "[N/A]"
   return v
+}
+function refused_field(key) {
+  return key == "Temperature" || key == "GPU Temperature" || key == "die temperature" || key == "dieTemp" || key == "Power" || key == "GPU Power" || key == "GPU Energy" || key == "watts" || key == "Tg05" || key == "Tg0D" || key == "Tg0d" || key == "thermalPressureLevel"
 }
 BEGIN { buf = "" }
 {

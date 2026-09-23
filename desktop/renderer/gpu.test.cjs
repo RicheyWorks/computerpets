@@ -440,6 +440,9 @@ test("the probe script never plants a zero, and the HUD stays lockstep", () => {
   const pySrc = readFileSync(join(__dirname, "..", "..", "client", "computerpets_client", "gpu.py"), "utf8");
   const appSrc = readFileSync(join(__dirname, "..", "..", "client", "computerpets_client", "app.py"), "utf8");
   assert.match(macProbe, /IOAccelerator/);
+  assert.match(macProbe, /GPU Energy/);
+  assert.match(macProbe, /IOReport/);
+  assert.match(macProbe, /AppleSMC/);
   assert.doesNotMatch(macProbe, /powermetrics|sudo/);
   const linuxProbe = readFileSync(join(__dirname, "..", "gpu-probe.sh"), "utf8");
   assert.match(linuxProbe, /gpu_busy_percent/);

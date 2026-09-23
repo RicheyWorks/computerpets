@@ -1,6 +1,6 @@
 # 0123. Linux i915 and xe device VRAM stay unread
 
-- **Status:** Accepted
+- **Status:** Accepted (Mac temperature and power fail-closed moved to [0124](0124-mac-gpu-temp-power.md))
 - **Date:** 2026-09-23
 - **Code:** `desktop/gpu-probe.sh`, `desktop/gpu-sense.test.cjs`, `desktop/renderer/gpu.js`, `web/src/lib/pets/gpu.ts`, `client/computerpets_client/gpu.py`
 

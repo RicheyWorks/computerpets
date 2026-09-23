@@ -1,6 +1,6 @@
 # 0118. Mac reads IOAccelerator for desktop-local GPU sense
 
-- **Status:** Accepted (Linux amdgpu sysfs moved to [0119](0119-linux-amdgpu-sysfs-gpu-sense.md))
+- **Status:** Accepted (Linux amdgpu sysfs moved to [0119](0119-linux-amdgpu-sysfs-gpu-sense.md); temperature and power fail-closed moved to [0124](0124-mac-gpu-temp-power.md))
 - **Date:** 2026-09-23
 - **Code:** `desktop/gpu-probe-mac.sh`, `desktop/gpu-sense.cjs`, `desktop/renderer/gpu.js`, `web/src/lib/pets/gpu.ts`, `client/computerpets_client/gpu.py`
 
