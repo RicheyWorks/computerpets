@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { ANIM_FPS, ONCE_ANIMS, RED_PANDA_SPRITES, type PetAnim } from "@/lib/pets/red-panda";
 import type { SpritePack } from "@/lib/pets/living";
 import { playDeskSound, playStep } from "@/lib/pets/desk-audio";
@@ -10,6 +10,7 @@ import type { CatHappy, CatHappyKind, CatTrick, CatTrickKind } from "@/lib/pets/
 import type { DogHappy, DogHappyKind, DogTrick, DogTrickKind } from "@/lib/pets/dog-tricks";
 import type { RabbitHappy, RabbitHappyKind, RabbitTrick, RabbitTrickKind } from "@/lib/pets/rabbit-tricks";
 import { sleepHoldFrame, startThankYou, tricksFor } from "@/lib/pets/ground-tricks";
+import { paintDemoFrame } from "@/lib/pets/desk-sprite-surface";
 
 type GroundTrick = RuiTrick | RelayTrick | FuseTrick | EarthTrick | CatTrick | DogTrick | RabbitTrick;
 type GroundHappy = RuiHappy | RelayHappy | FuseHappy | EarthHappy | CatHappy | DogHappy | RabbitHappy;
@@ -107,6 +108,8 @@ type LivingPetProps = {
   onPose?: (x: number, facing: 1 | -1) => void;
   /** Rui's closed-eye lie hold (not the stretch / backflip). */
   onLieHold?: (on: boolean) => void;
+  /** `/demo` draws the catalog frame on the shared canvas. Other rooms stay an image. */
+  spriteSurface?: boolean;
 };
 
 type Dust = { x: number; y: number; vx: number; vy: number; life: number; size: number };
@@ -193,10 +196,21 @@ export function LivingPet({
   cardOpen = false,
   onPose,
   onLieHold,
+  spriteSurface = false,
 }: LivingPetProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const hitRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const surfaceRef = useRef(spriteSurface);
+  surfaceRef.current = spriteSurface;
+  const bindCanvas = useCallback((node: HTMLCanvasElement | null) => {
+    canvasRef.current = node;
+    if (!node) return;
+    if (node.dataset && !node.dataset.surface) node.dataset.surface = "pending";
+    const first = sprites.idle[0];
+    if (first && node.dataset && !node.dataset.frame) paintDemoFrame(node, first);
+  }, [sprites]);
   const bubbleRef = useRef<HTMLDivElement>(null);
   const shadowRef = useRef<HTMLDivElement>(null);
   const dustRef = useRef<HTMLDivElement>(null);
@@ -891,7 +905,9 @@ export function LivingPet({
             ? "center center"
             : "center bottom";
       }
-      if (imgRef.current) {
+      if (surfaceRef.current) {
+        paintDemoFrame(canvasRef.current, src);
+      } else if (imgRef.current) {
         if (imgRef.current.src !== new URL(src, window.location.origin).href) {
           imgRef.current.src = src;
         }
@@ -1093,22 +1109,40 @@ export function LivingPet({
           pointerEvents: "auto",
         }}
       >
-        <img
-          ref={imgRef}
-          data-pet-art
-          src={sprites.idle[0]}
-          alt=""
-          draggable={false}
-          className="pointer-events-none block h-44 w-44 object-contain object-bottom"
-          style={{
-            background: "transparent",
-            padding: 0,
-            border: 0,
-            opacity: hidden ? 0.22 : 1,
-            filter: dull ? "saturate(0.42) brightness(0.82) contrast(0.92)" : unwell ? "saturate(0.5) brightness(0.88)" : undefined,
-            transition: "opacity 280ms ease, filter 280ms ease",
-          }}
-        />
+        {spriteSurface ? (
+          <canvas
+            ref={bindCanvas}
+            data-pet-art
+            role="img"
+            aria-label=""
+            className="pointer-events-none block h-44 w-44 bg-transparent"
+            style={{
+              background: "transparent",
+              padding: 0,
+              border: 0,
+              opacity: hidden ? 0.22 : 1,
+              filter: dull ? "saturate(0.42) brightness(0.82) contrast(0.92)" : unwell ? "saturate(0.5) brightness(0.88)" : undefined,
+              transition: "opacity 280ms ease, filter 280ms ease",
+            }}
+          />
+        ) : (
+          <img
+            ref={imgRef}
+            data-pet-art
+            src={sprites.idle[0]}
+            alt=""
+            draggable={false}
+            className="pointer-events-none block h-44 w-44 object-contain object-bottom"
+            style={{
+              background: "transparent",
+              padding: 0,
+              border: 0,
+              opacity: hidden ? 0.22 : 1,
+              filter: dull ? "saturate(0.42) brightness(0.82) contrast(0.92)" : unwell ? "saturate(0.5) brightness(0.88)" : undefined,
+              transition: "opacity 280ms ease, filter 280ms ease",
+            }}
+          />
+        )}
       </div>
     </div>
   );
