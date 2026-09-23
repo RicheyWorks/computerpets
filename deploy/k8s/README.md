@@ -47,8 +47,8 @@ Local-dev keeps env / `.env.example` and plain `docker-compose.yml`.
 | ConfigMap | `computerpets-config` | `SPRING_PROFILES_ACTIVE=prod`, JDBC URL, Redis host |
 | Deployment + Service + PVC | `computerpets-postgres` | Same Postgres 16 image as `docker-compose.yml` |
 | Deployment + Service | `computerpets-redis` | Same Redis 7 image as compose (AUTH-less; managed AUTH is ADR 0075) |
-| Deployment | `computerpets-blue` | Live app replicas (`color=blue`, local `replicas: 2`). Soft hostname spread ([ADR 0080](../../docs/adr/0080-api-pod-topology-spread.md)) |
-| Deployment | `computerpets-green` | Idle slot (`replicas: 0`, `color=green`). Not an HPA or PDB target. Same soft hostname spread |
+| Deployment | `computerpets-blue` | Live app replicas (`color=blue`, local `replicas: 2`). Soft hostname spread ([ADR 0080](../../docs/adr/0080-api-pod-topology-spread.md)) and soft zone spread ([ADR 0081](../../docs/adr/0081-api-pod-zone-spread.md)) |
+| Deployment | `computerpets-green` | Idle slot (`replicas: 0`, `color=green`). Not an HPA or PDB target. Same soft hostname and zone spread |
 | Service | `computerpets` | Selects `app=computerpets,color=blue` |
 | HorizontalPodAutoscaler | `computerpets` | **Not created by this apply.** Prod file `hpa.yaml` ([ADR 0078](../../docs/adr/0078-horizontal-pod-autoscaling.md)) |
 | PodDisruptionBudget | `computerpets` | **Not created by this apply.** Prod file `pdb.yaml` ([ADR 0079](../../docs/adr/0079-pod-disruption-budget.md)) |
@@ -237,7 +237,8 @@ Pending.
 
 The selector is `app=computerpets` plus that Deployment's own color.
 Blue pods do not count as green's spread, and green pods do not count
-as blue's. There is no `minDomains` and no zone key. Postgres and Redis
+as blue's. There is no `minDomains`. The zone key is a second constraint
+([ADR 0081](../../docs/adr/0081-api-pod-zone-spread.md)). Postgres and Redis
 are not constrained. Local `replicas` stay 2 and 0. This rule is on the
 pod template, so `kubectl apply -k` does apply it. It does not apply
 `hpa.yaml` or `pdb.yaml`.
@@ -251,6 +252,33 @@ green template, which already has the same soft rule. The Service, HPA,
 and PDB patches below are unchanged. Soft spread can still place every
 pod of the live color on one node. A crash of that node is not blocked
 by the budget.
+
+## Zone spread (ADR 0081)
+
+Both API pod templates add a second `topologySpreadConstraints` item on
+`topology.kubernetes.io/zone`. `maxSkew` is 1. `whenUnsatisfiable` is
+`ScheduleAnyway`. `nodeTaintsPolicy` is `Honor`. The selector is the
+same color-scoped pair as the hostname item. Hostname spread stays.
+
+`DoNotSchedule` is not used on the zone key. That action skips nodes
+which omit `topology.kubernetes.io/zone`, so a laptop cluster would
+leave the second pod Pending. It would also count a tainted node in
+another zone as an empty domain and stick the HPA floor of 3. There is
+no `minDomains`. A required zone anti-affinity is not set.
+
+**Prod expectation:** schedulable workers in at least two availability zones
+(three when the floor of 3 should land one pod per zone). Cloud
+providers set the zone label. This repo does not provision the node
+pool. A single-zone pool still schedules. Soft spread can still place
+every pod of the live color in one zone. A failure of that zone is not
+blocked by the budget.
+
+```bash
+./deploy/k8s/check-zone-spread.sh
+```
+
+A cutover does not patch the zone item. Scaling green uses the green
+template, which already has it.
 
 ## Blue / green
 
@@ -306,8 +334,8 @@ Flip `color` back to `blue` the next time (scale blue to 3, flip the
 Service, patch the HPA back to blue, patch the PDB selector back to blue,
 then scale green to 0). Each Deployment still uses `RollingUpdate`
 (`maxUnavailable: 0`) for in-color patches. Both templates already
-prefer different hostnames (ADR 0080); there is no spread patch in
-this cutover. A missing or wrong signature
+prefer different hostnames (ADR 0080) and different zones (ADR 0081).
+There is no spread patch in this cutover. A missing or wrong signature
 must stop at step 1 — do not set image.
 
 ## `spring.profiles.active=prod`

@@ -1,7 +1,8 @@
 # Idle color. Not an HPA target (ADR 0078). Not a PDB target (ADR 0079).
 # Scale up, wait Ready, then patch the Service selector to color=green.
 # See deploy/k8s/README.md.
-# Same probes, secrets, prod profile, and soft hostname spread as blue (ADR 0080).
+# Same probes, secrets, prod profile, and soft hostname and zone spread as blue
+# (ADR 0080, ADR 0081).
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -27,13 +28,23 @@ spec:
         app: computerpets
         color: green
     spec:
-      # Soft hostname spread (ADR 0080). Same rule as blue, scoped to
-      # color=green, so a cutover scale-up prefers different nodes.
-      # ScheduleAnyway still binds when the skew cannot be met.
-      # DoNotSchedule would leave that pod Pending.
+      # Soft hostname spread (ADR 0080) and soft zone spread (ADR 0081).
+      # Same rules as blue, scoped to color=green, so a cutover scale-up
+      # prefers different nodes and different zones. ScheduleAnyway still
+      # binds when the skew cannot be met. DoNotSchedule on the zone key
+      # would leave that pod Pending on a single-zone cluster and on nodes
+      # that omit topology.kubernetes.io/zone.
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          nodeTaintsPolicy: Honor
+          labelSelector:
+            matchLabels:
+              app: computerpets
+              color: green
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: ScheduleAnyway
           nodeTaintsPolicy: Honor
           labelSelector:

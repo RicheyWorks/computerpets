@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # ADR 0080 — soft hostname spread on the API Deployments.
+# Zone spread is a second constraint (ADR 0081); check-zone-spread.sh locks it.
 # No cluster. Does not kubectl apply. Local replica counts stay put.
 set -euo pipefail
 
@@ -81,12 +82,17 @@ check_spread() {
     ok "${name} spread selector is not the other color"
   fi
   keys="$(printf '%s\n' "${block}" | grep -c 'topologyKey:' || true)"
-  if [ "${keys}" = "1" ]; then ok "${name} has one topology key"
-  else bad "${name} has one topology key (found ${keys})"; fi
-  if printf '%s\n' "${block}" | grep -qE 'DoNotSchedule|minDomains:|matchLabelKeys:|topology.kubernetes.io/zone'; then
-    bad "${name} spread block stays soft, hostname-only, with no minDomains"
+  if [ "${keys}" = "2" ] \
+    && printf '%s\n' "${block}" | grep -q 'topologyKey: kubernetes.io/hostname' \
+    && printf '%s\n' "${block}" | grep -q 'topologyKey: topology.kubernetes.io/zone'; then
+    ok "${name} keeps the hostname key beside the zone key"
   else
-    ok "${name} spread block stays soft, hostname-only, with no minDomains"
+    bad "${name} keeps the hostname key beside the zone key (found ${keys})"
+  fi
+  if printf '%s\n' "${block}" | grep -qE 'DoNotSchedule|minDomains:|matchLabelKeys:'; then
+    bad "${name} spread block stays soft, with no minDomains"
+  else
+    ok "${name} spread block stays soft, with no minDomains"
   fi
 }
 
