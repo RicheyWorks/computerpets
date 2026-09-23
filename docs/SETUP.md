@@ -411,6 +411,11 @@ Prod voluntary disruption of that live color keeps 2 pods
 (`deploy/k8s/pdb.yaml`), also applied on its own, and only after that
 floor is actually running. It is not in the kustomization
 ([ADR 0079](adr/0079-pod-disruption-budget.md)).
+Both API Deployments prefer different nodes (`kubernetes.io/hostname`,
+`maxSkew: 1`, `whenUnsatisfiable: ScheduleAnyway`). Hard `DoNotSchedule`
+is not set, so a pod still binds when the hostname skew cannot be met.
+Local replica counts stay 2 and 0
+([ADR 0080](adr/0080-api-pod-topology-spread.md)).
 
 Prefer External Secrets Operator or Vault Agent to fill
 `computerpets-secrets` rather than committing values into `secret.yaml`.
