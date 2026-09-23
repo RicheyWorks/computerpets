@@ -5,8 +5,9 @@
 # nodeAffinityPolicy Honor, nodeTaintsPolicy Honor. No minDomains.
 # One labeled zone still schedules. A node that omits the zone label
 # does not. HPA, PDB, the pool selector, and the taint toleration stay.
-# Cluster Autoscaler zone anti-affinity stays preferred. metrics-server
-# zone spread is DoNotSchedule (ADR 0098).
+# Cluster Autoscaler zone spread is DoNotSchedule (ADR 0099). Required
+# zone anti-affinity is not set. metrics-server zone spread is
+# DoNotSchedule (ADR 0098).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -90,11 +91,11 @@ need_grep "$KUSTOM" 'ADR 0095' "kustomize comment names the hard zone spread"
 need_grep "$KUSTOM" 'One labeled zone still schedules' "kustomize comment is honest about one zone"
 need_grep "$KUSTOM" 'Do not set minDomains' "kustomize comment refuses minDomains"
 
-echo "== scaler stays preferred; metrics-server zone spread is ADR 0098 =="
-need_grep "$CA" 'preferredDuringSchedulingIgnoredDuringExecution' "cluster-autoscaler zone rule stays preferred"
+echo "== scaler zone spread is ADR 0099; metrics-server zone spread is ADR 0098 =="
+need_grep "$CA" 'whenUnsatisfiable: DoNotSchedule' "cluster-autoscaler zone spread is DoNotSchedule (ADR 0099)"
 need_grep "$CA" 'topologyKey: topology.kubernetes.io/zone' "cluster-autoscaler still names the zone key"
-need_not_grep "$CA" 'topologySpreadConstraints:' "cluster-autoscaler has no topology spread constraint"
-need_not_grep "$CA" 'DoNotSchedule' "cluster-autoscaler zone rule is not DoNotSchedule"
+need_grep "$CA" 'topologySpreadConstraints:' "cluster-autoscaler zone rule is a spread constraint"
+need_not_grep "$CA" 'preferredDuringSchedulingIgnoredDuringExecution' "cluster-autoscaler has no preferred zone term"
 need_grep "$METRICS" 'whenUnsatisfiable: DoNotSchedule' "metrics-server zone spread is DoNotSchedule (ADR 0098)"
 need_not_grep "$METRICS" 'whenUnsatisfiable: ScheduleAnyway' "metrics-server zone spread is not ScheduleAnyway"
 need_not_grep "$METRICS" 'minDomains:' "metrics-server zone spread has no minDomains"
@@ -187,24 +188,26 @@ ca = next(doc for doc in docs if isinstance(doc, dict)
           and doc.get("kind") == "Deployment"
           and (doc.get("metadata") or {}).get("name") == "cluster-autoscaler")
 ca_pod = ((ca.get("spec") or {}).get("template") or {}).get("spec") or {}
-check("topologySpreadConstraints" not in ca_pod,
-      "parsed cluster-autoscaler has no topology spread")
+ca_constraints = ca_pod.get("topologySpreadConstraints") or []
+check(len(ca_constraints) == 1, "parsed cluster-autoscaler has one zone spread constraint")
+if ca_constraints:
+    item = ca_constraints[0]
+    check(item.get("topologyKey") == "topology.kubernetes.io/zone",
+          "parsed cluster-autoscaler spread key is the zone")
+    check(item.get("whenUnsatisfiable") == "DoNotSchedule",
+          "parsed cluster-autoscaler zone spread is DoNotSchedule (ADR 0099)")
+    check(item.get("maxSkew") == 1, "parsed cluster-autoscaler maxSkew is 1")
+    check("minDomains" not in item, "parsed cluster-autoscaler has no minDomains")
 affinity = ((ca_pod.get("affinity") or {}).get("podAntiAffinity") or {})
 required = affinity.get("requiredDuringSchedulingIgnoredDuringExecution") or []
 preferred = affinity.get("preferredDuringSchedulingIgnoredDuringExecution") or []
 req_keys = [item.get("topologyKey") for item in required if isinstance(item, dict)]
-pref_keys = []
-for item in preferred:
-    if not isinstance(item, dict):
-        continue
-    term = item.get("podAffinityTerm") or {}
-    pref_keys.append(term.get("topologyKey"))
 check(req_keys == ["kubernetes.io/hostname"],
       "parsed cluster-autoscaler required anti-affinity is hostname only")
 check("topology.kubernetes.io/zone" not in req_keys,
       "parsed cluster-autoscaler zone anti-affinity is not required")
-check(pref_keys == ["topology.kubernetes.io/zone"],
-      "parsed cluster-autoscaler preferred anti-affinity is the zone key")
+check(preferred == [],
+      "parsed cluster-autoscaler has no preferred zone anti-affinity")
 
 ms_docs = list(yaml.safe_load_all(pathlib.Path(sys.argv[4]).read_text()))
 ms = next(doc for doc in ms_docs if isinstance(doc, dict)

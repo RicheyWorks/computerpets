@@ -108,7 +108,7 @@ address, or an API that is not on `main`.
 | [0087](0087-metrics-server-serving-cert.md) | Serving certificate for metrics-server (operator Secret; `insecureSkipTLSVerify` stays off) | Accepted |
 | [0088](0088-metrics-server-zone-spread.md) | Soft zone spread for metrics-server beside required hostname anti-affinity (`ScheduleAnyway`; single-zone clusters still schedule) | Superseded (in part) by 0098 |
 | [0089](0089-metrics-server-node-pool.md) | Pin metrics-server to the multi-AZ API node pool (`computerpets/node-pool=api`; kind stays off the file) | Accepted |
-| [0090](0090-cluster-autoscaler-ha.md) | High availability for Cluster Autoscaler (replicas 2, required hostname anti-affinity, preferred zone anti-affinity, leader election; still not in the kustomization) | Accepted |
+| [0090](0090-cluster-autoscaler-ha.md) | High availability for Cluster Autoscaler (replicas 2, required hostname anti-affinity, leader election; still not in the kustomization) | Superseded (in part) by 0099 |
 | [0091](0091-cluster-autoscaler-node-pool.md) | Pin Cluster Autoscaler to the multi-AZ API node pool (`computerpets/node-pool=api` and linux; kind stays off the file) | Accepted |
 | [0092](0092-cluster-autoscaler-pdb.md) | Pod disruption budget for Cluster Autoscaler (`minAvailable: 1` on `app=cluster-autoscaler`; kind stays off the file) | Accepted |
 | [0093](0093-api-node-pool.md) | Pin the API Deployments to the multi-AZ API node pool (`computerpets/node-pool=api` and linux; kind stays Pending until the label exists) | Accepted |
@@ -117,6 +117,7 @@ address, or an API that is not on `main`.
 | [0096](0096-system-daemon-api-pool-toleration.md) | API pool toleration on `aws-node` (`vpc-cni` `configuration_values`) and `kube-proxy` (strategic-merge patch; kind stays untainted) | Accepted |
 | [0097](0097-kube-proxy-toleration-hook.md) | Reassert kube-proxy API pool coverage on plan drift, or fail closed (kind stays untainted; the live probe defaults off) | Accepted |
 | [0098](0098-metrics-server-zone-hard-spread.md) | Hard zone spread for metrics-server (`DoNotSchedule` on `topology.kubernetes.io/zone`; one labeled zone still schedules; replicas stay 2) | Accepted |
+| [0099](0099-cluster-autoscaler-zone-hard-spread.md) | Hard zone spread for Cluster Autoscaler (`DoNotSchedule` on `topology.kubernetes.io/zone`; one labeled zone still schedules; preferred zone anti-affinity removed; replicas stay 2) | Accepted |
 
 ## How to add one
 

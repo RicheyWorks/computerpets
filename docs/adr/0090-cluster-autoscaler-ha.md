@@ -1,6 +1,6 @@
 # 0090. High availability for Cluster Autoscaler
 
-- **Status:** Accepted (the pool pin is [0091](0091-cluster-autoscaler-node-pool.md); the disruption budget is [0092](0092-cluster-autoscaler-pdb.md); replicas, anti-affinity, and leader election stay)
+- **Status:** Superseded in part by [0099](0099-cluster-autoscaler-zone-hard-spread.md) (the zone rule is `DoNotSchedule` spread, not a preferred anti-affinity; replicas, required hostname anti-affinity, and leader election stay; the pool pin is [0091](0091-cluster-autoscaler-node-pool.md); the disruption budget is [0092](0092-cluster-autoscaler-pdb.md))
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/cluster-autoscaler.yaml`; `deploy/terraform/check-cluster-autoscaler.sh`
 

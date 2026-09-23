@@ -1,6 +1,6 @@
 # 0092. Pod disruption budget for Cluster Autoscaler
 
-- **Status:** Accepted (the API pool pin is [0093](0093-api-node-pool.md); `minAvailable` stays)
+- **Status:** Accepted (the API pool pin is [0093](0093-api-node-pool.md); zone spread is [0099](0099-cluster-autoscaler-zone-hard-spread.md); `minAvailable` stays)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/cluster-autoscaler.yaml`; `deploy/terraform/check-cluster-autoscaler.sh`
 

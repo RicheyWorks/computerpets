@@ -102,8 +102,23 @@ assert_exit 1 "check fails when the API PDB minAvailable drops below 2" \
 
 copy_tree "${BROKEN}"
 # Required zone anti-affinity is not the follow-up.
-sed -i '/preferredDuringSchedulingIgnoredDuringExecution:/,/topologyKey: topology.kubernetes.io\/zone/s/preferredDuringSchedulingIgnoredDuringExecution:/requiredDuringSchedulingIgnoredDuringExecution:/' \
-  "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml"
+python3 - "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml" <<'PY'
+import pathlib, sys
+path = pathlib.Path(sys.argv[1])
+text = path.read_text()
+old = "              topologyKey: kubernetes.io/hostname\n"
+new = """              topologyKey: kubernetes.io/hostname
+            - labelSelector:
+                matchLabels:
+                  app: cluster-autoscaler
+              namespaces:
+                - kube-system
+              topologyKey: topology.kubernetes.io/zone
+"""
+if text.count(old) != 1:
+    raise SystemExit(f"hostname term count {text.count(old)}")
+path.write_text(text.replace(old, new, 1))
+PY
 assert_exit 1 "check fails when cluster-autoscaler zone anti-affinity is required" \
   "${BROKEN}/deploy/k8s/check-api-zone-hard-spread.sh"
 
