@@ -31,6 +31,10 @@ resources:
 # hostnames, so the HPA floor of 3 is 1 and 1 and 1. Kind and minikube
 # do not plan that pool. One hostname here still schedules. Do not set
 # minDomains.
+# HPA ceiling (ADR 0107) is 6, which is two zones times this floor.
+# A healthy pool holds that ceiling at one pod per hostname. The old
+# ceiling of 10 is refused. This apply does not include hpa.yaml.
+# One hostname here still schedules. Do not set minDomains.
 # Zone spread (ADR 0081, hardened by ADR 0095) is DoNotSchedule on
 # topology.kubernetes.io/zone, maxSkew 1, nodeAffinityPolicy Honor.
 # One labeled zone still schedules: a single domain keeps skew at 1.

@@ -1,6 +1,6 @@
 # 0078. Horizontal pod autoscaling
 
-- **Status:** Accepted (the "does not install metrics-server" clause is superseded in part by [0084](0084-metrics-server.md); the HPA object is unchanged)
+- **Status:** Accepted (the "does not install metrics-server" clause is superseded in part by [0084](0084-metrics-server.md); the ceiling of 10 is superseded in part by [0107](0107-api-hostname-ceiling.md); the HPA object otherwise stays)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/hpa.yaml`; `deploy/k8s/check-hpa.sh`
 
@@ -22,7 +22,7 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 
 **The prod API autoscaler is `deploy/k8s/hpa.yaml`. It is not in the kustomization. Local apply stays at blue 2 / green 0. Metrics-server is a cluster addon this repo does not install. CPU is a percent of the request. Memory is an absolute value above a quiet JVM, not a percent of the 512Mi request.**
 
-The install clause in that sentence is the part [0084](0084-metrics-server.md) replaces. The HPA numbers in this ADR are unchanged.
+The install clause in that sentence is the part [0084](0084-metrics-server.md) replaces. The ceiling of 10 in point 2 is the part [0107](0107-api-hostname-ceiling.md) replaces. `minReplicas` stays 3.
 
 1. **Target.** One `autoscaling/v2` `HorizontalPodAutoscaler` named `computerpets`. `scaleTargetRef` is Deployment `computerpets-blue`, the Service's default live color. Green, Postgres, and Redis are not targets.
 2. **Range.** `minReplicas: 3` (the diagram's floor). `maxReplicas: 10`. Scale up at most 2 pods per 60 seconds. Scale down waits 300 seconds and drops 1 pod per 60 seconds. The floor is the HPA minimum, not a disruption budget.

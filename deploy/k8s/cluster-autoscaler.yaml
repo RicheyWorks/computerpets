@@ -37,8 +37,9 @@
 #
 # This Deployment does not create nodes by itself. It sets desired capacity
 # on the Auto Scaling groups the managed node groups already own. Terraform
-# ignores desired_size after create. min is 3 per zone (ADR 0106). max is at least
-# the HPA ceiling. Scale-down still honors PodDisruptionBudgets.
+# ignores desired_size after create. min is 3 per zone (ADR 0106). max is 20.
+# The HPA ceiling is 6 (ADR 0107), so a healthy pool holds it at one pod
+# per hostname. Scale-down still honors PodDisruptionBudgets.
 # Karpenter is not installed.
 #
 # Two pods share one ServiceAccount and one IRSA role. Only the leader
@@ -282,6 +283,9 @@ spec:
           # ADR 0106. Each zone's min_size is 3. One Ready zone is three
           # hostnames, so the HPA floor is 1 and 1 and 1. The leader does
           # not scale a group below that min. Do not set minDomains.
+          # ADR 0107. The HPA ceiling is 6, one pod per healthy hostname.
+          # The leader does not add a node for a ceiling pod that already
+          # bound. Do not set minDomains.
           command:
             - ./cluster-autoscaler
             - --cloud-provider=aws
