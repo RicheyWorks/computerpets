@@ -12,6 +12,8 @@ resources:
   - service.yaml
 # ingress.yaml (HTTP, local/dev) and ingress-tls.yaml (public HTTPS, ADR 0077)
 # are optional. Neither is applied by this kustomization.
+# hpa.yaml (prod API autoscaler, ADR 0078) is also not applied here.
+# Local/dev stays blue replicas 2, green replicas 0.
 images:
   - name: ghcr.io/richeyworks/computerpets
     newTag: main

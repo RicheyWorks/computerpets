@@ -403,6 +403,10 @@ The in-cluster Service stays HTTP on 8081. Leave `API_LISTENER_TLS_REQUIRED`
 unset. A public door uses `deploy/k8s/ingress-tls.yaml` or the ALB HTTPS
 listener and sets that flag with `API_PUBLIC_BASE_URL=https://<host>`. Do
 not set `server.ssl` ([ADR 0077](adr/0077-api-listener-tls.md)).
+Prod API replica count is `deploy/k8s/hpa.yaml` (min 3, max 10), applied
+on its own after metrics-server answers `kubectl top`. It is not in the
+kustomization. Local `kubectl apply -k` stays at blue 2 / green 0
+([ADR 0078](adr/0078-horizontal-pod-autoscaling.md)).
 
 Prefer External Secrets Operator or Vault Agent to fill
 `computerpets-secrets` rather than committing values into `secret.yaml`.

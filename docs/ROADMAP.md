@@ -70,6 +70,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Redis AUTH and transit TLS — optional `REDIS_PASSWORD` / `REDIS_PASSWORD_FILE` and `REDIS_SSL` on the one Lettuce client. Prod fails closed when AUTH is required and the password is missing. ElastiCache enables AUTH and transit encryption together when `redis_auth_token` is set (ADR 0075). Catalog stays 221.
   - [x] Postgres transit TLS — managed JDBC `sslmode=require` (or `verify-full` when a CA path is set) and RDS `rds.force_ssl=1`. Prod refuses a half-set pair. Local and in-cluster Postgres stay cleartext (ADR 0076). Catalog stays 221.
   - [x] API listener TLS — cert-manager Ingress or an ACM HTTPS listener on the keeper-owned API ALB. Port 80 redirects. The JVM stays HTTP on 8081. Prod refuses a cleartext public origin when the flag is set. This root does not call ACM (ADR 0077). Catalog stays 221.
+  - [x] API horizontal pod autoscaling — `deploy/k8s/hpa.yaml` targets `computerpets-blue` (min 3, max 10, CPU 70% of the request, memory at 800Mi). Not in the kustomization. Local apply stays blue 2 / green 0. metrics-server is a cluster addon this repo does not install (ADR 0078). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload
@@ -131,6 +132,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Secret-operator hardening — prod refuses plain env / hand-filled Opaque Secret without `COMPUTERPETS_SECRETS_SOURCE` ∈ {`external-secrets`, `file`, `vault-agent`}; `verify-secret-operator.sh` deploy gate (ADR 0064). Local-dev keeps env / scaffolding `secret.yaml`.
   - [x] Secret rotation cadence / HSM story — dual-key `*_PREVIOUS` verify/decrypt, documented 90d/180d cadence, optional `COMPUTERPETS_KEYS_ROTATED_AT` (400d max when set), KMS/HSM pointer without a live appliance (`verify-secret-rotation.sh`; ADR 0065).
   - [x] API listener TLS — public door is `ingress-tls.yaml` or an ALB HTTPS listener (port 80 redirects). JVM stays HTTP on 8081. Prod refuses a cleartext public origin when `API_LISTENER_TLS_REQUIRED` is set. This root does not call ACM (ADR 0077). Catalog stays 221.
+  - [x] API horizontal pod autoscaling — prod `hpa.yaml` (min 3, max 10) is not in the kustomization. Local apply stays unscaled. metrics-server stays a cluster addon (ADR 0078). Catalog stays 221.
 
 ---
 
