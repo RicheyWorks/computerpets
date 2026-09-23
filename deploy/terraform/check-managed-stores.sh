@@ -139,6 +139,17 @@ else
   bad "check-system-daemons.sh missing"
 fi
 
+echo "== kube-proxy toleration hook (ADR 0097) =="
+if [ -x "${TF}/check-kube-proxy-toleration.sh" ]; then
+  if "${TF}/check-kube-proxy-toleration.sh"; then
+    ok "check-kube-proxy-toleration.sh"
+  else
+    bad "check-kube-proxy-toleration.sh"
+  fi
+else
+  bad "check-kube-proxy-toleration.sh missing"
+fi
+
 echo "== API node pool (ADR 0082) =="
 if [ -x "${TF}/check-node-pool.sh" ]; then
   if "${TF}/check-node-pool.sh"; then

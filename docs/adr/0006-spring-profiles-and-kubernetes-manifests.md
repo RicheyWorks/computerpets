@@ -71,7 +71,8 @@ No mesh.
   are not tainted ([0094](0094-api-pool-taint.md)). `aws-node` records
   the same toleration on the `vpc-cni` addon. `kube-proxy` records it
   in a strategic-merge patch that this kustomization does not apply
-  ([0096](0096-system-daemon-api-pool-toleration.md)).
+  ([0096](0096-system-daemon-api-pool-toleration.md)). The EKS reassert
+  hook for that patch is [0097](0097-kube-proxy-toleration-hook.md).
 - Private workers in at least two zones are the node pool
   ([0082](0082-multi-az-node-pool.md)). This kustomization does not create them.
 - Cluster Autoscaler grows those groups when pods are Pending

@@ -1,0 +1,45 @@
+# 0097. Durable kube-proxy API pool toleration
+
+- **Status:** Accepted
+- **Date:** 2026-09-23
+- **Code:** `deploy/terraform/modules/system_daemons/reassert-kube-proxy-toleration.sh`; `deploy/terraform/check-kube-proxy-toleration.sh`
+
+## Context
+
+[0096](0096-system-daemon-api-pool-toleration.md) left this gap: the kube-proxy managed addon schema still rejects `tolerations`, so the strategic-merge patch is not durable across an addon reconcile. If the DaemonSet already has `operator: Exists`, the taint is still tolerated. If it does not, the node can return to NotReady until the patch is applied again. Inventory on `main` tip `d3a271f56`:
+
+| Surface | What it did | What it did not do |
+|---------|-------------|--------------------|
+| `vpc-cni` `configuration_values` | Chart default `operator: Exists`, then the exact `Equal` entry. [0096](0096-system-daemon-api-pool-toleration.md) | This slice does not edit that document |
+| `kube-proxy-api-pool-toleration.yaml` | Strategic-merge patch. Exact `Equal` entry. No image | A keeper command. The addon controller can revert it |
+| `aws_eks_addon` | One addon, `vpc-cni`. `addon_version` unset | No kube-proxy addon. The schema rejects `tolerations` (containers-roadmap 2604, still open at the 2026-03-04 comment) |
+| Self-managed kube-proxy | Not in this repo | Owning the DaemonSet means deleting the managed addon and tracking an image. This root does not fork that image. A second DaemonSet beside the addon is two proxies |
+| Annotation or server-side apply | Not a toleration | Supported kube-proxy fields are mode, ipvs, resources, pod labels, and pod annotations. None of those add a toleration. A field manager on the tolerations list loses when the addon writes that list |
+| Helm release of kube-proxy | Not in this repo | A second release fights the managed addon. `deploy/k8s` is not Helm |
+| Kind and minikube | Untainted. The patch is not in the kustomization | A hook that runs there would patch a laptop cluster that must stay untainted |
+
+`configuration_values` on kube-proxy is still rejected. A keyless `operator: Exists` with an empty effect matches every taint, including `computerpets/node-pool=api:NoSchedule`. The same operator with effect `NoSchedule` matches this taint. Effect `NoExecute` does not. The exact `Equal` entry also matches. Those two shapes are coverage. Anything else is drift.
+
+This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip, cosign, CDN edge, secrets rotation, VerifyFieldBounds, ClientAddress, rate-limit bucket sizes, the machine/admin HMAC, the nonce store, the download JWT `jti`, the WAF ACL, Redis AUTH, Postgres JDBC SSL, API listener TLS, the HPA metrics and replica range, the API PDB `minAvailable`, the API hostname spread, the API zone `DoNotSchedule` item, the node-pool taint, metrics-server TLS/CA/zone/pin, or Cluster Autoscaler replica count, anti-affinity, leader election, node-pool pin, and disruption budget beyond this cross-link. vpc-cni `configuration_values` stays [0096](0096-system-daemon-api-pool-toleration.md). Required zone anti-affinity for Cluster Autoscaler stays unset. Catalog stays 221. No storefront. No DirectX 12 / Vulkan / Solana. No Rui sprites.
+
+## Decision
+
+**kube-proxy coverage is a keyless `operator: Exists` (effect empty or `NoSchedule`) or the exact `Equal` entry from the strategic-merge patch. When `reassert_kube_proxy_toleration` is true, plan reads the live DaemonSet and apply reasserts the patch if coverage is missing. If the second read is still uncovered, apply fails closed. The flag defaults false. Kind and minikube are refused before any patch. Do not taint a kind or minikube node. A toleration does not require the taint.**
+
+1. **Coverage.** `reassert-kube-proxy-toleration.sh` classifies a DaemonSet JSON document. Covered means one toleration is operator `Exists`, with no key, no value, no `tolerationSeconds`, and effect empty or `NoSchedule`, or one toleration is key `computerpets/node-pool`, operator `Equal`, value `api`, effect `NoSchedule`, and nothing else on that object. Exists with effect `NoExecute` is not coverage. A keyed Exists is not coverage. The script does not taint. It does not send an addon values document. It does not name an image.
+2. **Probe and reassert.** `data.external.kube_proxy_toleration` runs the script `--probe` only when the flag is true and `eks_cluster_name` is set. Probe is read-only. It prints `covered` `true` or `false`. `terraform_data.kube_proxy_toleration_reassert` replaces when that bit changes or when the patch file or the script changes, and its `local-exec` runs `--live`. `--live` patches only when the document is uncovered, using `kubectl patch daemonset kube-proxy -n kube-system --type strategic` and `kube-proxy-api-pool-toleration.yaml`. A second read that is not covered fails the apply. A kind or minikube context fails probe and live before any patch. The node group already waits on this module.
+3. **Flag default.** `reassert_kube_proxy_toleration` defaults false on the root and on the module. `terraform test` and CI do not call kubectl and do not apply. `enable_node_pool=false` does not instantiate the module. Set the flag true only with an EKS kubeconfig. This root does not create the cluster. No live AWS apply.
+4. **What was not taken.** The managed addon stays the owner of kube-proxy. This slice does not delete it, does not pin `addon_version`, and does not add a kube-proxy `aws_eks_addon`. It does not install a Helm release. It does not put the patch or the script in the kustomization. vpc-cni `configuration_values` stays the [0096](0096-system-daemon-api-pool-toleration.md) document.
+5. **Who does not change.** Postgres and Redis stay unpinned and do not tolerate the taint. Blue, green, metrics-server, and Cluster Autoscaler keep the toleration they already have. Hostname spread stays `ScheduleAnyway`. The API zone item stays `DoNotSchedule`. metrics-server zone spread stays `ScheduleAnyway`. Cluster Autoscaler zone anti-affinity stays preferred. Required zone anti-affinity is not the follow-up. HPA stays min 3 / max 10. The API PDB stays `minAvailable: 2`.
+6. **Fail closed.** `terraform_data.kube_proxy_toleration_hook_gate` refuses a plan when the script drops the coverage rule, the kind or minikube refusal, or the fail-closed path, or when it taints. `check-kube-proxy-toleration.sh` fails on the same drift, on a flag that defaults true, on a missing probe, on a missing `--live`, on a kube-proxy addon `configuration_values`, on a kustomization that lists the hook, and on a dropped external provider. `--self-test` proves Exists, exact Equal, `NoExecute` Exists, a keyed Exists, an uncovered document that becomes covered, an uncovered document that stays uncovered, and kind and minikube refusals. No `kubectl` on the real cluster and no `terraform apply`.
+
+## Consequences
+
+- On an EKS kubeconfig with `reassert_kube_proxy_toleration=true`, a plan that sees neither Exists nor the exact Equal entry replaces the reassert resource. Apply patches. If the addon controller strips the patch before the second read and does not leave Exists, apply fails and the node can stay NotReady. That failure is the closed door. Do not paper over it by sending `configuration_values` the schema rejects.
+- A DaemonSet that already has keyless Exists stays covered. Apply does not patch it, so a reconcile that restores the chart default does not fight this hook.
+- The flag defaults false. A keeper who leaves it false does not probe. The one-shot patch from [0096](0096-system-daemon-api-pool-toleration.md) is still not durable until the flag is set. CI cannot set it: this root has no cluster credentials.
+- Between two applies, a reconcile can drop coverage. The next plan that has the flag on sees the drift. There is no in-cluster controller in this repo.
+- Kind and minikube are not patched and are not tainted. Do not taint a kind or minikube node. A toleration does not require the taint.
+- Preferred zone anti-affinity can still place both Cluster Autoscaler pods in one zone. Required zone anti-affinity is not the follow-up. metrics-server zone spread stays `ScheduleAnyway`. One labeled zone still schedules every API pod of the live color.
+- Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
+- **Next gap:** the kube-proxy managed addon schema still rejects `tolerations`, so coverage between applies depends on this hook and on the flag being true. If the reasserted patch does not stick and Exists is also gone, apply fails closed and the node can stay NotReady. Preferred zone anti-affinity can still place both Cluster Autoscaler pods in one zone. Required zone anti-affinity is not the follow-up. metrics-server zone spread stays `ScheduleAnyway`. One labeled zone still schedules every API pod of the live color. A serving certificate that does not chain to `caBundle` (and is not a system root), or whose SAN is not `metrics-server.kube-system.svc`, still leaves `kubectl top` empty. A kubelet certificate that does not chain to `metrics-server-kubelet-ca` still leaves `kubectl top` empty.
