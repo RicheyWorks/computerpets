@@ -87,6 +87,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Cluster Autoscaler disruption budget — `policy/v1` `PodDisruptionBudget` in `cluster-autoscaler.yaml`, `minAvailable: 1`, selector `app=cluster-autoscaler`. One pod can drain while the other holds or takes the lease. `minAvailable: 2` is not used. Kind and minikube do not apply the file. Not in the kustomization (ADR 0092). Catalog stays 221.
   - [x] API node-pool pin — blue and green `nodeSelector` requires `kubernetes.io/os: linux` and `computerpets/node-pool: api`. `nodeAffinityPolicy: Honor` keeps hostname and zone spread on those nodes. Kind and minikube leave the API pods Pending until a node carries the label. One labeled node still schedules. HPA and PDB stay (ADR 0093). Catalog stays 221.
   - [x] API pool taint — the node group taints `computerpets/node-pool=api:NoSchedule`. Blue, green, metrics-server, and Cluster Autoscaler tolerate it. Postgres and Redis do not. Kind and minikube are not tainted (ADR 0094). Catalog stays 221.
+  - [x] API zone hard spread — both colors set `topology.kubernetes.io/zone` to `DoNotSchedule` (`maxSkew` 1, `nodeAffinityPolicy: Honor`). One labeled zone still schedules. A node that omits the zone label does not. Hostname stays `ScheduleAnyway`. HPA and PDB stay (ADR 0095). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload
@@ -165,6 +166,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Cluster Autoscaler disruption budget — `minAvailable: 1` on `app=cluster-autoscaler` in the same manifest. Kind stays off the file, so the budget stays off with it. Still not in the kustomization (ADR 0092). Catalog stays 221.
   - [x] API node-pool pin — required `nodeSelector` on `computerpets/node-pool=api` and linux for blue and green. Kind and minikube leave the API pods Pending until the label exists. Spread stays `ScheduleAnyway` (ADR 0093). Catalog stays 221.
   - [x] API pool taint — `computerpets/node-pool=api:NoSchedule` on the API node group, with matching tolerations on the four workloads that already select it. Kind and minikube stay untainted (ADR 0094). Catalog stays 221.
+  - [x] API zone hard spread — `DoNotSchedule` on `topology.kubernetes.io/zone` for blue and green (`maxSkew` 1). One labeled zone still schedules. Hostname stays `ScheduleAnyway` (ADR 0095). Catalog stays 221.
 
 ---
 

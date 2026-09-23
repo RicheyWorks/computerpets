@@ -416,26 +416,28 @@ Both API Deployments prefer different nodes (`kubernetes.io/hostname`,
 is not set, so a pod still binds when the hostname skew cannot be met.
 Local replica counts stay 2 and 0
 ([ADR 0080](adr/0080-api-pod-topology-spread.md)).
-They also prefer different zones (`topology.kubernetes.io/zone`, same
-`maxSkew`, `ScheduleAnyway`, and `nodeTaintsPolicy: Honor`). Hard zone
-spread is not set, so a single-zone cluster and nodes that omit the zone
-label still schedule. Prod workers are one private EKS managed node group
-per availability zone, at least two ([ADR 0082](adr/0082-multi-az-node-pool.md)).
+They also hard-spread zones (`topology.kubernetes.io/zone`, `maxSkew` 1,
+`DoNotSchedule`, `nodeTaintsPolicy: Honor`, `nodeAffinityPolicy: Honor`).
+`minDomains` is unset. One labeled zone still schedules. A node that
+omits the zone label does not. Prod workers are one private EKS managed
+node group per availability zone, at least two ([ADR 0082](adr/0082-multi-az-node-pool.md)).
 This kustomization does not create them. `enable_node_pool=false` is the
-local switch. The zone preference stays soft
-([ADR 0081](adr/0081-api-pod-zone-spread.md)).
+local switch. No live AWS apply
+([ADR 0095](adr/0095-api-zone-hard-spread.md)).
 Both API Deployments also require `kubernetes.io/os: linux` and
 `computerpets/node-pool: api`. Both spread items set
 `nodeAffinityPolicy: Honor`. Kind and minikube apply that selector.
 Their nodes omit the pool label unless you label one, and the API pods
 stay Pending until then. Do not delete the pool key to make a laptop
-apply schedule. One labeled node still schedules both blue pods.
-Postgres and Redis are not pinned
+apply schedule. One labeled node still schedules both blue pods once
+it also carries one `topology.kubernetes.io/zone` value. A pool label
+alone leaves the API Pending. Postgres and Redis are not pinned
 ([ADR 0093](adr/0093-api-node-pool.md)).
 The API node group also taints `computerpets/node-pool=api:NoSchedule`.
 Blue and green tolerate it. A toleration does not require the taint.
 Kind and minikube are not tainted. Do not taint a kind or minikube node.
-Labeling a node without that taint still schedules the API. Postgres and
+Labeling a node without that taint still schedules the API once that
+node also carries one zone label. Postgres and
 Redis do not tolerate it
 ([ADR 0094](adr/0094-api-pool-taint.md)).
 Cluster Autoscaler grows those groups when pods are Pending. Each zone's

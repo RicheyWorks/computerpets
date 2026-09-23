@@ -41,11 +41,11 @@ cp "${ROOT}/docs/adr/0080-api-pod-topology-spread.md" \
 cp "${SCRIPT}" "${BROKEN}/deploy/k8s/check-zone-spread.sh"
 chmod +x "${BROKEN}/deploy/k8s/check-zone-spread.sh"
 
-# Hard zone spread filters out nodes that omit the zone label and strands
-# a single-zone apply. Only the zone item is flipped; hostname stays soft.
-sed -i '/topologyKey: topology.kubernetes.io\/zone/{n;s/whenUnsatisfiable: ScheduleAnyway/whenUnsatisfiable: DoNotSchedule/;}' \
+# Soft zone spread lets every live pod pile into one labeled zone.
+# Only the zone item is flipped; hostname stays soft.
+sed -i '/topologyKey: topology.kubernetes.io\/zone/{n;s/whenUnsatisfiable: DoNotSchedule/whenUnsatisfiable: ScheduleAnyway/;}' \
   "${BROKEN}/deploy/k8s/deployment-blue.yaml"
-assert_exit 1 "check fails when the blue zone constraint is DoNotSchedule" \
+assert_exit 1 "check fails when the blue zone constraint is ScheduleAnyway" \
   "${BROKEN}/deploy/k8s/check-zone-spread.sh"
 
 # The zone selector must not count the other color during a cutover.

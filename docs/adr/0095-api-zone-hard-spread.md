@@ -1,0 +1,52 @@
+# 0095. Hard zone spread for the API colors
+
+- **Status:** Accepted
+- **Date:** 2026-09-23
+- **Code:** `deploy/k8s/deployment-blue.yaml`; `deploy/k8s/deployment-green.yaml`; `deploy/k8s/check-api-zone-hard-spread.sh`
+
+## Context
+
+[0094](0094-api-pool-taint.md) left this gap: `ScheduleAnyway` can still place every live API pod in one labeled zone. Inventory on `main` tip `cebf2572a`:
+
+| Surface | What it did | What it did not do |
+|---------|-------------|--------------------|
+| `deploy/k8s/deployment-blue.yaml` zone item | `topology.kubernetes.io/zone`, `maxSkew: 1`, `whenUnsatisfiable: ScheduleAnyway`, `nodeTaintsPolicy: Honor`, `nodeAffinityPolicy: Honor`, selector `app=computerpets, color=blue` | A preference. Every blue pod can still land in one labeled zone |
+| `deploy/k8s/deployment-green.yaml` zone item | The same item, selector `color=green` | The same preference on a cutover scale-up |
+| Hostname item on both colors | `kubernetes.io/hostname`, `maxSkew: 1`, `ScheduleAnyway`, `nodeTaintsPolicy: Honor`, `nodeAffinityPolicy: Honor` | Soft on purpose. One node can still take more than one pod |
+| `nodeSelector` and toleration | `kubernetes.io/os: linux` and `computerpets/node-pool: api`. Toleration `computerpets/node-pool=api:NoSchedule` ([0093](0093-api-node-pool.md), [0094](0094-api-pool-taint.md)) | Unchanged by this slice |
+| `deploy/k8s/hpa.yaml` and `pdb.yaml` | Floor 3, ceiling 10, `minAvailable: 2`. Not in the kustomization | They do not place pods |
+| `deploy/k8s/metrics-server.yaml` | Zone item stays `ScheduleAnyway` | Not the API. Out of the kustomization |
+| `deploy/k8s/cluster-autoscaler.yaml` | Preferred pod anti-affinity on `topology.kubernetes.io/zone`, weight 100. Required anti-affinity is hostname only | Not a spread constraint. Required zone anti-affinity is not the follow-up |
+| `deploy/terraform/modules/node_pool/main.tf` | At least two availability zones. EKS sets `topology.kubernetes.io/zone` from the instance AZ | This slice does not change the module |
+
+`ScheduleAnyway` scores a less-loaded zone and still binds when the score cannot be met. On a pool that already has two labeled zones, that still allows 3 and 0. `minDomains: 2` is the wrong lever: with one eligible domain it treats the global minimum as 0, so the second pod's skew is 2 and the pod stays Pending. Kind and minikube would then fail even after a human sets one zone label. Required zone anti-affinity for Cluster Autoscaler is still the wrong follow-up.
+
+This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip, cosign, CDN edge, secrets rotation, VerifyFieldBounds, ClientAddress, rate-limit bucket sizes, the machine/admin HMAC, the nonce store, the download JWT `jti`, the WAF ACL, Redis AUTH, Postgres JDBC SSL, API listener TLS, the HPA metrics and replica range, the API PDB `minAvailable`, the API hostname spread, the node-pool module or taint, metrics-server TLS/CA/zone/pin, or Cluster Autoscaler replica count, anti-affinity, leader election, node-pool pin, and disruption budget beyond this cross-link. The API `nodeSelector` stays the pair from [0093](0093-api-node-pool.md). Required zone anti-affinity for Cluster Autoscaler stays unset. Catalog stays 221. No storefront. No DirectX 12 / Vulkan / Solana. No Rui sprites.
+
+## Decision
+
+**The zone `topologySpreadConstraints` item on `computerpets-blue` and `computerpets-green` sets `whenUnsatisfiable: DoNotSchedule`. `maxSkew` stays 1. `nodeAffinityPolicy` stays `Honor`. `nodeTaintsPolicy` stays `Honor`. `minDomains` stays unset. The hostname item stays `ScheduleAnyway`. One labeled zone still schedules. A node that omits `topology.kubernetes.io/zone` does not.**
+
+1. **Zone item.** Both colors. `topologyKey` is `topology.kubernetes.io/zone`. `maxSkew: 1`. `whenUnsatisfiable: DoNotSchedule`. `nodeTaintsPolicy: Honor`. `nodeAffinityPolicy: Honor`. `labelSelector.matchLabels` stays `app: computerpets` plus that Deployment's own color. Green pods do not count toward blue's skew. There is one zone item per color. `matchLabelKeys` is not set.
+2. **No minDomains.** Unset minDomains behaves as 1. Do not set minDomains. A floor of 2 would treat a single labeled zone as an empty second domain and leave pods Pending. That is the laptop failure this slice refuses.
+3. **What hard spread does.** Eligible domains are zones of nodes that match the pool selector, that this pod can tolerate, and that carry `topology.kubernetes.io/zone`. The skew is the count in the candidate zone, plus one, minus the smallest count among those domains. `maxSkew: 1` refuses a larger difference. On two or more such zones that can take a pod, the live color cannot place every pod in one zone. On two zones the HPA floor of 3 is 2 and 1, not 3 and 0. If the lighter zone has no remaining capacity, the pod stays Pending. Cluster Autoscaler can add a node in that zone. This slice does not change the scaler.
+4. **One labeled zone still schedules.** When every eligible node shares one zone value, there is one domain. The skew of adding a pod there is 1, which `maxSkew: 1` allows. Hard spread does not invent a second zone. Kind and minikube with one zone label still run the API, including both local blue replicas on one node, because hostname spread stays `ScheduleAnyway`. That is the honest limit. A zone outage that removes the other zone's nodes leaves one domain, and the remaining zone can take every pod.
+5. **Missing zone label.** `DoNotSchedule` skips a node that does not have `topology.kubernetes.io/zone`. Kind and minikube do not set that label. Labeling only `computerpets/node-pool=api` is no longer enough. The API pods stay Pending until the node also carries one zone value. `ScheduleAnyway` used to bind on that node. It does not anymore. Do not delete the pool key to make a laptop apply schedule. Do not taint a kind or minikube node. A toleration does not require the taint.
+6. **Hostname stays soft.** The hostname item stays `maxSkew: 1`, `ScheduleAnyway`, `nodeTaintsPolicy: Honor`, `nodeAffinityPolicy: Honor`. One node inside a zone can still take more than one pod. Required hostname anti-affinity is not set.
+7. **What this slice does not change.** HPA stays min 3 / max 10. The API PDB stays `minAvailable: 2`. Both stay out of the kustomization. Local replicas stay blue 2 / green 0. The pool selector and the `NoSchedule` toleration stay. Postgres and Redis stay unpinned and unconstrained. metrics-server zone spread stays `ScheduleAnyway`. Cluster Autoscaler zone anti-affinity stays preferred. Required zone anti-affinity is not the follow-up. The node-pool module still refuses fewer than two zones. No live AWS apply.
+8. **Kind and minikube.** These Deployments are in the kustomization, so `kubectl apply -k deploy/k8s` installs the hard zone item. Their nodes omit `computerpets/node-pool=api` unless a human labels one, and they omit `topology.kubernetes.io/zone` unless a human sets one value. Both labels are required before the API schedules. One labeled zone still schedules. Do not set `minDomains`. `enable_node_pool=false` does not add either label and does not remove the constraint.
+9. **Verify without a cluster.** `check-api-zone-hard-spread.sh` fails when either color's zone item is not `DoNotSchedule`, when `maxSkew` is not 1, when `nodeAffinityPolicy` or `nodeTaintsPolicy` is not `Honor`, when `minDomains` or `matchLabelKeys` is set, when the hostname item is not `ScheduleAnyway`, when the pool selector or the taint toleration drops, when the HPA floor, the HPA ceiling, or the API PDB `minAvailable` drifts, when metrics-server zone spread becomes `DoNotSchedule`, or when Cluster Autoscaler zone anti-affinity becomes required. `check-api-zone-hard-spread.test.sh` proves a soft blue zone item, a hard green hostname item, `nodeAffinityPolicy: Ignore` on the blue zone item, `minDomains: 2`, a dropped HPA floor, a dropped API PDB, a required scaler zone rule, and a hard metrics-server zone item. No `kubectl apply` and no `terraform apply`.
+
+## Consequences
+
+- On a pool whose nodes span two or more zones and can take a pod, the live color cannot place every pod in one zone. `maxSkew: 1` and `DoNotSchedule` refuse the crowded zone.
+- One labeled zone still schedules. A kind or minikube node that carries `computerpets/node-pool=api` and one `topology.kubernetes.io/zone` value still runs both blue replicas. Hard spread is not a second zone.
+- A node that omits `topology.kubernetes.io/zone` does not receive an API pod. A laptop that only adds the pool label now leaves the API Pending. Set one zone value. Do not delete the pool key.
+- When the lighter zone cannot fit the pod, the pod stays Pending instead of joining the crowded zone. That wait is the cost of hard spread. Cluster Autoscaler is what adds the node. This slice does not apply it.
+- A zone that loses every eligible node stops being a domain. The remaining zone can then take every pod. The PDB does not apply to that crash.
+- Hostname spread stays `ScheduleAnyway`. Pods of one color can still share a node.
+- Preferred zone anti-affinity can still place both Cluster Autoscaler pods in one zone. Required zone anti-affinity is not the follow-up. metrics-server zone spread stays `ScheduleAnyway`.
+- `aws-node` and `kube-proxy` are not in this repo. A live apply of the API pool taint can leave a new node NotReady until those DaemonSets tolerate `computerpets/node-pool=api:NoSchedule`. This slice does not patch them. No live AWS apply.
+- Dropping `DoNotSchedule` on the zone item, setting `minDomains`, hardening the hostname item, ignoring node affinity, or making the scaler's zone rule required fails `check-api-zone-hard-spread.sh`.
+- Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
+- **Next gap:** `aws-node` and `kube-proxy` are not in this repo. A live apply of `computerpets/node-pool=api:NoSchedule` can leave a new node NotReady until those DaemonSets tolerate that key, `Equal`, value `api`, and `NoSchedule`. Preferred zone anti-affinity can still place both Cluster Autoscaler pods in one zone. Required zone anti-affinity is not the follow-up. metrics-server zone spread stays `ScheduleAnyway`. One labeled zone still schedules every API pod of the live color. A serving certificate that does not chain to `caBundle` (and is not a system root), or whose SAN is not `metrics-server.kube-system.svc`, still leaves `kubectl top` empty. A kubelet certificate that does not chain to `metrics-server-kubelet-ca` still leaves `kubectl top` empty.

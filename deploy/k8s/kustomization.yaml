@@ -16,11 +16,13 @@ resources:
 # pdb.yaml (prod API disruption budget, ADR 0079) is also not applied here.
 # Local/dev stays blue replicas 2, green replicas 0. Do not apply pdb.yaml
 # on that shape: minAvailable 2 with only 2 pods blocks every voluntary eviction.
-# Hostname spread (ADR 0080) and zone spread (ADR 0081) are on the two API
-# pod templates, so this apply includes both. whenUnsatisfiable is
-# ScheduleAnyway: on a labeled node, blue's 2 pods still schedule on a
-# one-node or single-zone cluster, including nodes that omit
-# topology.kubernetes.io/zone.
+# Hostname spread (ADR 0080) stays ScheduleAnyway on both API pod
+# templates. Zone spread (ADR 0081, hardened by ADR 0095) is
+# DoNotSchedule on topology.kubernetes.io/zone, maxSkew 1,
+# nodeAffinityPolicy Honor. One labeled zone still schedules: a single
+# domain keeps skew at 1. A node that omits topology.kubernetes.io/zone
+# does not. Kind and minikube omit that label unless a human sets one
+# zone value. Do not set minDomains. This apply does not create zones.
 # API pool pin (ADR 0093) is on both pod templates, so this apply includes
 # it. nodeSelector requires kubernetes.io/os=linux and
 # computerpets/node-pool=api. nodeAffinityPolicy is Honor. Kind and
@@ -33,7 +35,9 @@ resources:
 # A toleration does not require the taint.
 # Do not taint a kind or minikube node.
 # Labeling a node computerpets/node-pool=api without that taint still
-# schedules the API. Postgres and Redis do not tolerate the taint.
+# schedules the API once that node also carries one
+# topology.kubernetes.io/zone value (ADR 0095). A pool label alone
+# leaves the API Pending. Postgres and Redis do not tolerate the taint.
 # Multi-AZ workers are the node pool (ADR 0082), not this apply.
 # cluster-autoscaler.yaml (ADR 0083, ADR 0090, ADR 0091, ADR 0092) is
 # also not applied here. Kind and minikube set enable_node_pool=false

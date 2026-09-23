@@ -58,9 +58,10 @@ No mesh.
 - Each API color prefers different nodes (`topologySpreadConstraints`,
   `ScheduleAnyway` on `kubernetes.io/hostname`). Local replica counts
   stay blue 2 / green 0 ([0080](0080-api-pod-topology-spread.md)).
-- Each API color also prefers different zones (`ScheduleAnyway` on
-  `topology.kubernetes.io/zone`). A single-zone cluster still schedules
-  ([0081](0081-api-pod-zone-spread.md)).
+- Each API color hard-spreads zones (`DoNotSchedule` on
+  `topology.kubernetes.io/zone`, `maxSkew` 1). One labeled zone still
+  schedules. A node that omits the zone label does not
+  ([0095](0095-api-zone-hard-spread.md)).
 - Both API colors require `kubernetes.io/os: linux` and
   `computerpets/node-pool=api`. Kind and minikube leave those pods
   Pending until a node carries the pool label
