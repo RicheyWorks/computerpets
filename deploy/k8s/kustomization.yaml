@@ -52,11 +52,13 @@ resources:
 # leaves the API Pending. Postgres and Redis do not tolerate the taint.
 # Multi-AZ workers are the node pool (ADR 0082), not this apply.
 # cluster-autoscaler.yaml (ADR 0083, ADR 0090, ADR 0091, ADR 0092,
-# ADR 0099, ADR 0101) is also not applied here. Kind and minikube set
-# enable_node_pool=false and do not install the scaler, its zone
-# spread, or its disruption budget. That Deployment is two replicas
-# with leader election. The standby is not the scaler. The scheduled
-# leader raises desired capacity on the underfilled zone's group.
+# ADR 0099, ADR 0101, ADR 0102) is also not applied here. Kind and
+# minikube set enable_node_pool=false and do not install the scaler,
+# its zone spread, or its disruption budget. That Deployment is two
+# replicas with leader election. The standby is not the scaler. The
+# scheduled leader raises desired capacity on the underfilled zone's
+# group. --salvo-scale-up=true runs another scale-up in that same
+# loop when the first least-waste choice was a different group.
 # The zone item is DoNotSchedule on
 # topology.kubernetes.io/zone, maxSkew 1. One labeled zone still
 # schedules. A node that omits the zone label does not. Do not set
