@@ -801,7 +801,7 @@ export function CompanionRoom({
 
       <LivingPet
         key={resetKey}
-        spriteSurface={demoWindow}
+        spriteSurface
         command={order.cmd}
         orderId={order.id}
         speech={speech}

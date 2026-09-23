@@ -4,7 +4,6 @@ import {
   DEST_PX,
   beginDrag,
   clickMoved,
-  destStyle,
   endDrag,
   loadPlants,
   moveDrag,
@@ -18,6 +17,7 @@ import {
   type DeskPlant,
   type PlantMode,
 } from "@/lib/pets/desk-plants";
+import { paintPlantFrame } from "@/lib/pets/desk-sprite-surface";
 
 export function DeskPlants({ windOn }: { windOn?: boolean }) {
   const [plants, setPlants] = useState<DeskPlant[]>([]);
@@ -104,12 +104,16 @@ export function DeskPlants({ windOn }: { windOn?: boolean }) {
               press.current = null;
             }}
           >
-            <img
-              alt={plant.name}
-              src={src}
-              className="h-full w-full border-0 bg-transparent object-contain object-bottom shadow-none outline-none"
-              style={destStyle()}
-              draggable={false}
+            <canvas
+              role="img"
+              aria-label={plant.name}
+              data-surface="pending"
+              ref={(node) => {
+                if (!node || node.dataset.seed === "1" || !src) return;
+                node.dataset.seed = "1";
+                paintPlantFrame(node, src);
+              }}
+              className="block h-full w-full border-0 bg-transparent shadow-none outline-none"
             />
           </button>
         );

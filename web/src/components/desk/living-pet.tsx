@@ -108,7 +108,7 @@ type LivingPetProps = {
   onPose?: (x: number, facing: 1 | -1) => void;
   /** Rui's closed-eye lie hold (not the stretch / backflip). */
   onLieHold?: (on: boolean) => void;
-  /** `/demo` draws the catalog frame on the shared canvas. Other rooms stay an image. */
+  /** Living desk and `/demo` draw the catalog frame on the shared canvas. A visit walker, the house floor, and den blotters stay an image. */
   spriteSurface?: boolean;
 };
 

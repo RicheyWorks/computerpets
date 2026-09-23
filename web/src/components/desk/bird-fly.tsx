@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type RefObject } from "react";
 import { livingByKey } from "@/lib/pets/living";
 import { beginFly, FLY_BIRD_KEY, FLY_BIRD_NAME, markCalled, shouldCall, stepFly, stillVisible } from "@/lib/pets/bird-fly";
 import { playVoice } from "@/lib/pets/desk-audio";
+import { paintSipFrame } from "@/lib/pets/desk-sprite-surface";
 
 export function BirdFlyer({
   hidden,
@@ -19,7 +20,7 @@ export function BirdFlyer({
   hostPoseRef?: RefObject<{ x: number; facing: 1 | -1 }>;
 }) {
   const guest = livingByKey(FLY_BIRD_KEY);
-  const img = useRef<HTMLImageElement>(null);
+  const canvas = useRef<HTMLCanvasElement>(null);
   const [on, setOn] = useState(false);
   const sleepRef = useRef(hostSleeping);
   const keyRef = useRef(hostKey);
@@ -68,9 +69,9 @@ export function BirdFlyer({
         acc = 0;
         frame = (frame + 1) % frames.length;
       }
-      const el = img.current;
+      const el = canvas.current;
       if (el) {
-        el.src = frames[frame]!;
+        paintSipFrame(el, frames[frame]!);
         el.style.transform = `translate3d(${fly.x}px, ${-fly.lift}px, 0) rotate(${fly.rot}deg) scale(${fly.facing}, 1)`;
       }
       raf = window.requestAnimationFrame(tick);
@@ -81,13 +82,14 @@ export function BirdFlyer({
 
   if (!on && !startId) return null;
   return (
-    <img
-      ref={img}
-      alt={FLY_BIRD_NAME}
+    <canvas
+      ref={canvas}
+      role="img"
+      aria-label={FLY_BIRD_NAME}
       data-hit
       data-bird={FLY_BIRD_KEY}
-      className="pointer-events-auto absolute bottom-[18%] left-0 z-[6] h-28 w-28 origin-bottom select-none"
-      draggable={false}
+      data-surface="pending"
+      className="pointer-events-auto absolute bottom-[18%] left-0 z-[6] h-28 w-28 origin-bottom select-none bg-transparent"
     />
   );
 }

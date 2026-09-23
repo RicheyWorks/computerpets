@@ -1,4 +1,4 @@
-/** Catalog frames on a surface Chromium composites. The host pet, Sip, Brick, called guests, plants, the visit guest, and the desk /demo pet share this path. OffscreenCanvas when that 2d context and a bitmap renderer exist; otherwise an on-screen 2d canvas. Not a WebGL context, not a shader, not DirectX 12, and not Vulkan. The glass still opens only on hardware gpu_compositing (ADR 0125). */
+/** Catalog frames on a surface Chromium composites. The host pet, Sip, Brick, called guests, plants, the visit guest, the desk /demo pet, and the living desk room pet share this path. Desk Sip, Brick, called guests, and plants use it too. OffscreenCanvas when that 2d context and a bitmap renderer exist; otherwise an on-screen 2d canvas. Not a WebGL context, not a shader, not DirectX 12, and not Vulkan. The glass still opens only on hardware gpu_compositing (ADR 0125). */
 (function (root) {
   const CSS = 176;
   const BOX = { host: CSS, sip: 112, brick: 112, called: 128, plant: 128, guest: 128 };
