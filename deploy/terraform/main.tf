@@ -94,9 +94,10 @@ module "system_daemons" {
   count  = var.enable_node_pool ? 1 : 0
   source = "./modules/system_daemons"
 
-  project_name = var.project_name
-  environment  = var.environment
-  cluster_name = var.eks_cluster_name
+  project_name                   = var.project_name
+  environment                    = var.environment
+  cluster_name                   = var.eks_cluster_name
+  reassert_kube_proxy_toleration = var.reassert_kube_proxy_toleration
 }
 
 module "node_pool" {

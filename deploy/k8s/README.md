@@ -387,8 +387,10 @@ untainted node. Tainting the only laptop node leaves the stores
 Pending. metrics-server and Cluster Autoscaler stay out of the
 kustomization. `aws-node` and `kube-proxy` are not in this kustomization.
 The vpc-cni addon records the API pool toleration for `aws-node`. The
-kube-proxy strategic-merge patch is not applied here
-([ADR 0096](../../docs/adr/0096-system-daemon-api-pool-toleration.md)).
+kube-proxy strategic-merge patch is not applied here. The EKS reassert
+hook is not applied here
+([ADR 0096](../../docs/adr/0096-system-daemon-api-pool-toleration.md),
+[ADR 0097](../../docs/adr/0097-kube-proxy-toleration-hook.md)).
 No live AWS apply.
 
 ```bash

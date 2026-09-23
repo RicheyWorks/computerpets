@@ -188,8 +188,8 @@ resource "aws_eks_node_group" "zone" {
   # API pool taint (ADR 0094). Untolerated pods cannot land on these
   # workers. NoSchedule does not evict pods that are already running.
   # PreferNoSchedule would still admit them. NoExecute is not set.
-  # aws-node and kube-proxy toleration is ADR 0096. This block does not
-  # patch those DaemonSets.
+  # aws-node and kube-proxy toleration is ADR 0096. kube-proxy durability
+  # is ADR 0097. This block does not patch those DaemonSets.
   taint {
     key    = "computerpets/node-pool"
     value  = "api"

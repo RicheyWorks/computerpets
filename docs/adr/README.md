@@ -115,6 +115,7 @@ address, or an API that is not on `main`.
 | [0094](0094-api-pool-taint.md) | Taint the API node pool `computerpets/node-pool=api:NoSchedule` and tolerate it on the workloads that already select the pool (kind stays untainted) | Accepted |
 | [0095](0095-api-zone-hard-spread.md) | Hard zone spread for the API colors (`DoNotSchedule` on `topology.kubernetes.io/zone`; one labeled zone still schedules; hostname stays `ScheduleAnyway`) | Accepted |
 | [0096](0096-system-daemon-api-pool-toleration.md) | API pool toleration on `aws-node` (`vpc-cni` `configuration_values`) and `kube-proxy` (strategic-merge patch; kind stays untainted) | Accepted |
+| [0097](0097-kube-proxy-toleration-hook.md) | Reassert kube-proxy API pool coverage on plan drift, or fail closed (kind stays untainted; the live probe defaults off) | Accepted |
 
 ## How to add one
 

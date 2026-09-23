@@ -10,6 +10,10 @@ terraform {
       source  = "hashicorp/random"
       version = ">= 3.5, < 4.0"
     }
+    external = {
+      source  = "hashicorp/external"
+      version = ">= 2.3.0, < 3.0.0"
+    }
   }
 
   # Keepers choose the backend (S3 + DynamoDB lock, Terraform Cloud, etc.).
