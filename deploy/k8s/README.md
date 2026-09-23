@@ -48,9 +48,10 @@ Local-dev keeps env / `.env.example` and plain `docker-compose.yml`.
 | Deployment + Service + PVC | `computerpets-postgres` | Same Postgres 16 image as `docker-compose.yml` |
 | Deployment + Service | `computerpets-redis` | Same Redis 7 image as compose (AUTH-less; managed AUTH is ADR 0075) |
 | Deployment | `computerpets-blue` | Live app replicas (`color=blue`, local `replicas: 2`) |
-| Deployment | `computerpets-green` | Idle slot (`replicas: 0`, `color=green`). Not an HPA target |
+| Deployment | `computerpets-green` | Idle slot (`replicas: 0`, `color=green`). Not an HPA or PDB target |
 | Service | `computerpets` | Selects `app=computerpets,color=blue` |
 | HorizontalPodAutoscaler | `computerpets` | **Not created by this apply.** Prod file `hpa.yaml` ([ADR 0078](../../docs/adr/0078-horizontal-pod-autoscaling.md)) |
+| PodDisruptionBudget | `computerpets` | **Not created by this apply.** Prod file `pdb.yaml` ([ADR 0079](../../docs/adr/0079-pod-disruption-budget.md)) |
 
 `ingress.yaml` is **not** in the kustomization. It is the local/dev HTTP
 door and has no `tls` block. Public prod is `ingress-tls.yaml` (also not
@@ -194,6 +195,29 @@ kubectl apply -f deploy/k8s/hpa.yaml
 A later `kubectl apply -k` writes blue back to 2 until the autoscaler
 reconciles. Do not add `hpa.yaml` to `kustomization.yaml`.
 
+## Pod disruption budget (ADR 0079)
+
+`pdb.yaml` is **not** in the kustomization. `kubectl apply -k deploy/k8s`
+does not create it. Local blue stays at `replicas: 2`. Do not apply the
+budget on that shape: `minAvailable: 2` with only 2 Ready pods allows
+zero voluntary evictions, so a node drain stalls.
+
+The prod budget selects `app=computerpets, color=blue` (the Service's
+default live color). `minAvailable` is 2. Green, Postgres, and Redis are
+not selected. Apply it only after `hpa.yaml` has actually reached 3 Ready
+pods of that color. One pod may be evicted. Two stay. A node crash is not
+a voluntary disruption and is not blocked. `kubectl scale` is not an
+eviction.
+
+```bash
+# Prod only, after the live color is actually at 3 or more.
+kubectl apply -f deploy/k8s/pdb.yaml
+./deploy/k8s/check-pdb.sh
+```
+
+Re-applying `pdb.yaml` points the selector back at blue. Do not add
+`pdb.yaml` to `kustomization.yaml`.
+
 ## Blue / green
 
 Two Deployments, one Service. No mesh.
@@ -225,6 +249,13 @@ the Service, then point the HPA at green **before** scaling blue to 0.
 Scaling blue to 0 while the HPA still names blue brings blue back to 3.
 Re-applying `hpa.yaml` points the autoscaler back at blue.
 
+When `pdb.yaml` is also applied, patch its selector onto the same live
+color in that cutover, after green is Ready and before scaling blue to 0.
+`kubectl scale` does not consult the budget, so scaling blue to 0 while
+the budget still selects blue succeeds and leaves green with no budget.
+Re-applying `pdb.yaml` points the selector back at blue. Skip the `pdb`
+patch below if that object is not on the cluster.
+
 ```bash
 kubectl -n computerpets scale deploy/computerpets-green --replicas=3
 kubectl -n computerpets rollout status deploy/computerpets-green
@@ -232,14 +263,16 @@ kubectl -n computerpets patch svc computerpets \
   -p '{"spec":{"selector":{"app":"computerpets","color":"green"}}}'
 kubectl -n computerpets patch hpa computerpets --type merge \
   -p '{"spec":{"scaleTargetRef":{"name":"computerpets-green"}}}'
+kubectl -n computerpets patch pdb computerpets --type merge \
+  -p '{"spec":{"selector":{"matchLabels":{"app":"computerpets","color":"green"}}}}'
 kubectl -n computerpets scale deploy/computerpets-blue --replicas=0
 ```
 
 Flip `color` back to `blue` the next time (scale blue to 3, flip the
-Service, patch the HPA back to blue, then scale green to 0). Each
-Deployment still uses `RollingUpdate` (`maxUnavailable: 0`) for in-color
-patches. A missing or wrong signature must stop at step 1 — do not set
-image.
+Service, patch the HPA back to blue, patch the PDB selector back to blue,
+then scale green to 0). Each Deployment still uses `RollingUpdate`
+(`maxUnavailable: 0`) for in-color patches. A missing or wrong signature
+must stop at step 1 — do not set image.
 
 ## `spring.profiles.active=prod`
 

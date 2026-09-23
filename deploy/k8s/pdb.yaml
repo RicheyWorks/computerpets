@@ -1,0 +1,27 @@
+# Prod API disruption budget (ADR 0079). Not in kustomization.yaml.
+# Local/dev `kubectl apply -k deploy/k8s` keeps computerpets-blue at
+# replicas: 2 and computerpets-green at replicas: 0. Do not apply this
+# file on that shape. minAvailable 2 with only 2 ready pods allows zero
+# voluntary evictions, so a node drain stalls. Apply it after hpa.yaml
+# has actually reached the floor of 3.
+#
+# Selects the Service's default live color (app=computerpets, color=blue).
+# Green, Postgres, and Redis are not selected. A budget on the idle color
+# would protect the deployment a cutover is about to scale to 0, and leave
+# the live color unprotected.
+# After a cutover, patch spec.selector.matchLabels.color to green before
+# scaling blue to 0. Re-applying this file points the budget back at blue.
+# See deploy/k8s/README.md.
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: computerpets
+  namespace: computerpets
+  labels:
+    app: computerpets
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: computerpets
+      color: blue

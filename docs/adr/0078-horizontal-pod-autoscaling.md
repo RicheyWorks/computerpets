@@ -40,4 +40,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - Postgres and Redis stay at one replica. They are scaffolding, not the API.
 - This HPA does not spread pods across nodes and does not stop a drain from evicting every API pod.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** Pod disruption budget. `minReplicas: 3` does not stop a node drain from evicting every API pod. There is no `PodDisruptionBudget`. Not started here.
+- **Next gap:** Pod disruption budget landed as [0079](0079-pod-disruption-budget.md). Not started in this ADR.
