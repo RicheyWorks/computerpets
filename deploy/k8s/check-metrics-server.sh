@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# ADR 0084 / 0085 — metrics-server install path, two replicas, required anti-affinity.
+# ADR 0084 / 0085 / 0086 — metrics-server install path, two replicas,
+# required anti-affinity, and a fail-closed kubelet CA mount.
 # No cluster. Does not kubectl apply. The manifest stays out of kustomize.
 set -euo pipefail
 
@@ -12,6 +13,7 @@ GREEN="${ROOT}/deploy/k8s/deployment-green.yaml"
 README="${ROOT}/deploy/k8s/README.md"
 ADR="${ROOT}/docs/adr/0084-metrics-server.md"
 ADR85="${ROOT}/docs/adr/0085-metrics-server-ha.md"
+ADR86="${ROOT}/docs/adr/0086-metrics-server-kubelet-ca.md"
 PASS=0
 FAIL=0
 
@@ -39,7 +41,7 @@ need_grep() {
     bad "$name (missing $(basename "$file"))"
     return
   fi
-  if grep -qE "$pattern" "$file"; then ok "$name"
+  if grep -qE -- "$pattern" "$file"; then ok "$name"
   else bad "$name (pattern not found in $(basename "$file"))"; fi
 }
 
@@ -49,7 +51,7 @@ need_grep_body() {
     bad "$name (missing $(basename "$file"))"
     return
   fi
-  if yaml_body "$file" | grep -qE "$pattern"; then ok "$name"
+  if yaml_body "$file" | grep -qE -- "$pattern"; then ok "$name"
   else bad "$name (pattern not found in $(basename "$file") body)"; fi
 }
 
@@ -59,7 +61,7 @@ need_not_grep() {
     bad "$name (missing $(basename "$file"))"
     return
   fi
-  if grep -qE "$pattern" "$file"; then bad "$name"
+  if grep -qE -- "$pattern" "$file"; then bad "$name"
   else ok "$name"; fi
 }
 
@@ -69,7 +71,7 @@ need_not_grep_body() {
     bad "$name (missing $(basename "$file"))"
     return
   fi
-  if yaml_body "$file" | grep -qE "$pattern"; then bad "$name"
+  if yaml_body "$file" | grep -qE -- "$pattern"; then bad "$name"
   else ok "$name"; fi
 }
 
@@ -82,6 +84,7 @@ need_file "$GREEN"
 need_file "$README"
 need_file "$ADR"
 need_file "$ADR85"
+need_file "$ADR86"
 need_absent "${ROOT}/deploy/k8s/Chart.yaml"
 need_absent "${ROOT}/deploy/k8s/metrics-server/values.yaml"
 
@@ -118,6 +121,23 @@ need_not_grep_body "$MS" 'hostNetwork:[[:space:]]*true' "no host network"
 need_not_grep_body "$MS" 'hostPID:[[:space:]]*true' "no host PID"
 need_not_grep_body "$MS" 'privileged:[[:space:]]*true' "no privileged container"
 
+echo "== kubelet CA mount =="
+need_grep_body "$MS" '--kubelet-certificate-authority=/etc/metrics-server/kubelet-ca/ca\.crt$' "kubelet CA flag points at the mount"
+need_grep_body "$MS" 'mountPath: /etc/metrics-server/kubelet-ca$' "kubelet CA mount path matches the flag"
+need_grep_body "$MS" '^[[:space:]]*readOnly: true$' "kubelet CA mount is read-only"
+need_grep_body "$MS" '^[[:space:]]*optional: false$' "kubelet CA volume is required"
+need_grep_body "$MS" '^[[:space:]]*- key: ca\.crt$' "kubelet CA key is ca.crt"
+need_grep_body "$MS" '^[[:space:]]*path: ca\.crt$' "kubelet CA file name is ca.crt"
+need_not_grep_body "$MS" 'kubelet-insecure-tls' "kubelet scrapes stay verified"
+need_not_grep_body "$MS" 'deprecated-kubelet-completely-insecure' "kubelet hop stays encrypted"
+need_not_grep_body "$MS" 'hostPath:' "kubelet CA is not a hostPath"
+need_not_grep_body "$MS" 'kube-root-ca\.crt' "kubelet CA is not the automatic cluster root ConfigMap"
+need_not_grep_body "$MS" 'serviceaccount/ca\.crt' "kubelet CA is not the service-account bundle"
+need_not_grep_body "$MS" 'BEGIN CERTIFICATE' "this file does not vendor a CA"
+need_not_grep_body "$MS" '^kind: ConfigMap$' "the CA ConfigMap is not in this file"
+need_not_grep_body "$MS" '^kind: Secret$' "the CA Secret is not in this file"
+need_not_grep_body "$MS" 'optional: true' "kubelet CA volume is not optional"
+
 if [ -f "$MS" ]; then
   image_count="$(yaml_body "$MS" | grep -c 'image: registry.k8s.io/metrics-server/metrics-server:v0.9.0' || true)"
   if [ "${image_count}" = "1" ]; then ok "one pinned metrics-server image"
@@ -137,6 +157,27 @@ if [ -f "$MS" ]; then
   pdb_count="$(yaml_body "$MS" | grep -c '^kind: PodDisruptionBudget$' || true)"
   if [ "${pdb_count}" = "1" ]; then ok "one addon PodDisruptionBudget"
   else bad "expected one addon PodDisruptionBudget (found ${pdb_count})"; fi
+  ca_flag="$(yaml_body "$MS" | grep -c -- '--kubelet-certificate-authority=/etc/metrics-server/kubelet-ca/ca.crt' || true)"
+  if [ "${ca_flag}" = "1" ]; then ok "kubelet CA flag appears once"
+  else bad "expected one kubelet CA flag (found ${ca_flag})"; fi
+  ca_name="$(yaml_body "$MS" | grep -cE -- '^[[:space:]]*(- )?name: kubelet-ca$' || true)"
+  if [ "${ca_name}" = "2" ]; then ok "kubelet-ca is named on the mount and the volume"
+  else bad "expected kubelet-ca on the mount and the volume (found ${ca_name})"; fi
+  ro_count="$(yaml_body "$MS" | grep -cE '^[[:space:]]*readOnly: true$' || true)"
+  if [ "${ro_count}" = "1" ]; then ok "one read-only kubelet CA mount"
+  else bad "expected one readOnly: true (found ${ro_count})"; fi
+  opt_false="$(yaml_body "$MS" | grep -cE '^[[:space:]]*optional: false$' || true)"
+  if [ "${opt_false}" = "1" ]; then ok "optional: false appears once"
+  else bad "expected one optional: false (found ${opt_false})"; fi
+  cm_count="$(yaml_body "$MS" | grep -cE '^[[:space:]]*name: metrics-server-kubelet-ca$' || true)"
+  sec_count="$(yaml_body "$MS" | grep -cE '^[[:space:]]*secretName: metrics-server-kubelet-ca$' || true)"
+  if [ "${cm_count}" = "1" ] && [ "${sec_count}" = "0" ] && yaml_body "$MS" | grep -qE '^[[:space:]]*configMap:'; then
+    ok "kubelet CA volume is a required ConfigMap"
+  elif [ "${cm_count}" = "0" ] && [ "${sec_count}" = "1" ] && yaml_body "$MS" | grep -qE '^[[:space:]]*secret:'; then
+    ok "kubelet CA volume is a required Secret"
+  else
+    bad "expected one kubelet CA source (ConfigMap or Secret metrics-server-kubelet-ca; configMap=${cm_count} secret=${sec_count})"
+  fi
 fi
 
 echo "== stays out of local apply =="
@@ -167,6 +208,18 @@ need_grep "$ADR85" 'high-availability-1.21+' "HA ADR names the upstream file"
 need_grep "$ADR85" 'kubelet-insecure-tls' "HA ADR forbids the kubelet TLS skip"
 need_grep "$ADR85" 'Catalog stays 221' "HA ADR keeps catalog 221"
 need_grep "$ADR85" 'not in the kustomization' "HA ADR keeps the file out of kustomize"
+need_grep "$ADR86" 'kubelet-certificate-authority' "CA ADR names the flag"
+need_grep "$ADR86" 'metrics-server-kubelet-ca' "CA ADR names the operator object"
+need_grep "$ADR86" 'optional: false' "CA ADR requires the volume"
+need_grep "$ADR86" 'ConfigMap' "CA ADR names a ConfigMap"
+need_grep "$ADR86" 'Secret' "CA ADR names a Secret"
+need_grep "$ADR86" 'kubelet-insecure-tls' "CA ADR forbids the kubelet TLS skip"
+need_grep "$ADR86" 'Catalog stays 221' "CA ADR keeps catalog 221"
+need_grep "$ADR86" 'not in the kustomization' "CA ADR keeps the file out of kustomize"
+need_grep "$ADR86" 'replicas: 2' "CA ADR keeps two replicas"
+need_grep "$README" 'ADR 0086' "README names ADR 0086"
+need_grep "$README" 'kubelet-certificate-authority' "README names the kubelet CA flag"
+need_grep "$README" 'metrics-server-kubelet-ca' "README names the operator CA object"
 
 if command -v kubectl >/dev/null 2>&1; then
   if kubectl apply --dry-run=client --validate=false -f "$MS" >/dev/null 2>&1; then

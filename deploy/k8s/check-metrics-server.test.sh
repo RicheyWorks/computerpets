@@ -33,6 +33,8 @@ copy_tree() {
     "${dest}/docs/adr/0084-metrics-server.md"
   cp "${ROOT}/docs/adr/0085-metrics-server-ha.md" \
     "${dest}/docs/adr/0085-metrics-server-ha.md"
+  cp "${ROOT}/docs/adr/0086-metrics-server-kubelet-ca.md" \
+    "${dest}/docs/adr/0086-metrics-server-kubelet-ca.md"
   cp "${SCRIPT}" "${dest}/deploy/k8s/check-metrics-server.sh"
   chmod +x "${dest}/deploy/k8s/check-metrics-server.sh"
 }
@@ -77,6 +79,43 @@ copy_tree "${BROKEN}"
 sed -i '/podAntiAffinity:/d' \
   "${BROKEN}/deploy/k8s/metrics-server.yaml"
 assert_exit 1 "check fails when pod anti-affinity is removed" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# Without the flag, kubelet verification falls back to the in-cluster CA.
+sed -i '/--kubelet-certificate-authority=/d' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when the kubelet CA flag is removed" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# An optional volume starts the pod with no CA file.
+sed -i 's/optional: false/optional: true/' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when the kubelet CA volume is optional" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# hostPath is not an operator ConfigMap or Secret.
+sed -i '/name: tmp-dir/a\        hostPath:\n          path: /etc/kubernetes/pki' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when the kubelet CA is a hostPath" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# This repo does not vendor the trust anchor.
+printf '\nca.crt: |\n  -----BEGIN CERTIFICATE-----\n  MIIB\n' \
+  >> "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when a CA certificate is vendored" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# A Secret with the same name, key, and optional: false is the equivalent source.
+sed -i \
+  -e 's/configMap:/secret:/' \
+  -e 's/name: metrics-server-kubelet-ca/secretName: metrics-server-kubelet-ca/' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 0 "check passes when the kubelet CA volume is a Secret" \
   "${BROKEN}/deploy/k8s/check-metrics-server.sh"
 
 echo
