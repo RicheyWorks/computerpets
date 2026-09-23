@@ -37,6 +37,16 @@ run "two_zones_record_the_vpc_cni_toleration" {
   }
 
   assert {
+    condition     = module.system_daemons[0].kube_proxy_hook_recorded == true
+    error_message = "The kube-proxy reassert hook must be recorded when the node pool is on."
+  }
+
+  assert {
+    condition     = module.system_daemons[0].kube_proxy_reassert_enabled == false
+    error_message = "The live kube-proxy probe stays off unless reassert_kube_proxy_toleration is true."
+  }
+
+  assert {
     condition = strcontains(
       module.system_daemons[0].vpc_cni_configuration_values,
       "computerpets/node-pool"
@@ -90,5 +100,15 @@ run "node_pool_off_skips_the_addon" {
   assert {
     condition     = output.vpc_cni_addon_planned == false
     error_message = "enable_node_pool=false must not plan the vpc-cni addon."
+  }
+
+  assert {
+    condition     = output.kube_proxy_reassert_enabled == false
+    error_message = "enable_node_pool=false must not probe kube-proxy."
+  }
+
+  assert {
+    condition     = output.kube_proxy_hook_recorded == false
+    error_message = "enable_node_pool=false must not record a live kube-proxy hook."
   }
 }

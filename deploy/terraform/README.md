@@ -46,6 +46,8 @@ deploy/terraform/
   cluster_autoscaler.tftest.hcl
   check-system-daemons.sh          # vpc-cni toleration + kube-proxy patch (ADR 0096)
   check-system-daemons.test.sh
+  check-kube-proxy-toleration.sh   # reassert kube-proxy coverage or fail closed (ADR 0097)
+  check-kube-proxy-toleration.test.sh
   system_daemons.tftest.hcl
 ```
 
@@ -65,7 +67,7 @@ deploy/terraform/
 | Redis AUTH / TLS | **off** unless `redis_auth_token` is set (`TF_VAR_`, never in git). A token enables AUTH + transit encryption together. The app reads `REDIS_PASSWORD` / `REDIS_SSL` / `REDIS_AUTH_REQUIRED` ([ADR 0075](../../docs/adr/0075-redis-auth-and-transit-tls.md)) |
 | API node pool | **on** (`enable_node_pool`, default true). One private EKS managed node group per AZ, at least two, `min_size` 1, on-demand, no public IP, no SSH. Plan **refuses** an empty cluster name or a single zone. This root does not create the cluster or the subnets. EKS sets `topology.kubernetes.io/zone` from the instance AZ. The only custom label is `computerpets/node-pool=api`. metrics-server selects it ([ADR 0089](../../docs/adr/0089-metrics-server-node-pool.md)). Cluster Autoscaler selects it ([ADR 0091](../../docs/adr/0091-cluster-autoscaler-node-pool.md)). The API Deployments select it ([ADR 0093](../../docs/adr/0093-api-node-pool.md)). Kind and minikube leave those pods Pending until a node carries the label |
 | Cluster Autoscaler | **on** when the node pool is on (`enable_cluster_autoscaler`, default true). IRSA for `kube-system/cluster-autoscaler` only. Each group's max is at least the HPA ceiling of 10. Terraform ignores `desired_size` after create. Plan **refuses** a missing OIDC provider ARN in `aws_region`. This root does not create the provider. Kind/minikube keep `enable_node_pool=false`, which skips the role. The manifest is two replicas with leader election. `nodeSelector` requires `computerpets/node-pool=api` and linux. Voluntary disruption keeps one pod (`minAvailable: 1`). Kind and minikube do not apply the file, so they do not install that budget. It is not in the kustomization ([ADR 0083](../../docs/adr/0083-cluster-autoscaler.md), [ADR 0090](../../docs/adr/0090-cluster-autoscaler-ha.md), [ADR 0091](../../docs/adr/0091-cluster-autoscaler-node-pool.md), [ADR 0092](../../docs/adr/0092-cluster-autoscaler-pdb.md)) |
-| aws-node / kube-proxy toleration | **on** when the node pool is on. `aws_eks_addon.vpc_cni` `configuration_values` is the chart default `operator: Exists` plus `computerpets/node-pool=api:NoSchedule` (`Equal`). The kube-proxy addon schema rejects `tolerations`, so the live-apply path for that DaemonSet is the strategic-merge patch `modules/system_daemons/kube-proxy-api-pool-toleration.yaml`. No image pin. Kind and minikube do not plan the addon and do not run the patch ([ADR 0096](../../docs/adr/0096-system-daemon-api-pool-toleration.md)) |
+| aws-node / kube-proxy toleration | **on** when the node pool is on. `aws_eks_addon.vpc_cni` `configuration_values` is the chart default `operator: Exists` plus `computerpets/node-pool=api:NoSchedule` (`Equal`) ([ADR 0096](../../docs/adr/0096-system-daemon-api-pool-toleration.md)). The kube-proxy addon schema rejects `tolerations`. Coverage is a keyless `operator: Exists` (effect empty or `NoSchedule`) or that exact `Equal` entry. `reassert_kube_proxy_toleration=true` probes on plan and reasserts on apply, and fails closed if the patch does not stick. The flag defaults false. Kind and minikube do not call kubectl ([ADR 0097](../../docs/adr/0097-kube-proxy-toleration-hook.md)) |
 
 ## Operator flow
 
@@ -96,14 +98,13 @@ Then:
 terraform import 'module.system_daemons[0].aws_eks_addon.vpc_cni' '<eks_cluster_name>:vpc-cni'
 ```
 
-`kube-proxy` configuration_values cannot carry tolerations. The schema rejects that field. Patch the DaemonSet before `terraform apply`, and do not send the field through the addon API:
+`kube-proxy` configuration_values cannot carry tolerations. The schema rejects that field. Do not send it. Set `reassert_kube_proxy_toleration=true` on the EKS root so plan probes DaemonSet `kube-proxy` and apply runs:
 
 ```bash
-kubectl patch daemonset kube-proxy -n kube-system --type strategic \
-  --patch-file deploy/terraform/modules/system_daemons/kube-proxy-api-pool-toleration.yaml
+deploy/terraform/modules/system_daemons/reassert-kube-proxy-toleration.sh --live
 ```
 
-Do not run that patch on kind or minikube. Do not taint a kind or minikube node. The patch is not in the kustomization. The node group waits on the vpc-cni addon in the same apply. This repo does not apply either change in CI.
+That command strategic-merges `kube-proxy-api-pool-toleration.yaml` only when the DaemonSet has neither a keyless `operator: Exists` (effect empty or `NoSchedule`) nor the exact `Equal` entry. If the second read is still uncovered, apply fails closed. The flag defaults false, so CI and `terraform test` do not call kubectl. Do not run that patch on kind or minikube. A kind or minikube context fails the plan before any patch. Do not taint a kind or minikube node. The patch is not in the kustomization. The node group waits on this module in the same apply. This repo does not apply either change in CI.
 12. Cluster Autoscaler grows those groups when pods are Pending. Set `eks_oidc_provider_arn` to the cluster's existing OIDC provider in `aws_region`. This root does not create it. Each zone's max is at least the HPA ceiling of 10. Terraform ignores `desired_size` after create. Apply `deploy/k8s/cluster-autoscaler.yaml` only after substituting `CLUSTER_NAME`, `AWS_REGION`, and `cluster_autoscaler_role_arn`. It is two replicas with required hostname anti-affinity, preferred zone anti-affinity, and leader election. `nodeSelector` requires `kubernetes.io/os: linux` and `computerpets/node-pool: api`. The same file keeps one pod during voluntary disruption (`minAvailable: 1`). Kind and minikube do not apply the file (`enable_node_pool=false` does not label their nodes and does not install that budget). It is not in the kustomization. `enable_node_pool=false` keeps the role off ([ADR 0083](../../docs/adr/0083-cluster-autoscaler.md), [ADR 0090](../../docs/adr/0090-cluster-autoscaler-ha.md), [ADR 0091](../../docs/adr/0091-cluster-autoscaler-node-pool.md), [ADR 0092](../../docs/adr/0092-cluster-autoscaler-pdb.md)). Resource metrics are `deploy/k8s/metrics-server.yaml` (two replicas, required hostname anti-affinity, soft zone spread, kubelet CA mount, keeper serving cert), also not in the kustomization ([ADR 0084](../../docs/adr/0084-metrics-server.md), [ADR 0085](../../docs/adr/0085-metrics-server-ha.md), [ADR 0086](../../docs/adr/0086-metrics-server-kubelet-ca.md), [ADR 0087](../../docs/adr/0087-metrics-server-serving-cert.md), [ADR 0088](../../docs/adr/0088-metrics-server-zone-spread.md)).
 
 ## Local verify (no cloud account)
@@ -125,6 +126,8 @@ Do not run that patch on kind or minikube. Do not taint a kind or minikube node.
 ./deploy/terraform/check-cluster-autoscaler.test.sh
 ./deploy/terraform/check-system-daemons.sh
 ./deploy/terraform/check-system-daemons.test.sh
+./deploy/terraform/check-kube-proxy-toleration.sh
+./deploy/terraform/check-kube-proxy-toleration.test.sh
 terraform -chdir=deploy/terraform test    # mock provider; empty ALB ARN, empty ACM ARN, a short Redis token, a bad Postgres CA path, a single-zone node pool, and an empty OIDC ARN must fail the plan
 ```
 
