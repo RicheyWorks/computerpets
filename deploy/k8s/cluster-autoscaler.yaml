@@ -1,9 +1,14 @@
 # Cluster Autoscaler for the private multi-AZ API node groups (ADR 0083).
 # High availability is ADR 0090: two replicas, required hostname
 # anti-affinity, preferred zone anti-affinity, leader election on.
+# Pool pin is ADR 0091: nodeSelector requires kubernetes.io/os=linux and
+# computerpets/node-pool=api. A preference would still admit other nodes.
 # Not in kustomization.yaml. Local/dev `kubectl apply -k deploy/k8s` does
 # not install this. Kind and minikube set enable_node_pool=false and do
-# not apply this file. There is no overlay directory.
+# not apply this file. That switch does not label their nodes. Applying
+# this file there leaves both pods Pending. That is the feature-off path.
+# Do not delete the pool key to make a laptop apply schedule. There is no
+# overlay directory.
 #
 # Before apply, substitute three tokens:
 #   CLUSTER_NAME  -> eks_cluster_name
@@ -24,6 +29,14 @@
 # changes desired capacity. The standby waits on the kube-system Lease
 # named cluster-autoscaler. A one-node cluster that applies this file
 # leaves the second pod Pending. Do not apply it on kind or minikube.
+#
+# Pool pin (ADR 0091). nodeSelector requires kubernetes.io/os=linux and
+# computerpets/node-pool=api, the label modules/node_pool already sets.
+# Required hostname anti-affinity then needs two hostnames inside that
+# pool. Nodes outside the groups do not satisfy it. Zone anti-affinity
+# stays preferred, so a single-zone set of labeled nodes still schedules
+# both pods when two hostnames exist. The API Deployments do not select
+# this label.
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -175,6 +188,11 @@ spec:
                 namespaces:
                   - kube-system
                 topologyKey: topology.kubernetes.io/zone
+      # ADR 0091. Both keys are required. Kind and minikube omit the
+      # pool label and do not apply this file.
+      nodeSelector:
+        kubernetes.io/os: linux
+        computerpets/node-pool: api
       serviceAccountName: cluster-autoscaler
       priorityClassName: system-cluster-critical
       automountServiceAccountToken: true

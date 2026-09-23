@@ -306,7 +306,7 @@ failure of that zone is not blocked by the budget.
 A cutover does not patch the zone item. Scaling green uses the green
 template, which already has it.
 
-## Cluster Autoscaler (ADR 0083, ADR 0090)
+## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091)
 
 `cluster-autoscaler.yaml` is **not** in the kustomization. `kubectl apply -k
 deploy/k8s` does not install it. Kind and minikube set
@@ -334,6 +334,18 @@ Leader election stays on: `--leader-elect=true`, lock `leases`, name
 named lease. Both pods use ServiceAccount `cluster-autoscaler` and the
 one IRSA role. Only the leader calls `SetDesiredCapacity`. There is no
 second role and no PodDisruptionBudget in this file.
+
+`nodeSelector` requires `kubernetes.io/os: linux` and
+`computerpets/node-pool: api`. That second label is the one the node
+pool already sets. The selector is required. There is no `nodeAffinity`
+block, so a node outside the groups cannot take a replica. Required
+hostname anti-affinity then needs two hostnames inside that pool. Kind
+and minikube do not apply this file. `enable_node_pool=false` does not
+label their nodes. Applying the file there leaves both pods Pending.
+That is the feature-off path. Do not delete the pool key to make a
+laptop apply schedule. A single-zone cluster whose nodes do carry the
+label still schedules both pods when two hostnames exist, because the
+zone rule stays preferred. The API Deployments do not select this label.
 
 The committed manifest uses three tokens: `CLUSTER_NAME`, `AWS_REGION`, and
 account `000000000000` on the role ARN. Substitute the cluster name, the

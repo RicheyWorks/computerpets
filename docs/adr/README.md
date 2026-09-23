@@ -109,6 +109,7 @@ address, or an API that is not on `main`.
 | [0088](0088-metrics-server-zone-spread.md) | Soft zone spread for metrics-server beside required hostname anti-affinity (`ScheduleAnyway`; single-zone clusters still schedule) | Accepted |
 | [0089](0089-metrics-server-node-pool.md) | Pin metrics-server to the multi-AZ API node pool (`computerpets/node-pool=api`; kind stays off the file) | Accepted |
 | [0090](0090-cluster-autoscaler-ha.md) | High availability for Cluster Autoscaler (replicas 2, required hostname anti-affinity, preferred zone anti-affinity, leader election; still not in the kustomization) | Accepted |
+| [0091](0091-cluster-autoscaler-node-pool.md) | Pin Cluster Autoscaler to the multi-AZ API node pool (`computerpets/node-pool=api` and linux; kind stays off the file) | Accepted |
 
 ## How to add one
 

@@ -66,7 +66,10 @@ No mesh.
 - Cluster Autoscaler grows those groups when pods are Pending
   ([0083](0083-cluster-autoscaler.md)). Two replicas, required hostname
   anti-affinity, preferred zone anti-affinity, and leader election
-  ([0090](0090-cluster-autoscaler-ha.md)). It is not in this kustomization.
+  ([0090](0090-cluster-autoscaler-ha.md)). `nodeSelector` requires
+  `computerpets/node-pool=api` and linux, so kind and minikube stay off
+  the file ([0091](0091-cluster-autoscaler-node-pool.md)). It is not in
+  this kustomization.
 - Resource metrics for the HPA are upstream metrics-server v0.9.0, two
   replicas with required hostname anti-affinity, soft zone spread
   (`ScheduleAnyway` on `topology.kubernetes.io/zone`), a kubelet CA mount, and

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# ADR 0083 / 0090 — Cluster Autoscaler for the multi-AZ API node groups,
-# two replicas, required hostname anti-affinity, preferred zone
-# anti-affinity, and leader election on the leases lock.
+# ADR 0083 / 0090 / 0091 — Cluster Autoscaler for the multi-AZ API node
+# groups, two replicas, required hostname anti-affinity, preferred zone
+# anti-affinity, leader election on the leases lock, and a required
+# nodeSelector on computerpets/node-pool=api plus linux.
 # No cloud account. Does not terraform apply. Does not kubectl apply.
 # Kind/minikube stay off. Terraform must not reset desired_size.
 set -euo pipefail
@@ -22,6 +23,7 @@ GREEN="${ROOT}/deploy/k8s/deployment-green.yaml"
 K8README="${ROOT}/deploy/k8s/README.md"
 ADR="${ROOT}/docs/adr/0083-cluster-autoscaler.md"
 ADR90="${ROOT}/docs/adr/0090-cluster-autoscaler-ha.md"
+ADR91="${ROOT}/docs/adr/0091-cluster-autoscaler-node-pool.md"
 PASS=0
 FAIL=0
 
@@ -84,6 +86,7 @@ need_file "$POOL"
 need_file "$MANIFEST"
 need_file "$ADR"
 need_file "$ADR90"
+need_file "$ADR91"
 need_file "$HPA"
 need_file "$KUSTOM"
 
@@ -103,6 +106,7 @@ need_not_grep "$POOL" 'SetDesiredCapacity' "node role is not granted desired-cap
 need_not_grep "$POOL" 'AssumeRoleWithWebIdentity' "node role is not the autoscaler role"
 need_not_grep "$POOL" 'resource "aws_autoscaling_group"' "node pool does not declare a raw ASG"
 need_grep "$POOL" 'associate_public_ip_address[[:space:]]*=[[:space:]]*false' "workers stay private"
+need_grep "$POOL" '"computerpets/node-pool"[[:space:]]*=[[:space:]]*"api"' "node pool label is computerpets/node-pool=api"
 
 echo "== IRSA least privilege =="
 need_grep "$CA" 'cluster-autoscaler ADR 0083' "module names ADR 0083"
@@ -157,6 +161,12 @@ need_not_grep_body "$MANIFEST" '--leader-elect=false' "leader election is not tu
 need_not_grep_body "$MANIFEST" 'topologySpreadConstraints:' "zone preference is anti-affinity, not a spread constraint"
 need_not_grep_body "$MANIFEST" 'DoNotSchedule' "zone preference is not a hard schedule gate"
 need_grep "$MANIFEST" 'enable_node_pool=false' "manifest names the kind switch"
+need_grep "$MANIFEST" 'feature-off path' "manifest names the kind leave-off"
+need_grep "$MANIFEST" 'Do not delete the pool key' "manifest refuses dropping the pool key for laptops"
+need_grep_body "$MANIFEST" 'nodeSelector:' "pod template has a nodeSelector"
+need_grep_body "$MANIFEST" 'kubernetes.io/os: linux$' "nodeSelector requires linux"
+need_grep_body "$MANIFEST" 'computerpets/node-pool: api$' "nodeSelector requires the api pool label"
+need_not_grep_body "$MANIFEST" 'nodeAffinity:' "pool pin is nodeSelector, not node affinity"
 need_not_grep "$MANIFEST" ':latest' "image is not floating latest"
 need_not_grep "$MANIFEST" 'karpenter' "manifest does not install Karpenter"
 need_not_grep "$MANIFEST" 'arn:aws:iam::[1-9][0-9]{11}:' "manifest has no real account id"
@@ -164,6 +174,10 @@ need_not_grep "$MANIFEST" 'hostNetwork: true' "autoscaler does not use the host 
 need_not_grep "$KUSTOM" '^[[:space:]]*-[[:space:]]*cluster-autoscaler\.yaml[[:space:]]*$' "kustomization does not list the manifest"
 need_grep "$BLUE" 'replicas: 2' "blue local replica count stays 2"
 need_grep "$GREEN" 'replicas: 0' "green stays the idle slot"
+need_not_grep "$BLUE" 'nodeSelector:' "blue is not pinned to the pool"
+need_not_grep "$GREEN" 'nodeSelector:' "green is not pinned to the pool"
+need_not_grep "$BLUE" 'computerpets/node-pool' "blue does not select the pool label"
+need_not_grep "$GREEN" 'computerpets/node-pool' "green does not select the pool label"
 need_grep "$K8README" 'ADR 0083' "k8s README names ADR 0083"
 need_grep "$ADR" 'Catalog stays 221' "catalog stays 221"
 need_grep "$ADR" 'No Rui sprites' "no Rui sprites"
@@ -173,6 +187,21 @@ need_grep "$ADR90" 'No Rui sprites' "HA ADR has no Rui sprites"
 need_grep "$ADR90" 'replicas: 2' "HA ADR names two replicas"
 need_grep "$ADR90" 'leader election' "HA ADR names leader election"
 need_grep "$K8README" 'ADR 0090' "k8s README names ADR 0090"
+need_grep "$K8README" 'ADR 0091' "k8s README names ADR 0091"
+need_grep "$ADR91" 'Catalog stays 221' "pool ADR keeps catalog 221"
+need_grep "$ADR91" 'No Rui sprites' "pool ADR has no Rui sprites"
+need_grep "$ADR91" 'computerpets/node-pool' "pool ADR names the pool label"
+need_grep "$ADR91" 'Kind and minikube' "pool ADR names the kind leave-off"
+
+selector_count="$(yaml_body "$MANIFEST" | grep -c 'nodeSelector:' || true)"
+if [ "${selector_count}" = "1" ]; then ok "one nodeSelector"
+else bad "expected one nodeSelector (found ${selector_count})"; fi
+pool_sel="$(yaml_body "$MANIFEST" | grep -c 'computerpets/node-pool: api' || true)"
+if [ "${pool_sel}" = "1" ]; then ok "api pool label appears once"
+else bad "expected one computerpets/node-pool: api (found ${pool_sel})"; fi
+os_sel="$(yaml_body "$MANIFEST" | grep -c 'kubernetes.io/os: linux' || true)"
+if [ "${os_sel}" = "1" ]; then ok "linux nodeSelector appears once"
+else bad "expected one kubernetes.io/os: linux (found ${os_sel})"; fi
 
 python3 - "$POOL" "$HPA" "$CA" "$MANIFEST" <<'PY'
 import pathlib, re, sys
@@ -275,7 +304,13 @@ check(rolling.get("maxSurge") == 0, "parsed maxSurge is 0")
 pod = ((spec.get("template") or {}).get("spec") or {})
 check(pod.get("serviceAccountName") == "cluster-autoscaler", "pods use the IRSA service account")
 check("topologySpreadConstraints" not in pod, "pod spec has no topology spread constraint")
-anti = ((pod.get("affinity") or {}).get("podAntiAffinity") or {})
+check(pod.get("nodeSelector") == {
+    "kubernetes.io/os": "linux",
+    "computerpets/node-pool": "api",
+}, "parsed nodeSelector is linux plus the api pool label")
+affinity = pod.get("affinity") or {}
+check("nodeAffinity" not in affinity, "parsed affinity has no nodeAffinity")
+anti = (affinity.get("podAntiAffinity") or {})
 required = anti.get("requiredDuringSchedulingIgnoredDuringExecution") or []
 preferred = anti.get("preferredDuringSchedulingIgnoredDuringExecution") or []
 
