@@ -4,8 +4,9 @@
 # directory. This file is the prod apply, same pattern as ingress-tls.yaml.
 #
 # Requires metrics-server (the metrics.k8s.io API). This file does not
-# install it. Apply metrics-server.yaml first (ADR 0084, ADR 0085). That
-# file is also outside this kustomization. It runs two replicas. `kubectl
+# install it. Apply metrics-server.yaml first (ADR 0084, ADR 0085, ADR 0086).
+# That file is also outside this kustomization. It runs two replicas and
+# mounts the keeper's kubelet CA. `kubectl
 # top pods -n computerpets` must show cpu and memory. Until that API
 # answers, applying this object does not raise the replica count, so blue
 # can stay at 2.

@@ -1,6 +1,6 @@
 # 0085. High availability for metrics-server
 
-- **Status:** Accepted
+- **Status:** Accepted (the no-kubelet-CA clause is superseded in part by [0086](0086-metrics-server-kubelet-ca.md); replicas, anti-affinity, and the install path stay)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/metrics-server.yaml`; `deploy/k8s/check-metrics-server.sh`
 
@@ -24,13 +24,15 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 
 **`deploy/k8s/metrics-server.yaml` is upstream metrics-server `high-availability-1.21+.yaml` v0.9.0. The Deployment sets `replicas: 2` and required pod anti-affinity on `kubernetes.io/hostname`. It is not in the kustomization. Kubelet scrapes stay verified. The image stays pinned. `hpa.yaml` still does not raise replicas until `metrics.k8s.io` answers.**
 
+The no-kubelet-CA sentence in point 7 is the part [0086](0086-metrics-server-kubelet-ca.md) replaces. The same file now mounts an operator CA and sets `--kubelet-certificate-authority`. Replicas, anti-affinity, and the install path in this ADR are unchanged.
+
 1. **Pinned upstream file.** The objects below the header are [high-availability-1.21+.yaml v0.9.0](https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.9.0/high-availability-1.21+.yaml). That asset is `components.yaml` from [0084](0084-metrics-server.md) plus four changes: `replicas: 2`, `rollingUpdate.maxUnavailable: 1`, required pod anti-affinity, and a `PodDisruptionBudget` with `minAvailable: 1`. Image `registry.k8s.io/metrics-server/metrics-server:v0.9.0`. `:latest` is not used. There is no Helm chart and no second Deployment.
 2. **Two pods.** `replicas: 2` is set. Omitting the field, or setting `1`, is the single-pod shape this slice replaces. `priorityClassName` stays `system-cluster-critical`. The container stays non-root, drops all capabilities, and uses a read-only root filesystem. No host network, no host PID, no privileged flag.
 3. **Required hostname anti-affinity.** `podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution` matches `k8s-app: metrics-server` in namespace `kube-system`, `topologyKey: kubernetes.io/hostname`. It is not `preferredDuringSchedulingIgnoredDuringExecution`. It is not a zone constraint and not the API `ScheduleAnyway` spread. A second hostname is required or the second pod stays Pending. Kind and minikube do not apply this file. The node-pool floor is already one worker in each of at least two zones. If a cluster that does apply this file has only one node, Cluster Autoscaler can add a node for that Pending pod. It does not place the pod itself.
 4. **Addon budget, not the API budget.** The same file adds `policy/v1` `PodDisruptionBudget` `metrics-server` in `kube-system` with `minAvailable: 1`. Voluntary disruption can drop the addon to one pod. `pdb.yaml` stays `minAvailable: 2` on `color=blue` in `computerpets`. `check-pdb.sh` still counts that API budget as the one house budget. This file is not that object.
 5. **Rolling update.** `maxUnavailable: 1` is the upstream HA value. `components.yaml` used `0`. With `replicas: 2`, the default `maxSurge` is 1. Required anti-affinity may need a free hostname before a surge pod binds.
 6. **Still out of the kustomization.** `kubectl apply -k deploy/k8s` does not install two metrics-server pods on a laptop. Blue stays `replicas: 2`. Green stays `replicas: 0`. Apply order is this file, then wait for `kubectl top`, then `hpa.yaml`.
-7. **Kubelet TLS stays on.** Args stay the upstream set. `--kubelet-insecure-tls` is not set. This file does not mount a kubelet CA. `insecureSkipTLSVerify: true` still appears once, on the APIService, for the addon's own serving cert minted in `/tmp`. That flag is not the kubelet scrape skip.
+7. **Kubelet TLS stays on.** Args stay the upstream set. `--kubelet-insecure-tls` is not set. This file does not mount a kubelet CA. `insecureSkipTLSVerify: true` still appears once, on the APIService, for the addon's own serving cert minted in `/tmp`. That flag is not the kubelet scrape skip. The CA mount that replaces this sentence is [0086](0086-metrics-server-kubelet-ca.md).
 8. **Verify without a cluster.** `check-metrics-server.sh` fails when `replicas` is not 2, when pod anti-affinity is missing or only preferred, when `maxUnavailable` is not 1, when the addon budget is missing, when the tag floats, when `--kubelet-insecure-tls` is set, or when `kustomization.yaml` lists the file. `check-metrics-server.test.sh` proves the replica drop, the missing anti-affinity, and the three failures from [0084](0084-metrics-server.md). No `kubectl apply`.
 
 ## Consequences
@@ -41,4 +43,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - Adding `--kubelet-insecure-tls`, floating the image tag, listing the file in `kustomization.yaml`, dropping to one replica, or removing the anti-affinity fails `check-metrics-server.sh`.
 - The APIService still skips verification of the addon's own serving cert. That is the upstream file. It does not skip kubelet verification.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** a kubelet certificate this addon does not trust still leaves `kubectl top` empty. This file does not mount a kubelet CA and does not add `--kubelet-insecure-tls`. The APIService still uses upstream `insecureSkipTLSVerify: true` for the addon's own serving cert. Required anti-affinity is hostname-only, so both pods can still land in one zone when that zone has two nodes. API zone spread stays `ScheduleAnyway`. Cluster Autoscaler still only adds a node for pods that are already Pending. Not started here.
+- **Next gap:** moved. The kubelet CA mount is [0086](0086-metrics-server-kubelet-ca.md).
