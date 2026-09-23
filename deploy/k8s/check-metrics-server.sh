@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# ADR 0084 / 0085 / 0086 — metrics-server install path, two replicas,
-# required anti-affinity, and a fail-closed kubelet CA mount.
-# No cluster. Does not kubectl apply. The manifest stays out of kustomize.
+# ADR 0084 / 0085 / 0086 / 0087 — metrics-server install path, two replicas,
+# required anti-affinity, a fail-closed kubelet CA mount, and a
+# fail-closed serving-cert Secret. No cluster. Does not kubectl apply.
+# The manifest stays out of kustomize.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -14,6 +15,7 @@ README="${ROOT}/deploy/k8s/README.md"
 ADR="${ROOT}/docs/adr/0084-metrics-server.md"
 ADR85="${ROOT}/docs/adr/0085-metrics-server-ha.md"
 ADR86="${ROOT}/docs/adr/0086-metrics-server-kubelet-ca.md"
+ADR87="${ROOT}/docs/adr/0087-metrics-server-serving-cert.md"
 PASS=0
 FAIL=0
 
@@ -85,6 +87,7 @@ need_file "$README"
 need_file "$ADR"
 need_file "$ADR85"
 need_file "$ADR86"
+need_file "$ADR87"
 need_absent "${ROOT}/deploy/k8s/Chart.yaml"
 need_absent "${ROOT}/deploy/k8s/metrics-server/values.yaml"
 
@@ -102,7 +105,7 @@ need_not_grep_body "$MS" 'kubelet-insecure-tls' "kubelet scrapes stay verified"
 need_grep_body "$MS" 'name: v1beta1\.metrics\.k8s\.io$' "APIService is v1beta1.metrics.k8s.io"
 need_grep_body "$MS" 'group: metrics\.k8s\.io$' "API group is metrics.k8s.io"
 need_grep_body "$MS" 'version: v1beta1$' "API version is v1beta1"
-need_grep_body "$MS" 'insecureSkipTLSVerify: true' "upstream APIService serving-cert hop is present"
+need_not_grep_body "$MS" 'insecureSkipTLSVerify' "APIService does not skip serving-cert verification"
 need_grep_body "$MS" 'runAsNonRoot: true' "container runs as non-root"
 need_grep_body "$MS" 'readOnlyRootFilesystem: true' "root filesystem is read-only"
 need_grep_body "$MS" 'allowPrivilegeEscalation: false' "privilege escalation is off"
@@ -142,9 +145,9 @@ if [ -f "$MS" ]; then
   image_count="$(yaml_body "$MS" | grep -c 'image: registry.k8s.io/metrics-server/metrics-server:v0.9.0' || true)"
   if [ "${image_count}" = "1" ]; then ok "one pinned metrics-server image"
   else bad "expected one pinned metrics-server image (found ${image_count})"; fi
-  skip_count="$(yaml_body "$MS" | grep -c 'insecureSkipTLSVerify:' || true)"
-  if [ "${skip_count}" = "1" ]; then ok "APIService TLS skip appears once"
-  else bad "expected one insecureSkipTLSVerify (found ${skip_count})"; fi
+  skip_count="$(yaml_body "$MS" | grep -c 'insecureSkipTLSVerify' || true)"
+  if [ "${skip_count}" = "0" ]; then ok "APIService TLS skip is absent"
+  else bad "expected no insecureSkipTLSVerify (found ${skip_count})"; fi
   deploy_count="$(yaml_body "$MS" | grep -c '^kind: Deployment$' || true)"
   if [ "${deploy_count}" = "1" ]; then ok "one Deployment"
   else bad "expected one Deployment (found ${deploy_count})"; fi
@@ -164,11 +167,11 @@ if [ -f "$MS" ]; then
   if [ "${ca_name}" = "2" ]; then ok "kubelet-ca is named on the mount and the volume"
   else bad "expected kubelet-ca on the mount and the volume (found ${ca_name})"; fi
   ro_count="$(yaml_body "$MS" | grep -cE '^[[:space:]]*readOnly: true$' || true)"
-  if [ "${ro_count}" = "1" ]; then ok "one read-only kubelet CA mount"
-  else bad "expected one readOnly: true (found ${ro_count})"; fi
+  if [ "${ro_count}" = "2" ]; then ok "kubelet CA and serving cert mounts are read-only"
+  else bad "expected two readOnly: true (found ${ro_count})"; fi
   opt_false="$(yaml_body "$MS" | grep -cE '^[[:space:]]*optional: false$' || true)"
-  if [ "${opt_false}" = "1" ]; then ok "optional: false appears once"
-  else bad "expected one optional: false (found ${opt_false})"; fi
+  if [ "${opt_false}" = "2" ]; then ok "both cert volumes are required"
+  else bad "expected two optional: false (found ${opt_false})"; fi
   cm_count="$(yaml_body "$MS" | grep -cE '^[[:space:]]*name: metrics-server-kubelet-ca$' || true)"
   sec_count="$(yaml_body "$MS" | grep -cE '^[[:space:]]*secretName: metrics-server-kubelet-ca$' || true)"
   if [ "${cm_count}" = "1" ] && [ "${sec_count}" = "0" ] && yaml_body "$MS" | grep -qE '^[[:space:]]*configMap:'; then
@@ -178,6 +181,43 @@ if [ -f "$MS" ]; then
   else
     bad "expected one kubelet CA source (ConfigMap or Secret metrics-server-kubelet-ca; configMap=${cm_count} secret=${sec_count})"
   fi
+fi
+
+echo "== serving cert mount =="
+need_grep_body "$MS" '--tls-cert-file=/etc/metrics-server/serving/tls\.crt$' "serving cert flag points at the mount"
+need_grep_body "$MS" '--tls-private-key-file=/etc/metrics-server/serving/tls\.key$' "serving key flag points at the mount"
+need_grep_body "$MS" 'mountPath: /etc/metrics-server/serving$' "serving mount path matches the flags"
+need_grep_body "$MS" '^[[:space:]]*- key: tls\.crt$' "serving cert key is tls.crt"
+need_grep_body "$MS" '^[[:space:]]*path: tls\.crt$' "serving cert file name is tls.crt"
+need_grep_body "$MS" '^[[:space:]]*- key: tls\.key$' "serving key key is tls.key"
+need_grep_body "$MS" '^[[:space:]]*path: tls\.key$' "serving key file name is tls.key"
+need_grep_body "$MS" '^[[:space:]]*secretName: metrics-server-serving$' "serving volume is Secret metrics-server-serving"
+need_not_grep_body "$MS" 'insecureSkipTLSVerify' "APIService does not skip serving-cert verification"
+need_not_grep_body "$MS" 'caBundle:' "this file does not vendor an APIService CA"
+need_not_grep_body "$MS" 'kubelet-insecure-tls' "kubelet scrapes stay verified"
+need_not_grep_body "$MS" 'BEGIN CERTIFICATE' "this file does not vendor a serving certificate"
+need_not_grep_body "$MS" 'BEGIN PRIVATE KEY' "this file does not vendor a serving key"
+need_not_grep_body "$MS" 'BEGIN RSA PRIVATE KEY' "this file does not vendor an RSA serving key"
+need_not_grep_body "$MS" 'hostPath:' "serving cert is not a hostPath"
+need_not_grep_body "$MS" '^kind: Secret$' "the serving Secret is not in this file"
+need_not_grep_body "$MS" 'optional: true' "serving volume is not optional"
+
+if [ -f "$MS" ]; then
+  cert_flag="$(yaml_body "$MS" | grep -c -- '--tls-cert-file=/etc/metrics-server/serving/tls.crt' || true)"
+  if [ "${cert_flag}" = "1" ]; then ok "serving cert flag appears once"
+  else bad "expected one tls-cert-file flag (found ${cert_flag})"; fi
+  key_flag="$(yaml_body "$MS" | grep -c -- '--tls-private-key-file=/etc/metrics-server/serving/tls.key' || true)"
+  if [ "${key_flag}" = "1" ]; then ok "serving key flag appears once"
+  else bad "expected one tls-private-key-file flag (found ${key_flag})"; fi
+  serving_name="$(yaml_body "$MS" | grep -cE -- '^[[:space:]]*(- )?name: serving-cert$' || true)"
+  if [ "${serving_name}" = "2" ]; then ok "serving-cert is named on the mount and the volume"
+  else bad "expected serving-cert on the mount and the volume (found ${serving_name})"; fi
+  serving_secret="$(yaml_body "$MS" | grep -cE -- '^[[:space:]]*secretName: metrics-server-serving$' || true)"
+  if [ "${serving_secret}" = "1" ]; then ok "one serving Secret reference"
+  else bad "expected one secretName metrics-server-serving (found ${serving_secret})"; fi
+  serving_cm="$(yaml_body "$MS" | grep -cE -- 'metrics-server-serving' || true)"
+  if [ "${serving_cm}" = "1" ]; then ok "serving object name appears once"
+  else bad "expected metrics-server-serving once (found ${serving_cm})"; fi
 fi
 
 echo "== stays out of local apply =="
@@ -220,6 +260,21 @@ need_grep "$ADR86" 'replicas: 2' "CA ADR keeps two replicas"
 need_grep "$README" 'ADR 0086' "README names ADR 0086"
 need_grep "$README" 'kubelet-certificate-authority' "README names the kubelet CA flag"
 need_grep "$README" 'metrics-server-kubelet-ca' "README names the operator CA object"
+need_grep "$ADR87" 'tls-cert-file' "serving ADR names the cert flag"
+need_grep "$ADR87" 'tls-private-key-file' "serving ADR names the key flag"
+need_grep "$ADR87" 'metrics-server-serving' "serving ADR names the Secret"
+need_grep "$ADR87" 'optional: false' "serving ADR requires the volume"
+need_grep "$ADR87" 'insecureSkipTLSVerify' "serving ADR names the APIService skip"
+need_grep "$ADR87" 'caBundle' "serving ADR names the keeper CA field"
+need_grep "$ADR87" 'kubelet-insecure-tls' "serving ADR forbids the kubelet TLS skip"
+need_grep "$ADR87" 'kubelet-certificate-authority' "serving ADR keeps the kubelet CA"
+need_grep "$ADR87" 'replicas: 2' "serving ADR keeps two replicas"
+need_grep "$ADR87" 'Catalog stays 221' "serving ADR keeps catalog 221"
+need_grep "$ADR87" 'not in the kustomization' "serving ADR keeps the file out of kustomize"
+need_grep "$README" 'ADR 0087' "README names ADR 0087"
+need_grep "$README" 'tls-cert-file' "README names the serving cert flag"
+need_grep "$README" 'metrics-server-serving' "README names the serving Secret"
+need_grep "$README" 'insecureSkipTLSVerify' "README names the APIService skip"
 
 if command -v kubectl >/dev/null 2>&1; then
   if kubectl apply --dry-run=client --validate=false -f "$MS" >/dev/null 2>&1; then

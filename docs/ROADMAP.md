@@ -79,6 +79,7 @@ All critical items required before any public or limited production exposure hav
   - [x] metrics-server — `deploy/k8s/metrics-server.yaml` is upstream v0.9.0 so `hpa.yaml` can read CPU and memory. Not in the kustomization. Kubelet TLS stays verified. Apply before the HPA (ADR 0084). Catalog stays 221.
   - [x] metrics-server high availability — same manifest is upstream `high-availability-1.21+.yaml` v0.9.0. `replicas: 2`, required pod anti-affinity on `kubernetes.io/hostname`, addon PDB `minAvailable: 1`. Not in the kustomization. No `--kubelet-insecure-tls` (ADR 0085). Catalog stays 221.
   - [x] metrics-server kubelet CA — `--kubelet-certificate-authority` mounts operator ConfigMap or Secret `metrics-server-kubelet-ca` (`ca.crt`, `optional: false`). No `--kubelet-insecure-tls`. The CA bytes are not in git. Not in the kustomization (ADR 0086). Catalog stays 221.
+  - [x] metrics-server serving certificate — `--tls-cert-file` and `--tls-private-key-file` mount Secret `metrics-server-serving`. `insecureSkipTLSVerify` is unset. The cert bytes are not in git. A private CA is keeper-set `caBundle`. Not in the kustomization (ADR 0087). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload
@@ -149,6 +150,7 @@ All critical items required before any public or limited production exposure hav
   - [x] metrics-server — upstream v0.9.0 manifest, not in the kustomization. HPA resource metrics stay dark until `kubectl top` answers. Kubelet TLS stays verified (ADR 0084). Catalog stays 221.
   - [x] metrics-server high availability — `replicas: 2` and required hostname anti-affinity, plus an addon PDB that keeps one pod. Still not in the kustomization. No kubelet TLS skip (ADR 0085). Catalog stays 221.
   - [x] metrics-server kubelet CA — operator ConfigMap or Secret `metrics-server-kubelet-ca` mounted read-only for `--kubelet-certificate-authority`. No kubelet TLS skip. Still not in the kustomization (ADR 0086). Catalog stays 221.
+  - [x] metrics-server serving certificate — Secret `metrics-server-serving` mounted read-only for `--tls-cert-file` and `--tls-private-key-file`. `insecureSkipTLSVerify` stays off. Still not in the kustomization (ADR 0087). Catalog stays 221.
 
 ---
 
