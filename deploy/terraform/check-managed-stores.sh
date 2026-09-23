@@ -117,7 +117,7 @@ else
   bad "check-api-listener-tls.sh missing"
 fi
 
-echo "== Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091) =="
+echo "== Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092) =="
 if [ -x "${TF}/check-cluster-autoscaler.sh" ]; then
   if "${TF}/check-cluster-autoscaler.sh"; then
     ok "check-cluster-autoscaler.sh"

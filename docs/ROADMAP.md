@@ -84,6 +84,7 @@ All critical items required before any public or limited production exposure hav
   - [x] metrics-server node pool pin — `nodeSelector` requires `kubernetes.io/os: linux` and `computerpets/node-pool: api`. `nodeAffinityPolicy: Honor` keeps the zone count on those nodes. Kind and minikube do not apply the file. A single-zone set of labeled nodes still schedules. Not in the kustomization (ADR 0089). Catalog stays 221.
   - [x] Cluster Autoscaler high availability — `replicas: 2`, required hostname anti-affinity, preferred zone anti-affinity, leader election on the leases lock. Rolling update does not ask for a third hostname. Same IRSA service account. Not in the kustomization (ADR 0090). Catalog stays 221.
   - [x] Cluster Autoscaler node-pool pin — `nodeSelector` requires `kubernetes.io/os: linux` and `computerpets/node-pool: api`. Required hostname anti-affinity stays inside that pool. Kind and minikube do not apply the file. A single-zone set of labeled nodes still schedules. API Deployments stay unpinned. Not in the kustomization (ADR 0091). Catalog stays 221.
+  - [x] Cluster Autoscaler disruption budget — `policy/v1` `PodDisruptionBudget` in `cluster-autoscaler.yaml`, `minAvailable: 1`, selector `app=cluster-autoscaler`. One pod can drain while the other holds or takes the lease. `minAvailable: 2` is not used. Kind and minikube do not apply the file. Not in the kustomization (ADR 0092). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload
@@ -159,6 +160,7 @@ All critical items required before any public or limited production exposure hav
   - [x] metrics-server node pool pin — required `nodeSelector` on `computerpets/node-pool=api` with `nodeAffinityPolicy: Honor`. Kind stays off the file. A labeled single-zone cluster still schedules. Still not in the kustomization (ADR 0089). Catalog stays 221.
   - [x] Cluster Autoscaler high availability — two replicas, required hostname anti-affinity, preferred zone anti-affinity, and leader election. Still not in the kustomization (ADR 0090). Catalog stays 221.
   - [x] Cluster Autoscaler node-pool pin — required `nodeSelector` on `computerpets/node-pool=api` and linux. Kind stays off the file. A labeled single-zone cluster still schedules. API Deployments stay unpinned. Still not in the kustomization (ADR 0091). Catalog stays 221.
+  - [x] Cluster Autoscaler disruption budget — `minAvailable: 1` on `app=cluster-autoscaler` in the same manifest. Kind stays off the file, so the budget stays off with it. Still not in the kustomization (ADR 0092). Catalog stays 221.
 
 ---
 

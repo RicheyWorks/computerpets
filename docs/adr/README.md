@@ -110,6 +110,7 @@ address, or an API that is not on `main`.
 | [0089](0089-metrics-server-node-pool.md) | Pin metrics-server to the multi-AZ API node pool (`computerpets/node-pool=api`; kind stays off the file) | Accepted |
 | [0090](0090-cluster-autoscaler-ha.md) | High availability for Cluster Autoscaler (replicas 2, required hostname anti-affinity, preferred zone anti-affinity, leader election; still not in the kustomization) | Accepted |
 | [0091](0091-cluster-autoscaler-node-pool.md) | Pin Cluster Autoscaler to the multi-AZ API node pool (`computerpets/node-pool=api` and linux; kind stays off the file) | Accepted |
+| [0092](0092-cluster-autoscaler-pdb.md) | Pod disruption budget for Cluster Autoscaler (`minAvailable: 1` on `app=cluster-autoscaler`; kind stays off the file) | Accepted |
 
 ## How to add one
 

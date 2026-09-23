@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-# ADR 0083 / 0090 / 0091 — Cluster Autoscaler for the multi-AZ API node
-# groups, two replicas, required hostname anti-affinity, preferred zone
-# anti-affinity, leader election on the leases lock, and a required
-# nodeSelector on computerpets/node-pool=api plus linux.
-# No cloud account. Does not terraform apply. Does not kubectl apply.
-# Kind/minikube stay off. Terraform must not reset desired_size.
+# ADR 0083 / 0090 / 0091 / 0092 — Cluster Autoscaler for the multi-AZ API
+# node groups, two replicas, required hostname anti-affinity, preferred
+# zone anti-affinity, leader election on the leases lock, a required
+# nodeSelector on computerpets/node-pool=api plus linux, and a
+# PodDisruptionBudget with minAvailable 1 whose selector matches the
+# Deployment. No cloud account. Does not terraform apply. Does not
+# kubectl apply. Kind/minikube stay off. Terraform must not reset
+# desired_size.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -24,6 +26,7 @@ K8README="${ROOT}/deploy/k8s/README.md"
 ADR="${ROOT}/docs/adr/0083-cluster-autoscaler.md"
 ADR90="${ROOT}/docs/adr/0090-cluster-autoscaler-ha.md"
 ADR91="${ROOT}/docs/adr/0091-cluster-autoscaler-node-pool.md"
+ADR92="${ROOT}/docs/adr/0092-cluster-autoscaler-pdb.md"
 PASS=0
 FAIL=0
 
@@ -87,6 +90,7 @@ need_file "$MANIFEST"
 need_file "$ADR"
 need_file "$ADR90"
 need_file "$ADR91"
+need_file "$ADR92"
 need_file "$HPA"
 need_file "$KUSTOM"
 
@@ -192,6 +196,20 @@ need_grep "$ADR91" 'Catalog stays 221' "pool ADR keeps catalog 221"
 need_grep "$ADR91" 'No Rui sprites' "pool ADR has no Rui sprites"
 need_grep "$ADR91" 'computerpets/node-pool' "pool ADR names the pool label"
 need_grep "$ADR91" 'Kind and minikube' "pool ADR names the kind leave-off"
+need_grep "$K8README" 'ADR 0092' "k8s README names ADR 0092"
+need_grep "$ADR92" 'Catalog stays 221' "budget ADR keeps catalog 221"
+need_grep "$ADR92" 'No Rui sprites' "budget ADR has no Rui sprites"
+need_grep "$ADR92" 'minAvailable: 1' "budget ADR names minAvailable 1"
+need_grep "$ADR92" 'voluntary' "budget ADR limits the budget to voluntary disruption"
+need_grep "$ADR92" 'Kind and minikube' "budget ADR names the kind leave-off"
+need_grep "$MANIFEST" 'do not install this budget' "manifest names the kind leave-off for the budget"
+need_grep_body "$MANIFEST" '^kind: PodDisruptionBudget$' "autoscaler disruption budget is present"
+need_grep_body "$MANIFEST" '^apiVersion: policy/v1$' "autoscaler budget is policy/v1"
+need_grep_body "$MANIFEST" '^  minAvailable: 1$' "autoscaler budget keeps one pod"
+need_not_grep_body "$MANIFEST" 'apiVersion: policy/v1beta1' "beta PDB API is not used"
+need_not_grep_body "$MANIFEST" 'minAvailable: 2' "minAvailable 2 would block every voluntary eviction"
+need_not_grep_body "$MANIFEST" 'minAvailable: 0' "budget is not zero"
+need_not_grep_body "$MANIFEST" 'minAvailable:.*%' "minAvailable is a count, not a percent"
 
 selector_count="$(yaml_body "$MANIFEST" | grep -c 'nodeSelector:' || true)"
 if [ "${selector_count}" = "1" ]; then ok "one nodeSelector"
@@ -202,6 +220,12 @@ else bad "expected one computerpets/node-pool: api (found ${pool_sel})"; fi
 os_sel="$(yaml_body "$MANIFEST" | grep -c 'kubernetes.io/os: linux' || true)"
 if [ "${os_sel}" = "1" ]; then ok "linux nodeSelector appears once"
 else bad "expected one kubernetes.io/os: linux (found ${os_sel})"; fi
+pdb_count="$(yaml_body "$MANIFEST" | grep -c '^kind: PodDisruptionBudget$' || true)"
+if [ "${pdb_count}" = "1" ]; then ok "one autoscaler PodDisruptionBudget"
+else bad "expected one autoscaler PodDisruptionBudget (found ${pdb_count})"; fi
+min_av="$(yaml_body "$MANIFEST" | grep -c '^  minAvailable: 1$' || true)"
+if [ "${min_av}" = "1" ]; then ok "minAvailable 1 appears once"
+else bad "expected one minAvailable: 1 (found ${min_av})"; fi
 
 python3 - "$POOL" "$HPA" "$CA" "$MANIFEST" <<'PY'
 import pathlib, re, sys
@@ -271,7 +295,8 @@ check(kinds == [
     "Role",
     "RoleBinding",
     "Deployment",
-], "manifest is the six autoscaler objects in order")
+    "PodDisruptionBudget",
+], "manifest is the seven autoscaler objects in order")
 if failed:
     sys.exit(1)
 PY
@@ -366,6 +391,23 @@ check(len(accounts) == 1, "one service account")
 ann = ((accounts[0].get("metadata") or {}).get("annotations") or {}) if accounts else {}
 check(ann.get("eks.amazonaws.com/role-arn", "").startswith("arn:aws:iam::000000000000:role/"),
       "IRSA annotation stays the placeholder role")
+
+pdbs = [doc for doc in docs if doc.get("kind") == "PodDisruptionBudget"]
+check(len(pdbs) == 1, "one Cluster Autoscaler PodDisruptionBudget")
+budget = pdbs[0] if pdbs else {}
+check(budget.get("apiVersion") == "policy/v1", "parsed budget is policy/v1")
+bmeta = budget.get("metadata") or {}
+check(bmeta.get("name") == "cluster-autoscaler", "budget name matches the Deployment")
+check(bmeta.get("namespace") == "kube-system", "budget namespace is kube-system")
+check((dep.get("metadata") or {}).get("namespace") == "kube-system", "Deployment namespace is kube-system")
+bspec = budget.get("spec") or {}
+check(bspec.get("minAvailable") == 1, "parsed minAvailable is 1")
+check("maxUnavailable" not in bspec, "budget does not set maxUnavailable")
+check(not isinstance(bspec.get("minAvailable"), str), "minAvailable is not a percent string")
+dep_sel = (spec.get("selector") or {}).get("matchLabels")
+pdb_sel = (bspec.get("selector") or {}).get("matchLabels")
+check(dep_sel == {"app": "cluster-autoscaler"}, "Deployment selector is app=cluster-autoscaler")
+check(pdb_sel == dep_sel, "budget selector matches the Deployment selector")
 if failed:
     sys.exit(1)
 PY

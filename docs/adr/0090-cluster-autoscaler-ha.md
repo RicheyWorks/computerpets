@@ -1,6 +1,6 @@
 # 0090. High availability for Cluster Autoscaler
 
-- **Status:** Accepted (the pool pin is [0091](0091-cluster-autoscaler-node-pool.md); replicas, anti-affinity, and leader election stay)
+- **Status:** Accepted (the pool pin is [0091](0091-cluster-autoscaler-node-pool.md); the disruption budget is [0092](0092-cluster-autoscaler-pdb.md); replicas, anti-affinity, and leader election stay)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/cluster-autoscaler.yaml`; `deploy/terraform/check-cluster-autoscaler.sh`
 
@@ -40,7 +40,7 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - A one-node cluster that applies this file leaves the second pod Pending. Do not apply it on kind or minikube. Local `kubectl apply -k deploy/k8s` still starts two API pods and an idle green Deployment.
 - Preferred zone anti-affinity can still place both pods in one zone. That is accepted. A hard zone rule would block the standby when only one zone remains.
 - The pool pin is [0091](0091-cluster-autoscaler-node-pool.md). Required hostname anti-affinity and leader election stay. The API Deployments stay unpinned.
-- There is no PodDisruptionBudget on this Deployment. Draining the leader's node drops that pod. The other replica, already scheduled on another hostname, can take the lease. Draining every node that holds a replica still stops scaling until one pod is back.
+- The disruption budget is [0092](0092-cluster-autoscaler-pdb.md). Replicas, anti-affinity, and leader election stay.
 - The image tag stays `v1.36.1`. A keeper whose cluster minor is older replaces the tag with that minor's latest patch before apply. `:latest` is not used.
 - Adding the file to `kustomization.yaml`, dropping to one replica, removing required hostname anti-affinity, making the zone rule required, turning leader election off, or floating the image tag fails `check-cluster-autoscaler.sh`.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.

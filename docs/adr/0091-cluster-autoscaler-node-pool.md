@@ -1,6 +1,6 @@
 # 0091. Pin Cluster Autoscaler to the multi-AZ API node pool
 
-- **Status:** Accepted
+- **Status:** Accepted (the disruption budget is [0092](0092-cluster-autoscaler-pdb.md); the nodeSelector stays)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/cluster-autoscaler.yaml`; `deploy/terraform/check-cluster-autoscaler.sh`
 
@@ -43,8 +43,8 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - If every labeled node is gone, these pods stay Pending and cannot raise desired capacity until one labeled node exists. The pool floor is already one worker per zone. Kind and minikube have no such nodes. Do not apply this file there, and do not delete the pool key to make that apply schedule.
 - Preferred zone anti-affinity can still place both pods in one zone. That is accepted. A hard zone rule would block the standby when only one zone remains.
 - The API Deployments stay unpinned. Their pods can still schedule outside this label.
-- There is no PodDisruptionBudget on this Deployment. Draining the leader's node drops that pod. The other replica, already scheduled on another labeled hostname, can take the lease. Draining every labeled node that holds a replica still stops scaling until one pod is back.
+- The disruption budget is [0092](0092-cluster-autoscaler-pdb.md). `minAvailable` is 1. The nodeSelector stays.
 - One running replica can still change desired capacity while the other is down, after it holds the lease. Both pods down still leaves Pending pods without new nodes until one replica is back and leading.
 - Adding the file to `kustomization.yaml`, dropping either selector key, dropping to one replica, removing required hostname anti-affinity, making the zone rule required, turning leader election off, or floating the image tag fails `check-cluster-autoscaler.sh`.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** there is no PodDisruptionBudget on this Deployment. A voluntary drain of the leader's node drops that pod; the standby takes the lease only when it is already scheduled on another labeled hostname. Preferred zone anti-affinity can still place both pods in one zone. `ScheduleAnyway` can still place both metrics-server pods in one zone when the labeled pool is one zone or a labeled node omits `topology.kubernetes.io/zone`. API zone spread stays `ScheduleAnyway`, and the API Deployments are still not pinned to this label. A serving certificate that does not chain to `caBundle` (and is not a system root), or whose SAN is not `metrics-server.kube-system.svc`, still leaves `kubectl top` empty. A kubelet certificate that does not chain to `metrics-server-kubelet-ca` still leaves `kubectl top` empty.
+- **Next gap:** moved. The disruption budget is [0092](0092-cluster-autoscaler-pdb.md).

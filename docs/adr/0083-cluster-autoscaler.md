@@ -1,6 +1,6 @@
 # 0083. Cluster Autoscaler for the multi-AZ API node groups
 
-- **Status:** Accepted (replica count and anti-affinity are [0090](0090-cluster-autoscaler-ha.md); the pool pin is [0091](0091-cluster-autoscaler-node-pool.md); IRSA, discovery tags, and the kustomize exclusion stay)
+- **Status:** Accepted (replica count and anti-affinity are [0090](0090-cluster-autoscaler-ha.md); the pool pin is [0091](0091-cluster-autoscaler-node-pool.md); the disruption budget is [0092](0092-cluster-autoscaler-pdb.md); IRSA, discovery tags, and the kustomize exclusion stay)
 - **Date:** 2026-09-23
 - **Code:** `deploy/terraform/modules/cluster_autoscaler/main.tf`; `deploy/terraform/modules/node_pool/main.tf`; `deploy/k8s/cluster-autoscaler.yaml`; `deploy/terraform/check-cluster-autoscaler.sh`
 
