@@ -65,6 +65,9 @@ No mesh.
   `computerpets/node-pool=api`. Kind and minikube leave those pods
   Pending until a node carries the pool label
   ([0093](0093-api-node-pool.md)).
+- The API node group taints that key `NoSchedule`. Blue, green,
+  metrics-server, and Cluster Autoscaler tolerate it. Kind and minikube
+  are not tainted ([0094](0094-api-pool-taint.md)).
 - Private workers in at least two zones are the node pool
   ([0082](0082-multi-az-node-pool.md)). This kustomization does not create them.
 - Cluster Autoscaler grows those groups when pods are Pending

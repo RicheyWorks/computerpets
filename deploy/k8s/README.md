@@ -337,6 +337,33 @@ the selector. Postgres and Redis still schedule on the unlabeled node.
 ./deploy/k8s/check-api-node-pool.sh
 ```
 
+## API pool taint (ADR 0094)
+
+The node group taints `computerpets/node-pool=api:NoSchedule`. Blue,
+green, metrics-server, and Cluster Autoscaler tolerate that exact key,
+`Equal`, value `api`, and `NoSchedule`. They keep the pool
+`nodeSelector`. Postgres and Redis do not tolerate it and stay
+unpinned. `PreferNoSchedule` is not used. `NoExecute` is not used.
+`NoSchedule` does not evict a pod that is already running.
+
+Kind and minikube apply the blue and green tolerations (`kubectl apply
+-k deploy/k8s`) and do not apply the node group. Their nodes are not
+tainted.
+A toleration does not require the taint.
+Do not taint a kind or minikube node.
+The API pods stay Pending until a node is labeled
+`computerpets/node-pool=api`. Labeling that node without the taint
+still schedules the API. Postgres and Redis still schedule on the
+untainted node. Tainting the only laptop node leaves the stores
+Pending. metrics-server and Cluster Autoscaler stay out of the
+kustomization. `aws-node` and `kube-proxy` are not in this repo. No
+live AWS apply.
+
+```bash
+./deploy/k8s/check-api-pool-taint.sh
+./deploy/k8s/check-api-pool-taint.test.sh
+```
+
 ## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092)
 
 `cluster-autoscaler.yaml` is **not** in the kustomization. `kubectl apply -k
@@ -388,6 +415,8 @@ laptop apply schedule. A single-zone cluster whose nodes do carry the
 label still schedules both pods when two hostnames exist, because the
 zone rule stays preferred. The API Deployments select the same label
 ([ADR 0093](../../docs/adr/0093-api-node-pool.md)).
+The pod template tolerates the API pool taint
+([ADR 0094](../../docs/adr/0094-api-pool-taint.md)).
 
 The committed manifest uses three tokens: `CLUSTER_NAME`, `AWS_REGION`, and
 account `000000000000` on the role ARN. Substitute the cluster name, the
@@ -433,6 +462,8 @@ feature-off path. A single-zone cluster whose nodes do carry the label
 still schedules both pods when two hostnames exist, because zone spread
 stays `ScheduleAnyway`. The API Deployments select the same label
 ([ADR 0093](../../docs/adr/0093-api-node-pool.md)).
+The pod template tolerates the API pool taint
+([ADR 0094](../../docs/adr/0094-api-pool-taint.md)).
 Rolling update `maxUnavailable` is 1.
 An addon `PodDisruptionBudget` in `kube-system` keeps `minAvailable: 1`. That
 budget is not `pdb.yaml`.

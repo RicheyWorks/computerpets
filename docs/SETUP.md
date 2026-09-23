@@ -432,6 +432,12 @@ stay Pending until then. Do not delete the pool key to make a laptop
 apply schedule. One labeled node still schedules both blue pods.
 Postgres and Redis are not pinned
 ([ADR 0093](adr/0093-api-node-pool.md)).
+The API node group also taints `computerpets/node-pool=api:NoSchedule`.
+Blue and green tolerate it. A toleration does not require the taint.
+Kind and minikube are not tainted. Do not taint a kind or minikube node.
+Labeling a node without that taint still schedules the API. Postgres and
+Redis do not tolerate it
+([ADR 0094](adr/0094-api-pool-taint.md)).
 Cluster Autoscaler grows those groups when pods are Pending. Each zone's
 max is at least the HPA ceiling of 10. Terraform ignores `desired_size`
 after create. `deploy/k8s/cluster-autoscaler.yaml` is not in this
