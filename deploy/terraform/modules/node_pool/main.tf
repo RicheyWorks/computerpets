@@ -47,19 +47,21 @@ locals {
   # so the leader cannot lift this ceiling. A zone at max is skipped
   # (MaxLimitReached). Hard zone spread will not use the other zone.
   # hpa-min-replicas=3. pdb-min-available=2. min-availability-zones=2.
-  # hostname-floor-nodes=4. min-size-per-zone=2 (ADR 0105).
-  # Zone hard spread puts ceil(3/2)=2 floor pods in one healthy zone.
-  # Hostname hard spread is maxSkew 1, so that zone needs 2 hostnames
-  # or those two pods share a node. Two healthy zones times this floor
-  # is 4, which covers the HPA min. The old floor of 1 is 2 hostnames
-  # and lands the HPA min as 2 and 1. Nothing stays Pending, so the
-  # leader does not add the third node. Do not set minDomains.
+  # hostname-floor-nodes=6. min-size-per-zone=3 (ADR 0106).
+  # single-zone-hostname-floor=3. surviving-zones=1.
+  # Hostname hard spread is maxSkew 1. Three floor pods on two hostnames
+  # is 2 and 1, and that skew is legal, so the third pod binds. One Ready
+  # zone therefore needs three hostnames, and those pods are 1 and 1 and 1.
+  # The ADR 0105 floor of 2 is that 2-and-1 pool and is refused. A floor
+  # of 4 bills a hostname the floor does not use. A third AZ with the
+  # floor of 2 still leaves one Ready zone at two hostnames. Two healthy
+  # zones times this floor is 6. Do not set minDomains.
   # api-pool-taint ADR 0094
   # taint-key=computerpets/node-pool
   # taint-value=api
   # taint-effect=NO_SCHEDULE
-  min_size_per_zone     = 2
-  desired_size_per_zone = 2
+  min_size_per_zone     = 3
+  desired_size_per_zone = 3
   max_size_per_zone     = 20
   root_volume_gib       = 20
 
@@ -174,7 +176,7 @@ resource "aws_eks_node_group" "zone" {
   }
 
   # A later apply must not write desired_size back to the create-time
-  # floor (ADR 0083, ADR 0105).
+  # floor (ADR 0083, ADR 0106).
   # min_size and max_size stay Terraform-owned. lifecycle cannot be
   # conditional, so this ignore stays even if the autoscaler flag is off.
   lifecycle {

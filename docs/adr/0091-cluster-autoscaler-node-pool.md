@@ -1,6 +1,6 @@
 # 0091. Pin Cluster Autoscaler to the multi-AZ API node pool
 
-- **Status:** Accepted (the disruption budget is [0092](0092-cluster-autoscaler-pdb.md); zone spread is [0099](0099-cluster-autoscaler-zone-hard-spread.md); the per-zone floor is [0105](0105-api-hostname-floor.md); the nodeSelector stays)
+- **Status:** Accepted (the disruption budget is [0092](0092-cluster-autoscaler-pdb.md); zone spread is [0099](0099-cluster-autoscaler-zone-hard-spread.md); the per-zone floor is [0106](0106-api-single-zone-hostname-floor.md); the nodeSelector stays)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/cluster-autoscaler.yaml`; `deploy/terraform/check-cluster-autoscaler.sh`
 

@@ -97,6 +97,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Cluster Autoscaler salvo early stop — the `1m` budget stays. Node-provision time and node-group backoff stay at the v1.36.1 defaults. A budget that is already gone, a failed snapshot update, or a scale-up that is not successful still ends the salvo. The next main loop is the retry. Kind and minikube do not apply the file (ADR 0103). Catalog stays 221.
   - [x] Per-zone API node-group max — `max_size` is 20, twice the HPA ceiling of 10. Cluster Autoscaler reads the Auto Scaling group `MaxSize` and cannot lift it. The old max of 10 is refused. The per-zone min of 1 is ADR 0105. Kind and minikube do not apply the file (ADR 0104). Catalog stays 221.
   - [x] API hostname floor — each zone's `min_size` is 2 and the create-time `desired_size` is 2. Two healthy zones are four hostnames, so the HPA floor of 3 does not land 2 and 1. HPA min stays 3 because the PDB keeps 2. The old floor of 1 is refused. Kind and minikube do not plan the pool. Do not set minDomains (ADR 0105). Catalog stays 221.
+  - [x] Single-zone API hostname floor — each zone's `min_size` is 3 and the create-time `desired_size` is 3. One Ready zone is three hostnames, so the HPA floor of 3 is 1 and 1 and 1. The zone gate stays two. The floor of 2 is refused. Kind and minikube do not plan the pool. Do not set minDomains (ADR 0106). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload
@@ -185,6 +186,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Cluster Autoscaler salvo early stop — the `1m` budget stays. Node-provision time and node-group backoff stay at the v1.36.1 defaults. A budget that is already gone, a failed snapshot update, or a scale-up that is not successful still ends the salvo. The next main loop is the retry. Kind and minikube do not apply the file (ADR 0103). Catalog stays 221.
   - [x] Per-zone API node-group max — `max_size` is 20, twice the HPA ceiling of 10. Cluster Autoscaler reads the Auto Scaling group `MaxSize` and cannot lift it. The old max of 10 is refused. The per-zone min of 1 is ADR 0105. Kind and minikube do not apply the file (ADR 0104). Catalog stays 221.
   - [x] API hostname floor — each zone's `min_size` is 2 and the create-time `desired_size` is 2. Two healthy zones are four hostnames, so the HPA floor of 3 does not land 2 and 1. HPA min stays 3 because the PDB keeps 2. The old floor of 1 is refused. Kind and minikube do not plan the pool. Do not set minDomains (ADR 0105). Catalog stays 221.
+  - [x] Single-zone API hostname floor — each zone's `min_size` is 3 and the create-time `desired_size` is 3. One Ready zone is three hostnames, so the HPA floor of 3 is 1 and 1 and 1. The zone gate stays two. The floor of 2 is refused. Kind and minikube do not plan the pool. Do not set minDomains (ADR 0106). Catalog stays 221.
 
 ---
 
