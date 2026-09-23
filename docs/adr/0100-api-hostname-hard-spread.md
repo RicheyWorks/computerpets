@@ -1,6 +1,6 @@
 # 0100. Hard hostname spread for the API colors
 
-- **Status:** Accepted (the running leader's scale path for a Pending standby is [0101](0101-cluster-autoscaler-leader-scale.md); the healthy-zone hostname count for the HPA floor is [0105](0105-api-hostname-floor.md); this hostname item stays)
+- **Status:** Accepted (the running leader's scale path for a Pending standby is [0101](0101-cluster-autoscaler-leader-scale.md); the healthy-zone hostname count for the HPA floor is [0105](0105-api-hostname-floor.md); the one Ready zone is [0106](0106-api-single-zone-hostname-floor.md); this hostname item stays)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/deployment-blue.yaml`; `deploy/k8s/deployment-green.yaml`; `deploy/k8s/check-api-hostname-hard-spread.sh`
 
