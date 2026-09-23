@@ -1,9 +1,9 @@
-/** Desktop-local GPU sense. The browser has no sensor, so this page stays unread and the sparkline stays empty. Windows and Linux nvidia-smi share the line. Mac reads IOAccelerator into that same line. */
+/** Desktop-local GPU sense. The browser has no sensor, so this page stays unread and the sparkline stays empty. Windows and Linux nvidia-smi share the line. Linux amdgpu sysfs uses that line when nvidia-smi does not. Mac reads IOAccelerator into that same line. */
 
 export const STALE_MS = 20000;
 export const LATER_DOOR = "unsupported";
 
-const SOURCES = ["nvidia-smi", "pdh", "nvidia-smi+pdh", "ioaccelerator"] as const;
+const SOURCES = ["nvidia-smi", "pdh", "nvidia-smi+pdh", "ioaccelerator", "amdgpu"] as const;
 const METRIC_KEYS = ["tempC", "utilPercent", "memoryUsedBytes", "memoryTotalBytes", "powerWatts"] as const;
 
 export type GpuSource = (typeof SOURCES)[number];
@@ -514,21 +514,24 @@ export function sampleFromProbe(probe: unknown, opts: { platform?: string | null
   const rec = probe as Record<string, unknown>;
   if (rec.malformed) return blank("malformed", "malformed", platform || null, nowMs);
   const nvidia = parseNvidiaCsv(rec.nvidiaCsv);
+  const amd = parseNvidiaCsv(rec.amdgpuCsv);
   const pdh = reducePdh(rec.engines, rec.adapterMemory);
   const nvidiaRows = nvidia.malformed ? [] : nvidia.rows;
+  const amdRows = amd.malformed ? [] : amd.rows;
   const pdhRows = pdh.malformed ? [] : pdh.rows;
   const nvidiaBest = pickBest(nvidiaRows);
+  const amdBest = pickBest(amdRows);
   const pdhBest = pickBest(pdhRows);
   const nvidiaCount = nvidiaRows.filter((row) => rowHasMetric(row)).length;
   const pdhCount = pdhRows.filter((row) => rowHasMetric(row)).length;
-  if (!nvidiaBest && !pdhBest) {
-    if (nvidia.malformed || pdh.malformed || nvidia.rejected || pdh.rejected) {
+  if (!nvidiaBest && !amdBest && !pdhBest) {
+    if (nvidia.malformed || amd.malformed || pdh.malformed || nvidia.rejected || amd.rejected || pdh.rejected) {
       return blank("malformed", "malformed", platform || null, nowMs);
     }
     return blank("unread", "missing", platform || null, nowMs);
   }
-  let chosen = (nvidiaBest || pdhBest) as NvidiaRow;
-  let source: GpuSource = nvidiaBest ? (isMac(platform) ? "ioaccelerator" : "nvidia-smi") : "pdh";
+  let chosen = (nvidiaBest || amdBest || pdhBest) as NvidiaRow;
+  let source: GpuSource = nvidiaBest ? (isMac(platform) ? "ioaccelerator" : "nvidia-smi") : (amdBest ? "amdgpu" : "pdh");
   if (nvidiaBest && pdhBest && nvidiaCount === 1 && pdhCount === 1) {
     chosen = {
       index: nvidiaBest.index,
@@ -548,6 +551,15 @@ export function sampleFromProbe(probe: unknown, opts: { platform?: string | null
       }
     });
     source = filled ? "nvidia-smi+pdh" : (isMac(platform) ? "ioaccelerator" : "nvidia-smi");
+  } else if (nvidiaBest) {
+    chosen = nvidiaBest;
+    source = isMac(platform) ? "ioaccelerator" : "nvidia-smi";
+  } else if (amdBest) {
+    chosen = amdBest;
+    source = "amdgpu";
+  } else if (pdhBest) {
+    chosen = pdhBest;
+    source = "pdh";
   }
   if (nowMs == null) return blank("malformed", "malformed", platform || null, null);
   return parseSample({
@@ -570,10 +582,12 @@ export function parseProbeText(text: unknown) {
   const lines = text.split(/\r?\n/);
   if (!lines.some((line) => line.trim() === "END")) return { malformed: true as const };
   let nvidiaCsv: string | null = null;
+  let amdgpuCsv: string | null = null;
   let engines: Array<{ instance: string; util: number | null }> | null = null;
   let adapterMemory: Array<{ instance: string; dedicatedUsage: number | null; dedicatedLimit: number | null }> | null = null;
-  let mode: "nvidia" | "engine" | "memory" | null = null;
+  let mode: "nvidia" | "amdgpu" | "engine" | "memory" | null = null;
   const nvidiaLines: string[] = [];
+  const amdgpuLines: string[] = [];
   for (let i = 0; i < lines.length; i++) {
     const tag = lines[i].trim();
     if (tag === "END") break;
@@ -594,6 +608,26 @@ export function parseProbeText(text: unknown) {
     }
     if (tag === "ENDNVIDIA") {
       nvidiaCsv = nvidiaLines.join("\n");
+      mode = null;
+      continue;
+    }
+    if (tag === "AMDGPU_ABSENT") {
+      amdgpuCsv = null;
+      mode = null;
+      continue;
+    }
+    if (tag === "AMDGPU_EMPTY") {
+      amdgpuCsv = "";
+      mode = null;
+      continue;
+    }
+    if (tag === "AMDGPU") {
+      mode = "amdgpu";
+      amdgpuLines.length = 0;
+      continue;
+    }
+    if (tag === "ENDAMDGPU") {
+      amdgpuCsv = amdgpuLines.join("\n");
       mode = null;
       continue;
     }
@@ -626,6 +660,7 @@ export function parseProbeText(text: unknown) {
       continue;
     }
     if (mode === "nvidia") nvidiaLines.push(tag);
+    else if (mode === "amdgpu") amdgpuLines.push(tag);
     else if (mode === "engine" && engines) {
       const bits = lines[i].split("\t");
       if (bits.length !== 2) return { malformed: true as const };
@@ -641,5 +676,5 @@ export function parseProbeText(text: unknown) {
       adapterMemory.push({ instance: bits[0].trim(), dedicatedUsage: used.value, dedicatedLimit: limit.value });
     }
   }
-  return { nvidiaCsv, engines, adapterMemory, malformed: false as const };
+  return { nvidiaCsv, amdgpuCsv, engines, adapterMemory, malformed: false as const };
 }

@@ -1,9 +1,9 @@
 const assert = require("node:assert/strict");
 const { execFileSync } = require("node:child_process");
 const { EventEmitter } = require("node:events");
-const { mkdtempSync, writeFileSync, chmodSync, rmSync, readFileSync } = require("node:fs");
+const { mkdtempSync, writeFileSync, chmodSync, rmSync, readFileSync, mkdirSync, symlinkSync } = require("node:fs");
 const { tmpdir } = require("node:os");
-const { join } = require("node:path");
+const { dirname, join } = require("node:path");
 const { test } = require("node:test");
 const Sense = require("./gpu-sense.cjs");
 const Gpu = require("./renderer/gpu.js");
@@ -193,6 +193,28 @@ test("Linux spawns the shell probe and keeps a real nvidia-smi reading", async (
   assert.equal(sample.powerWatts, 48.5);
 });
 
+function writeSysfsFile(dir, rel, body) {
+  const file = join(dir, rel);
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(file, body);
+}
+
+function amdCard(root, name, { driver = "amdgpu", pci = null, files = {} } = {}) {
+  const dev = join(root, name, "device");
+  mkdirSync(dev, { recursive: true });
+  if (driver) symlinkSync(driver, join(dev, "driver"));
+  if (pci) writeFileSync(join(dev, "uevent"), `DRIVER=amdgpu\nPCI_ID=${pci}\nPCI_SLOT_NAME=0000:03:00.0\n`);
+  Object.entries(files).forEach(([rel, body]) => writeSysfsFile(dev, rel, body));
+}
+
+function runLinuxProbe(extraEnv) {
+  return execFileSync("/bin/sh", [Sense.PROBE_SH], {
+    encoding: "utf8",
+    timeout: 8000,
+    env: { ...process.env, PATH: "/usr/bin:/bin", ...extraEnv },
+  });
+}
+
 test("Linux without nvidia-smi stays unread and is not zero", async () => {
   const absent = ["NVIDIA_ABSENT", "ENGINE_ABSENT", "MEMORY_ABSENT", "END", ""].join("\n");
   const sample = await Sense.read({
@@ -207,23 +229,229 @@ test("Linux without nvidia-smi stays unread and is not zero", async () => {
   assert.equal(sample.powerWatts, null);
 });
 
-test("the Linux probe script names nvidia-smi and does not invent a zero", () => {
-  const { readFileSync } = require("node:fs");
+test("the Linux probe script names nvidia-smi and amdgpu sysfs and does not invent a zero", () => {
   const text = readFileSync(Sense.PROBE_SH, "utf8");
   assert.match(text, /nvidia-smi/);
+  assert.match(text, /gpu_busy_percent/);
+  assert.match(text, /mem_info_vram_used/);
+  assert.match(text, /mem_info_vram_total/);
   assert.match(text, /NVIDIA_ABSENT/);
   assert.match(text, /NVIDIA_EMPTY/);
+  assert.match(text, /AMDGPU_ABSENT/);
+  assert.match(text, /AMDGPU_EMPTY/);
   assert.match(text, /ENGINE_ABSENT/);
   assert.match(text, /MEMORY_ABSENT/);
-  assert.doesNotMatch(text, /\/sys\/class\/drm|powermetrics|ioreg /);
+  assert.match(text, /\/sys\/class\/drm/);
+  assert.doesNotMatch(text, /powermetrics|ioreg |intel_gpu_top|busy_ns|rps_cur_freq|mem_busy_percent|mem_info_gtt|temp1_input|debugfs/);
   assert.doesNotMatch(text, /tempC\s*=\s*0/);
   assert.doesNotMatch(text, /utilPercent\s*=\s*0/);
+  const emptyRoot = mkdtempSync(join(tmpdir(), "gpu-empty-"));
+  try {
+    const absent = runLinuxProbe({ GPU_SYSFS_ROOT: emptyRoot });
+    assert.match(absent, /NVIDIA_ABSENT/);
+    assert.match(absent, /AMDGPU_ABSENT/);
+    assert.match(absent, /ENGINE_ABSENT/);
+    assert.match(absent, /MEMORY_ABSENT/);
+    assert.match(absent, /\nEND\n?$/);
+    assert.doesNotMatch(absent, /[0-9]/);
+    assert.doesNotMatch(absent, /^ENGINE$/m);
+    assert.doesNotMatch(absent, /^MEMORY$/m);
+  } finally {
+    rmSync(emptyRoot, { recursive: true, force: true });
+  }
   const live = execFileSync("/bin/sh", [Sense.PROBE_SH], { encoding: "utf8", timeout: 8000 });
   assert.match(live, /ENGINE_ABSENT/);
   assert.match(live, /MEMORY_ABSENT/);
   assert.match(live, /\nEND\n?$/);
   assert.doesNotMatch(live, /^ENGINE$/m);
   assert.doesNotMatch(live, /^MEMORY$/m);
+});
+
+test("Linux amdgpu sysfs prints the shared line and ignores Intel and decoys", async () => {
+  const root = mkdtempSync(join(tmpdir(), "gpu-amd-"));
+  const bin = mkdtempSync(join(tmpdir(), "gpu-smi-"));
+  try {
+    amdCard(root, "card2", {
+      pci: "1002:164E",
+      files: { gpu_busy_percent: "80\n" },
+    });
+    amdCard(root, "card10", {
+      pci: "1002:73BF",
+      files: {
+        gpu_busy_percent: "37\n",
+        mem_info_vram_used: "2147483648\n",
+        mem_info_vram_total: "8589934592\n",
+        mem_busy_percent: "50\n",
+        mem_info_gtt_used: "111111111\n",
+        mem_info_gtt_total: "222222222\n",
+        "hwmon/hwmon0/temp1_input": "45000\n",
+        "hwmon/hwmon0/power1_average": "33000000\n",
+      },
+    });
+    amdCard(root, "card0-DP-1", {
+      pci: "1002:FFFF",
+      files: { gpu_busy_percent: "99\n" },
+    });
+    const intel = join(root, "card1");
+    mkdirSync(join(intel, "device"), { recursive: true });
+    symlinkSync("i915", join(intel, "device", "driver"));
+    writeSysfsFile(intel, "device/gpu_busy_percent", "77\n");
+    writeSysfsFile(intel, "gt/gt0/rps_cur_freq_mhz", "1400\n");
+    writeSysfsFile(intel, "gt/gt0/rps_max_freq_mhz", "2000\n");
+    writeSysfsFile(intel, "device/gt/gt0/rps_cur_freq_mhz", "1500\n");
+    writeSysfsFile(intel, "engine/rcs0/busy", "999999\n");
+    const text = runLinuxProbe({ GPU_SYSFS_ROOT: root });
+    assert.match(text, /NVIDIA_ABSENT/);
+    assert.match(text, /AMDGPU\n/);
+    assert.match(text, /amdgpu 1002:164E, \[N\/A\], 80, \[N\/A\], \[N\/A\], \[N\/A\]/);
+    assert.match(text, /amdgpu 1002:73BF, \[N\/A\], 37, 2048, 8192, \[N\/A\]/);
+    assert.match(text, /ENDAMDGPU/);
+    assert.doesNotMatch(text, /99|77|50|45|1400|1500|2000|999999|111111111|222222222|33000000|45000/);
+    const sample = Gpu.sampleFromProbe(Gpu.parseProbeText(text), { platform: "linux", nowMs: NOW });
+    assert.equal(sample.status, "read");
+    assert.equal(sample.source, "amdgpu");
+    assert.equal(sample.name, "amdgpu 1002:73BF");
+    assert.equal(sample.utilPercent, 37);
+    assert.equal(sample.tempC, null);
+    assert.equal(sample.powerWatts, null);
+    assert.equal(sample.memoryUsedBytes, 2048 * 1024 * 1024);
+    assert.equal(sample.memoryTotalBytes, 8192 * 1024 * 1024);
+    assert.equal(Gpu.gpuLine(sample), "GPU amdgpu 1002:73BF · unread · 37% · 2 GiB/8 GiB · unread");
+
+    const tieRoot = mkdtempSync(join(tmpdir(), "gpu-tie-"));
+    try {
+      amdCard(tieRoot, "card10", { pci: "1002:73BF", files: { gpu_busy_percent: "9\n" } });
+      amdCard(tieRoot, "card2", { pci: "1002:164E", files: { gpu_busy_percent: "4\n" } });
+      const tie = runLinuxProbe({ GPU_SYSFS_ROOT: tieRoot });
+      const tieSample = Gpu.sampleFromProbe(Gpu.parseProbeText(tie), { platform: "linux", nowMs: NOW });
+      assert.equal(tieSample.utilPercent, 4);
+      assert.equal(tieSample.name, "amdgpu 1002:164E");
+      assert.equal(tieSample.index, 0);
+    } finally {
+      rmSync(tieRoot, { recursive: true, force: true });
+    }
+
+    const quiet = mkdtempSync(join(tmpdir(), "gpu-quiet-"));
+    try {
+      amdCard(quiet, "card0", {
+        pci: "1002:73BF",
+        files: {
+          gpu_busy_percent: "0\n",
+          mem_info_vram_used: "0\n",
+          mem_info_vram_total: "8589934592\n",
+        },
+      });
+      const zeroText = runLinuxProbe({ GPU_SYSFS_ROOT: quiet });
+      const zeroSample = Gpu.sampleFromProbe(Gpu.parseProbeText(zeroText), { platform: "linux", nowMs: NOW });
+      assert.equal(zeroSample.utilPercent, 0);
+      assert.equal(zeroSample.memoryUsedBytes, 0);
+      assert.equal(zeroSample.memoryTotalBytes, 8192 * 1024 * 1024);
+      assert.equal(zeroSample.tempC, null);
+      assert.equal(Gpu.gpuLine(zeroSample), "GPU amdgpu 1002:73BF · unread · 0% · 0 MiB/8 GiB · unread");
+    } finally {
+      rmSync(quiet, { recursive: true, force: true });
+    }
+
+    const tinyRoot = mkdtempSync(join(tmpdir(), "gpu-tiny-"));
+    try {
+      amdCard(tinyRoot, "card0", {
+        pci: "1002:73BF",
+        files: {
+          gpu_busy_percent: "3\n",
+          mem_info_vram_used: "1000\n",
+          mem_info_vram_total: "8589934592\n",
+        },
+      });
+      const tinyText = runLinuxProbe({ GPU_SYSFS_ROOT: tinyRoot });
+      assert.match(tinyText, /amdgpu 1002:73BF, \[N\/A\], 3, \[N\/A\], 8192, \[N\/A\]/);
+      assert.doesNotMatch(tinyText, /1000/);
+      const tinySample = Gpu.sampleFromProbe(Gpu.parseProbeText(tinyText), { platform: "linux", nowMs: NOW });
+      assert.equal(tinySample.utilPercent, 3);
+      assert.equal(tinySample.memoryUsedBytes, null);
+      assert.equal(tinySample.memoryTotalBytes, 8192 * 1024 * 1024);
+      assert.doesNotMatch(Gpu.gpuLine(tinySample), /0 MiB/);
+    } finally {
+      rmSync(tinyRoot, { recursive: true, force: true });
+    }
+
+    const edge = mkdtempSync(join(tmpdir(), "gpu-edge-"));
+    try {
+      amdCard(edge, "card0", {
+        files: { mem_info_vram_used: "524287\n", mem_info_vram_total: "1048576\n" },
+      });
+      const under = runLinuxProbe({ GPU_SYSFS_ROOT: edge });
+      assert.match(under, /amdgpu, \[N\/A\], \[N\/A\], \[N\/A\], 1, \[N\/A\]/);
+      assert.doesNotMatch(under, /524287/);
+      amdCard(edge, "card4", {
+        pci: "1002:164E",
+        files: {
+          gpu_busy_percent: "101\n",
+          mem_info_vram_used: "999999999999\n",
+          mem_info_vram_total: "1048576\n",
+        },
+      });
+      const bad = runLinuxProbe({ GPU_SYSFS_ROOT: edge });
+      assert.doesNotMatch(bad, /101|999999999999/);
+    } finally {
+      rmSync(edge, { recursive: true, force: true });
+    }
+
+    const closed = mkdtempSync(join(tmpdir(), "gpu-closed-"));
+    try {
+      amdCard(closed, "card0", {
+        pci: "1002:73BF",
+        files: {
+          gpu_busy_percent: "Operation not supported\n",
+          mem_info_vram_total: "0\n",
+          mem_info_vram_used: "0\n",
+          mem_busy_percent: "50\n",
+        },
+      });
+      const empty = runLinuxProbe({ GPU_SYSFS_ROOT: closed });
+      assert.match(empty, /AMDGPU_EMPTY/);
+      assert.doesNotMatch(empty, /[0-9]|Operation/);
+      const emptySample = Gpu.sampleFromProbe(Gpu.parseProbeText(empty), { platform: "linux", nowMs: NOW });
+      assert.equal(emptySample.status, "unread");
+      assert.equal(emptySample.utilPercent, null);
+      assert.doesNotMatch(Gpu.gpuLine(emptySample), /0%/);
+      const blocked = join(closed, "card0", "device", "gpu_busy_percent");
+      rmSync(blocked);
+      mkdirSync(blocked);
+      writeFileSync(join(closed, "card0", "device", "mem_info_vram_total"), "8589934592\n");
+      writeFileSync(join(closed, "card0", "device", "mem_info_vram_used"), "2147483648\n");
+      const noUtil = runLinuxProbe({ GPU_SYSFS_ROOT: closed });
+      assert.match(noUtil, /amdgpu 1002:73BF, \[N\/A\], \[N\/A\], 2048, 8192, \[N\/A\]/);
+      assert.doesNotMatch(noUtil, /, 12,|, 0,/);
+    } finally {
+      rmSync(closed, { recursive: true, force: true });
+    }
+
+    writeFileSync(join(bin, "nvidia-smi"), "#!/bin/sh\nprintf '%s\\n' 'NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5'\nexit 0\n");
+    chmodSync(join(bin, "nvidia-smi"), 0o755);
+    const nvidia = runLinuxProbe({ GPU_SYSFS_ROOT: root, PATH: `${bin}:/usr/bin:/bin` });
+    assert.match(nvidia, /ENDNVIDIA/);
+    assert.doesNotMatch(nvidia, /AMDGPU|73BF|37,/);
+    const nvidiaSample = await Sense.read({
+      platform: "linux",
+      nowMs: NOW,
+      spawn: fakeSpawn(nvidia),
+    });
+    assert.equal(nvidiaSample.source, "nvidia-smi");
+    assert.equal(nvidiaSample.utilPercent, 14);
+    assert.equal(nvidiaSample.tempC, 62);
+
+    writeFileSync(join(bin, "nvidia-smi"), "#!/bin/sh\nexit 0\n");
+    const afterEmpty = runLinuxProbe({ GPU_SYSFS_ROOT: root, PATH: `${bin}:/usr/bin:/bin` });
+    assert.match(afterEmpty, /NVIDIA_EMPTY/);
+    assert.match(afterEmpty, /amdgpu 1002:73BF, \[N\/A\], 37, 2048, 8192, \[N\/A\]/);
+    const fell = Gpu.sampleFromProbe(Gpu.parseProbeText(afterEmpty), { platform: "linux", nowMs: NOW });
+    assert.equal(fell.source, "amdgpu");
+    assert.equal(fell.utilPercent, 37);
+    assert.equal(fell.tempC, null);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+    rmSync(bin, { recursive: true, force: true });
+  }
 });
 
 test("a Windows probe text becomes a real reading", async () => {

@@ -58,6 +58,26 @@ test("Windows, Linux, and Mac sense; another platform stays unsupported", () => 
   assert.equal(linux.tempC, 62);
   assert.equal(linux.utilPercent, 14);
   assert.equal(G.gpuLine(linux), VALID_LINE);
+  const amd = G.sampleFromProbe(
+    { amdgpuCsv: "amdgpu 1002:73BF, [N/A], 37, 2048, 8192, [N/A]" },
+    { platform: "linux", nowMs: NOW },
+  );
+  assert.equal(amd.status, "read");
+  assert.equal(amd.source, "amdgpu");
+  assert.equal(amd.utilPercent, 37);
+  assert.equal(amd.tempC, null);
+  assert.equal(amd.powerWatts, null);
+  assert.equal(amd.memoryUsedBytes, 2048 * 1024 * 1024);
+  assert.equal(G.gpuLine(amd), "GPU amdgpu 1002:73BF · unread · 37% · 2 GiB/8 GiB · unread");
+  const preferNvidia = G.sampleFromProbe(
+    {
+      nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5",
+      amdgpuCsv: "amdgpu 1002:73BF, [N/A], 37, 2048, 8192, [N/A]",
+    },
+    { platform: "linux", nowMs: NOW },
+  );
+  assert.equal(preferNvidia.source, "nvidia-smi");
+  assert.equal(preferNvidia.utilPercent, 14);
   assert.equal(other.status, "unsupported");
   assert.equal(other.tempC, null);
   assert.equal(G.gpuLine(other), "GPU unread · unsupported");
@@ -368,7 +388,12 @@ test("the probe script never plants a zero, and the HUD stays lockstep", () => {
   const appSrc = readFileSync(join(__dirname, "..", "..", "client", "computerpets_client", "app.py"), "utf8");
   assert.match(macProbe, /IOAccelerator/);
   assert.doesNotMatch(macProbe, /powermetrics|sudo/);
+  const linuxProbe = readFileSync(join(__dirname, "..", "gpu-probe.sh"), "utf8");
+  assert.match(linuxProbe, /gpu_busy_percent/);
+  assert.match(linuxProbe, /mem_info_vram_total/);
+  assert.doesNotMatch(linuxProbe, /mem_busy_percent|mem_info_gtt|temp1_input|intel_gpu_top|busy_ns/);
   assert.match(webGpu, /ioaccelerator/);
+  assert.match(webGpu, /amdgpu/);
   assert.match(webGpu, /STALE_MS = 20000/);
   assert.match(webGpu, /export function remember/);
   assert.match(webGpu, /export function sparkline/);
@@ -378,6 +403,7 @@ test("the probe script never plants a zero, and the HUD stays lockstep", () => {
   assert.match(cardSrc, /data-spark=/);
   assert.doesNotMatch(cardSrc, /M1 11\.3/);
   assert.match(pySrc, /ioaccelerator/);
+  assert.match(pySrc, /amdgpu/);
   assert.match(pySrc, /STALE_MS = 20000/);
   assert.match(pySrc, /def remember/);
   assert.match(pySrc, /def sparkline/);

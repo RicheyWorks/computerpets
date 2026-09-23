@@ -14,6 +14,7 @@ import {
   isLinux,
   isMac,
   laterDoor,
+  parseProbeText,
   parseSample,
   present,
   remember,
@@ -104,6 +105,29 @@ test("the browser contract matches the overlay: valid, missing, malformed, stale
   assert.equal(other.tempC, null);
   assert.equal(gpuLine(other), "GPU unread · unsupported");
   assert.equal(linux.powerWatts, 48.5);
+  const amdText = [
+    "NVIDIA_ABSENT",
+    "AMDGPU",
+    "amdgpu 1002:73BF, [N/A], 37, 2048, 8192, [N/A]",
+    "ENDAMDGPU",
+    "ENGINE_ABSENT",
+    "MEMORY_ABSENT",
+    "END",
+  ].join("\n");
+  const amd = sampleFromProbe(parseProbeText(amdText), { platform: "linux", nowMs: NOW });
+  assert.equal(amd.status, "read");
+  assert.equal(amd.source, "amdgpu");
+  assert.equal(amd.utilPercent, 37);
+  assert.equal(amd.tempC, null);
+  assert.equal(amd.powerWatts, null);
+  assert.equal(gpuLine(amd), "GPU amdgpu 1002:73BF · unread · 37% · 2 GiB/8 GiB · unread");
+  const emptyAmd = sampleFromProbe(parseProbeText(["NVIDIA_ABSENT", "AMDGPU_EMPTY", "ENGINE_ABSENT", "MEMORY_ABSENT", "END"].join("\n")), {
+    platform: "linux",
+    nowMs: NOW,
+  });
+  assert.equal(emptyAmd.status, "unread");
+  assert.equal(emptyAmd.utilPercent, null);
+  assert.doesNotMatch(gpuLine(emptyAmd), /0%/);
 });
 
 function at(util, when) {
