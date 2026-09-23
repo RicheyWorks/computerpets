@@ -41,6 +41,7 @@ module "redis" {
   app_cidr_blocks    = var.app_cidr_blocks
   node_type          = var.redis_node_type
   engine_version     = var.redis_engine_version
+  auth_token         = var.redis_auth_token
 }
 
 module "secrets" {

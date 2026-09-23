@@ -36,4 +36,4 @@ A bearer issued before this slice has no `jti` and is **401** until the client v
 - If the token store accepts the claim and the grant store then fails, the bearer is spent and the client must verify again. Both stores are the same Redis, so that window is a crash between the two commands.
 - Two fresh bearers for the same license in the same `exp` second can still `SETEX` the same `download:grant:{licenseJti}:{exp}` key. That reopen is the grant index, not this JWT claim.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** WAF landed as [0074](0074-waf-in-front-of-rate-limiter.md). Redis still has no AUTH token and no transit TLS ([0062](0062-terraform-managed-stores.md)); the app still only reads `REDIS_HOST` / `REDIS_PORT` / `REDIS_TIMEOUT`. Not started here.
+- **Next gap:** WAF landed as [0074](0074-waf-in-front-of-rate-limiter.md). Redis AUTH and transit TLS landed as [0075](0075-redis-auth-and-transit-tls.md). Not started in this ADR.
