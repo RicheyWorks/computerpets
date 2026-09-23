@@ -181,8 +181,10 @@ not at a percent of the request. A JVM that sits on its heap must not
 be read as load.
 
 **metrics-server** (the `metrics.k8s.io` API) is
-`metrics-server.yaml` ([ADR 0084](../../docs/adr/0084-metrics-server.md)).
-That file is also not in the kustomization. Apply it first.
+`metrics-server.yaml` ([ADR 0084](../../docs/adr/0084-metrics-server.md),
+[ADR 0085](../../docs/adr/0085-metrics-server-ha.md)).
+That file is also not in the kustomization. It runs two replicas with
+required hostname anti-affinity. Apply it first.
 `kubectl top pods -n computerpets` must show cpu and memory. Until that
 API answers, applying the HPA does not raise the replica count, so blue
 can stay at 2.
@@ -308,25 +310,31 @@ minor's latest patch instead. Do not commit a real account id.
 Zone spread stays `ScheduleAnyway`. Adding a node does not force a pod
 onto it.
 
-## metrics-server (ADR 0084)
+## metrics-server (ADR 0084, ADR 0085)
 
 `metrics-server.yaml` is **not** in the kustomization. `kubectl apply -k
 deploy/k8s` does not install it. Kind and minikube do not apply it.
 
-The file is upstream [components.yaml v0.9.0](https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.9.0/components.yaml).
+The file is upstream [high-availability-1.21+.yaml v0.9.0](https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.9.0/high-availability-1.21+.yaml).
 Image `registry.k8s.io/metrics-server/metrics-server:v0.9.0`. The
 APIService is `v1beta1.metrics.k8s.io`. That is the API `hpa.yaml` reads
 for CPU and memory. Namespace is `kube-system`. There is no Helm chart
 and no floating tag.
 
-`--kubelet-insecure-tls` is not set. Kubelet scrapes stay verified. The
-APIService does set `insecureSkipTLSVerify: true` once. That is the
-upstream hop from the apiserver to the addon's own serving cert (minted
-in `/tmp`, not the cluster CA). It is not a kubelet skip.
+The Deployment sets `replicas: 2`. Pod anti-affinity is required on
+`kubernetes.io/hostname`, so the second pod stays Pending until a second
+node exists. Rolling update `maxUnavailable` is 1. An addon
+`PodDisruptionBudget` in `kube-system` keeps `minAvailable: 1`. That
+budget is not `pdb.yaml`.
 
-The Deployment does not set `replicas`, so it stays one pod. Upstream
-`high-availability-1.21+.yaml` is not this file. Apply this before
-`hpa.yaml`. If `kubectl top` is empty, do not add the kubelet TLS skip.
+`--kubelet-insecure-tls` is not set. Kubelet scrapes stay verified. This
+file does not mount a kubelet CA. The APIService does set
+`insecureSkipTLSVerify: true` once. That is the upstream hop from the
+apiserver to the addon's own serving cert (minted in `/tmp`, not the
+cluster CA). It is not a kubelet skip.
+
+Apply this before `hpa.yaml`. If `kubectl top` is empty, do not add the
+kubelet TLS skip.
 
 ```bash
 # Prod only. Not part of kubectl apply -k.

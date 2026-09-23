@@ -103,6 +103,7 @@ address, or an API that is not on `main`.
 | [0082](0082-multi-az-node-pool.md) | Private multi-AZ API node pool (one managed node group per zone; no public IP; no SSH) | Accepted |
 | [0083](0083-cluster-autoscaler.md) | Cluster Autoscaler for those node groups (desired size ignored; max at least the HPA ceiling; IRSA) | Accepted |
 | [0084](0084-metrics-server.md) | metrics-server for API resource metrics (upstream v0.9.0; not in the kustomization; kubelet TLS stays on) | Accepted |
+| [0085](0085-metrics-server-ha.md) | High availability for metrics-server (replicas 2, required hostname anti-affinity; still not in the kustomization) | Accepted |
 
 ## How to add one
 
