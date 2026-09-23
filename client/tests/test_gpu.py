@@ -121,15 +121,17 @@ def test_stale_drops_the_old_numbers():
     assert "62" not in gpu_line(stale)
 
 
-def test_linux_reads_nvidia_and_mac_stays_closed():
+def test_linux_reads_nvidia_and_mac_reads_ioaccelerator(monkeypatch, tmp_path):
     assert senses_on("win32")
     assert senses_on("linux")
+    assert senses_on("darwin")
     assert is_mac("darwin")
     assert is_linux("linux")
     assert later_door("win32") is None
     assert later_door("linux") is None
-    assert later_door("darwin") == LATER_DOOR
-    assert LATER_DOOR == "mac-gpu-sense"
+    assert later_door("darwin") is None
+    assert later_door("freebsd") == LATER_DOOR
+    assert LATER_DOOR == "unsupported"
     linux = sample_from_probe(
         {"nvidiaCsv": "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5"},
         platform="linux",
@@ -140,24 +142,62 @@ def test_linux_reads_nvidia_and_mac_stays_closed():
     assert linux["tempC"] == 62
     assert gpu_line(linux) == VALID_LINE
     mac = sample_from_probe(
-        {"nvidiaCsv": "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5"},
+        {"nvidiaCsv": "Apple M2, [N/A], 16, 542, [N/A], [N/A]"},
         platform="darwin",
         now_ms=NOW,
     )
-    assert mac["status"] == "unsupported"
+    assert mac["status"] == "read"
+    assert mac["source"] == "ioaccelerator"
+    assert mac["name"] == "Apple M2"
+    assert mac["utilPercent"] == 16
     assert mac["tempC"] is None
-    assert mac["utilPercent"] is None
-    assert gpu_line(mac) == "GPU unread · mac-gpu-sense"
+    assert mac["powerWatts"] is None
+    assert mac["memoryTotalBytes"] is None
+    assert gpu_line(mac) == "GPU Apple M2 · unread · 16% · 542 MiB/unread · unread"
+    other = sample_from_probe(
+        {"nvidiaCsv": "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5"},
+        platform="freebsd",
+        now_ms=NOW,
+    )
+    assert other["status"] == "unsupported"
+    assert other["tempC"] is None
+    assert gpu_line(other) == "GPU unread · unsupported"
     live = read_local(platform="linux", now_ms=NOW)
     assert live["status"] in {"read", "unread", "malformed"}
     if live["status"] != "read":
         assert live["utilPercent"] is None
         assert live["tempC"] is None
         assert "0%" not in gpu_line(live)
-    assert read_local(platform="darwin", now_ms=NOW)["reason"] == LATER_DOOR
     initial = initial_sample(platform="linux", now_ms=NOW)
     assert initial["status"] == "unread"
     assert "0%" not in gpu_line(initial)
+    assert initial_sample(platform="darwin", now_ms=NOW)["status"] == "unread"
+
+    fixture = "\n".join(
+        [
+            "+-o AGXAccelerator  <class AGXAccelerator, id 0x1, registered>",
+            '{ "model" = "Apple M2"',
+            '  "PerformanceStatistics" = {"Device Utilization %"=16,"In use system memory"=568164352,"Alloc system memory"=16749051904} }',
+            "",
+        ]
+    )
+    fake = tmp_path / "ioreg"
+    fake.write_text("#!/bin/sh\ncat <<'FIXTURE'\n" + fixture + "FIXTURE\n")
+    fake.chmod(0o755)
+    monkeypatch.setenv("PATH", f"{tmp_path}:{__import__('os').environ['PATH']}")
+    probed = read_local(platform="darwin", now_ms=NOW)
+    assert probed["status"] == "read"
+    assert probed["source"] == "ioaccelerator"
+    assert probed["utilPercent"] == 16
+    assert probed["powerWatts"] is None
+    assert probed["tempC"] is None
+    assert "16749051904" not in gpu_line(probed)
+    monkeypatch.setenv("PATH", "/usr/bin:/bin")
+    missing = read_local(platform="darwin", now_ms=NOW)
+    assert missing["status"] == "unread"
+    assert missing["utilPercent"] is None
+    assert missing["tempC"] is None
+    assert "0%" not in gpu_line(missing)
 
 
 TRAIL = "M1 11.3 L71 8.2"
@@ -229,7 +269,7 @@ def test_unread_malformed_and_unsupported_sparklines_stay_empty():
 
     mac = sample_from_probe(
         {"nvidiaCsv": "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5"},
-        platform="darwin",
+        platform="freebsd",
         now_ms=NOW,
     )
     assert mac["status"] == "unsupported"

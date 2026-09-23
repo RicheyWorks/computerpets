@@ -1,10 +1,11 @@
-/** Desktop-local GPU probe. Windows uses PowerShell. Linux uses nvidia-smi. Mac stays unsupported. */
+/** Desktop-local GPU probe. Windows uses PowerShell. Linux uses nvidia-smi. Mac uses IOAccelerator. */
 const { spawn } = require("child_process");
 const path = require("path");
 const Gpu = require("./renderer/gpu.js");
 
 const PROBE_PS1 = path.join(__dirname, "gpu-probe.ps1");
 const PROBE_SH = path.join(__dirname, "gpu-probe.sh");
+const PROBE_MAC = path.join(__dirname, "gpu-probe-mac.sh");
 const TIMEOUT_MS = 8000;
 
 function probeSpec(platform) {
@@ -16,6 +17,9 @@ function probeSpec(platform) {
   }
   if (Gpu.isLinux(platform)) {
     return { command: "/bin/sh", args: [PROBE_SH] };
+  }
+  if (Gpu.isMac(platform)) {
+    return { command: "/bin/sh", args: [PROBE_MAC] };
   }
   return null;
 }
@@ -93,4 +97,4 @@ function read(opts) {
     .catch(() => Gpu.parseSample({ status: "unread", platform, reason: "probe-failed", readAtMs: nowMs }));
 }
 
-module.exports = { read, probeSpec, PROBE_PS1, PROBE_SH, PROBE_SCRIPT: PROBE_PS1, TIMEOUT_MS };
+module.exports = { read, probeSpec, PROBE_PS1, PROBE_SH, PROBE_MAC, PROBE_SCRIPT: PROBE_PS1, TIMEOUT_MS };
