@@ -101,6 +101,7 @@ address, or an API that is not on `main`.
 | [0080](0080-api-pod-topology-spread.md) | Soft hostname topology spread for the API colors (ScheduleAnyway; local replica counts unchanged) | Accepted |
 | [0081](0081-api-pod-zone-spread.md) | Soft zone topology spread beside hostname (ScheduleAnyway; single-zone clusters still schedule) | Accepted |
 | [0082](0082-multi-az-node-pool.md) | Private multi-AZ API node pool (one managed node group per zone; no public IP; no SSH) | Accepted |
+| [0083](0083-cluster-autoscaler.md) | Cluster Autoscaler for those node groups (desired size ignored; max at least the HPA ceiling; IRSA) | Accepted |
 
 ## How to add one
 

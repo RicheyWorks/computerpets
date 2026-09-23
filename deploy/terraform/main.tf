@@ -6,8 +6,9 @@
 #   (no deploy/terraform prior to this slice)
 #
 # This root wires Postgres, Redis, secret shells, CDN, the regional API
-# WAF (ADR 0074), the API HTTPS listener (ADR 0077), and private multi-AZ
-# API workers (ADR 0082). Deny-safe defaults:
+# WAF (ADR 0074), the API HTTPS listener (ADR 0077), private multi-AZ
+# API workers (ADR 0082), and the Cluster Autoscaler role (ADR 0083).
+# Deny-safe defaults:
 # no public DBs, no house crypto in tfvars/state, WAF plan refuses an empty
 # ALB ARN, listener plan refuses a missing ACM certificate. This root does
 # not call ACM. AWS is the reference provider; keepers may fork.
@@ -95,6 +96,17 @@ module "node_pool" {
   cluster_name   = var.eks_cluster_name
   subnets        = var.node_pool_subnets
   instance_types = var.node_pool_instance_types
+}
+
+module "cluster_autoscaler" {
+  count  = var.enable_node_pool && var.enable_cluster_autoscaler ? 1 : 0
+  source = "./modules/cluster_autoscaler"
+
+  project_name      = var.project_name
+  environment       = var.environment
+  aws_region        = var.aws_region
+  cluster_name      = var.eks_cluster_name
+  oidc_provider_arn = var.eks_oidc_provider_arn
 }
 
 # Plan-time gate the test suite can name. The module association carries the
@@ -185,6 +197,39 @@ resource "terraform_data" "node_pool_gate" {
         )
       )
       error_message = "API node pool is fail-closed (ADR 0082). Set eks_cluster_name to the keeper-owned EKS cluster and node_pool_subnets to at least two private subnet ids keyed by availability zone in aws_region (us-east-1a = \"subnet-…\"). One group per zone, no public IP, no SSH. This root does not create the cluster, the VPC, or the subnets. Set enable_node_pool=false only when you intentionally have no workers here (local kind or minikube)."
+    }
+  }
+}
+
+# Plan-time gate for Cluster Autoscaler (ADR 0083). The role is planned
+# only when the node pool is on. Kind and minikube set enable_node_pool
+# false and this gate stays quiet. An empty OIDC ARN passes validate.
+resource "terraform_data" "cluster_autoscaler_gate" {
+  input = {
+    enabled = var.enable_cluster_autoscaler && var.enable_node_pool
+    oidc    = var.eks_oidc_provider_arn
+    region  = var.aws_region
+    cluster = var.eks_cluster_name
+  }
+
+  lifecycle {
+    precondition {
+      condition = (
+        !var.enable_cluster_autoscaler ||
+        !var.enable_node_pool ||
+        (
+          can(regex(
+            "^arn:aws:iam::[0-9]{12}:oidc-provider/oidc\\.eks\\.[a-z0-9-]+\\.amazonaws\\.com/id/[A-Z0-9]{32}$",
+            var.eks_oidc_provider_arn
+          )) &&
+          strcontains(
+            var.eks_oidc_provider_arn,
+            ":oidc-provider/oidc.eks.${var.aws_region}.amazonaws.com/id/"
+          ) &&
+          can(regex("^[A-Za-z0-9][A-Za-z0-9_-]{0,99}$", var.eks_cluster_name))
+        )
+      )
+      error_message = "Cluster Autoscaler is fail-closed (ADR 0083). Set eks_oidc_provider_arn to the keeper-owned EKS OIDC provider in aws_region (arn:aws:iam::ACCOUNT:oidc-provider/oidc.eks.<region>.amazonaws.com/id/…). This root does not create the provider or the cluster. The role trusts only kube-system/cluster-autoscaler. Set enable_cluster_autoscaler=false only when you intentionally will not scale the node groups. Set enable_node_pool=false for kind or minikube (the autoscaler stays off with the workers)."
     }
   }
 }

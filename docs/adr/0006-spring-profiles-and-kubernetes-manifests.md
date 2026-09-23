@@ -63,3 +63,5 @@ No mesh.
   ([0081](0081-api-pod-zone-spread.md)).
 - Private workers in at least two zones are the node pool
   ([0082](0082-multi-az-node-pool.md)). This kustomization does not create them.
+- Cluster Autoscaler grows those groups when pods are Pending
+  ([0083](0083-cluster-autoscaler.md)). It is not in this kustomization.
