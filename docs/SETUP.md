@@ -442,6 +442,11 @@ nodes outside those groups. Kind and minikube do not apply the file
 set of labeled nodes still schedules both pods when two hostnames exist.
 The API Deployments do not select this label
 ([ADR 0091](adr/0091-cluster-autoscaler-node-pool.md)).
+The same file keeps one autoscaler pod during voluntary disruption
+(`minAvailable: 1`, selector `app=cluster-autoscaler`). `minAvailable: 2`
+is not used, because two replicas would then allow zero evictions. Kind
+and minikube do not apply the file, so they do not install this budget
+([ADR 0092](adr/0092-cluster-autoscaler-pdb.md)).
 Resource metrics for that HPA are `deploy/k8s/metrics-server.yaml`
 (upstream high-availability-1.21+.yaml v0.9.0, `replicas: 2`, required
 hostname anti-affinity, APIService `v1beta1.metrics.k8s.io`). It is not in

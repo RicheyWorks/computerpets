@@ -3,12 +3,17 @@
 # anti-affinity, preferred zone anti-affinity, leader election on.
 # Pool pin is ADR 0091: nodeSelector requires kubernetes.io/os=linux and
 # computerpets/node-pool=api. A preference would still admit other nodes.
+# Disruption budget is ADR 0092: policy/v1 PodDisruptionBudget,
+# minAvailable 1, selector app=cluster-autoscaler (the Deployment
+# selector). minAvailable 2 with replicas 2 allows zero voluntary
+# evictions. One pod can drain while the other holds or takes the lease.
 # Not in kustomization.yaml. Local/dev `kubectl apply -k deploy/k8s` does
 # not install this. Kind and minikube set enable_node_pool=false and do
-# not apply this file. That switch does not label their nodes. Applying
-# this file there leaves both pods Pending. That is the feature-off path.
-# Do not delete the pool key to make a laptop apply schedule. There is no
-# overlay directory.
+# not apply this file, so they do not install this budget. That switch
+# does not label their nodes. Applying this file there leaves both pods
+# Pending. That is the feature-off path. Do not delete the pool key to
+# make a laptop apply schedule. Do not apply this budget on a cluster
+# that is not running these two replicas. There is no overlay directory.
 #
 # Before apply, substitute three tokens:
 #   CLUSTER_NAME  -> eks_cluster_name
@@ -37,6 +42,14 @@
 # stays preferred, so a single-zone set of labeled nodes still schedules
 # both pods when two hostnames exist. The API Deployments do not select
 # this label.
+#
+# Disruption budget (ADR 0092). policy/v1 PodDisruptionBudget
+# cluster-autoscaler in kube-system. minAvailable is 1. The selector is
+# app=cluster-autoscaler, the same matchLabels as the Deployment.
+# minAvailable 2 is not used: with two replicas it would block every
+# voluntary eviction, including a drain that should leave the standby.
+# A node crash is not a voluntary disruption. Kind and minikube do not
+# apply this file, so they do not install this budget.
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -238,3 +251,16 @@ spec:
       volumes:
         - name: tmp
           emptyDir: {}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: cluster-autoscaler
+  namespace: kube-system
+  labels:
+    app: cluster-autoscaler
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: cluster-autoscaler

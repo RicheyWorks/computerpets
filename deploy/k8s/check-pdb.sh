@@ -81,12 +81,13 @@ else
   bad "selector is the live blue API color"
 fi
 
-# Addon budget is metrics-server.yaml (ADR 0085). This count is the API budget.
+# Addon budgets are metrics-server.yaml (ADR 0085) and
+# cluster-autoscaler.yaml (ADR 0092). This count is the API budget.
 pdb_count=0
 if [ -d "${ROOT}/deploy/k8s" ]; then
   pdb_count="$(
     grep -l '^kind: PodDisruptionBudget$' "${ROOT}/deploy/k8s/"*.yaml 2>/dev/null \
-      | grep -v '/metrics-server\.yaml$' \
+      | grep -vE '/(metrics-server|cluster-autoscaler)\.yaml$' \
       | wc -l \
       | tr -d ' ' \
     || true
