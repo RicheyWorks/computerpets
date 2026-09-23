@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # ADR 0080 — soft hostname spread on the API Deployments.
-# Zone spread is a second constraint (ADR 0081); check-zone-spread.sh locks it.
-# No cluster. Does not kubectl apply. Local replica counts stay put.
+# Zone spread is a second constraint (ADR 0081). Its action is DoNotSchedule
+# (ADR 0095); check-api-zone-hard-spread.sh locks that item. This script
+# locks the hostname item only. No cluster. Does not kubectl apply.
+# Local replica counts stay put.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -52,6 +54,30 @@ spread_block() {
   ' "$1"
 }
 
+# Print the topologySpreadConstraints list item whose topologyKey matches.
+constraint_item() {
+  local file="$1" key="$2"
+  awk -v key="$key" '
+    $0 ~ /^        - maxSkew:/ {
+      if (capture && hit) print item
+      item=$0
+      capture=1
+      hit=0
+      next
+    }
+    capture && $0 ~ /^      [^ ]/ {
+      if (hit) print item
+      capture=0
+      exit
+    }
+    capture {
+      item=item "\n" $0
+      if (index($0, "topologyKey: " key)) hit=1
+    }
+    END { if (capture && hit) print item }
+  ' "$file"
+}
+
 check_spread() {
   local file="$1" color="$2" name="$3"
   local block other keys
@@ -89,10 +115,13 @@ check_spread() {
   else
     bad "${name} keeps the hostname key beside the zone key (found ${keys})"
   fi
-  if printf '%s\n' "${block}" | grep -qE 'DoNotSchedule|minDomains:|matchLabelKeys:'; then
-    bad "${name} spread block stays soft, with no minDomains"
+  host="$(constraint_item "$file" "kubernetes.io/hostname")"
+  if [ -n "${host}" ] \
+    && printf '%s\n' "${host}" | grep -q 'whenUnsatisfiable: ScheduleAnyway' \
+    && ! printf '%s\n' "${host}" | grep -qE 'DoNotSchedule|minDomains:|matchLabelKeys:'; then
+    ok "${name} hostname constraint stays soft, with no minDomains"
   else
-    ok "${name} spread block stays soft, with no minDomains"
+    bad "${name} hostname constraint stays soft, with no minDomains"
   fi
 }
 
@@ -109,8 +138,6 @@ need_file "$ADR"
 echo "== hostname spread contract =="
 check_spread "$BLUE" blue "blue"
 check_spread "$GREEN" green "green"
-need_not_grep "$BLUE" 'whenUnsatisfiable: DoNotSchedule' "blue does not hard-fail unspreadable pods"
-need_not_grep "$GREEN" 'whenUnsatisfiable: DoNotSchedule' "green does not hard-fail unspreadable pods"
 need_not_grep "$BLUE" 'requiredDuringSchedulingIgnoredDuringExecution' "blue has no required anti-affinity"
 need_not_grep "$GREEN" 'requiredDuringSchedulingIgnoredDuringExecution' "green has no required anti-affinity"
 need_not_grep "$BLUE" 'podAntiAffinity:' "blue does not also anti-affinity"
@@ -156,10 +183,10 @@ if command -v kubectl >/dev/null 2>&1; then
   if kubectl kustomize "${ROOT}/deploy/k8s" >"${kust_out}" 2>/tmp/cp-spread-kust.err; then
     if grep -q 'whenUnsatisfiable: ScheduleAnyway' "${kust_out}" \
       && grep -q 'topologyKey: kubernetes.io/hostname' "${kust_out}" \
-      && ! grep -q 'whenUnsatisfiable: DoNotSchedule' "${kust_out}"; then
-      ok "kustomize output keeps the soft hostname spread"
+      && grep -q 'whenUnsatisfiable: DoNotSchedule' "${kust_out}"; then
+      ok "kustomize output keeps the soft hostname spread beside hard zone spread"
     else
-      bad "kustomize output keeps the soft hostname spread"
+      bad "kustomize output keeps the soft hostname spread beside hard zone spread"
     fi
   else
     bad "kubectl kustomize deploy/k8s failed"

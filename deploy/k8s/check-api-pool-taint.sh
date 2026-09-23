@@ -123,10 +123,10 @@ need_not_grep "$KUSTOM" '^[[:space:]]*-[[:space:]]*metrics-server\.yaml[[:space:
 need_not_grep "$KUSTOM" '^[[:space:]]*-[[:space:]]*cluster-autoscaler\.yaml[[:space:]]*$' "kustomization still omits cluster-autoscaler"
 need_grep "$BLUE" 'replicas: 2' "blue local replica count stays 2"
 need_grep "$GREEN" 'replicas: 0' "green stays the idle slot"
-need_grep "$BLUE" 'whenUnsatisfiable: ScheduleAnyway' "blue spread stays ScheduleAnyway"
-need_grep "$GREEN" 'whenUnsatisfiable: ScheduleAnyway' "green spread stays ScheduleAnyway"
-need_not_grep "$BLUE" 'whenUnsatisfiable: DoNotSchedule' "blue spread is not required"
-need_not_grep "$GREEN" 'whenUnsatisfiable: DoNotSchedule' "green spread is not required"
+# Zone DoNotSchedule is ADR 0095. This check does not own that action.
+# Hostname stays ScheduleAnyway.
+need_grep "$BLUE" 'whenUnsatisfiable: ScheduleAnyway' "blue hostname stays ScheduleAnyway"
+need_grep "$GREEN" 'whenUnsatisfiable: ScheduleAnyway' "green hostname stays ScheduleAnyway"
 need_grep "$HPA" 'minReplicas: 3' "HPA floor stays 3"
 need_grep "$HPA" 'maxReplicas: 10' "HPA ceiling stays 10"
 need_grep "$PDB" 'minAvailable: 2' "API disruption budget stays 2"

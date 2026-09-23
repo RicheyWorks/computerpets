@@ -1,8 +1,8 @@
 # Idle color. Not an HPA target (ADR 0078). Not a PDB target (ADR 0079).
 # Scale up, wait Ready, then patch the Service selector to color=green.
 # See deploy/k8s/README.md.
-# Same probes, secrets, prod profile, and soft hostname and zone spread as blue
-# (ADR 0080, ADR 0081).
+# Same probes, secrets, prod profile, soft hostname spread, and hard zone
+# spread as blue (ADR 0080, ADR 0081, ADR 0095).
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,12 +28,16 @@ spec:
         app: computerpets
         color: green
     spec:
-      # Soft hostname spread (ADR 0080) and soft zone spread (ADR 0081).
-      # Same rules as blue, scoped to color=green, so a cutover scale-up
-      # prefers different nodes and different zones. ScheduleAnyway still
-      # binds when the skew cannot be met. DoNotSchedule on the zone key
-      # would leave that pod Pending on a single-zone cluster and on nodes
-      # that omit topology.kubernetes.io/zone.
+      # Soft hostname spread (ADR 0080). Hard zone spread (ADR 0095).
+      # Same rules as blue, scoped to color=green. Hostname stays
+      # ScheduleAnyway. The zone item is DoNotSchedule, maxSkew 1,
+      # nodeAffinityPolicy Honor, nodeTaintsPolicy Honor. No minDomains.
+      # On two or more pool zones that can take a pod, a cutover scale-up
+      # cannot place every green pod in one zone. One labeled zone still
+      # schedules: a single domain keeps skew at 1. A node that omits
+      # topology.kubernetes.io/zone is skipped. Kind and minikube omit
+      # that label unless a human sets one zone value. Do not set
+      # minDomains.
       # Pool pin (ADR 0093). Same nodeSelector as blue: kubernetes.io/os=linux
       # and computerpets/node-pool=api. Both spread items set
       # nodeAffinityPolicy Honor. Kind and minikube apply this file. Their
@@ -52,7 +56,7 @@ spec:
               color: green
         - maxSkew: 1
           topologyKey: topology.kubernetes.io/zone
-          whenUnsatisfiable: ScheduleAnyway
+          whenUnsatisfiable: DoNotSchedule
           nodeTaintsPolicy: Honor
           nodeAffinityPolicy: Honor
           labelSelector:

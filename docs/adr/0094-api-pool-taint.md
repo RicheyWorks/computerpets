@@ -1,6 +1,6 @@
 # 0094. Taint the API node pool NoSchedule
 
-- **Status:** Accepted
+- **Status:** Accepted (the taint stays; zone `whenUnsatisfiable` is `DoNotSchedule` in [0095](0095-api-zone-hard-spread.md))
 - **Date:** 2026-09-23
 - **Code:** `deploy/terraform/modules/node_pool/main.tf`; `deploy/k8s/deployment-blue.yaml`; `deploy/k8s/deployment-green.yaml`; `deploy/k8s/metrics-server.yaml`; `deploy/k8s/cluster-autoscaler.yaml`; `deploy/k8s/check-api-pool-taint.sh`
 
@@ -39,7 +39,7 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - Pods that were already running on an API worker stay there. `NoSchedule` does not evict them. A later reschedule of Postgres or Redis will not choose a tainted API worker.
 - Kind and minikube apply the toleration and not the taint. Until a node is labeled `computerpets/node-pool=api`, the API pods stay Pending. Do not taint a kind or minikube node. A toleration does not require the taint. One labeled, untainted node still schedules both blue pods.
 - `aws-node` and `kube-proxy` are not in this repo. Amazon EKS does not add this toleration to those DaemonSets. A live apply of the taint can leave a new node NotReady until those DaemonSets tolerate the same key, `Equal`, value `api`, and `NoSchedule`. This slice does not patch them. No live AWS apply.
-- `ScheduleAnyway` can still place every live API pod in one labeled zone. Preferred zone anti-affinity can still place both Cluster Autoscaler pods in one zone. Required zone anti-affinity is not the follow-up.
+- Hard zone spread for the API colors is [0095](0095-api-zone-hard-spread.md). Preferred zone anti-affinity can still place both Cluster Autoscaler pods in one zone. Required zone anti-affinity is not the follow-up.
 - Dropping the taint, softening it to `PREFER_NO_SCHEDULE`, setting `NO_EXECUTE`, dropping a toleration, using `Exists`, tolerating the key from Postgres or Redis, or adding a DaemonSet under `deploy/k8s` fails `check-api-pool-taint.sh`.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** `ScheduleAnyway` can still place every live API pod in one labeled zone. Preferred zone anti-affinity can still place both Cluster Autoscaler pods in one zone. Required zone anti-affinity is not the follow-up. A serving certificate that does not chain to `caBundle` (and is not a system root), or whose SAN is not `metrics-server.kube-system.svc`, still leaves `kubectl top` empty. A kubelet certificate that does not chain to `metrics-server-kubelet-ca` still leaves `kubectl top` empty.
+- **Next gap:** moved. Hard zone spread for the API colors is [0095](0095-api-zone-hard-spread.md). Preferred zone anti-affinity can still place both Cluster Autoscaler pods in one zone. Required zone anti-affinity is not the follow-up. `aws-node` and `kube-proxy` are not in this repo. A serving certificate that does not chain to `caBundle` (and is not a system root), or whose SAN is not `metrics-server.kube-system.svc`, still leaves `kubectl top` empty. A kubelet certificate that does not chain to `metrics-server-kubelet-ca` still leaves `kubectl top` empty.
