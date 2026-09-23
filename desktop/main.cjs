@@ -540,7 +540,8 @@ async function runGuiHarnessSmokes(target) {
   const script = `(async () => {
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     for (let i = 0; i < 60; i++) {
-      if (window.PetGuiHarness && window.PetGuiHarness.snapshot().kind) break;
+      const snap = window.PetGuiHarness && window.PetGuiHarness.snapshot();
+      if (snap && snap.kind && snap.petSrc) break;
       await sleep(100);
     }
     const H = window.PetGuiHarness;

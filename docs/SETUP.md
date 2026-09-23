@@ -34,7 +34,7 @@ The first PyQt6 desk is in `client/`. It uses Qt’s GPU-backed scene (`QGraphic
 - **PyQt6** and **cryptography** — `pip install -e ".[dev]"` from `client/`
 - **GPU Drivers** — optional; without a usable OpenGL surface the scene falls back to Qt software raster and says so
 
-See [client/README.md](../client/README.md). The Electron overlay remains in `desktop/`. It opens when Chromium's GPU compositor is hardware-accelerated. A software fallback keeps the glass closed unless `gpu-path.json` says `expect` is `software`.
+See [client/README.md](../client/README.md). The Electron overlay remains in `desktop/`. It opens when Chromium's GPU compositor is hardware-accelerated. A software fallback keeps the glass closed unless `gpu-path.json` says `expect` is `software`. The host pet draws on a canvas that compositor already composites. A missing canvas context stays blank.
 
 ---
 

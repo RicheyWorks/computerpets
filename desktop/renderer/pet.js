@@ -26,6 +26,23 @@ function clamp(n, a, b) {
 }
 
 const pet = document.getElementById("pet");
+let petSurface = null;
+try {
+  petSurface = window.PetSpriteSurface ? window.PetSpriteSurface.attach(pet) : null;
+} catch {
+  petSurface = null;
+}
+
+function paintPetFrame(src) {
+  if (!petSurface || petSurface.ok !== true) {
+    if (pet && pet.dataset) {
+      pet.dataset.surface = "refused";
+      delete pet.dataset.frame;
+    }
+    return;
+  }
+  petSurface.paint(src);
+}
 const guestEl = document.getElementById("guest");
 const tongueEl = document.getElementById("tongue");
 const shadow = document.getElementById("shadow");
@@ -3268,7 +3285,7 @@ function tick(now) {
 
   const frames = kind.sprites[sim.anim];
   const src = frames[Math.min(sim.frame, frames.length - 1)];
-  if (pet.getAttribute("src") !== src) pet.src = src;
+  paintPetFrame(src);
 
   const G = window.PetGait;
   const p = gaitProfile();
@@ -4622,7 +4639,8 @@ window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
     return {
       kind: kind ? kind.key : null,
       name: kind ? kind.name : null,
-      petSrc: !!(pet && pet.getAttribute("src")),
+      petSrc: !!(pet && pet.dataset && pet.dataset.frame),
+      petSurface: pet && pet.dataset ? pet.dataset.surface || "" : "",
       collapsed: !!(card && card.collapsed),
       hudShow: !!(hud && hud.classList.contains("show")),
       hudCollapsedAttr: hud ? hud.dataset.collapsed || "" : "",
