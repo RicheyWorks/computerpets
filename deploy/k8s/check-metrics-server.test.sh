@@ -31,6 +31,8 @@ copy_tree() {
   cp -a "${ROOT}/deploy/k8s/." "${dest}/deploy/k8s/"
   cp "${ROOT}/docs/adr/0084-metrics-server.md" \
     "${dest}/docs/adr/0084-metrics-server.md"
+  cp "${ROOT}/docs/adr/0085-metrics-server-ha.md" \
+    "${dest}/docs/adr/0085-metrics-server-ha.md"
   cp "${SCRIPT}" "${dest}/deploy/k8s/check-metrics-server.sh"
   chmod +x "${dest}/deploy/k8s/check-metrics-server.sh"
 }
@@ -61,6 +63,20 @@ copy_tree "${BROKEN}"
 sed -i '/- service.yaml/a\  - metrics-server.yaml' \
   "${BROKEN}/deploy/k8s/kustomization.yaml"
 assert_exit 1 "check fails when kustomize would apply metrics-server" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# One replica is the components.yaml shape this gate exists to reject.
+sed -i 's/^  replicas: 2$/  replicas: 1/' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when the addon drops to one replica" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# A preference is not the upstream required anti-affinity.
+sed -i '/podAntiAffinity:/d' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when pod anti-affinity is removed" \
   "${BROKEN}/deploy/k8s/check-metrics-server.sh"
 
 echo
