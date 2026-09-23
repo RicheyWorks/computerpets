@@ -5,14 +5,15 @@
 mock_provider "aws" {}
 
 variables {
-  enable_postgres = true
-  enable_redis    = false
-  enable_secrets  = false
-  enable_cdn      = false
-  enable_waf      = false
-  vpc_id          = "vpc-0123456789abcdef0"
-  private_subnet_ids = ["subnet-aaa", "subnet-bbb"]
-  app_cidr_blocks    = ["10.0.0.0/16"]
+  enable_postgres         = true
+  enable_redis            = false
+  enable_secrets          = false
+  enable_cdn              = false
+  enable_waf              = false
+  enable_api_listener_tls = false
+  vpc_id                  = "vpc-0123456789abcdef0"
+  private_subnet_ids      = ["subnet-aaa", "subnet-bbb"]
+  app_cidr_blocks         = ["10.0.0.0/16"]
 }
 
 run "provisioned_rds_forces_ssl" {

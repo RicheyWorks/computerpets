@@ -22,6 +22,9 @@ import java.util.Set;
  * {@code RATE_LIMIT_BACKEND=memory}, an H2 {@code SPRING_DATASOURCE_URL},
  * a misconfigured {@code SPRING_DATASOURCE_REPLICA_URL}, a half-configured
  * Postgres TLS pair ([ADR 0076](../../docs/adr/0076-postgres-transit-tls.md)),
+ * a JVM keystore or a cleartext public API origin when
+ * {@code API_LISTENER_TLS_REQUIRED} is set
+ * ([ADR 0077](../../docs/adr/0077-api-listener-tls.md)),
  * plain env {@code Secret} injection without an External Secrets /
  * {@code *_FILE} / Vault-agent operator attestation
  * ([ADR 0064](../../docs/adr/0064-secret-operator-prod-refuses-plain-env.md)),
@@ -112,12 +115,14 @@ public class ProductionProfileGuard {
             }
         }
         rejectUnsafePostgresTls();
+        rejectUnsafeApiListenerTls();
         rejectPlainEnvSecrets();
         rejectUnsafeRedisAuth();
         rejectStaleKeysRotatedAt();
         log.info(
-                "Production profile guard passed (Postgres ssl={}, Redis auth={}, ssl={}, microsoft.dev-mode=false, secrets source={}).",
+                "Production profile guard passed (Postgres ssl={}, API listener tls={}, Redis auth={}, ssl={}, microsoft.dev-mode=false, secrets source={}).",
                 postgresSslLabel(),
+                apiListenerTlsRequired() ? "required" : "off",
                 redisAuthRequired() ? "required" : "off",
                 redisSsl() ? "on" : "off",
                 plainSecretAllowed() ? "plain-local-override" : secretsSource.toLowerCase(Locale.ROOT));
@@ -137,6 +142,46 @@ public class ProductionProfileGuard {
                 replicaDatasourceUrl,
                 postgresSslRequired(),
                 postgresSslRootCert());
+    }
+
+    /**
+     * Prod API listener TLS (ADR 0077). The JVM never terminates TLS. When
+     * {@code API_LISTENER_TLS_REQUIRED} is set, the public origin must be
+     * {@code https} on port 443. Unset keeps the in-cluster Service on HTTP.
+     * The URL is not logged.
+     */
+    void rejectUnsafeApiListenerTls() {
+        ApiListenerTls.rejectCleartextPublicListener(
+                apiListenerTlsRequired(),
+                apiPublicBaseUrl(),
+                serverSslEnabled(),
+                serverSslKeyStore());
+    }
+
+    private boolean apiListenerTlsRequired() {
+        return flag("api-listener.tls-required", "API_LISTENER_TLS_REQUIRED");
+    }
+
+    private String apiPublicBaseUrl() {
+        String fromBinding = environment.getProperty("api-listener.public-base-url");
+        if (fromBinding != null && !fromBinding.isBlank()) {
+            return fromBinding.trim();
+        }
+        String fromEnv = environment.getProperty("API_PUBLIC_BASE_URL");
+        return fromEnv == null ? "" : fromEnv.trim();
+    }
+
+    private boolean serverSslEnabled() {
+        return flag("server.ssl.enabled", "SERVER_SSL_ENABLED");
+    }
+
+    private String serverSslKeyStore() {
+        String fromBinding = environment.getProperty("server.ssl.key-store");
+        if (fromBinding != null && !fromBinding.isBlank()) {
+            return fromBinding.trim();
+        }
+        String fromEnv = environment.getProperty("SERVER_SSL_KEY_STORE");
+        return fromEnv == null ? "" : fromEnv.trim();
     }
 
     private boolean postgresSslRequired() {

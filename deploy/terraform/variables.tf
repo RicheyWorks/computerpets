@@ -75,6 +75,12 @@ variable "enable_waf" {
   default     = true
 }
 
+variable "enable_api_listener_tls" {
+  type        = bool
+  description = "Attach an HTTPS listener and an HTTP-to-HTTPS redirect on the keeper-owned API ALB (ADR 0077). Plan/apply refuses to continue unless the ALB, an existing ACM certificate ARN, and the target group ARN are set. This root does not create an ACM certificate. Set false only for local or in-cluster HTTP with no public listener."
+  default     = true
+}
+
 variable "postgres_publicly_accessible" {
   type        = bool
   description = "DENY-SAFE DEFAULT false. Do not flip true for production."
@@ -183,6 +189,57 @@ variable "waf_associate_alb_arn" {
       )
     )
     error_message = "waf_associate_alb_arn must be empty (validate-only) or an application load balancer ARN (arn:aws:elasticloadbalancing:…:loadbalancer/app/…)."
+  }
+}
+
+variable "api_listener_alb_arn" {
+  type        = string
+  description = "Keeper-owned API application load balancer ARN for the HTTPS listener (ADR 0077). Required for plan/apply when enable_api_listener_tls is true. When enable_waf is also true this must equal waf_associate_alb_arn. Empty is accepted by terraform validate only. This root does not create the ALB."
+  default     = ""
+
+  validation {
+    condition = (
+      var.api_listener_alb_arn == "" ||
+      (
+        startswith(var.api_listener_alb_arn, "arn:aws:elasticloadbalancing:") &&
+        strcontains(var.api_listener_alb_arn, ":loadbalancer/app/")
+      )
+    )
+    error_message = "api_listener_alb_arn must be empty (validate-only) or an application load balancer ARN (arn:aws:elasticloadbalancing:…:loadbalancer/app/…)."
+  }
+}
+
+variable "api_listener_certificate_arn" {
+  type        = string
+  description = "Existing ACM certificate ARN for the API listener (ADR 0077). Required for plan/apply when enable_api_listener_tls is true. Empty is accepted by terraform validate only. This root does not call ACM and does not invent a domain."
+  default     = ""
+
+  validation {
+    condition = (
+      var.api_listener_certificate_arn == "" ||
+      (
+        startswith(var.api_listener_certificate_arn, "arn:aws:acm:") &&
+        strcontains(var.api_listener_certificate_arn, ":certificate/")
+      )
+    )
+    error_message = "api_listener_certificate_arn must be empty (validate-only) or an ACM certificate ARN (arn:aws:acm:…:certificate/…)."
+  }
+}
+
+variable "api_listener_target_group_arn" {
+  type        = string
+  description = "Existing target group ARN on the API ALB. The HTTPS listener forwards here. The pods stay HTTP on 8081 (ADR 0077). Empty is accepted by terraform validate only."
+  default     = ""
+
+  validation {
+    condition = (
+      var.api_listener_target_group_arn == "" ||
+      (
+        startswith(var.api_listener_target_group_arn, "arn:aws:elasticloadbalancing:") &&
+        strcontains(var.api_listener_target_group_arn, ":targetgroup/")
+      )
+    )
+    error_message = "api_listener_target_group_arn must be empty (validate-only) or a target group ARN (arn:aws:elasticloadbalancing:…:targetgroup/…)."
   }
 }
 

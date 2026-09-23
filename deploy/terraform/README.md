@@ -24,7 +24,7 @@ deploy/terraform/
   main.tf / variables.tf / outputs.tf / versions.tf / providers.tf
   terraform.tfvars.example
   configmap-managed.example.yaml   # ConfigMap overlay after apply (not kustomized)
-  modules/postgres|redis|secrets|cdn|waf/
+  modules/postgres|redis|secrets|cdn|waf|api_listener/
   check-managed-stores.sh          # deny-safe asserts + terraform validate
   check-managed-stores.test.sh
   check-waf-gate.sh                # JVM buckets == regional ACL (ADR 0074)
@@ -35,6 +35,9 @@ deploy/terraform/
   check-postgres-tls.sh            # JDBC sslmode == rds.force_ssl (ADR 0076)
   check-postgres-tls.test.sh
   postgres_tls.tftest.hcl
+  check-api-listener-tls.sh        # edge HTTPS; pod stays HTTP (ADR 0077)
+  check-api-listener-tls.test.sh
+  api_listener_tls.tftest.hcl
 ```
 
 ## Deny-safe defaults
@@ -49,6 +52,7 @@ deploy/terraform/
 | Bundle bucket | Block public ACLs; CloudFront OAC only. Edge redeem: `deploy/cdn/` ([ADR 0063](../../docs/adr/0063-cdn-edge-redeem-verification.md)). Not the API WAF |
 | API WAF | Regional ACL, default **block**, four buckets matching `RateLimitingFilter` (10/30/60/60 per minute). Plan **refuses** an empty ALB ARN ([ADR 0074](../../docs/adr/0074-waf-in-front-of-rate-limiter.md)) |
 | Postgres transit TLS | **on** for every provisioned RDS instance. Parameter group `rds.force_ssl=1`. `jdbc_url` is `sslmode=require`, or `verify-full` when `postgres_ssl_root_cert` is an absolute PEM path. The app flag is `POSTGRES_SSL_REQUIRED` ([ADR 0076](../../docs/adr/0076-postgres-transit-tls.md)) |
+| API listener TLS | **on** for the public ALB (`enable_api_listener_tls`, default true). HTTPS 443 forwards to the existing target group. Port 80 is `HTTP_301`. Plan **refuses** until the keeper-owned ALB ARN, an existing ACM certificate ARN, and the target group ARN are set. When the WAF is on, the listener ALB must be the same ARN. This root does not call ACM. The JVM stays HTTP on 8081 ([ADR 0077](../../docs/adr/0077-api-listener-tls.md)) |
 | Redis AUTH / TLS | **off** unless `redis_auth_token` is set (`TF_VAR_`, never in git). A token enables AUTH + transit encryption together. The app reads `REDIS_PASSWORD` / `REDIS_SSL` / `REDIS_AUTH_REQUIRED` ([ADR 0075](../../docs/adr/0075-redis-auth-and-transit-tls.md)) |
 
 ## Operator flow
@@ -72,6 +76,7 @@ Then:
 6. If `redis_auth_enabled` is true, set `REDIS_SSL=true` and `REDIS_AUTH_REQUIRED=true`, and inject the same token as `REDIS_PASSWORD` or `REDIS_PASSWORD_FILE` (`openssl rand -hex 16`). Leave all three unset when the output is false.
 7. Set `POSTGRES_SSL_REQUIRED=true` with `spring_datasource_url`. That URL is `sslmode=require` unless you set `postgres_ssl_root_cert` to a PEM you mounted (then `verify-full` and `POSTGRES_SSL_ROOT_CERT`). Do not invent a CA bundle. In-cluster Postgres leaves the flag unset ([ADR 0076](../../docs/adr/0076-postgres-transit-tls.md)).
 8. Keep the ADR 0061 digest verify gate before `kubectl set image`.
+9. For a public API door, set `api_listener_alb_arn` to the same ALB as `waf_associate_alb_arn`, plus an ACM certificate ARN you already have and that ALB's target group. This root does not call ACM. Port 80 redirects to 443. Set `API_LISTENER_TLS_REQUIRED=true` and `API_PUBLIC_BASE_URL=https://<host>`. Leave both unset for in-cluster HTTP. Do not set `server.ssl` ([ADR 0077](../../docs/adr/0077-api-listener-tls.md)). `enable_api_listener_tls=false` is the explicit switch for no public listener.
 
 ## Local verify (no cloud account)
 
@@ -84,7 +89,9 @@ Then:
 ./deploy/terraform/check-redis-auth.test.sh
 ./deploy/terraform/check-postgres-tls.sh
 ./deploy/terraform/check-postgres-tls.test.sh
-terraform -chdir=deploy/terraform test    # mock provider; empty ALB ARN, a short Redis token, and a bad Postgres CA path must fail the plan
+./deploy/terraform/check-api-listener-tls.sh
+./deploy/terraform/check-api-listener-tls.test.sh
+terraform -chdir=deploy/terraform test    # mock provider; empty ALB ARN, empty ACM ARN, a short Redis token, and a bad Postgres CA path must fail the plan
 ```
 
 `check-managed-stores.sh` asserts deny-safe HCL + External Secrets name alignment,
