@@ -247,6 +247,60 @@ def test_linux_reads_nvidia_and_mac_reads_ioaccelerator(monkeypatch, tmp_path):
     assert empty["utilPercent"] is None
     assert "0%" not in gpu_line(empty)
 
+    intel_root = tmp_path / "intel-sysfs"
+    i915 = intel_root / "card0"
+    (i915 / "device").mkdir(parents=True)
+    os.symlink("i915", i915 / "device" / "driver")
+    (i915 / "device" / "uevent").write_text("PCI_ID=8086:9A49\n")
+    (i915 / "gt" / "gt0").mkdir(parents=True)
+    (i915 / "gt" / "gt0" / "rc6_residency_ms").write_text("812345\n")
+    (i915 / "gt" / "gt0" / "rps_act_freq_mhz").write_text("1450\n")
+    xe = intel_root / "card1" / "device"
+    (xe / "tile0" / "gt0" / "gtidle").mkdir(parents=True)
+    os.symlink("xe", xe / "driver")
+    (xe / "tile0" / "gt0" / "gtidle" / "idle_residency_ms").write_text("654321\n")
+    (xe / "tile0" / "memory").mkdir(parents=True)
+    (xe / "tile0" / "memory" / "physical_vram_size_bytes").write_text("17179869184\n")
+    monkeypatch.setenv("GPU_SYSFS_ROOT", str(intel_root))
+    intel_raw = subprocess.run(
+        ["/bin/sh", str(linux_probe_script())],
+        check=False,
+        capture_output=True,
+        text=True,
+        env={**os.environ, "PATH": "/usr/bin:/bin", "GPU_SYSFS_ROOT": str(intel_root)},
+    )
+    assert "INTEL_EMPTY" in intel_raw.stdout
+    assert "812345" not in intel_raw.stdout
+    assert "654321" not in intel_raw.stdout
+    assert "1450" not in intel_raw.stdout
+    assert "17179869184" not in intel_raw.stdout
+    assert "8086" not in intel_raw.stdout
+    intel_sample = sample_from_probe(parse_probe_text(intel_raw.stdout), platform="linux", now_ms=NOW)
+    assert intel_sample["status"] == "unread"
+    assert intel_sample["utilPercent"] is None
+    assert intel_sample["memoryUsedBytes"] is None
+    assert "0%" not in gpu_line(intel_sample)
+    planted = sample_from_probe(
+        parse_probe_text(
+            "\n".join(
+                [
+                    "NVIDIA_ABSENT",
+                    "AMDGPU_ABSENT",
+                    "INTEL_EMPTY",
+                    "i915 8086:9A49, 40, 12, 100, 200, 15",
+                    "ENGINE_ABSENT",
+                    "MEMORY_ABSENT",
+                    "END",
+                ]
+            )
+        ),
+        platform="linux",
+        now_ms=NOW,
+    )
+    assert planted["status"] == "unread"
+    assert planted["utilPercent"] is None
+    assert "12%" not in gpu_line(planted)
+
 
 TRAIL = "M1 11.3 L71 8.2"
 

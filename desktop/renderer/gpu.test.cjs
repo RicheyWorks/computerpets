@@ -391,7 +391,10 @@ test("the probe script never plants a zero, and the HUD stays lockstep", () => {
   const linuxProbe = readFileSync(join(__dirname, "..", "gpu-probe.sh"), "utf8");
   assert.match(linuxProbe, /gpu_busy_percent/);
   assert.match(linuxProbe, /mem_info_vram_total/);
-  assert.doesNotMatch(linuxProbe, /mem_busy_percent|mem_info_gtt|temp1_input|intel_gpu_top|busy_ns/);
+  assert.match(linuxProbe, /INTEL_EMPTY/);
+  assert.match(linuxProbe, /rc6_residency_ms/);
+  assert.match(linuxProbe, /idle_residency_ms/);
+  assert.doesNotMatch(linuxProbe, /mem_busy_percent|mem_info_gtt|temp1_input|intel_gpu_top|busy_ns|\bsleep\b/);
   assert.match(webGpu, /ioaccelerator/);
   assert.match(webGpu, /amdgpu/);
   assert.match(webGpu, /STALE_MS = 20000/);

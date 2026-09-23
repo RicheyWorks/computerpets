@@ -1,6 +1,6 @@
 # 0119. Linux reads amdgpu sysfs for desktop-local GPU sense
 
-- **Status:** Accepted
+- **Status:** Accepted (Intel sysfs fail-closed moved to [0120](0120-linux-intel-sysfs-gpu-sense.md))
 - **Date:** 2026-09-23
 - **Code:** `desktop/gpu-probe.sh`, `desktop/gpu-sense.cjs`, `desktop/renderer/gpu.js`, `web/src/lib/pets/gpu.ts`, `client/computerpets_client/gpu.py`
 

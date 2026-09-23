@@ -239,10 +239,14 @@ test("the Linux probe script names nvidia-smi and amdgpu sysfs and does not inve
   assert.match(text, /NVIDIA_EMPTY/);
   assert.match(text, /AMDGPU_ABSENT/);
   assert.match(text, /AMDGPU_EMPTY/);
+  assert.match(text, /INTEL_ABSENT/);
+  assert.match(text, /INTEL_EMPTY/);
+  assert.match(text, /rc6_residency_ms/);
+  assert.match(text, /idle_residency_ms/);
   assert.match(text, /ENGINE_ABSENT/);
   assert.match(text, /MEMORY_ABSENT/);
   assert.match(text, /\/sys\/class\/drm/);
-  assert.doesNotMatch(text, /powermetrics|ioreg |intel_gpu_top|busy_ns|rps_cur_freq|mem_busy_percent|mem_info_gtt|temp1_input|debugfs/);
+  assert.doesNotMatch(text, /powermetrics|ioreg |intel_gpu_top|busy_ns|rps_cur_freq|mem_busy_percent|mem_info_gtt|temp1_input|debugfs|\/proc\/|\bsleep\b/);
   assert.doesNotMatch(text, /tempC\s*=\s*0/);
   assert.doesNotMatch(text, /utilPercent\s*=\s*0/);
   const emptyRoot = mkdtempSync(join(tmpdir(), "gpu-empty-"));
@@ -250,6 +254,7 @@ test("the Linux probe script names nvidia-smi and amdgpu sysfs and does not inve
     const absent = runLinuxProbe({ GPU_SYSFS_ROOT: emptyRoot });
     assert.match(absent, /NVIDIA_ABSENT/);
     assert.match(absent, /AMDGPU_ABSENT/);
+    assert.match(absent, /INTEL_ABSENT/);
     assert.match(absent, /ENGINE_ABSENT/);
     assert.match(absent, /MEMORY_ABSENT/);
     assert.match(absent, /\nEND\n?$/);
@@ -306,6 +311,7 @@ test("Linux amdgpu sysfs prints the shared line and ignores Intel and decoys", a
     assert.match(text, /amdgpu 1002:164E, \[N\/A\], 80, \[N\/A\], \[N\/A\], \[N\/A\]/);
     assert.match(text, /amdgpu 1002:73BF, \[N\/A\], 37, 2048, 8192, \[N\/A\]/);
     assert.match(text, /ENDAMDGPU/);
+    assert.doesNotMatch(text, /^INTEL/m);
     assert.doesNotMatch(text, /99|77|50|45|1400|1500|2000|999999|111111111|222222222|33000000|45000/);
     const sample = Gpu.sampleFromProbe(Gpu.parseProbeText(text), { platform: "linux", nowMs: NOW });
     assert.equal(sample.status, "read");
@@ -430,7 +436,7 @@ test("Linux amdgpu sysfs prints the shared line and ignores Intel and decoys", a
     chmodSync(join(bin, "nvidia-smi"), 0o755);
     const nvidia = runLinuxProbe({ GPU_SYSFS_ROOT: root, PATH: `${bin}:/usr/bin:/bin` });
     assert.match(nvidia, /ENDNVIDIA/);
-    assert.doesNotMatch(nvidia, /AMDGPU|73BF|37,/);
+    assert.doesNotMatch(nvidia, /AMDGPU|INTEL|73BF|37,/);
     const nvidiaSample = await Sense.read({
       platform: "linux",
       nowMs: NOW,
@@ -451,6 +457,86 @@ test("Linux amdgpu sysfs prints the shared line and ignores Intel and decoys", a
   } finally {
     rmSync(root, { recursive: true, force: true });
     rmSync(bin, { recursive: true, force: true });
+  }
+});
+
+test("Linux i915 and xe sysfs stay unread and do not paint a percent or a memory pair", async () => {
+  const root = mkdtempSync(join(tmpdir(), "gpu-intel-"));
+  try {
+    const i915 = join(root, "card0");
+    mkdirSync(join(i915, "device"), { recursive: true });
+    symlinkSync("i915", join(i915, "device", "driver"));
+    writeFileSync(join(i915, "device", "uevent"), "DRIVER=i915\nPCI_ID=8086:9A49\n");
+    writeSysfsFile(i915, "gt/gt0/rc6_residency_ms", "812345\n");
+    writeSysfsFile(i915, "power/rc6_residency_ms", "812345\n");
+    writeSysfsFile(i915, "gt/gt0/rps_act_freq_mhz", "1450\n");
+    writeSysfsFile(i915, "gt/gt0/rps_max_freq_mhz", "2100\n");
+    writeSysfsFile(i915, "engine/rcs0/busy", "999999999\n");
+    writeSysfsFile(i915, "device/gpu_busy_percent", "77\n");
+    const xe = join(root, "card2");
+    mkdirSync(join(xe, "device"), { recursive: true });
+    symlinkSync("../../bus/pci/drivers/xe", join(xe, "device", "driver"));
+    writeFileSync(join(xe, "device", "uevent"), "DRIVER=xe\nPCI_ID=8086:E20B\n");
+    writeSysfsFile(xe, "device/tile0/gt0/gtidle/name", "gt0-rc\n");
+    writeSysfsFile(xe, "device/tile0/gt0/gtidle/idle_residency_ms", "654321\n");
+    writeSysfsFile(xe, "device/tile0/gt0/gtidle/idle_status", "gt-c0\n");
+    writeSysfsFile(xe, "device/tile0/memory/physical_vram_size_bytes", "17179869184\n");
+    writeSysfsFile(xe, "device/tile0/memory/freq0/max_freq", "1200\n");
+    writeSysfsFile(xe, "device/tile0/gt1/gtidle/idle_residency_ms", "111111\n");
+    const plug = join(root, "card0-DP-1");
+    mkdirSync(join(plug, "device"), { recursive: true });
+    symlinkSync("i915", join(plug, "device", "driver"));
+    writeSysfsFile(plug, "gt/gt0/rc6_residency_ms", "424242\n");
+    const text = runLinuxProbe({ GPU_SYSFS_ROOT: root });
+    assert.match(text, /NVIDIA_ABSENT/);
+    assert.match(text, /AMDGPU_ABSENT/);
+    assert.match(text, /INTEL_EMPTY/);
+    assert.doesNotMatch(text, /^INTEL$/m);
+    assert.doesNotMatch(text, /ENDINTEL/);
+    assert.doesNotMatch(text, /8086|9A49|E20B|812345|654321|1450|2100|999999999|17179869184|1200|111111|424242|77|gt-c0/);
+    assert.doesNotMatch(text, /, 0,/);
+    const sample = Gpu.sampleFromProbe(Gpu.parseProbeText(text), { platform: "linux", nowMs: NOW });
+    assert.equal(sample.status, "unread");
+    assert.equal(sample.reason, "missing");
+    assert.equal(sample.utilPercent, null);
+    assert.equal(sample.memoryUsedBytes, null);
+    assert.equal(sample.memoryTotalBytes, null);
+    assert.equal(sample.tempC, null);
+    assert.equal(sample.powerWatts, null);
+    assert.equal(Gpu.gpuLine(sample), "GPU unread");
+    assert.doesNotMatch(Gpu.gpuLine(sample), /0%/);
+
+    const decoy = mkdtempSync(join(tmpdir(), "gpu-decoy-"));
+    try {
+      const nouveau = join(decoy, "card0");
+      mkdirSync(join(nouveau, "device"), { recursive: true });
+      symlinkSync("nouveau", join(nouveau, "device", "driver"));
+      writeSysfsFile(nouveau, "gt/gt0/rc6_residency_ms", "555\n");
+      const other = runLinuxProbe({ GPU_SYSFS_ROOT: decoy });
+      assert.match(other, /INTEL_ABSENT/);
+      assert.doesNotMatch(other, /555|INTEL_EMPTY/);
+      const otherSample = Gpu.sampleFromProbe(Gpu.parseProbeText(other), { platform: "linux", nowMs: NOW });
+      assert.equal(otherSample.status, "unread");
+      assert.equal(otherSample.utilPercent, null);
+    } finally {
+      rmSync(decoy, { recursive: true, force: true });
+    }
+
+    const planted = [
+      "NVIDIA_ABSENT",
+      "AMDGPU_ABSENT",
+      "INTEL_EMPTY",
+      "i915 8086:9A49, 40, 12, 100, 200, 15",
+      "ENGINE_ABSENT",
+      "MEMORY_ABSENT",
+      "END",
+    ].join("\n");
+    const plantedSample = Gpu.sampleFromProbe(Gpu.parseProbeText(planted), { platform: "linux", nowMs: NOW });
+    assert.equal(plantedSample.status, "unread");
+    assert.equal(plantedSample.utilPercent, null);
+    assert.doesNotMatch(Gpu.gpuLine(plantedSample), /12%|0%/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
   }
 });
 

@@ -128,6 +128,24 @@ test("the browser contract matches the overlay: valid, missing, malformed, stale
   assert.equal(emptyAmd.status, "unread");
   assert.equal(emptyAmd.utilPercent, null);
   assert.doesNotMatch(gpuLine(emptyAmd), /0%/);
+  const intelEmpty = sampleFromProbe(
+    parseProbeText(
+      [
+        "NVIDIA_ABSENT",
+        "AMDGPU_ABSENT",
+        "INTEL_EMPTY",
+        "i915 8086:9A49, 40, 12, 100, 200, 15",
+        "ENGINE_ABSENT",
+        "MEMORY_ABSENT",
+        "END",
+      ].join("\n"),
+    ),
+    { platform: "linux", nowMs: NOW },
+  );
+  assert.equal(intelEmpty.status, "unread");
+  assert.equal(intelEmpty.utilPercent, null);
+  assert.equal(intelEmpty.memoryUsedBytes, null);
+  assert.doesNotMatch(gpuLine(intelEmpty), /12%|0%/);
 });
 
 function at(util, when) {

@@ -1,4 +1,4 @@
-/** Desktop-local GPU sense. The browser has no sensor, so this page stays unread and the sparkline stays empty. Windows and Linux nvidia-smi share the line. Linux amdgpu sysfs uses that line when nvidia-smi does not. Mac reads IOAccelerator into that same line. */
+/** Desktop-local GPU sense. The browser has no sensor, so this page stays unread and the sparkline stays empty. Windows and Linux nvidia-smi share the line. Linux amdgpu sysfs uses that line when nvidia-smi does not. i915 and xe sysfs stay INTEL_EMPTY. Mac reads IOAccelerator into that same line. */
 
 export const STALE_MS = 20000;
 export const LATER_DOOR = "unsupported";
@@ -628,6 +628,10 @@ export function parseProbeText(text: unknown) {
     }
     if (tag === "ENDAMDGPU") {
       amdgpuCsv = amdgpuLines.join("\n");
+      mode = null;
+      continue;
+    }
+    if (tag === "INTEL_ABSENT" || tag === "INTEL_EMPTY") {
       mode = null;
       continue;
     }
