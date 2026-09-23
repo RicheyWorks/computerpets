@@ -172,6 +172,8 @@ resource "aws_eks_node_group" "zone" {
   # A static zone label would be the same on every node in the group, and
   # it would lie if the subnet is not actually in each.key. EKS sets
   # topology.kubernetes.io/zone from the instance AZ.
+  # metrics-server selects computerpets/node-pool=api (ADR 0089).
+  # The API Deployments do not.
   labels = {
     "computerpets/node-pool" = "api"
   }

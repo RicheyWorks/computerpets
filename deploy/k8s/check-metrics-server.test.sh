@@ -39,6 +39,11 @@ copy_tree() {
     "${dest}/docs/adr/0087-metrics-server-serving-cert.md"
   cp "${ROOT}/docs/adr/0088-metrics-server-zone-spread.md" \
     "${dest}/docs/adr/0088-metrics-server-zone-spread.md"
+  cp "${ROOT}/docs/adr/0089-metrics-server-node-pool.md" \
+    "${dest}/docs/adr/0089-metrics-server-node-pool.md"
+  mkdir -p "${dest}/deploy/terraform/modules/node_pool"
+  cp "${ROOT}/deploy/terraform/modules/node_pool/main.tf" \
+    "${dest}/deploy/terraform/modules/node_pool/main.tf"
   cp "${SCRIPT}" "${dest}/deploy/k8s/check-metrics-server.sh"
   chmod +x "${dest}/deploy/k8s/check-metrics-server.sh"
 }
@@ -176,6 +181,34 @@ copy_tree "${BROKEN}"
 sed -i '/whenUnsatisfiable: ScheduleAnyway/a\        minDomains: 2' \
   "${BROKEN}/deploy/k8s/metrics-server.yaml"
 assert_exit 1 "check fails when zone spread sets minDomains" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# Without the pool label, linux nodes outside the API groups count again.
+sed -i '/computerpets\/node-pool: api/d' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when the pool nodeSelector is removed" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# Ignore counts every node, including linux nodes outside the selector.
+sed -i 's/nodeAffinityPolicy: Honor/nodeAffinityPolicy: Ignore/' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when nodeAffinityPolicy is Ignore" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# A missing policy is not the fail-closed Honor contract.
+sed -i '/nodeAffinityPolicy: Honor/d' \
+  "${BROKEN}/deploy/k8s/metrics-server.yaml"
+assert_exit 1 "check fails when nodeAffinityPolicy is removed" \
+  "${BROKEN}/deploy/k8s/check-metrics-server.sh"
+
+copy_tree "${BROKEN}"
+# The addon and the node group must name the same label value.
+sed -i 's/"computerpets\/node-pool" = "api"/"computerpets\/node-pool" = "other"/' \
+  "${BROKEN}/deploy/terraform/modules/node_pool/main.tf"
+assert_exit 1 "check fails when the node pool label value drifts" \
   "${BROKEN}/deploy/k8s/check-metrics-server.sh"
 
 echo
