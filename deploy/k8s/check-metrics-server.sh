@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# ADR 0084 / 0085 / 0086 / 0087 — metrics-server install path, two replicas,
-# required anti-affinity, a fail-closed kubelet CA mount, and a
-# fail-closed serving-cert Secret. No cluster. Does not kubectl apply.
-# The manifest stays out of kustomize.
+# ADR 0084 / 0085 / 0086 / 0087 / 0088 — metrics-server install path, two
+# replicas, required hostname anti-affinity, soft zone spread, a
+# fail-closed kubelet CA mount, and a fail-closed serving-cert Secret.
+# No cluster. Does not kubectl apply. The manifest stays out of kustomize.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -16,6 +16,7 @@ ADR="${ROOT}/docs/adr/0084-metrics-server.md"
 ADR85="${ROOT}/docs/adr/0085-metrics-server-ha.md"
 ADR86="${ROOT}/docs/adr/0086-metrics-server-kubelet-ca.md"
 ADR87="${ROOT}/docs/adr/0087-metrics-server-serving-cert.md"
+ADR88="${ROOT}/docs/adr/0088-metrics-server-zone-spread.md"
 PASS=0
 FAIL=0
 
@@ -88,6 +89,7 @@ need_file "$ADR"
 need_file "$ADR85"
 need_file "$ADR86"
 need_file "$ADR87"
+need_file "$ADR88"
 need_absent "${ROOT}/deploy/k8s/Chart.yaml"
 need_absent "${ROOT}/deploy/k8s/metrics-server/values.yaml"
 
@@ -117,6 +119,13 @@ need_grep_body "$MS" 'podAntiAffinity:' "pod anti-affinity is set"
 need_grep_body "$MS" 'requiredDuringSchedulingIgnoredDuringExecution:' "anti-affinity is required"
 need_not_grep_body "$MS" 'preferredDuringSchedulingIgnoredDuringExecution:' "anti-affinity is not a preference"
 need_grep_body "$MS" 'topologyKey: kubernetes.io/hostname$' "anti-affinity topology is hostname"
+need_grep_body "$MS" 'topologySpreadConstraints:' "zone spread is set"
+need_grep_body "$MS" 'topologyKey: topology\.kubernetes\.io/zone$' "zone spread topology is the zone label"
+need_grep_body "$MS" 'maxSkew: 1$' "zone spread maxSkew is 1"
+need_grep_body "$MS" 'whenUnsatisfiable: ScheduleAnyway$' "zone spread still schedules"
+need_grep_body "$MS" 'nodeTaintsPolicy: Honor$' "zone spread honors taints"
+need_not_grep_body "$MS" 'DoNotSchedule' "zone spread is not a hard failure"
+need_not_grep_body "$MS" 'minDomains:' "zone spread has no zone floor"
 need_grep_body "$MS" '^      maxUnavailable: 1$' "rolling update maxUnavailable is 1"
 need_grep_body "$MS" '^kind: PodDisruptionBudget$' "addon disruption budget is present"
 need_grep_body "$MS" '^  minAvailable: 1$' "addon budget keeps one pod"
@@ -157,6 +166,18 @@ if [ -f "$MS" ]; then
   affinity_count="$(yaml_body "$MS" | grep -c 'podAntiAffinity:' || true)"
   if [ "${affinity_count}" = "1" ]; then ok "one podAntiAffinity"
   else bad "expected one podAntiAffinity (found ${affinity_count})"; fi
+  spread_count="$(yaml_body "$MS" | grep -c 'topologySpreadConstraints:' || true)"
+  if [ "${spread_count}" = "1" ]; then ok "one topologySpreadConstraints"
+  else bad "expected one topologySpreadConstraints (found ${spread_count})"; fi
+  zone_count="$(yaml_body "$MS" | grep -c 'topologyKey: topology.kubernetes.io/zone' || true)"
+  if [ "${zone_count}" = "1" ]; then ok "one zone topology key"
+  else bad "expected one zone topology key (found ${zone_count})"; fi
+  host_key="$(yaml_body "$MS" | grep -c 'topologyKey: kubernetes.io/hostname' || true)"
+  if [ "${host_key}" = "1" ]; then ok "hostname anti-affinity key appears once"
+  else bad "expected one hostname topology key (found ${host_key})"; fi
+  soft_count="$(yaml_body "$MS" | grep -c 'whenUnsatisfiable: ScheduleAnyway' || true)"
+  if [ "${soft_count}" = "1" ]; then ok "ScheduleAnyway appears once"
+  else bad "expected one ScheduleAnyway (found ${soft_count})"; fi
   pdb_count="$(yaml_body "$MS" | grep -c '^kind: PodDisruptionBudget$' || true)"
   if [ "${pdb_count}" = "1" ]; then ok "one addon PodDisruptionBudget"
   else bad "expected one addon PodDisruptionBudget (found ${pdb_count})"; fi
@@ -275,6 +296,18 @@ need_grep "$README" 'ADR 0087' "README names ADR 0087"
 need_grep "$README" 'tls-cert-file' "README names the serving cert flag"
 need_grep "$README" 'metrics-server-serving' "README names the serving Secret"
 need_grep "$README" 'insecureSkipTLSVerify' "README names the APIService skip"
+need_grep "$ADR88" 'topology.kubernetes.io/zone' "zone ADR names the zone key"
+need_grep "$ADR88" 'ScheduleAnyway' "zone ADR names the soft action"
+need_grep "$ADR88" 'DoNotSchedule' "zone ADR names the hard action"
+need_grep "$ADR88" 'kubernetes.io/hostname' "zone ADR keeps hostname anti-affinity"
+need_grep "$ADR88" 'replicas: 2' "zone ADR keeps two replicas"
+need_grep "$ADR88" 'insecureSkipTLSVerify' "zone ADR keeps serving verification"
+need_grep "$ADR88" 'kubelet-insecure-tls' "zone ADR forbids the kubelet TLS skip"
+need_grep "$ADR88" 'Catalog stays 221' "zone ADR keeps catalog 221"
+need_grep "$ADR88" 'not in the kustomization' "zone ADR keeps the file out of kustomize"
+need_grep "$README" 'ADR 0088' "README names ADR 0088"
+need_grep "$README" 'topology.kubernetes.io/zone' "README names the zone key"
+need_grep "$README" 'ScheduleAnyway' "README names the soft zone action"
 
 if command -v kubectl >/dev/null 2>&1; then
   if kubectl apply --dry-run=client --validate=false -f "$MS" >/dev/null 2>&1; then

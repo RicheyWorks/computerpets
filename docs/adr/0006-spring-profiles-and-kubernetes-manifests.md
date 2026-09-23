@@ -66,9 +66,12 @@ No mesh.
 - Cluster Autoscaler grows those groups when pods are Pending
   ([0083](0083-cluster-autoscaler.md)). It is not in this kustomization.
 - Resource metrics for the HPA are upstream metrics-server v0.9.0, two
-  replicas with required hostname anti-affinity, a kubelet CA mount, and
+  replicas with required hostname anti-affinity, soft zone spread
+  (`ScheduleAnyway` on `topology.kubernetes.io/zone`), a kubelet CA mount, and
   a keeper serving certificate
   ([0084](0084-metrics-server.md), [0085](0085-metrics-server-ha.md),
   [0086](0086-metrics-server-kubelet-ca.md),
-  [0087](0087-metrics-server-serving-cert.md)).
-  That manifest is not in this kustomization.
+  [0087](0087-metrics-server-serving-cert.md),
+  [0088](0088-metrics-server-zone-spread.md)).
+  That manifest is not in this kustomization. A single-zone apply still
+  schedules both pods when two hostnames exist.
