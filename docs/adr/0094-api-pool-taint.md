@@ -1,0 +1,45 @@
+# 0094. Taint the API node pool NoSchedule
+
+- **Status:** Accepted
+- **Date:** 2026-09-23
+- **Code:** `deploy/terraform/modules/node_pool/main.tf`; `deploy/k8s/deployment-blue.yaml`; `deploy/k8s/deployment-green.yaml`; `deploy/k8s/metrics-server.yaml`; `deploy/k8s/cluster-autoscaler.yaml`; `deploy/k8s/check-api-pool-taint.sh`
+
+## Context
+
+[0093](0093-api-node-pool.md) left this gap: the API node pool has no taint, so a pod that does not select `computerpets/node-pool=api` can still schedule onto those workers. Inventory on `main` tip `0e5a8b6c9`:
+
+| Surface | What it did | What it did not do |
+|---------|-------------|--------------------|
+| `deploy/terraform/modules/node_pool/main.tf` | One private managed node group per availability zone, at least two. The only custom label is `computerpets/node-pool=api` | No `taint` block. Any pod that fits the node can land there |
+| `deploy/k8s/deployment-blue.yaml` and `deployment-green.yaml` | `nodeSelector` is `kubernetes.io/os: linux` and `computerpets/node-pool: api`. Soft hostname and zone spread stay `ScheduleAnyway` with `nodeAffinityPolicy: Honor`. Both are in the kustomization | No toleration. They select the pool. They do not yet survive a taint on it |
+| `deploy/k8s/metrics-server.yaml` | Same two `nodeSelector` keys ([0089](0089-metrics-server-node-pool.md)). Out of the kustomization | No toleration |
+| `deploy/k8s/cluster-autoscaler.yaml` | Same two `nodeSelector` keys ([0091](0091-cluster-autoscaler-node-pool.md)). Out of the kustomization | No toleration. Preferred zone anti-affinity stays preferred |
+| `deploy/k8s/postgres.yaml` and `redis.yaml` | In-cluster scaffolding, one replica each, no `nodeSelector`. In the kustomization | They do not belong on the API pool. A toleration would admit them |
+| DaemonSets under `deploy/k8s/` | None | `aws-node` and `kube-proxy` are EKS DaemonSets this repo does not own |
+
+`PreferNoSchedule` would still place an untolerated pod on an API worker when the scheduler is out of other room. `NoExecute` would evict pods that are already running. Required zone anti-affinity for Cluster Autoscaler is still the wrong follow-up. Kind and minikube apply blue and green. They do not apply this Terraform module, so they do not gain this taint.
+
+This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip, cosign, CDN edge, secrets rotation, VerifyFieldBounds, ClientAddress, rate-limit bucket sizes, the machine/admin HMAC, the nonce store, the download JWT `jti`, the WAF ACL, Redis AUTH, Postgres JDBC SSL, API listener TLS, the HPA metrics and replica range, the API PDB `minAvailable`, the API hostname/zone topology spread, metrics-server TLS/CA/zone/pin, or Cluster Autoscaler replica count, anti-affinity, leader election, node-pool pin, and disruption budget beyond this cross-link. The API `nodeSelector` stays the pair from [0093](0093-api-node-pool.md). Required zone anti-affinity for Cluster Autoscaler stays unset. Catalog stays 221. No storefront. No DirectX 12 / Vulkan / Solana. No Rui sprites.
+
+## Decision
+
+**Each API managed node group taints `computerpets/node-pool=api:NoSchedule`. Blue, green, metrics-server, and Cluster Autoscaler tolerate that exact key, value, `Equal`, and `NoSchedule`, and they keep the pool `nodeSelector` they already have. Postgres and Redis stay unpinned and do not tolerate the taint. There is no DaemonSet in `deploy/k8s`. Kind and minikube are not tainted. Do not taint a kind or minikube node. A toleration does not require the taint.**
+
+1. **Target.** `aws_eks_node_group.zone` gains one `taint` block: key `computerpets/node-pool`, value `api`, effect `NO_SCHEDULE`. The label on that key stays. This slice does not add a second label, a second taint, a scaling change, or a public IP. No live AWS apply.
+2. **Who tolerates it.** The four pod templates that already select the pool. Each `tolerations` entry is exactly that key, `operator: Equal`, `value: api`, and `effect: NoSchedule`. `Exists` is not used. `NoExecute` is not used. `tolerationSeconds` is not set. The `nodeSelector` on each stays `kubernetes.io/os: linux` and `computerpets/node-pool: api`. A toleration without that selector would also admit nodes outside the pool.
+3. **Who does not.** Postgres and Redis gain neither a selector nor a toleration. A toleration would let those stores land on API workers. No other Deployment in `deploy/k8s` selects the pool. `deploy/k8s` has no DaemonSet. `aws-node` and `kube-proxy` are not in this repo. This slice does not patch them.
+4. **Kind and minikube.** The taint is on the managed node group. `enable_node_pool=false` does not create that group and does not taint a laptop node. `kubectl apply -k deploy/k8s` installs the blue and green tolerations and does not install a Node taint. A toleration does not require the taint. Kind and minikube nodes omit `computerpets/node-pool=api` unless a human labels one, so the API pods stay Pending until that label exists. That missing-label path is unchanged. Do not delete the pool key to make a laptop apply schedule. Do not taint a kind or minikube node. Labeling a node `computerpets/node-pool=api` without the taint still schedules blue, and green once it is scaled, because the toleration is unused on an untainted node and `ScheduleAnyway` still binds. Postgres and Redis still schedule on that untainted node. Tainting the only laptop node (`computerpets/node-pool=api:NoSchedule`) keeps the API, which already tolerates it, and leaves the stores Pending, because they do not. That is not the local path. metrics-server and Cluster Autoscaler stay out of the kustomization, so kind does not apply their tolerations.
+5. **Spread and budgets stay soft.** Hostname and zone spread stay `ScheduleAnyway`. `nodeTaintsPolicy: Honor` stays. These pods tolerate the new taint, so tainted API workers remain in the skew. A control-plane taint they do not tolerate stays out. HPA stays min 3 / max 10. The API PDB stays `minAvailable: 2`. Cluster Autoscaler zone anti-affinity stays preferred. `DoNotSchedule` is not added.
+6. **NoExecute is the wrong effect.** `NoSchedule` blocks new pods that do not tolerate the taint. It does not evict a pod that is already running. `NoExecute` would. `PreferNoSchedule` would still admit an untolerated pod.
+7. **Verify without a cluster.** `check-api-pool-taint.sh` fails when the taint block is missing, when the effect is not `NO_SCHEDULE`, when any of the four workloads drops the toleration or the pool selector, when the toleration operator is not `Equal` or the effect is not `NoSchedule`, when Postgres or Redis tolerates the key, when `deploy/k8s` gains a DaemonSet, or when the local-path wording is dropped. `check-api-pool-taint.test.sh` proves `PREFER_NO_SCHEDULE`, `NO_EXECUTE`, a removed taint block, a preferred effect on blue, `Exists` on green, a drifted metrics-server value, a dropped scaler key, a selector dropped from blue, a Postgres toleration, and a new DaemonSet. No `kubectl apply` and no `terraform apply`.
+
+## Consequences
+
+- On a cluster whose API workers carry the label and the taint, a new pod that does not tolerate `computerpets/node-pool=api:NoSchedule` is not scheduled onto those workers. Blue, green, metrics-server, and Cluster Autoscaler still are, and they still require the label, so they are not scheduled onto other nodes.
+- Pods that were already running on an API worker stay there. `NoSchedule` does not evict them. A later reschedule of Postgres or Redis will not choose a tainted API worker.
+- Kind and minikube apply the toleration and not the taint. Until a node is labeled `computerpets/node-pool=api`, the API pods stay Pending. Do not taint a kind or minikube node. A toleration does not require the taint. One labeled, untainted node still schedules both blue pods.
+- `aws-node` and `kube-proxy` are not in this repo. Amazon EKS does not add this toleration to those DaemonSets. A live apply of the taint can leave a new node NotReady until those DaemonSets tolerate the same key, `Equal`, value `api`, and `NoSchedule`. This slice does not patch them. No live AWS apply.
+- `ScheduleAnyway` can still place every live API pod in one labeled zone. Preferred zone anti-affinity can still place both Cluster Autoscaler pods in one zone. Required zone anti-affinity is not the follow-up.
+- Dropping the taint, softening it to `PREFER_NO_SCHEDULE`, setting `NO_EXECUTE`, dropping a toleration, using `Exists`, tolerating the key from Postgres or Redis, or adding a DaemonSet under `deploy/k8s` fails `check-api-pool-taint.sh`.
+- Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
+- **Next gap:** `ScheduleAnyway` can still place every live API pod in one labeled zone. Preferred zone anti-affinity can still place both Cluster Autoscaler pods in one zone. Required zone anti-affinity is not the follow-up. A serving certificate that does not chain to `caBundle` (and is not a system root), or whose SAN is not `metrics-server.kube-system.svc`, still leaves `kubectl top` empty. A kubelet certificate that does not chain to `metrics-server-kubelet-ca` still leaves `kubectl top` empty.

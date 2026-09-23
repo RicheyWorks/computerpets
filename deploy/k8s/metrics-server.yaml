@@ -300,6 +300,12 @@ spec:
       nodeSelector:
         kubernetes.io/os: linux
         computerpets/node-pool: api
+      # API pool taint (ADR 0094). Kind and minikube do not apply this file.
+      tolerations:
+        - key: computerpets/node-pool
+          operator: Equal
+          value: api
+          effect: NoSchedule
       priorityClassName: system-cluster-critical
       serviceAccountName: metrics-server
       volumes:

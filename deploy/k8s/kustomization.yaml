@@ -27,6 +27,13 @@ resources:
 # minikube nodes omit the pool label unless a human adds it. The API pods
 # stay Pending until then. Do not delete the pool key to make a laptop
 # apply schedule. Postgres and Redis stay unpinned.
+# API pool taint (ADR 0094) is the toleration on both pod templates, so
+# this apply includes it. The taint itself is the node group, not this
+# apply. Kind and minikube nodes are not tainted.
+# A toleration does not require the taint.
+# Do not taint a kind or minikube node.
+# Labeling a node computerpets/node-pool=api without that taint still
+# schedules the API. Postgres and Redis do not tolerate the taint.
 # Multi-AZ workers are the node pool (ADR 0082), not this apply.
 # cluster-autoscaler.yaml (ADR 0083, ADR 0090, ADR 0091, ADR 0092) is
 # also not applied here. Kind and minikube set enable_node_pool=false

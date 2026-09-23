@@ -92,6 +92,9 @@ need_grep "$BLUE" 'nodeSelector:' "blue is pinned to the pool (ADR 0093)"
 need_grep "$GREEN" 'nodeSelector:' "green is pinned to the pool (ADR 0093)"
 need_grep "$BLUE" 'computerpets/node-pool: api$' "blue selects the api pool label"
 need_grep "$GREEN" 'computerpets/node-pool: api$' "green selects the api pool label"
+# API pool taint is ADR 0094. This check only requires the effect.
+need_grep "$MODULE" 'taint-effect=NO_SCHEDULE' "module names the API pool taint"
+need_grep "$MODULE" 'effect[[:space:]]*=[[:space:]]*"NO_SCHEDULE"' "API pool taint effect is NO_SCHEDULE"
 
 python3 - "$MODULE" "$ROOT_MAIN" <<'PY'
 import pathlib, re, sys
