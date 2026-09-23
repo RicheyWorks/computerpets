@@ -39,11 +39,12 @@ cp "${ROOT}/docs/adr/0080-api-pod-topology-spread.md" \
 cp "${SCRIPT}" "${BROKEN}/deploy/k8s/check-topology-spread.sh"
 chmod +x "${BROKEN}/deploy/k8s/check-topology-spread.sh"
 
-# Hard hostname spread is still refused. The zone item is already
-# DoNotSchedule (ADR 0095). Only the hostname line is ScheduleAnyway.
-sed -i '/topologyKey: kubernetes.io\/hostname/{n;s/whenUnsatisfiable: ScheduleAnyway/whenUnsatisfiable: DoNotSchedule/;}' \
+# Soft hostname spread lets every live pod pile onto one node.
+# The zone item stays DoNotSchedule (ADR 0095). Only the hostname line
+# is flipped back to ScheduleAnyway.
+sed -i '/topologyKey: kubernetes.io\/hostname/{n;s/whenUnsatisfiable: DoNotSchedule/whenUnsatisfiable: ScheduleAnyway/;}' \
   "${BROKEN}/deploy/k8s/deployment-blue.yaml"
-assert_exit 1 "check fails when the blue hostname constraint is DoNotSchedule" \
+assert_exit 1 "check fails when the blue hostname constraint is ScheduleAnyway" \
   "${BROKEN}/deploy/k8s/check-topology-spread.sh"
 
 # A selector of only app=computerpets would count the other color during cutover.

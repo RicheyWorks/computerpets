@@ -25,20 +25,22 @@ spec:
         app: computerpets
         color: blue
     spec:
-      # Soft hostname spread (ADR 0080). Hard zone spread (ADR 0095).
-      # Hostname stays ScheduleAnyway. The default nodeTaintsPolicy counts
-      # a tainted control-plane node as an empty domain and would leave the
-      # second local pod, and the HPA floor of 3, Pending. ScheduleAnyway
-      # still prefers a less-loaded hostname and still binds.
-      # The zone item is DoNotSchedule, maxSkew 1, nodeAffinityPolicy Honor,
-      # nodeTaintsPolicy Honor. No minDomains. On two or more pool zones
-      # that can take a pod, this color cannot place every pod in one zone.
-      # One labeled zone still schedules: minDomains is unset, so it behaves
-      # as 1, and the only domain keeps skew at 1. Hard spread does not
-      # invent a second zone. A node that omits topology.kubernetes.io/zone
-      # is skipped. Kind and minikube omit that label unless a human sets
-      # one zone value. Do not set minDomains. That would leave pods Pending
-      # on a laptop that has only one zone label.
+      # Hard hostname spread (ADR 0080, hardened by ADR 0100). Hard zone
+      # spread (ADR 0095). Both items are DoNotSchedule, maxSkew 1,
+      # nodeAffinityPolicy Honor, nodeTaintsPolicy Honor. No minDomains.
+      # On two or more pool hostnames that can take a pod, this color
+      # cannot place every pod on one node. One hostname still schedules:
+      # minDomains is unset, so it behaves as 1, and the only domain keeps
+      # skew at 1. Hard spread does not invent a second node. The second
+      # local replica is not left Pending by this item. Required hostname
+      # anti-affinity is not set. That rule would leave the second pod
+      # Pending on one node. Do not set minDomains. That would treat the
+      # missing hostname as an empty domain and leave the second pod
+      # Pending on a laptop that has only one hostname.
+      # The zone item uses the same action on topology.kubernetes.io/zone.
+      # One labeled zone still schedules. A node that omits that label is
+      # skipped. Kind and minikube omit it unless a human sets one zone
+      # value. Do not set minDomains on the zone item either.
       # Pool pin (ADR 0093). nodeSelector requires kubernetes.io/os=linux
       # and computerpets/node-pool=api, the label the node pool already
       # sets. Both spread items set nodeAffinityPolicy Honor so a node
@@ -51,7 +53,7 @@ spec:
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: ScheduleAnyway
+          whenUnsatisfiable: DoNotSchedule
           nodeTaintsPolicy: Honor
           nodeAffinityPolicy: Honor
           labelSelector:

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ADR 0095 — hard zone spread for the API colors.
 # No cluster. Does not kubectl apply. No terraform apply.
-# Hostname stays ScheduleAnyway. Zone is DoNotSchedule, maxSkew 1,
+# Hostname is DoNotSchedule (ADR 0100). Zone is DoNotSchedule, maxSkew 1,
 # nodeAffinityPolicy Honor, nodeTaintsPolicy Honor. No minDomains.
 # One labeled zone still schedules. A node that omits the zone label
 # does not. HPA, PDB, the pool selector, and the taint toleration stay.
@@ -113,7 +113,8 @@ need_grep "$ADR" 'One labeled zone still schedules' "ADR is honest about one zon
 need_grep "$ADR" 'Do not set minDomains' "ADR refuses minDomains"
 need_grep "$ADR" 'nodeAffinityPolicy: Honor' "ADR names Honor"
 need_grep "$ADR" 'maxSkew: 1' "ADR names maxSkew 1"
-need_grep "$ADR" 'ScheduleAnyway' "ADR keeps hostname ScheduleAnyway"
+need_grep "$ADR" 'ScheduleAnyway' "zone ADR still records the old hostname preference"
+need_grep "$ROOT/docs/adr/0100-api-hostname-hard-spread.md" 'DoNotSchedule' "hostname hard spread is ADR 0100"
 need_grep "$ADR" 'aws-node' "ADR names aws-node"
 need_grep "$ADR" 'kube-proxy' "ADR names kube-proxy"
 need_grep "$ADR" 'No live AWS apply' "ADR does not apply Terraform"
@@ -144,7 +145,7 @@ want_tol = {
     "effect": "NoSchedule",
 }
 actions = {
-    "kubernetes.io/hostname": "ScheduleAnyway",
+    "kubernetes.io/hostname": "DoNotSchedule",
     "topology.kubernetes.io/zone": "DoNotSchedule",
 }
 keys = ["kubernetes.io/hostname", "topology.kubernetes.io/zone"]
@@ -236,10 +237,10 @@ if command -v kubectl >/dev/null 2>&1; then
     host_n="$(grep -c 'topologyKey: kubernetes.io/hostname' "${kust_out}" || true)"
     soft_n="$(grep -c 'whenUnsatisfiable: ScheduleAnyway' "${kust_out}" || true)"
     hard_n="$(grep -c 'whenUnsatisfiable: DoNotSchedule' "${kust_out}" || true)"
-    if [ "${zone_n}" = "2" ] && [ "${host_n}" = "2" ] && [ "${soft_n}" = "2" ] && [ "${hard_n}" = "2" ]; then
-      ok "kustomize output keeps hard zone spread beside soft hostname"
+    if [ "${zone_n}" = "2" ] && [ "${host_n}" = "2" ] && [ "${soft_n}" = "0" ] && [ "${hard_n}" = "4" ]; then
+      ok "kustomize output keeps hard zone spread beside hard hostname"
     else
-      bad "kustomize output keeps hard zone spread beside soft hostname (zone=${zone_n} host=${host_n} soft=${soft_n} hard=${hard_n})"
+      bad "kustomize output keeps hard zone spread beside hard hostname (zone=${zone_n} host=${host_n} soft=${soft_n} hard=${hard_n})"
     fi
   else
     bad "kubectl kustomize deploy/k8s failed"

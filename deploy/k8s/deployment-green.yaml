@@ -1,8 +1,8 @@
 # Idle color. Not an HPA target (ADR 0078). Not a PDB target (ADR 0079).
 # Scale up, wait Ready, then patch the Service selector to color=green.
 # See deploy/k8s/README.md.
-# Same probes, secrets, prod profile, soft hostname spread, and hard zone
-# spread as blue (ADR 0080, ADR 0081, ADR 0095).
+# Same probes, secrets, prod profile, hard hostname spread, and hard zone
+# spread as blue (ADR 0080, ADR 0081, ADR 0095, ADR 0100).
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,16 +28,19 @@ spec:
         app: computerpets
         color: green
     spec:
-      # Soft hostname spread (ADR 0080). Hard zone spread (ADR 0095).
-      # Same rules as blue, scoped to color=green. Hostname stays
-      # ScheduleAnyway. The zone item is DoNotSchedule, maxSkew 1,
-      # nodeAffinityPolicy Honor, nodeTaintsPolicy Honor. No minDomains.
-      # On two or more pool zones that can take a pod, a cutover scale-up
-      # cannot place every green pod in one zone. One labeled zone still
-      # schedules: a single domain keeps skew at 1. A node that omits
+      # Hard hostname spread (ADR 0080, hardened by ADR 0100). Hard zone
+      # spread (ADR 0095). Same rules as blue, scoped to color=green.
+      # Both items are DoNotSchedule, maxSkew 1, nodeAffinityPolicy Honor,
+      # nodeTaintsPolicy Honor. No minDomains. On two or more pool
+      # hostnames that can take a pod, a cutover scale-up cannot place
+      # every green pod on one node. One hostname still schedules: a
+      # single domain keeps skew at 1. The second pod is not left Pending
+      # by this item. Required hostname anti-affinity is not set. Do not
+      # set minDomains. On two or more pool zones that can take a pod, the
+      # same scale-up cannot place every green pod in one zone. One
+      # labeled zone still schedules. A node that omits
       # topology.kubernetes.io/zone is skipped. Kind and minikube omit
-      # that label unless a human sets one zone value. Do not set
-      # minDomains.
+      # that label unless a human sets one zone value.
       # Pool pin (ADR 0093). Same nodeSelector as blue: kubernetes.io/os=linux
       # and computerpets/node-pool=api. Both spread items set
       # nodeAffinityPolicy Honor. Kind and minikube apply this file. Their
@@ -47,7 +50,7 @@ spec:
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: ScheduleAnyway
+          whenUnsatisfiable: DoNotSchedule
           nodeTaintsPolicy: Honor
           nodeAffinityPolicy: Honor
           labelSelector:
