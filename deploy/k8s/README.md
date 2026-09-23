@@ -306,7 +306,7 @@ failure of that zone is not blocked by the budget.
 A cutover does not patch the zone item. Scaling green uses the green
 template, which already has it.
 
-## Cluster Autoscaler (ADR 0083)
+## Cluster Autoscaler (ADR 0083, ADR 0090)
 
 `cluster-autoscaler.yaml` is **not** in the kustomization. `kubectl apply -k
 deploy/k8s` does not install it. Kind and minikube set
@@ -317,6 +317,23 @@ Auto Scaling groups behind the per-zone node groups. Each group's max is
 10, the HPA ceiling. The minimum stays 1. Terraform ignores `desired_size`
 after the first apply. `--balance-similar-node-groups=true` keeps the two
 zones from drifting apart. Scale-down still reads `poddisruptionbudgets`.
+
+The Deployment sets `replicas: 2`. Pod anti-affinity is required on
+`kubernetes.io/hostname` for `app: cluster-autoscaler` in `kube-system`,
+so the second pod stays Pending until a second node exists. Beside that,
+pod anti-affinity prefers a different zone (`topology.kubernetes.io/zone`,
+weight 100). That preference is not required, and there is no
+`topologySpreadConstraints` item, so a single-zone cluster still
+schedules both pods when two hostnames exist. Do not apply this file on
+kind or minikube. Rolling update is `maxUnavailable: 1` and `maxSurge: 0`,
+so a replacement uses a hostname that is already free instead of asking
+for a third node while both pods are up.
+
+Leader election stays on: `--leader-elect=true`, lock `leases`, name
+`cluster-autoscaler`. The ClusterRole can create leases and update that
+named lease. Both pods use ServiceAccount `cluster-autoscaler` and the
+one IRSA role. Only the leader calls `SetDesiredCapacity`. There is no
+second role and no PodDisruptionBudget in this file.
 
 The committed manifest uses three tokens: `CLUSTER_NAME`, `AWS_REGION`, and
 account `000000000000` on the role ARN. Substitute the cluster name, the

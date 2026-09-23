@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# ADR 0083 — Cluster Autoscaler for the multi-AZ API node groups.
+# ADR 0083 / 0090 — Cluster Autoscaler for the multi-AZ API node groups,
+# two replicas, required hostname anti-affinity, preferred zone
+# anti-affinity, and leader election on the leases lock.
 # No cloud account. Does not terraform apply. Does not kubectl apply.
 # Kind/minikube stay off. Terraform must not reset desired_size.
 set -euo pipefail
@@ -19,6 +21,7 @@ BLUE="${ROOT}/deploy/k8s/deployment-blue.yaml"
 GREEN="${ROOT}/deploy/k8s/deployment-green.yaml"
 K8README="${ROOT}/deploy/k8s/README.md"
 ADR="${ROOT}/docs/adr/0083-cluster-autoscaler.md"
+ADR90="${ROOT}/docs/adr/0090-cluster-autoscaler-ha.md"
 PASS=0
 FAIL=0
 
@@ -50,11 +53,37 @@ need_not_grep() {
   else ok "$name"; fi
 }
 
+# House comments may name a forbidden shape. The gate reads the YAML body.
+yaml_body() {
+  grep -vE '^[[:space:]]*#' "$1" || true
+}
+
+need_grep_body() {
+  local file="$1" pattern="$2" name="$3"
+  if [ ! -f "$file" ]; then
+    bad "$name (missing $(basename "$file"))"
+    return
+  fi
+  if yaml_body "$file" | grep -qE -- "$pattern"; then ok "$name"
+  else bad "$name (pattern not found in $(basename "$file") body)"; fi
+}
+
+need_not_grep_body() {
+  local file="$1" pattern="$2" name="$3"
+  if [ ! -f "$file" ]; then
+    bad "$name (missing $(basename "$file"))"
+    return
+  fi
+  if yaml_body "$file" | grep -qE -- "$pattern"; then bad "$name"
+  else ok "$name"; fi
+}
+
 echo "== cluster autoscaler files =="
 need_file "$CA"
 need_file "$POOL"
 need_file "$MANIFEST"
 need_file "$ADR"
+need_file "$ADR90"
 need_file "$HPA"
 need_file "$KUSTOM"
 
@@ -113,7 +142,20 @@ need_grep "$MANIFEST" '--balance-similar-node-groups=true' "similar node groups 
 need_grep "$MANIFEST" '--skip-nodes-with-system-pods=false' "EKS DaemonSets do not block scale-down"
 need_grep "$MANIFEST" 'poddisruptionbudgets' "scale-down can read disruption budgets"
 need_grep "$MANIFEST" 'namespace: kube-system' "autoscaler runs in kube-system"
-need_grep "$MANIFEST" 'replicas: 1' "one autoscaler replica"
+need_grep_body "$MANIFEST" '^  replicas: 2$' "Deployment replicas is 2"
+need_not_grep_body "$MANIFEST" '^  replicas: 1$' "Deployment is not a single replica"
+need_grep_body "$MANIFEST" 'maxUnavailable: 1' "rolling update can drop one pod"
+need_grep_body "$MANIFEST" 'maxSurge: 0' "rolling update does not ask for a third hostname"
+need_grep_body "$MANIFEST" 'requiredDuringSchedulingIgnoredDuringExecution:' "hostname anti-affinity is required"
+need_grep_body "$MANIFEST" 'preferredDuringSchedulingIgnoredDuringExecution:' "zone anti-affinity is preferred"
+need_grep_body "$MANIFEST" 'topologyKey: kubernetes.io/hostname$' "required topology is hostname"
+need_grep_body "$MANIFEST" 'topologyKey: topology.kubernetes.io/zone$' "preferred topology is zone"
+need_grep_body "$MANIFEST" '--leader-elect=true' "leader election is explicitly on"
+need_grep_body "$MANIFEST" '--leader-elect-resource-lock=leases' "leader lock is leases"
+need_grep_body "$MANIFEST" '--leader-elect-resource-name=cluster-autoscaler' "leader lock name matches the lease RBAC"
+need_not_grep_body "$MANIFEST" '--leader-elect=false' "leader election is not turned off"
+need_not_grep_body "$MANIFEST" 'topologySpreadConstraints:' "zone preference is anti-affinity, not a spread constraint"
+need_not_grep_body "$MANIFEST" 'DoNotSchedule' "zone preference is not a hard schedule gate"
 need_grep "$MANIFEST" 'enable_node_pool=false' "manifest names the kind switch"
 need_not_grep "$MANIFEST" ':latest' "image is not floating latest"
 need_not_grep "$MANIFEST" 'karpenter' "manifest does not install Karpenter"
@@ -126,6 +168,11 @@ need_grep "$K8README" 'ADR 0083' "k8s README names ADR 0083"
 need_grep "$ADR" 'Catalog stays 221' "catalog stays 221"
 need_grep "$ADR" 'No Rui sprites' "no Rui sprites"
 need_grep "$ADR" 'Karpenter' "ADR says why Karpenter is not the scaler"
+need_grep "$ADR90" 'Catalog stays 221' "HA ADR keeps catalog 221"
+need_grep "$ADR90" 'No Rui sprites' "HA ADR has no Rui sprites"
+need_grep "$ADR90" 'replicas: 2' "HA ADR names two replicas"
+need_grep "$ADR90" 'leader election' "HA ADR names leader election"
+need_grep "$K8README" 'ADR 0090' "k8s README names ADR 0090"
 
 python3 - "$POOL" "$HPA" "$CA" "$MANIFEST" <<'PY'
 import pathlib, re, sys
@@ -196,6 +243,94 @@ check(kinds == [
     "RoleBinding",
     "Deployment",
 ], "manifest is the six autoscaler objects in order")
+if failed:
+    sys.exit(1)
+PY
+
+python3 - "$MANIFEST" <<'PY'
+import pathlib, sys
+import yaml
+
+manifest = pathlib.Path(sys.argv[1]).read_text()
+docs = [doc for doc in yaml.safe_load_all(manifest) if doc]
+failed = False
+
+def check(cond, name):
+    global failed
+    if cond:
+        print(f"ok - {name}")
+    else:
+        print(f"not ok - {name}")
+        failed = True
+
+deps = [doc for doc in docs if doc.get("kind") == "Deployment"]
+check(len(deps) == 1, "one Cluster Autoscaler Deployment")
+dep = deps[0] if deps else {}
+spec = dep.get("spec") or {}
+check(spec.get("replicas") == 2, "parsed replicas is 2")
+rolling = (spec.get("strategy") or {}).get("rollingUpdate") or {}
+check(rolling.get("maxUnavailable") == 1, "parsed maxUnavailable is 1")
+check(rolling.get("maxSurge") == 0, "parsed maxSurge is 0")
+
+pod = ((spec.get("template") or {}).get("spec") or {})
+check(pod.get("serviceAccountName") == "cluster-autoscaler", "pods use the IRSA service account")
+check("topologySpreadConstraints" not in pod, "pod spec has no topology spread constraint")
+anti = ((pod.get("affinity") or {}).get("podAntiAffinity") or {})
+required = anti.get("requiredDuringSchedulingIgnoredDuringExecution") or []
+preferred = anti.get("preferredDuringSchedulingIgnoredDuringExecution") or []
+
+def term_key(term):
+    return term.get("topologyKey")
+
+def term_app(term):
+    return ((term.get("labelSelector") or {}).get("matchLabels") or {}).get("app")
+
+req_keys = [term_key(term) for term in required]
+check(req_keys == ["kubernetes.io/hostname"], "required anti-affinity is hostname only")
+check(all(term_app(term) == "cluster-autoscaler" for term in required) and len(required) == 1,
+      "required anti-affinity selects app=cluster-autoscaler")
+check(all(term.get("namespaces") == ["kube-system"] for term in required),
+      "required anti-affinity is limited to kube-system")
+
+preferred_zones = []
+for item in preferred:
+    term = item.get("podAffinityTerm") or {}
+    preferred_zones.append((item.get("weight"), term_key(term), term_app(term), term.get("namespaces")))
+check(preferred_zones == [(100, "topology.kubernetes.io/zone", "cluster-autoscaler", ["kube-system"])],
+      "preferred anti-affinity is zone weight 100 in kube-system")
+check("topology.kubernetes.io/zone" not in req_keys, "zone anti-affinity is not required")
+
+containers = pod.get("containers") or []
+command = containers[0].get("command") if containers else []
+command = command or []
+check("--leader-elect=true" in command, "command turns leader election on")
+check("--leader-elect-resource-lock=leases" in command, "command pins the lease lock")
+check("--leader-elect-resource-name=cluster-autoscaler" in command, "command pins the lease name")
+check(not any(str(arg) == "--leader-elect=false" or str(arg).startswith("--leader-elect=false") for arg in command),
+      "command does not turn leader election off")
+check(command.count("./cluster-autoscaler") == 1, "command starts the autoscaler binary once")
+
+roles = [doc for doc in docs if doc.get("kind") == "ClusterRole"]
+rules = (roles[0].get("rules") if roles else []) or []
+create_ok = False
+update_ok = False
+for rule in rules:
+    groups = rule.get("apiGroups") or []
+    resources = rule.get("resources") or []
+    verbs = rule.get("verbs") or []
+    names = rule.get("resourceNames") or []
+    if "coordination.k8s.io" in groups and "leases" in resources:
+        if "create" in verbs and not names:
+            create_ok = True
+        if "get" in verbs and "update" in verbs and names == ["cluster-autoscaler"]:
+            update_ok = True
+check(create_ok and update_ok, "ClusterRole can create leases and update the named autoscaler lease")
+
+accounts = [doc for doc in docs if doc.get("kind") == "ServiceAccount"]
+check(len(accounts) == 1, "one service account")
+ann = ((accounts[0].get("metadata") or {}).get("annotations") or {}) if accounts else {}
+check(ann.get("eks.amazonaws.com/role-arn", "").startswith("arn:aws:iam::000000000000:role/"),
+      "IRSA annotation stays the placeholder role")
 if failed:
     sys.exit(1)
 PY
