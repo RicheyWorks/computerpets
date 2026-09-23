@@ -855,6 +855,8 @@ function windowsPerch() {
     return fail("usable rect below MIN", { box });
   }
   if (W.laterDoor("win32") !== null) return fail("win32 should enumerate", {});
+  if (W.laterDoor("linux") !== null) return fail("linux should enumerate", {});
+  if (!W.enumeratesOn("linux")) return fail("linux enumeratesOn", {});
   if (W.laterDoor("darwin") !== W.LATER_DOOR) return fail("darwin later door drifted", {});
 
   const fixture = [{ id: "8", x: 200, y: 80, width: 700, height: 580 }];
@@ -881,7 +883,7 @@ function windowsPerch() {
     [
       "windows.parseEnumText",
       "windows.takeRects.filter=overlay+min+taskbar+tool+cloaked",
-      "windows.laterDoor=win32|darwin",
+      "windows.laterDoor=win32|linux|darwin",
       "window-play.playFor=budgie:perch,cat:ledge",
       "window-play.pickTarget.perch+ledge",
       "window-play.beginPlay.approach",

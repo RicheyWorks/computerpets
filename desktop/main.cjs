@@ -893,9 +893,13 @@ ipcMain.handle("nft-quote", async (_e, nft, line) => {
   }
 });
 
-/** Real top-level window bounds on Windows. Rects only. Mac/Linux stay a later door. */
+/** Real top-level window bounds on Windows and on Linux X11. Rects only. Mac stays a later door. */
 let windowTick = null;
 let windowBusy = false;
+
+function windowEnumsHere() {
+  return Desk.isWindows(process.platform) || Desk.isLinux(process.platform);
+}
 
 function overlaySkipIds() {
   const ids = [];
@@ -919,7 +923,7 @@ function overlaySkipIds() {
 }
 
 function pushWindowRects() {
-  if (!Desk.isWindows(process.platform)) return;
+  if (!windowEnumsHere()) return;
   if (!win || win.isDestroyed() || windowBusy) return;
   windowBusy = true;
   const area = floorOf();
@@ -945,7 +949,7 @@ function pushWindowRects() {
 }
 
 function startWindowTick() {
-  if (!Desk.isWindows(process.platform) || windowTick) return;
+  if (!windowEnumsHere() || windowTick) return;
   pushWindowRects();
   windowTick = setInterval(pushWindowRects, 750);
 }
