@@ -1,6 +1,6 @@
 # 0088. Zone spread for metrics-server
 
-- **Status:** Accepted (the pool pin is [0089](0089-metrics-server-node-pool.md); soft zone spread and required hostname anti-affinity stay)
+- **Status:** Superseded in part by [0098](0098-metrics-server-zone-hard-spread.md) (the zone action is `DoNotSchedule`; one labeled zone still schedules; required hostname anti-affinity stays; the pool pin is [0089](0089-metrics-server-node-pool.md))
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/metrics-server.yaml`; `deploy/k8s/check-metrics-server.sh`
 

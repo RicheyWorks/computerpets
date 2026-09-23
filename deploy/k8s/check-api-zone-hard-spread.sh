@@ -6,7 +6,7 @@
 # One labeled zone still schedules. A node that omits the zone label
 # does not. HPA, PDB, the pool selector, and the taint toleration stay.
 # Cluster Autoscaler zone anti-affinity stays preferred. metrics-server
-# zone spread stays ScheduleAnyway.
+# zone spread is DoNotSchedule (ADR 0098).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -90,13 +90,13 @@ need_grep "$KUSTOM" 'ADR 0095' "kustomize comment names the hard zone spread"
 need_grep "$KUSTOM" 'One labeled zone still schedules' "kustomize comment is honest about one zone"
 need_grep "$KUSTOM" 'Do not set minDomains' "kustomize comment refuses minDomains"
 
-echo "== scaler and metrics-server stay soft on zone =="
+echo "== scaler stays preferred; metrics-server zone spread is ADR 0098 =="
 need_grep "$CA" 'preferredDuringSchedulingIgnoredDuringExecution' "cluster-autoscaler zone rule stays preferred"
 need_grep "$CA" 'topologyKey: topology.kubernetes.io/zone' "cluster-autoscaler still names the zone key"
 need_not_grep "$CA" 'topologySpreadConstraints:' "cluster-autoscaler has no topology spread constraint"
 need_not_grep "$CA" 'DoNotSchedule' "cluster-autoscaler zone rule is not DoNotSchedule"
-need_grep "$METRICS" 'whenUnsatisfiable: ScheduleAnyway' "metrics-server zone spread stays ScheduleAnyway"
-need_not_grep "$METRICS" 'whenUnsatisfiable: DoNotSchedule' "metrics-server zone spread is not DoNotSchedule"
+need_grep "$METRICS" 'whenUnsatisfiable: DoNotSchedule' "metrics-server zone spread is DoNotSchedule (ADR 0098)"
+need_not_grep "$METRICS" 'whenUnsatisfiable: ScheduleAnyway' "metrics-server zone spread is not ScheduleAnyway"
 need_not_grep "$METRICS" 'minDomains:' "metrics-server zone spread has no minDomains"
 
 echo "== docs =="
@@ -217,8 +217,8 @@ if ms_constraints:
     item = ms_constraints[0]
     check(item.get("topologyKey") == "topology.kubernetes.io/zone",
           "parsed metrics-server spread key stays the zone")
-    check(item.get("whenUnsatisfiable") == "ScheduleAnyway",
-          "parsed metrics-server zone spread stays ScheduleAnyway")
+    check(item.get("whenUnsatisfiable") == "DoNotSchedule",
+          "parsed metrics-server zone spread is DoNotSchedule (ADR 0098)")
     check(item.get("maxSkew") == 1, "parsed metrics-server maxSkew stays 1")
     check("minDomains" not in item, "parsed metrics-server has no minDomains")
 

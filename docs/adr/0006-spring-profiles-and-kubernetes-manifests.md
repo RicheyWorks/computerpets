@@ -85,15 +85,17 @@ No mesh.
   [0092](0092-cluster-autoscaler-pdb.md)). It is not in
   this kustomization.
 - Resource metrics for the HPA are upstream metrics-server v0.9.0, two
-  replicas with required hostname anti-affinity, soft zone spread
-  (`ScheduleAnyway` on `topology.kubernetes.io/zone`), a kubelet CA mount, and
+  replicas with required hostname anti-affinity, hard zone spread
+  (`DoNotSchedule` on `topology.kubernetes.io/zone`; one labeled zone
+  still schedules), a kubelet CA mount, and
   a keeper serving certificate
   ([0084](0084-metrics-server.md), [0085](0085-metrics-server-ha.md),
   [0086](0086-metrics-server-kubelet-ca.md),
   [0087](0087-metrics-server-serving-cert.md),
   [0088](0088-metrics-server-zone-spread.md),
-  [0089](0089-metrics-server-node-pool.md)).
+  [0089](0089-metrics-server-node-pool.md),
+  [0098](0098-metrics-server-zone-hard-spread.md)).
   That manifest is not in this kustomization. `nodeSelector` requires
   `computerpets/node-pool=api`, so kind and minikube stay off the file.
   A single-zone set of labeled nodes still schedules both pods when two
-  hostnames exist.
+  hostnames exist and the nodes carry one zone value. Do not set minDomains.
