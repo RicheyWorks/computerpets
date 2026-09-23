@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
-# ADR 0105 — hostname floor for two healthy zones. The per-zone number
-# moved to 3 in ADR 0106 so one Ready zone does not stack 2 and 1.
-# min_size and create-time desired_size are 3. Two healthy zones are
-# six hostnames. HPA min stays 3 because the PDB keeps 2.
-# The floor of 1 and the ADR 0105 floor of 2 are refused.
-# No minDomains. No required hostname anti-affinity.
+# ADR 0108 — one Ready zone holds the HPA ceiling.
+# maxReplicas is 3, which is min_size 3 and the HPA floor.
+# One Ready zone holds that ceiling at one pod per hostname.
+# The ADR 0107 ceiling of 6 is 2, 2, and 2 and is refused.
+# Raising min_size to 4, 5, 6, or 10 (eight, ten, twelve, or twenty
+# nodes) so a higher ceiling does not stack is refused. That bill is
+# two always-on nodes per extra pod.
+# No minDomains. No required hostname anti-affinity. No required zone anti-affinity.
 # No cluster. Does not kubectl apply. No terraform apply.
-# Kind and minikube do not plan the pool. One hostname still schedules.
+# Kind and minikube do not plan the pool and do not apply the HPA.
+# One hostname still schedules.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -20,7 +23,7 @@ GREEN="${ROOT}/deploy/k8s/deployment-green.yaml"
 KUSTOM="${ROOT}/deploy/k8s/kustomization.yaml"
 CA="${ROOT}/deploy/k8s/cluster-autoscaler.yaml"
 README="${ROOT}/deploy/k8s/README.md"
-ADR="${ROOT}/docs/adr/0105-api-hostname-floor.md"
+ADR="${ROOT}/docs/adr/0108-api-single-zone-hostname-ceiling.md"
 PASS=0
 FAIL=0
 
@@ -52,7 +55,7 @@ need_not_grep() {
   else ok "$name"; fi
 }
 
-echo "== API hostname floor files =="
+echo "== API single-zone hostname ceiling files =="
 need_file "$POOL"
 need_file "$ROOT_MAIN"
 need_file "$VARS"
@@ -66,10 +69,18 @@ need_file "$README"
 need_file "$ADR"
 
 echo "== docs and pins =="
-need_grep "$ADR" 'min_size_per_zone' "ADR names the per-zone floor"
-need_grep "$ADR" 'hostname-floor-nodes=4' "ADR names four healthy-zone hostnames"
+need_grep "$ADR" 'maxReplicas' "ADR names the HPA ceiling"
+need_grep "$ADR" 'hpa-max-replicas=3' "ADR names the house ceiling"
+need_grep "$ADR" 'hostname-ceiling-pods=3' "ADR names three ceiling pods"
+need_grep "$ADR" 'single-zone-hostname-ceiling=3' "ADR names the one-zone ceiling"
+need_grep "$ADR" 'refused-ceiling-nodes-per-pod=2' "ADR names the refused node rate"
 need_grep "$ADR" 'minReplicas' "ADR names the HPA floor"
-need_grep "$ADR" 'minAvailable' "ADR names the disruption budget"
+need_grep "$ADR" 'min_size' "ADR names the per-zone floor"
+need_grep "$ADR" 'twelve' "ADR refuses twelve nodes"
+need_grep "$ADR" 'eight' "ADR refuses eight nodes"
+need_grep "$ADR" 'twenty' "ADR refuses twenty nodes"
+need_grep "$ADR" '2, 2, and 2' "ADR names the one-zone ceiling that stacked"
+need_grep "$ADR" 'ignore_changes' "ADR leaves the desired_size ignore in place"
 need_grep "$ADR" 'Do not set minDomains' "ADR refuses minDomains"
 need_grep "$ADR" 'Required hostname anti-affinity is not set' "ADR does not require hostname anti-affinity"
 need_grep "$ADR" 'Required zone anti-affinity is not the follow-up' "ADR does not require zone anti-affinity"
@@ -78,28 +89,27 @@ need_grep "$ADR" 'Kind and minikube' "ADR names kind and minikube"
 need_grep "$ADR" 'No live AWS apply' "ADR does not apply Terraform"
 need_grep "$ADR" 'Catalog stays 221' "catalog stays 221"
 need_grep "$ADR" 'No Rui sprites' "no Rui sprites"
-need_grep "$ADR" 'one unhealthy zone' "ADR names the single-zone remainder"
-need_grep "$POOL" 'min-size-per-zone=3' "node pool names the house floor"
-need_grep "$POOL" 'hostname-floor-nodes=6' "node pool names six hostnames"
-need_grep "$POOL" 'hpa-min-replicas=3' "node pool names the HPA floor"
-need_grep "$POOL" 'pdb-min-available=2' "node pool names the PDB"
-need_grep "$POOL" 'min_size_per_zone[[:space:]]*=[[:space:]]*3' "min size per zone is 3 (ADR 0106)"
-need_grep "$POOL" 'desired_size_per_zone[[:space:]]*=[[:space:]]*3' "create-time desired size is 3 (ADR 0106)"
+need_grep "$POOL" 'hpa-max-replicas=3' "node pool names the house ceiling"
+need_grep "$POOL" 'hostname-ceiling-pods=3' "node pool names three ceiling pods"
+need_grep "$POOL" 'single-zone-hostname-ceiling=3' "node pool names the one-zone ceiling"
+need_grep "$POOL" 'refused-ceiling-nodes-per-pod=2' "node pool names the refused node rate"
+need_grep "$POOL" 'min-size-per-zone=3' "node pool floor stays 3"
 need_grep "$HPA" 'minReplicas: 3' "HPA floor stays 3"
-need_grep "$HPA" 'maxReplicas: 3' "HPA ceiling stays 3 (ADR 0108)"
+need_grep "$HPA" 'maxReplicas: 3' "HPA ceiling is 3"
 need_grep "$PDB" 'minAvailable: 2' "API disruption budget stays 2"
 need_grep "$BLUE" 'replicas: 2' "blue local replica count stays 2"
 need_grep "$GREEN" 'replicas: 0' "green stays the idle slot"
-need_grep "$KUSTOM" 'ADR 0105' "kustomize comment names the hostname floor"
+need_grep "$KUSTOM" 'ADR 0108' "kustomize comment names the one-zone ceiling"
 need_grep "$KUSTOM" 'One hostname here still schedules' "kustomize comment is honest about one hostname"
-need_grep "$README" 'ADR 0105' "README names ADR 0105"
-need_grep "$CA" 'ADR 0105' "manifest names ADR 0105"
+need_grep "$README" 'ADR 0108' "README names ADR 0108"
+need_grep "$CA" 'ADR 0108' "manifest names ADR 0108"
 need_grep "$CA" '--balance-similar-node-groups=true' "similar groups stay balanced"
 need_grep "$VARS" 'variable "enable_node_pool"' "kind and minikube can leave the pool off"
+need_not_grep "$POOL" 'hpa-max-replicas=6' "node pool does not keep the six-pod ceiling pin"
+need_not_grep "$POOL" 'hpa-max-replicas=10' "node pool does not keep the old ceiling pin"
 need_not_grep "$KUSTOM" '^[[:space:]]*-[[:space:]]*hpa\.yaml[[:space:]]*$' "kustomization still omits hpa.yaml"
 need_not_grep "$KUSTOM" '^[[:space:]]*-[[:space:]]*pdb\.yaml[[:space:]]*$' "kustomization still omits pdb.yaml"
-need_not_grep "$POOL" 'variable "min_size_per_zone"' "node pool floor is not a module variable"
-need_not_grep "$VARS" 'variable "min_size_per_zone"' "root module has no min_size_per_zone variable"
+need_not_grep "$VARS" 'variable "max_replicas"' "root module has no max_replicas variable"
 need_not_grep "$BLUE" 'requiredDuringSchedulingIgnoredDuringExecution' "blue has no required anti-affinity"
 need_not_grep "$GREEN" 'requiredDuringSchedulingIgnoredDuringExecution' "green has no required anti-affinity"
 need_not_grep "$BLUE" 'podAntiAffinity:' "blue does not also anti-affinity"
@@ -119,10 +129,16 @@ root = pathlib.Path(sys.argv[2]).read_text()
 hpa = pathlib.Path(sys.argv[3]).read_text()
 pdb = pathlib.Path(sys.argv[4]).read_text()
 failed = False
-HOUSE_MIN = 3
 HOUSE_ZONES = 2
+HOUSE_MIN = 3
+HOUSE_CEILING = 3
 HOUSE_HPA_MIN = 3
 HOUSE_PDB = 2
+HOUSE_SKEW = 1
+HOUSE_MAX_NODES = 20
+FLOOR_NODES = HOUSE_ZONES * HOUSE_MIN
+# Two always-on nodes per peak pod. Same rate at every ceiling above the floor.
+REFUSED = ((4, 8), (5, 10), (6, 12), (10, 20))
 
 def check(cond, name):
     global failed
@@ -134,6 +150,20 @@ def check(cond, name):
 
 def code_only(text):
     return "\n".join(line.split("#", 1)[0] for line in text.splitlines())
+
+def stacks(pods, hostnames, max_skew):
+    """True when some feasible placement puts two pods on one hostname.
+
+    maxSkew 1 refuses a second pod on a hostname while any eligible
+    hostname is still empty (skew would be 2). Stacking is feasible
+    only after every hostname already holds one, which needs more pods
+    than hostnames. maxSkew of 2 or more allows that second pod immediately.
+    """
+    if hostnames < 1 or pods < 1 or max_skew < 1:
+        return True
+    if max_skew >= 2:
+        return pods >= 2
+    return pods > hostnames
 
 pool_code = code_only(pool)
 root_code = code_only(root)
@@ -151,20 +181,25 @@ desired = re.findall(r"(?m)^[ \t]*desired_size_per_zone[ \t]*=[ \t]*(\d+)[ \t]*$
 sizes = re.findall(r"(?m)^[ \t]*max_size_per_zone[ \t]*=[ \t]*(\d+)[ \t]*$", pool_code)
 resource_min = re.findall(r"(?m)^[ \t]*min_size[ \t]*=[ \t]*(\S+)[ \t]*$", pool_code)
 resource_desired = re.findall(r"(?m)^[ \t]*desired_size[ \t]*=[ \t]*(\S+)[ \t]*$", pool_code)
+resource_max = re.findall(r"(?m)^[ \t]*max_size[ \t]*=[ \t]*(\S+)[ \t]*$", pool_code)
 zone_gate = re.findall(r"length\(var\.subnets\) >= (\d+)", pool_code)
 root_gate = re.findall(r"length\(var\.node_pool_subnets\) >= (\d+)", root_code)
 
 check(hpa_min == HOUSE_HPA_MIN, "HPA floor stays 3")
-check(hpa_max == 3, "HPA ceiling stays 3 (ADR 0108)")
+check(hpa_max == HOUSE_CEILING, "HPA ceiling is 3, not 6")
 check(pdb_min == HOUSE_PDB, "PDB minAvailable stays 2")
-if hpa_min is not None and pdb_min is not None:
+if hpa_min is not None and hpa_max is not None and pdb_min is not None:
     check(hpa_min >= pdb_min + 1,
           "HPA floor keeps one spare pod above the disruption budget")
+    check(hpa_max == hpa_min, "HPA ceiling equals the floor")
+    check(hpa_max >= hpa_min, "HPA ceiling is not under the floor")
 else:
     check(False, "HPA floor keeps one spare pod above the disruption budget")
-check(mins == [str(HOUSE_MIN)], "configured min is 3 (ADR 0106), not the 0105 floor of 2")
-check(desired == [str(HOUSE_MIN)], "create-time desired size is the floor, not 2")
-check(sizes == ["20"], "per-zone max stays 20")
+    check(False, "HPA ceiling equals the floor")
+    check(False, "HPA ceiling is not under the floor")
+check(mins == [str(HOUSE_MIN)], "configured min stays 3, not 4, 5, 6, or 10")
+check(desired == [str(HOUSE_MIN)], "create-time desired size stays 3")
+check(sizes == [str(HOUSE_MAX_NODES)], "per-zone max stays 20")
 if mins and desired and sizes and all(item.isdigit() for item in mins + desired + sizes):
     min_n, des_n, max_n = int(mins[0]), int(desired[0]), int(sizes[0])
     check(min_n <= des_n <= max_n, "desired size stays between min and max")
@@ -174,22 +209,23 @@ check(resource_min == ["local.min_size_per_zone"],
       "scaling_config min_size is the local, not a second literal")
 check(resource_desired == ["local.desired_size_per_zone"],
       "scaling_config desired_size is the local, not a second literal")
-check(zone_gate == [str(HOUSE_ZONES)], "node pool still refuses a single zone")
-check(root_gate == [str(HOUSE_ZONES)], "root gate still refuses a single zone")
-if mins and zone_gate and hpa_min is not None and mins[0].isdigit() and zone_gate[0].isdigit():
-    zones = int(zone_gate[0])
-    per_zone = int(mins[0])
-    hostnames = zones * per_zone
-    heavy = (hpa_min + zones - 1) // zones
-    check(hostnames >= hpa_min,
-          "healthy zones provide a hostname per HPA-floor pod")
-    check(per_zone >= heavy,
-          "each zone has a hostname per pod the heavy zone holds at the HPA floor")
-else:
-    check(False, "healthy zones provide a hostname per HPA-floor pod")
-    check(False, "each zone has a hostname per pod the heavy zone holds at the HPA floor")
+check(resource_max == ["local.max_size_per_zone"],
+      "scaling_config max_size is the local, not a second literal")
+check(zone_gate == [str(HOUSE_ZONES)], "node pool still refuses a single zone and does not require a third")
+check(root_gate == [str(HOUSE_ZONES)], "root gate still refuses a single zone and does not require a third")
+
+for pods, nodes in REFUSED:
+    check(nodes == HOUSE_ZONES * pods,
+          f"a ceiling of {pods} that one zone holds at one pod per hostname bills {nodes} nodes")
+    check(nodes > FLOOR_NODES,
+          f"the {nodes}-node bill is above the floor bill of {FLOOR_NODES}")
+    check(stacks(pods, HOUSE_MIN, HOUSE_SKEW),
+          f"keeping min_size {HOUSE_MIN} still stacks a ceiling of {pods}")
+    check(not stacks(pods, pods, HOUSE_SKEW),
+          f"min_size {pods} would hold a ceiling of {pods}, and that bill is refused")
 
 keys = ["kubernetes.io/hostname", "topology.kubernetes.io/zone"]
+hostname_skew = None
 for path, color in ((sys.argv[5], "blue"), (sys.argv[6], "green")):
     doc = yaml.safe_load(pathlib.Path(path).read_text())
     pod = (((doc.get("spec") or {}).get("template") or {}).get("spec") or {})
@@ -201,10 +237,33 @@ for path, color in ((sys.argv[5], "blue"), (sys.argv[6], "green")):
     check(got == keys, f"parsed {color} spread keys stay hostname then zone")
     for item in constraints:
         key = item.get("topologyKey")
-        check(item.get("maxSkew") == 1, f"parsed {color} {key} maxSkew is 1")
+        check(item.get("maxSkew") == HOUSE_SKEW, f"parsed {color} {key} maxSkew is 1")
         check(item.get("whenUnsatisfiable") == "DoNotSchedule",
               f"parsed {color} {key} stays DoNotSchedule")
         check("minDomains" not in item, f"parsed {color} {key} has no minDomains")
+        if color == "blue" and key == "kubernetes.io/hostname":
+            hostname_skew = item.get("maxSkew")
+
+if (mins and zone_gate and hpa_max is not None and mins[0].isdigit()
+        and zone_gate[0].isdigit() and isinstance(hostname_skew, int)):
+    per_zone = int(mins[0])
+    zones = int(zone_gate[0])
+    healthy = zones * per_zone
+    check(healthy == FLOOR_NODES, "two zones still bill six hostnames")
+    check(per_zone == hpa_max,
+          "one Ready zone's hostnames equal the HPA ceiling")
+    check(not stacks(hpa_max, per_zone, hostname_skew),
+          "one Ready zone does not stack two ceiling pods on one hostname")
+    check(not stacks(hpa_max, healthy, hostname_skew),
+          "a healthy pool does not stack two ceiling pods on one hostname")
+    check(stacks(6, per_zone, hostname_skew),
+          "the ceiling of 6 still stacks on three hostnames")
+else:
+    check(False, "two zones still bill six hostnames")
+    check(False, "one Ready zone's hostnames equal the HPA ceiling")
+    check(False, "one Ready zone does not stack two ceiling pods on one hostname")
+    check(False, "a healthy pool does not stack two ceiling pods on one hostname")
+    check(False, "the ceiling of 6 still stacks on three hostnames")
 
 if failed:
     sys.exit(1)

@@ -92,7 +92,7 @@ need_grep "$POOL" 'surviving-zones=1' "node pool names the one Ready zone"
 need_grep "$POOL" 'min_size_per_zone[[:space:]]*=[[:space:]]*3' "min size per zone is 3"
 need_grep "$POOL" 'desired_size_per_zone[[:space:]]*=[[:space:]]*3' "create-time desired size is 3"
 need_grep "$HPA" 'minReplicas: 3' "HPA floor stays 3"
-need_grep "$HPA" 'maxReplicas: 6' "HPA ceiling stays 6"
+need_grep "$HPA" 'maxReplicas: 3' "HPA ceiling stays 3 (ADR 0108)"
 need_grep "$PDB" 'minAvailable: 2' "API disruption budget stays 2"
 need_grep "$BLUE" 'replicas: 2' "blue local replica count stays 2"
 need_grep "$GREEN" 'replicas: 0' "green stays the idle slot"
@@ -179,7 +179,7 @@ zone_gate = re.findall(r"length\(var\.subnets\) >= (\d+)", pool_code)
 root_gate = re.findall(r"length\(var\.node_pool_subnets\) >= (\d+)", root_code)
 
 check(hpa_min == HOUSE_HPA_MIN, "HPA floor stays 3")
-check(hpa_max == 6, "HPA ceiling stays 6")
+check(hpa_max == 3, "HPA ceiling stays 3 (ADR 0108)")
 check(pdb_min == HOUSE_PDB, "PDB minAvailable stays 2")
 if hpa_min is not None and pdb_min is not None:
     check(hpa_min >= pdb_min + 1,

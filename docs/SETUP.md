@@ -403,7 +403,7 @@ The in-cluster Service stays HTTP on 8081. Leave `API_LISTENER_TLS_REQUIRED`
 unset. A public door uses `deploy/k8s/ingress-tls.yaml` or the ALB HTTPS
 listener and sets that flag with `API_PUBLIC_BASE_URL=https://<host>`. Do
 not set `server.ssl` ([ADR 0077](adr/0077-api-listener-tls.md)).
-Prod API replica count is `deploy/k8s/hpa.yaml` (min 3, max 6), applied
+Prod API replica count is `deploy/k8s/hpa.yaml` (min 3, max 3), applied
 on its own after metrics-server answers `kubectl top`. It is not in the
 kustomization. Local `kubectl apply -k` stays at blue 2 / green 0
 ([ADR 0078](adr/0078-horizontal-pod-autoscaling.md)).
@@ -454,8 +454,8 @@ false. Do not run that patch on kind or minikube
 ([ADR 0096](adr/0096-system-daemon-api-pool-toleration.md),
 [ADR 0097](adr/0097-kube-proxy-toleration-hook.md)).
 Cluster Autoscaler grows those groups when pods are Pending. Each zone's
-max is 20. The HPA ceiling is 6, so six healthy hostnames hold it at one pod each
-([ADR 0107](adr/0107-api-hostname-ceiling.md)). Terraform ignores `desired_size`
+max is 20. The HPA ceiling is 3, so one Ready zone holds it at one pod per hostname
+([ADR 0108](adr/0108-api-single-zone-hostname-ceiling.md)). Terraform ignores `desired_size`
 after create. `deploy/k8s/cluster-autoscaler.yaml` is not in this
 kustomization. Substitute `CLUSTER_NAME`, `AWS_REGION`, and the role ARN
 before applying it. `enable_node_pool=false` keeps the role off

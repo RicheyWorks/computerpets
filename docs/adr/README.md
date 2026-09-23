@@ -125,7 +125,8 @@ address, or an API that is not on `main`.
 | [0104](0104-per-zone-node-max.md) | Per-zone API node-group max is 20 (twice the HPA ceiling; Cluster Autoscaler reads Auto Scaling group `MaxSize` and cannot lift it; the old max of 10 is refused; kind stays off the file) | Accepted (min of 1 superseded in part by 0105) |
 | [0105](0105-api-hostname-floor.md) | Two hostnames per API zone for the HPA floor (`min_size` 2 and create-time `desired_size` 2; two healthy zones are four hostnames; HPA min stays 3 because the PDB keeps 2; the old floor of 1 is refused; no `minDomains`; kind stays off the pool) | Accepted (single-zone floor superseded in part by 0106) |
 | [0106](0106-api-single-zone-hostname-floor.md) | Three hostnames in the one Ready API zone (`min_size` 3 and create-time `desired_size` 3; one Ready zone holds the HPA floor as 1 and 1 and 1; the zone gate stays two; the floor of 2 is refused; no `minDomains`; kind stays off the pool) | Accepted (healthy-pool ceiling superseded in part by 0107) |
-| [0107](0107-api-hostname-ceiling.md) | HPA ceiling matches the six healthy API hostnames (`maxReplicas` 6; two zones times `min_size` 3; the old ceiling of 10 is refused; `min_size` stays 3; no `minDomains`; kind stays off the HPA and the pool) | Accepted |
+| [0107](0107-api-hostname-ceiling.md) | HPA ceiling matches the six healthy API hostnames (`maxReplicas` 6; two zones times `min_size` 3; the old ceiling of 10 is refused; `min_size` stays 3; no `minDomains`; kind stays off the HPA and the pool) | Accepted (one Ready zone ceiling superseded in part by 0108) |
+| [0108](0108-api-single-zone-hostname-ceiling.md) | One Ready zone holds the HPA ceiling (`maxReplicas` 3, equal to `minReplicas` and to `min_size` 3; the ceiling of 6 is refused; eight, ten, twelve, and twenty node bills are refused; no `minDomains`; kind stays off the HPA and the pool) | Accepted |
 
 ## How to add one
 

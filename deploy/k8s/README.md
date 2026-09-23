@@ -175,10 +175,13 @@ blue `replicas: 2`, green `replicas: 0`. Postgres and Redis stay at 1.
 
 The prod autoscaler targets Deployment `computerpets-blue` only
 (the Service's default live color). `minReplicas` is 3. `maxReplicas`
-is 6 ([ADR 0107](../../docs/adr/0107-api-hostname-ceiling.md)). That is
-two zones times `min_size` 3, so a healthy pool holds the ceiling at
-one pod per hostname. The old ceiling of 10 stacked on those six
-hostnames and is refused. CPU scales at 70% of the `250m` request. Memory scales at an
+is 3 ([ADR 0108](../../docs/adr/0108-api-single-zone-hostname-ceiling.md)).
+That is one Ready zone times `min_size` 3, so that zone holds the ceiling
+at one pod per hostname. The range equals the floor. The
+[ADR 0107](../../docs/adr/0107-api-hostname-ceiling.md) ceiling of 6
+stacked as 2, 2, and 2 on that zone and is refused. Raising `min_size`
+to keep a higher ceiling (eight, ten, twelve, or twenty nodes) is refused.
+CPU scales at 70% of the `250m` request. Memory scales at an
 absolute `800Mi` (above the `512Mi` request, under the `1Gi` limit),
 not at a percent of the request. A JVM that sits on its heap must not
 be read as load.
@@ -293,7 +296,11 @@ One Ready zone is three hostnames, so the HPA floor of 3 is 1 and 1
 and 1 under hostname `maxSkew` 1. Two healthy zones are six hostnames.
 The HPA floor stays 3 because the disruption budget keeps 2. A floor
 of 2 would stack 2 and 1 when only one zone is Ready, and it is refused.
-The zone gate stays two. Kind and minikube do not plan the pool.
+The zone gate stays two. The HPA ceiling is that same 3
+([ADR 0108](../../docs/adr/0108-api-single-zone-hostname-ceiling.md)),
+so one Ready zone holds it as 1 and 1 and 1. The ceiling of 6 is
+2, 2, and 2 on those three hostnames and is refused. Kind and minikube
+do not plan the pool and do not apply the HPA.
 One hostname on a laptop still schedules. Do not set `minDomains`.
 Required hostname anti-affinity is not set. A keeper must raise
 `desired_size` to at least 3 before `min_size` 3 will apply.
@@ -321,6 +328,8 @@ zone value also leaves them Pending.
 ./deploy/k8s/check-api-single-zone-hostname-floor.test.sh
 ./deploy/k8s/check-api-hostname-ceiling.sh
 ./deploy/k8s/check-api-hostname-ceiling.test.sh
+./deploy/k8s/check-api-single-zone-hostname-ceiling.sh
+./deploy/k8s/check-api-single-zone-hostname-ceiling.test.sh
 ```
 
 A cutover does not patch this. Scaling green creates pods from the
@@ -458,8 +467,8 @@ The prod scaler runs in `kube-system` and changes desired capacity on the
 Auto Scaling groups behind the per-zone node groups. Each group's max is
 20
 ([ADR 0104](../../docs/adr/0104-per-zone-node-max.md)).
-The HPA ceiling is 6, so six healthy hostnames hold it at one pod each
-([ADR 0107](../../docs/adr/0107-api-hostname-ceiling.md)).
+The HPA ceiling is 3, so one Ready zone holds it at one pod per hostname
+([ADR 0108](../../docs/adr/0108-api-single-zone-hostname-ceiling.md)).
 The leader reads that number from the group's `MaxSize`. It does not
 raise it. The minimum is 3 per zone
 ([ADR 0106](../../docs/adr/0106-api-single-zone-hostname-floor.md)).

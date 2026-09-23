@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# ADR 0107 — HPA ceiling matches the six healthy API hostnames.
-# maxReplicas is 6, which is two zones times min_size 3.
-# A healthy pool holds that ceiling at one pod per hostname.
-# The old ceiling of 10 stacks and is refused.
-# min_size stays 3. Raising it to 5 or to 10 to keep 10 pods is refused.
+# ADR 0107 — HPA ceiling matched the six healthy API hostnames.
+# ADR 0108 moved the live ceiling to 3 so one Ready zone does not
+# stack 2, 2, and 2. maxReplicas is that floor. min_size stays 3.
+# The old ceiling of 10 stacks on six hostnames and is refused.
+# Raising min_size to 5 or to 10 to keep 10 pods is refused.
 # No minDomains. No required hostname anti-affinity. No required zone anti-affinity.
 # No cluster. Does not kubectl apply. No terraform apply.
 # Kind and minikube do not plan the pool and do not apply the HPA.
@@ -86,12 +86,12 @@ need_grep "$ADR" 'Kind and minikube' "ADR names kind and minikube"
 need_grep "$ADR" 'No live AWS apply' "ADR does not apply Terraform"
 need_grep "$ADR" 'Catalog stays 221' "catalog stays 221"
 need_grep "$ADR" 'No Rui sprites' "no Rui sprites"
-need_grep "$POOL" 'hpa-max-replicas=6' "node pool names the house ceiling"
-need_grep "$POOL" 'hostname-ceiling-pods=6' "node pool names six ceiling pods"
+need_grep "$POOL" 'hpa-max-replicas=3' "node pool names the one-zone ceiling"
+need_grep "$POOL" 'hostname-ceiling-pods=3' "node pool names three ceiling pods"
 need_grep "$POOL" 'min-size-per-zone=3' "node pool floor stays 3"
 need_grep "$POOL" 'hostname-floor-nodes=6' "node pool names six hostnames"
 need_grep "$HPA" 'minReplicas: 3' "HPA floor stays 3"
-need_grep "$HPA" 'maxReplicas: 6' "HPA ceiling is 6"
+need_grep "$HPA" 'maxReplicas: 3' "HPA ceiling is 3 (ADR 0108)"
 need_grep "$PDB" 'minAvailable: 2' "API disruption budget stays 2"
 need_grep "$BLUE" 'replicas: 2' "blue local replica count stays 2"
 need_grep "$GREEN" 'replicas: 0' "green stays the idle slot"
@@ -126,7 +126,8 @@ pdb = pathlib.Path(sys.argv[4]).read_text()
 failed = False
 HOUSE_ZONES = 2
 HOUSE_MIN = 3
-HOUSE_CEILING = 6
+HOUSE_CEILING = 3
+HEALTHY_HOSTS = 6
 HOUSE_HPA_MIN = 3
 HOUSE_PDB = 2
 HOUSE_SKEW = 1
@@ -179,15 +180,15 @@ zone_gate = re.findall(r"length\(var\.subnets\) >= (\d+)", pool_code)
 root_gate = re.findall(r"length\(var\.node_pool_subnets\) >= (\d+)", root_code)
 
 check(hpa_min == HOUSE_HPA_MIN, "HPA floor stays 3")
-check(hpa_max == HOUSE_CEILING, "HPA ceiling is 6, not the old 10")
+check(hpa_max == HOUSE_CEILING, "HPA ceiling is 3, not the ADR 0107 ceiling of 6")
 check(pdb_min == HOUSE_PDB, "PDB minAvailable stays 2")
 if hpa_min is not None and hpa_max is not None and pdb_min is not None:
     check(hpa_min >= pdb_min + 1,
           "HPA floor keeps one spare pod above the disruption budget")
-    check(hpa_max > hpa_min, "HPA ceiling stays above the floor")
+    check(hpa_max == hpa_min, "HPA ceiling equals the floor")
 else:
     check(False, "HPA floor keeps one spare pod above the disruption budget")
-    check(False, "HPA ceiling stays above the floor")
+    check(False, "HPA ceiling equals the floor")
 check(mins == [str(HOUSE_MIN)], "configured min stays 3, not 5 or 10")
 check(desired == [str(HOUSE_MIN)], "create-time desired size stays 3")
 check(sizes == [str(HOUSE_MAX_NODES)], "per-zone max stays 20")
@@ -204,11 +205,11 @@ check(resource_max == ["local.max_size_per_zone"],
       "scaling_config max_size is the local, not a second literal")
 check(zone_gate == [str(HOUSE_ZONES)], "node pool still refuses a single zone and does not require a third")
 check(root_gate == [str(HOUSE_ZONES)], "root gate still refuses a single zone and does not require a third")
-check(not stacks(5, HOUSE_CEILING, HOUSE_SKEW),
-      "a ceiling of 5 would not stack, and it wastes a paid hostname")
-check(stacks(7, HOUSE_CEILING, HOUSE_SKEW),
+check(not stacks(5, HEALTHY_HOSTS, HOUSE_SKEW),
+      "a ceiling of 5 would not stack on six hostnames, and it wastes a paid hostname")
+check(stacks(7, HEALTHY_HOSTS, HOUSE_SKEW),
       "a ceiling of 7 stacks on six hostnames")
-check(stacks(OLD_CEILING, HOUSE_CEILING, HOUSE_SKEW),
+check(stacks(OLD_CEILING, HEALTHY_HOSTS, HOUSE_SKEW),
       "the old ceiling of 10 stacks on six hostnames")
 check(not stacks(OLD_CEILING, OLD_CEILING, HOUSE_SKEW),
       "ten hostnames would hold the old ceiling, and that bill is refused")
@@ -240,16 +241,19 @@ if (mins and zone_gate and hpa_max is not None and mins[0].isdigit()
     per_zone = int(mins[0])
     zones = int(zone_gate[0])
     healthy = zones * per_zone
-    check(healthy == hpa_max,
-          "healthy hostnames equal the HPA ceiling")
+    check(healthy == HEALTHY_HOSTS,
+          "two zones still bill six hostnames")
+    check(per_zone == hpa_max,
+          "one Ready zone's hostnames equal the HPA ceiling")
+    check(not stacks(hpa_max, per_zone, hostname_skew),
+          "one Ready zone does not stack two ceiling pods on one hostname")
     check(not stacks(hpa_max, healthy, hostname_skew),
           "a healthy pool does not stack two ceiling pods on one hostname")
-    check(stacks(hpa_max, per_zone, hostname_skew),
-          "one Ready zone still stacks the ceiling")
 else:
-    check(False, "healthy hostnames equal the HPA ceiling")
+    check(False, "two zones still bill six hostnames")
+    check(False, "one Ready zone's hostnames equal the HPA ceiling")
+    check(False, "one Ready zone does not stack two ceiling pods on one hostname")
     check(False, "a healthy pool does not stack two ceiling pods on one hostname")
-    check(False, "one Ready zone still stacks the ceiling")
 
 if failed:
     sys.exit(1)
