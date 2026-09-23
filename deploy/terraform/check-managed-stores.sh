@@ -128,6 +128,17 @@ else
   bad "check-cluster-autoscaler.sh missing"
 fi
 
+echo "== API pool system daemons (ADR 0096) =="
+if [ -x "${TF}/check-system-daemons.sh" ]; then
+  if "${TF}/check-system-daemons.sh"; then
+    ok "check-system-daemons.sh"
+  else
+    bad "check-system-daemons.sh"
+  fi
+else
+  bad "check-system-daemons.sh missing"
+fi
+
 echo "== API node pool (ADR 0082) =="
 if [ -x "${TF}/check-node-pool.sh" ]; then
   if "${TF}/check-node-pool.sh"; then
