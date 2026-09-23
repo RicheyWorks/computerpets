@@ -81,6 +81,17 @@ need_grep "$TF/outputs.tf" 'spring_datasource_url' "root output spring_datasourc
 need_grep "$TF/outputs.tf" 'redis_host' "root output redis_host"
 need_grep "$TF/outputs.tf" 'bundle_base_url' "root output bundle_base_url"
 
+echo "== WAF live gate (ADR 0074) =="
+if [ -x "${TF}/check-waf-gate.sh" ]; then
+  if "${TF}/check-waf-gate.sh"; then
+    ok "check-waf-gate.sh"
+  else
+    bad "check-waf-gate.sh"
+  fi
+else
+  bad "check-waf-gate.sh missing"
+fi
+
 echo "== terraform validate (optional binary) =="
 if command -v terraform >/dev/null 2>&1; then
   (
@@ -89,6 +100,15 @@ if command -v terraform >/dev/null 2>&1; then
     terraform validate >/tmp/cp-tf-validate.out 2>&1
   ) && ok "terraform init -backend=false && validate" \
     || { bad "terraform validate failed"; cat /tmp/cp-tf-init.out /tmp/cp-tf-validate.out || true; }
+  if (
+    cd "$TF"
+    terraform test -no-color >/tmp/cp-tf-test.out 2>&1
+  ); then
+    ok "terraform test (empty ALB ARN fails the plan)"
+  else
+    bad "terraform test (empty ALB ARN fails the plan)"
+    cat /tmp/cp-tf-test.out || true
+  fi
 else
   ok "terraform binary absent — skipped validate (static checks still ran)"
 fi

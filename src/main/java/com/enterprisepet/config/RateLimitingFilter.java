@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
  * <p>Client identity is {@link ClientAddress} (trusted-proxy CIDRs only; ADR 0067).
  * {@code GET /api/bundles/{petKey}/redeem} is not a catalog read: signed grant
  * redeem stays outside the bundles bucket (ADR 0069).
+ * The same four buckets are the regional WAF on the API ALB (ADR 0074).
  */
 @Component
 @Order(100) // before machine-verify MAC (order 200) so a refused signature still spends this bucket

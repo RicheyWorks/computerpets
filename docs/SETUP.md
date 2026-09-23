@@ -416,6 +416,15 @@ ConfigMap overlay example. Local verify does not need a cloud account:
 ```
 
 A real `terraform apply` is the keeper's AWS account — not CI.
+While `enable_waf` is true (the default), set `waf_associate_alb_arn` to the
+API application load balancer or the plan fails closed
+([ADR 0074](adr/0074-waf-in-front-of-rate-limiter.md)). The ACL's four rate
+rules match the JVM buckets. Do not attach it to the bundle CloudFront
+distribution. Local WAF contract check:
+
+```bash
+./deploy/terraform/check-waf-gate.sh
+```
 
 ### CDN edge redeem
 

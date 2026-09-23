@@ -21,5 +21,7 @@ enable_secrets  = true
 enable_cdn      = true
 enable_waf      = true
 
-# Optional WAF association once an ALB exists:
-# waf_associate_alb_arn = "arn:aws:elasticloadbalancing:…"
+# Required for plan/apply while enable_waf is true (ADR 0074).
+# Empty is validate-only. Use the API application load balancer, not an NLB
+# and not the bundle CloudFront distribution.
+# waf_associate_alb_arn = "arn:aws:elasticloadbalancing:us-east-1:000000000000:loadbalancer/app/computerpets/example"

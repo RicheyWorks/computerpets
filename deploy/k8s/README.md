@@ -52,7 +52,12 @@ Local-dev keeps env / `.env.example` and plain `docker-compose.yml`.
 | Service | `computerpets` | Selects `app=computerpets,color=blue` |
 
 `ingress.yaml` is **not** in the kustomization. Apply it only if you have
-an Ingress controller.
+an Ingress controller. It has no nginx rate-limit annotations. The outer
+gate is the regional WAF on the API ALB
+([ADR 0074](../../docs/adr/0074-waf-in-front-of-rate-limiter.md)). The JVM
+filter stays the inner bucket. Point `TRUSTED_PROXY_CIDRS` at the ALB
+subnet so that bucket sees the client
+([ADR 0067](../../docs/adr/0067-trusted-proxy-client-address.md)).
 
 In-cluster Postgres and Redis are scaffolding, the same as compose. A
 real production cluster should point `SPRING_DATASOURCE_URL` and
