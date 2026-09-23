@@ -1,6 +1,6 @@
 # 0126. The host pet draws on a canvas Chromium composites
 
-- **Status:** Accepted
+- **Status:** Accepted (Sip, Brick, called guests, and plants moved to [0127](0127-chromium-overlay-company-sprites.md))
 - **Date:** 2026-09-23
 - **Code:** `desktop/renderer/sprite-surface.js`, `desktop/renderer/pet.js`, `desktop/renderer/sprite-surface.test.cjs`
 
@@ -22,13 +22,13 @@ This slice does not reopen presence/CSP, Hikari, bundle zip, cosign, CDN, secret
 2. **Which surface.** When `OffscreenCanvas` can create a 2d context and the visible canvas can take a bitmap, the frame is drawn offscreen and transferred. Chromium composites that bitmap. When `OffscreenCanvas` is missing or its constructor throws, the visible canvas 2d context draws the same fit. The element is `<canvas id="pet">`. It is not a WebGL context.
 3. **What stays closed.** No canvas, no image decoder, an OffscreenCanvas whose 2d context is null, or a bitmap renderer that cannot take the bitmap: `data-surface` is `refused`, `data-frame` is unset, and `pet.js` does not assign an `img` src. A decode error or a zero-size bitmap does not claim the frame. A frame that already painted stays until a later good frame replaces it.
 4. **What the gate still is.** `gpu-path.cjs` is unchanged except the cross-link. `gpu_compositing`, `softwareRendering`, and the software GL names still open or close the glass. This module does not read `getGPUFeatureStatus()` or `getGPUInfo()`. It does not pass `--use-angle`. A software accept still means the window may open. It does not turn a refused canvas into an `img`.
-5. **What stays an image.** Sip, Brick, called guests, plants, and the desk `/demo` pet stay `img` elements. The blotter stays the Qt OpenGL viewport. Catalog stays 221.
+5. **What stayed an image in this slice.** Sip, Brick, called guests, and plants were still `img` elements. They draw on this same canvas now ([0127](0127-chromium-overlay-company-sprites.md)). The visit guest and the desk `/demo` pet stay `img` elements. The blotter stays the Qt OpenGL viewport. Catalog stays 221.
 
 ## Consequences
 
 - A keeper whose compositor is hardware-accelerated, and whose Chromium can create the canvas, sees the same catalog frame on that surface. The tray still says `Chromium GPU compositor` when the gate is hardware.
 - A keeper whose canvas context cannot be created does not get an `img` that pretends to be that surface. The GUI harness waits for `data-frame` and fails the paint smoke when the surface stays refused.
 - OffscreenCanvas is the preferred surface. It is not a shader and not a texture API this tree owns. WebGL is not opened.
-- Sip, Brick, called guests, and plants are still image elements. The desk pet is still an image element.
+- Sip, Brick, called guests, and plants draw on this same canvas ([0127](0127-chromium-overlay-company-sprites.md)). The visit guest and the desk pet are still image elements.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** Sip, Brick, called guests, and plants on the overlay are still image elements. A later slice can draw those same catalog sprites on this canvas. The hardware gate still applies. Do not start DirectX 12, Vulkan, Solana, or Pane. Catalog stays 221.
+- **Next gap:** Sip, Brick, called guests, and plants draw on this canvas ([0127](0127-chromium-overlay-company-sprites.md)). The visit guest and the desk `/demo` pet are still image elements. Do not start DirectX 12, Vulkan, Solana, or Pane. Catalog stays 221.
