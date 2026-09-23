@@ -1,4 +1,4 @@
-/** Desktop-local GPU sense. Windows and Linux nvidia-smi. Linux amdgpu sysfs uses the same line when nvidia-smi does not. Mac reads IOAccelerator into that line. Sparkline is real samples only. */
+/** Desktop-local GPU sense. Windows and Linux nvidia-smi. Linux amdgpu sysfs uses the same line when nvidia-smi does not. i915 and xe sysfs stay INTEL_EMPTY. Mac reads IOAccelerator into that line. Sparkline is real samples only. */
 (function (root) {
   const STALE_MS = 20000;
   const LATER_DOOR = "unsupported";
@@ -467,6 +467,10 @@
       }
       if (tag === "ENDAMDGPU") {
         amdgpuCsv = amdgpuLines.join("\n");
+        mode = null;
+        continue;
+      }
+      if (tag === "INTEL_ABSENT" || tag === "INTEL_EMPTY") {
         mode = null;
         continue;
       }
