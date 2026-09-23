@@ -55,3 +55,6 @@ No mesh.
   ([0078](0078-horizontal-pod-autoscaling.md)).
 - Voluntary disruption of that live color keeps 2 pods (`pdb.yaml`, also
   not in this kustomization) ([0079](0079-pod-disruption-budget.md)).
+- Each API color prefers different nodes (`topologySpreadConstraints`,
+  `ScheduleAnyway` on `kubernetes.io/hostname`). Local replica counts
+  stay blue 2 / green 0 ([0080](0080-api-pod-topology-spread.md)).

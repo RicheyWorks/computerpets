@@ -72,6 +72,7 @@ All critical items required before any public or limited production exposure hav
   - [x] API listener TLS — cert-manager Ingress or an ACM HTTPS listener on the keeper-owned API ALB. Port 80 redirects. The JVM stays HTTP on 8081. Prod refuses a cleartext public origin when the flag is set. This root does not call ACM (ADR 0077). Catalog stays 221.
   - [x] API horizontal pod autoscaling — `deploy/k8s/hpa.yaml` targets `computerpets-blue` (min 3, max 10, CPU 70% of the request, memory at 800Mi). Not in the kustomization. Local apply stays blue 2 / green 0. metrics-server is a cluster addon this repo does not install (ADR 0078). Catalog stays 221.
   - [x] API pod disruption budget — `deploy/k8s/pdb.yaml` keeps 2 pods of the live color (`color=blue`) during voluntary disruption. Not in the kustomization. Apply only after the HPA floor is running. Cutover patches the selector with the HPA (ADR 0079). Catalog stays 221.
+  - [x] API hostname spread — both Deployments set `topologySpreadConstraints` on `kubernetes.io/hostname` (`maxSkew: 1`, `ScheduleAnyway`, `nodeTaintsPolicy: Honor`, selector scoped to that color). Not `DoNotSchedule`. Not a required anti-affinity. Local replica counts stay blue 2 / green 0 (ADR 0080). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload
@@ -135,6 +136,7 @@ All critical items required before any public or limited production exposure hav
   - [x] API listener TLS — public door is `ingress-tls.yaml` or an ALB HTTPS listener (port 80 redirects). JVM stays HTTP on 8081. Prod refuses a cleartext public origin when `API_LISTENER_TLS_REQUIRED` is set. This root does not call ACM (ADR 0077). Catalog stays 221.
   - [x] API horizontal pod autoscaling — prod `hpa.yaml` (min 3, max 10) is not in the kustomization. Local apply stays unscaled. metrics-server stays a cluster addon (ADR 0078). Catalog stays 221.
   - [x] API pod disruption budget — prod `pdb.yaml` (`minAvailable: 2` on the live color) is not in the kustomization. Apply only after the HPA floor is running (ADR 0079). Catalog stays 221.
+  - [x] API hostname spread — soft `topologySpreadConstraints` on `kubernetes.io/hostname` for both colors (`ScheduleAnyway`). A one-node local apply still schedules. No zone key (ADR 0080). Catalog stays 221.
 
 ---
 
