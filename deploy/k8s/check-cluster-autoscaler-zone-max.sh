@@ -2,7 +2,7 @@
 # ADR 0104 — each API zone's node-group max is 20.
 # Cluster Autoscaler reads that as the Auto Scaling group MaxSize.
 # The old local of 10 is refused. The max stays at least the HPA
-# ceiling. min is 2 (ADR 0105). No cluster. Does not kubectl apply.
+# ceiling. min is 3 (ADR 0106). No cluster. Does not kubectl apply.
 # No terraform apply. Kind and minikube stay off this file.
 # Do not set minDomains.
 set -euo pipefail
@@ -137,8 +137,8 @@ if hpa_max and sizes and sizes[0].isdigit() and hpa_max[0].isdigit():
     check(int(sizes[0]) != 10, "configured max is not silently 10")
 else:
     check(False, "configured max is at least the HPA max pods one zone can be asked to hold")
-check(mins == ["2"], "min size per zone is 2 (ADR 0105)")
-check(desired == ["2"], "create-time desired size is 2 (ADR 0105)")
+check(mins == ["3"], "min size per zone is 3 (ADR 0106)")
+check(desired == ["3"], "create-time desired size is 3 (ADR 0106)")
 if mins and sizes and mins[0].isdigit() and sizes[0].isdigit():
     check(int(mins[0]) >= 1 and int(mins[0]) < int(sizes[0]),
           "min stays at least 1 and below the max")

@@ -1,6 +1,6 @@
 # 0101. The scheduled Cluster Autoscaler leader scales the underfilled zone
 
-- **Status:** Accepted (the per-zone max is [0104](0104-per-zone-node-max.md); the per-zone floor is [0105](0105-api-hostname-floor.md))
+- **Status:** Accepted (the per-zone max is [0104](0104-per-zone-node-max.md); the per-zone floor is [0106](0106-api-single-zone-hostname-floor.md))
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/cluster-autoscaler.yaml`; `deploy/terraform/modules/node_pool/main.tf`; `deploy/k8s/check-cluster-autoscaler-leader-scale.sh`
 
