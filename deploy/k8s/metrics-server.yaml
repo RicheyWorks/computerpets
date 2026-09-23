@@ -1,9 +1,11 @@
-# metrics-server so hpa.yaml can read CPU and memory (ADR 0084, ADR 0085).
+# metrics-server so hpa.yaml can read CPU and memory (ADR 0084, ADR 0085,
+# ADR 0086).
 # Not in kustomization.yaml. Local/dev `kubectl apply -k deploy/k8s` does
 # not install this. Kind and minikube do not apply this file. There is no
 # overlay directory. No Helm chart.
 #
-# Bytes below this header are upstream high-availability-1.21+.yaml v0.9.0:
+# The objects below this header start from upstream
+# high-availability-1.21+.yaml v0.9.0:
 # https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.9.0/high-availability-1.21+.yaml
 # Image registry.k8s.io/metrics-server/metrics-server:v0.9.0 (Kubernetes
 # 1.34+; release dependencies are 1.36.2, the same minor line as the
@@ -11,6 +13,8 @@
 # That release asset is components.yaml plus replicas 2, rollingUpdate
 # maxUnavailable 1, required hostname pod anti-affinity, and an addon
 # PodDisruptionBudget (minAvailable 1). It is not a second chart.
+# The kubelet CA argument, volume, and volumeMount are the only additions
+# (ADR 0086). They are not in that upstream file.
 #
 # Apply this before hpa.yaml. The APIService is v1beta1.metrics.k8s.io.
 # Until `kubectl top pods -n computerpets` shows cpu and memory, the HPA
@@ -19,8 +23,21 @@
 # insecureSkipTLSVerify on that APIService is the upstream hop from the
 # apiserver to this addon's serving cert (minted in /tmp, not the cluster
 # CA). It is not a kubelet scrape skip. Do not add --kubelet-insecure-tls.
-# Kubelet certificate verification stays on. This file does not mount a
-# kubelet CA.
+# Do not add --deprecated-kubelet-completely-insecure.
+#
+# Kubelet verification uses
+# --kubelet-certificate-authority=/etc/metrics-server/kubelet-ca/ca.crt.
+# That path is a read-only mount of ConfigMap metrics-server-kubelet-ca
+# in kube-system, key ca.crt, optional: false. This file does not create
+# that object and does not contain a certificate. Create it before apply:
+#   kubectl -n kube-system create configmap metrics-server-kubelet-ca \
+#     --from-file=ca.crt=/path/to/kubelet-serving-ca.crt
+# A Secret with the same name, key, and optional: false is the equivalent
+# volume source when the bundle is already a Secret. hostPath is not.
+# The flag replaces the in-cluster CA for kubelet scrapes. Put the CA
+# that signed the kubelet serving certificates in that object. A
+# certificate that does not chain to it still leaves kubectl top empty.
+# A missing object leaves the pods unstarted.
 #
 # The Deployment sets replicas: 2. Anti-affinity is required on
 # kubernetes.io/hostname, so the second pod stays Pending until a second
@@ -176,6 +193,7 @@ spec:
         - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
         - --kubelet-use-node-status-port
         - --metric-resolution=15s
+        - --kubelet-certificate-authority=/etc/metrics-server/kubelet-ca/ca.crt
         image: registry.k8s.io/metrics-server/metrics-server:v0.9.0
         imagePullPolicy: IfNotPresent
         livenessProbe:
@@ -215,6 +233,9 @@ spec:
         volumeMounts:
         - mountPath: /tmp
           name: tmp-dir
+        - mountPath: /etc/metrics-server/kubelet-ca
+          name: kubelet-ca
+          readOnly: true
       nodeSelector:
         kubernetes.io/os: linux
       priorityClassName: system-cluster-critical
@@ -222,6 +243,13 @@ spec:
       volumes:
       - emptyDir: {}
         name: tmp-dir
+      - name: kubelet-ca
+        configMap:
+          name: metrics-server-kubelet-ca
+          optional: false
+          items:
+          - key: ca.crt
+            path: ca.crt
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget

@@ -182,15 +182,19 @@ be read as load.
 
 **metrics-server** (the `metrics.k8s.io` API) is
 `metrics-server.yaml` ([ADR 0084](../../docs/adr/0084-metrics-server.md),
-[ADR 0085](../../docs/adr/0085-metrics-server-ha.md)).
+[ADR 0085](../../docs/adr/0085-metrics-server-ha.md),
+[ADR 0086](../../docs/adr/0086-metrics-server-kubelet-ca.md)).
 That file is also not in the kustomization. It runs two replicas with
-required hostname anti-affinity. Apply it first.
+required hostname anti-affinity. Create the kubelet CA object, then
+apply it.
 `kubectl top pods -n computerpets` must show cpu and memory. Until that
 API answers, applying the HPA does not raise the replica count, so blue
 can stay at 2.
 
 ```bash
-# Prod only. metrics-server first, then the HPA after kubectl top answers.
+# Prod only. Kubelet CA, then metrics-server, then the HPA after kubectl top answers.
+kubectl -n kube-system create configmap metrics-server-kubelet-ca \
+  --from-file=ca.crt=/path/to/kubelet-serving-ca.crt
 kubectl apply -f deploy/k8s/metrics-server.yaml
 kubectl apply -f deploy/k8s/hpa.yaml
 ./deploy/k8s/check-hpa.sh
@@ -310,12 +314,12 @@ minor's latest patch instead. Do not commit a real account id.
 Zone spread stays `ScheduleAnyway`. Adding a node does not force a pod
 onto it.
 
-## metrics-server (ADR 0084, ADR 0085)
+## metrics-server (ADR 0084, ADR 0085, ADR 0086)
 
 `metrics-server.yaml` is **not** in the kustomization. `kubectl apply -k
 deploy/k8s` does not install it. Kind and minikube do not apply it.
 
-The file is upstream [high-availability-1.21+.yaml v0.9.0](https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.9.0/high-availability-1.21+.yaml).
+The file starts from upstream [high-availability-1.21+.yaml v0.9.0](https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.9.0/high-availability-1.21+.yaml).
 Image `registry.k8s.io/metrics-server/metrics-server:v0.9.0`. The
 APIService is `v1beta1.metrics.k8s.io`. That is the API `hpa.yaml` reads
 for CPU and memory. Namespace is `kube-system`. There is no Helm chart
@@ -327,17 +331,28 @@ node exists. Rolling update `maxUnavailable` is 1. An addon
 `PodDisruptionBudget` in `kube-system` keeps `minAvailable: 1`. That
 budget is not `pdb.yaml`.
 
-`--kubelet-insecure-tls` is not set. Kubelet scrapes stay verified. This
-file does not mount a kubelet CA. The APIService does set
-`insecureSkipTLSVerify: true` once. That is the upstream hop from the
-apiserver to the addon's own serving cert (minted in `/tmp`, not the
-cluster CA). It is not a kubelet skip.
+`--kubelet-insecure-tls` is not set. Kubelet scrapes stay verified.
+`--kubelet-certificate-authority` points at
+`/etc/metrics-server/kubelet-ca/ca.crt`, a read-only mount of ConfigMap
+`metrics-server-kubelet-ca` (key `ca.crt`, `optional: false`). This repo
+does not vendor that certificate. A Secret with the same name, key, and
+`optional: false` is the equivalent volume source. `hostPath` is not.
+The flag replaces the in-cluster CA for kubelet scrapes, so the object
+must be the CA that signed the kubelet serving certificates. A missing
+object leaves the pods unstarted. A certificate that does not chain to
+the bundle still leaves `kubectl top` empty. Do not add the kubelet TLS
+skip.
 
-Apply this before `hpa.yaml`. If `kubectl top` is empty, do not add the
-kubelet TLS skip.
+The APIService does set `insecureSkipTLSVerify: true` once. That is the
+upstream hop from the apiserver to the addon's own serving cert (minted
+in `/tmp`, not the cluster CA). It is not a kubelet skip.
+
+Create the CA object, then apply this file, before `hpa.yaml`.
 
 ```bash
 # Prod only. Not part of kubectl apply -k.
+kubectl -n kube-system create configmap metrics-server-kubelet-ca \
+  --from-file=ca.crt=/path/to/kubelet-serving-ca.crt
 kubectl apply -f deploy/k8s/metrics-server.yaml
 ./deploy/k8s/check-metrics-server.sh
 ```
