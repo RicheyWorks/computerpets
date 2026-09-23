@@ -42,4 +42,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - Postgres and Redis stay at one replica with no spread. They are scaffolding, not the API.
 - Re-applying the Deployments does not retarget the HPA or the PDB. Those cutover patches are unchanged.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** Soft hostname spread does not place pods in different availability zones. There is no `topology.kubernetes.io/zone` constraint. A node pool that satisfies `maxSkew: 1` can still sit in one zone, and a zone outage is involuntary, so the disruption budget does not apply. Not started here.
+- **Next gap:** Soft zone spread landed as [0081](0081-api-pod-zone-spread.md). Not started in this ADR.
