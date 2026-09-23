@@ -4,9 +4,11 @@ Spring Boot is not the pet's GPU. There is no ``/metrics/gpu`` door.
 Temperature, utilization, memory, and power come from nvidia-smi, or from
 Windows GPU performance counters. Linux runs the same nvidia-smi query.
 When that binary is missing, the Linux probe reads amdgpu sysfs into the
-same line. i915 and xe sysfs stay unread (``INTEL_EMPTY``). Mac runs ``ioreg`` on IOAccelerator
+same line. i915 and xe utilization comes from two DRM fdinfo reads when
+that percent is honest; otherwise the section stays ``INTEL_EMPTY``.
+Mac runs ``ioreg`` on IOAccelerator
 PerformanceStatistics and prints that same line. A missing tool stays unread.
-Temperature and power on Mac, and on the amdgpu line, stay unread. A missing,
+Temperature and power on Mac, on the amdgpu line, and on the fdinfo line stay unread. A missing,
 malformed, or stale reading stays unread. A real zero from the hardware is
 kept. The sparkline is a trail of those read samples and stays empty until
 two fresh utilization points exist.
@@ -23,7 +25,7 @@ from pathlib import Path
 
 STALE_MS = 20000
 LATER_DOOR = "unsupported"
-SOURCES = ("nvidia-smi", "pdh", "nvidia-smi+pdh", "ioaccelerator", "amdgpu")
+SOURCES = ("nvidia-smi", "pdh", "nvidia-smi+pdh", "ioaccelerator", "amdgpu", "fdinfo")
 METRIC_KEYS = ("tempC", "utilPercent", "memoryUsedBytes", "memoryTotalBytes", "powerWatts")
 _NA = re.compile(r"^\[?\s*(n/a|not supported)\s*\]?$", re.I)
 _NUM = re.compile(r"^-?\d+(\.\d+)?$")
@@ -574,22 +576,27 @@ def sample_from_probe(probe, *, platform: str | None, now_ms) -> dict:
         return blank("malformed", "malformed", platform, now)
     nvidia = parse_nvidia_csv(probe.get("nvidiaCsv"))
     amd = parse_nvidia_csv(probe.get("amdgpuCsv"))
+    intel = parse_nvidia_csv(probe.get("intelCsv"))
     pdh = reduce_pdh(probe.get("engines"), probe.get("adapterMemory"))
     nvidia_rows = [] if nvidia["malformed"] else nvidia["rows"]
     amd_rows = [] if amd["malformed"] else amd["rows"]
+    intel_rows = [] if intel["malformed"] else intel["rows"]
     pdh_rows = [] if pdh["malformed"] else pdh["rows"]
     nvidia_best = _pick_best(nvidia_rows)
     amd_best = _pick_best(amd_rows)
+    intel_best = _pick_best(intel_rows)
     pdh_best = _pick_best(pdh_rows)
     nvidia_count = sum(1 for row in nvidia_rows if _row_has_metric(row))
     pdh_count = sum(1 for row in pdh_rows if _row_has_metric(row))
-    if nvidia_best is None and amd_best is None and pdh_best is None:
+    if nvidia_best is None and amd_best is None and intel_best is None and pdh_best is None:
         if (
             nvidia["malformed"]
             or amd["malformed"]
+            or intel["malformed"]
             or pdh["malformed"]
             or nvidia["rejected"]
             or amd["rejected"]
+            or intel["rejected"]
             or pdh["rejected"]
         ):
             return blank("malformed", "malformed", platform, now)
@@ -616,6 +623,9 @@ def sample_from_probe(probe, *, platform: str | None, now_ms) -> dict:
     elif amd_best:
         chosen = amd_best
         source = "amdgpu"
+    elif intel_best:
+        chosen = intel_best
+        source = "fdinfo"
     else:
         chosen = pdh_best
         source = "pdh"
@@ -646,11 +656,13 @@ def parse_probe_text(text) -> dict:
         return {"malformed": True}
     nvidia_csv = None
     amdgpu_csv = None
+    intel_csv = None
     engines = None
     adapter_memory = None
     mode = None
     nvidia_lines: list[str] = []
     amdgpu_lines: list[str] = []
+    intel_lines: list[str] = []
     for line in lines:
         tag = line.strip()
         if tag == "END":
@@ -690,6 +702,14 @@ def parse_probe_text(text) -> dict:
         if tag == "INTEL_ABSENT" or tag == "INTEL_EMPTY":
             mode = None
             continue
+        if tag == "INTEL":
+            mode = "intel"
+            intel_lines = []
+            continue
+        if tag == "ENDINTEL":
+            intel_csv = "\n".join(intel_lines)
+            mode = None
+            continue
         if tag == "ENGINE_ABSENT":
             engines = None
             mode = None
@@ -716,6 +736,8 @@ def parse_probe_text(text) -> dict:
             nvidia_lines.append(tag)
         elif mode == "amdgpu":
             amdgpu_lines.append(tag)
+        elif mode == "intel":
+            intel_lines.append(tag)
         elif mode == "engine":
             bits = line.split("\t")
             if len(bits) != 2:
@@ -742,6 +764,7 @@ def parse_probe_text(text) -> dict:
     return {
         "nvidiaCsv": nvidia_csv,
         "amdgpuCsv": amdgpu_csv,
+        "intelCsv": intel_csv,
         "engines": engines,
         "adapterMemory": adapter_memory,
         "malformed": False,

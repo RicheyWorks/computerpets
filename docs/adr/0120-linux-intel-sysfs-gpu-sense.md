@@ -1,6 +1,6 @@
 # 0120. Linux i915 and xe sysfs stay unread
 
-- **Status:** Accepted
+- **Status:** Accepted (fdinfo render utilization moved to [0121](0121-linux-intel-fdinfo-gpu-sense.md))
 - **Date:** 2026-09-23
 - **Code:** `desktop/gpu-probe.sh`, `desktop/gpu-sense.cjs`, `desktop/renderer/gpu.js`, `web/src/lib/pets/gpu.ts`, `client/computerpets_client/gpu.py`
 

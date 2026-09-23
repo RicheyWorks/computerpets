@@ -301,6 +301,80 @@ def test_linux_reads_nvidia_and_mac_reads_ioaccelerator(monkeypatch, tmp_path):
     assert planted["utilPercent"] is None
     assert "12%" not in gpu_line(planted)
 
+    proc1 = tmp_path / "proc1"
+    proc2 = tmp_path / "proc2"
+    fd_root = tmp_path / "fd-sys"
+    dev = fd_root / "card0" / "device"
+    dev.mkdir(parents=True)
+    os.symlink("i915", dev / "driver")
+    (dev / "uevent").write_text("PCI_ID=8086:9A49\nPCI_SLOT_NAME=0000:00:02.0\n")
+    (fd_root / "card0" / "gt" / "gt0").mkdir(parents=True)
+    (fd_root / "card0" / "gt" / "gt0" / "rc6_residency_ms").write_text("812345\n")
+    one = proc1 / "10" / "fdinfo"
+    two = proc2 / "10" / "fdinfo"
+    one.mkdir(parents=True)
+    two.mkdir(parents=True)
+    (one / "3").write_text(
+        "drm-driver:\ti915\n"
+        "drm-pdev:\t0000:00:02.0\n"
+        "drm-client-id:\t7\n"
+        "drm-engine-render:\t1000 ns\n"
+        "drm-engine-copy:\t999 ns\n"
+        "drm-engine-capacity-render:\t1\n"
+        "drm-total-resident-vram:\t999999999\n"
+    )
+    (two / "3").write_text(
+        "drm-driver:\ti915\n"
+        "drm-pdev:\t0000:00:02.0\n"
+        "drm-client-id:\t7\n"
+        "drm-engine-render:\t50001000 ns\n"
+        "drm-engine-copy:\t999999999 ns\n"
+        "drm-engine-capacity-render:\t1\n"
+        "drm-total-resident-vram:\t999999999\n"
+    )
+    fd_raw = subprocess.run(
+        ["/bin/sh", str(linux_probe_script())],
+        check=False,
+        capture_output=True,
+        text=True,
+        env={
+            **os.environ,
+            "PATH": "/usr/bin:/bin",
+            "GPU_SYSFS_ROOT": str(fd_root),
+            "GPU_PROC_ROOT": str(proc1),
+            "GPU_FDINFO_ROOT_2": str(proc2),
+            "GPU_FDINFO_INTERVAL_NS": "100000000",
+        },
+    )
+    assert "i915 8086:9A49, [N/A], 50, [N/A], [N/A], [N/A]" in fd_raw.stdout
+    assert "999999999" not in fd_raw.stdout
+    assert "812345" not in fd_raw.stdout
+    fd_sample = sample_from_probe(parse_probe_text(fd_raw.stdout), platform="linux", now_ms=NOW)
+    assert fd_sample["status"] == "read"
+    assert fd_sample["source"] == "fdinfo"
+    assert fd_sample["utilPercent"] == 50
+    assert fd_sample["tempC"] is None
+    assert fd_sample["powerWatts"] is None
+    assert fd_sample["memoryUsedBytes"] is None
+    assert gpu_line(fd_sample) == "GPU i915 8086:9A49 · unread · 50% · unread · unread"
+    rewind = subprocess.run(
+        ["/bin/sh", str(linux_probe_script())],
+        check=False,
+        capture_output=True,
+        text=True,
+        env={
+            **os.environ,
+            "PATH": "/usr/bin:/bin",
+            "GPU_SYSFS_ROOT": str(fd_root),
+            "GPU_PROC_ROOT": str(proc2),
+            "GPU_FDINFO_ROOT_2": str(proc1),
+            "GPU_FDINFO_INTERVAL_NS": "100000000",
+        },
+    )
+    assert "INTEL_EMPTY" in rewind.stdout
+    assert "ENDINTEL" not in rewind.stdout
+    assert "50" not in rewind.stdout
+
 
 TRAIL = "M1 11.3 L71 8.2"
 
