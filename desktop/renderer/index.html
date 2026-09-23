@@ -183,7 +183,7 @@
       <svg id="tongue" width="36" height="20" viewBox="0 0 36 20" aria-hidden="true">
         <path d="M2 10 L16 10 M16 10 L28 5 M16 10 L28 15" fill="none" stroke="rgba(214,92,108,0.94)" stroke-width="1.7" stroke-linecap="round" />
       </svg>
-      <img id="pet" data-hit alt="" draggable="false" />
+      <canvas id="pet" data-hit data-surface="pending" width="176" height="176" role="img" aria-label=""></canvas>
       <article id="hud" class="keeper-card" aria-label="Keeper card" data-color="ink">
         <button type="button" id="hud-collapse" class="keeper-collapse" data-hit data-card="collapse" aria-expanded="true">
           <p id="hud-kicker" class="keeper-kicker">Keeper card</p>
@@ -555,6 +555,7 @@
     <script src="mind.js"></script>
     <script src="listener.js"></script>
     <script src="presence.js"></script>
+    <script src="sprite-surface.js"></script>
     <script src="pet.js"></script>
   </body>
 </html>

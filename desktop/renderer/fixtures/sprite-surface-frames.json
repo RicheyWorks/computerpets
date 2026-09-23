@@ -1,0 +1,23 @@
+{
+  "box": 176,
+  "frames": [
+    {
+      "src": "sprites/cat/idle/1.png",
+      "width": 80,
+      "height": 160,
+      "x": 44,
+      "y": 0,
+      "w": 88,
+      "h": 176
+    },
+    {
+      "src": "sprites/cat/walk/2.png",
+      "width": 160,
+      "height": 80,
+      "x": 0,
+      "y": 88,
+      "w": 176,
+      "h": 88
+    }
+  ]
+}
