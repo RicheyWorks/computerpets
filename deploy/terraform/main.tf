@@ -86,6 +86,19 @@ module "api_listener" {
   target_group_arn = var.api_listener_target_group_arn
 }
 
+# vpc-cni toleration and the kube-proxy patch record (ADR 0096).
+# Count follows the node pool: kind and minikube set enable_node_pool
+# false and do not plan the addon. The node group below waits on this
+# module so an apply updates aws-node before it touches the taint.
+module "system_daemons" {
+  count  = var.enable_node_pool ? 1 : 0
+  source = "./modules/system_daemons"
+
+  project_name = var.project_name
+  environment  = var.environment
+  cluster_name = var.eks_cluster_name
+}
+
 module "node_pool" {
   count  = var.enable_node_pool ? 1 : 0
   source = "./modules/node_pool"
@@ -96,6 +109,8 @@ module "node_pool" {
   cluster_name   = var.eks_cluster_name
   subnets        = var.node_pool_subnets
   instance_types = var.node_pool_instance_types
+
+  depends_on = [module.system_daemons]
 }
 
 module "cluster_autoscaler" {

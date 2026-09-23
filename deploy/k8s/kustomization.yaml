@@ -32,6 +32,9 @@ resources:
 # API pool taint (ADR 0094) is the toleration on both pod templates, so
 # this apply includes it. The taint itself is the node group, not this
 # apply. Kind and minikube nodes are not tainted.
+# aws-node and kube-proxy toleration (ADR 0096) is not this apply.
+# vpc-cni configuration_values and the kube-proxy patch live under
+# deploy/terraform. Do not run that patch on kind or minikube.
 # A toleration does not require the taint.
 # Do not taint a kind or minikube node.
 # Labeling a node computerpets/node-pool=api without that taint still
