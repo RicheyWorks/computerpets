@@ -25,6 +25,20 @@ spec:
         app: computerpets
         color: blue
     spec:
+      # Soft hostname spread (ADR 0080). The default whenUnsatisfiable is
+      # DoNotSchedule, and the default nodeTaintsPolicy counts a tainted
+      # control-plane node as an empty domain. That pair leaves the second
+      # local pod, and the HPA floor of 3, Pending. ScheduleAnyway still
+      # prefers a less-loaded hostname and still binds.
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          nodeTaintsPolicy: Honor
+          labelSelector:
+            matchLabels:
+              app: computerpets
+              color: blue
       initContainers:
         - name: wait-postgres
           image: postgres:16-alpine
