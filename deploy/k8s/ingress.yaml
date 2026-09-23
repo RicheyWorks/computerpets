@@ -1,5 +1,7 @@
 # Optional. Not included in kustomization.yaml — apply only if you have
 # an Ingress controller. Change the host.
+# No nginx rate-limit annotations (ADR 0074). The outer gate is the regional
+# WAF on the API ALB. The JVM RateLimitingFilter stays the inner bucket.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

@@ -71,7 +71,7 @@ variable "enable_cdn" {
 
 variable "enable_waf" {
   type        = bool
-  description = "Provision a WAF web ACL stub (association is optional)."
+  description = "Provision the regional API WAF. Plan/apply refuses to continue unless waf_associate_alb_arn is the API ALB (ADR 0074). Set false only when you intentionally have no edge gate."
   default     = true
 }
 
@@ -129,16 +129,21 @@ variable "cdn_price_class" {
   default     = "PriceClass_100"
 }
 
-variable "waf_rate_limit" {
-  type        = number
-  description = "WAF rate-based rule threshold (requests per 5 minutes per IP)."
-  default     = 2000
-}
-
 variable "waf_associate_alb_arn" {
   type        = string
-  description = "Optional ALB ARN to associate the WAF ACL. Empty = ACL only (no association)."
+  description = "API application load balancer ARN. Required for plan/apply when enable_waf is true (ADR 0074). Empty is accepted by terraform validate only; plan refuses it."
   default     = ""
+
+  validation {
+    condition = (
+      var.waf_associate_alb_arn == "" ||
+      (
+        startswith(var.waf_associate_alb_arn, "arn:aws:elasticloadbalancing:") &&
+        strcontains(var.waf_associate_alb_arn, ":loadbalancer/app/")
+      )
+    )
+    error_message = "waf_associate_alb_arn must be empty (validate-only) or an application load balancer ARN (arn:aws:elasticloadbalancing:…:loadbalancer/app/…)."
+  }
 }
 
 variable "write_house_secret_values" {

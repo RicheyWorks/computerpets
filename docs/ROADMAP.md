@@ -66,6 +66,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Signed admin requests — every `/api/admin/**` method except OPTIONS requires HMAC-SHA256 (`computerpets-admin-v1`, 300s skew, `ADMIN_API_KEY`). A static `X-Admin-Key` is refused (ADR 0071). Catalog stays 221.
   - [x] Single-use nonce — signed admin and machine requests send `X-ComputerPets-Nonce` (in the MAC). Replay inside 300 seconds is **401**. The nonce store shares Redis with the rate limiter (`replay:nonce:…`, `SET NX EX 300`). Store down is **503** (ADR 0072). Catalog stays 221.
   - [x] Single-use download JWT — `JwtService` mints `jti`. `POST /api/download` claims `download:jwt:{jti}` once (`SET NX`, TTL `jwt.ttl-minutes` + 60s). A second mint is **409**. A bearer with no `jti` is **401**. Store down is **503**. Unlock still sends the bearer; it does not add a jti field (ADR 0073). Catalog stays 221.
+  - [x] Regional WAF in front of those buckets — default block, 10/30/60/60 per minute on the API ALB, signed redeem excluded. Plan refuses an empty ALB ARN (ADR 0074). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload
@@ -120,7 +121,8 @@ All critical items required before any public or limited production exposure hav
   - [x] Kubernetes manifests (`deploy/k8s/`, not Helm)
   - [x] Blue/green via two Deployments + Service `color` selector (no mesh)
   - [x] GHCR image signing — keyless cosign (Sigstore Fulcio) on `main` publish; fail-closed digest verify for prod deploy (`deploy/k8s/verify-image-signature.sh`; ADR 0061)
-  - [x] Terraform for managed stores — Postgres / Redis / Secrets Manager shells / CDN / WAF stubs (`deploy/terraform/`; deny-safe defaults; ADR 0062)
+  - [x] Terraform for managed stores — Postgres / Redis / Secrets Manager shells / CDN / WAF (`deploy/terraform/`; deny-safe defaults; ADR 0062)
+  - [x] WAF live gate — regional ACL matches the JVM rate-limit buckets; `terraform plan` refuses to apply without the API ALB ARN (ADR 0074)
   - [x] CDN edge redeem verification — fail-closed call to house `GET /api/bundles/{pet}/redeem` before zip bytes (`deploy/cdn/edge-redeem.js`; `pet=` on signed URLs; ADR 0063)
   - [x] Secret-operator hardening — prod refuses plain env / hand-filled Opaque Secret without `COMPUTERPETS_SECRETS_SOURCE` ∈ {`external-secrets`, `file`, `vault-agent`}; `verify-secret-operator.sh` deploy gate (ADR 0064). Local-dev keeps env / scaffolding `secret.yaml`.
   - [x] Secret rotation cadence / HSM story — dual-key `*_PREVIOUS` verify/decrypt, documented 90d/180d cadence, optional `COMPUTERPETS_KEYS_ROTATED_AT` (400d max when set), KMS/HSM pointer without a live appliance (`verify-secret-rotation.sh`; ADR 0065).
