@@ -47,8 +47,8 @@ Local-dev keeps env / `.env.example` and plain `docker-compose.yml`.
 | ConfigMap | `computerpets-config` | `SPRING_PROFILES_ACTIVE=prod`, JDBC URL, Redis host |
 | Deployment + Service + PVC | `computerpets-postgres` | Same Postgres 16 image as `docker-compose.yml` |
 | Deployment + Service | `computerpets-redis` | Same Redis 7 image as compose (AUTH-less; managed AUTH is ADR 0075) |
-| Deployment | `computerpets-blue` | Live app replicas (`color=blue`, local `replicas: 2`) |
-| Deployment | `computerpets-green` | Idle slot (`replicas: 0`, `color=green`). Not an HPA or PDB target |
+| Deployment | `computerpets-blue` | Live app replicas (`color=blue`, local `replicas: 2`). Soft hostname spread ([ADR 0080](../../docs/adr/0080-api-pod-topology-spread.md)) |
+| Deployment | `computerpets-green` | Idle slot (`replicas: 0`, `color=green`). Not an HPA or PDB target. Same soft hostname spread |
 | Service | `computerpets` | Selects `app=computerpets,color=blue` |
 | HorizontalPodAutoscaler | `computerpets` | **Not created by this apply.** Prod file `hpa.yaml` ([ADR 0078](../../docs/adr/0078-horizontal-pod-autoscaling.md)) |
 | PodDisruptionBudget | `computerpets` | **Not created by this apply.** Prod file `pdb.yaml` ([ADR 0079](../../docs/adr/0079-pod-disruption-budget.md)) |
@@ -218,6 +218,40 @@ kubectl apply -f deploy/k8s/pdb.yaml
 Re-applying `pdb.yaml` points the selector back at blue. Do not add
 `pdb.yaml` to `kustomization.yaml`.
 
+## Hostname spread (ADR 0080)
+
+Both API pod templates set `topologySpreadConstraints` on
+`kubernetes.io/hostname`. `maxSkew` is 1. `whenUnsatisfiable` is
+`ScheduleAnyway` (soft). The Kubernetes default is `DoNotSchedule`
+(hard): the scheduler refuses the pod when the skew would exceed 1.
+The default `nodeTaintsPolicy` is `Ignore`, so a tainted node counts
+as a domain with zero pods. A worker that already holds one pod then
+cannot take another, and a third pod stays Pending when two workers
+hold one each and that tainted node is still at zero. That sticks the
+HPA floor of 3. `ScheduleAnyway` still prefers a less-loaded hostname
+and still binds. `nodeTaintsPolicy` here is `Honor`, so a node the pod
+cannot tolerate is not that empty domain. Required hostname
+anti-affinity is not set either: that is one pod per node, so the
+second local replica, and any pod past the node count, would stay
+Pending.
+
+The selector is `app=computerpets` plus that Deployment's own color.
+Blue pods do not count as green's spread, and green pods do not count
+as blue's. There is no `minDomains` and no zone key. Postgres and Redis
+are not constrained. Local `replicas` stay 2 and 0. This rule is on the
+pod template, so `kubectl apply -k` does apply it. It does not apply
+`hpa.yaml` or `pdb.yaml`.
+
+```bash
+./deploy/k8s/check-topology-spread.sh
+```
+
+A cutover does not patch this. Scaling green creates pods from the
+green template, which already has the same soft rule. The Service, HPA,
+and PDB patches below are unchanged. Soft spread can still place every
+pod of the live color on one node. A crash of that node is not blocked
+by the budget.
+
 ## Blue / green
 
 Two Deployments, one Service. No mesh.
@@ -271,7 +305,9 @@ kubectl -n computerpets scale deploy/computerpets-blue --replicas=0
 Flip `color` back to `blue` the next time (scale blue to 3, flip the
 Service, patch the HPA back to blue, patch the PDB selector back to blue,
 then scale green to 0). Each Deployment still uses `RollingUpdate`
-(`maxUnavailable: 0`) for in-color patches. A missing or wrong signature
+(`maxUnavailable: 0`) for in-color patches. Both templates already
+prefer different hostnames (ADR 0080); there is no spread patch in
+this cutover. A missing or wrong signature
 must stop at step 1 — do not set image.
 
 ## `spring.profiles.active=prod`

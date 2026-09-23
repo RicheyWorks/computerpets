@@ -1,7 +1,7 @@
 # Idle color. Not an HPA target (ADR 0078). Not a PDB target (ADR 0079).
 # Scale up, wait Ready, then patch the Service selector to color=green.
 # See deploy/k8s/README.md.
-# Same probes, secrets, and prod profile as blue.
+# Same probes, secrets, prod profile, and soft hostname spread as blue (ADR 0080).
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -27,6 +27,19 @@ spec:
         app: computerpets
         color: green
     spec:
+      # Soft hostname spread (ADR 0080). Same rule as blue, scoped to
+      # color=green, so a cutover scale-up prefers different nodes.
+      # ScheduleAnyway still binds when the skew cannot be met.
+      # DoNotSchedule would leave that pod Pending.
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          nodeTaintsPolicy: Honor
+          labelSelector:
+            matchLabels:
+              app: computerpets
+              color: green
       initContainers:
         - name: wait-postgres
           image: postgres:16-alpine

@@ -40,4 +40,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - Postgres and Redis stay at one replica with no budget. They are scaffolding, not the API.
 - Re-applying `pdb.yaml` after a green cutover points the budget back at blue. Patch the live color again, or the idle color is what a drain protects.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** The live API pods are not spread across nodes. There is no topology spread and no pod anti-affinity. If every pod of the live color sits on one node, this budget blocks a drain of that node (two cannot stay up elsewhere) and a crash of that node is involuntary, so the budget does not apply. Not started here.
+- **Next gap:** Soft hostname spread landed as [0080](0080-api-pod-topology-spread.md). Not started in this ADR.

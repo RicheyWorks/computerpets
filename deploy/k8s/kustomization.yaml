@@ -16,6 +16,9 @@ resources:
 # pdb.yaml (prod API disruption budget, ADR 0079) is also not applied here.
 # Local/dev stays blue replicas 2, green replicas 0. Do not apply pdb.yaml
 # on that shape: minAvailable 2 with only 2 pods blocks every voluntary eviction.
+# Hostname spread is on the two API pod templates (ADR 0080), so this apply
+# does include it. whenUnsatisfiable is ScheduleAnyway: blue's 2 pods still
+# schedule on a one-node cluster.
 images:
   - name: ghcr.io/richeyworks/computerpets
     newTag: main
