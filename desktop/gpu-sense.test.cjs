@@ -252,6 +252,11 @@ test("the Linux probe script names nvidia-smi and amdgpu sysfs and does not inve
   assert.match(text, /drm-engine-render/);
   assert.match(text, /drm-cycles-rcs/);
   assert.match(text, /drm-total-cycles-rcs/);
+  assert.match(text, /memory_info/);
+  assert.match(text, /physical_vram_size_bytes/);
+  assert.match(text, /vram_d3cold_threshold/);
+  assert.match(text, /vram_avail/);
+  assert.match(text, /\/dev\/dri/);
   assert.match(text, /\/proc/);
   assert.match(text, /\bsleep\b/);
   assert.doesNotMatch(text, /powermetrics|ioreg |intel_gpu_top|busy_ns|rps_cur_freq|mem_busy_percent|mem_info_gtt|temp1_input|debugfs|perf_event|\/sys\/kernel\/debug/);
@@ -743,6 +748,138 @@ test("Linux i915 and xe sysfs stay unread and do not paint a percent or a memory
     assert.doesNotMatch(Gpu.gpuLine(plantedSample), /12%|0%/);
   } finally {
     rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("Linux i915 and xe device VRAM files stay off the shared line", () => {
+  function card(root, name, driver, pci, slot) {
+    const dev = join(root, name, "device");
+    mkdirSync(dev, { recursive: true });
+    symlinkSync(driver, join(dev, "driver"));
+    const lines = [`DRIVER=${driver}`];
+    if (pci) lines.push(`PCI_ID=${pci}`);
+    if (slot) lines.push(`PCI_SLOT_NAME=${slot}`);
+    writeFileSync(join(dev, "uevent"), `${lines.join("\n")}\n`);
+  }
+  function client(root, pid, fd, body) {
+    const file = join(root, String(pid), "fdinfo", String(fd));
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, body);
+  }
+  const i915Body = [
+    "drm-driver:\ti915",
+    "drm-pdev:\t0000:00:02.0",
+    "drm-client-id:\t7",
+    "drm-engine-render:\t1000 ns",
+    "drm-engine-capacity-render:\t1",
+    "drm-total-resident-vram:\t999999999",
+    "drm-resident-local:\t888888888",
+    "drm-total-local:\t777777777",
+    "",
+  ].join("\n");
+  const i915Next = i915Body.replace("drm-engine-render:\t1000 ns", "drm-engine-render:\t50001000 ns");
+  const root = mkdtempSync(join(tmpdir(), "gpu-ivram-"));
+  const first = mkdtempSync(join(tmpdir(), "gpu-ivram1-"));
+  const second = mkdtempSync(join(tmpdir(), "gpu-ivram2-"));
+  try {
+    card(root, "card0", "i915", "8086:9A49", "0000:00:02.0");
+    writeSysfsFile(root, "card0/device/memory_info/vram_total", "8589934592\n");
+    writeSysfsFile(root, "card0/device/memory_info/vram_avail", "6442450944\n");
+    writeSysfsFile(root, "card0/device/memory_info/vram_used", "0\n");
+    writeSysfsFile(root, "card0/device/mem_info_vram_used", "2147483648\n");
+    writeSysfsFile(root, "card0/device/mem_info_vram_total", "8589934592\n");
+    client(first, 10, 3, i915Body);
+    client(second, 10, 3, i915Next);
+    const text = runLinuxProbe({
+      GPU_SYSFS_ROOT: root,
+      GPU_PROC_ROOT: first,
+      GPU_FDINFO_ROOT_2: second,
+      GPU_FDINFO_INTERVAL_NS: "100000000",
+    });
+    assert.match(text, /i915 8086:9A49, \[N\/A\], 50, \[N\/A\], \[N\/A\], \[N\/A\]/);
+    assert.doesNotMatch(text, /8589934592|6442450944|2147483648|999999999|888888888|777777777/);
+    assert.doesNotMatch(text, /, 0,/);
+    const sample = Gpu.sampleFromProbe(Gpu.parseProbeText(text), { platform: "linux", nowMs: NOW });
+    assert.equal(sample.status, "read");
+    assert.equal(sample.source, "fdinfo");
+    assert.equal(sample.utilPercent, 50);
+    assert.equal(sample.memoryUsedBytes, null);
+    assert.equal(sample.memoryTotalBytes, null);
+    assert.equal(Gpu.gpuLine(sample), "GPU i915 8086:9A49 · unread · 50% · unread · unread");
+    assert.doesNotMatch(Gpu.gpuLine(sample), /0 MiB/);
+
+    const xeRoot = mkdtempSync(join(tmpdir(), "gpu-xvram-"));
+    const xe1 = mkdtempSync(join(tmpdir(), "gpu-xvram1-"));
+    const xe2 = mkdtempSync(join(tmpdir(), "gpu-xvram2-"));
+    try {
+      card(xeRoot, "card1", "xe", "8086:E20B", "0000:00:02.0");
+      writeSysfsFile(xeRoot, "card1/device/tile0/memory/physical_vram_size_bytes", "17179869184\n");
+      writeSysfsFile(xeRoot, "card1/device/tile0/memory/vram_used_bytes", "4294967296\n");
+      writeSysfsFile(xeRoot, "card1/device/vram_d3cold_threshold", "314159\n");
+      writeSysfsFile(xeRoot, "card1/device/tile0/memory/freq0/max_freq", "1200\n");
+      writeSysfsFile(xeRoot, "card1/device/memory_info/vram_total", "17179869184\n");
+      writeSysfsFile(xeRoot, "card1/device/memory_info/vram_avail", "0\n");
+      const xeBody = (cycles, total) =>
+        [
+          "drm-driver:\txe",
+          "drm-pdev:\t0000:00:02.0",
+          "drm-client-id:\t6",
+          `drm-cycles-rcs:\t${cycles}`,
+          `drm-total-cycles-rcs:\t${total}`,
+          "drm-total-vram0:\t666666666",
+          "drm-resident-vram0:\t555555555",
+          "",
+        ].join("\n");
+      client(xe1, 4, 3, xeBody(100, 1000));
+      client(xe2, 4, 3, xeBody(400000100, 1000001000));
+      const xeText = runLinuxProbe({
+        GPU_SYSFS_ROOT: xeRoot,
+        GPU_PROC_ROOT: xe1,
+        GPU_FDINFO_ROOT_2: xe2,
+        GPU_FDINFO_INTERVAL_NS: "100000000",
+      });
+      assert.match(xeText, /xe 8086:E20B, \[N\/A\], 40, \[N\/A\], \[N\/A\], \[N\/A\]/);
+      assert.doesNotMatch(xeText, /17179869184|4294967296|314159|1200|666666666|555555555/);
+      assert.doesNotMatch(xeText, /, 0,/);
+      const xeSample = Gpu.sampleFromProbe(Gpu.parseProbeText(xeText), { platform: "linux", nowMs: NOW });
+      assert.equal(xeSample.utilPercent, 40);
+      assert.equal(xeSample.memoryUsedBytes, null);
+      assert.equal(xeSample.memoryTotalBytes, null);
+      assert.equal(Gpu.gpuLine(xeSample), "GPU xe 8086:E20B · unread · 40% · unread · unread");
+    } finally {
+      rmSync(xeRoot, { recursive: true, force: true });
+      rmSync(xe1, { recursive: true, force: true });
+      rmSync(xe2, { recursive: true, force: true });
+    }
+
+    const only = mkdtempSync(join(tmpdir(), "gpu-ivram-only-"));
+    try {
+      card(only, "card0", "i915", "8086:9A49", "0000:00:02.0");
+      writeSysfsFile(only, "card0/device/memory_info/vram_total", "8589934592\n");
+      writeSysfsFile(only, "card0/device/memory_info/vram_used", "2147483648\n");
+      writeSysfsFile(only, "card0/device/memory_info/vram_avail", "6442450944\n");
+      const empty = runLinuxProbe({
+        GPU_SYSFS_ROOT: only,
+        GPU_PROC_ROOT: only,
+        GPU_FDINFO_INTERVAL_MS: "1",
+      });
+      assert.match(empty, /INTEL_EMPTY/);
+      assert.doesNotMatch(empty, /^INTEL$/m);
+      assert.doesNotMatch(empty, /ENDINTEL/);
+      assert.doesNotMatch(empty, /8589934592|2147483648|6442450944|8086/);
+      assert.doesNotMatch(empty, /, 0,/);
+      const emptySample = Gpu.sampleFromProbe(Gpu.parseProbeText(empty), { platform: "linux", nowMs: NOW });
+      assert.equal(emptySample.status, "unread");
+      assert.equal(emptySample.memoryUsedBytes, null);
+      assert.equal(emptySample.memoryTotalBytes, null);
+      assert.equal(Gpu.gpuLine(emptySample), "GPU unread");
+    } finally {
+      rmSync(only, { recursive: true, force: true });
+    }
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+    rmSync(first, { recursive: true, force: true });
+    rmSync(second, { recursive: true, force: true });
   }
 });
 

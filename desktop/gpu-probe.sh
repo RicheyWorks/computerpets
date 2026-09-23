@@ -24,7 +24,16 @@
 # is positive and no counter moved backwards. A zero interval, a
 # rewind, a missing file, or a percent above 100 stays INTEL_EMPTY.
 # Temperature, power, and memory stay [N/A]. Per-client fdinfo memory
-# is not device VRAM. rc6_residency_ms, gtidle/idle_residency_ms, and
+# is not device VRAM. There is no upstream device used and total pair.
+# xe tileN/memory/physical_vram_size_bytes is gone. What remains under
+# tileN/memory is HBM frequency. vram_d3cold_threshold is a D3cold
+# policy in megabytes, not a byte pair. An i915 memory_info directory
+# (vram_total, vram_avail, vram_used) is not upstream. A DRM query
+# used or unallocated field is zero without CAP_PERFMON, so that zero
+# is not idle and a derived full card is not used. The probe does not
+# open /dev/dri for that query. GTT and system memory are not card
+# capacity. A fixture that plants those files, including a zero, is
+# not copied. rc6_residency_ms, gtidle/idle_residency_ms, and
 # frequency files are not copied. PMU is not opened. The overlay tick
 # is five seconds and a hung probe is killed at eight, so the gap
 # between reads defaults to 200ms, never more than one second, and a
@@ -829,6 +838,8 @@ emit_intel() {
       }
     ' "$fdinfo_tmp/pairs" > "$one"
     pct=$(card_percent "$drv" "$one" "$interval_ns") || continue
+    # Memory stays unread. memory_info, physical_vram_size_bytes,
+    # vram_d3cold_threshold, and per-client fdinfo memory are not a pair.
     row="$label, [N/A], $pct, [N/A], [N/A], [N/A]"
     if [ "$nlines" -eq 0 ]; then
       lines=$row
