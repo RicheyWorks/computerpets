@@ -111,6 +111,16 @@ output "cluster_autoscaler_role_name" {
   value = try(module.cluster_autoscaler[0].role_name, "")
 }
 
+output "system_daemon_toleration_recorded" {
+  description = "True when vpc-cni configuration_values and the kube-proxy patch both record the API pool toleration (ADR 0096). False when enable_node_pool is false."
+  value       = try(module.system_daemons[0].recorded, false)
+}
+
+output "vpc_cni_addon_planned" {
+  description = "True when the vpc-cni addon is planned (ADR 0096). False for an empty cluster name and for kind or minikube."
+  value       = try(module.system_daemons[0].addon_planned, false)
+}
+
 output "node_pool_zone_label" {
   description = "topology.kubernetes.io/zone. EKS sets it from the instance AZ. This root does not stamp it."
   value       = try(module.node_pool[0].zone_label, "topology.kubernetes.io/zone")
@@ -134,7 +144,7 @@ output "k8s_wiring_hint" {
     7. Set POSTGRES_SSL_REQUIRED=true with spring_datasource_url. That URL is sslmode=require unless postgres_ssl_root_cert was set (then verify-full). Mount that PEM and set POSTGRES_SSL_ROOT_CERT to the same path. Do not invent a CA bundle. In-cluster Postgres leaves the flag unset.
     8. Keep verifying GHCR digests (ADR 0061) before kubectl set image.
     9. For a public API door, set api_listener_alb_arn (same value as waf_associate_alb_arn), api_listener_certificate_arn (an ACM certificate you already have — this root does not call ACM), and api_listener_target_group_arn. Port 80 redirects to 443. Then set API_LISTENER_TLS_REQUIRED=true and API_PUBLIC_BASE_URL=https://<your host>. Leave both unset for in-cluster HTTP. Do not set server.ssl (ADR 0077).
-    10. For multi-AZ API workers, set eks_cluster_name and node_pool_subnets to at least two private subnets in aws_region (ADR 0082). One on-demand node group per zone. No public IP. No SSH. This root does not create the cluster. Set enable_node_pool=false for kind or minikube. EKS sets topology.kubernetes.io/zone from the instance AZ.
+    10. For multi-AZ API workers, set eks_cluster_name and node_pool_subnets to at least two private subnets in aws_region (ADR 0082). One on-demand node group per zone. No public IP. No SSH. This root does not create the cluster. Set enable_node_pool=false for kind or minikube. EKS sets topology.kubernetes.io/zone from the instance AZ. Before that apply, patch kube-proxy with deploy/terraform/modules/system_daemons/kube-proxy-api-pool-toleration.yaml and import an existing vpc-cni addon (ADR 0096). Do not run that patch on kind or minikube. Do not taint a kind or minikube node.
     11. Cluster Autoscaler (ADR 0083) grows those groups when pods are Pending. Set eks_oidc_provider_arn to the cluster's existing OIDC provider (this root does not create it). Each group's max is at least the HPA ceiling of 10. Terraform ignores desired_size after create. Apply deploy/k8s/cluster-autoscaler.yaml only after substituting CLUSTER_NAME, AWS_REGION, and the role ARN. It is not in the kustomization. enable_node_pool=false keeps the role off for kind or minikube.
   EOT
 }

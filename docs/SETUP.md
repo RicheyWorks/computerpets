@@ -440,6 +440,12 @@ Labeling a node without that taint still schedules the API once that
 node also carries one zone label. Postgres and
 Redis do not tolerate it
 ([ADR 0094](adr/0094-api-pool-taint.md)).
+`aws-node` and `kube-proxy` are not in this kustomization. The vpc-cni
+addon `configuration_values` records the API pool toleration for
+`aws-node`. The kube-proxy strategic-merge patch is applied on the EKS
+cluster only, before that Terraform apply. Do not run that patch on
+kind or minikube
+([ADR 0096](adr/0096-system-daemon-api-pool-toleration.md)).
 Cluster Autoscaler grows those groups when pods are Pending. Each zone's
 max is at least the HPA ceiling of 10. Terraform ignores `desired_size`
 after create. `deploy/k8s/cluster-autoscaler.yaml` is not in this

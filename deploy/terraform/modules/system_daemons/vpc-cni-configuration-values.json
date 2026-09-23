@@ -1,0 +1,13 @@
+{
+  "tolerations": [
+    {
+      "operator": "Exists"
+    },
+    {
+      "key": "computerpets/node-pool",
+      "operator": "Equal",
+      "value": "api",
+      "effect": "NoSchedule"
+    }
+  ]
+}
