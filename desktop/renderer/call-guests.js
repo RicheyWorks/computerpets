@@ -1,5 +1,20 @@
-/** Call any of the 221. Groups are the existing dens. No new taxa. */
+/** Call any of the 221. Groups are the existing dens. No new taxa. Called guests draw on the shared sprite surface (ADR 0127). */
 (function (root) {
+  let surfaceLib = null;
+  if (typeof module !== "undefined" && module.exports) surfaceLib = require("./sprite-surface.js");
+
+  function surfaceApi() {
+    if (surfaceLib) return surfaceLib;
+    const scope = typeof globalThis !== "undefined" ? globalThis : {};
+    return scope.PetSpriteSurface || null;
+  }
+
+  function calledBox() {
+    const api = surfaceApi();
+    const n = api && api.BOX && api.BOX.called;
+    return typeof n === "number" && n > 0 ? n : GUEST_DEST;
+  }
+
   const HOUSE_KEYS = [
     "red_panda",
     "cat",
@@ -231,7 +246,8 @@
       img.style.background = "transparent";
       img.style.boxShadow = "none";
     }
-    if (img.setAttribute) {
+    // Width and height attributes clear a canvas backing store. The sprite surface owns that bitmap.
+    if (img.setAttribute && typeof img.getContext !== "function") {
       img.setAttribute("width", String(GUEST_DEST));
       img.setAttribute("height", String(GUEST_DEST));
     }
@@ -775,24 +791,46 @@
     return frames[i];
   }
 
-  function assignedSrc(img) {
-    if (!img) return "";
-    if (img.dataset && img.dataset.frameSrc) return img.dataset.frameSrc;
-    if (img.getAttribute) return img.getAttribute("src") || "";
-    return img.src || "";
+  function assignedSrc(el) {
+    if (!el) return "";
+    if (el.dataset && el.dataset.frame) return el.dataset.frame;
+    if (el.dataset && el.dataset.frameSrc) return el.dataset.frameSrc;
+    if (typeof el.getContext === "function") return "";
+    if (el.getAttribute) return el.getAttribute("src") || "";
+    return el.src || "";
   }
 
-  function assignSrc(img, src) {
-    if (!img || !src) return false;
-    if (assignedSrc(img) === src) return false;
-    if (img.dataset) img.dataset.frameSrc = src;
-    if (img.setAttribute) img.setAttribute("src", src);
-    else img.src = src;
+  function assignSrc(el, src, opts) {
+    if (!el || !src) return false;
+    const surface = el.dataset && el.dataset.surface;
+    const known = el.dataset && (el.dataset.frame || el.dataset.frameSrc);
+    if (known === src && surface && surface !== "refused" && surface !== "pending") return false;
+    const api = surfaceApi();
+    if (!api || typeof api.paintHeld !== "function") {
+      if (el.dataset) {
+        el.dataset.surface = "refused";
+        delete el.dataset.frame;
+      }
+      return false;
+    }
+    const painted = api.paintHeld(el, src, Object.assign({ cssSize: calledBox() }, opts || {}));
+    if (!painted || painted.ok !== true) return false;
+    if (el.dataset) el.dataset.frameSrc = src;
+    if (painted.cached) return false;
     return true;
   }
+
+  function createCalledCanvas() {
+    if (typeof document === "undefined" || typeof document.createElement !== "function") return null;
+    const canvas = document.createElement("canvas");
+    if (canvas.dataset) canvas.dataset.surface = "pending";
+    return canvas;
+  }
+
   function syncCalledPaint(root, guests, opts) {
     if (!root) return { reused: 0, added: 0, removed: 0 };
-    const make = (opts && opts.createImg) || (typeof document !== "undefined" && document.createElement ? () => document.createElement("img") : null);
+    // createImg is the node-reuse test seam. The overlay default is a canvas.
+    const make = (opts && opts.createImg) || createCalledCanvas;
     if (!make) return { reused: 0, added: 0, removed: 0 };
     const visible = (Array.isArray(guests) ? guests : []).filter(stillVisible);
     const keep = Object.create(null);
@@ -817,11 +855,14 @@
         img = make();
         img.className = "called-guest";
         img.alt = "";
-        if (img.setAttribute) img.setAttribute("aria-label", g.name || g.key);
-        else img.ariaLabel = g.name || g.key;
+        if (img.setAttribute) {
+          img.setAttribute("role", "img");
+          img.setAttribute("aria-label", g.name || g.key);
+        } else img.ariaLabel = g.name || g.key;
         if (!img.dataset) img.dataset = {};
         img.dataset.hit = "1";
         img.dataset.callKey = g.key;
+        if (!img.dataset.surface) img.dataset.surface = "pending";
         img.draggable = false;
         if ((onPress || onDismiss) && img.addEventListener) {
           img.addEventListener("pointerdown", (e) => {
@@ -838,8 +879,8 @@
       const frames = frameOf ? frameOf(g) : poseFrames(g, g.sprites);
       let src = frames && frames.length ? frames[Math.abs(g.frame || 0) % frames.length] || frames[0] : "";
       if (!src) src = poseSrc(g, g.sprites) || (g.sprites && (g.sprites.idle && g.sprites.idle[0])) || "";
-      assignSrc(img, src);
       destFit(img);
+      assignSrc(img, src, opts && opts.surface);
       if (img.style) img.style.transform = `translate3d(${g.x}px, ${-(g.lift || 0)}px, 0) scale(${g.facing || 1}, 1)`;
     }
     return { reused, added, removed };

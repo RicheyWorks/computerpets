@@ -1,6 +1,6 @@
 # 0125. The overlay opens on Chromium's GPU compositor or it stays closed
 
-- **Status:** Accepted (host pet frame moved to [0126](0126-chromium-sprite-surface.md))
+- **Status:** Accepted (host pet frame moved to [0126](0126-chromium-sprite-surface.md); Sip, Brick, called guests, and plants moved to [0127](0127-chromium-overlay-company-sprites.md))
 - **Date:** 2026-09-23
 - **Code:** `desktop/gpu-path.cjs`, `desktop/main.cjs`, `desktop/gpu-path.test.cjs`
 

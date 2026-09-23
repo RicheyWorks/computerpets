@@ -75,11 +75,11 @@ test("robin draw uses one real sit or walk frame, not two empty rects, and perch
   assert.equal(walking, walk[0]);
 
   const img = { src: "", dataset: {}, style: {}, setAttribute(name, value) { this[name] = value; }, getAttribute(name) { return this[name] || ""; } };
-  assert.equal(Call.assignSrc(img, src), true);
   assert.equal(Call.assignSrc(img, src), false);
   assert.equal(Call.assignSrc(img, ""), false);
-  assert.notEqual(img.src, "");
-  assert.notEqual(img.src, "sprites/robin/walk/1.png");
+  assert.equal(img.src, "");
+  assert.equal(img.dataset.surface, "refused");
+  assert.equal(img.dataset.frame, undefined);
 
   const flags = { hostKey: "red_panda", hostSleeping: true, hostX: 200, hostFacing: 1, hostLift: 0 };
   let robin = Call.beginCalled("robin", 800, 0, 1);
@@ -113,8 +113,8 @@ test("already-sat meet guests can spawn visible on the live overlay", () => {
   assert.match(petSrc, /spawnCalled\(\[next\]\)/);
   const img = { style: {}, src: "", setAttribute(n, v) { this[n] = v; this.src = n === "src" ? v : this.src; } };
   assert.equal(Call.destFit(img), true);
-  assert.equal(Call.assignSrc(img, "sprites/cat/walk/1.png"), true);
-  assert.notEqual(img.src, "");
+  assert.equal(Call.assignSrc(img, "sprites/cat/walk/1.png"), false);
+  assert.equal(img.src, "");
 });
 
 
