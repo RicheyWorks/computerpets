@@ -89,7 +89,9 @@ resources:
 # serving cert chains to APIService caBundle and its DNS SAN is
 # metrics-server.kube-system.svc. Kind and minikube do not apply that
 # cert. The kubelet CA ConfigMap is written only after each supplied
-# leaf chains to it (ADR 0112). Kind and minikube do not apply that CA.
+# leaf chains to it (ADR 0112). The leaf SAN must cover the dial
+# address, InternalIP then ExternalIP then Hostname (ADR 0113).
+# Kind and minikube do not apply that CA.
 # Its zone item is DoNotSchedule on
 # topology.kubernetes.io/zone, maxSkew 1. One labeled
 # zone still schedules. A node that omits the zone label does not.
