@@ -70,7 +70,7 @@ need_file "$METRICS"
 
 echo "== budgets, pin, and neighbors stay =="
 need_grep "$HPA" 'minReplicas: 3' "HPA floor stays 3"
-need_grep "$HPA" 'maxReplicas: 10' "HPA ceiling stays 10"
+need_grep "$HPA" 'maxReplicas: 6' "HPA ceiling stays 6"
 need_grep "$PDB" 'minAvailable: 2' "API disruption budget stays 2"
 need_grep "$BLUE" 'replicas: 2' "blue local replica count stays 2"
 need_grep "$GREEN" 'replicas: 0' "green stays the idle slot"
