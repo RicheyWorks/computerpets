@@ -39,7 +39,7 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - One running replica can still change desired capacity while the other is down, after it holds the lease. Both pods down still leaves Pending pods without new nodes until one replica is back and leading. Losing the lease waits out the 15-second duration unless the process releases it first.
 - A one-node cluster that applies this file leaves the second pod Pending. Do not apply it on kind or minikube. Local `kubectl apply -k deploy/k8s` still starts two API pods and an idle green Deployment.
 - Preferred zone anti-affinity can still place both pods in one zone. That is accepted. A hard zone rule would block the standby when only one zone remains.
-- The pool pin is [0091](0091-cluster-autoscaler-node-pool.md). Required hostname anti-affinity and leader election stay. The API Deployments stay unpinned.
+- The pool pin is [0091](0091-cluster-autoscaler-node-pool.md). Required hostname anti-affinity and leader election stay. The API pool pin is [0093](0093-api-node-pool.md).
 - The disruption budget is [0092](0092-cluster-autoscaler-pdb.md). Replicas, anti-affinity, and leader election stay.
 - The image tag stays `v1.36.1`. A keeper whose cluster minor is older replaces the tag with that minor's latest patch before apply. `:latest` is not used.
 - Adding the file to `kustomization.yaml`, dropping to one replica, removing required hostname anti-affinity, making the zone rule required, turning leader election off, or floating the image tag fails `check-cluster-autoscaler.sh`.
