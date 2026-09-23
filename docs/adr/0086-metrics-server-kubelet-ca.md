@@ -45,4 +45,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - Adding `--kubelet-insecure-tls`, making the volume optional, vendoring a PEM, floating the image tag, or listing the file in `kustomization.yaml` fails `check-metrics-server.sh`.
 - The APIService skip in this paragraph is [0087](0087-metrics-server-serving-cert.md). It does not skip kubelet verification.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** moved. The serving certificate is [0087](0087-metrics-server-serving-cert.md). The kubelet chain gate is [0112](0112-metrics-server-kubelet-ca-chain.md).
+- **Next gap:** moved. The serving certificate is [0087](0087-metrics-server-serving-cert.md). The kubelet chain gate is [0112](0112-metrics-server-kubelet-ca-chain.md). The dial-address SAN gate is [0113](0113-metrics-server-kubelet-san.md).

@@ -7,6 +7,7 @@
 # It does not apply metrics-server.yaml and does not patch caBundle.
 # Do not set --kubelet-insecure-tls. Certificates are not written into
 # the repo. No live AWS apply.
+# Dial-address SAN coverage is metrics-server-kubelet-san.sh (ADR 0113).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
