@@ -81,6 +81,17 @@ need_grep "$TF/outputs.tf" 'spring_datasource_url' "root output spring_datasourc
 need_grep "$TF/outputs.tf" 'redis_host' "root output redis_host"
 need_grep "$TF/outputs.tf" 'bundle_base_url' "root output bundle_base_url"
 
+echo "== Redis AUTH + transit TLS (ADR 0075) =="
+if [ -x "${TF}/check-redis-auth.sh" ]; then
+  if "${TF}/check-redis-auth.sh"; then
+    ok "check-redis-auth.sh"
+  else
+    bad "check-redis-auth.sh"
+  fi
+else
+  bad "check-redis-auth.sh missing"
+fi
+
 echo "== WAF live gate (ADR 0074) =="
 if [ -x "${TF}/check-waf-gate.sh" ]; then
   if "${TF}/check-waf-gate.sh"; then

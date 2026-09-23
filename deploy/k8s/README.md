@@ -46,7 +46,7 @@ Local-dev keeps env / `.env.example` and plain `docker-compose.yml`.
 | Secret | `computerpets-secrets` | Keys + Postgres password |
 | ConfigMap | `computerpets-config` | `SPRING_PROFILES_ACTIVE=prod`, JDBC URL, Redis host |
 | Deployment + Service + PVC | `computerpets-postgres` | Same Postgres 16 image as `docker-compose.yml` |
-| Deployment + Service | `computerpets-redis` | Same Redis 7 image as compose (no AUTH — the app has no Redis password setting) |
+| Deployment + Service | `computerpets-redis` | Same Redis 7 image as compose (AUTH-less; managed AUTH is ADR 0075) |
 | Deployment | `computerpets-blue` | Live app replicas (`color=blue`) |
 | Deployment | `computerpets-green` | Idle slot (`replicas: 0`, `color=green`) |
 | Service | `computerpets` | Selects `app=computerpets,color=blue` |
@@ -90,9 +90,12 @@ openssl rand -base64 24   # SPRING_DATASOURCE_PASSWORD (also POSTGRES_PASSWORD)
 | `SPRING_DATASOURCE_REPLICA_URL` | No | Optional managed Postgres **read** replica. Leave unset for the in-cluster single primary. Do not invent a replica Service. |
 | `POSTGRES_USER` / `POSTGRES_PASSWORD` / `POSTGRES_DB` | Yes if using the in-cluster Postgres | `postgres` container |
 
-Redis has no secret in this tree: `RateLimitConfiguration` only takes
-`REDIS_HOST` / `REDIS_PORT` / `REDIS_TIMEOUT` (ConfigMap). Do not invent
-a Redis password the app cannot read.
+In-cluster Redis has no secret in this tree. `REDIS_HOST`, `REDIS_PORT`,
+and `REDIS_TIMEOUT` stay on the ConfigMap. Optional managed AUTH
+([ADR 0075](../../docs/adr/0075-redis-auth-and-transit-tls.md)): put
+`REDIS_PASSWORD` on the Secret (or `REDIS_PASSWORD_FILE`) and set
+`REDIS_SSL=true` plus `REDIS_AUTH_REQUIRED=true`. Do not invent a token
+in git. `openssl rand -hex 16` matches the ElastiCache character rules.
 
 Optional provider env (add to the Secret or ConfigMap if you have real
 values — do not invent a collection address, itch game id, or Epic

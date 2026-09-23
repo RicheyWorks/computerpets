@@ -37,6 +37,7 @@ services:
       - RATE_LIMIT_BACKEND=redis
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      # AUTH and TLS stay unset. Compose Redis has no requirepass (ADR 0075).
       # OTLP/HTTP traces — empty means no export; local compose starts without a collector
       - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT:-}
     depends_on:

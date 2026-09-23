@@ -42,4 +42,4 @@ This slice does not reopen presence/CSP, Hikari/replica, bundle zip, cosign, CDN
 - WAF evaluation is a fixed window. The JVM filter is a token bucket. A client can still trip one before the other inside the same minute. The budgets are the same size.
 - Signed redeem is allowed through and is not on the bundles rate rule. HMAC, one-time consume, and IP binding stay on the house ([0055](0055-download-jti-one-time-and-ip-bound.md)).
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** Redis AUTH and transit TLS are still off. `RateLimitConfiguration` only reads `REDIS_HOST` / `REDIS_PORT` / `REDIS_TIMEOUT`. Not started here — a password the JVM cannot read would break the AUTH-less contract in [0062](0062-terraform-managed-stores.md).
+- **Next gap:** Redis AUTH and transit TLS landed as [0075](0075-redis-auth-and-transit-tls.md). Not started in this ADR.

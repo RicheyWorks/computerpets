@@ -1,4 +1,6 @@
-# No AUTH — RateLimitConfiguration only reads host/port/timeout, same as compose.
+# In-cluster scaffolding stays AUTH-less and without TLS (ADR 0075).
+# Managed ElastiCache sets REDIS_PASSWORD + REDIS_SSL=true. Do not add
+# an AUTH password on this container — compose and this Deployment are the local default.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
