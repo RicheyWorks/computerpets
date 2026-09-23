@@ -1,6 +1,6 @@
 # 0082. Multi-AZ API worker node pool
 
-- **Status:** Accepted (the API Deployments select this label in [0093](0093-api-node-pool.md); the per-zone floor is [0105](0105-api-hostname-floor.md); the node groups stay)
+- **Status:** Accepted (the API Deployments select this label in [0093](0093-api-node-pool.md); the per-zone floor is [0106](0106-api-single-zone-hostname-floor.md); the node groups stay)
 - **Date:** 2026-09-23
 - **Code:** `deploy/terraform/modules/node_pool/main.tf`; `deploy/terraform/check-node-pool.sh`
 

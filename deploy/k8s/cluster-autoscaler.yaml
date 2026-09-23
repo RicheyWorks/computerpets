@@ -37,7 +37,7 @@
 #
 # This Deployment does not create nodes by itself. It sets desired capacity
 # on the Auto Scaling groups the managed node groups already own. Terraform
-# ignores desired_size after create. min is 2 per zone (ADR 0105). max is at least
+# ignores desired_size after create. min is 3 per zone (ADR 0106). max is at least
 # the HPA ceiling. Scale-down still honors PodDisruptionBudgets.
 # Karpenter is not installed.
 #
@@ -277,10 +277,11 @@ spec:
           # ADR 0104. Each zone's max_size is 20. The leader reads that
           # as the Auto Scaling group MaxSize. It does not raise it.
           # --max-nodes-total stays unset.
-          # ADR 0105. Each zone's min_size is 2. Two healthy zones are
-          # four API hostnames, so the HPA floor does not land 2 and 1.
-          # The leader does not scale a group below that min.
-          # Do not set minDomains.
+          # ADR 0105. Each zone's min_size was 2. Two healthy zones were
+          # four API hostnames. One unhealthy zone still stacked 2 and 1.
+          # ADR 0106. Each zone's min_size is 3. One Ready zone is three
+          # hostnames, so the HPA floor is 1 and 1 and 1. The leader does
+          # not scale a group below that min. Do not set minDomains.
           command:
             - ./cluster-autoscaler
             - --cloud-provider=aws

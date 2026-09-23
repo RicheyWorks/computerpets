@@ -113,7 +113,7 @@ assert_exit 1 "check fails when the max is zero" \
 
 copy_tree "${BROKEN}"
 replace_once "${BROKEN}/deploy/terraform/modules/node_pool/main.tf" \
-  "min_size_per_zone     = 2" \
+  "min_size_per_zone     = 3" \
   "min_size_per_zone     = 0"
 assert_exit 1 "check fails when min drops below 1" \
   "${BROKEN}/deploy/k8s/check-cluster-autoscaler-zone-max.sh"
