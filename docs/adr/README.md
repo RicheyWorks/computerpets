@@ -137,7 +137,8 @@ address, or an API that is not on `main`.
 | [0116](0116-mac-accessibility-window-play.md) | Mac Accessibility lists top-level window rectangles for pet window play (window number, not the view pointer; untrusted stays empty) | Accepted |
 | [0117](0117-linux-nvidia-gpu-sense.md) | Linux reads nvidia-smi for desktop-local GPU sense (same line protocol as Windows; Mac stays `mac-gpu-sense`) | Accepted (Mac clause superseded in part by 0118; amdgpu-unread clause superseded in part by 0119) |
 | [0118](0118-mac-ioaccelerator-gpu-sense.md) | Mac reads IOAccelerator PerformanceStatistics for desktop-local GPU sense (same line protocol; missing tool stays unread; powermetrics is not called) | Accepted (amdgpu clause superseded in part by 0119) |
-| [0119](0119-linux-amdgpu-sysfs-gpu-sense.md) | Linux reads amdgpu sysfs into the same GPU line when nvidia-smi does not print one (missing file stays unread; Intel sysfs stays unread) | Accepted |
+| [0119](0119-linux-amdgpu-sysfs-gpu-sense.md) | Linux reads amdgpu sysfs into the same GPU line when nvidia-smi does not print one (missing file stays unread; Intel sysfs stays unread) | Accepted (Intel clause superseded in part by 0120) |
+| [0120](0120-linux-intel-sysfs-gpu-sense.md) | Linux i915 and xe sysfs stay unread (`INTEL_EMPTY`; RC6, GT idle, frequency, and a lone capacity file are not the line) | Accepted |
 
 ## How to add one
 

@@ -7,8 +7,15 @@
 # A missing file, a failed read, or a non-numeric file stays [N/A], not a zero.
 # A VRAM total of zero is not capacity. Bytes under half a MiB stay [N/A]
 # unless the file itself is zero. VRAM busyness, GTT, and hwmon are not
-# copied. Intel sysfs is not read. Windows PDH sections stay ABSENT.
-# GPU_SYSFS_ROOT overrides /sys/class/drm so a fixture can stand in for a card.
+# copied. When nvidia-smi and amdgpu both print nothing, an i915 or xe
+# card is still unread. Those drivers publish rc6_residency_ms and
+# gtidle/idle_residency_ms, which are cumulative idle milliseconds.
+# One read is not a percent. Time outside RC6 is not engine busy.
+# A frequency file is not utilization. No used and total memory pair
+# is published on that sysfs, so a lone capacity file is not copied.
+# The section is INTEL_ABSENT or INTEL_EMPTY. Windows PDH sections stay
+# ABSENT. GPU_SYSFS_ROOT overrides /sys/class/drm so a fixture can stand
+# in for a card.
 sysfs_root=${GPU_SYSFS_ROOT:-/sys/class/drm}
 
 read_one() {
@@ -142,6 +149,46 @@ $row"
   fi
 }
 
+emit_intel() {
+  root=$1
+  found=0
+  if [ ! -d "$root" ]; then
+    printf '%s\n' "INTEL_ABSENT"
+    return
+  fi
+  names=$(
+    for entry in "$root"/card*; do
+      [ -d "$entry" ] || continue
+      base=$(basename "$entry")
+      case "$base" in
+        card*[!0-9]*) continue ;;
+        card*[0-9]) printf '%s\n' "$base" ;;
+      esac
+    done | sort -V
+  )
+  old_ifs=$IFS
+  IFS='
+'
+  for base in $names; do
+    [ -n "$base" ] || continue
+    dev="$root/$base/device"
+    [ -d "$dev" ] || continue
+    [ -L "$dev/driver" ] || continue
+    target=$(readlink "$dev/driver" 2>/dev/null || true)
+    [ -n "$target" ] || continue
+    drv=$(basename "$target")
+    case "$drv" in
+      i915|xe) found=1 ;;
+    esac
+  done
+  IFS=$old_ifs
+  if [ "$found" -eq 0 ]; then
+    printf '%s\n' "INTEL_ABSENT"
+  else
+    printf '%s\n' "INTEL_EMPTY"
+  fi
+}
+
 nvidia_hit=0
 smi=$(command -v nvidia-smi 2>/dev/null || true)
 if [ -z "$smi" ]; then
@@ -162,7 +209,15 @@ else
   fi
 fi
 if [ "$nvidia_hit" -eq 0 ]; then
-  emit_amdgpu "$sysfs_root"
+  amd_out=$(emit_amdgpu "$sysfs_root")
+  printf '%s\n' "$amd_out"
+  amd_hit=0
+  if printf '%s\n' "$amd_out" | grep -qx 'AMDGPU'; then
+    amd_hit=1
+  fi
+  if [ "$amd_hit" -eq 0 ]; then
+    emit_intel "$sysfs_root"
+  fi
 fi
 printf '%s\n' "ENGINE_ABSENT"
 printf '%s\n' "MEMORY_ABSENT"
