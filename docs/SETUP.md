@@ -435,6 +435,13 @@ Zone anti-affinity is preferred, so a single zone still schedules when
 two hostnames exist. Leader election stays on. Both pods use the one
 IRSA service account. Only the leader changes desired capacity
 ([ADR 0090](adr/0090-cluster-autoscaler-ha.md)).
+`nodeSelector` also requires `kubernetes.io/os: linux` and
+`computerpets/node-pool: api`, so the hostname rule cannot be met by
+nodes outside those groups. Kind and minikube do not apply the file
+(`enable_node_pool=false` does not label their nodes). A single-zone
+set of labeled nodes still schedules both pods when two hostnames exist.
+The API Deployments do not select this label
+([ADR 0091](adr/0091-cluster-autoscaler-node-pool.md)).
 Resource metrics for that HPA are `deploy/k8s/metrics-server.yaml`
 (upstream high-availability-1.21+.yaml v0.9.0, `replicas: 2`, required
 hostname anti-affinity, APIService `v1beta1.metrics.k8s.io`). It is not in

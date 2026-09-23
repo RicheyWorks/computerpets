@@ -52,6 +52,8 @@ copy_tree() {
     "${dest}/docs/adr/0083-cluster-autoscaler.md"
   cp "${ROOT}/docs/adr/0090-cluster-autoscaler-ha.md" \
     "${dest}/docs/adr/0090-cluster-autoscaler-ha.md"
+  cp "${ROOT}/docs/adr/0091-cluster-autoscaler-node-pool.md" \
+    "${dest}/docs/adr/0091-cluster-autoscaler-node-pool.md"
   cp "${SCRIPT}" "${dest}/deploy/terraform/check-cluster-autoscaler.sh"
   chmod +x "${dest}/deploy/terraform/check-cluster-autoscaler.sh"
 }
@@ -110,6 +112,34 @@ copy_tree "${BROKEN}"
 sed -i '/topologyKey: topology.kubernetes.io\/zone/d' \
   "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml"
 assert_exit 1 "check fails when the soft zone anti-affinity is removed" \
+  "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
+
+copy_tree "${BROKEN}"
+# Without the pool key, two hostnames outside the groups satisfy anti-affinity.
+sed -i '/computerpets\/node-pool: api/d' \
+  "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml"
+assert_exit 1 "check fails when the pool nodeSelector is removed" \
+  "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
+
+copy_tree "${BROKEN}"
+# linux is part of the same required selector metrics-server uses.
+sed -i '/kubernetes.io\/os: linux/d' \
+  "${BROKEN}/deploy/k8s/cluster-autoscaler.yaml"
+assert_exit 1 "check fails when the linux nodeSelector is removed" \
+  "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
+
+copy_tree "${BROKEN}"
+# A drifted pool label would pin the scaler to nodes this module does not create.
+sed -i 's/"computerpets\/node-pool" = "api"/"computerpets\/node-pool" = "other"/' \
+  "${BROKEN}/deploy/terraform/modules/node_pool/main.tf"
+assert_exit 1 "check fails when the node pool label value drifts" \
+  "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
+
+copy_tree "${BROKEN}"
+# The API colors stay unpinned. This slice pins the scaler only.
+printf '\nnodeSelector:\n  computerpets/node-pool: api\n' \
+  >> "${BROKEN}/deploy/k8s/deployment-blue.yaml"
+assert_exit 1 "check fails when blue gains a pool nodeSelector" \
   "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
 
 echo
