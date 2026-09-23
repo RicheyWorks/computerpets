@@ -105,6 +105,7 @@ No mesh.
   ([0084](0084-metrics-server.md), [0085](0085-metrics-server-ha.md),
   [0086](0086-metrics-server-kubelet-ca.md),
   [0087](0087-metrics-server-serving-cert.md),
+  [0111](0111-metrics-server-serving-cert-chain.md),
   [0088](0088-metrics-server-zone-spread.md),
   [0089](0089-metrics-server-node-pool.md),
   [0098](0098-metrics-server-zone-hard-spread.md)).
