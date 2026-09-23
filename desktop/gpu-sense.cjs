@@ -1,22 +1,37 @@
-/** Windows-only GPU probe. Mac and Linux return unsupported and do not spawn. */
+/** Desktop-local GPU probe. Windows uses PowerShell. Linux uses nvidia-smi. Mac stays unsupported. */
 const { spawn } = require("child_process");
 const path = require("path");
 const Gpu = require("./renderer/gpu.js");
 
-const PROBE_SCRIPT = path.join(__dirname, "gpu-probe.ps1");
+const PROBE_PS1 = path.join(__dirname, "gpu-probe.ps1");
+const PROBE_SH = path.join(__dirname, "gpu-probe.sh");
 const TIMEOUT_MS = 8000;
+
+function probeSpec(platform) {
+  if (platform === "win32" || /^Win/i.test(String(platform || ""))) {
+    return {
+      command: "powershell.exe",
+      args: ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", PROBE_PS1],
+    };
+  }
+  if (Gpu.isLinux(platform)) {
+    return { command: "/bin/sh", args: [PROBE_SH] };
+  }
+  return null;
+}
 
 function runProbe(opts) {
   const spawnFn = (opts && opts.spawn) || spawn;
   const timeoutMs = (opts && opts.timeoutMs) || TIMEOUT_MS;
+  const spec = (opts && opts.probe) || probeSpec(opts && opts.platform);
   return new Promise((resolve, reject) => {
+    if (!spec) {
+      reject(new Error("gpu probe has no command"));
+      return;
+    }
     let child;
     try {
-      child = spawnFn(
-        "powershell.exe",
-        ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", PROBE_SCRIPT],
-        { windowsHide: true },
-      );
+      child = spawnFn(spec.command, spec.args, { windowsHide: true });
     } catch (err) {
       reject(err);
       return;
@@ -78,4 +93,4 @@ function read(opts) {
     .catch(() => Gpu.parseSample({ status: "unread", platform, reason: "probe-failed", readAtMs: nowMs }));
 }
 
-module.exports = { read, PROBE_SCRIPT, TIMEOUT_MS };
+module.exports = { read, probeSpec, PROBE_PS1, PROBE_SH, PROBE_SCRIPT: PROBE_PS1, TIMEOUT_MS };

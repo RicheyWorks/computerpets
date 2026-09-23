@@ -1199,13 +1199,13 @@ def _desk_rows() -> list[Affordance]:
         Affordance(
             "live.gpu_sense",
             "desk",
-            "Windows keeper GPU probe",
+            "Keeper-machine GPU probe",
             "gpu.py read_local",
             mode="live",
             fate="excluded",
             exclude_reason=(
                 "Reads the keeper machine. Offline contract is card.gpu. "
-                "Pass --live to probe. Mac/Linux stay mac-linux-gpu-sense. Never invents numbers."
+                "Pass --live to probe. Linux reads nvidia-smi. Mac stays mac-gpu-sense. Never invents numbers."
             ),
         ),
     ]
@@ -1472,9 +1472,9 @@ def _card_rows() -> list[Affordance]:
             "Honest GPU sense contract",
             "gpu.py / gpu.js / gpu.ts",
             notes=(
-                "Offline: valid, missing, malformed, stale, and Mac/Linux unsupported readings. "
+                "Offline: valid, missing, malformed, stale, Linux nvidia-smi, and Mac unsupported readings. "
                 "Sparkline history grows only from fresh read samples and stays empty otherwise. "
-                "No invented zeros. Live Windows probe stays live.gpu_sense."
+                "No invented zeros. Live probe stays live.gpu_sense."
             ),
         ),
         Affordance(
@@ -1610,13 +1610,13 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
             "missing": missing["status"] == "unread" and missing["utilPercent"] is None and "0%" not in gpu_line(missing),
             "malformed": malformed["status"] == "malformed" and malformed["utilPercent"] is None and "0%" not in gpu_line(malformed),
             "stale": stale["status"] == "stale" and stale["tempC"] is None and "62" not in gpu_line(stale),
-            "linux": linux["status"] == "unsupported" and linux["tempC"] is None and later_door("linux") == LATER_DOOR,
-            "darwin": darwin["status"] == "unsupported" and later_door("darwin") == LATER_DOOR and senses_on("win32"),
+            "linux": linux["status"] == "read" and linux["tempC"] == 62 and linux["utilPercent"] == 14 and later_door("linux") is None and senses_on("linux"),
+            "darwin": darwin["status"] == "unsupported" and darwin["tempC"] is None and later_door("darwin") == LATER_DOOR and senses_on("win32"),
             "history": len(history) == 2 and history[0]["utilPercent"] == 14 and history[1]["utilPercent"] == 40 and trail["path"] == "M1 11.3 L71 8.2" and trail["empty"] is False,
             "unread_spark": remember([], missing, now) == [] and sparkline([], missing, now)["path"] == "" and sparkline([], missing, now)["ink"] == UNREAD_INK,
             "stale_spark": stale_history == [] and sparkline(history, present(second, later), later)["path"] == "",
             "malformed_spark": remember([], malformed, now) == [] and sparkline([], malformed, now)["path"] == "",
-            "unsupported_spark": remember([], linux, now) == [] and sparkline([], darwin, now)["path"] == "" and sparkline([], linux, now)["history"] == [],
+            "unsupported_spark": remember([], darwin, now) == [] and sparkline([], darwin, now)["path"] == "" and sparkline([], darwin, now)["history"] == [],
             "surfaces": (
                 'id="hud-gpu"' in overlay
                 and 'data-spark="empty"' in overlay
@@ -2482,14 +2482,23 @@ def _invoke_live_network(action_id: str) -> InvokeResult:
                 detail=str(sample.get("status")),
                 trace=["gpu.invented"],
             )
-        if sys.platform != "win32":
-            ok = sample["status"] == "unsupported" and sample.get("reason") == "mac-linux-gpu-sense"
+        if sys.platform == "darwin":
+            ok = sample["status"] == "unsupported" and sample.get("reason") == "mac-gpu-sense"
             return InvokeResult(
                 action_id, "desk", ok,
                 detail=f"status={sample['status']}",
                 extras={"status": sample["status"], "platform": sys.platform},
                 trace=[f"gpu.{sample['status']}", "platform=" + sys.platform],
-                error=None if ok else "non-Windows GPU sense must stay unsupported",
+                error=None if ok else "Mac GPU sense must stay mac-gpu-sense",
+            )
+        if sys.platform not in {"win32", "linux"}:
+            ok = sample["status"] == "unsupported" and sample.get("reason") == "mac-gpu-sense"
+            return InvokeResult(
+                action_id, "desk", ok,
+                detail=f"status={sample['status']}",
+                extras={"status": sample["status"], "platform": sys.platform},
+                trace=[f"gpu.{sample['status']}", "platform=" + sys.platform],
+                error=None if ok else "this platform has no GPU probe",
             )
         ok = sample["status"] in {"read", "unread", "malformed"}
         if sample["status"] == "read":
@@ -2499,7 +2508,7 @@ def _invoke_live_network(action_id: str) -> InvokeResult:
             detail=f"status={sample['status']}",
             extras={"status": sample["status"], "platform": sys.platform},
             trace=[f"gpu.{sample['status']}"],
-            error=None if ok else "Windows GPU probe returned an unusable sample",
+            error=None if ok else "GPU probe returned an unusable sample",
         )
     if action_id == "live.cry_playback":
         return InvokeResult(

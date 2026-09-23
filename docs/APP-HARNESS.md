@@ -123,7 +123,7 @@ These are **in the catalog** so they cannot go green by omission. `--gaps` lists
 | `live.news_rss` | True live RSS/HTTP; **`desk.news.resolve` drives `parseRss` fixtures** |
 | `live.market_quote` | True live CoinGecko/Yahoo HTTP; **`desk.market.resolve` drives parse fixtures** |
 | `live.nft_floor` | True live NFT floor HTTP; **`desk.nft.resolve` drives `parseNftLive` fixtures** |
-| `live.gpu_sense` | Live keeper-machine GPU probe; **`card.gpu` drives the offline contract**. Mac/Linux stay `mac-linux-gpu-sense`. Pass `--live` to read the machine. Never invents numbers. |
+| `live.gpu_sense` | Live keeper-machine GPU probe; **`card.gpu` drives the offline contract**. Linux reads nvidia-smi. Mac stays `mac-gpu-sense`. Pass `--live` to read the machine. Never invents numbers. |
 | `ethogram.tricks.red_panda` | Rui stays excluded by design (idle `acts_for` covers blotter ethogram) — do not invent a driven `ethogram.tricks.red_panda` ultra row |
 | `blotter.plaque` | Needs PyQt6 `SpeciesPlaque` QWidget; **plaque copy** driven as `blotter.guide`; **pass `--gui`** to drive this id (species-plaque `ok:` line from shared `app --check`) |
 | `blotter.frames_paint` | Needs PyQt6 QPainter; **ANIMS keys** driven as `blotter.frames`; **pass `--gui`** to drive this id (pet-frames-painted / pixmap `ok:` line) |

@@ -18,14 +18,17 @@ function probe(body) {
   return G.parseProbeText(body);
 }
 
-test("Windows senses; Mac and Linux name the later door and do not invent numbers", () => {
+test("Windows and Linux sense; Mac names the later door and does not invent numbers", () => {
   assert.equal(G.sensesOn("win32"), true);
   assert.equal(G.sensesOn("Windows"), true);
+  assert.equal(G.sensesOn("linux"), true);
+  assert.equal(G.sensesOn("Linux"), true);
   assert.equal(G.laterDoor("win32"), null);
+  assert.equal(G.laterDoor("linux"), null);
   assert.equal(G.isMac("darwin"), true);
   assert.equal(G.isLinux("linux"), true);
-  assert.equal(G.laterDoor("darwin"), "mac-linux-gpu-sense");
-  assert.equal(G.laterDoor("linux"), "mac-linux-gpu-sense");
+  assert.equal(G.laterDoor("darwin"), "mac-gpu-sense");
+  assert.equal(G.LATER_DOOR, "mac-gpu-sense");
   assert.equal(G.STALE_MS, 20000);
   const mac = G.sampleFromProbe(
     { nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5" },
@@ -36,12 +39,20 @@ test("Windows senses; Mac and Linux name the later door and do not invent number
     { platform: "linux", nowMs: NOW },
   );
   assert.equal(mac.status, "unsupported");
-  assert.equal(linux.status, "unsupported");
-  assert.equal(G.gpuLine(mac), "GPU unread · mac-linux-gpu-sense");
-  assert.equal(G.gpuLine(linux), "GPU unread · mac-linux-gpu-sense");
+  assert.equal(linux.status, "read");
+  assert.equal(linux.source, "nvidia-smi");
+  assert.equal(linux.tempC, 62);
+  assert.equal(linux.utilPercent, 14);
+  assert.equal(G.gpuLine(mac), "GPU unread · mac-gpu-sense");
+  assert.equal(G.gpuLine(linux), VALID_LINE);
   assert.equal(mac.tempC, null);
-  assert.equal(linux.utilPercent, null);
   assert.doesNotMatch(G.gpuLine(mac), /62|14%|0%/);
+  const second = G.sampleFromProbe(
+    { nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 40, 3200, 12288, 48.5" },
+    { platform: "linux", nowMs: NOW + 1000 },
+  );
+  const history = G.remember(G.remember([], linux, NOW), second, NOW + 1000);
+  assert.equal(G.sparkline(history, second, NOW + 1000).path, "M1 11.3 L71 8.2");
 });
 
 test("a valid nvidia reading keeps real zeros and skips a second GPU", () => {
@@ -280,19 +291,17 @@ test("unread, malformed, and unsupported sparklines stay empty", () => {
   assert.equal(G.sparkline(prior, malformed, NOW + 2000).empty, true);
   assert.equal(G.sparkline(prior, malformed, NOW + 2000).path, "");
 
-  for (const platform of ["darwin", "linux"]) {
-    const sample = G.sampleFromProbe(
-      { nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5" },
-      { platform, nowMs: NOW },
-    );
-    assert.equal(sample.status, "unsupported");
-    assert.deepEqual(G.remember([], sample, NOW), []);
-    const spark = G.sparkline([], sample, NOW);
-    assert.equal(spark.empty, true);
-    assert.equal(spark.path, "");
-    assert.equal(spark.ink, G.UNREAD_INK);
-    assert.deepEqual(spark.history, []);
-  }
+  const mac = G.sampleFromProbe(
+    { nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5" },
+    { platform: "darwin", nowMs: NOW },
+  );
+  assert.equal(mac.status, "unsupported");
+  assert.deepEqual(G.remember([], mac, NOW), []);
+  const spark = G.sparkline([], mac, NOW);
+  assert.equal(spark.empty, true);
+  assert.equal(spark.path, "");
+  assert.equal(spark.ink, G.UNREAD_INK);
+  assert.deepEqual(spark.history, []);
 });
 
 test("stale samples clear the sparkline", () => {
@@ -340,7 +349,7 @@ test("the probe script never plants a zero, and the HUD stays lockstep", () => {
   const cardSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "keeper-card.tsx"), "utf8");
   const pySrc = readFileSync(join(__dirname, "..", "..", "client", "computerpets_client", "gpu.py"), "utf8");
   const appSrc = readFileSync(join(__dirname, "..", "..", "client", "computerpets_client", "app.py"), "utf8");
-  assert.match(webGpu, /mac-linux-gpu-sense/);
+  assert.match(webGpu, /mac-gpu-sense/);
   assert.match(webGpu, /STALE_MS = 20000/);
   assert.match(webGpu, /export function remember/);
   assert.match(webGpu, /export function sparkline/);
@@ -349,7 +358,7 @@ test("the probe script never plants a zero, and the HUD stays lockstep", () => {
   assert.match(cardSrc, /sparkline\(\[\], UNREAD_GPU, 0\)/);
   assert.match(cardSrc, /data-spark=/);
   assert.doesNotMatch(cardSrc, /M1 11\.3/);
-  assert.match(pySrc, /mac-linux-gpu-sense/);
+  assert.match(pySrc, /mac-gpu-sense/);
   assert.match(pySrc, /STALE_MS = 20000/);
   assert.match(pySrc, /def remember/);
   assert.match(pySrc, /def sparkline/);
