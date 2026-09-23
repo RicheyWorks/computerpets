@@ -423,7 +423,7 @@ No live AWS apply.
 ./deploy/k8s/check-api-pool-taint.test.sh
 ```
 
-## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092, ADR 0099, ADR 0101, ADR 0102, ADR 0103)
+## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092, ADR 0099, ADR 0101, ADR 0102, ADR 0103, ADR 0104)
 
 `cluster-autoscaler.yaml` is **not** in the kustomization. `kubectl apply -k
 deploy/k8s` does not install it. Kind and minikube set
@@ -431,7 +431,10 @@ deploy/k8s` does not install it. Kind and minikube set
 
 The prod scaler runs in `kube-system` and changes desired capacity on the
 Auto Scaling groups behind the per-zone node groups. Each group's max is
-10, the HPA ceiling. The minimum stays 1. Terraform ignores `desired_size`
+20, twice the HPA ceiling of 10
+([ADR 0104](../../docs/adr/0104-per-zone-node-max.md)).
+The leader reads that number from the group's `MaxSize`. It does not
+raise it. The minimum stays 1. Terraform ignores `desired_size`
 after the first apply. `--balance-similar-node-groups=true` keeps the two
 zones from drifting apart. Scale-down still reads `poddisruptionbudgets`.
 
@@ -477,6 +480,8 @@ defaults. A budget that is already gone, a failed snapshot update, or
 a scale-up that is not successful still ends that salvo. The next
 main loop is the retry
 ([ADR 0103](../../docs/adr/0103-cluster-autoscaler-salvo-early-stop.md)).
+A zone already at 20 still cannot grow. On two hostnames the HPA floor
+is still 2 and 1.
 Do not set `minDomains`.
 Required zone anti-affinity is not set. Required hostname anti-affinity
 is not the follow-up.
@@ -525,6 +530,8 @@ minor's latest patch instead. Do not commit a real account id.
 ./deploy/k8s/check-cluster-autoscaler-scale-up-salvo.test.sh
 ./deploy/k8s/check-cluster-autoscaler-salvo-early-stop.sh
 ./deploy/k8s/check-cluster-autoscaler-salvo-early-stop.test.sh
+./deploy/k8s/check-cluster-autoscaler-zone-max.sh
+./deploy/k8s/check-cluster-autoscaler-zone-max.test.sh
 ```
 
 Zone spread for the API colors stays the item in those Deployments.

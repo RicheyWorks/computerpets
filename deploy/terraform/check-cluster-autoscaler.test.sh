@@ -69,7 +69,7 @@ trap cleanup EXIT
 
 copy_tree "${BROKEN}"
 # A max under the HPA ceiling leaves the tenth pod Pending even after scale-up.
-sed -i 's/max_size_per_zone     = 10/max_size_per_zone     = 4/' \
+sed -i 's/max_size_per_zone     = 20/max_size_per_zone     = 4/' \
   "${BROKEN}/deploy/terraform/modules/node_pool/main.tf"
 assert_exit 1 "check fails when node-group max drops below the HPA ceiling" \
   "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"

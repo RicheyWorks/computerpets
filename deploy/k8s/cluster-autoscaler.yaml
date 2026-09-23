@@ -274,6 +274,9 @@ spec:
           # that is already gone, a failed snapshot update, or a
           # scale-up that is not successful ends the salvo. The next
           # main loop is the retry.
+          # ADR 0104. Each zone's max_size is 20. The leader reads that
+          # as the Auto Scaling group MaxSize. It does not raise it.
+          # --max-nodes-total stays unset.
           command:
             - ./cluster-autoscaler
             - --cloud-provider=aws
