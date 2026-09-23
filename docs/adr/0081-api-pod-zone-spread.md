@@ -1,6 +1,6 @@
 # 0081. API pod zone spread
 
-- **Status:** Accepted (the pool pin is [0093](0093-api-node-pool.md); `ScheduleAnyway` stays)
+- **Status:** Accepted (zone `whenUnsatisfiable` is `DoNotSchedule` in [0095](0095-api-zone-hard-spread.md); hostname stays `ScheduleAnyway`)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/deployment-blue.yaml`; `deploy/k8s/deployment-green.yaml`; `deploy/k8s/check-zone-spread.sh`
 
@@ -43,4 +43,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - Postgres and Redis stay at one replica with no zone spread. They are scaffolding, not the API.
 - Re-applying the Deployments does not retarget the HPA or the PDB.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** Closed for the worker pool by [0082](0082-multi-az-node-pool.md). The zone constraint stays soft.
+- **Next gap:** moved. Hard zone spread is [0095](0095-api-zone-hard-spread.md).

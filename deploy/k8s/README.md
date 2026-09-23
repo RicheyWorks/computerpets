@@ -263,7 +263,9 @@ Pending.
 The selector is `app=computerpets` plus that Deployment's own color.
 Blue pods do not count as green's spread, and green pods do not count
 as blue's. There is no `minDomains`. The zone key is a second constraint
-([ADR 0081](../../docs/adr/0081-api-pod-zone-spread.md)). Postgres and Redis
+([ADR 0081](../../docs/adr/0081-api-pod-zone-spread.md)). Its action is
+`DoNotSchedule` ([ADR 0095](../../docs/adr/0095-api-zone-hard-spread.md)).
+This hostname item stays `ScheduleAnyway`. Postgres and Redis
 are not constrained. Local `replicas` stay 2 and 0. This rule is on the
 pod template, so `kubectl apply -k` does apply it. It does not apply
 `hpa.yaml` or `pdb.yaml`. The pool pin is
@@ -280,31 +282,53 @@ and PDB patches below are unchanged. Soft spread can still place every
 pod of the live color on one node. A crash of that node is not blocked
 by the budget.
 
-## Zone spread (ADR 0081)
+## Zone spread (ADR 0081, ADR 0095)
 
 Both API pod templates add a second `topologySpreadConstraints` item on
 `topology.kubernetes.io/zone`. `maxSkew` is 1. `whenUnsatisfiable` is
-`ScheduleAnyway`. `nodeTaintsPolicy` is `Honor`. The selector is the
-same color-scoped pair as the hostname item. Hostname spread stays.
+`DoNotSchedule`. `nodeTaintsPolicy` is `Honor`. `nodeAffinityPolicy` is
+`Honor`. The selector is the same color-scoped pair as the hostname
+item. Hostname spread stays `ScheduleAnyway`. There is no `minDomains`.
+Do not set `minDomains`.
 
-`DoNotSchedule` is not used on the zone key. That action skips nodes
-which omit `topology.kubernetes.io/zone`, so a laptop cluster would
-leave the second pod Pending. It would also count a tainted node in
-another zone as an empty domain and stick the HPA floor of 3. There is
-no `minDomains`. A required zone anti-affinity is not set.
+`DoNotSchedule` skips a node that omits `topology.kubernetes.io/zone`.
+Kind and minikube do not set that label. A pool label alone leaves the
+API pods Pending. Set one zone value on the labeled node when a local
+cluster should run the API.
+
+One labeled zone still schedules. `minDomains` is unset, so the
+constraint behaves as `minDomains: 1`. The only eligible domain is that
+zone, and the skew of placing another pod there is 1, which `maxSkew`
+allows. Hard spread does not invent a second zone. Every replica of the
+live color can still sit in that one zone. That is the honest limit.
+
+On two or more pool zones that can take a pod, a placement that would
+make the skew greater than 1 stays Pending. The live color cannot put
+every pod in one zone while another labeled zone has room. On two zones
+the HPA floor of 3 is 2 and 1, not 3 and 0. If the lighter zone has no
+remaining capacity, the pod stays Pending until that zone can take it.
+Cluster Autoscaler can add a node there. This apply does not change the
+scaler.
+
+`nodeTaintsPolicy: Honor` drops nodes this pod cannot tolerate out of
+the count. These pods tolerate the API pool taint, so tainted API
+workers stay in the skew. A control-plane taint they do not tolerate
+stays out. `nodeAffinityPolicy: Honor` counts only nodes that match the
+pool selector.
 
 **Prod expectation:** schedulable workers in at least two availability zones
 (three when the floor of 3 should land one pod per zone). Cloud
 providers set the zone label. Private workers are one EKS managed node
 group per zone ([ADR 0082](../../docs/adr/0082-multi-az-node-pool.md)).
-This apply does not create them. A single-zone pool still schedules once
-the nodes carry `computerpets/node-pool=api`
-([ADR 0093](../../docs/adr/0093-api-node-pool.md)).
-Soft spread can still place every pod of the live color in one zone. A
-failure of that zone is not blocked by the budget.
+This apply does not create them. No live AWS apply. `aws-node` and
+`kube-proxy` are not in this repo. A failure of a zone that still has
+no eligible node is not blocked by the budget, and the remaining zone
+can take every pod because it is then the only domain.
 
 ```bash
 ./deploy/k8s/check-zone-spread.sh
+./deploy/k8s/check-api-zone-hard-spread.sh
+./deploy/k8s/check-api-zone-hard-spread.test.sh
 ```
 
 A cutover does not patch the zone item. Scaling green uses the green
@@ -320,10 +344,12 @@ The selector is required. There is no `nodeAffinity` block. A node
 outside the groups does not receive an API pod.
 
 Both spread items set `nodeAffinityPolicy: Honor`, so hostname and zone
-skew count only nodes that match the selector. `whenUnsatisfiable`
-stays `ScheduleAnyway`. `DoNotSchedule` is not set. One labeled node
-still schedules both blue pods. A single labeled zone still schedules.
-HPA and PDB are unchanged. Postgres and Redis are not pinned.
+skew count only nodes that match the selector. Hostname
+`whenUnsatisfiable` stays `ScheduleAnyway`. The zone item is
+`DoNotSchedule` ([ADR 0095](../../docs/adr/0095-api-zone-hard-spread.md)).
+One labeled node still schedules both blue pods when that node also
+carries one zone label. One labeled zone still schedules. HPA and PDB
+are unchanged. Postgres and Redis are not pinned.
 
 Kind and minikube apply these Deployments (`kubectl apply -k
 deploy/k8s`). Their nodes omit `computerpets/node-pool=api` unless a
@@ -353,7 +379,10 @@ A toleration does not require the taint.
 Do not taint a kind or minikube node.
 The API pods stay Pending until a node is labeled
 `computerpets/node-pool=api`. Labeling that node without the taint
-still schedules the API. Postgres and Redis still schedule on the
+still schedules the API once the node also carries one
+`topology.kubernetes.io/zone` value
+([ADR 0095](../../docs/adr/0095-api-zone-hard-spread.md)). A pool label
+alone leaves the API Pending. Postgres and Redis still schedule on the
 untainted node. Tainting the only laptop node leaves the stores
 Pending. metrics-server and Cluster Autoscaler stay out of the
 kustomization. `aws-node` and `kube-proxy` are not in this repo. No
