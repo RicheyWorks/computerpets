@@ -13,7 +13,8 @@
 # has no pods. Postgres and Redis are not targets.
 # After a cutover, patch scaleTargetRef to computerpets-green before
 # scaling blue to 0. Re-applying this file points the autoscaler back at
-# blue. See deploy/k8s/README.md.
+# blue. Patch pdb.yaml onto that same color in the same cutover (ADR 0079).
+# See deploy/k8s/README.md.
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
