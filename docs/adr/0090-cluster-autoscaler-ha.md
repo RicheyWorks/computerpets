@@ -1,6 +1,6 @@
 # 0090. High availability for Cluster Autoscaler
 
-- **Status:** Accepted
+- **Status:** Accepted (the pool pin is [0091](0091-cluster-autoscaler-node-pool.md); replicas, anti-affinity, and leader election stay)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/cluster-autoscaler.yaml`; `deploy/terraform/check-cluster-autoscaler.sh`
 
@@ -39,9 +39,9 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - One running replica can still change desired capacity while the other is down, after it holds the lease. Both pods down still leaves Pending pods without new nodes until one replica is back and leading. Losing the lease waits out the 15-second duration unless the process releases it first.
 - A one-node cluster that applies this file leaves the second pod Pending. Do not apply it on kind or minikube. Local `kubectl apply -k deploy/k8s` still starts two API pods and an idle green Deployment.
 - Preferred zone anti-affinity can still place both pods in one zone. That is accepted. A hard zone rule would block the standby when only one zone remains.
-- The pods are not pinned to `computerpets/node-pool=api`. Two hostnames outside those groups satisfy the required rule. The API Deployments stay unpinned.
+- The pool pin is [0091](0091-cluster-autoscaler-node-pool.md). Required hostname anti-affinity and leader election stay. The API Deployments stay unpinned.
 - There is no PodDisruptionBudget on this Deployment. Draining the leader's node drops that pod. The other replica, already scheduled on another hostname, can take the lease. Draining every node that holds a replica still stops scaling until one pod is back.
 - The image tag stays `v1.36.1`. A keeper whose cluster minor is older replaces the tag with that minor's latest patch before apply. `:latest` is not used.
 - Adding the file to `kustomization.yaml`, dropping to one replica, removing required hostname anti-affinity, making the zone rule required, turning leader election off, or floating the image tag fails `check-cluster-autoscaler.sh`.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** these pods are still not pinned to `computerpets/node-pool=api`, so required hostname anti-affinity can be met by nodes outside the groups this scaler manages. There is no PodDisruptionBudget on this Deployment. Preferred zone anti-affinity can still place both pods in one zone. `ScheduleAnyway` can still place both metrics-server pods in one zone when the labeled pool is one zone or a labeled node omits `topology.kubernetes.io/zone`. API zone spread stays `ScheduleAnyway`, and the API Deployments are still not pinned to this label. A serving certificate that does not chain to `caBundle` (and is not a system root), or whose SAN is not `metrics-server.kube-system.svc`, still leaves `kubectl top` empty. A kubelet certificate that does not chain to `metrics-server-kubelet-ca` still leaves `kubectl top` empty.
+- **Next gap:** moved. The pool pin is [0091](0091-cluster-autoscaler-node-pool.md).
