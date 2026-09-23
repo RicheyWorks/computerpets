@@ -123,10 +123,11 @@ need_not_grep "$KUSTOM" '^[[:space:]]*-[[:space:]]*metrics-server\.yaml[[:space:
 need_not_grep "$KUSTOM" '^[[:space:]]*-[[:space:]]*cluster-autoscaler\.yaml[[:space:]]*$' "kustomization still omits cluster-autoscaler"
 need_grep "$BLUE" 'replicas: 2' "blue local replica count stays 2"
 need_grep "$GREEN" 'replicas: 0' "green stays the idle slot"
-# Zone DoNotSchedule is ADR 0095. This check does not own that action.
-# Hostname stays ScheduleAnyway.
-need_grep "$BLUE" 'whenUnsatisfiable: ScheduleAnyway' "blue hostname stays ScheduleAnyway"
-need_grep "$GREEN" 'whenUnsatisfiable: ScheduleAnyway' "green hostname stays ScheduleAnyway"
+# Zone DoNotSchedule is ADR 0095. Hostname DoNotSchedule is ADR 0100.
+# This check does not own those actions. It only refuses a drop back
+# to ScheduleAnyway on the API colors.
+need_not_grep "$BLUE" 'whenUnsatisfiable: ScheduleAnyway' "blue spread is not ScheduleAnyway"
+need_not_grep "$GREEN" 'whenUnsatisfiable: ScheduleAnyway' "green spread is not ScheduleAnyway"
 need_grep "$HPA" 'minReplicas: 3' "HPA floor stays 3"
 need_grep "$HPA" 'maxReplicas: 10' "HPA ceiling stays 10"
 need_grep "$PDB" 'minAvailable: 2' "API disruption budget stays 2"
@@ -150,7 +151,7 @@ need_grep "$ADR" 'Catalog stays 221' "catalog stays 221"
 need_grep "$ADR" 'No Rui sprites' "no Rui sprites"
 need_grep "$ADR" 'Do not taint a kind or minikube node' "ADR refuses a local taint"
 need_grep "$ADR" 'A toleration does not require the taint' "ADR says a toleration is not a taint"
-need_grep "$ADR" 'ScheduleAnyway' "ADR keeps the soft spread"
+need_grep "$ADR" 'ScheduleAnyway' "taint ADR still records the old soft spread"
 need_grep "$ADR" 'aws-node' "ADR names the VPC CNI DaemonSet this repo does not own"
 need_grep "$ADR" 'kube-proxy' "ADR names kube-proxy this repo does not own"
 need_grep "$ADR" 'No live AWS apply' "ADR does not apply Terraform"

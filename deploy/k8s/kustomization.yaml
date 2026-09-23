@@ -16,13 +16,22 @@ resources:
 # pdb.yaml (prod API disruption budget, ADR 0079) is also not applied here.
 # Local/dev stays blue replicas 2, green replicas 0. Do not apply pdb.yaml
 # on that shape: minAvailable 2 with only 2 pods blocks every voluntary eviction.
-# Hostname spread (ADR 0080) stays ScheduleAnyway on both API pod
-# templates. Zone spread (ADR 0081, hardened by ADR 0095) is
-# DoNotSchedule on topology.kubernetes.io/zone, maxSkew 1,
-# nodeAffinityPolicy Honor. One labeled zone still schedules: a single
-# domain keeps skew at 1. A node that omits topology.kubernetes.io/zone
-# does not. Kind and minikube omit that label unless a human sets one
-# zone value. Do not set minDomains. This apply does not create zones.
+# Hostname spread (ADR 0080, hardened by ADR 0100) is DoNotSchedule on
+# kubernetes.io/hostname, maxSkew 1, nodeAffinityPolicy Honor,
+# nodeTaintsPolicy Honor, on both API pod templates.
+# One hostname still schedules: a single domain keeps skew at 1.
+# The second local replica is not left Pending by this item.
+# Kind and minikube with one eligible hostname still run both blue
+# replicas on that node. Hard spread does not invent a second node.
+# Required hostname anti-affinity is not set.
+# Do not set minDomains. That would leave the second pod Pending on a
+# laptop that has only one hostname.
+# Zone spread (ADR 0081, hardened by ADR 0095) is DoNotSchedule on
+# topology.kubernetes.io/zone, maxSkew 1, nodeAffinityPolicy Honor.
+# One labeled zone still schedules: a single domain keeps skew at 1.
+# A node that omits topology.kubernetes.io/zone does not. Kind and
+# minikube omit that label unless a human sets one zone value. Do not
+# set minDomains. This apply does not create zones.
 # API pool pin (ADR 0093) is on both pod templates, so this apply includes
 # it. nodeSelector requires kubernetes.io/os=linux and
 # computerpets/node-pool=api. nodeAffinityPolicy is Honor. Kind and

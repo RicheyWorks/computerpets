@@ -1,6 +1,6 @@
 # 0095. Hard zone spread for the API colors
 
-- **Status:** Accepted
+- **Status:** Accepted (the zone item stays; hostname `whenUnsatisfiable` is `DoNotSchedule` in [0100](0100-api-hostname-hard-spread.md))
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/deployment-blue.yaml`; `deploy/k8s/deployment-green.yaml`; `deploy/k8s/check-api-zone-hard-spread.sh`
 

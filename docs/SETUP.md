@@ -411,11 +411,16 @@ Prod voluntary disruption of that live color keeps 2 pods
 (`deploy/k8s/pdb.yaml`), also applied on its own, and only after that
 floor is actually running. It is not in the kustomization
 ([ADR 0079](adr/0079-pod-disruption-budget.md)).
-Both API Deployments prefer different nodes (`kubernetes.io/hostname`,
-`maxSkew: 1`, `whenUnsatisfiable: ScheduleAnyway`). Hard `DoNotSchedule`
-is not set, so a pod still binds when the hostname skew cannot be met.
+Both API Deployments hard-spread hostnames (`kubernetes.io/hostname`,
+`maxSkew` 1, `DoNotSchedule`, `nodeTaintsPolicy: Honor`,
+`nodeAffinityPolicy: Honor`). `minDomains` is unset. One hostname still
+schedules. Kind and minikube with one eligible hostname still run both
+local blue replicas on that node. The second pod is not left Pending by
+this item. Required hostname anti-affinity is not set. Do not set
+`minDomains`. That would leave the second pod Pending on one hostname.
 Local replica counts stay 2 and 0
-([ADR 0080](adr/0080-api-pod-topology-spread.md)).
+([ADR 0080](adr/0080-api-pod-topology-spread.md),
+[ADR 0100](adr/0100-api-hostname-hard-spread.md)).
 They also hard-spread zones (`topology.kubernetes.io/zone`, `maxSkew` 1,
 `DoNotSchedule`, `nodeTaintsPolicy: Honor`, `nodeAffinityPolicy: Honor`).
 `minDomains` is unset. One labeled zone still schedules. A node that
@@ -430,7 +435,8 @@ Both API Deployments also require `kubernetes.io/os: linux` and
 Their nodes omit the pool label unless you label one, and the API pods
 stay Pending until then. Do not delete the pool key to make a laptop
 apply schedule. One labeled node still schedules both blue pods once
-it also carries one `topology.kubernetes.io/zone` value. A pool label
+it also carries one `topology.kubernetes.io/zone` value. One hostname
+still schedules. A pool label
 alone leaves the API Pending. Postgres and Redis are not pinned
 ([ADR 0093](adr/0093-api-node-pool.md)).
 The API node group also taints `computerpets/node-pool=api:NoSchedule`.

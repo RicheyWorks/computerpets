@@ -83,7 +83,7 @@ assert_exit 1 "check fails when the node pool label value drifts" \
 
 copy_tree "${BROKEN}"
 # Soft zone spread is no longer the contract (ADR 0095). Only the zone item
-# is flipped back. Hostname stays ScheduleAnyway.
+# is flipped back. Hostname stays DoNotSchedule (ADR 0100).
 sed -i '/topologyKey: topology.kubernetes.io\/zone/{n;s/whenUnsatisfiable: DoNotSchedule/whenUnsatisfiable: ScheduleAnyway/;}' \
   "${BROKEN}/deploy/k8s/deployment-blue.yaml"
 assert_exit 1 "check fails when the blue zone constraint is ScheduleAnyway" \

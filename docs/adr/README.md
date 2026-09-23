@@ -98,7 +98,7 @@ address, or an API that is not on `main`.
 | [0077](0077-api-listener-tls.md) | API listener TLS (Ingress cert-manager or ACM HTTPS listener; prod fails closed when required) | Accepted |
 | [0078](0078-horizontal-pod-autoscaling.md) | Horizontal pod autoscaling for the API (prod HPA; local apply stays unscaled) | Accepted |
 | [0079](0079-pod-disruption-budget.md) | Pod disruption budget for the live API color (prod PDB; local apply omits it) | Accepted |
-| [0080](0080-api-pod-topology-spread.md) | Soft hostname topology spread for the API colors (ScheduleAnyway; local replica counts unchanged) | Accepted |
+| [0080](0080-api-pod-topology-spread.md) | Soft hostname topology spread for the API colors (ScheduleAnyway; local replica counts unchanged) | Superseded (in part) by 0100 |
 | [0081](0081-api-pod-zone-spread.md) | Soft zone topology spread beside hostname (ScheduleAnyway; single-zone clusters still schedule) | Accepted |
 | [0082](0082-multi-az-node-pool.md) | Private multi-AZ API node pool (one managed node group per zone; no public IP; no SSH) | Accepted |
 | [0083](0083-cluster-autoscaler.md) | Cluster Autoscaler for those node groups (desired size ignored; max at least the HPA ceiling; IRSA) | Accepted |
@@ -113,11 +113,12 @@ address, or an API that is not on `main`.
 | [0092](0092-cluster-autoscaler-pdb.md) | Pod disruption budget for Cluster Autoscaler (`minAvailable: 1` on `app=cluster-autoscaler`; kind stays off the file) | Accepted |
 | [0093](0093-api-node-pool.md) | Pin the API Deployments to the multi-AZ API node pool (`computerpets/node-pool=api` and linux; kind stays Pending until the label exists) | Accepted |
 | [0094](0094-api-pool-taint.md) | Taint the API node pool `computerpets/node-pool=api:NoSchedule` and tolerate it on the workloads that already select the pool (kind stays untainted) | Accepted |
-| [0095](0095-api-zone-hard-spread.md) | Hard zone spread for the API colors (`DoNotSchedule` on `topology.kubernetes.io/zone`; one labeled zone still schedules; hostname stays `ScheduleAnyway`) | Accepted |
+| [0095](0095-api-zone-hard-spread.md) | Hard zone spread for the API colors (`DoNotSchedule` on `topology.kubernetes.io/zone`; one labeled zone still schedules) | Accepted |
 | [0096](0096-system-daemon-api-pool-toleration.md) | API pool toleration on `aws-node` (`vpc-cni` `configuration_values`) and `kube-proxy` (strategic-merge patch; kind stays untainted) | Accepted |
 | [0097](0097-kube-proxy-toleration-hook.md) | Reassert kube-proxy API pool coverage on plan drift, or fail closed (kind stays untainted; the live probe defaults off) | Accepted |
 | [0098](0098-metrics-server-zone-hard-spread.md) | Hard zone spread for metrics-server (`DoNotSchedule` on `topology.kubernetes.io/zone`; one labeled zone still schedules; replicas stay 2) | Accepted |
 | [0099](0099-cluster-autoscaler-zone-hard-spread.md) | Hard zone spread for Cluster Autoscaler (`DoNotSchedule` on `topology.kubernetes.io/zone`; one labeled zone still schedules; preferred zone anti-affinity removed; replicas stay 2) | Accepted |
+| [0100](0100-api-hostname-hard-spread.md) | Hard hostname spread for the API colors (`DoNotSchedule` on `kubernetes.io/hostname`; one hostname still schedules; the second local replica is not left Pending; zone stays `DoNotSchedule`) | Accepted |
 
 ## How to add one
 

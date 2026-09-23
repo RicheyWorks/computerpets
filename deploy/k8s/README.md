@@ -246,44 +246,63 @@ kubectl apply -f deploy/k8s/pdb.yaml
 Re-applying `pdb.yaml` points the selector back at blue. Do not add
 `pdb.yaml` to `kustomization.yaml`.
 
-## Hostname spread (ADR 0080)
+## Hostname spread (ADR 0080, ADR 0100)
 
 Both API pod templates set `topologySpreadConstraints` on
 `kubernetes.io/hostname`. `maxSkew` is 1. `whenUnsatisfiable` is
-`ScheduleAnyway` (soft). The Kubernetes default is `DoNotSchedule`
-(hard): the scheduler refuses the pod when the skew would exceed 1.
-The default `nodeTaintsPolicy` is `Ignore`, so a tainted node counts
-as a domain with zero pods. A worker that already holds one pod then
-cannot take another, and a third pod stays Pending when two workers
-hold one each and that tainted node is still at zero. That sticks the
-HPA floor of 3. `ScheduleAnyway` still prefers a less-loaded hostname
-and still binds. `nodeTaintsPolicy` here is `Honor`, so a node the pod
-cannot tolerate is not that empty domain. Required hostname
-anti-affinity is not set either: that is one pod per node, so the
-second local replica, and any pod past the node count, would stay
-Pending.
+`DoNotSchedule`. `nodeTaintsPolicy` is `Honor`. `nodeAffinityPolicy`
+is `Honor`. The selector is `app=computerpets` plus that Deployment's
+own color. Blue pods do not count as green's spread, and green pods
+do not count as blue's. There is no `minDomains`. Do not set
+`minDomains`. `ScheduleAnyway` is not the hostname action. Required
+hostname anti-affinity is not set.
 
-The selector is `app=computerpets` plus that Deployment's own color.
-Blue pods do not count as green's spread, and green pods do not count
-as blue's. There is no `minDomains`. The zone key is a second constraint
+`nodeTaintsPolicy: Honor` drops a node this pod cannot tolerate out of
+the count. These pods tolerate the API pool taint, so tainted API
+workers stay in the skew. A control-plane taint they do not tolerate
+stays out. The default `Ignore` would count that tainted node as an
+empty domain and leave later pods Pending. Honor does not.
+
+One hostname still schedules. `minDomains` is unset, so the constraint
+behaves as `minDomains: 1`. The only eligible domain is that hostname,
+and the skew of placing another pod there is 1, which `maxSkew` allows.
+Hard spread does not invent a second node. Kind and minikube with one
+eligible hostname still run both local blue replicas on that node. The
+second pod is not left Pending by this item. Required hostname
+anti-affinity would leave that second pod Pending. It is not set.
+`minDomains: 2` would also leave it Pending. Do not set it.
+
+On two or more pool hostnames that can take a pod, a placement that
+would make the skew greater than 1 stays Pending. The live color cannot
+put every pod on one node while another eligible hostname has room. On
+two hostnames the local blue count of 2 is 1 and 1, not 2 and 0. On two
+hostnames the HPA floor of 3 is 2 and 1, not 3 and 0. Pods of one color
+can still share a node when the count stays inside that skew. If the
+lighter hostname has no remaining capacity, the pod stays Pending until
+that hostname can take it. Cluster Autoscaler can add a node. This
+apply does not change the scaler.
+
+The zone key is a second constraint
 ([ADR 0081](../../docs/adr/0081-api-pod-zone-spread.md)). Its action is
 `DoNotSchedule` ([ADR 0095](../../docs/adr/0095-api-zone-hard-spread.md)).
-This hostname item stays `ScheduleAnyway`. Postgres and Redis
-are not constrained. Local `replicas` stay 2 and 0. This rule is on the
-pod template, so `kubectl apply -k` does apply it. It does not apply
-`hpa.yaml` or `pdb.yaml`. The pool pin is
+Postgres and Redis are not constrained. Local `replicas` stay 2 and 0.
+This rule is on the pod template, so `kubectl apply -k` does apply it.
+It does not apply `hpa.yaml` or `pdb.yaml`. The pool pin is
 [ADR 0093](../../docs/adr/0093-api-node-pool.md). An unlabeled kind or
-minikube node leaves the API pods Pending.
+minikube node leaves the API pods Pending. A pool label without one
+zone value also leaves them Pending.
 
 ```bash
 ./deploy/k8s/check-topology-spread.sh
+./deploy/k8s/check-api-hostname-hard-spread.sh
+./deploy/k8s/check-api-hostname-hard-spread.test.sh
 ```
 
 A cutover does not patch this. Scaling green creates pods from the
-green template, which already has the same soft rule. The Service, HPA,
-and PDB patches below are unchanged. Soft spread can still place every
-pod of the live color on one node. A crash of that node is not blocked
-by the budget.
+green template, which already has the same hard rule. The Service, HPA,
+and PDB patches below are unchanged. One hostname can still hold every
+pod of the live color, because it is then the only domain. A crash of
+that node is not blocked by the budget.
 
 ## Zone spread (ADR 0081, ADR 0095)
 
@@ -291,7 +310,8 @@ Both API pod templates add a second `topologySpreadConstraints` item on
 `topology.kubernetes.io/zone`. `maxSkew` is 1. `whenUnsatisfiable` is
 `DoNotSchedule`. `nodeTaintsPolicy` is `Honor`. `nodeAffinityPolicy` is
 `Honor`. The selector is the same color-scoped pair as the hostname
-item. Hostname spread stays `ScheduleAnyway`. There is no `minDomains`.
+item. Hostname spread is `DoNotSchedule`
+([ADR 0100](../../docs/adr/0100-api-hostname-hard-spread.md)). There is no `minDomains`.
 Do not set `minDomains`.
 
 `DoNotSchedule` skips a node that omits `topology.kubernetes.io/zone`.
@@ -348,10 +368,12 @@ outside the groups does not receive an API pod.
 
 Both spread items set `nodeAffinityPolicy: Honor`, so hostname and zone
 skew count only nodes that match the selector. Hostname
-`whenUnsatisfiable` stays `ScheduleAnyway`. The zone item is
+`whenUnsatisfiable` is `DoNotSchedule`
+([ADR 0100](../../docs/adr/0100-api-hostname-hard-spread.md)). The zone item is
 `DoNotSchedule` ([ADR 0095](../../docs/adr/0095-api-zone-hard-spread.md)).
 One labeled node still schedules both blue pods when that node also
-carries one zone label. One labeled zone still schedules. HPA and PDB
+carries one zone label. One hostname still schedules. One labeled zone
+still schedules. HPA and PDB
 are unchanged. Postgres and Redis are not pinned.
 
 Kind and minikube apply these Deployments (`kubectl apply -k
