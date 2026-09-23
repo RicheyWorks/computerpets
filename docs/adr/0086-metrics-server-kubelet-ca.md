@@ -1,6 +1,6 @@
 # 0086. Kubelet CA for metrics-server
 
-- **Status:** Accepted
+- **Status:** Accepted (the APIService `insecureSkipTLSVerify` clause is superseded in part by [0087](0087-metrics-server-serving-cert.md); the kubelet CA mount stays)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/metrics-server.yaml`; `deploy/k8s/check-metrics-server.sh`
 
@@ -34,7 +34,7 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 4. **Refuse the skip.** `--kubelet-insecure-tls` is not set. `--deprecated-kubelet-completely-insecure` is not set. v0.9.0 already refuses the CA flag together with `--kubelet-insecure-tls`. The check fails if either insecure flag appears in the YAML body. Skipping verification is not how a kubelet certificate becomes trusted.
 5. **High availability stays.** `replicas: 2`, required pod anti-affinity on `kubernetes.io/hostname`, rolling update `maxUnavailable: 1`, and the addon `PodDisruptionBudget` `minAvailable: 1` stay. The image stays `registry.k8s.io/metrics-server/metrics-server:v0.9.0`.
 6. **Still not in the kustomization.** `kubectl apply -k deploy/k8s` does not install this file. Kind and minikube do not apply it. Blue stays `replicas: 2`. Green stays `replicas: 0`. Apply order is the operator CA object, then this file, then wait for `kubectl top`, then `hpa.yaml`.
-7. **APIService serving cert is unchanged.** `insecureSkipTLSVerify: true` still appears once, on the APIService, for the addon's own serving cert minted in `/tmp`. That flag is not the kubelet scrape skip.
+7. **APIService serving cert.** `insecureSkipTLSVerify: true` was the upstream hop for the cert minted in `/tmp`. That flag is not the kubelet scrape skip. The serving-cert mount that replaces this sentence is [0087](0087-metrics-server-serving-cert.md).
 8. **Verify without a cluster.** `check-metrics-server.sh` fails when the CA flag, the mount, or `optional: false` is missing, when the volume is `hostPath` or optional, when a certificate is vendored, when `--kubelet-insecure-tls` is set, when the tag floats, or when `kustomization.yaml` lists the file. It passes when the volume source is the Secret substitution. `check-metrics-server.test.sh` proves those cases. No `kubectl apply`.
 
 ## Consequences
@@ -43,6 +43,6 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - A certificate that does not chain to the mounted bundle still leaves `kubectl top` empty. The mount does not skip verification to hide that.
 - A missing ConfigMap or Secret leaves the pods unstarted. Local `kubectl apply -k deploy/k8s` still does not install metrics-server.
 - Adding `--kubelet-insecure-tls`, making the volume optional, vendoring a PEM, floating the image tag, or listing the file in `kustomization.yaml` fails `check-metrics-server.sh`.
-- The APIService still skips verification of the addon's own serving cert. That is the upstream file. It does not skip kubelet verification.
+- The APIService skip in this paragraph is [0087](0087-metrics-server-serving-cert.md). It does not skip kubelet verification.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** the APIService still uses upstream `insecureSkipTLSVerify: true` for the addon's own serving cert minted in `/tmp`. The v0.9.0 FAQ names `--tls-cert-file` and `--tls-private-key-file` as the way to give the apiserver a cert it can verify. Not started here. A kubelet certificate that does not chain to `metrics-server-kubelet-ca` still leaves `kubectl top` empty. Required anti-affinity is still hostname-only. API zone spread stays `ScheduleAnyway`. Cluster Autoscaler still only adds a node for pods that are already Pending.
+- **Next gap:** moved. The serving certificate is [0087](0087-metrics-server-serving-cert.md).

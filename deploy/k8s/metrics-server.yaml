@@ -1,5 +1,5 @@
 # metrics-server so hpa.yaml can read CPU and memory (ADR 0084, ADR 0085,
-# ADR 0086).
+# ADR 0086, ADR 0087).
 # Not in kustomization.yaml. Local/dev `kubectl apply -k deploy/k8s` does
 # not install this. Kind and minikube do not apply this file. There is no
 # overlay directory. No Helm chart.
@@ -13,17 +13,40 @@
 # That release asset is components.yaml plus replicas 2, rollingUpdate
 # maxUnavailable 1, required hostname pod anti-affinity, and an addon
 # PodDisruptionBudget (minAvailable 1). It is not a second chart.
-# The kubelet CA argument, volume, and volumeMount are the only additions
-# (ADR 0086). They are not in that upstream file.
+# The kubelet CA argument, volume, and volumeMount are additions
+# (ADR 0086). The serving-cert arguments, volume, and volumeMount are
+# additions (ADR 0087). insecureSkipTLSVerify is not set. None of those
+# are in that upstream file.
 #
 # Apply this before hpa.yaml. The APIService is v1beta1.metrics.k8s.io.
 # Until `kubectl top pods -n computerpets` shows cpu and memory, the HPA
 # does not raise blue from 2 to 3.
 #
-# insecureSkipTLSVerify on that APIService is the upstream hop from the
-# apiserver to this addon's serving cert (minted in /tmp, not the cluster
-# CA). It is not a kubelet scrape skip. Do not add --kubelet-insecure-tls.
+# The apiserver verifies this addon's serving certificate.
+# --tls-cert-file and --tls-private-key-file point at a read-only mount
+# of Secret metrics-server-serving in kube-system (keys tls.crt and
+# tls.key, optional: false). This file does not create that Secret and
+# does not contain a certificate or a key. Create it before apply:
+#   kubectl -n kube-system create secret generic metrics-server-serving \
+#     --from-file=tls.crt=/path/to/tls.crt \
+#     --from-file=tls.key=/path/to/tls.key \
+#     --from-file=ca.crt=/path/to/serving-ca.crt
+# The certificate DNS SAN must include metrics-server.kube-system.svc.
+# That is the name the apiserver uses. --cert-dir=/tmp stays in the
+# upstream arg list and is ignored while both files are set, so the
+# process does not mint a serving cert in /tmp. Do not add
+# insecureSkipTLSVerify. Do not add --kubelet-insecure-tls.
 # Do not add --deprecated-kubelet-completely-insecure.
+#
+# A private CA is not a system root. After apply, set the APIService
+# caBundle from that ca.crt. The field is base64. Do not commit it:
+#   CA_B64="$(kubectl -n kube-system get secret metrics-server-serving \
+#     -o jsonpath='{.data.ca\.crt}')"
+#   kubectl patch apiservice v1beta1.metrics.k8s.io --type=merge \
+#     -p "{\"spec\":{\"caBundle\":\"${CA_B64}\"}}"
+# Until that field is the CA that signed tls.crt, the apiserver uses
+# system roots and a private serving cert leaves kubectl top empty.
+# A missing Secret leaves the pods unstarted.
 #
 # Kubelet verification uses
 # --kubelet-certificate-authority=/etc/metrics-server/kubelet-ca/ca.crt.
@@ -189,6 +212,8 @@ spec:
       containers:
       - args:
         - --cert-dir=/tmp
+        - --tls-cert-file=/etc/metrics-server/serving/tls.crt
+        - --tls-private-key-file=/etc/metrics-server/serving/tls.key
         - --secure-port=10250
         - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
         - --kubelet-use-node-status-port
@@ -236,6 +261,9 @@ spec:
         - mountPath: /etc/metrics-server/kubelet-ca
           name: kubelet-ca
           readOnly: true
+        - mountPath: /etc/metrics-server/serving
+          name: serving-cert
+          readOnly: true
       nodeSelector:
         kubernetes.io/os: linux
       priorityClassName: system-cluster-critical
@@ -250,6 +278,15 @@ spec:
           items:
           - key: ca.crt
             path: ca.crt
+      - name: serving-cert
+        secret:
+          secretName: metrics-server-serving
+          optional: false
+          items:
+          - key: tls.crt
+            path: tls.crt
+          - key: tls.key
+            path: tls.key
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget
@@ -273,7 +310,6 @@ metadata:
 spec:
   group: metrics.k8s.io
   groupPriorityMinimum: 100
-  insecureSkipTLSVerify: true
   service:
     name: metrics-server
     namespace: kube-system
