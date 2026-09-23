@@ -95,6 +95,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Cluster Autoscaler leader scale path — the standby is not the scaler. The scheduled leader keeps `--balance-similar-node-groups=true`, `--expander=least-waste`, and `--skip-nodes-with-system-pods=false`. One similar group per zone, at least two. Kind and minikube do not apply the file (ADR 0101). Catalog stays 221.
   - [x] Cluster Autoscaler scale-up salvo — `--salvo-scale-up=true` and `--salvo-scale-up-budget=1m` run another least-waste choice in the same loop. `--frequent-loops-enabled=true` stays. No priority expander ConfigMap. Kind and minikube do not apply the file (ADR 0102). Catalog stays 221.
   - [x] Cluster Autoscaler salvo early stop — the `1m` budget stays. Node-provision time and node-group backoff stay at the v1.36.1 defaults. A budget that is already gone, a failed snapshot update, or a scale-up that is not successful still ends the salvo. The next main loop is the retry. Kind and minikube do not apply the file (ADR 0103). Catalog stays 221.
+  - [x] Per-zone API node-group max — `max_size` is 20, twice the HPA ceiling of 10. Cluster Autoscaler reads the Auto Scaling group `MaxSize` and cannot lift it. The old max of 10 is refused. `min_size` stays 1. Kind and minikube do not apply the file (ADR 0104). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload
@@ -181,6 +182,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Cluster Autoscaler leader scale path — the standby is not the scaler. The scheduled leader keeps `--balance-similar-node-groups=true` and `--expander=least-waste`. One similar group per zone. Kind and minikube do not apply the file (ADR 0101). Catalog stays 221.
   - [x] Cluster Autoscaler scale-up salvo — `--salvo-scale-up=true` and `--salvo-scale-up-budget=1m` run another least-waste choice in the same loop. `--frequent-loops-enabled=true` stays. No priority expander ConfigMap. Kind and minikube do not apply the file (ADR 0102). Catalog stays 221.
   - [x] Cluster Autoscaler salvo early stop — the `1m` budget stays. Node-provision time and node-group backoff stay at the v1.36.1 defaults. A budget that is already gone, a failed snapshot update, or a scale-up that is not successful still ends the salvo. The next main loop is the retry. Kind and minikube do not apply the file (ADR 0103). Catalog stays 221.
+  - [x] Per-zone API node-group max — `max_size` is 20, twice the HPA ceiling of 10. Cluster Autoscaler reads the Auto Scaling group `MaxSize` and cannot lift it. The old max of 10 is refused. `min_size` stays 1. Kind and minikube do not apply the file (ADR 0104). Catalog stays 221.
 
 ---
 

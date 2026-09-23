@@ -210,8 +210,8 @@ check("setproduct(sort(keys(var.subnets)), sort(keys(local.ca_discovery_tags)))"
 mins = re.findall(r"(?m)^[ \t]*min_size_per_zone\s*=\s*(\d+)\s*$", pool_code)
 maxes = re.findall(r"(?m)^[ \t]*max_size_per_zone\s*=\s*(\d+)\s*$", pool_code)
 check(mins == ["1"], "min size per zone stays 1")
-check(maxes == ["10"] and int(maxes[0]) > int(mins[0]),
-      "max size per zone is 10, above the floor")
+check(maxes == ["20"] and int(maxes[0]) > int(mins[0]),
+      "max size per zone is 20, above the floor")
 check('resource "aws_autoscaling_group"' not in pool_code, "no raw single ASG")
 
 def list_body(name, text):

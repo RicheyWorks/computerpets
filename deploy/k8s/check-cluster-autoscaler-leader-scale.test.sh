@@ -204,7 +204,7 @@ assert_exit 1 "check fails when discovery tags cover one zone" \
 
 copy_tree "${BROKEN}"
 replace_once "${BROKEN}/deploy/terraform/modules/node_pool/main.tf" \
-  "max_size_per_zone     = 10" \
+  "max_size_per_zone     = 20" \
   "max_size_per_zone     = 1"
 assert_exit 1 "check fails when max size cannot grow past the floor" \
   "${BROKEN}/deploy/k8s/check-cluster-autoscaler-leader-scale.sh"

@@ -40,14 +40,19 @@ locals {
   # It does not stamp topology.kubernetes.io/zone. EKS sets that label
   # from the instance placement AZ. One subnet per group keeps that AZ.
   # desired-size-owner=cluster-autoscaler (ADR 0083). Create still uses 1.
-  # hpa-max-replicas=10. Each group's max_size is at least that ceiling.
+  # hpa-max-replicas=10. The HPA ceiling is pods, not spare nodes.
+  # zone-max-nodes=20. Twice that ceiling (ADR 0104).
+  # Cluster Autoscaler reads the managed Auto Scaling group's MaxSize.
+  # It does not read this local. eks:UpdateNodegroupConfig is denied,
+  # so the leader cannot lift this ceiling. A zone at max is skipped
+  # (MaxLimitReached). Hard zone spread will not use the other zone.
   # api-pool-taint ADR 0094
   # taint-key=computerpets/node-pool
   # taint-value=api
   # taint-effect=NO_SCHEDULE
   min_size_per_zone     = 1
   desired_size_per_zone = 1
-  max_size_per_zone     = 10
+  max_size_per_zone     = 20
   root_volume_gib       = 20
 
   zones_ok = (
