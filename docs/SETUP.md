@@ -445,11 +445,17 @@ The same Deployment prefers different zones
 (`topology.kubernetes.io/zone`, `maxSkew: 1`, `ScheduleAnyway`,
 `nodeTaintsPolicy: Honor`). Hard zone spread is not set, so a single-zone
 cluster and nodes that omit the zone label still schedule when two
-hostnames exist
+hostnames exist.
+`nodeSelector` also requires `computerpets/node-pool: api`, and
+`nodeAffinityPolicy: Honor` counts only those nodes. Kind and minikube
+do not apply the file (`enable_node_pool=false` does not label their
+nodes). A single-zone set of labeled nodes still schedules both pods
+when two hostnames exist
 ([ADR 0084](adr/0084-metrics-server.md), [ADR 0085](adr/0085-metrics-server-ha.md),
 [ADR 0086](adr/0086-metrics-server-kubelet-ca.md),
 [ADR 0087](adr/0087-metrics-server-serving-cert.md),
-[ADR 0088](adr/0088-metrics-server-zone-spread.md)).
+[ADR 0088](adr/0088-metrics-server-zone-spread.md),
+[ADR 0089](adr/0089-metrics-server-node-pool.md)).
 
 Prefer External Secrets Operator or Vault Agent to fill
 `computerpets-secrets` rather than committing values into `secret.yaml`.

@@ -185,12 +185,16 @@ be read as load.
 [ADR 0085](../../docs/adr/0085-metrics-server-ha.md),
 [ADR 0086](../../docs/adr/0086-metrics-server-kubelet-ca.md),
 [ADR 0087](../../docs/adr/0087-metrics-server-serving-cert.md),
-[ADR 0088](../../docs/adr/0088-metrics-server-zone-spread.md)).
+[ADR 0088](../../docs/adr/0088-metrics-server-zone-spread.md),
+[ADR 0089](../../docs/adr/0089-metrics-server-node-pool.md)).
 That file is also not in the kustomization. It runs two replicas with
 required hostname anti-affinity and soft zone spread (`ScheduleAnyway`
-on `topology.kubernetes.io/zone`). A single-zone cluster still schedules
-both pods when two hostnames exist. Create the kubelet CA object and the
-serving Secret, then apply it.
+on `topology.kubernetes.io/zone`). `nodeSelector` requires
+`computerpets/node-pool: api`, and `nodeAffinityPolicy: Honor` keeps
+the zone count on those nodes. Kind and minikube do not apply it
+(`enable_node_pool=false` does not label their nodes). A single-zone
+set of labeled nodes still schedules both pods when two hostnames exist.
+Create the kubelet CA object and the serving Secret, then apply it.
 `kubectl top pods -n computerpets` must show cpu and memory. Until that
 API answers, applying the HPA does not raise the replica count, so blue
 can stay at 2.
@@ -327,7 +331,7 @@ minor's latest patch instead. Do not commit a real account id.
 Zone spread stays `ScheduleAnyway`. Adding a node does not force a pod
 onto it.
 
-## metrics-server (ADR 0084, ADR 0085, ADR 0086, ADR 0087, ADR 0088)
+## metrics-server (ADR 0084, ADR 0085, ADR 0086, ADR 0087, ADR 0088, ADR 0089)
 
 `metrics-server.yaml` is **not** in the kustomization. `kubectl apply -k
 deploy/k8s` does not install it. Kind and minikube do not apply it.
@@ -345,7 +349,19 @@ zone (`topology.kubernetes.io/zone`, `maxSkew: 1`, `whenUnsatisfiable:
 ScheduleAnyway`, `nodeTaintsPolicy: Honor`). `DoNotSchedule` is not set,
 and there is no required zone anti-affinity, so a single-zone cluster
 and nodes that omit the zone label still schedule. The preference can
-still place both pods in one zone. Rolling update `maxUnavailable` is 1.
+still place both pods in one zone. `nodeSelector` requires
+`kubernetes.io/os: linux` and `computerpets/node-pool: api`. That pool
+label is the one `deploy/terraform/modules/node_pool` already sets on
+each multi-AZ group ([ADR 0089](../../docs/adr/0089-metrics-server-node-pool.md)).
+`nodeAffinityPolicy: Honor` keeps the soft zone count on nodes that
+match the selector. Linux nodes outside those groups do not receive
+these pods and do not count. The selector is required. Kind and minikube
+do not apply this file. `enable_node_pool=false` does not label their
+nodes, so applying the file there leaves both pods Pending. That is the
+feature-off path. A single-zone cluster whose nodes do carry the label
+still schedules both pods when two hostnames exist, because zone spread
+stays `ScheduleAnyway`. The API Deployments do not select this label.
+Rolling update `maxUnavailable` is 1.
 An addon `PodDisruptionBudget` in `kube-system` keeps `minAvailable: 1`. That
 budget is not `pdb.yaml`.
 

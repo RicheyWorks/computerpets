@@ -1,6 +1,6 @@
 # 0088. Zone spread for metrics-server
 
-- **Status:** Accepted
+- **Status:** Accepted (the pool pin is [0089](0089-metrics-server-node-pool.md); soft zone spread and required hostname anti-affinity stay)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/metrics-server.yaml`; `deploy/k8s/check-metrics-server.sh`
 
@@ -35,9 +35,9 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 ## Consequences
 
 - On a cluster whose schedulable nodes already span two zones, the scheduler prefers one metrics-server pod in each zone. A failure of one zone is still involuntary. The addon budget does not keep a pod in the other zone by itself. The preference is what makes that other pod the usual case.
-- `ScheduleAnyway` is a preference, not a placement guarantee. One zone, nodes that omit `topology.kubernetes.io/zone`, a failed score, or a zone that cannot fit the second pod can still co-locate both pods. `nodeSelector` is still only `kubernetes.io/os: linux`, so nodes outside the API groups count.
+- `ScheduleAnyway` is a preference, not a placement guarantee. One zone, nodes that omit `topology.kubernetes.io/zone`, a failed score, or a zone that cannot fit the second pod can still co-locate both pods. The selector that stops nodes outside the API groups from counting is [0089](0089-metrics-server-node-pool.md).
 - A single-zone cluster with two nodes still runs both pods. A one-node cluster still leaves the second pod Pending on the hostname rule. Local `kubectl apply -k deploy/k8s` still does not install metrics-server.
 - `nodeTaintsPolicy` is the same Kubernetes 1.26 field as the API zone item. A cluster that rejects the field cannot apply this Deployment.
 - Adding `DoNotSchedule` on the zone key, adding `minDomains`, dropping the zone key, dropping required hostname anti-affinity, adding `insecureSkipTLSVerify`, adding `--kubelet-insecure-tls`, floating the image tag, or listing the file in `kustomization.yaml` fails `check-metrics-server.sh`.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** `nodeSelector` is still only `kubernetes.io/os: linux`, so both pods can schedule onto linux nodes that are not in the multi-AZ API groups. Soft zone spread counts those nodes. A set of them in one zone, or nodes that omit `topology.kubernetes.io/zone`, still receives both pods. Required zone anti-affinity is not the follow-up: it would leave the second pod Pending on a single-zone cluster. API zone spread stays `ScheduleAnyway`. Cluster Autoscaler still only adds a node for pods that are already Pending, and that Deployment is still one replica. A serving certificate that does not chain to `caBundle` (and is not a system root), or whose SAN is not `metrics-server.kube-system.svc`, still leaves `kubectl top` empty. A kubelet certificate that does not chain to `metrics-server-kubelet-ca` still leaves `kubectl top` empty.
+- **Next gap:** moved. The pool pin is [0089](0089-metrics-server-node-pool.md).
