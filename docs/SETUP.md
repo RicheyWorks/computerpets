@@ -430,6 +430,11 @@ after create. `deploy/k8s/cluster-autoscaler.yaml` is not in this
 kustomization. Substitute `CLUSTER_NAME`, `AWS_REGION`, and the role ARN
 before applying it. `enable_node_pool=false` keeps the role off
 ([ADR 0083](adr/0083-cluster-autoscaler.md)).
+The Deployment is two replicas. Hostname anti-affinity is required.
+Zone anti-affinity is preferred, so a single zone still schedules when
+two hostnames exist. Leader election stays on. Both pods use the one
+IRSA service account. Only the leader changes desired capacity
+([ADR 0090](adr/0090-cluster-autoscaler-ha.md)).
 Resource metrics for that HPA are `deploy/k8s/metrics-server.yaml`
 (upstream high-availability-1.21+.yaml v0.9.0, `replicas: 2`, required
 hostname anti-affinity, APIService `v1beta1.metrics.k8s.io`). It is not in

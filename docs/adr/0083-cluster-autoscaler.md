@@ -1,6 +1,6 @@
 # 0083. Cluster Autoscaler for the multi-AZ API node groups
 
-- **Status:** Accepted
+- **Status:** Accepted (replica count and placement are [0090](0090-cluster-autoscaler-ha.md); IRSA, discovery tags, and the kustomize exclusion stay)
 - **Date:** 2026-09-23
 - **Code:** `deploy/terraform/modules/cluster_autoscaler/main.tf`; `deploy/terraform/modules/node_pool/main.tf`; `deploy/k8s/cluster-autoscaler.yaml`; `deploy/terraform/check-cluster-autoscaler.sh`
 
