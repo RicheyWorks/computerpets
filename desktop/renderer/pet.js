@@ -3407,8 +3407,8 @@ function tapVisitor() {
   openChoice({ role: "visit" });
   visit.said = true;
   visit.tapped = true;
-  if (visit.sprites.talk) guestEl.src = visit.sprites.talk[0];
-  else guestEl.src = visit.sprites.idle[0];
+  if (visit.sprites.talk) paintActor(guestEl, visit.sprites.talk[0], "guest");
+  else paintActor(guestEl, visit.sprites.idle[0], "guest");
   return true;
 }
 
@@ -3439,7 +3439,7 @@ function startVisit() {
     phase: "in",
   };
   guestEl.classList.add("show");
-  guestEl.src = sprites.walk[0];
+  paintActor(guestEl, sprites.walk[0], "guest");
   if (window.PetCallGuests && window.PetCallGuests.destFit) window.PetCallGuests.destFit(guestEl);
 }
 
@@ -3485,11 +3485,11 @@ function tickVisit(dt, now, width) {
       visit.acc = 0;
       visit.frame = (visit.frame + 1) % visit.sprites.walk.length;
     }
-    guestEl.src = visit.sprites.walk[visit.frame];
+    paintActor(guestEl, visit.sprites.walk[visit.frame], "guest");
   } else if (phase === "talk" || sitting) {
-    guestEl.src = visit.sprites.talk ? visit.sprites.talk[0] : visit.sprites.idle[0];
+    paintActor(guestEl, visit.sprites.talk ? visit.sprites.talk[0] : visit.sprites.idle[0], "guest");
   } else if (phase !== "leave") {
-    guestEl.src = visit.sprites.idle[0];
+    paintActor(guestEl, visit.sprites.idle[0], "guest");
   }
   guestEl.classList.add("show");
   guestEl.style.transform = `translate3d(${visit.x}px, 0, 0) scale(${visit.facing}, 1)`;
