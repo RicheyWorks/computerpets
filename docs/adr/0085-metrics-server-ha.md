@@ -1,6 +1,6 @@
 # 0085. High availability for metrics-server
 
-- **Status:** Accepted (the no-kubelet-CA clause is superseded in part by [0086](0086-metrics-server-kubelet-ca.md); soft zone spread beside the hostname rule is [0088](0088-metrics-server-zone-spread.md); replicas, required hostname anti-affinity, and the install path stay)
+- **Status:** Accepted (the no-kubelet-CA clause is superseded in part by [0086](0086-metrics-server-kubelet-ca.md); hard zone spread is [0098](0098-metrics-server-zone-hard-spread.md) (`DoNotSchedule`; one labeled zone still schedules); the soft action was [0088](0088-metrics-server-zone-spread.md); replicas, required hostname anti-affinity, and the install path stay)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/metrics-server.yaml`; `deploy/k8s/check-metrics-server.sh`
 

@@ -1,5 +1,5 @@
 # metrics-server so hpa.yaml can read CPU and memory (ADR 0084, ADR 0085,
-# ADR 0086, ADR 0087, ADR 0088, ADR 0089).
+# ADR 0086, ADR 0087, ADR 0088, ADR 0089, ADR 0098).
 # Not in kustomization.yaml. Local/dev `kubectl apply -k deploy/k8s` does
 # not install this. Kind and minikube do not apply this file. There is no
 # overlay directory. No Helm chart.
@@ -15,8 +15,9 @@
 # PodDisruptionBudget (minAvailable 1). It is not a second chart.
 # The kubelet CA argument, volume, and volumeMount are additions
 # (ADR 0086). The serving-cert arguments, volume, and volumeMount are
-# additions (ADR 0087). insecureSkipTLSVerify is not set. Soft zone
-# spread is an addition (ADR 0088). The nodeSelector pool pin is an
+# additions (ADR 0087). insecureSkipTLSVerify is not set. Zone
+# spread is an addition (ADR 0088), hardened to DoNotSchedule
+# (ADR 0098). The nodeSelector pool pin is an
 # addition (ADR 0089). None of those are in that upstream file.
 #
 # Apply this before hpa.yaml. The APIService is v1beta1.metrics.k8s.io.
@@ -68,13 +69,18 @@
 # node exists. Kind and minikube do not apply this file. The addon budget
 # is not pdb.yaml.
 #
-# Zone spread (ADR 0088) sits beside that hostname rule. The constraint
-# is topology.kubernetes.io/zone, maxSkew 1, whenUnsatisfiable
-# ScheduleAnyway, nodeTaintsPolicy Honor. It prefers a different zone
-# and still binds when every schedulable node is in one zone or omits
-# the zone label. It is not a required zone anti-affinity. That required
-# rule would leave the second pod Pending on a single-zone cluster.
-# DoNotSchedule is not set, for the same reason.
+# Zone spread (ADR 0088, hardened by ADR 0098) sits beside that
+# hostname rule. The constraint is topology.kubernetes.io/zone,
+# maxSkew 1, whenUnsatisfiable DoNotSchedule, nodeTaintsPolicy Honor,
+# nodeAffinityPolicy Honor. minDomains is unset. Do not set minDomains.
+# On two or more labeled zones that can take a pod, the two replicas
+# cannot share one zone. One labeled zone still schedules: unset
+# minDomains behaves as 1, so the only domain keeps skew at 1. Hard
+# spread does not invent a second zone. A node that omits
+# topology.kubernetes.io/zone is skipped, so both pods stay Pending
+# until that label exists. Kind and minikube do not apply this file.
+# There is no required zone anti-affinity. That required rule would
+# leave the second pod Pending when every node shares one zone.
 #
 # Pool pin (ADR 0089). nodeSelector requires kubernetes.io/os=linux and
 # computerpets/node-pool=api. That second label is the one
@@ -84,9 +90,12 @@
 # only nodes that match this selector. Kind and minikube do not apply
 # this file. enable_node_pool=false does not label their nodes. Applying
 # this file there leaves both pods Pending. That is the feature-off path.
-# A single-zone cluster whose nodes do carry the label still schedules
-# both pods when two hostnames exist, because zone spread stays
-# ScheduleAnyway. The API Deployments select the same label (ADR 0093).
+# A pool label without topology.kubernetes.io/zone also leaves both pods
+# Pending, because DoNotSchedule skips a node that omits the zone label.
+# A single-zone cluster whose nodes carry the pool label and one zone
+# value still schedules both pods when two hostnames exist. One domain
+# keeps skew at 1. One node still leaves the second pod Pending on the
+# hostname rule. The API Deployments select the same label (ADR 0093).
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -233,7 +242,7 @@ spec:
       topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: topology.kubernetes.io/zone
-        whenUnsatisfiable: ScheduleAnyway
+        whenUnsatisfiable: DoNotSchedule
         nodeTaintsPolicy: Honor
         nodeAffinityPolicy: Honor
         labelSelector:

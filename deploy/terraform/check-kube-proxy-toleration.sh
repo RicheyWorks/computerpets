@@ -81,7 +81,7 @@ need_not_grep "$KUSTOM" 'reassert-kube-proxy-toleration' "kustomization does not
 need_not_grep "$KUSTOM" 'kube-proxy-api-pool-toleration' "kustomization does not apply the kube-proxy patch"
 need_grep "$CA" 'preferredDuringSchedulingIgnoredDuringExecution' "cluster-autoscaler zone rule stays preferred"
 need_not_grep "$CA" 'DoNotSchedule' "cluster-autoscaler zone rule is not DoNotSchedule"
-need_grep "$METRICS" 'whenUnsatisfiable: ScheduleAnyway' "metrics-server zone spread stays ScheduleAnyway"
+need_grep "$METRICS" 'whenUnsatisfiable: DoNotSchedule' "metrics-server zone spread is DoNotSchedule (ADR 0098)"
 need_grep "$ADR" 'Catalog stays 221' "catalog stays 221"
 need_grep "$ADR" 'No Rui sprites' "no Rui sprites"
 need_grep "$ADR" 'No live AWS apply' "ADR does not apply Terraform"

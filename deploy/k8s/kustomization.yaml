@@ -48,8 +48,11 @@ resources:
 # Deployment is two replicas with leader election. The budget is
 # minAvailable 1.
 # metrics-server.yaml (ADR 0084, ADR 0085, ADR 0086, ADR 0087, ADR 0088,
-# ADR 0089) is also not applied here. Its zone preference is
-# ScheduleAnyway. Its nodeSelector requires computerpets/node-pool=api.
+# ADR 0089, ADR 0098) is also not applied here. Its zone item is
+# DoNotSchedule on topology.kubernetes.io/zone, maxSkew 1. One labeled
+# zone still schedules. A node that omits the zone label does not.
+# Do not set minDomains. Kind and minikube do not apply the file.
+# Its nodeSelector requires computerpets/node-pool=api.
 # The Deployment in that file is two replicas. Kind and minikube do not
 # install it. The HPA does not raise replicas until that API answers.
 images:
