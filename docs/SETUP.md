@@ -424,6 +424,12 @@ per availability zone, at least two ([ADR 0082](adr/0082-multi-az-node-pool.md))
 This kustomization does not create them. `enable_node_pool=false` is the
 local switch. The zone preference stays soft
 ([ADR 0081](adr/0081-api-pod-zone-spread.md)).
+Cluster Autoscaler grows those groups when pods are Pending. Each zone's
+max is at least the HPA ceiling of 10. Terraform ignores `desired_size`
+after create. `deploy/k8s/cluster-autoscaler.yaml` is not in this
+kustomization. Substitute `CLUSTER_NAME`, `AWS_REGION`, and the role ARN
+before applying it. `enable_node_pool=false` keeps the role off
+([ADR 0083](adr/0083-cluster-autoscaler.md)).
 
 Prefer External Secrets Operator or Vault Agent to fill
 `computerpets-secrets` rather than committing values into `secret.yaml`.

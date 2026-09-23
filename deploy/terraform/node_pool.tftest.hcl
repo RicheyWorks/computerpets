@@ -10,8 +10,9 @@ variables {
   enable_secrets          = false
   enable_cdn              = false
   enable_waf              = false
-  enable_api_listener_tls = false
-  enable_node_pool        = true
+  enable_api_listener_tls    = false
+  enable_node_pool           = true
+  enable_cluster_autoscaler  = false
 }
 
 run "empty_subnet_map_is_refused" {
@@ -156,6 +157,21 @@ run "two_private_zones_plan" {
   assert {
     condition     = module.node_pool[0].capacity_type == "ON_DEMAND"
     error_message = "Workers must be on-demand."
+  }
+
+  assert {
+    condition     = module.node_pool[0].max_size_per_zone >= 10
+    error_message = "Each node group max must be at least the HPA ceiling of 10."
+  }
+
+  assert {
+    condition     = module.node_pool[0].desired_size_owner == "cluster-autoscaler"
+    error_message = "Cluster Autoscaler must own desired_size after create."
+  }
+
+  assert {
+    condition     = module.node_pool[0].cluster_autoscaler_asg_tag_count == 4
+    error_message = "Each zone's Auto Scaling group needs the two discovery tags."
   }
 
   assert {

@@ -281,6 +281,31 @@ failure of that zone is not blocked by the budget.
 A cutover does not patch the zone item. Scaling green uses the green
 template, which already has it.
 
+## Cluster Autoscaler (ADR 0083)
+
+`cluster-autoscaler.yaml` is **not** in the kustomization. `kubectl apply -k
+deploy/k8s` does not install it. Kind and minikube set
+`enable_node_pool=false`, which also skips the IRSA role.
+
+The prod scaler runs in `kube-system` and changes desired capacity on the
+Auto Scaling groups behind the per-zone node groups. Each group's max is
+10, the HPA ceiling. The minimum stays 1. Terraform ignores `desired_size`
+after the first apply. `--balance-similar-node-groups=true` keeps the two
+zones from drifting apart. Scale-down still reads `poddisruptionbudgets`.
+
+The committed manifest uses three tokens: `CLUSTER_NAME`, `AWS_REGION`, and
+account `000000000000` on the role ARN. Substitute the cluster name, the
+region, and the `cluster_autoscaler_role_arn` output before apply. The image
+tag is `v1.36.1` (Kubernetes 1.36). A different cluster minor needs that
+minor's latest patch instead. Do not commit a real account id.
+
+```bash
+./deploy/terraform/check-cluster-autoscaler.sh
+```
+
+Zone spread stays `ScheduleAnyway`. Adding a node does not force a pod
+onto it.
+
 ## Blue / green
 
 Two Deployments, one Service. No mesh.
