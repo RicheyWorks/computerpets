@@ -41,6 +41,10 @@ locals {
   # from the instance placement AZ. One subnet per group keeps that AZ.
   # desired-size-owner=cluster-autoscaler (ADR 0083). Create still uses 1.
   # hpa-max-replicas=10. Each group's max_size is at least that ceiling.
+  # api-pool-taint ADR 0094
+  # taint-key=computerpets/node-pool
+  # taint-value=api
+  # taint-effect=NO_SCHEDULE
   min_size_per_zone     = 1
   desired_size_per_zone = 1
   max_size_per_zone     = 10
@@ -175,8 +179,19 @@ resource "aws_eks_node_group" "zone" {
   # metrics-server selects computerpets/node-pool=api (ADR 0089).
   # Cluster Autoscaler selects the same label (ADR 0091).
   # The API Deployments select the same label (ADR 0093).
+  # The same key is a NoSchedule taint (ADR 0094). Kind and minikube
+  # are not this resource. Do not taint a kind or minikube node.
   labels = {
     "computerpets/node-pool" = "api"
+  }
+
+  # API pool taint (ADR 0094). Untolerated pods cannot land on these
+  # workers. NoSchedule does not evict pods that are already running.
+  # PreferNoSchedule would still admit them. NoExecute is not set.
+  taint {
+    key    = "computerpets/node-pool"
+    value  = "api"
+    effect = "NO_SCHEDULE"
   }
 
   update_config {

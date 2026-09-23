@@ -62,6 +62,15 @@ spec:
       nodeSelector:
         kubernetes.io/os: linux
         computerpets/node-pool: api
+      # API pool taint (ADR 0094). Same toleration as blue.
+      # A toleration does not require the taint.
+      # Kind and minikube are not tainted.
+      # Do not taint a kind or minikube node. replicas stays 0.
+      tolerations:
+        - key: computerpets/node-pool
+          operator: Equal
+          value: api
+          effect: NoSchedule
       initContainers:
         - name: wait-postgres
           image: postgres:16-alpine
