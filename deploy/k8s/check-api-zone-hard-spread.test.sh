@@ -33,6 +33,8 @@ copy_tree() {
   cp -a "${ROOT}/deploy/k8s/." "${dest}/deploy/k8s/"
   cp "${ROOT}/docs/adr/0095-api-zone-hard-spread.md" \
     "${dest}/docs/adr/0095-api-zone-hard-spread.md"
+  cp "${ROOT}/docs/adr/0100-api-hostname-hard-spread.md" \
+    "${dest}/docs/adr/0100-api-hostname-hard-spread.md"
   cp "${ROOT}/deploy/terraform/modules/node_pool/main.tf" \
     "${dest}/deploy/terraform/modules/node_pool/main.tf"
   cp "${SCRIPT}" "${dest}/deploy/k8s/check-api-zone-hard-spread.sh"
@@ -54,10 +56,10 @@ assert_exit 1 "check fails when the blue zone constraint is ScheduleAnyway" \
   "${BROKEN}/deploy/k8s/check-api-zone-hard-spread.sh"
 
 copy_tree "${BROKEN}"
-# Hard hostname spread is still the wrong follow-up.
-sed -i '/topologyKey: kubernetes.io\/hostname/{n;s/whenUnsatisfiable: ScheduleAnyway/whenUnsatisfiable: DoNotSchedule/;}' \
+# Soft hostname spread is ADR 0100's regression. Zone stays hard.
+sed -i '/topologyKey: kubernetes.io\/hostname/{n;s/whenUnsatisfiable: DoNotSchedule/whenUnsatisfiable: ScheduleAnyway/;}' \
   "${BROKEN}/deploy/k8s/deployment-green.yaml"
-assert_exit 1 "check fails when the green hostname constraint is DoNotSchedule" \
+assert_exit 1 "check fails when the green hostname constraint is ScheduleAnyway" \
   "${BROKEN}/deploy/k8s/check-api-zone-hard-spread.sh"
 
 copy_tree "${BROKEN}"

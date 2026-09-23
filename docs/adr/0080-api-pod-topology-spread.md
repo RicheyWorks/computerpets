@@ -1,6 +1,6 @@
 # 0080. API pod topology spread
 
-- **Status:** Accepted (hostname stays `ScheduleAnyway`; the zone action is [0095](0095-api-zone-hard-spread.md))
+- **Status:** Superseded in part by [0100](0100-api-hostname-hard-spread.md) (hostname `whenUnsatisfiable` is `DoNotSchedule`; the zone action is [0095](0095-api-zone-hard-spread.md))
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/deployment-blue.yaml`; `deploy/k8s/deployment-green.yaml`; `deploy/k8s/check-topology-spread.sh`
 

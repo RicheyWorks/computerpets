@@ -3,8 +3,8 @@
 # No cluster. Does not kubectl apply. No terraform apply.
 # Kind and minikube apply these Deployments. Nodes that omit the pool
 # label leave the API pods Pending. Do not delete the pool key for a laptop.
-# Hostname spread stays ScheduleAnyway. Zone spread is DoNotSchedule
-# (ADR 0095). HPA and PDB stay put.
+# Hostname spread is DoNotSchedule (ADR 0100). Zone spread is
+# DoNotSchedule (ADR 0095). HPA and PDB stay put.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -88,8 +88,8 @@ done
 
 need_not_grep "$BLUE" 'nodeAffinityPolicy: Ignore' "blue does not ignore node affinity"
 need_not_grep "$GREEN" 'nodeAffinityPolicy: Ignore' "green does not ignore node affinity"
-need_grep "$BLUE" 'whenUnsatisfiable: ScheduleAnyway' "blue hostname stays ScheduleAnyway"
-need_grep "$GREEN" 'whenUnsatisfiable: ScheduleAnyway' "green hostname stays ScheduleAnyway"
+need_grep "$BLUE" 'whenUnsatisfiable: DoNotSchedule' "blue hostname spread is DoNotSchedule"
+need_grep "$GREEN" 'whenUnsatisfiable: DoNotSchedule' "green hostname spread is DoNotSchedule"
 need_grep "$BLUE" 'whenUnsatisfiable: DoNotSchedule' "blue zone spread is DoNotSchedule"
 need_grep "$GREEN" 'whenUnsatisfiable: DoNotSchedule' "green zone spread is DoNotSchedule"
 need_grep "$BLUE" 'topologyKey: kubernetes.io/hostname' "blue keeps the hostname key"
@@ -125,7 +125,7 @@ need_grep "$README" 'Do not delete the pool key' "README refuses dropping the po
 need_grep "$ADR" 'Catalog stays 221' "catalog stays 221"
 need_grep "$ADR" 'No Rui sprites' "no Rui sprites"
 need_grep "$ADR" 'Kind and minikube' "ADR names kind and minikube"
-need_grep "$ADR" 'ScheduleAnyway' "ADR keeps the soft spread"
+need_grep "$ADR" 'ScheduleAnyway' "pool ADR still records the old soft spread"
 need_grep "$ADR" 'computerpets/node-pool' "ADR names the pool label"
 need_grep "$ADR" 'nodeAffinityPolicy: Honor' "ADR names Honor"
 
@@ -166,7 +166,7 @@ for path, color, replicas in (
     got_keys = [item.get("topologyKey") for item in constraints]
     check(got_keys == keys, f"parsed {color} spread keys stay hostname then zone")
     actions = {
-        "kubernetes.io/hostname": "ScheduleAnyway",
+        "kubernetes.io/hostname": "DoNotSchedule",
         "topology.kubernetes.io/zone": "DoNotSchedule",
     }
     for item in constraints:
