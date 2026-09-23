@@ -4,7 +4,7 @@ Spring Boot is not the pet's GPU. There is no ``/metrics/gpu`` door.
 Temperature, utilization, memory, and power come from nvidia-smi, or from
 Windows GPU performance counters. Linux runs the same nvidia-smi query.
 When that binary is missing, the Linux probe reads amdgpu sysfs into the
-same line. Intel sysfs is not read. Mac runs ``ioreg`` on IOAccelerator
+same line. i915 and xe sysfs stay unread (``INTEL_EMPTY``). Mac runs ``ioreg`` on IOAccelerator
 PerformanceStatistics and prints that same line. A missing tool stays unread.
 Temperature and power on Mac, and on the amdgpu line, stay unread. A missing,
 malformed, or stale reading stays unread. A real zero from the hardware is
@@ -685,6 +685,9 @@ def parse_probe_text(text) -> dict:
             continue
         if tag == "ENDAMDGPU":
             amdgpu_csv = "\n".join(amdgpu_lines)
+            mode = None
+            continue
+        if tag == "INTEL_ABSENT" or tag == "INTEL_EMPTY":
             mode = None
             continue
         if tag == "ENGINE_ABSENT":
