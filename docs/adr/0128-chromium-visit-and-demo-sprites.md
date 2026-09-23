@@ -1,6 +1,6 @@
 # 0128. The visit guest and the desk `/demo` pet draw on the same canvas
 
-- **Status:** Accepted
+- **Status:** Accepted (living desk room pet and desk company sprites moved to [0129](0129-chromium-living-desk-sprites.md))
 - **Date:** 2026-09-23
 - **Code:** `desktop/renderer/sprite-surface.js`, `desktop/renderer/pet.js`, `web/src/lib/pets/desk-sprite-surface.ts`, `web/src/components/desk/living-pet.tsx`, `desktop/renderer/sprite-surface.test.cjs`
 
@@ -22,13 +22,13 @@ This slice does not reopen presence/CSP, Hikari, bundle zip, cosign, CDN, secret
 2. **Which surface.** The same rule as the host pet. When `OffscreenCanvas` can create a 2d context and the visible canvas can take a bitmap, the frame is drawn offscreen and transferred. When `OffscreenCanvas` is missing or its constructor throws, the visible canvas 2d context draws the same fit. `#guest` is `<canvas id="guest">`. The `/demo` pet is a canvas inside `LivingPet` when `demoWindow` is set. `desk-sprite-surface.ts` calls `paintHeld` with the host box. Neither is a WebGL context.
 3. **What stays closed.** No canvas, no image decoder, an OffscreenCanvas whose 2d context is null, or a bitmap renderer that cannot take the bitmap: `data-surface` is `refused`, `data-frame` is unset, and neither door assigns an `img` src. A decode error or a zero-size bitmap does not claim the frame. A frame that already painted stays until a later good frame replaces it. Width and height attributes are not written onto a canvas after that surface owns the bitmap.
 4. **What the gate still is.** `gpu-path.cjs` is unchanged except the cross-link. `gpu_compositing`, `softwareRendering`, and the software GL names still open or close the glass. This module does not read `getGPUFeatureStatus()` or `getGPUInfo()`. It does not pass `--use-angle`. A software accept still means the window may open. It does not turn a refused canvas into an `img`. The desk page is not that glass.
-5. **What stays an image.** The living desk outside `/demo` still draws the room pet as an `img`. Sip, Brick, called guests, and plants on that desk stay `img` elements. The blotter stays the Qt OpenGL viewport. Catalog stays 221.
+5. **What stayed an image in this slice.** The living desk outside `/demo` still drew the room pet as an `img`. Sip, Brick, called guests, and plants on that desk were still `img` elements. They draw on this same canvas now ([0129](0129-chromium-living-desk-sprites.md)). The day's visitor, the house floor, the hive, and the den blotters stay image elements. The blotter stays the Qt OpenGL viewport. Catalog stays 221.
 
 ## Consequences
 
 - A keeper whose compositor is hardware-accelerated, and whose Chromium can create the canvas, sees the visit guest on that surface. The tray still says `Chromium GPU compositor` when the gate is hardware. `/demo` draws the room pet on the same surface. The desk does not open or close the overlay glass.
 - A keeper whose canvas context cannot be created does not get an `img` that pretends to be that surface. The node stays blank.
 - OffscreenCanvas is the preferred surface. It is not a shader and not a texture API this tree owns. WebGL is not opened.
-- The living desk outside `/demo`, and Sip, Brick, called guests, and plants on that desk, are still image elements.
+- The living desk room pet, and desk Sip, Brick, called guests, and plants, draw on this same canvas ([0129](0129-chromium-living-desk-sprites.md)).
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** the living desk outside `/demo` still draws the room pet as an image, and Sip, Brick, called guests, and plants on that desk stay image elements. A later slice can draw those same catalog sprites on this canvas. The hardware gate still applies to the overlay. Do not start DirectX 12, Vulkan, Solana, or Pane. Catalog stays 221.
+- **Next gap:** the day's visitor, the house floor, the hive, and the den blotters still draw catalog sprites as images ([0129](0129-chromium-living-desk-sprites.md)). Do not start DirectX 12, Vulkan, Solana, or Pane. Catalog stays 221.

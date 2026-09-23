@@ -90,7 +90,8 @@ test("robin draw uses one real sit or walk frame, not two empty rects, and perch
   assert.equal(robin.phase, "perch");
   assert.notEqual(robin.phase, "gone");
   assert.ok(Call.poseSrc(robin, { sit, walk, idle }).includes("/sit/"));
-  assert.match(calledSrc, /getAttribute\("src"\)/);
+  assert.match(calledSrc, /paintCalledFrame/);
+  assert.doesNotMatch(calledSrc, /setAttribute\(\s*"src"/);
   assert.match(calledSrc, /poseFrames/);
   assert.doesNotMatch(calledSrc, /if \(hidden \|\| !list\.length\)/);
 });

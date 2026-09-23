@@ -6,13 +6,13 @@ import {
   ROBIN_SONG,
   beginRobinFly,
   destSrc,
-  destStyle,
   markSung,
   shouldSing,
   stepRobinFly,
   stillVisible,
 } from "@/lib/pets/robin-fly";
 import { playVoice } from "@/lib/pets/desk-audio";
+import { paintBrickFrame } from "@/lib/pets/desk-sprite-surface";
 
 export function RobinFlyer({
   hidden,
@@ -32,7 +32,7 @@ export function RobinFlyer({
   hostPoseRef?: RefObject<{ x: number; facing: 1 | -1 }>;
 }) {
   const guest = livingByKey(ROBIN_KEY);
-  const img = useRef<HTMLImageElement>(null);
+  const canvas = useRef<HTMLCanvasElement>(null);
   const [on, setOn] = useState(false);
   const sleepRef = useRef(hostSleeping);
   const keyRef = useRef(hostKey);
@@ -54,10 +54,7 @@ export function RobinFlyer({
     const first = destSrc(fly, guest.sprites);
     setOn(true);
     onVisible?.(true);
-    if (img.current && first) {
-      img.current.setAttribute("src", first);
-      Object.assign(img.current.style, destStyle());
-    }
+    if (canvas.current && first) paintBrickFrame(canvas.current, first);
     playVoice(ROBIN_KEY);
     let raf = 0;
     const tick = (now: number) => {
@@ -87,11 +84,10 @@ export function RobinFlyer({
         frame = (frame + 1) % 4;
       }
       fly.frame = frame;
-      const el = img.current;
+      const el = canvas.current;
       const src = destSrc(fly, guest.sprites);
       if (el && src) {
-        if (el.getAttribute("src") !== src) el.setAttribute("src", src);
-        Object.assign(el.style, destStyle());
+        paintBrickFrame(el, src);
         el.style.transform = `translate3d(${fly.x}px, ${-fly.lift}px, 0) rotate(${fly.rot}deg) scale(${fly.facing}, ${fly.flap || 1})`;
       }
       raf = window.requestAnimationFrame(tick);
@@ -102,14 +98,14 @@ export function RobinFlyer({
 
   if (!on && !startId) return null;
   return (
-    <img
-      ref={img}
-      alt={ROBIN_NAME}
+    <canvas
+      ref={canvas}
+      role="img"
+      aria-label={ROBIN_NAME}
       data-hit
       data-robin={ROBIN_KEY}
-      src={destSrc({ key: ROBIN_KEY, phase: "stay", t: 0, age: 0, x: 0, lift: 0, rot: 0, facing: 1, fromX: 0, toX: 0, fromLift: 0, toLift: 0, sungAt: 0, flap: 1 }, guest.sprites)}
-      className="pointer-events-auto absolute bottom-0 left-0 z-[6] h-28 w-28 origin-bottom select-none border-0 bg-transparent object-contain object-bottom shadow-none outline-none"
-      draggable={false}
+      data-surface="pending"
+      className="pointer-events-auto absolute bottom-0 left-0 z-[6] h-28 w-28 origin-bottom select-none border-0 bg-transparent shadow-none outline-none"
     />
   );
 }
