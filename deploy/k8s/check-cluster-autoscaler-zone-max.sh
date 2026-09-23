@@ -2,7 +2,7 @@
 # ADR 0104 — each API zone's node-group max is 20.
 # Cluster Autoscaler reads that as the Auto Scaling group MaxSize.
 # The old local of 10 is refused. The max stays at least the HPA
-# ceiling. min stays 1. No cluster. Does not kubectl apply.
+# ceiling. min is 2 (ADR 0105). No cluster. Does not kubectl apply.
 # No terraform apply. Kind and minikube stay off this file.
 # Do not set minDomains.
 set -euo pipefail
@@ -84,7 +84,7 @@ need_grep "$ADR" 'No Rui sprites' "no Rui sprites"
 need_grep "$ADR" 'Do not set minDomains' "ADR refuses minDomains"
 need_grep "$ADR" 'Kind and minikube' "ADR names kind and minikube"
 need_grep "$ADR" 'No live AWS apply' "ADR does not apply Terraform"
-need_grep "$ADR" 'On two hostnames the HPA floor is still 2 and 1' "HPA floor stays a later gap"
+need_grep "$ADR" '0105-api-hostname-floor' "hostname floor moved to ADR 0105"
 need_grep "$POOL" 'zone-max-nodes=20' "node pool names the house ceiling"
 need_grep "$POOL" 'hpa-max-replicas=10' "node pool still names the HPA pod ceiling"
 need_grep "$POOL" 'max_size_per_zone[[:space:]]*=[[:space:]]*20' "max size per zone is 20"
@@ -137,8 +137,8 @@ if hpa_max and sizes and sizes[0].isdigit() and hpa_max[0].isdigit():
     check(int(sizes[0]) != 10, "configured max is not silently 10")
 else:
     check(False, "configured max is at least the HPA max pods one zone can be asked to hold")
-check(mins == ["1"], "min size per zone stays 1")
-check(desired == ["1"], "create-time desired size stays 1")
+check(mins == ["2"], "min size per zone is 2 (ADR 0105)")
+check(desired == ["2"], "create-time desired size is 2 (ADR 0105)")
 if mins and sizes and mins[0].isdigit() and sizes[0].isdigit():
     check(int(mins[0]) >= 1 and int(mins[0]) < int(sizes[0]),
           "min stays at least 1 and below the max")

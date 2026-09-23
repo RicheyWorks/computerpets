@@ -26,6 +26,10 @@ resources:
 # Required hostname anti-affinity is not set.
 # Do not set minDomains. That would leave the second pod Pending on a
 # laptop that has only one hostname.
+# API hostname floor (ADR 0105) is the node pool, not this apply.
+# min_size is 2 per zone. Two healthy zones are four hostnames, so the
+# HPA floor of 3 does not land 2 and 1. Kind and minikube do not plan
+# that pool. One hostname here still schedules. Do not set minDomains.
 # Zone spread (ADR 0081, hardened by ADR 0095) is DoNotSchedule on
 # topology.kubernetes.io/zone, maxSkew 1, nodeAffinityPolicy Honor.
 # One labeled zone still schedules: a single domain keeps skew at 1.

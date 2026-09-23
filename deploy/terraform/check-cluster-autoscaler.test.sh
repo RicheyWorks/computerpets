@@ -75,7 +75,7 @@ assert_exit 1 "check fails when node-group max drops below the HPA ceiling" \
   "${BROKEN}/deploy/terraform/check-cluster-autoscaler.sh"
 
 copy_tree "${BROKEN}"
-# Without ignore_changes, the next apply writes desired_size back to 1.
+# Without ignore_changes, the next apply writes desired_size back to the create-time floor.
 sed -i '/ignore_changes = \[scaling_config\[0\].desired_size\]/d' \
   "${BROKEN}/deploy/terraform/modules/node_pool/main.tf"
 assert_exit 1 "check fails when terraform would reset desired_size" \

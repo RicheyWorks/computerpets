@@ -99,8 +99,8 @@ echo "== node group ceiling and desired size =="
 need_grep "$POOL" 'desired-size-owner=cluster-autoscaler' "node pool names the desired-size owner"
 need_grep "$POOL" 'hpa-max-replicas=10' "node pool names the HPA ceiling"
 need_grep "$POOL" 'max_size_per_zone[[:space:]]*=[[:space:]]*20' "max size per zone is 20"
-need_grep "$POOL" 'desired_size_per_zone[[:space:]]*=[[:space:]]*1' "create-time desired size stays 1"
-need_grep "$POOL" 'min_size_per_zone[[:space:]]*=[[:space:]]*1' "min size per zone stays 1"
+need_grep "$POOL" 'desired_size_per_zone[[:space:]]*=[[:space:]]*2' "create-time desired size is 2 (ADR 0105)"
+need_grep "$POOL" 'min_size_per_zone[[:space:]]*=[[:space:]]*2' "min size per zone is 2 (ADR 0105)"
 need_grep "$POOL" 'ignore_changes = \[scaling_config\[0\]\.desired_size\]' "terraform ignores desired_size after create"
 need_grep "$POOL" 'aws_autoscaling_group_tag" "cluster_autoscaler"' "discovery tags target the managed ASG"
 need_grep "$POOL" 'k8s.io/cluster-autoscaler/enabled' "enabled discovery tag is present"
@@ -268,8 +268,8 @@ mins = re.findall(r"(?m)^[ \t]*min_size_per_zone[ \t]*=[ \t]*(\d+)[ \t]*$", pool
 check(hpa_max == ["10"], "HPA file has one ceiling and it is 10")
 check(len(sizes) == 1 and int(sizes[0]) >= int(hpa_max[0] if hpa_max else "999"),
       "node-group max is at least the HPA ceiling")
-check(desired == ["1"], "create-time desired size is still 1")
-check(mins == ["1"], "min size per zone is still 1")
+check(desired == ["2"], "create-time desired size is 2 (ADR 0105)")
+check(mins == ["2"], "min size per zone is 2 (ADR 0105)")
 check("ignore_changes = [scaling_config[0].desired_size]" in pool_code,
       "ignore_changes is in code, not only a comment")
 check('resource "aws_autoscaling_group"' not in pool_code, "no raw ASG resource in the node pool")
