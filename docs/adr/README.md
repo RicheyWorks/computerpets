@@ -140,7 +140,8 @@ address, or an API that is not on `main`.
 | [0119](0119-linux-amdgpu-sysfs-gpu-sense.md) | Linux reads amdgpu sysfs into the same GPU line when nvidia-smi does not print one (missing file stays unread; Intel sysfs stays unread) | Accepted (Intel clause superseded in part by 0120) |
 | [0120](0120-linux-intel-sysfs-gpu-sense.md) | Linux i915 and xe sysfs stay unread (`INTEL_EMPTY`; RC6, GT idle, frequency, and a lone capacity file are not the line) | Accepted (fdinfo render utilization moved to 0121) |
 | [0121](0121-linux-intel-fdinfo-gpu-sense.md) | Linux i915 and xe render utilization comes from two DRM fdinfo reads in one probe (rewind, zero interval, and a missing file stay unread) | Accepted (amdgpu hwmon temperature and power moved to 0122) |
-| [0122](0122-linux-amdgpu-hwmon-gpu-sense.md) | Linux amdgpu temperature and power come from the card hwmon when the label is `edge` or `PPT` (an unlabeled channel, junction, memory, and a power cap stay unread) | Accepted |
+| [0122](0122-linux-amdgpu-hwmon-gpu-sense.md) | Linux amdgpu temperature and power come from the card hwmon when the label is `edge` or `PPT` (an unlabeled channel, junction, memory, and a power cap stay unread) | Accepted (Intel device VRAM fail-closed moved to 0123) |
+| [0123](0123-linux-intel-device-vram-gpu-sense.md) | Linux i915 and xe device VRAM used and total stay unread (no upstream used and total pair; a query zero without CAP_PERFMON is not a sample) | Accepted |
 
 ## How to add one
 

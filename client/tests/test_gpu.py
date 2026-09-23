@@ -311,6 +311,11 @@ def test_linux_reads_nvidia_and_mac_reads_ioaccelerator(monkeypatch, tmp_path):
     (xe / "tile0" / "gt0" / "gtidle" / "idle_residency_ms").write_text("654321\n")
     (xe / "tile0" / "memory").mkdir(parents=True)
     (xe / "tile0" / "memory" / "physical_vram_size_bytes").write_text("17179869184\n")
+    (xe / "memory_info").mkdir(parents=True)
+    (xe / "memory_info" / "vram_total").write_text("8589934592\n")
+    (xe / "memory_info" / "vram_avail").write_text("6442450944\n")
+    (xe / "memory_info" / "vram_used").write_text("0\n")
+    (xe / "vram_d3cold_threshold").write_text("314159\n")
     monkeypatch.setenv("GPU_SYSFS_ROOT", str(intel_root))
     intel_raw = subprocess.run(
         ["/bin/sh", str(linux_probe_script())],
@@ -324,6 +329,9 @@ def test_linux_reads_nvidia_and_mac_reads_ioaccelerator(monkeypatch, tmp_path):
     assert "654321" not in intel_raw.stdout
     assert "1450" not in intel_raw.stdout
     assert "17179869184" not in intel_raw.stdout
+    assert "8589934592" not in intel_raw.stdout
+    assert "6442450944" not in intel_raw.stdout
+    assert "314159" not in intel_raw.stdout
     assert "8086" not in intel_raw.stdout
     intel_sample = sample_from_probe(parse_probe_text(intel_raw.stdout), platform="linux", now_ms=NOW)
     assert intel_sample["status"] == "unread"
@@ -360,6 +368,11 @@ def test_linux_reads_nvidia_and_mac_reads_ioaccelerator(monkeypatch, tmp_path):
     (dev / "uevent").write_text("PCI_ID=8086:9A49\nPCI_SLOT_NAME=0000:00:02.0\n")
     (fd_root / "card0" / "gt" / "gt0").mkdir(parents=True)
     (fd_root / "card0" / "gt" / "gt0" / "rc6_residency_ms").write_text("812345\n")
+    mem = dev / "memory_info"
+    mem.mkdir(parents=True)
+    (mem / "vram_total").write_text("8589934592\n")
+    (mem / "vram_avail").write_text("6442450944\n")
+    (mem / "vram_used").write_text("0\n")
     one = proc1 / "10" / "fdinfo"
     two = proc2 / "10" / "fdinfo"
     one.mkdir(parents=True)
@@ -372,6 +385,8 @@ def test_linux_reads_nvidia_and_mac_reads_ioaccelerator(monkeypatch, tmp_path):
         "drm-engine-copy:\t999 ns\n"
         "drm-engine-capacity-render:\t1\n"
         "drm-total-resident-vram:\t999999999\n"
+        "drm-resident-local:\t888888888\n"
+        "drm-total-local:\t777777777\n"
     )
     (two / "3").write_text(
         "drm-driver:\ti915\n"
@@ -381,6 +396,8 @@ def test_linux_reads_nvidia_and_mac_reads_ioaccelerator(monkeypatch, tmp_path):
         "drm-engine-copy:\t999999999 ns\n"
         "drm-engine-capacity-render:\t1\n"
         "drm-total-resident-vram:\t999999999\n"
+        "drm-resident-local:\t888888888\n"
+        "drm-total-local:\t777777777\n"
     )
     fd_raw = subprocess.run(
         ["/bin/sh", str(linux_probe_script())],
@@ -398,7 +415,12 @@ def test_linux_reads_nvidia_and_mac_reads_ioaccelerator(monkeypatch, tmp_path):
     )
     assert "i915 8086:9A49, [N/A], 50, [N/A], [N/A], [N/A]" in fd_raw.stdout
     assert "999999999" not in fd_raw.stdout
+    assert "888888888" not in fd_raw.stdout
+    assert "777777777" not in fd_raw.stdout
+    assert "8589934592" not in fd_raw.stdout
+    assert "6442450944" not in fd_raw.stdout
     assert "812345" not in fd_raw.stdout
+    assert ", 0," not in fd_raw.stdout
     fd_sample = sample_from_probe(parse_probe_text(fd_raw.stdout), platform="linux", now_ms=NOW)
     assert fd_sample["status"] == "read"
     assert fd_sample["source"] == "fdinfo"
