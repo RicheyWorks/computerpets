@@ -14,8 +14,25 @@
 
   const MIN_W = 80;
   const MIN_H = 80;
-  /** Mac window play is still a later door. Linux X11 enumerates. Do not invent Mac rects. */
-  const LATER_DOOR = "mac-window-play";
+  /** The Mac list is Accessibility. This door is closed. Do not invent rects. */
+  const LATER_DOOR = null;
+  /** Dock, WindowServer, menu bar, Control Center. Not written on the pipe. */
+  const MAC_SHELL_BUNDLES = [
+    "com.apple.dock",
+    "com.apple.WindowServer",
+    "com.apple.SystemUIServer",
+    "com.apple.controlcenter",
+  ];
+  /** Floating, dialog, and unknown subroles are tool windows. A standard window is not. */
+  const MAC_TOOL_SUBROLES = [
+    "AXFloatingWindow",
+    "AXSystemFloatingWindow",
+    "AXDialog",
+    "AXSystemDialog",
+    "AXUnknown",
+  ];
+  /** Notification Center is a tool even when the subrole is blank. */
+  const MAC_TOOL_BUNDLES = ["com.apple.notificationcenterui"];
 
   function isWindows(platform) {
     return platform === "win32" || /^Win/i.test(String(platform || ""));
@@ -30,14 +47,41 @@
   }
 
   function enumeratesOn(platform) {
-    return isWindows(platform) || isLinux(platform);
+    return isWindows(platform) || isLinux(platform) || isMac(platform);
   }
 
-  /** A Mac does not invent window rects. Linux and Windows enumerate. */
+  /** Windows, Linux X11, and Mac Accessibility enumerate. Other hosts do not invent rects. */
   function laterDoor(platform) {
-    if (enumeratesOn(platform)) return null;
-    if (isMac(platform)) return LATER_DOOR;
-    return null;
+    return enumeratesOn(platform) ? null : null;
+  }
+
+  /**
+   * Electron on Mac reports `window:<CGWindowID>:<webContents>`.
+   * The view pointer from getNativeWindowHandle is not this id.
+   * A window that is not on screen yet is `window:-1` and is refused.
+   */
+  function cgWindowIdFromMediaSource(id) {
+    const matched = /^window:(\d+):\d+$/.exec(String(id || "").trim());
+    if (!matched || matched[1] === "0") return "";
+    return matched[1];
+  }
+
+  function listed(arr, item) {
+    return arr.indexOf(item) >= 0;
+  }
+
+  /** Same bits the Accessibility helper emits. A bundle id is not stored on the row. */
+  function macWindowBits(subrole, bundle, minimized, appHidden) {
+    const shell = listed(MAC_SHELL_BUNDLES, String(bundle || ""));
+    const tool =
+      !shell &&
+      (listed(MAC_TOOL_SUBROLES, String(subrole || "")) || listed(MAC_TOOL_BUNDLES, String(bundle || "")));
+    return {
+      minimized: !!minimized,
+      tool,
+      cloaked: !!appHidden,
+      shell,
+    };
   }
 
   function parseEnumText(text) {
@@ -158,11 +202,16 @@
     MIN_W,
     MIN_H,
     LATER_DOOR,
+    MAC_SHELL_BUNDLES,
+    MAC_TOOL_SUBROLES,
+    MAC_TOOL_BUNDLES,
     isWindows,
     isLinux,
     isMac,
     enumeratesOn,
     laterDoor,
+    cgWindowIdFromMediaSource,
+    macWindowBits,
     parseEnumText,
     hwndFromHandle,
     takeRects,

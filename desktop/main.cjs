@@ -893,32 +893,31 @@ ipcMain.handle("nft-quote", async (_e, nft, line) => {
   }
 });
 
-/** Real top-level window bounds on Windows and on Linux X11. Rects only. Mac stays a later door. */
+/** Real top-level window bounds on Windows, Linux X11, and Mac Accessibility. Rects only. */
 let windowTick = null;
 let windowBusy = false;
 
 function windowEnumsHere() {
-  return Desk.isWindows(process.platform) || Desk.isLinux(process.platform);
+  return Desk.isWindows(process.platform) || Desk.isLinux(process.platform) || Desk.isMac(process.platform);
+}
+
+/** Windows and Linux skip the view handle. Mac skips the window number. The view pointer is not that id. */
+function nativeSkipId(target) {
+  if (!target || target.isDestroyed()) return "";
+  try {
+    if (Desk.isMac(process.platform)) return Windows.cgWindowIdFromMediaSource(target.getMediaSourceId());
+    return Windows.hwndFromHandle(target.getNativeWindowHandle());
+  } catch {
+    return "";
+  }
 }
 
 function overlaySkipIds() {
   const ids = [];
-  if (win && !win.isDestroyed()) {
-    try {
-      const id = Windows.hwndFromHandle(win.getNativeWindowHandle());
-      if (id) ids.push(id);
-    } catch {
-      /* ignore */
-    }
-  }
-  if (settingsWin && !settingsWin.isDestroyed()) {
-    try {
-      const id = Windows.hwndFromHandle(settingsWin.getNativeWindowHandle());
-      if (id) ids.push(id);
-    } catch {
-      /* ignore */
-    }
-  }
+  const overlay = nativeSkipId(win);
+  const settings = nativeSkipId(settingsWin);
+  if (overlay) ids.push(overlay);
+  if (settings) ids.push(settings);
   return ids;
 }
 
@@ -928,13 +927,15 @@ function pushWindowRects() {
   windowBusy = true;
   const area = floorOf();
   const display = screen.getDisplayNearestPoint({ x: area.x, y: area.y });
+  // Accessibility frames are points, the same space as the work area. A Retina scale would halve the sit.
+  const scale = Desk.isMac(process.platform) ? 1 : display.scaleFactor || 1;
   WindowEnum.listRaw({ platform: process.platform })
     .then((listed) => {
       if (!win || win.isDestroyed()) return;
       const windows = Presence.scrubWindows(
         Windows.takeRects(listed.raw, {
           workArea: area,
-          scaleFactor: display.scaleFactor || 1,
+          scaleFactor: scale,
           skipIds: overlaySkipIds(),
         }),
       );
