@@ -1,5 +1,5 @@
 # metrics-server so hpa.yaml can read CPU and memory (ADR 0084, ADR 0085,
-# ADR 0086, ADR 0087, ADR 0088, ADR 0089, ADR 0098).
+# ADR 0086, ADR 0087, ADR 0088, ADR 0089, ADR 0098, ADR 0111).
 # Not in kustomization.yaml. Local/dev `kubectl apply -k deploy/k8s` does
 # not install this. Kind and minikube do not apply this file. There is no
 # overlay directory. No Helm chart.
@@ -33,22 +33,23 @@
 #     --from-file=tls.crt=/path/to/tls.crt \
 #     --from-file=tls.key=/path/to/tls.key \
 #     --from-file=ca.crt=/path/to/serving-ca.crt
-# The certificate DNS SAN must include metrics-server.kube-system.svc.
-# That is the name the apiserver uses. --cert-dir=/tmp stays in the
-# upstream arg list and is ignored while both files are set, so the
-# process does not mint a serving cert in /tmp. Do not add
-# insecureSkipTLSVerify. Do not add --kubelet-insecure-tls.
-# Do not add --deprecated-kubelet-completely-insecure.
+# The certificate DNS SAN must be metrics-server.kube-system.svc.
+# That is the name the apiserver uses. A cluster.local name is not
+# a substitute. --cert-dir=/tmp stays in the upstream arg list and is
+# ignored while both files are set, so the process does not mint a
+# serving cert in /tmp. Do not add insecureSkipTLSVerify. Do not add
+# --kubelet-insecure-tls. Do not add
+# --deprecated-kubelet-completely-insecure.
 #
-# A private CA is not a system root. After apply, set the APIService
-# caBundle from that ca.crt. The field is base64. Do not commit it:
-#   CA_B64="$(kubectl -n kube-system get secret metrics-server-serving \
-#     -o jsonpath='{.data.ca\.crt}')"
-#   kubectl patch apiservice v1beta1.metrics.k8s.io --type=merge \
-#     -p "{\"spec\":{\"caBundle\":\"${CA_B64}\"}}"
-# Until that field is the CA that signed tls.crt, the apiserver uses
-# system roots and a private serving cert leaves kubectl top empty.
-# A missing Secret leaves the pods unstarted.
+# ADR 0111 mints that leaf and the private CA, then refuses apply
+# unless the leaf chains to ca.crt and the SAN is that name. The
+# same apply writes Secret metrics-server-serving and patches
+# APIService caBundle from that ca.crt. Do not commit the certificate,
+# the key, or caBundle. A missing Secret leaves the pods unstarted.
+#   OUT="$(mktemp -d)"
+#   ./deploy/k8s/metrics-server-serving-cert.sh render "$OUT"
+#   COMPUTERPETS_METRICS_SERVING_APPLY=1 \
+#     ./deploy/k8s/metrics-server-serving-cert.sh apply "$OUT"
 #
 # Kubelet verification uses
 # --kubelet-certificate-authority=/etc/metrics-server/kubelet-ca/ca.crt.

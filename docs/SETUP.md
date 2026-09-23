@@ -515,8 +515,12 @@ this kustomization. Apply it before `hpa.yaml`, and only after
 mounts operator ConfigMap or Secret `metrics-server-kubelet-ca` (key
 `ca.crt`, `optional: false`). `--tls-cert-file` and
 `--tls-private-key-file` mount Secret `metrics-server-serving`.
-`insecureSkipTLSVerify` is not set. This repo does not vendor those
-certificates.
+`insecureSkipTLSVerify` is not set. `metrics-server-serving-cert.sh`
+mints a private CA and a leaf whose DNS SAN is
+`metrics-server.kube-system.svc`, then refuses apply unless that leaf
+chains to the CA written into APIService `caBundle`
+([ADR 0111](adr/0111-metrics-server-serving-cert-chain.md)).
+This repo does not vendor those certificates.
 The same Deployment hard-spreads zones
 (`topology.kubernetes.io/zone`, `maxSkew: 1`, `DoNotSchedule`,
 `nodeTaintsPolicy: Honor`, `nodeAffinityPolicy: Honor`). `minDomains`
@@ -531,6 +535,7 @@ when two hostnames exist and the nodes carry one zone value
 ([ADR 0084](adr/0084-metrics-server.md), [ADR 0085](adr/0085-metrics-server-ha.md),
 [ADR 0086](adr/0086-metrics-server-kubelet-ca.md),
 [ADR 0087](adr/0087-metrics-server-serving-cert.md),
+[ADR 0111](adr/0111-metrics-server-serving-cert-chain.md),
 [ADR 0088](adr/0088-metrics-server-zone-spread.md),
 [ADR 0089](adr/0089-metrics-server-node-pool.md),
 [ADR 0098](adr/0098-metrics-server-zone-hard-spread.md)).

@@ -1,6 +1,6 @@
 # 0087. Serving certificate for metrics-server
 
-- **Status:** Accepted
+- **Status:** Accepted (the unguarded keeper `caBundle` patch is superseded in part by [0111](0111-metrics-server-serving-cert-chain.md); the Secret mount stays)
 - **Date:** 2026-09-23
 - **Code:** `deploy/k8s/metrics-server.yaml`; `deploy/k8s/check-metrics-server.sh`
 
@@ -57,4 +57,4 @@ This slice does not reopen presence/CSP, Hikari/replica pool sizing, bundle zip,
 - A missing Secret leaves the pods unstarted. Local `kubectl apply -k deploy/k8s` still does not install metrics-server.
 - Adding `insecureSkipTLSVerify`, adding `--kubelet-insecure-tls`, making either volume optional, vendoring a PEM, committing `caBundle`, floating the image tag, or listing the file in `kustomization.yaml` fails `check-metrics-server.sh`.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** moved. Zone spread for this addon is [0088](0088-metrics-server-zone-spread.md).
+- **Next gap:** moved. Zone spread for this addon is [0088](0088-metrics-server-zone-spread.md). The chain and SAN gate is [0111](0111-metrics-server-serving-cert-chain.md).

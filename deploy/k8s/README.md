@@ -193,7 +193,8 @@ be read as load.
 [ADR 0087](../../docs/adr/0087-metrics-server-serving-cert.md),
 [ADR 0088](../../docs/adr/0088-metrics-server-zone-spread.md),
 [ADR 0089](../../docs/adr/0089-metrics-server-node-pool.md),
-[ADR 0098](../../docs/adr/0098-metrics-server-zone-hard-spread.md)).
+[ADR 0098](../../docs/adr/0098-metrics-server-zone-hard-spread.md),
+[ADR 0111](../../docs/adr/0111-metrics-server-serving-cert-chain.md)).
 That file is also not in the kustomization. It runs two replicas with
 required hostname anti-affinity and hard zone spread (`DoNotSchedule`
 on `topology.kubernetes.io/zone`, `maxSkew` 1). One labeled zone still
@@ -203,26 +204,25 @@ the zone count on those nodes. Kind and minikube do not apply it
 (`enable_node_pool=false` does not label their nodes). A single-zone
 set of labeled nodes still schedules both pods when two hostnames exist
 and the nodes carry one zone value.
-Create the kubelet CA object and the serving Secret, then apply it.
+Create the kubelet CA object, then let
+`metrics-server-serving-cert.sh` mint the serving leaf and write
+`caBundle` ([ADR 0111](../../docs/adr/0111-metrics-server-serving-cert-chain.md)).
 `kubectl top pods -n computerpets` must show cpu and memory. Until that
 API answers, applying the HPA does not raise the replica count, so blue
 can stay at 2.
 
 ```bash
-# Prod only. Kubelet CA and serving Secret, then metrics-server, then the
-# HPA after kubectl top answers.
+# Prod only. Not kind or minikube. The serving script refuses a leaf
+# that does not chain to ca.crt, or whose DNS SAN is not
+# metrics-server.kube-system.svc, before any kubectl (ADR 0111).
 kubectl -n kube-system create configmap metrics-server-kubelet-ca \
   --from-file=ca.crt=/path/to/kubelet-serving-ca.crt
-kubectl -n kube-system create secret generic metrics-server-serving \
-  --from-file=tls.crt=/path/to/tls.crt \
-  --from-file=tls.key=/path/to/tls.key \
-  --from-file=ca.crt=/path/to/serving-ca.crt
-kubectl apply -f deploy/k8s/metrics-server.yaml
-CA_B64="$(kubectl -n kube-system get secret metrics-server-serving \
-  -o jsonpath='{.data.ca\.crt}')"
-kubectl patch apiservice v1beta1.metrics.k8s.io --type=merge \
-  -p "{\"spec\":{\"caBundle\":\"${CA_B64}\"}}"
+OUT="$(mktemp -d)"
+./deploy/k8s/metrics-server-serving-cert.sh render "$OUT"
+COMPUTERPETS_METRICS_SERVING_APPLY=1 \
+  ./deploy/k8s/metrics-server-serving-cert.sh apply "$OUT"
 kubectl apply -f deploy/k8s/hpa.yaml
+./deploy/k8s/check-metrics-server-serving-cert.sh
 ./deploy/k8s/check-hpa.sh
 ```
 
@@ -671,29 +671,31 @@ and `tls.key`, a read-only mount of Secret `metrics-server-serving`
 (keys `tls.crt` and `tls.key`, `optional: false`). This repo does not
 vendor that certificate or key. `--cert-dir=/tmp` stays in the upstream
 arg list and is ignored while both files are set, so the process does
-not mint a serving cert. The certificate DNS SAN must include
-`metrics-server.kube-system.svc`. A private CA is not a system root:
-after apply, set APIService `caBundle` from the Secret's `ca.crt`. Do
-not commit that field. A missing Secret leaves the pods unstarted. A
-private cert with an empty `caBundle` leaves `kubectl top` empty. Do
-not add `insecureSkipTLSVerify`.
+not mint a serving cert. `metrics-server-serving-cert.sh` mints a
+private CA and a leaf whose DNS SAN is `metrics-server.kube-system.svc`
+([ADR 0111](../../docs/adr/0111-metrics-server-serving-cert-chain.md)).
+`apply` verifies the chain and the SAN, then writes the Secret and
+patches APIService `caBundle` from that same `ca.crt`. A cluster.local
+name is not a substitute. A leaf that does not chain refuses apply
+before `kubectl`. Do not commit the certificate, the key, or
+`caBundle`. A missing Secret leaves the pods unstarted. Do not add
+`insecureSkipTLSVerify`. Do not add `--kubelet-insecure-tls`.
 
-Create the CA object and the serving Secret, then apply this file,
-before `hpa.yaml`.
+Create the kubelet CA object, then run
+`metrics-server-serving-cert.sh` before `hpa.yaml`. That script applies
+this file only after the serving leaf chains to `ca.crt` and the DNS
+SAN is `metrics-server.kube-system.svc`.
 
 ```bash
-# Prod only. Not part of kubectl apply -k.
+# Prod only. Not part of kubectl apply -k. Not kind or minikube.
 kubectl -n kube-system create configmap metrics-server-kubelet-ca \
   --from-file=ca.crt=/path/to/kubelet-serving-ca.crt
-kubectl -n kube-system create secret generic metrics-server-serving \
-  --from-file=tls.crt=/path/to/tls.crt \
-  --from-file=tls.key=/path/to/tls.key \
-  --from-file=ca.crt=/path/to/serving-ca.crt
-kubectl apply -f deploy/k8s/metrics-server.yaml
-CA_B64="$(kubectl -n kube-system get secret metrics-server-serving \
-  -o jsonpath='{.data.ca\.crt}')"
-kubectl patch apiservice v1beta1.metrics.k8s.io --type=merge \
-  -p "{\"spec\":{\"caBundle\":\"${CA_B64}\"}}"
+OUT="$(mktemp -d)"
+./deploy/k8s/metrics-server-serving-cert.sh render "$OUT"
+COMPUTERPETS_METRICS_SERVING_APPLY=1 \
+  ./deploy/k8s/metrics-server-serving-cert.sh apply "$OUT"
+./deploy/k8s/check-metrics-server-serving-cert.sh
+./deploy/k8s/check-metrics-server-serving-cert.test.sh
 ./deploy/k8s/check-metrics-server.sh
 ./deploy/k8s/check-metrics-server-zone-hard-spread.sh
 ./deploy/k8s/check-metrics-server-zone-hard-spread.test.sh
