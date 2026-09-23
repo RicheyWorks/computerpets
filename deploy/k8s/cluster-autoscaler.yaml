@@ -48,9 +48,14 @@
 # raises desired capacity on the underfilled zone's Auto Scaling group.
 # --balance-similar-node-groups=true, --expander=least-waste, and
 # --skip-nodes-with-system-pods=false stay. --namespace=kube-system is
-# the lease namespace, not a pod filter. A one-node cluster that applies
-# this file leaves the second pod Pending. Do not apply it on kind or
-# minikube.
+# the lease namespace, not a pod filter. --salvo-scale-up=true runs
+# another scale-up in that same loop for pods the first least-waste
+# choice did not place, including the underfilled zone (ADR 0102).
+# The budget is 1m. --frequent-loops-enabled=true stays, so a loop
+# that did scale up starts the next pass without waiting out the
+# scan interval. There is no priority expander ConfigMap. A one-node
+# cluster that applies this file leaves the second pod Pending. Do not
+# apply it on kind or minikube.
 #
 # Pool pin (ADR 0091). nodeSelector requires kubernetes.io/os=linux and
 # computerpets/node-pool=api, the label modules/node_pool already sets.
@@ -255,6 +260,10 @@ spec:
           # scale-down. It is not a filter of kube-system Pending pods.
           # --namespace=kube-system is the lease namespace. There is no
           # scheduler allow-list and no --nodes list. Do not set minDomains.
+          # ADR 0102. One expander choice still names one option. Salvo
+          # runs another choice in the same loop for the pods that
+          # option did not place. The budget is 1m. Frequent loops stay
+          # on. A priority expander ConfigMap is not created.
           command:
             - ./cluster-autoscaler
             - --cloud-provider=aws
@@ -266,6 +275,9 @@ spec:
             - --balance-similar-node-groups=true
             - --skip-nodes-with-system-pods=false
             - --expander=least-waste
+            - --salvo-scale-up=true
+            - --salvo-scale-up-budget=1m
+            - --frequent-loops-enabled=true
           env:
             - name: AWS_REGION
               value: AWS_REGION
