@@ -505,7 +505,11 @@ named lease. Both pods use ServiceAccount `cluster-autoscaler` and the
 one IRSA role. Only the leader calls `SetDesiredCapacity`. There is no
 second role. The standby is not the scaler
 ([ADR 0101](../../docs/adr/0101-cluster-autoscaler-leader-scale.md)).
-A Pending replica does not hold the lease. The scheduled leader still
+A Pending replica never holds the lease. The Running leader remains
+the scaler. v1.36.1 acquires the lease inside the running container.
+No flag hands it to a pod that has not started
+([ADR 0110](../../docs/adr/0110-cluster-autoscaler-pending-lease.md)).
+The scheduled leader still
 raises desired capacity on the underfilled zone's Auto Scaling group.
 `--balance-similar-node-groups=true` and `--expander=least-waste` stay.
 `--skip-nodes-with-system-pods=false` stays. That flag is scale-down.
@@ -582,12 +586,17 @@ minor's latest patch instead. Do not commit a real account id.
 ./deploy/k8s/check-cluster-autoscaler-zone-max.test.sh
 ./deploy/k8s/check-cluster-autoscaler-zone-max-floor.sh
 ./deploy/k8s/check-cluster-autoscaler-zone-max-floor.test.sh
+./deploy/k8s/check-cluster-autoscaler-pending-lease.sh
+./deploy/k8s/check-cluster-autoscaler-pending-lease.test.sh
 ```
 
 Zone spread for the API colors stays the item in those Deployments.
 Adding a node does not force a pod onto it. The scaler's own zone item
 is `DoNotSchedule`. If the lighter zone cannot fit the second scaler
-pod, that pod stays Pending and does not hold the lease. The standby is
+pod, that pod stays Pending and never holds the lease. The Running
+leader remains the scaler
+([ADR 0110](../../docs/adr/0110-cluster-autoscaler-pending-lease.md)).
+The standby is
 not the scaler. The scheduled leader raises desired capacity on the
 underfilled zone's group
 ([ADR 0101](../../docs/adr/0101-cluster-autoscaler-leader-scale.md)).
