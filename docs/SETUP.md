@@ -440,10 +440,16 @@ mounts operator ConfigMap or Secret `metrics-server-kubelet-ca` (key
 `ca.crt`, `optional: false`). `--tls-cert-file` and
 `--tls-private-key-file` mount Secret `metrics-server-serving`.
 `insecureSkipTLSVerify` is not set. This repo does not vendor those
-certificates
+certificates.
+The same Deployment prefers different zones
+(`topology.kubernetes.io/zone`, `maxSkew: 1`, `ScheduleAnyway`,
+`nodeTaintsPolicy: Honor`). Hard zone spread is not set, so a single-zone
+cluster and nodes that omit the zone label still schedule when two
+hostnames exist
 ([ADR 0084](adr/0084-metrics-server.md), [ADR 0085](adr/0085-metrics-server-ha.md),
 [ADR 0086](adr/0086-metrics-server-kubelet-ca.md),
-[ADR 0087](adr/0087-metrics-server-serving-cert.md)).
+[ADR 0087](adr/0087-metrics-server-serving-cert.md),
+[ADR 0088](adr/0088-metrics-server-zone-spread.md)).
 
 Prefer External Secrets Operator or Vault Agent to fill
 `computerpets-secrets` rather than committing values into `secret.yaml`.
