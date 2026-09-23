@@ -119,6 +119,7 @@ address, or an API that is not on `main`.
 | [0098](0098-metrics-server-zone-hard-spread.md) | Hard zone spread for metrics-server (`DoNotSchedule` on `topology.kubernetes.io/zone`; one labeled zone still schedules; replicas stay 2) | Accepted |
 | [0099](0099-cluster-autoscaler-zone-hard-spread.md) | Hard zone spread for Cluster Autoscaler (`DoNotSchedule` on `topology.kubernetes.io/zone`; one labeled zone still schedules; preferred zone anti-affinity removed; replicas stay 2) | Accepted |
 | [0100](0100-api-hostname-hard-spread.md) | Hard hostname spread for the API colors (`DoNotSchedule` on `kubernetes.io/hostname`; one hostname still schedules; the second local replica is not left Pending; zone stays `DoNotSchedule`) | Accepted |
+| [0101](0101-cluster-autoscaler-leader-scale.md) | The scheduled Cluster Autoscaler leader scales the underfilled zone (the standby is not the scaler; `least-waste` and similar per-zone groups stay; kind stays off the file) | Accepted |
 
 ## How to add one
 

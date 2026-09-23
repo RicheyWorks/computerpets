@@ -92,6 +92,7 @@ All critical items required before any public or limited production exposure hav
   - [x] kube-proxy toleration hook — `reassert_kube_proxy_toleration=true` probes on plan and reasserts coverage on apply, or fails closed. The flag defaults false. Kind and minikube are refused before any patch (ADR 0097). Catalog stays 221.
   - [x] metrics-server zone hard spread — `DoNotSchedule` on `topology.kubernetes.io/zone` (`maxSkew` 1, Honor policies). One labeled zone still schedules. A node that omits the zone label does not. Replicas stay 2. Kind and minikube do not apply the file (ADR 0098). Catalog stays 221.
   - [x] Cluster Autoscaler zone hard spread — `DoNotSchedule` on `topology.kubernetes.io/zone` (`maxSkew` 1, Honor policies). The preferred zone term is removed. One labeled zone still schedules. A node that omits the zone label does not. Replicas stay 2. Kind and minikube do not apply the file (ADR 0099). Catalog stays 221.
+  - [x] Cluster Autoscaler leader scale path — the standby is not the scaler. The scheduled leader keeps `--balance-similar-node-groups=true`, `--expander=least-waste`, and `--skip-nodes-with-system-pods=false`. One similar group per zone, at least two. Kind and minikube do not apply the file (ADR 0101). Catalog stays 221.
 
 - **2.2 Hardware Binding (hwid)**
   - [x] Optional `hwid` stored on IssuedLicense + inside the encrypted LicensePayload
@@ -175,6 +176,7 @@ All critical items required before any public or limited production exposure hav
   - [x] kube-proxy toleration hook — probe on plan and reassert on apply, or fail closed. The live flag defaults false. Kind and minikube stay untainted (ADR 0097). Catalog stays 221.
   - [x] metrics-server zone hard spread — `DoNotSchedule` on `topology.kubernetes.io/zone` (`maxSkew` 1). One labeled zone still schedules. Replicas stay 2. Kind and minikube do not apply the file (ADR 0098). Catalog stays 221.
   - [x] Cluster Autoscaler zone hard spread — `DoNotSchedule` on `topology.kubernetes.io/zone` (`maxSkew` 1, Honor policies). The preferred zone term is removed. One labeled zone still schedules. A node that omits the zone label does not. Replicas stay 2. Kind and minikube do not apply the file (ADR 0099). Catalog stays 221.
+  - [x] Cluster Autoscaler leader scale path — the standby is not the scaler. The scheduled leader keeps `--balance-similar-node-groups=true` and `--expander=least-waste`. One similar group per zone. Kind and minikube do not apply the file (ADR 0101). Catalog stays 221.
 
 ---
 
