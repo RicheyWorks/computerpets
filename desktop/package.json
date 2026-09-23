@@ -29,6 +29,7 @@
       "gpu-sense.cjs",
       "gpu-probe.ps1",
       "gpu-probe.sh",
+      "gpu-probe-mac.sh",
       "license/**/*.cjs",
       "!license/**/*.test.cjs",
       "!license/contract-test-double.cjs",

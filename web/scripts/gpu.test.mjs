@@ -29,12 +29,14 @@ const VALID_LINE = "GPU NVIDIA GeForce RTX 4070 · 62°C · 14% · 3.1 GiB/12 Gi
 test("the browser contract matches the overlay: valid, missing, malformed, stale, unsupported", () => {
   assert.equal(sensesOn("win32"), true);
   assert.equal(sensesOn("linux"), true);
+  assert.equal(sensesOn("darwin"), true);
   assert.equal(isMac("darwin"), true);
   assert.equal(isLinux("linux"), true);
-  assert.equal(laterDoor("darwin"), LATER_DOOR);
+  assert.equal(laterDoor("darwin"), null);
   assert.equal(laterDoor("linux"), null);
   assert.equal(laterDoor("win32"), null);
-  assert.equal(LATER_DOOR, "mac-gpu-sense");
+  assert.equal(laterDoor("freebsd"), LATER_DOOR);
+  assert.equal(LATER_DOOR, "unsupported");
   assert.equal(STALE_MS, 20000);
 
   const valid = sampleFromProbe(
@@ -77,20 +79,30 @@ test("the browser contract matches the overlay: valid, missing, malformed, stale
   assert.equal(present(valid, NOW + STALE_MS).status, "read");
 
   const mac = sampleFromProbe(
-    { nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5" },
+    { nvidiaCsv: "Apple M2, [N/A], 16, 542, [N/A], [N/A]" },
     { platform: "darwin", nowMs: NOW },
   );
   const linux = sampleFromProbe(
     { nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5" },
     { platform: "linux", nowMs: NOW },
   );
-  assert.equal(mac.status, "unsupported");
+  const other = sampleFromProbe(
+    { nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5" },
+    { platform: "freebsd", nowMs: NOW },
+  );
+  assert.equal(mac.status, "read");
+  assert.equal(mac.source, "ioaccelerator");
+  assert.equal(mac.utilPercent, 16);
+  assert.equal(mac.tempC, null);
+  assert.equal(mac.powerWatts, null);
+  assert.equal(gpuLine(mac), "GPU Apple M2 · unread · 16% · 542 MiB/unread · unread");
   assert.equal(linux.status, "read");
   assert.equal(linux.tempC, 62);
   assert.equal(linux.utilPercent, 14);
-  assert.equal(gpuLine(mac), "GPU unread · mac-gpu-sense");
   assert.equal(gpuLine(linux), VALID_LINE);
-  assert.equal(mac.tempC, null);
+  assert.equal(other.status, "unsupported");
+  assert.equal(other.tempC, null);
+  assert.equal(gpuLine(other), "GPU unread · unsupported");
   assert.equal(linux.powerWatts, 48.5);
 });
 
@@ -141,7 +153,7 @@ test("a sparkline grows only from fresh read samples and stays empty otherwise",
 
   const mac = sampleFromProbe(
     { nvidiaCsv: "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5" },
-    { platform: "darwin", nowMs: NOW },
+    { platform: "freebsd", nowMs: NOW },
   );
   assert.deepEqual(remember([], mac, NOW), []);
   assert.equal(sparkline([], mac, NOW).path, "");
