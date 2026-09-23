@@ -1,4 +1,4 @@
-/** Desktop-local GPU probe. Windows uses PowerShell. Linux uses nvidia-smi. Mac uses IOAccelerator. */
+/** Desktop-local GPU probe. Windows uses PowerShell. Linux uses nvidia-smi, then amdgpu sysfs. Mac uses IOAccelerator. */
 const { spawn } = require("child_process");
 const path = require("path");
 const Gpu = require("./renderer/gpu.js");

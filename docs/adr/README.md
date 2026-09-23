@@ -135,8 +135,9 @@ address, or an API that is not on `main`.
 | [0114](0114-metrics-server-kubelet-port.md) | Kubelet `kubeletEndpoint.port` is the port metrics-server dials (non-zero status port, otherwise 10250; that port must be the listen port; apply refuses a miss; kind stays off the file; no dial) | Accepted |
 | [0115](0115-linux-x11-window-play.md) | Linux X11 lists top-level window rectangles for pet window play (rects only; Mac stays `mac-window-play`) | Accepted |
 | [0116](0116-mac-accessibility-window-play.md) | Mac Accessibility lists top-level window rectangles for pet window play (window number, not the view pointer; untrusted stays empty) | Accepted |
-| [0117](0117-linux-nvidia-gpu-sense.md) | Linux reads nvidia-smi for desktop-local GPU sense (same line protocol as Windows; Mac stays `mac-gpu-sense`) | Accepted (Mac clause superseded in part by 0118) |
-| [0118](0118-mac-ioaccelerator-gpu-sense.md) | Mac reads IOAccelerator PerformanceStatistics for desktop-local GPU sense (same line protocol; missing tool stays unread; powermetrics is not called) | Accepted |
+| [0117](0117-linux-nvidia-gpu-sense.md) | Linux reads nvidia-smi for desktop-local GPU sense (same line protocol as Windows; Mac stays `mac-gpu-sense`) | Accepted (Mac clause superseded in part by 0118; amdgpu-unread clause superseded in part by 0119) |
+| [0118](0118-mac-ioaccelerator-gpu-sense.md) | Mac reads IOAccelerator PerformanceStatistics for desktop-local GPU sense (same line protocol; missing tool stays unread; powermetrics is not called) | Accepted (amdgpu clause superseded in part by 0119) |
+| [0119](0119-linux-amdgpu-sysfs-gpu-sense.md) | Linux reads amdgpu sysfs into the same GPU line when nvidia-smi does not print one (missing file stays unread; Intel sysfs stays unread) | Accepted |
 
 ## How to add one
 

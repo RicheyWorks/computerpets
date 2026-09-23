@@ -199,6 +199,54 @@ def test_linux_reads_nvidia_and_mac_reads_ioaccelerator(monkeypatch, tmp_path):
     assert missing["tempC"] is None
     assert "0%" not in gpu_line(missing)
 
+    from computerpets_client.gpu import linux_probe_script, parse_probe_text
+    import os
+    import subprocess
+
+    sysfs = tmp_path / "sysfs"
+    dev = sysfs / "card0" / "device"
+    dev.mkdir(parents=True)
+    os.symlink("amdgpu", dev / "driver")
+    (dev / "uevent").write_text("PCI_ID=1002:73BF\n")
+    (dev / "gpu_busy_percent").write_text("37\n")
+    (dev / "mem_info_vram_used").write_text("2147483648\n")
+    (dev / "mem_info_vram_total").write_text("8589934592\n")
+    (dev / "mem_busy_percent").write_text("50\n")
+    intel = sysfs / "card1" / "device"
+    intel.mkdir(parents=True)
+    os.symlink("i915", intel / "driver")
+    (intel / "gpu_busy_percent").write_text("77\n")
+    monkeypatch.setenv("GPU_SYSFS_ROOT", str(sysfs))
+    monkeypatch.setenv("PATH", "/usr/bin:/bin")
+    probed_amd = read_local(platform="linux", now_ms=NOW)
+    assert probed_amd["status"] == "read"
+    assert probed_amd["source"] == "amdgpu"
+    assert probed_amd["name"] == "amdgpu 1002:73BF"
+    assert probed_amd["utilPercent"] == 37
+    assert probed_amd["tempC"] is None
+    assert probed_amd["powerWatts"] is None
+    assert probed_amd["memoryUsedBytes"] == 2048 * 1024 * 1024
+    assert "50" not in gpu_line(probed_amd)
+    assert "77" not in gpu_line(probed_amd)
+    raw = subprocess.run(
+        ["/bin/sh", str(linux_probe_script())],
+        check=False,
+        capture_output=True,
+        text=True,
+        env={**os.environ, "PATH": "/usr/bin:/bin", "GPU_SYSFS_ROOT": str(sysfs)},
+    )
+    assert "AMDGPU" in raw.stdout
+    assert "77" not in raw.stdout
+    assert "50" not in raw.stdout
+    empty = sample_from_probe(
+        parse_probe_text("\n".join(["NVIDIA_ABSENT", "AMDGPU_EMPTY", "ENGINE_ABSENT", "MEMORY_ABSENT", "END"])),
+        platform="linux",
+        now_ms=NOW,
+    )
+    assert empty["status"] == "unread"
+    assert empty["utilPercent"] is None
+    assert "0%" not in gpu_line(empty)
+
 
 TRAIL = "M1 11.3 L71 8.2"
 
