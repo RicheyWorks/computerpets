@@ -63,7 +63,7 @@ resources:
 # leaves the API Pending. Postgres and Redis do not tolerate the taint.
 # Multi-AZ workers are the node pool (ADR 0082), not this apply.
 # cluster-autoscaler.yaml (ADR 0083, ADR 0090, ADR 0091, ADR 0092,
-# ADR 0099, ADR 0101, ADR 0102, ADR 0103, ADR 0104, ADR 0109) is also not applied here. Kind and
+# ADR 0099, ADR 0101, ADR 0102, ADR 0103, ADR 0104, ADR 0109, ADR 0110) is also not applied here. Kind and
 # minikube set enable_node_pool=false and do not install the scaler,
 # its zone spread, or its disruption budget. That Deployment is two
 # replicas with leader election. The standby is not the scaler. The
@@ -76,8 +76,9 @@ resources:
 # Each zone's node-group max is 20 (ADR 0104). The leader reads that
 # as the Auto Scaling group MaxSize. The one-zone floor under that
 # cap is 8 (ADR 0109). The live set binds on min_size 3, so
-# MaxLimitReached at 20 is unreachable in this design. Kind and
-# minikube do not apply this file.
+# MaxLimitReached at 20 is unreachable in this design. A Pending
+# replica never holds the lease. The Running leader remains the
+# scaler (ADR 0110). Kind and minikube do not apply this file.
 # The zone item is DoNotSchedule on
 # topology.kubernetes.io/zone, maxSkew 1. One labeled zone still
 # schedules. A node that omits the zone label does not. Do not set
