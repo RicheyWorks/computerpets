@@ -53,9 +53,14 @@
 # choice did not place, including the underfilled zone (ADR 0102).
 # The budget is 1m. --frequent-loops-enabled=true stays, so a loop
 # that did scale up starts the next pass without waiting out the
-# scan interval. There is no priority expander ConfigMap. A one-node
-# cluster that applies this file leaves the second pod Pending. Do not
-# apply it on kind or minikube.
+# scan interval. There is no priority expander ConfigMap. That 1m
+# budget stays. It is not the 15m node-provision wait. Node-group
+# backoff stays at the v1.36.1 defaults, unset on the command. A
+# budget that is already gone, a failed snapshot update, or a
+# scale-up that is not successful still ends the salvo. The next
+# main loop is the retry (ADR 0103). A one-node cluster that applies
+# this file leaves the second pod Pending. Do not apply it on kind
+# or minikube.
 #
 # Pool pin (ADR 0091). nodeSelector requires kubernetes.io/os=linux and
 # computerpets/node-pool=api, the label modules/node_pool already sets.
@@ -264,6 +269,11 @@ spec:
           # runs another choice in the same loop for the pods that
           # option did not place. The budget is 1m. Frequent loops stay
           # on. A priority expander ConfigMap is not created.
+          # ADR 0103. The 1m budget stays. Node-provision time and
+          # node-group backoff stay at the v1.36.1 defaults. A budget
+          # that is already gone, a failed snapshot update, or a
+          # scale-up that is not successful ends the salvo. The next
+          # main loop is the retry.
           command:
             - ./cluster-autoscaler
             - --cloud-provider=aws
