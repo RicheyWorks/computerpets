@@ -41,6 +41,8 @@ copy_tree() {
     "${dest}/docs/adr/0088-metrics-server-zone-spread.md"
   cp "${ROOT}/docs/adr/0089-metrics-server-node-pool.md" \
     "${dest}/docs/adr/0089-metrics-server-node-pool.md"
+  cp "${ROOT}/docs/adr/0098-metrics-server-zone-hard-spread.md" \
+    "${dest}/docs/adr/0098-metrics-server-zone-hard-spread.md"
   mkdir -p "${dest}/deploy/terraform/modules/node_pool"
   cp "${ROOT}/deploy/terraform/modules/node_pool/main.tf" \
     "${dest}/deploy/terraform/modules/node_pool/main.tf"
@@ -170,15 +172,15 @@ assert_exit 1 "check fails when the zone topology key is removed" \
   "${BROKEN}/deploy/k8s/check-metrics-server.sh"
 
 copy_tree "${BROKEN}"
-# DoNotSchedule leaves the second pod Pending on a single-zone cluster.
-sed -i 's/whenUnsatisfiable: ScheduleAnyway/whenUnsatisfiable: DoNotSchedule/' \
+# ScheduleAnyway lets both replicas pile into one labeled zone.
+sed -i 's/whenUnsatisfiable: DoNotSchedule/whenUnsatisfiable: ScheduleAnyway/' \
   "${BROKEN}/deploy/k8s/metrics-server.yaml"
-assert_exit 1 "check fails when zone spread is DoNotSchedule" \
+assert_exit 1 "check fails when zone spread is ScheduleAnyway" \
   "${BROKEN}/deploy/k8s/check-metrics-server.sh"
 
 copy_tree "${BROKEN}"
 # minDomains is enforced only with a hard action and strands a smaller cluster.
-sed -i '/whenUnsatisfiable: ScheduleAnyway/a\        minDomains: 2' \
+sed -i '/whenUnsatisfiable: DoNotSchedule/a\        minDomains: 2' \
   "${BROKEN}/deploy/k8s/metrics-server.yaml"
 assert_exit 1 "check fails when zone spread sets minDomains" \
   "${BROKEN}/deploy/k8s/check-metrics-server.sh"

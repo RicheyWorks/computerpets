@@ -108,9 +108,9 @@ assert_exit 1 "check fails when cluster-autoscaler zone anti-affinity is require
   "${BROKEN}/deploy/k8s/check-api-zone-hard-spread.sh"
 
 copy_tree "${BROKEN}"
-sed -i 's/whenUnsatisfiable: ScheduleAnyway/whenUnsatisfiable: DoNotSchedule/' \
+sed -i 's/whenUnsatisfiable: DoNotSchedule/whenUnsatisfiable: ScheduleAnyway/' \
   "${BROKEN}/deploy/k8s/metrics-server.yaml"
-assert_exit 1 "check fails when metrics-server zone spread is DoNotSchedule" \
+assert_exit 1 "check fails when metrics-server zone spread is ScheduleAnyway" \
   "${BROKEN}/deploy/k8s/check-api-zone-hard-spread.sh"
 
 echo

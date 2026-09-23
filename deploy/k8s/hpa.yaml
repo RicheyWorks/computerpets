@@ -5,9 +5,10 @@
 #
 # Requires metrics-server (the metrics.k8s.io API). This file does not
 # install it. Apply metrics-server.yaml first (ADR 0084, ADR 0085,
-# ADR 0086, ADR 0087, ADR 0088). That file is also outside this
-# kustomization. It runs two replicas, prefers two zones (ScheduleAnyway),
-# mounts the keeper's kubelet CA, and serves with the keeper's certificate.
+# ADR 0086, ADR 0087, ADR 0088, ADR 0098). That file is also outside this
+# kustomization. It runs two replicas and hard-spreads zones (DoNotSchedule).
+# One labeled zone still schedules. Do not set minDomains.
+# It mounts the keeper's kubelet CA, and serves with the keeper's certificate.
 # `kubectl
 # top pods -n computerpets` must show cpu and memory. Until that API
 # answers, applying this object does not raise the replica count, so blue
