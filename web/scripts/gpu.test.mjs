@@ -146,6 +146,32 @@ test("the browser contract matches the overlay: valid, missing, malformed, stale
   assert.equal(intelEmpty.utilPercent, null);
   assert.equal(intelEmpty.memoryUsedBytes, null);
   assert.doesNotMatch(gpuLine(intelEmpty), /12%|0%/);
+  const intelText = [
+    "NVIDIA_ABSENT",
+    "AMDGPU_ABSENT",
+    "INTEL",
+    "i915 8086:9A49, [N/A], 50, [N/A], [N/A], [N/A]",
+    "ENDINTEL",
+    "ENGINE_ABSENT",
+    "MEMORY_ABSENT",
+    "END",
+  ].join("\n");
+  const intel = sampleFromProbe(parseProbeText(intelText), { platform: "linux", nowMs: NOW });
+  assert.equal(intel.status, "read");
+  assert.equal(intel.source, "fdinfo");
+  assert.equal(intel.utilPercent, 50);
+  assert.equal(intel.tempC, null);
+  assert.equal(intel.powerWatts, null);
+  assert.equal(intel.memoryUsedBytes, null);
+  assert.equal(intel.memoryTotalBytes, null);
+  assert.equal(gpuLine(intel), "GPU i915 8086:9A49 · unread · 50% · unread · unread");
+  const over = sampleFromProbe(
+    parseProbeText(["NVIDIA_ABSENT", "AMDGPU_ABSENT", "INTEL", "xe 8086:E20B, [N/A], 101, [N/A], [N/A], [N/A]", "ENDINTEL", "ENGINE_ABSENT", "MEMORY_ABSENT", "END"].join("\n")),
+    { platform: "linux", nowMs: NOW },
+  );
+  assert.equal(over.status, "malformed");
+  assert.equal(over.utilPercent, null);
+  assert.doesNotMatch(gpuLine(over), /101|100%|0%/);
 });
 
 function at(util, when) {
