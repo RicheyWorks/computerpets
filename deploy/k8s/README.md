@@ -47,9 +47,10 @@ Local-dev keeps env / `.env.example` and plain `docker-compose.yml`.
 | ConfigMap | `computerpets-config` | `SPRING_PROFILES_ACTIVE=prod`, JDBC URL, Redis host |
 | Deployment + Service + PVC | `computerpets-postgres` | Same Postgres 16 image as `docker-compose.yml` |
 | Deployment + Service | `computerpets-redis` | Same Redis 7 image as compose (AUTH-less; managed AUTH is ADR 0075) |
-| Deployment | `computerpets-blue` | Live app replicas (`color=blue`) |
-| Deployment | `computerpets-green` | Idle slot (`replicas: 0`, `color=green`) |
+| Deployment | `computerpets-blue` | Live app replicas (`color=blue`, local `replicas: 2`) |
+| Deployment | `computerpets-green` | Idle slot (`replicas: 0`, `color=green`). Not an HPA target |
 | Service | `computerpets` | Selects `app=computerpets,color=blue` |
+| HorizontalPodAutoscaler | `computerpets` | **Not created by this apply.** Prod file `hpa.yaml` ([ADR 0078](../../docs/adr/0078-horizontal-pod-autoscaling.md)) |
 
 `ingress.yaml` is **not** in the kustomization. It is the local/dev HTTP
 door and has no `tls` block. Public prod is `ingress-tls.yaml` (also not
@@ -165,9 +166,39 @@ no Steam or Redis reasons. Liveness is the process is up. Unhung
 optional doors do not restart the house. `/actuator/prometheus` stays
 authenticated.
 
+## Horizontal pod autoscaling (ADR 0078)
+
+`hpa.yaml` is **not** in the kustomization. There is no `overlays/`
+directory. `kubectl apply -k deploy/k8s` stays the local/dev shape:
+blue `replicas: 2`, green `replicas: 0`. Postgres and Redis stay at 1.
+
+The prod autoscaler targets Deployment `computerpets-blue` only
+(the Service's default live color). `minReplicas` is 3. `maxReplicas`
+is 10. CPU scales at 70% of the `250m` request. Memory scales at an
+absolute `800Mi` (above the `512Mi` request, under the `1Gi` limit),
+not at a percent of the request. A JVM that sits on its heap must not
+be read as load.
+
+**metrics-server** (the `metrics.k8s.io` API) has to already be on the
+cluster. This repo does not install it, and it does not vendor the
+addon manifest. `kubectl top pods -n computerpets` must show cpu and
+memory. Until that API answers, applying the HPA does not raise the
+replica count, so blue can stay at 2.
+
+```bash
+# Prod only, after metrics-server answers kubectl top.
+kubectl apply -f deploy/k8s/hpa.yaml
+./deploy/k8s/check-hpa.sh
+```
+
+A later `kubectl apply -k` writes blue back to 2 until the autoscaler
+reconciles. Do not add `hpa.yaml` to `kustomization.yaml`.
+
 ## Blue / green
 
 Two Deployments, one Service. No mesh.
+
+Without the HPA (local/dev):
 
 1. Verify the signed digest, ship it on **green**, and scale it up:
    ```bash
@@ -188,9 +219,27 @@ Two Deployments, one Service. No mesh.
    kubectl -n computerpets scale deploy/computerpets-blue --replicas=0
    ```
 
-Flip `color` back to `blue` the next time. Each Deployment still uses
-`RollingUpdate` (`maxUnavailable: 0`) for in-color patches. A missing or
-wrong signature must stop at step 1 — do not set image.
+With `hpa.yaml` applied, green is still not a target (a resource HPA
+cannot scale from zero). Scale green by hand to **3**, wait Ready, flip
+the Service, then point the HPA at green **before** scaling blue to 0.
+Scaling blue to 0 while the HPA still names blue brings blue back to 3.
+Re-applying `hpa.yaml` points the autoscaler back at blue.
+
+```bash
+kubectl -n computerpets scale deploy/computerpets-green --replicas=3
+kubectl -n computerpets rollout status deploy/computerpets-green
+kubectl -n computerpets patch svc computerpets \
+  -p '{"spec":{"selector":{"app":"computerpets","color":"green"}}}'
+kubectl -n computerpets patch hpa computerpets --type merge \
+  -p '{"spec":{"scaleTargetRef":{"name":"computerpets-green"}}}'
+kubectl -n computerpets scale deploy/computerpets-blue --replicas=0
+```
+
+Flip `color` back to `blue` the next time (scale blue to 3, flip the
+Service, patch the HPA back to blue, then scale green to 0). Each
+Deployment still uses `RollingUpdate` (`maxUnavailable: 0`) for in-color
+patches. A missing or wrong signature must stop at step 1 — do not set
+image.
 
 ## `spring.profiles.active=prod`
 
