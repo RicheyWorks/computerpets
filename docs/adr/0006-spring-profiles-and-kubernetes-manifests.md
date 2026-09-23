@@ -87,7 +87,10 @@ No mesh.
   the scaler. The scheduled leader raises the underfilled zone
   ([0101](0101-cluster-autoscaler-leader-scale.md)).
   `--salvo-scale-up=true` runs another choice in that same loop
-  ([0102](0102-cluster-autoscaler-scale-up-salvo.md)). `nodeSelector` requires
+  ([0102](0102-cluster-autoscaler-scale-up-salvo.md)).
+  The `1m` budget stays. The next main loop is the retry when that
+  salvo stops early
+  ([0103](0103-cluster-autoscaler-salvo-early-stop.md)). `nodeSelector` requires
   `computerpets/node-pool=api` and linux, so kind and minikube stay off
   the file ([0091](0091-cluster-autoscaler-node-pool.md)). Voluntary
   disruption keeps one of those pods (`minAvailable: 1`,

@@ -423,7 +423,7 @@ No live AWS apply.
 ./deploy/k8s/check-api-pool-taint.test.sh
 ```
 
-## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092, ADR 0099, ADR 0101, ADR 0102)
+## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092, ADR 0099, ADR 0101, ADR 0102, ADR 0103)
 
 `cluster-autoscaler.yaml` is **not** in the kustomization. `kubectl apply -k
 deploy/k8s` does not install it. Kind and minikube set
@@ -471,6 +471,12 @@ not place, including the underfilled zone. `--frequent-loops-enabled=true`
 stays, so a loop that did scale up starts the next pass without waiting
 out the scan interval. There is no priority expander ConfigMap
 ([ADR 0102](../../docs/adr/0102-cluster-autoscaler-scale-up-salvo.md)).
+The `1m` budget stays. Node-provision time stays the unset `15m`
+default, and node-group backoff stays the unset `5m` / `30m` / `3h`
+defaults. A budget that is already gone, a failed snapshot update, or
+a scale-up that is not successful still ends that salvo. The next
+main loop is the retry
+([ADR 0103](../../docs/adr/0103-cluster-autoscaler-salvo-early-stop.md)).
 Do not set `minDomains`.
 Required zone anti-affinity is not set. Required hostname anti-affinity
 is not the follow-up.
@@ -517,6 +523,8 @@ minor's latest patch instead. Do not commit a real account id.
 ./deploy/k8s/check-cluster-autoscaler-leader-scale.test.sh
 ./deploy/k8s/check-cluster-autoscaler-scale-up-salvo.sh
 ./deploy/k8s/check-cluster-autoscaler-scale-up-salvo.test.sh
+./deploy/k8s/check-cluster-autoscaler-salvo-early-stop.sh
+./deploy/k8s/check-cluster-autoscaler-salvo-early-stop.test.sh
 ```
 
 Zone spread for the API colors stays the item in those Deployments.
@@ -529,6 +537,10 @@ underfilled zone's group
 When another Pending pod wins least-waste first, `--salvo-scale-up=true`
 still asks for the other group in that same loop
 ([ADR 0102](../../docs/adr/0102-cluster-autoscaler-scale-up-salvo.md)).
+If that call uses the whole `1m` budget, the snapshot update fails, or
+the scale-up is not successful, the pods still waiting use the next
+main loop
+([ADR 0103](../../docs/adr/0103-cluster-autoscaler-salvo-early-stop.md)).
 
 ## metrics-server (ADR 0084, ADR 0085, ADR 0086, ADR 0087, ADR 0088, ADR 0089, ADR 0098)
 

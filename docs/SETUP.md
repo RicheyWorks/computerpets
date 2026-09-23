@@ -475,6 +475,10 @@ choice in that same loop. `--frequent-loops-enabled=true` stays
 [ADR 0099](adr/0099-cluster-autoscaler-zone-hard-spread.md),
 [ADR 0101](adr/0101-cluster-autoscaler-leader-scale.md),
 [ADR 0102](adr/0102-cluster-autoscaler-scale-up-salvo.md)).
+The `1m` budget stays. A budget that is already gone, a failed snapshot
+update, or a scale-up that is not successful still ends that salvo.
+The next main loop is the retry
+([ADR 0103](adr/0103-cluster-autoscaler-salvo-early-stop.md)).
 `nodeSelector` also requires `kubernetes.io/os: linux` and
 `computerpets/node-pool: api`, so the hostname rule cannot be met by
 nodes outside those groups. Kind and minikube do not apply the file
