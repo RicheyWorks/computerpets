@@ -1,7 +1,9 @@
-/** Host pet frames on a surface Chromium composites. OffscreenCanvas when that 2d context and a bitmap renderer exist; otherwise an on-screen 2d canvas. Not a WebGL context, not a shader, not DirectX 12, and not Vulkan. The glass still opens only on hardware gpu_compositing (ADR 0125). */
+/** Catalog frames on a surface Chromium composites. The host pet, Sip, Brick, called guests, and plants share this path. OffscreenCanvas when that 2d context and a bitmap renderer exist; otherwise an on-screen 2d canvas. Not a WebGL context, not a shader, not DirectX 12, and not Vulkan. The glass still opens only on hardware gpu_compositing (ADR 0125). */
 (function (root) {
   const CSS = 176;
+  const BOX = { host: CSS, sip: 112, brick: 112, called: 128, plant: 128 };
   const FRAME = /^sprites\/[a-z0-9_]+\/(?:idle|walk|sit|sleep|talk|eat|play)\/[1-9]\d*\.png$/;
+  const held = new WeakMap();
 
   function catalogFrame(src) {
     return typeof src === "string" && FRAME.test(src);
@@ -172,6 +174,16 @@
     return { ok: true, kind: state.kind, reason: "", src, pending: !next.done };
   }
 
+  function paintHeld(canvas, src, opts) {
+    const css = cssSize(opts);
+    let row = canvas && typeof canvas === "object" ? held.get(canvas) : null;
+    if (!row || row.css !== css) {
+      row = { css, surface: attach(canvas, Object.assign({}, opts, { cssSize: css })) };
+      if (canvas && typeof canvas === "object") held.set(canvas, row);
+    }
+    return row.surface.paint(src);
+  }
+
   function attach(canvas, opts) {
     const opened = openSurface(canvas, opts || {});
     const state = {
@@ -216,10 +228,12 @@
 
   const api = {
     CSS,
+    BOX,
     catalogFrame,
     fitContainBottom,
     backingOf,
     attach,
+    paintHeld,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetSpriteSurface = api;

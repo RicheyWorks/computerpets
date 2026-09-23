@@ -323,6 +323,11 @@ select {
   opacity: 0;
   transform-origin: center bottom;
   -webkit-user-drag: none;
+  border: 0;
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+  padding: 0;
 }
 
 #bird.show {

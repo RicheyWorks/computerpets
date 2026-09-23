@@ -43,6 +43,20 @@ function paintPetFrame(src) {
   }
   petSurface.paint(src);
 }
+
+function paintActor(el, src, box) {
+  if (!el || !src) return;
+  const api = window.PetSpriteSurface;
+  const css = api && api.BOX ? api.BOX[box] : 0;
+  if (!api || typeof api.paintHeld !== "function" || !(css > 0)) {
+    if (el.dataset) {
+      el.dataset.surface = "refused";
+      delete el.dataset.frame;
+    }
+    return;
+  }
+  api.paintHeld(el, src, { cssSize: css });
+}
 const guestEl = document.getElementById("guest");
 const tongueEl = document.getElementById("tongue");
 const shadow = document.getElementById("shadow");
@@ -850,11 +864,8 @@ function callRobin() {
   robinFrame = 0;
   const sprites = pack(R.ROBIN_KEY);
   const src = R.destSrc(robinFly, sprites);
-  if (src) {
-    robinEl.setAttribute("src", src);
-    if (robinEl.dataset) robinEl.dataset.frameSrc = src;
-  }
   R.applyDest(robinEl);
+  if (src) paintActor(robinEl, src, "brick");
   robinEl.classList.add("show");
 }
 
@@ -892,11 +903,8 @@ function tickRobin(dt) {
   }
   robinFly.frame = robinFrame;
   const src = R.destSrc(robinFly, sprites);
-  if (src && robinEl.getAttribute("src") !== src) {
-    robinEl.setAttribute("src", src);
-    if (robinEl.dataset) robinEl.dataset.frameSrc = src;
-  }
   R.applyDest(robinEl);
+  if (src) paintActor(robinEl, src, "brick");
   robinEl.classList.add("show");
   robinEl.style.transform = `translate3d(${robinFly.x}px, ${-robinFly.lift}px, 0) rotate(${robinFly.rot}deg) scale(${robinFly.facing}, ${robinFly.flap || 1})`;
 }
@@ -920,31 +928,32 @@ function paintPlants() {
     if (!key || !keep[key]) el.remove();
   }
   for (const plant of deskPlants) {
-    let img = kids.find((el) => el.dataset && el.dataset.plant === plant.key);
-    if (!img) {
-      img = document.createElement("img");
-      img.className = "desk-plant";
-      img.alt = plant.name;
-      img.dataset.hit = "1";
-      img.dataset.plant = plant.key;
-      img.draggable = false;
-      img.addEventListener("pointerdown", (e) => {
+    let node = kids.find((el) => el.dataset && el.dataset.plant === plant.key);
+    if (!node) {
+      node = document.createElement("canvas");
+      node.className = "desk-plant";
+      node.setAttribute("role", "img");
+      node.setAttribute("aria-label", plant.name);
+      node.dataset.hit = "1";
+      node.dataset.plant = plant.key;
+      node.dataset.surface = "pending";
+      node.addEventListener("pointerdown", (e) => {
         if (e.button === 2) return;
         e.stopPropagation();
-        img.setPointerCapture(e.pointerId);
+        node.setPointerCapture(e.pointerId);
         deskPlants = P.selectOnly(deskPlants, plant.key);
         plantPress = { key: plant.key, x: e.clientX, y: e.clientY };
         plantDrag = null;
         paintPlants();
       });
-      plantsRoot.appendChild(img);
+      plantsRoot.appendChild(node);
     }
     const src = P.plantSrc(plant.key, pack(plant.key));
-    if (src && img.getAttribute("src") !== src) img.setAttribute("src", src);
-    P.applyDest(img);
-    img.dataset.on = plant.selected ? "1" : "0";
+    P.applyDest(node);
+    if (src) paintActor(node, src, "plant");
+    node.dataset.on = plant.selected ? "1" : "0";
     const lean = P.windLean(plantAge, windOn, plant.selected, plant.mode);
-    img.style.transform = P.paintTransform(plant, lean);
+    node.style.transform = P.paintTransform(plant, lean);
   }
 }
 
@@ -1037,7 +1046,7 @@ function callSip() {
   birdFrame = 0;
   birdEl.classList.add("show");
   const sprites = pack(F.FLY_BIRD_KEY);
-  birdEl.src = (sprites.play && sprites.play[0]) || sprites.idle[0];
+  paintActor(birdEl, (sprites.play && sprites.play[0]) || sprites.idle[0], "sip");
   birdFly = F.markCalled(birdFly);
 }
 
@@ -1234,7 +1243,7 @@ function tickBird(dt) {
   if (birdAcc > 1 / 8) {
     birdAcc = 0;
     birdFrame = (birdFrame + 1) % frames.length;
-    birdEl.src = frames[birdFrame];
+    paintActor(birdEl, frames[birdFrame], "sip");
   }
   birdEl.classList.add("show");
   birdEl.style.transform = `translate3d(${birdFly.x}px, ${-birdFly.lift}px, 0) rotate(${birdFly.rot}deg) scale(${birdFly.facing}, 1)`;
