@@ -3,11 +3,19 @@
 # nvidia-smi prints name, temperature, utilization, memory, and power.
 # When that binary is missing, fails, or prints nothing, amdgpu sysfs may
 # print the same line from gpu_busy_percent and mem_info_vram_used /
-# mem_info_vram_total. Temperature and power stay [N/A] on that line.
-# A missing file, a failed read, or a non-numeric file stays [N/A], not a zero.
+# mem_info_vram_total. Temperature is the card's own hwmon channel whose
+# label is edge, millidegrees Celsius converted to degrees. Power is the
+# card's own hwmon channel whose label is PPT, microwatts converted to
+# watts. Instantaneous power is used when that file prints a number in
+# range; otherwise the average file is used. Junction, memory temperature,
+# a power cap, slowPPT, and fastPPT stay [N/A]. An unlabeled channel is
+# not guessed by index. A missing file, a failed read, a non-numeric file,
+# two channels with the same accepted label, or a value outside the line
+# range stays [N/A], not a zero. A file that prints zero is kept. On an
+# APU the PPT file includes the CPU; that is the number the driver prints.
 # A VRAM total of zero is not capacity. Bytes under half a MiB stay [N/A]
-# unless the file itself is zero. VRAM busyness, GTT, and hwmon are not
-# copied. When nvidia-smi and amdgpu both print nothing, an i915 or xe
+# unless the file itself is zero. VRAM busyness and GTT are not copied.
+# PMU is not opened. When nvidia-smi and amdgpu both print nothing, an i915 or xe
 # card may print utilization from DRM client fdinfo. i915 uses
 # drm-engine-render (cumulative nanoseconds). xe uses drm-cycles-rcs
 # and drm-total-cycles-rcs (cumulative cycles). The probe reads those
@@ -64,6 +72,148 @@ bytes_to_mib() {
   }'
 }
 
+milli_to_c() {
+  awk -v n="$1" 'BEGIN {
+    if (n !~ /^-?[0-9]+$/) exit 1
+    v = n + 0
+    if (v < -40000 || v > 125000) exit 1
+    neg = 0
+    if (v < 0) { neg = 1; v = -v }
+    whole = int(v / 1000)
+    rem = v - (whole * 1000)
+    tenth = int(rem / 100)
+    if ((rem - (tenth * 100)) >= 50) tenth = tenth + 1
+    if (tenth >= 10) { whole = whole + 1; tenth = 0 }
+    if (neg == 1) {
+      if (whole == 0 && tenth == 0) { printf "0"; exit }
+      if (tenth == 0) printf "-%d", whole
+      else printf "-%d.%d", whole, tenth
+    } else if (tenth == 0) printf "%d", whole
+    else printf "%d.%d", whole, tenth
+  }'
+}
+
+uw_to_w() {
+  awk -v n="$1" 'BEGIN {
+    if (n !~ /^[0-9]+$/) exit 1
+    v = n + 0
+    if (v < 0 || v > 2000000000) exit 1
+    whole = int(v / 1000000)
+    rem = v - (whole * 1000000)
+    tenth = int(rem / 100000)
+    if ((rem - (tenth * 100000)) >= 50000) tenth = tenth + 1
+    if (tenth >= 10) { whole = whole + 1; tenth = 0 }
+    if (whole > 2000) exit 1
+    if (tenth == 0) printf "%d", whole
+    else printf "%d.%d", whole, tenth
+  }'
+}
+
+hwmon_dirs() {
+  dev=$1
+  for hdir in "$dev"/hwmon/hwmon*; do
+    [ -d "$hdir" ] || continue
+    base=$(basename "$hdir")
+    case "$base" in
+      hwmon*[!0-9]*) continue ;;
+      hwmon*[0-9]) printf '%s\n' "$hdir" ;;
+    esac
+  done
+}
+
+convert_channel() {
+  path=$1
+  kind=$2
+  if [ ! -e "$path" ]; then
+    return 1
+  fi
+  raw=$(read_one "$path" || true)
+  if [ "$kind" = "c" ]; then
+    milli_to_c "$raw"
+  else
+    uw_to_w "$raw"
+  fi
+}
+
+hwmon_edge_c() {
+  dev=$1
+  hits=0
+  value=""
+  dirs=$(hwmon_dirs "$dev")
+  hwmon_ifs=$IFS
+  IFS='
+'
+  for hdir in $dirs; do
+    [ -n "$hdir" ] || continue
+    n=1
+    while [ "$n" -le 3 ]; do
+      label=$(read_one "$hdir/temp${n}_label" || true)
+      if [ "$label" = "edge" ]; then
+        conv=$(convert_channel "$hdir/temp${n}_input" c || true)
+        if [ -z "$conv" ]; then
+          IFS=$hwmon_ifs
+          return 1
+        fi
+        hits=$((hits + 1))
+        value=$conv
+        if [ "$hits" -gt 1 ]; then
+          IFS=$hwmon_ifs
+          return 1
+        fi
+      fi
+      n=$((n + 1))
+    done
+  done
+  IFS=$hwmon_ifs
+  if [ "$hits" -eq 1 ]; then
+    printf '%s' "$value"
+    return 0
+  fi
+  return 1
+}
+
+hwmon_ppt_w() {
+  dev=$1
+  hits=0
+  value=""
+  dirs=$(hwmon_dirs "$dev")
+  hwmon_ifs=$IFS
+  IFS='
+'
+  for hdir in $dirs; do
+    [ -n "$hdir" ] || continue
+    n=1
+    while [ "$n" -le 2 ]; do
+      label=$(read_one "$hdir/power${n}_label" || true)
+      if [ "$label" = "PPT" ]; then
+        conv=""
+        if [ -e "$hdir/power${n}_input" ]; then
+          conv=$(convert_channel "$hdir/power${n}_input" w || true)
+        elif [ -e "$hdir/power${n}_average" ]; then
+          conv=$(convert_channel "$hdir/power${n}_average" w || true)
+        fi
+        if [ -z "$conv" ]; then
+          IFS=$hwmon_ifs
+          return 1
+        fi
+        hits=$((hits + 1))
+        value=$conv
+        if [ "$hits" -gt 1 ]; then
+          IFS=$hwmon_ifs
+          return 1
+        fi
+      fi
+      n=$((n + 1))
+    done
+  done
+  IFS=$hwmon_ifs
+  if [ "$hits" -eq 1 ]; then
+    printf '%s' "$value"
+    return 0
+  fi
+  return 1
+}
+
 emit_amdgpu() {
   root=$1
   found=0
@@ -103,10 +253,22 @@ emit_amdgpu() {
         name="amdgpu $pci"
       fi
     fi
+    temp_field="[N/A]"
     util_field="[N/A]"
     used_field="[N/A]"
     total_field="[N/A]"
+    power_field="[N/A]"
     have=0
+    edge_c=$(hwmon_edge_c "$dev" || true)
+    if [ -n "$edge_c" ]; then
+      temp_field=$edge_c
+      have=1
+    fi
+    ppt_w=$(hwmon_ppt_w "$dev" || true)
+    if [ -n "$ppt_w" ]; then
+      power_field=$ppt_w
+      have=1
+    fi
     util_raw=$(read_one "$dev/gpu_busy_percent" || true)
     if [ -n "$util_raw" ] && is_plain_num "$util_raw" && awk -v n="$util_raw" 'BEGIN { exit !(n+0 >= 0 && n+0 <= 100) }'; then
       util_field=$util_raw
@@ -146,7 +308,7 @@ emit_amdgpu() {
       fi
     fi
     if [ "$have" -eq 1 ]; then
-      row="$name, [N/A], $util_field, $used_field, $total_field, [N/A]"
+      row="$name, $temp_field, $util_field, $used_field, $total_field, $power_field"
       if [ "$nlines" -eq 0 ]; then
         lines=$row
       else

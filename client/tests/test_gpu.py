@@ -238,6 +238,56 @@ def test_linux_reads_nvidia_and_mac_reads_ioaccelerator(monkeypatch, tmp_path):
     assert "AMDGPU" in raw.stdout
     assert "77" not in raw.stdout
     assert "50" not in raw.stdout
+
+    hwmon = tmp_path / "amd-hwmon" / "card0" / "device"
+    hwmon.mkdir(parents=True)
+    os.symlink("amdgpu", hwmon / "driver")
+    (hwmon / "uevent").write_text("PCI_ID=1002:73BF\n")
+    (hwmon / "gpu_busy_percent").write_text("37\n")
+    sensor = hwmon / "hwmon" / "hwmon0"
+    sensor.mkdir(parents=True)
+    (sensor / "temp1_label").write_text("edge\n")
+    (sensor / "temp1_input").write_text("45500\n")
+    (sensor / "temp2_label").write_text("junction\n")
+    (sensor / "temp2_input").write_text("90000\n")
+    (sensor / "power1_label").write_text("PPT\n")
+    (sensor / "power1_average").write_text("33000000\n")
+    (sensor / "power1_cap").write_text("180000000\n")
+    hwmon_raw = subprocess.run(
+        ["/bin/sh", str(linux_probe_script())],
+        check=False,
+        capture_output=True,
+        text=True,
+        env={**os.environ, "PATH": "/usr/bin:/bin", "GPU_SYSFS_ROOT": str(tmp_path / "amd-hwmon")},
+    )
+    assert "amdgpu 1002:73BF, 45.5, 37, [N/A], [N/A], 33" in hwmon_raw.stdout
+    assert "90000" not in hwmon_raw.stdout
+    assert "180000000" not in hwmon_raw.stdout
+    hwmon_sample = sample_from_probe(parse_probe_text(hwmon_raw.stdout), platform="linux", now_ms=NOW)
+    assert hwmon_sample["source"] == "amdgpu"
+    assert hwmon_sample["tempC"] == 45.5
+    assert hwmon_sample["powerWatts"] == 33
+    assert hwmon_sample["utilPercent"] == 37
+    assert "90" not in gpu_line(hwmon_sample)
+    plain = sample_from_probe(
+        parse_probe_text(
+            "\n".join(
+                [
+                    "NVIDIA_ABSENT",
+                    "AMDGPU",
+                    "amdgpu 1002:73BF, [N/A], 37, 2048, 8192, [N/A]",
+                    "ENDAMDGPU",
+                    "ENGINE_ABSENT",
+                    "MEMORY_ABSENT",
+                    "END",
+                ]
+            )
+        ),
+        platform="linux",
+        now_ms=NOW,
+    )
+    assert plain["tempC"] is None
+    assert plain["powerWatts"] is None
     empty = sample_from_probe(
         parse_probe_text("\n".join(["NVIDIA_ABSENT", "AMDGPU_EMPTY", "ENGINE_ABSENT", "MEMORY_ABSENT", "END"])),
         platform="linux",
