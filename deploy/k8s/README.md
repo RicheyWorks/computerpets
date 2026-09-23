@@ -195,7 +195,8 @@ be read as load.
 [ADR 0089](../../docs/adr/0089-metrics-server-node-pool.md),
 [ADR 0098](../../docs/adr/0098-metrics-server-zone-hard-spread.md),
 [ADR 0111](../../docs/adr/0111-metrics-server-serving-cert-chain.md),
-[ADR 0112](../../docs/adr/0112-metrics-server-kubelet-ca-chain.md)).
+[ADR 0112](../../docs/adr/0112-metrics-server-kubelet-ca-chain.md),
+[ADR 0113](../../docs/adr/0113-metrics-server-kubelet-san.md)).
 That file is also not in the kustomization. It runs two replicas with
 required hostname anti-affinity and hard zone spread (`DoNotSchedule`
 on `topology.kubernetes.io/zone`, `maxSkew` 1). One labeled zone still
@@ -217,14 +218,22 @@ can stay at 2.
 ```bash
 # Prod only. Not kind or minikube. The kubelet CA script refuses a
 # missing CA, a leaf that does not chain to ca.crt, or
-# --kubelet-insecure-tls, before any kubectl (ADR 0112). The serving
-# script refuses a leaf that does not chain to ca.crt, or whose DNS SAN
-# is not metrics-server.kube-system.svc, before any kubectl (ADR 0111).
+# --kubelet-insecure-tls, before any kubectl (ADR 0112). The SAN script
+# refuses a leaf whose SAN does not cover InternalIP, then ExternalIP,
+# then Hostname, before any kubectl (ADR 0113). It does not connect to
+# a node. The serving script refuses a leaf that does not chain to
+# ca.crt, or whose DNS SAN is not metrics-server.kube-system.svc, before
+# any kubectl (ADR 0111).
 KUBELET="$(mktemp -d)"
 # keeper copies ca.crt and kubelet.crt (and kubelet-*.crt) into "$KUBELET"
 ./deploy/k8s/metrics-server-kubelet-ca.sh verify "$KUBELET"
 COMPUTERPETS_METRICS_KUBELET_CA_APPLY=1 \
   ./deploy/k8s/metrics-server-kubelet-ca.sh apply "$KUBELET"
+SAN="$(mktemp -d)"
+# keeper copies ca.crt and nodes/<name>/{kubelet.crt,addresses} into "$SAN"
+./deploy/k8s/metrics-server-kubelet-san.sh verify "$SAN"
+COMPUTERPETS_METRICS_KUBELET_SAN_APPLY=1 \
+  ./deploy/k8s/metrics-server-kubelet-san.sh apply "$SAN"
 OUT="$(mktemp -d)"
 ./deploy/k8s/metrics-server-serving-cert.sh render "$OUT"
 COMPUTERPETS_METRICS_SERVING_APPLY=1 \
@@ -675,6 +684,15 @@ supplied kubelet leaf chains to `ca.crt`
 A missing CA, a swapped CA, or `--kubelet-insecure-tls` refuses apply
 before `kubectl`. A missing object leaves the pods unstarted. Do not add
 the kubelet TLS skip.
+`metrics-server-kubelet-san.sh` writes that same ConfigMap only after
+each node file set's leaf chains to `ca.crt` and the leaf SAN covers
+the address metrics-server dials
+([ADR 0113](../../docs/adr/0113-metrics-server-kubelet-san.md)).
+The dial order is `InternalIP`, then `ExternalIP`, then `Hostname`.
+The first address of the first present type is the one in the SAN.
+An IP dial needs an IP SAN. A hostname dial needs a DNS SAN.
+The script does not connect to a node. Kind and minikube do not
+receive the ConfigMap. Do not add `--kubelet-insecure-tls`.
 
 `insecureSkipTLSVerify` is not set. `--tls-cert-file` and
 `--tls-private-key-file` point at `/etc/metrics-server/serving/tls.crt`
@@ -692,12 +710,13 @@ before `kubectl`. Do not commit the certificate, the key, or
 `caBundle`. A missing Secret leaves the pods unstarted. Do not add
 `insecureSkipTLSVerify`. Do not add `--kubelet-insecure-tls`.
 
-Run `metrics-server-kubelet-ca.sh` before
+Run `metrics-server-kubelet-san.sh` before
 `metrics-server-serving-cert.sh`, and that script before `hpa.yaml`.
-The kubelet script writes ConfigMap `metrics-server-kubelet-ca` and does
-not apply this file. The serving script applies this file only after the
-serving leaf chains to `ca.crt` and the DNS SAN is
-`metrics-server.kube-system.svc`.
+The SAN script writes ConfigMap `metrics-server-kubelet-ca` after the
+leaf SAN covers the dial address, and does not apply this file. The
+chain script remains the chain-only writer. The serving script applies
+this file only after the serving leaf chains to `ca.crt` and the DNS SAN
+is `metrics-server.kube-system.svc`.
 
 ```bash
 # Prod only. Not part of kubectl apply -k. Not kind or minikube.
@@ -706,12 +725,19 @@ KUBELET="$(mktemp -d)"
 ./deploy/k8s/metrics-server-kubelet-ca.sh verify "$KUBELET"
 COMPUTERPETS_METRICS_KUBELET_CA_APPLY=1 \
   ./deploy/k8s/metrics-server-kubelet-ca.sh apply "$KUBELET"
+SAN="$(mktemp -d)"
+# keeper copies ca.crt and nodes/<name>/{kubelet.crt,addresses} into "$SAN"
+./deploy/k8s/metrics-server-kubelet-san.sh verify "$SAN"
+COMPUTERPETS_METRICS_KUBELET_SAN_APPLY=1 \
+  ./deploy/k8s/metrics-server-kubelet-san.sh apply "$SAN"
 OUT="$(mktemp -d)"
 ./deploy/k8s/metrics-server-serving-cert.sh render "$OUT"
 COMPUTERPETS_METRICS_SERVING_APPLY=1 \
   ./deploy/k8s/metrics-server-serving-cert.sh apply "$OUT"
 ./deploy/k8s/check-metrics-server-kubelet-ca.sh
 ./deploy/k8s/check-metrics-server-kubelet-ca.test.sh
+./deploy/k8s/check-metrics-server-kubelet-san.sh
+./deploy/k8s/check-metrics-server-kubelet-san.test.sh
 ./deploy/k8s/check-metrics-server-serving-cert.sh
 ./deploy/k8s/check-metrics-server-serving-cert.test.sh
 ./deploy/k8s/check-metrics-server.sh
