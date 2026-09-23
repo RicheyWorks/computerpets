@@ -423,7 +423,7 @@ No live AWS apply.
 ./deploy/k8s/check-api-pool-taint.test.sh
 ```
 
-## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092, ADR 0099, ADR 0101)
+## Cluster Autoscaler (ADR 0083, ADR 0090, ADR 0091, ADR 0092, ADR 0099, ADR 0101, ADR 0102)
 
 `cluster-autoscaler.yaml` is **not** in the kustomization. `kubectl apply -k
 deploy/k8s` does not install it. Kind and minikube set
@@ -464,7 +464,14 @@ raises desired capacity on the underfilled zone's Auto Scaling group.
 `--skip-nodes-with-system-pods=false` stays. That flag is scale-down.
 `--namespace=kube-system` is the lease namespace, not a pod filter.
 There is no scheduler allow-list and no `--nodes` list. The node pool
-is one similar group per zone, at least two. Do not set `minDomains`.
+is one similar group per zone, at least two.
+`--salvo-scale-up=true` and `--salvo-scale-up-budget=1m` run another
+scale-up in that same loop for pods the first least-waste choice did
+not place, including the underfilled zone. `--frequent-loops-enabled=true`
+stays, so a loop that did scale up starts the next pass without waiting
+out the scan interval. There is no priority expander ConfigMap
+([ADR 0102](../../docs/adr/0102-cluster-autoscaler-scale-up-salvo.md)).
+Do not set `minDomains`.
 Required zone anti-affinity is not set. Required hostname anti-affinity
 is not the follow-up.
 
@@ -508,6 +515,8 @@ minor's latest patch instead. Do not commit a real account id.
 ./deploy/k8s/check-cluster-autoscaler-zone-hard-spread.test.sh
 ./deploy/k8s/check-cluster-autoscaler-leader-scale.sh
 ./deploy/k8s/check-cluster-autoscaler-leader-scale.test.sh
+./deploy/k8s/check-cluster-autoscaler-scale-up-salvo.sh
+./deploy/k8s/check-cluster-autoscaler-scale-up-salvo.test.sh
 ```
 
 Zone spread for the API colors stays the item in those Deployments.
@@ -517,6 +526,9 @@ pod, that pod stays Pending and does not hold the lease. The standby is
 not the scaler. The scheduled leader raises desired capacity on the
 underfilled zone's group
 ([ADR 0101](../../docs/adr/0101-cluster-autoscaler-leader-scale.md)).
+When another Pending pod wins least-waste first, `--salvo-scale-up=true`
+still asks for the other group in that same loop
+([ADR 0102](../../docs/adr/0102-cluster-autoscaler-scale-up-salvo.md)).
 
 ## metrics-server (ADR 0084, ADR 0085, ADR 0086, ADR 0087, ADR 0088, ADR 0089, ADR 0098)
 
