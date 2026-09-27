@@ -27,7 +27,7 @@ function box(kind: "host" | "sip" | "brick" | "called" | "plant") {
   return typeof n === "number" && Number.isFinite(n) && n > 0 ? n : 0;
 }
 
-/** Living-desk and `/demo` room pet. Host box, contain, then sit on the bottom. */
+/** Every `LivingPet`: the living-desk and `/demo` room pet, the day's visitor, the house floor, the hive, and the den blotters. Host box, contain, then sit on the bottom. */
 export function paintDemoFrame(canvas: HTMLCanvasElement | null, src: string) {
   return paintBox(canvas, src, box("host"));
 }

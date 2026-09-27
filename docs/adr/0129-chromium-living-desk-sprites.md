@@ -1,6 +1,6 @@
 # 0129. The living desk room pet, and desk Sip, Brick, called guests, and plants, draw on the same canvas
 
-- **Status:** Accepted
+- **Status:** Accepted (day's visitor, house floor, hive, and den blotters moved to [0130](0130-chromium-visitor-floor-hive-den-sprites.md))
 - **Date:** 2026-09-23
 - **Code:** `web/src/lib/pets/desk-sprite-surface.ts`, `web/src/components/desk/living-pet.tsx`, `web/src/components/desk/companion-room.tsx`, `web/src/components/desk/bird-fly.tsx`, `web/src/components/desk/robin-fly.tsx`, `web/src/components/desk/called-guests.tsx`, `web/src/components/desk/desk-plants.tsx`, `desktop/renderer/sprite-surface.test.cjs`
 
@@ -22,7 +22,7 @@ This slice does not reopen presence/CSP, Hikari, bundle zip, cosign, CDN, secret
 2. **Which surface.** The same rule as the host pet. When `OffscreenCanvas` can create a 2d context and the visible canvas can take a bitmap, the frame is drawn offscreen and transferred. When `OffscreenCanvas` is missing or its constructor throws, the visible canvas 2d context draws the same fit. `CompanionRoom` always sets `spriteSurface` on its room pet, including outside `/demo`. Sip is a canvas in `BirdFlyer`. Brick is a canvas in `RobinFlyer`. Called guests and plants are canvases in those desk nodes. None of them is a WebGL context. The desk page is not the overlay glass.
 3. **What stays closed.** No canvas, no image decoder, an OffscreenCanvas whose 2d context is null, or a bitmap renderer that cannot take the bitmap: `data-surface` is `refused`, `data-frame` is unset, and these doors do not assign an `img` src. A decode error or a zero-size bitmap does not claim the frame. A frame that already painted stays until a later good frame replaces it. Width and height attributes are not written onto a canvas after that surface owns the bitmap.
 4. **What the gate still is.** `gpu-path.cjs` is unchanged except the cross-link. `gpu_compositing`, `softwareRendering`, and the software GL names still open or close the glass. This module does not read `getGPUFeatureStatus()` or `getGPUInfo()`. It does not pass `--use-angle`. A software accept still means the window may open. It does not turn a refused canvas into an `img`.
-5. **What stays an image.** The day's visitor, the house floor, the hive, and the den blotters still draw through `LivingPet` without `spriteSurface`, so those catalog sprites stay `img` elements. The habitat photograph stays an image. The blotter stays the Qt OpenGL viewport. Catalog stays 221.
+5. **What stayed an image in this slice.** The day's visitor, the house floor, the hive, and the den blotters still drew through `LivingPet` without `spriteSurface`, so those catalog sprites were still `img` elements. They draw on this same canvas now ([0130](0130-chromium-visitor-floor-hive-den-sprites.md)). The habitat photograph stays an image. The blotter stays the Qt OpenGL viewport. Catalog stays 221.
 
 ## Consequences
 
@@ -31,4 +31,4 @@ This slice does not reopen presence/CSP, Hikari, bundle zip, cosign, CDN, secret
 - OffscreenCanvas is the preferred surface. It is not a shader and not a texture API this tree owns. WebGL is not opened.
 - Sip and Brick still mount with the desk's `/demo` window plates. Called guests and plants still mount on every living desk, including outside `/demo`.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** the day's visitor, the house floor, the hive, and the den blotters still draw catalog sprites as images. A later slice can draw those same sprites on this canvas. The hardware gate still applies to the overlay. Do not start DirectX 12, Vulkan, Solana, or Pane. Catalog stays 221.
+- **Next gap:** the day's visitor, the house floor, the hive, and the den blotters draw on this same canvas now ([0130](0130-chromium-visitor-floor-hive-den-sprites.md)). The hardware gate still applies to the overlay. Do not start DirectX 12, Vulkan, Solana, or Pane. Catalog stays 221.
