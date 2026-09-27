@@ -2,11 +2,11 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const G = await import(join(root, "src/lib/pets/genetics.ts"));
-const nestLib = await import(join(root, "src/lib/pets/pedigree.ts"));
+const G = await import(pathToFileURL(join(root, "src/lib/pets/genetics.ts")).href);
+const nestLib = await import(pathToFileURL(join(root, "src/lib/pets/pedigree.ts")).href);
 const nestPage = readFileSync(join(root, "src/routes/nest.tsx"), "utf8");
 const hatchPage = readFileSync(join(root, "src/routes/hatch.tsx"), "utf8");
 const shell = readFileSync(join(root, "src/components/app-shell.tsx"), "utf8");

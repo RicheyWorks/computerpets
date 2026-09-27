@@ -3,12 +3,12 @@ import { existsSync, readFileSync, statSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const S = await import(join(root, "src/lib/pets/house-sleep.ts"));
+const S = await import(pathToFileURL(join(root, "src/lib/pets/house-sleep.ts")).href);
 const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/house-sleep.js"));
-const C = await import(join(root, "src/lib/pets/card.ts"));
+const C = await import(pathToFileURL(join(root, "src/lib/pets/card.ts")).href);
 const cardSrc = readFileSync(join(root, "src/components/desk/keeper-card.tsx"), "utf8");
 const overlayPet = readFileSync(join(root, "../desktop/renderer/pet.js"), "utf8");
 const overlayHtml = readFileSync(join(root, "../desktop/renderer/index.html"), "utf8");

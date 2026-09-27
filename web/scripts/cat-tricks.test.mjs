@@ -156,9 +156,9 @@ test("ground registry keeps prior guests gated; Miso selectable; no scratch-name
   assert.equal(Earth.TRICK_KEY, "ground_dragon");
   assert.equal(T.TRICK_KEY, "cat");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...Relay.TRICKS], ["click", "latch", "arc", "buzz", "switch"]);
-  assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
-  assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
+  assert.deepEqual([...Relay.TRICKS], ["contactclick", "latchseat", "arcflick", "coilbuzz", "poleswitch", "armaturetap", "relayhush"]);
+  assert.deepEqual([...Fuse.TRICKS], ["railseat", "holdcurrent", "blowclear", "reseatsnap", "cartridgerattle", "bladeflash", "fusehush"]);
+  assert.deepEqual([...Earth.TRICKS], ["lugstrap", "earthseat", "heaveplate", "bedsettle", "soilgrip", "plateclamp", "groundhush"]);
   assert.equal(T.TRICKS.includes("scratch"), false);
   assert.equal(Rui.wantsThankYou("cat"), false);
   assert.equal(Relay.wantsThankYou("cat"), false);

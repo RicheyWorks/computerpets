@@ -118,10 +118,11 @@ test("the browser door comes after, and /demo stays the same house", () => {
 });
 
 test("START-HERE tells the honest house count without owning house-count", () => {
-  assert.match(startSrc, /There are \*\*220\*\* animals/);
-  assert.match(startSrc, /all \*\*220\*\*/);
+  assert.match(startSrc, /There are \*\*221\*\* animals/);
+  assert.match(startSrc, /all \*\*221\*\*/);
   assert.doesNotMatch(startSrc, /\*\*211\*\*/);
   assert.doesNotMatch(startSrc, /\*\*219\*\*/);
-  assert.match(readmeSrc, /There are \*\*220\*\* animals/);
-  assert.match(readmeSrc, /Two hundred twenty living kinds/);
+  assert.doesNotMatch(startSrc, /\*\*220\*\*/);
+  assert.match(readmeSrc, /There are \*\*221\*\* animals/);
+  assert.match(readmeSrc, /Two hundred twenty-one living kinds/);
 });

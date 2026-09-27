@@ -1,36 +1,41 @@
 const assert = require("node:assert/strict");
-const { readFileSync } = require("node:fs");
+const { tmpdir } = require("node:os");
 const { join } = require("node:path");
 const { test } = require("node:test");
 const Presence = require("../presence.cjs");
 const Guard = require("./presence.js");
+const { readSource } = require("../test-source.cjs");
 
-const mainSrc = readFileSync(join(__dirname, "..", "main.cjs"), "utf8");
-const preloadSrc = readFileSync(join(__dirname, "..", "preload.cjs"), "utf8");
-const petSrc = readFileSync(join(__dirname, "pet.js"), "utf8");
-const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
-const settingsSrc = readFileSync(join(__dirname, "settings.html"), "utf8");
-const enumSrc = readFileSync(join(__dirname, "..", "windows-enum.cjs"), "utf8");
-const guardSrc = readFileSync(join(__dirname, "presence.js"), "utf8");
-const areasSrc = readFileSync(join(__dirname, "weather-areas.js"), "utf8");
-const webSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "presence.ts"), "utf8");
-const roomSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "companion-room.tsx"), "utf8");
-const pySrc = readFileSync(join(__dirname, "..", "..", "client", "computerpets_client", "presence.py"), "utf8");
-const appSrc = readFileSync(join(__dirname, "..", "..", "client", "computerpets_client", "app.py"), "utf8");
+const mainSrc = readSource(join(__dirname, "..", "main.cjs"));
+const preloadSrc = readSource(join(__dirname, "..", "preload.cjs"));
+const petSrc = readSource(join(__dirname, "pet.js"));
+const htmlSrc = readSource(join(__dirname, "index.html"));
+const settingsSrc = readSource(join(__dirname, "settings.html"));
+const enumSrc = readSource(join(__dirname, "..", "windows-enum.cjs"));
+const guardSrc = readSource(join(__dirname, "presence.js"));
+const areasSrc = readSource(join(__dirname, "weather-areas.js"));
+const webSrc = readSource(join(__dirname, "..", "..", "web", "src", "lib", "pets", "presence.ts"));
+const roomSrc = readSource(join(__dirname, "..", "..", "web", "src", "components", "desk", "companion-room.tsx"));
+const pySrc = readSource(join(__dirname, "..", "..", "client", "computerpets_client", "presence.py"));
+const appSrc = readSource(join(__dirname, "..", "..", "client", "computerpets_client", "app.py"));
 
 test("presence writes stay inside userData house files", () => {
-  const card = Presence.houseFile("/tmp/computerpets-user", "card.json");
-  const mind = Presence.houseFile("/tmp/computerpets-user", "mind.json");
-  assert.equal(card, "/tmp/computerpets-user/card.json");
-  assert.equal(mind, "/tmp/computerpets-user/mind.json");
-  assert.equal(Presence.houseFile("/tmp/computerpets-user", "../secrets.txt"), null);
-  assert.equal(Presence.houseFile("/tmp/computerpets-user", "/etc/passwd"), null);
-  assert.equal(Presence.houseFile("/tmp/computerpets-user", "Desktop/homework.txt"), null);
-  assert.equal(Presence.houseFile("/tmp/computerpets-user", "hwid.txt"), null);
+  const home = join(tmpdir(), "computerpets-user");
+  const card = Presence.houseFile(home, "card.json");
+  const mind = Presence.houseFile(home, "mind.json");
+  assert.equal(card, join(home, "card.json"));
+  assert.equal(mind, join(home, "mind.json"));
+  assert.equal(Presence.houseFile(home, "../secrets.txt"), null);
+  assert.equal(Presence.houseFile(home, "..\\secrets.txt"), null);
+  assert.equal(Presence.houseFile(home, "/etc/passwd"), null);
+  assert.equal(Presence.houseFile(home, "C:\\Windows\\win.ini"), null);
+  assert.equal(Presence.houseFile(home, "Desktop/homework.txt"), null);
+  assert.equal(Presence.houseFile(home, "Desktop\\homework.txt"), null);
+  assert.equal(Presence.houseFile(home, "hwid.txt"), null);
   assert.deepEqual(Presence.readMachineMark(), { read: false, raw: null, id: "" });
   assert.deepEqual(Guard.readMachineMark(), { read: false, raw: null, id: "" });
   assert.equal(Presence.houseFile("", "card.json"), null);
-  assert.equal(Presence.houseFile("/tmp/computerpets-user", "card.json/../../x"), null);
+  assert.equal(Presence.houseFile(home, "card.json/../../x"), null);
 });
 
 test("in-page navigation is refused, including a dropped file URL", () => {
@@ -218,7 +223,7 @@ test("presence does not list Desktop, Documents, or Downloads", () => {
     const listed = Presence.listHostFolder(folder);
     assert.deepEqual(listed, { listed: false, names: [] });
   }
-  assert.doesNotMatch(readFileSync(join(__dirname, "..", "presence.cjs"), "utf8"), /readdir|readdirSync|Get-ChildItem|listdir/);
+  assert.doesNotMatch(readSource(join(__dirname, "..", "presence.cjs")), /readdir|readdirSync|Get-ChildItem|listdir/);
 });
 
 test("a window caption is never a title, and a path needs consent", () => {
@@ -276,7 +281,7 @@ test("a focused field keeps the key, and a key outside it is not logged", () => 
   const guardNote = Guard.classifyKey({ key: "q", target: { tagName: "SELECT" } });
   assert.deepEqual(guardNote, { record: false, field: true, toggle: false });
   assert.deepEqual(Guard.recordKeystroke(["q"], { key: "q" }), { record: false, keys: [] });
-  assert.doesNotMatch(readFileSync(join(__dirname, "..", "presence.cjs"), "utf8"), /SetWindowsHook|globalShortcut|keylog|uiohook/);
+  assert.doesNotMatch(readSource(join(__dirname, "..", "presence.cjs")), /SetWindowsHook|globalShortcut|keylog|uiohook/);
   assert.doesNotMatch(guardSrc, /SetWindowsHook|globalShortcut|keylog|uiohook|localStorage/);
 });
 
@@ -421,17 +426,17 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.match(areasSrc, /AbortController/);
   assert.match(areasSrc, /WeatherTimeout/);
   assert.equal(require("./weather-areas.js").WEATHER_TIMEOUT_MS, 12_000);
-  const newsSrc = readFileSync(join(__dirname, "news.js"), "utf8");
+  const newsSrc = readSource(join(__dirname, "news.js"));
   assert.match(newsSrc, /NEWS_TIMEOUT_MS/);
   assert.match(newsSrc, /AbortController/);
   assert.match(newsSrc, /NewsTimeout/);
   assert.equal(require("./news.js").NEWS_TIMEOUT_MS, 12_000);
-  const marketSrc = readFileSync(join(__dirname, "market.js"), "utf8");
+  const marketSrc = readSource(join(__dirname, "market.js"));
   assert.match(marketSrc, /QUOTE_TIMEOUT_MS/);
   assert.match(marketSrc, /AbortController/);
   assert.match(marketSrc, /QuoteTimeout/);
   assert.equal(require("./market.js").QUOTE_TIMEOUT_MS, 12_000);
-  const radioSrc = readFileSync(join(__dirname, "house-music.js"), "utf8");
+  const radioSrc = readSource(join(__dirname, "house-music.js"));
   assert.match(radioSrc, /RADIO_TIMEOUT_MS/);
   assert.match(radioSrc, /AbortController/);
   assert.match(radioSrc, /RadioTimeout/);
@@ -439,8 +444,10 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   const beatAt = petSrc.indexOf("setInterval(readHeartbeat");
   assert.doesNotMatch(petSrc.slice(beatAt, beatAt + 80), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
   const gpuAt = petSrc.indexOf("setInterval(() => {\n  if (!window.PetGpu");
+  assert.ok(gpuAt > 0, "the GPU tick is found");
   assert.doesNotMatch(petSrc.slice(gpuAt, gpuAt + 500), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
   const lifeAt = petSrc.indexOf("setInterval(() => {\n  if (document.hidden || !kind || !life)");
+  assert.ok(lifeAt > 0, "the life tick is found");
   assert.ok(lifeAt > petSrc.indexOf("function sendLiveFix"));
   assert.doesNotMatch(petSrc.slice(lifeAt), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
   assert.doesNotMatch(petSrc.slice(lifeAt), /forecastUrl\(/);
@@ -526,6 +533,7 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.doesNotMatch(bootBody, /talkAsked = true/);
   assert.doesNotMatch(bootBody, /askMind\(/);
   const refreshAt = petSrc.lastIndexOf("fetchNews();\n  fetchMarket();");
+  assert.ok(refreshAt > 0, "the news and market refresh is found");
   assert.doesNotMatch(petSrc.slice(refreshAt - 180, refreshAt + 40), /popularRssUrl|geckoManyUrl|newsUrl\(/);
 });
 

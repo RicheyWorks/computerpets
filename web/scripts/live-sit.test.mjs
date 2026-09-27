@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const L = await import(join(root, "src/lib/pets/live.ts"));
+const L = await import(pathToFileURL(join(root, "src/lib/pets/live.ts")).href);
 
 const livePageSrc = readFileSync(join(root, "src/routes/live.tsx"), "utf8");
 const liveSrc = readFileSync(join(root, "src/components/desk/live-stage.tsx"), "utf8");
@@ -19,7 +19,7 @@ const catalogSrc = readFileSync(join(root, "src/routes/catalog.tsx"), "utf8");
 const petSrc = readFileSync(join(root, "src/routes/pets.$key.tsx"), "utf8");
 const speciesSrc = readFileSync(join(root, "src/lib/pets/catalog.ts"), "utf8");
 const careSrc = readFileSync(join(root, "src/lib/pets/care.ts"), "utf8");
-const C = await import(join(root, "src/lib/pets/care.ts"));
+const C = await import(pathToFileURL(join(root, "src/lib/pets/care.ts")).href);
 
 const house = [
   { key: "red_panda", slug: "rui" },

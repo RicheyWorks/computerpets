@@ -3,12 +3,12 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const require = createRequire(import.meta.url);
-const Hours = await import(join(root, "src/lib/pets/hours.ts"));
-const C = await import(join(root, "src/lib/pets/care.ts"));
+const Hours = await import(pathToFileURL(join(root, "src/lib/pets/hours.ts")).href);
+const C = await import(pathToFileURL(join(root, "src/lib/pets/care.ts")).href);
 const OverlayHours = require(join(root, "../desktop/renderer/hours.js"));
 const OverlayGait = require(join(root, "../desktop/renderer/gait.js"));
 const OverlayLife = require(join(root, "../desktop/renderer/life.js"));

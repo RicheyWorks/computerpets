@@ -3,17 +3,17 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const A = await import(join(root, "src/lib/pets/arrive.ts"));
-const P = await import(join(root, "src/lib/pets/play.ts"));
-const D = await import(join(root, "src/lib/pets/mac-desk.ts"));
-const Hive = await import(join(root, "src/lib/pets/hive.ts"));
-const C = await import(join(root, "src/lib/pets/care.ts"));
-const Treats = await import(join(root, "src/lib/pets/treats.ts"));
-const Traits = await import(join(root, "src/lib/pets/traits.ts"));
-const Hours = await import(join(root, "src/lib/pets/hours.ts"));
+const A = await import(pathToFileURL(join(root, "src/lib/pets/arrive.ts")).href);
+const P = await import(pathToFileURL(join(root, "src/lib/pets/play.ts")).href);
+const D = await import(pathToFileURL(join(root, "src/lib/pets/mac-desk.ts")).href);
+const Hive = await import(pathToFileURL(join(root, "src/lib/pets/hive.ts")).href);
+const C = await import(pathToFileURL(join(root, "src/lib/pets/care.ts")).href);
+const Treats = await import(pathToFileURL(join(root, "src/lib/pets/treats.ts")).href);
+const Traits = await import(pathToFileURL(join(root, "src/lib/pets/traits.ts")).href);
+const Hours = await import(pathToFileURL(join(root, "src/lib/pets/hours.ts")).href);
 const OverlaySpecial = createRequire(import.meta.url)(join(root, "../desktop/renderer/specials.js"));
 
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
@@ -30,9 +30,9 @@ const windowsSitSrc = readFileSync(join(root, "src/components/desk/windows-desk-
 const sitSrc = readFileSync(join(root, "src/components/desk/tablet-desk-sit.tsx"), "utf8");
 const phoneSitSrc = readFileSync(join(root, "src/components/desk/phone-desk-sit.tsx"), "utf8");
 const demoPageSrc = readFileSync(join(root, "src/routes/demo.$slug.tsx"), "utf8");
-const T = await import(join(root, "src/lib/pets/tablet-desk.ts"));
-const H = await import(join(root, "src/lib/pets/phone-desk.ts"));
-const K = await import(join(root, "src/lib/pets/keeper.ts"));
+const T = await import(pathToFileURL(join(root, "src/lib/pets/tablet-desk.ts")).href);
+const H = await import(pathToFileURL(join(root, "src/lib/pets/phone-desk.ts")).href);
+const K = await import(pathToFileURL(join(root, "src/lib/pets/keeper.ts")).href);
 
 function lureSeek() {
   return { taken: false, cmd: "seek", mark: "lure" };

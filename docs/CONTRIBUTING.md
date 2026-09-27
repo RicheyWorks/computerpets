@@ -140,6 +140,12 @@ When making architectural changes, remember to update the **"Last Updated"** dat
 - Run `mvn clean package` before pushing
 - Add unit or integration tests when possible
 - Manually verify that your changes work as expected
+- Run the desk tests with `npm test` in `desktop/` and in `web/`. Both suites run on Windows, Mac, and Linux:
+  - A test that reads source text uses `readSource` (`desktop/test-source.cjs`, `web/scripts/test-source.mjs`), so a Windows checkout with CRLF reads the same as Linux.
+  - A web test imports a `.ts` module with `pathToFileURL(join(root, ...)).href`, not a bare path.
+  - A web test that runs a repo Python script gets the command from `python3()` in `web/scripts/test-python.mjs` (python3, then python, then `py -3`).
+  - A test that needs `/bin/sh` or Xvfb is skipped with a reason on Windows and runs on Linux CI.
+- Shell scripts are LF on every checkout (`*.sh text eol=lf` in `.gitattributes`). On a Windows clone made before that line, re-check them out once in PowerShell: `$sh = git ls-files "*.sh"; Remove-Item $sh; git checkout -- $sh`
 
 ### 5. Open a Pull Request
 
