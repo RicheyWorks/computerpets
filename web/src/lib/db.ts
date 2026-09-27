@@ -1,5 +1,18 @@
+import { PLAIN_LINES, toHouseError } from "./plain-error";
+
 /** Which database backend is active. */
 export type DbSource = "neon" | "pglite";
+
+/**
+ * A database failure never reaches the page as raw Postgres/PGLite text
+ * (`relation … does not exist`, `ECONNREFUSED`, SQLSTATE codes). The raw error
+ * is logged here on the server; callers get a HouseError with one plain line.
+ */
+function plainDbError(stage: string, err: unknown): Error {
+  return toHouseError(err, PLAIN_LINES.database, (_label, raw) => {
+    console.error(`[db] ${stage} failed:`, raw);
+  });
+}
 
 // An empty/whitespace DATABASE_URL (an easy misconfig in deploy UIs) must mean
 // "unset" — otherwise production would silently run on the PGLite fallback.
@@ -68,7 +81,14 @@ const identity = (v: string) => v;
 type Run = <T>(text: string, params: unknown[]) => Promise<T[]>;
 
 /** Wrap a query runner in the tagged-template + `.query()` `Sql` surface. */
-function toSql(run: Run): Sql {
+function toSql(rawRun: Run): Sql {
+  const run: Run = async <T>(text: string, params: unknown[]) => {
+    try {
+      return await rawRun<T>(text, params);
+    } catch (err) {
+      throw plainDbError("query", err);
+    }
+  };
   const sql = (async <T = Record<string, unknown>>(
     strings: TemplateStringsArray,
     ...values: unknown[]
@@ -98,6 +118,7 @@ function createNeonSql(): Promise<Sql> {
     });
   })().catch((err) => {
     globalRef.__pgSqlPromise__ = undefined;
+    // Raw here on purpose: getSql() logs it and hands the page one plain line.
     throw err;
   });
   return globalRef.__pgSqlPromise__;
@@ -123,6 +144,7 @@ async function createPgliteSql(): Promise<Sql> {
     return pg;
   })().catch((err) => {
     globalRef.__pgliteInstance__ = undefined;
+    // Raw here on purpose: getSql() logs it and hands the page one plain line.
     throw err;
   });
   const pg = await globalRef.__pgliteInstance__;
@@ -189,7 +211,7 @@ async function createSql(): Promise<Sql> {
 export function getSql(): Promise<Sql> {
   sqlPromise ??= createSql().catch((err) => {
     sqlPromise = null; // don't memoize failures — let the next call retry
-    throw err;
+    throw plainDbError("open", err);
   });
   return sqlPromise;
 }
@@ -232,6 +254,7 @@ const globalBoot = globalThis as typeof globalThis & {
 if (typeof window === "undefined" && dbSource === "pglite") {
   globalBoot.__pgBootstrapPromise__ ??= ensureDbReady().catch((err) => {
     globalBoot.__pgBootstrapPromise__ = undefined;
+    // getSql() already logged the raw cause as "[db] open failed"; this is the plain line.
     console.error("[db] PGLite bootstrap failed:", err);
     throw err;
   });

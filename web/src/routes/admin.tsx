@@ -13,6 +13,7 @@ import {
   unlockAdmin,
   type LicenseAudit,
 } from "@/lib/admin/api";
+import { plainMessage } from "@/lib/plain-error";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
@@ -36,6 +37,7 @@ export function AdminPage() {
   const [rows, setRows] = useState<LicenseAudit[]>([]);
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<string | null>(null);
+  const [detail, setDetail] = useState<string | null>(null);
   const [pendingJti, setPendingJti] = useState<string | null>(null);
 
   useEffect(() => {
@@ -45,9 +47,20 @@ export function AdminPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /** One plain line; the service's raw text only behind the Details toggle. */
+  function showError(err: unknown, fallback: string) {
+    setNote(plainMessage(err, fallback));
+    setDetail(err instanceof AdminApiError && err.detail ? err.detail : null);
+  }
+
+  function clearNote() {
+    setNote(null);
+    setDetail(null);
+  }
+
   async function openLedger(base: string, key: string) {
     setBusy(true);
-    setNote(null);
+    clearNote();
     try {
       await unlockAdmin(base, key);
       const recent = await listLicenses(base, key);
@@ -58,7 +71,7 @@ export function AdminPage() {
     } catch (err) {
       setUnlocked(false);
       setRows([]);
-      setNote(err instanceof Error ? err.message : "Unlock failed.");
+      showError(err, "Unlock failed.");
     } finally {
       setBusy(false);
     }
@@ -72,7 +85,7 @@ export function AdminPage() {
   async function onSearch(e: FormEvent) {
     e.preventDefault();
     setBusy(true);
-    setNote(null);
+    clearNote();
     try {
       const found = await lookupLicenses(apiBase, adminKey, query);
       setRows(found);
@@ -82,7 +95,7 @@ export function AdminPage() {
         lock("Admin key rejected.");
         return;
       }
-      setNote(err instanceof Error ? err.message : "Lookup failed.");
+      showError(err, "Lookup failed.");
     } finally {
       setBusy(false);
     }
@@ -90,7 +103,7 @@ export function AdminPage() {
 
   async function confirmRevoke(jti: string) {
     setBusy(true);
-    setNote(null);
+    clearNote();
     try {
       await revokeLicense(apiBase, adminKey, jti);
       const next = await lookupLicenses(apiBase, adminKey, query);
@@ -102,7 +115,7 @@ export function AdminPage() {
         lock("Admin key rejected.");
         return;
       }
-      setNote(err instanceof Error ? err.message : "Revoke failed.");
+      showError(err, "Revoke failed.");
     } finally {
       setBusy(false);
     }
@@ -114,6 +127,7 @@ export function AdminPage() {
     setRows([]);
     setPendingJti(null);
     setNote(message ?? null);
+    setDetail(null);
   }
 
   return (
@@ -156,7 +170,7 @@ export function AdminPage() {
           <Button type="submit" disabled={busy || !adminKey.trim()}>
             {busy ? "Opening…" : "Open the ledger"}
           </Button>
-          {note ? <p className="text-sm text-muted">{note}</p> : null}
+          <Note note={note} detail={detail} />
         </form>
       ) : (
         <section className="space-y-6">
@@ -188,7 +202,7 @@ export function AdminPage() {
             </div>
           </form>
 
-          {note ? <p className="text-sm text-muted">{note}</p> : null}
+          <Note note={note} detail={detail} />
 
           <ul className="space-y-3">
             {rows.map((row) => (
@@ -240,6 +254,22 @@ export function AdminPage() {
         </section>
       )}
     </main>
+  );
+}
+
+/** The page note. Raw service text stays folded under "Details" and is never the default view. */
+function Note({ note, detail }: { note: string | null; detail: string | null }) {
+  if (!note) return null;
+  return (
+    <div className="space-y-1">
+      <p className="text-sm text-muted">{note}</p>
+      {detail ? (
+        <details className="text-xs text-subtle">
+          <summary className="cursor-pointer select-none">Details</summary>
+          <p className="mt-1 break-all font-mono">{detail}</p>
+        </details>
+      ) : null}
+    </div>
   );
 }
 
