@@ -54,6 +54,11 @@ contextBridge.exposeInMainWorld("desk", {
     ipcRenderer.on("windows", wrapped);
     return () => ipcRenderer.removeListener("windows", wrapped);
   },
+  onSettingsSection: (fn) => {
+    const wrapped = (_e, section) => fn(section === "unlock" ? "unlock" : "minds");
+    ipcRenderer.on("settings-section", wrapped);
+    return () => ipcRenderer.removeListener("settings-section", wrapped);
+  },
   onGpu: (fn) => {
     const wrapped = (_e, sample) => fn(sample);
     ipcRenderer.on("gpu", wrapped);

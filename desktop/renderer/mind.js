@@ -171,7 +171,7 @@
       }
       return Promise.resolve(window.desk.mindSet(mind)).then(
         (result) => (result && typeof result === "object" ? result : { kept: "os" }),
-        () => ({ kept: "none" }),
+        () => ({ kept: "none", saved: false }),
       );
     }
     pageMind = mind;
@@ -430,6 +430,41 @@
 
   function preset(id) {
     return PRESETS.find((p) => p.id === id) || PRESETS[0];
+  }
+
+  /**
+   * One plain sentence for a Base URL talk would refuse, or "" when talk can use it.
+   * Same rules as safeUrl, so Minds never says "Saved" for a mind that falls back to house lines.
+   */
+  function baseUrlProblem(raw, id) {
+    const text = String(raw == null ? "" : raw).trim();
+    const p = preset(id);
+    if (!text || p.kind === "local") return "";
+    let url;
+    try {
+      url = new URL(text);
+    } catch {
+      return "The Base URL is not a web address. Copy it from the plugin's own page, starting with https.";
+    }
+    if (url.protocol !== "https:" && url.protocol !== "http:") {
+      return "The Base URL is not a web address. Copy it from the plugin's own page, starting with https.";
+    }
+    if (url.username || url.password) {
+      return "Take the name and password out of the Base URL. They are never saved, so put the key in the API key box instead.";
+    }
+    const host = url.hostname.replace(/^\[|\]$/g, "");
+    const local = host === "127.0.0.1" || host === "localhost" || host === "::1";
+    if (local) {
+      if (!(p.id === "ollama" || p.id === "lmstudio" || p.id === "custom")) {
+        return "A Base URL on this computer only works with Ollama, LM Studio, or Custom. Pick one of those, or use the plugin's https address.";
+      }
+      return "";
+    }
+    if (url.protocol !== "https:") return "The Base URL must start with https:// so the key is not sent in the open.";
+    if (/^(10|127|0)\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[0-1])\./.test(host)) {
+      return "The Base URL points at a private network address. Talk only goes to a public https address or to this computer.";
+    }
+    return safeUrl(text, p.id) ? "" : "The Base URL is not a web address. Copy it from the plugin's own page, starting with https.";
   }
 
   function binding(species) {
@@ -696,6 +731,7 @@
     load,
     save,
     preset,
+    baseUrlProblem,
     binding,
     run,
     TALK_HOST_NAME,

@@ -5,7 +5,7 @@ const assert = require("node:assert/strict");
 const os = require("os");
 const path = require("path");
 const fs = require("fs");
-const { createLicenseSession, NO_LICENSE_MESSAGE } = require("./session.cjs");
+const { createLicenseSession, NO_LICENSE_MESSAGE, NO_TOKEN_MESSAGE, FIELDS_MISSING_MESSAGE } = require("./session.cjs");
 const { createContractTestDouble, encryptLicense } = require("./contract-test-double.cjs");
 const { LicenseError } = require("./errors.cjs");
 const { bundleHonesty, downloadTalkHonesty, licenseHonesty } = require("./license-net.cjs");
@@ -79,6 +79,101 @@ describe("license session", () => {
     assert.equal(gets.length, 1);
     assert.equal(new URLSearchParams(gets[0].query).has("hwid"), false);
     assert.equal(Object.prototype.hasOwnProperty.call(gets[0].body, "hwid"), false);
+  });
+
+  it("never writes the download sign-in in plain text: sealed with a secret store, memory-only without", async () => {
+    // A reversible stand-in for the OS secret store that never echoes the token.
+    const codec = {
+      encrypt: (text) => Buffer.from(String(text), "utf8").map((b) => b ^ 0x5a).toString("base64"),
+      decrypt: (sealed) => Buffer.from(Buffer.from(String(sealed), "base64").map((b) => b ^ 0x5a)).toString("utf8"),
+    };
+    const storeOf = (disk) => [...disk.files.entries()].find(([p]) => p.endsWith("license.json"))[1];
+    for (const withStore of [true, false]) {
+      const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
+      const disk = memoryFs();
+      const make = () =>
+        createLicenseSession({
+          userDataDir: path.join(os.tmpdir(), "cp-license-token"),
+          env: { LICENSE_SECRET_KEY: SECRET, BUNDLE_SIGNING_KEY: SIGNING, COMPUTERPETS_BACKEND_URL: "http://127.0.0.1:8080" },
+          fetchImpl: backend.fetchImpl,
+          hwid: "device-abc-123",
+          readFile: disk.readFile,
+          writeFile: disk.writeFile,
+          mkdir: disk.mkdir,
+          codec: withStore ? () => codec : () => null,
+        });
+      const result = await make().unlock({ steamId: "76561198000000000", appId: "123456" });
+      assert.equal(result.unlocked, true);
+      const download = backend.calls.find((c) => c.path === "/api/download/red_panda");
+      const token = String(download.headers.Authorization).slice("Bearer ".length);
+      assert.match(token, /^test\./, "Unlock's own download still carried the sign-in");
+      const raw = storeOf(disk);
+      assert.equal(raw.includes(token), false, `license.json holds the plain token (store=${withStore})`);
+      assert.equal(raw.includes(SECRET), false);
+      const saved = JSON.parse(raw);
+      assert.equal(Object.prototype.hasOwnProperty.call(saved.auth, "token"), false);
+      if (withStore) assert.equal(codec.decrypt(saved.auth.sealedToken), token);
+      else assert.equal(saved.auth.sealedToken, undefined);
+      if (!withStore) {
+        // A later run has no token to send: it says so plainly and posts nothing.
+        const before = backend.calls.length;
+        await assert.rejects(
+          () => make().download({}),
+          (err) => err instanceof LicenseError && err.code === "no_token" && err.message === NO_TOKEN_MESSAGE
+        );
+        assert.equal(backend.calls.length, before);
+      }
+    }
+  });
+
+  it("uses an older license.json's plain token once, then keeps only the seal", async () => {
+    const codec = {
+      encrypt: (text) => "sealed:" + Buffer.from(String(text)).reverse().toString("base64"),
+      decrypt: (sealed) => Buffer.from(String(sealed).slice(7), "base64").reverse().toString("utf8"),
+    };
+    const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
+    const issued = await (
+      await backend.fetchImpl("http://127.0.0.1:8080/api/verify/steam", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ steamId: "76561198000000000", appId: "123456", petType: "red_panda", hwid: "device-abc-123" }),
+      })
+    ).json();
+    const disk = memoryFs();
+    const dir = path.join(os.tmpdir(), "cp-license-legacy");
+    disk.writeFile(
+      path.join(dir, "license.json"),
+      JSON.stringify({ backendUrl: "http://127.0.0.1:8080", provider: "steam", license: issued.license, auth: issued.auth })
+    );
+    const session = createLicenseSession({
+      userDataDir: dir,
+      env: { LICENSE_SECRET_KEY: SECRET, BUNDLE_SIGNING_KEY: SIGNING },
+      fetchImpl: backend.fetchImpl,
+      hwid: "device-abc-123",
+      readFile: disk.readFile,
+      writeFile: disk.writeFile,
+      mkdir: disk.mkdir,
+      codec,
+    });
+    const last = await session.download({});
+    assert.match(last.downloadUrl, /jti=/);
+    const sent = backend.calls.find((c) => c.path === "/api/download/red_panda");
+    assert.equal(sent.headers.Authorization, `Bearer ${issued.auth.token}`);
+    const raw = disk.files.get(path.join(dir, "license.json"));
+    assert.equal(raw.includes(issued.auth.token), false);
+    assert.equal(codec.decrypt(JSON.parse(raw).auth.sealedToken), issued.auth.token);
+  });
+
+  it("asks for the Steam ID and App ID in plain words before anything leaves", async () => {
+    const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
+    const session = sessionFor(backend);
+    for (const input of [{ steamId: "", appId: "123456" }, { steamId: "76561198000000000", appId: "  " }]) {
+      await assert.rejects(
+        () => session.unlock(input),
+        (err) => err instanceof LicenseError && err.code === "fields_missing" && err.message === FIELDS_MISSING_MESSAGE
+      );
+    }
+    assert.equal(backend.calls.length, 0);
   });
 
   it("fails closed without LICENSE_SECRET_KEY — no always-licensed stub", async () => {
