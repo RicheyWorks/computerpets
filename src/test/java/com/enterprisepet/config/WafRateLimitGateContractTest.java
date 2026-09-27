@@ -46,7 +46,8 @@ class WafRateLimitGateContractTest {
     @Test
     @DisplayName("ACL defaults deny, rate rules answer 429, and the ALB association is unconditional")
     void denySafeAssociation() throws Exception {
-        String hcl = Files.readString(WAF);
+        // The block checks below span lines. A Windows checkout (core.autocrlf) has CRLF.
+        String hcl = Files.readString(WAF).replace("\r\n", "\n");
         assertThat(hcl).contains("scope       = \"REGIONAL\"");
         assertThat(hcl).contains("default_action {\n    block {}");
         assertThat(hcl).doesNotContain("default_action {\n    allow");
