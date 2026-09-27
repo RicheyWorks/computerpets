@@ -100,10 +100,13 @@ function makeElectron(ctx) {
     }
     constructor(opts) {
       this.opts = opts;
+      this.handlers = {};
     }
-    on() {}
+    on(ev, fn) {
+      this.handlers[ev] = fn;
+    }
     show() {
-      ctx.notes.push(this.opts);
+      ctx.notes.push(this);
     }
   }
   const display = { workArea: { x: 0, y: 0, width: 1280, height: 800 }, bounds: { x: 0, y: 0, width: 1280, height: 800 }, scaleFactor: 1 };
@@ -263,6 +266,42 @@ function checkedKey(submenu, roster) {
   if (!row) return "";
   const hit = roster.find((r) => row.label === `${r.name} — ${r.speciesLabel}`);
   return hit ? hit.key : "";
+}
+
+/**
+ * Send a notification the way the overlay does, then click it the way the keeper does.
+ * Returns what the overlay was told and whether it is showing.
+ */
+function clickNote(ctx, payload) {
+  const win = ctx.windows[0];
+  win.visible = false;
+  const before = ctx.notes.length;
+  ctx.send("notify", payload);
+  const note = ctx.notes[before];
+  if (!note || typeof note.handlers.click !== "function") return { shown: false, command: null, body: "" };
+  const sent = ctx.sent.length;
+  note.handlers.click();
+  const commands = ctx.sent.slice(sent).filter((m) => m[0] === "command");
+  return { shown: win.visible === true, command: commands.length === 1 ? commands[0][1] : null, body: note.opts.body };
+}
+
+/** A clock note click shows the overlay and hands the saved line back; care is not opened. */
+function clockNoteFails(ctx, C, rang, key, line) {
+  const fails = [];
+  const named = C.clockNote(rang, "Soot", key, line);
+  const click = clickNote(ctx, named);
+  const want = line && line.kind !== "do" ? C.clipLine(line.text) : "";
+  if (!click.shown) fails.push(`${rang} note click did not show the overlay`);
+  if (!click.command || click.command.type !== "clock-note") fails.push(`${rang} note click sent ${click.command ? click.command.type : "nothing"}, not clock-note`);
+  else if (click.command.line !== want || click.command.key !== key || click.command.clock !== rang) fails.push(`${rang} note click lost its line or guest`);
+  if (click.body !== (want || (rang === "alarm" ? "The clock asked." : "The timer is done."))) fails.push(`${rang} note body is ${click.body}`);
+  const care = clickNote(ctx, { title: "Soot", body: "Soot is hungry.", key, need: "hunger" });
+  if (!care.command || care.command.type !== "open-care" || care.command.need !== "hunger") fails.push("a care note no longer opens care on its need");
+  const pet = fs.readFileSync(path.join(RENDERER, "pet.js"), "utf8").replace(/\r\n/g, "\n");
+  if (!/cmd\.type === "clock-note"[\s\S]{0,40}showClockNote\(cmd\)/.test(pet)) fails.push("pet.js does not route a clock note to showClockNote");
+  const show = pet.slice(pet.indexOf("function showClockNote("), pet.indexOf("function openCareFromNotify("));
+  if (!/bubbleText\.textContent = line/.test(show) || /openKeeperCard|careForNeed/.test(show)) fails.push("showClockNote does not just show the line");
+  return fails;
 }
 
 function loadFresh(name) {
@@ -534,7 +573,10 @@ async function alarmClock() {
     const body = clockAt >= 0 ? pet.slice(clockAt, pet.indexOf("}, 1000);", clockAt)) : "";
     if (!body || /if \(document\.hidden[^)]*\) return/.test(body)) fails.push("pet.js clock still stops while the overlay is hidden");
     if (!/clockTick\(cardGuest\(\), now, since\)/.test(body)) fails.push("pet.js clock does not use clockTick with the last look");
-    if (!/if \(document\.hidden\) window\.desk\?\.notify\(/.test(body)) fails.push("a hidden overlay gets no notification");
+    if (!/if \(document\.hidden\) window\.desk\?\.notify\(window\.PetCard\.clockNote\(/.test(body)) fails.push("a hidden overlay gets no clock notification");
+    // Clicking that notification shows the overlay and the alarm's saved line; it does not open care.
+    fails.push(...clockNoteFails(ctx, C, "alarm", KEY, { id: "l-stretch", text: "Time to stretch.", kind: "say" }));
+    fails.push(...clockNoteFails(ctx, C, "alarm", KEY, null));
     return fails.length
       ? fail(fails.join("; "))
       : ok("alarm rings once while hidden, once after a sleep, keeps its day on disk", { late_ms: slow.lateMs }, [
@@ -546,6 +588,9 @@ async function alarmClock() {
           "past_time=quiet",
           "off=quiet",
           "pet_clock_hidden=runs",
+          "note_click=clock-note",
+          "note_line=Time to stretch.",
+          "care_note=open-care",
         ]);
   } finally {
     ctx.cleanup();
@@ -585,6 +630,8 @@ async function timerClock() {
     if (stopped.running || stopped.remainingMs !== 40_000) fails.push("stop did not keep the time left");
     const resumed = C.startTimer(stopped, stopped.remainingMs, t0 + 30_000);
     if (resumed.endsAt !== t0 + 70_000) fails.push("start again did not run from the time left");
+    fails.push(...clockNoteFails(ctx, C, "timer", KEY, null));
+    fails.push(...clockNoteFails(ctx, C, "timer", KEY, { id: "l-tea", text: "Tea is ready.", kind: "say" }));
     return fails.length
       ? fail(fails.join("; "))
       : ok("timer rings once on time while hidden; survives card.json reload; stop keeps time left", {}, [
@@ -592,6 +639,7 @@ async function timerClock() {
           "late_ms=0",
           "reload_rings_on_end",
           "stop_left=40000",
+          "note_click=clock-note",
         ]);
   } finally {
     ctx.cleanup();

@@ -1,11 +1,12 @@
 key: boa
 guest: Lula (Boa Constrictor)
-source: Freesound sound 553374 "Snake Hiss" by xoiziox
-URL: https://freesound.org/people/xoiziox/sounds/553374/
-Direct: Pixabay mirror of same CC0 tape (cdn.pixabay.com audio_8a49e4cc49.mp3)
-author: xoiziox
-license: Creative Commons Zero (CC0 1.0)
-Species: Boa constrictor — dry defensive hiss stand-in (gentle dynamic foley hiss). Distinct from Bluff #706977 and Bandit #846337. No movie roar. No music. No narrator.
-Notes: House cut ~3.6s mono 44.1kHz volume=-4dB + dynaudnorm + afade from full source.
-sat: 2026-09-03 Buffffff
-House path: build our own from field tape — not Grok Imagine
+source: Freesound sound 33458 "Boa Constrictor.wav" by Kjell Persson
+URL: https://freesound.org/people/Kjell%20Persson/sounds/33458/
+Direct: https://cdn.freesound.org/previews/33/33458_250997-hq.mp3 (Freesound HQ preview of the 48 kHz 16-bit stereo field wav, 17.5 s)
+author: Kjell Persson
+license: Creative Commons Attribution 3.0 (CC BY 3.0) https://creativecommons.org/licenses/by/3.0/ - credit "Kjell Persson"
+Species: genus Boa. Uploader: "A Boa Constrictor warning us not to get any closer. Recorded in Costa Rica 1994. Field recording" (Sony TC-D5M cassette, Sony ECM-929LT mic). Filed as Boa constrictor; Central American boas are now often split as Boa imperator, so the exact species is not confirmed. Same genus as Lula either way. Real hiss: no voice, no music, no synthesis.
+Replaces: Freesound 553374 "Snake Hiss" by xoiziox (CC0). Its page says "I used my vape to make a gentle snake hiss", so it was not a snake.
+Notes: House cut 0.20-3.70 s of the first hiss (the second hiss follows a pause at 11.5 s). Downmix to mono, 44.1 kHz 16-bit, 60 Hz high-pass, 30 ms fade in, 350 ms fade out, gain to RMS -30.0 dBFS, peak 0.22, 3.50 s. Spectrogram checked: broadband exhale hiss with a broad 450-620 Hz body that is absent in the pause; no harmonics, no voice.
+sat: 2026-09-27 notify-and-snake-hiss
+House path: build our own from field tape - not Grok Imagine
