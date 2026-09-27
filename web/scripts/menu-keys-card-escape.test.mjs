@@ -201,8 +201,9 @@ test("overlay plates: Escape steps back to the card (then closes it); plate tabs
   const house = read(repo, "desktop/renderer/desk-house.js");
   assert.equal((house.match(/btn\.tabIndex = on \? 0 : -1;/g) || []).length, 2, "weather and news tabs rove");
   const html = read(repo, "desktop/renderer/index.html");
-  assert.match(html, /data-weather-tab="current" role="tab" aria-selected="true" tabindex="0"/);
-  assert.match(html, /data-news-tab="x" role="tab" aria-selected="false" tabindex="-1"/);
+  // Each tab also names its tabpanel now (first-run-hints.test.mjs).
+  assert.match(html, /data-weather-tab="current" id="weather-tab-current" role="tab" aria-selected="true" aria-controls="weather-panel" tabindex="0"/);
+  assert.match(html, /data-news-tab="x" id="news-tab-x" role="tab" aria-selected="false" aria-controls="news-panel" tabindex="-1"/);
 });
 
 test("/meet walkers: one hello group with one tab stop; arrows move between walkers", () => {

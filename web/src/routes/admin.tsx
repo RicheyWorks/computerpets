@@ -1,5 +1,5 @@
-import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react";
-import { REVOKED_NOTE, focusAfterGate, formatLocalWhen, ledgerCaption, markRevoked, rereadOnce, revokeAskFocus, revokedListStale } from "@/lib/admin/base";
+import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode, type RefObject } from "react";
+import { REVOKED_NOTE, focusAfterGate, formatLocalWhen, ledgerCaption, markRevoked, rereadOnce, revokeAskFocus, revokeDoneFocus, revokedListStale } from "@/lib/admin/base";
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -51,6 +51,15 @@ export function AdminPage() {
   /** The row whose ask was kept (Keep or Escape): its Revoke gets focus back. */
   const keptJti = useRef<string | null>(null);
   const ledgerList = useRef<HTMLUListElement>(null);
+  /** The status line; after a confirmed revoke focus moves here (revokeDoneFocus) so the result is read. */
+  const statusLine = useRef<HTMLDivElement>(null);
+  const statusFocus = useRef(false);
+
+  useEffect(() => {
+    if (!statusFocus.current || !note) return;
+    statusFocus.current = false;
+    statusLine.current?.focus();
+  }, [note]);
 
   useEffect(() => {
     const kept = keptJti.current;
@@ -189,6 +198,7 @@ export function AdminPage() {
     try {
       const next = await lookupLicenses(apiBase, adminKey, query);
       setRows(next);
+      statusFocus.current = revokeDoneFocus("revoked") === "status";
       setNote(REVOKED_NOTE);
     } catch (err) {
       if (err instanceof AdminApiError && err.status === 401) {
@@ -196,6 +206,7 @@ export function AdminPage() {
         return;
       }
       setRows((was) => markRevoked(was, jti));
+      statusFocus.current = revokeDoneFocus("stale") === "status";
       setNote(revokedListStale(plainMessage(err, "Try again in a moment.")));
       setDetail(err instanceof AdminApiError && err.detail ? err.detail : null);
       // Read the list once more shortly (or when this window gets focus back), then stop.
@@ -297,7 +308,7 @@ export function AdminPage() {
             </div>
           </form>
 
-          <Note note={note} detail={detail} />
+          <Note note={note} detail={detail} statusRef={statusLine} />
 
           <h2 id={ledgerId} className="sr-only">
             {ledgerCaption(rows.length)}
@@ -384,13 +395,13 @@ export function AdminPage() {
  * The page note, read out as a status. Raw service text stays folded behind the "Details" toggle
  * (aria-expanded / aria-controls) and is never the default view; a new detail folds it again.
  */
-function Note({ note, detail }: { note: string | null; detail: string | null }) {
+function Note({ note, detail, statusRef }: { note: string | null; detail: string | null; statusRef?: RefObject<HTMLDivElement | null> }) {
   const detailId = useId();
   const [open, setOpen] = useState(false);
   useEffect(() => setOpen(false), [detail]);
   if (!note) return null;
   return (
-    <div className="space-y-1" role="status">
+    <div className="space-y-1" role="status" ref={statusRef} tabIndex={statusRef ? -1 : undefined} data-admin-status>
       <p className="text-sm text-muted">{note}</p>
       {detail ? (
         <div className="text-xs text-subtle">

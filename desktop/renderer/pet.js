@@ -93,6 +93,10 @@ const hudListener = document.getElementById("hud-listener");
 const hudTruth = document.getElementById("hud-truth");
 const hudCare = document.getElementById("hud-care");
 const hudCollapse = document.getElementById("hud-collapse");
+const firstHintEl = document.getElementById("first-hint");
+const firstHintTitle = document.getElementById("first-hint-title");
+const firstHintList = document.getElementById("first-hint-lines");
+const firstHintOk = document.getElementById("first-hint-ok");
 const hudBody = document.getElementById("hud-body");
 const hudVolume = document.getElementById("hud-volume");
 const hudColors = document.getElementById("hud-colors");
@@ -124,6 +128,10 @@ const barEnergy = document.getElementById("bar-energy");
 const barHygiene = document.getElementById("bar-hygiene");
 const barBond = document.getElementById("bar-bond");
 let houseServer = { show: false };
+/** The named server that answered at least once this session; until then the row reads "not running (optional)". */
+let houseServerSeenHost = null;
+/** What the first-run hello last painted (title and lines), so a repaint does not rebuild it. */
+let firstHintPainted = "";
 let gpuSample = window.PetGpu ? window.PetGpu.UNREAD : { status: "unread" };
 let gpuHistory = window.PetGpu ? window.PetGpu.emptyHistory() : [];
 for (let i = 0; i < 12; i++) dustRoot.appendChild(document.createElement("span"));
@@ -191,6 +199,8 @@ let mark = null;
 let taken = false;
 let leaving = false;
 let choiceOpen = false;
+/** Where keyboard focus was when the choice menu opened; Escape or a keyboard pick puts it back. */
+let choiceReturn = null;
 let lureTimer = 0;
 let card = window.PetCard ? window.PetCard.load() : { collapsed: true, color: "ink", voiceStyle: "hearth", mutes: {}, off: false, pets: {} };
 let offArmed = false;
@@ -1332,6 +1342,7 @@ function readHouseServer() {
     .houseServer()
     .then((state) => {
       houseServer = state && state.show === true ? state : { show: false };
+      if (houseServer.show && houseServer.reachable === true) houseServerSeenHost = houseServer.host || "";
       paintHud();
     })
     .catch(() => {
@@ -1358,7 +1369,7 @@ if (hudCollapse) {
 }
 if (hud) {
   hud.addEventListener("click", (e) => {
-    const hit = e.target && e.target.closest && e.target.closest("[data-care], [data-card], input, button, label");
+    const hit = e.target && e.target.closest && e.target.closest("[data-care], [data-card], [data-first-hint], input, button, label");
     if (hit) return;
     if (card.collapsed) return;
     card.collapsed = true;
@@ -1552,6 +1563,7 @@ function paintHud() {
   const K = window.PetKeeper;
   const meters = K ? K.meters(life) : { hunger: life.hunger, rest: life.energy, bond: life.bond, bondTitle: "New" };
   hudName.textContent = kind.name;
+  paintFirstHint();
   if (hudStage) hudStage.textContent = life.stage;
   if (hudBondTitle) hudBondTitle.textContent = meters.bondTitle;
   const hive = window.PetHive && window.PetHive.isHivePlace(kind.key) ? window.PetHive.colonyOf(life, life.hidden) : null;
@@ -1563,11 +1575,12 @@ function paintHud() {
   if (hudRest) hudRest.textContent = String(meters.rest);
   if (hudBond) hudBond.textContent = String(meters.bond);
   if (hudHeartbeat && K) {
-    const serverLine = K.houseServerLine(houseServer);
+    const seen = houseServerSeenHost != null && houseServerSeenHost === (houseServer.host || "");
+    const serverLine = K.houseServerLine({ ...houseServer, seen });
     hudHeartbeat.hidden = !serverLine;
     hudHeartbeat.textContent = serverLine;
     hudHeartbeat.title = K.houseServerTitle(houseServer);
-    hudHeartbeat.setAttribute("data-heartbeat", houseServer.reachable === true ? "UP" : "DOWN");
+    hudHeartbeat.setAttribute("data-heartbeat", houseServer.reachable === true ? "UP" : seen ? "DOWN" : "OFF");
   }
   if (hudGpu && window.PetGpu) {
     const now = Date.now();
@@ -1635,6 +1648,46 @@ function paintHud() {
   });
 }
 
+/**
+ * The one-time hello at the top of the keeper card (keeper.js firstHint). It is a labelled region with a
+ * Got it button inside the card's Tab cycle; Got it saves firstHintSeen to card.json and it never returns.
+ */
+function paintFirstHint() {
+  const K = window.PetKeeper;
+  if (!firstHintEl || !K || !K.firstHint) return;
+  const shows = K.firstHintShows(card);
+  firstHintEl.hidden = !shows;
+  if (!shows) {
+    firstHintPainted = "";
+    return;
+  }
+  const hint = K.firstHint(kind ? kind.name : "");
+  const sig = [hint.title, ...hint.lines].join("|");
+  if (sig === firstHintPainted) return;
+  firstHintPainted = sig;
+  if (firstHintTitle) firstHintTitle.textContent = hint.title;
+  if (firstHintList) {
+    firstHintList.replaceChildren(
+      ...hint.lines.map((text) => {
+        const li = document.createElement("li");
+        li.textContent = text;
+        return li;
+      }),
+    );
+  }
+  if (firstHintOk) firstHintOk.textContent = hint.ok;
+}
+if (firstHintOk) {
+  firstHintOk.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const hadFocus = document.activeElement === firstHintOk;
+    card.firstHintSeen = true;
+    persistCard();
+    // The button is gone now; keyboard focus lands on the card's name button instead of nowhere.
+    if (hadFocus && hudCollapse) hudCollapse.focus();
+  });
+}
+
 function paintCard() {
   const C = window.PetCard;
   const K = window.PetKeeper;
@@ -1649,6 +1702,7 @@ function paintCard() {
   if (card.collapsed) cardKeys(false);
   paintHouseMusic();
   if (hudCollapse) hudCollapse.setAttribute("aria-expanded", card.collapsed ? "false" : "true");
+  paintFirstHint();
   if (hudVolume) hudVolume.value = String(guest.volume);
   if (hudVoiceTruth) hudVoiceTruth.textContent = (K && K.VOICE_TRUTH) || C.VOICE_TRUTH;
   if (hudOffTruth) hudOffTruth.textContent = (K && K.QUIT_TRUTH) || C.QUIT_TRUTH;
@@ -2468,6 +2522,33 @@ function applyCommand() {
   }
 }
 
+/** After Escape or a keyboard pick: focus goes back where it was, else to the open card's name. */
+function returnChoiceFocus() {
+  const back = choiceReturn;
+  choiceReturn = null;
+  if (back && back.isConnected && typeof back.focus === "function" && !(back.closest && back.closest("[hidden]"))) {
+    back.focus();
+    return;
+  }
+  if (!card.collapsed && hudCollapse) hudCollapse.focus();
+}
+
+if (choiceEl) {
+  choiceEl.addEventListener("keydown", (e) => {
+    const P = window.PetChoice;
+    if (!choiceOpen || !P || !P.menuKey) return;
+    const items = [...choiceEl.querySelectorAll('[role="menuitem"]')];
+    const act = P.menuKey(e.key, items.indexOf(document.activeElement), items.length);
+    // Escape is the document's dismiss key (below): it closes the menu and brings focus back.
+    if (act == null || act === "close") return;
+    e.preventDefault();
+    items.forEach((btn, i) => {
+      btn.tabIndex = i === act ? 0 : -1;
+    });
+    if (items[act]) items[act].focus();
+  });
+}
+
 function closeChoice() {
   choiceOpen = false;
   choiceTarget = null;
@@ -2528,6 +2609,8 @@ function openChoice(target) {
     return;
   }
   choiceTarget = next;
+  const had = document.activeElement;
+  choiceReturn = had && had !== document.body && !choiceEl.contains(had) ? had : null;
   const guest = next.role === "called" ? called.find((c) => c.key === next.key) : null;
   const walking =
     next.role === "host"
@@ -2545,17 +2628,22 @@ function openChoice(target) {
     specialVerb: window.PetSpecial?.verbFor(kind.key) || "Special",
   });
   choiceEl.replaceChildren();
-  for (const mark of marks) {
+  // A real menu, like the web sit menu: menuitem buttons, one Tab stop, arrows / Home / End walk it.
+  marks.forEach((mark, i) => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.textContent = mark.label;
     btn.dataset.hit = "1";
+    btn.setAttribute("role", "menuitem");
+    btn.tabIndex = i === 0 ? 0 : -1;
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
+      const keys = e.detail === 0;
       pickChoice(mark.id);
+      if (keys) returnChoiceFocus();
     });
     choiceEl.appendChild(btn);
-  }
+  });
   choiceEl.style.transform = `translate3d(${choiceAnchorX(next)}px, 0, 0)`;
   choiceEl.classList.add("show");
   choiceOpen = true;
@@ -3864,7 +3952,9 @@ document.addEventListener("keydown", (e) => {
     return;
   }
   if (choiceOpen) {
+    const inMenu = !!(choiceEl && choiceEl.contains(document.activeElement));
     closeChoice();
+    if (inMenu) returnChoiceFocus();
     e.preventDefault();
   }
 });
@@ -3909,7 +3999,9 @@ function keyPlates() {
 /** Tab order while the card has the keyboard: the card's controls first, then each plate on the glass. */
 function cardFocusables() {
   if (!hud || card.collapsed) return [];
-  const out = hudFocusables();
+  // An open choice menu is one Tab stop (its active item), ahead of the card.
+  const out = choiceOpen && choiceEl ? focusablesIn(choiceEl) : [];
+  out.push(...hudFocusables());
   for (const plate of keyPlates()) out.push(...focusablesIn(plate));
   return out;
 }

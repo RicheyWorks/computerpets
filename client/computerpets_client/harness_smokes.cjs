@@ -1105,6 +1105,8 @@ const COMMANDS = {
   market_search: MainHarness.market_search,
   mind_get_set: MainHarness.mind_get_set,
   saved_lines: MainHarness.saved_lines,
+  first_run_desk: MainHarness.first_run,
+  plates_first_run: Replay.plates_first_run,
   alarm_clock: MainHarness.alarm_clock,
   timer_clock: MainHarness.timer_clock,
   music_radio: MainHarness.music_radio,

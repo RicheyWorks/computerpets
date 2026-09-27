@@ -69,6 +69,23 @@
     return GUEST_CHOICE.indexOf(id) >= 0 ? id : null;
   }
 
+  /** The menu's name for screen readers (web guest-choice.tsx says the same). */
+  const MENU_LABEL = "A sit";
+
+  /**
+   * A key inside the open choice menu, the same as the web sit menu (keeper.ts menuKey): "close" for
+   * Escape, the index to focus for an arrow (both ways, wrapping), Home, or End, and null for anything else.
+   */
+  function menuKey(key, at, count) {
+    if (key === "Escape" || key === "Esc") return "close";
+    if (!count) return null;
+    if (key === "ArrowRight" || key === "ArrowDown") return at < 0 ? 0 : (at + 1) % count;
+    if (key === "ArrowLeft" || key === "ArrowUp") return at <= 0 ? count - 1 : at - 1;
+    if (key === "Home") return 0;
+    if (key === "End") return count - 1;
+    return null;
+  }
+
   function guestHitPad(sit) {
     // Extra wood. The pad is empty. It does not paint a plate.
     if (sit && sit.phone) return 12;
@@ -76,7 +93,7 @@
     return 0;
   }
 
-  const api = { GUEST_CHOICE, guestTap, poseFlip, guestMarks, guestPick, guestHitPad, dismissMarks };
+  const api = { GUEST_CHOICE, MENU_LABEL, guestTap, poseFlip, guestMarks, guestPick, guestHitPad, dismissMarks, menuKey };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetChoice = api;
 })(typeof window !== "undefined" ? window : globalThis);

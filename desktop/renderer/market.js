@@ -12,6 +12,8 @@
   const GECKO_TERMINAL_HOST = "api.geckoterminal.com";
   const CANT_REACH = "can't reach";
   const NO_QUOTE = "no quote yet";
+  /** The closed plate's header before the first price: prices are read only while the plate is open. */
+  const QUOTE_WAITS = "open to see the price";
   const NO_NFT = "no NFT yet";
   const MAX_TICKERS = 24;
   const MAX_NFTS = 8;
@@ -754,7 +756,7 @@
     return readJson(url, fetchImpl, timeoutMs);
   }
 
-  function plateLine(market, live, unread) {
+  function plateLine(market, live, unread, waiting) {
     const house = market && market.tickers ? market : parseMarket(market);
     const ticker = currentTicker(house);
     if (!ticker) {
@@ -763,6 +765,7 @@
       return NO_QUOTE;
     }
     if (unread && !live) return ticker.symbol + " · " + CANT_REACH;
+    if (!live && waiting) return ticker.symbol + " · " + QUOTE_WAITS;
     if (!live) return ticker.symbol + " · looking up";
     return ticker.symbol + " · " + formatPrice(live.price);
   }
@@ -839,6 +842,7 @@
     GECKO_TERMINAL_HOST,
     CANT_REACH,
     NO_QUOTE,
+    QUOTE_WAITS,
     NO_NFT,
     MAX_TICKERS,
     MAX_NFTS,
