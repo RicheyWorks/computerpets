@@ -344,6 +344,30 @@
     return { alarm, timer: tick.timer, rang: "timer", lineId: timer.lineId, lateMs: Math.max(0, now - endsAt), changed: true };
   }
 
+  const CLOCK_NOTES = ["alarm", "timer"];
+
+  /**
+   * The notification a hidden overlay sends when the keeper clock rings. line is the saved line the
+   * alarm or timer names (a say line is shown; a do line is not words), or null for the plain words.
+   */
+  function clockNote(rang, name, key, line) {
+    const clock = rang === "timer" ? "timer" : "alarm";
+    const plain = clock === "alarm" ? "The clock asked." : "The timer is done.";
+    const said = line && line.kind !== "do" ? clipLine(line.text) : "";
+    return { title: String(name || "").slice(0, 60), body: said || plain, key: String(key || ""), clock, line: said };
+  }
+
+  /**
+   * What a notification click asks the overlay. A clock note shows the overlay and its saved line;
+   * it does not open care. Any other notification opens care on its need.
+   */
+  function noteCommand(payload, fallbackKey) {
+    const p = payload && typeof payload === "object" ? payload : {};
+    const key = p.key ? String(p.key) : String(fallbackKey || "");
+    if (CLOCK_NOTES.indexOf(p.clock) >= 0) return { type: "clock-note", key, clock: p.clock, line: clipLine(p.line) };
+    return { type: "open-care", key, need: p.need ? String(p.need) : "" };
+  }
+
   function formatRemain(ms) {
     const total = Math.max(0, Math.round(ms / 1000));
     const m = Math.floor(total / 60);
@@ -481,6 +505,8 @@
     stopTimer,
     timerTick,
     clockTick,
+    clockNote,
+    noteCommand,
     formatRemain,
     voiceStyleOf,
     pickSystemVoice,

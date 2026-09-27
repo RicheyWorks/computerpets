@@ -1922,7 +1922,8 @@ def _card_rows() -> list[Affordance]:
                 "One-second looks through a hidden stretch ring once in the alarm minute; the ring day reaches "
                 "card.json so a restart does not ring again; a computer asleep over the minute rings once, late; "
                 "23:59 across midnight keeps yesterday; a past time or an off alarm stays quiet. pet.js keeps the "
-                "clock running while hidden and sends a notification."
+                "clock running while hidden and sends a notification. Clicking that notification shows the "
+                "overlay and the alarm's saved line (clock-note), not care; a care notification still opens care."
             ),
         ),
         Affordance(
@@ -1933,7 +1934,8 @@ def _card_rows() -> list[Affordance]:
             notes=(
                 "Loads the real desktop/main.cjs under a stand-in Electron (harness_main.cjs): no window, tray icon, network, or quit. "
                 "A five-minute timer rings once, on the second it ends; a running timer saved to card.json comes "
-                "back and still ends on the wall clock; stop keeps the time left."
+                "back and still ends on the wall clock; stop keeps the time left. A clicked timer notification "
+                "shows the overlay (clock-note), not care."
             ),
         ),
         Affordance(

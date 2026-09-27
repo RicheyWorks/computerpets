@@ -325,6 +325,10 @@ def test_main_rows_drive_the_real_main_process_offline():
         assert any(mark in t for t in result.trace), (aid, result.trace)
     alarm = invoke("card.alarm")
     assert "pet_clock_hidden=runs" in alarm.trace
+    # A clicked clock notification shows the overlay and the saved line; care notes still open care.
+    assert "note_click=clock-note" in alarm.trace
+    assert "care_note=open-care" in alarm.trace
+    assert "note_click=clock-note" in invoke("card.timer").trace
     tray = invoke("desk.tray.switch")
     assert tray.extras["companions"] == 221
     assert tray.extras["picks"][0] == "red_panda"

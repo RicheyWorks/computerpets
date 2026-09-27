@@ -195,6 +195,28 @@ test("the keeper clock rings a passed alarm once and a timer on time, even while
   assert.match(webCard, /export function clockTick/);
 });
 
+test("a keeper-clock notification click shows the overlay and its saved line, not care", () => {
+  const note = C.clockNote("alarm", "Soot", "crow", { id: "l-1", text: "  Time   to stretch. ", kind: "say" });
+  assert.deepEqual(note, { title: "Soot", body: "Time to stretch.", key: "crow", clock: "alarm", line: "Time to stretch." });
+  const plain = C.clockNote("timer", "Soot", "crow", null);
+  assert.equal(plain.body, "The timer is done.");
+  assert.equal(plain.line, "");
+  assert.equal(C.clockNote("alarm", "Soot", "crow", { text: "sit", kind: "do" }).line, "", "a do line is not words");
+  assert.deepEqual(C.noteCommand(note, "red_panda"), { type: "clock-note", key: "crow", clock: "alarm", line: "Time to stretch." });
+  assert.deepEqual(C.noteCommand(plain, "red_panda"), { type: "clock-note", key: "crow", clock: "timer", line: "" });
+  // Care notes still open care on their need; an odd clock value is not a clock note.
+  assert.deepEqual(C.noteCommand({ title: "Soot", body: "Hungry", key: "crow", need: "hunger" }, "red_panda"), { type: "open-care", key: "crow", need: "hunger" });
+  assert.deepEqual(C.noteCommand({ clock: "bell" }, "red_panda"), { type: "open-care", key: "red_panda", need: "" });
+  assert.deepEqual(C.noteCommand(null, "red_panda"), { type: "open-care", key: "red_panda", need: "" });
+  // Wires: the overlay sends clockNote, main routes the click through noteCommand, pet.js shows the line.
+  assert.match(petSrc, /window\.desk\?\.notify\(window\.PetCard\.clockNote\(tick\.rang, kind\.name, kind\.key, named\)\)/);
+  assert.match(mainSrc, /PetCard\.noteCommand\(payload, currentKey\)/);
+  assert.match(petSrc, /cmd\.type === "clock-note"[\s\S]{0,40}showClockNote\(cmd\)/);
+  const show = petSrc.slice(petSrc.indexOf("function showClockNote("), petSrc.indexOf("function openCareFromNotify("));
+  assert.match(show, /bubbleText\.textContent = line/);
+  assert.doesNotMatch(show, /openKeeperCard|careForNeed|handle\(/);
+});
+
 test("an asleep guest keeps the sleep pose until a real wake; Walk is a wake", () => {
   const life = { ...Life.blank(), asleep: true, sleepHeld: true, hunger: 70 };
   assert.equal(Life.sleepHolds(life, "wander"), false);
