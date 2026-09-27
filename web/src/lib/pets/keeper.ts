@@ -391,6 +391,18 @@ export function heartbeatLine(beat: Heartbeat, answered = true) {
   return up ? `${HOUSE_SERVER_UP} · up ${up}` : HOUSE_SERVER_UP;
 }
 
+/**
+ * The heartbeat line's tone, for its `data-heartbeat` attribute (same values as the overlay row).
+ * "OFF": never answered this session. The server is optional, so this is neutral, not a warning.
+ * "DOWN": it answered this session, then stopped. Only this one is styled as a warning.
+ * "UP": running.
+ */
+export type HeartbeatTone = "UP" | "DOWN" | "OFF";
+export function heartbeatTone(beat: Heartbeat, answered = true): HeartbeatTone {
+  if (beat.status === "UP") return "UP";
+  return answered ? "DOWN" : "OFF";
+}
+
 /** The technical detail behind the heartbeat line, for its tooltip only: "Java 8081 · UP · local · 2m". */
 export function heartbeatDetail(beat: Heartbeat) {
   const port = beat.port ?? JAVA_PORT;

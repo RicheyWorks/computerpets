@@ -39,13 +39,13 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.equal(A.geocodeUrl("   "), "");
   assert.equal(A.TYPE_A_CITY, "type a city");
   assert.equal(A.HERE_FAIL, "this computer did not share a place");
-  assert.equal(A.HERE_SEND, "this click sends a place to the forecast host.");
-  assert.equal(A.HERE_ASK, "send a place from this computer? a prior browser allow can satisfy the next locate without a new os or browser prompt. the house still asks in the app. this house cannot revoke that grant.");
+  assert.equal(A.HERE_SEND, "Pressing this sends a place to Open-Meteo, a weather website.");
+  assert.equal(A.HERE_ASK, "Send where this computer is? If you said yes to your browser or computer before, it may not ask again, but this app still asks you first. This app can't take back a yes you gave your browser or computer. You can change that in its settings.");
   assert.equal(A.HERE_YES, "Send the place");
   assert.equal(A.HERE_NO, "Don't send");
   assert.equal(A.HERE_HELD, "the place was not sent");
   assert.equal(A.HERE_KEPT, "keeping the saved place");
-  assert.equal(A.HERE_SENT, "a place was sent to the forecast host");
+  assert.equal(A.HERE_SENT, "a place was sent to Open-Meteo");
   assert.equal(Overlay.HERE_SEND, A.HERE_SEND);
   assert.equal(Overlay.HERE_ASK, A.HERE_ASK);
   assert.equal(Overlay.HERE_YES, A.HERE_YES);
@@ -87,18 +87,22 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.equal(Overlay.locateGate(A.blankAreas(), false).act, "ask");
   assert.equal(Overlay.locateGate(A.blankAreas(), true).act, "locate");
   assert.equal(Overlay.locateGate(typed, true).act, "keep");
-  assert.equal(A.FORECAST_NET, "this computer's network address goes with the https request, as any client.");
-  assert.equal(A.clientNetLine(), A.FORECAST_NET);
-  assert.equal(Overlay.clientNetLine(), A.FORECAST_NET);
+  assert.equal(A.FORECAST_NET, "This computer's internet address also goes to Open-Meteo, like visiting any website.");
+  assert.equal(A.plainNetLine(A.WEATHER_SITE), A.FORECAST_NET);
+  assert.equal(Overlay.plainNetLine(Overlay.WEATHER_SITE), A.FORECAST_NET);
   assert.equal(Overlay.FORECAST_NET, A.FORECAST_NET);
+  assert.equal(A.plainNetLine(""), "");
+  assert.equal(A.plainNetLine("CoinGecko and GeckoTerminal"), "This computer's internet address also goes to CoinGecko and GeckoTerminal, like visiting any website.");
+  // clientNetLine stays for radio (Rui's music block), cloud talk, license, and STUN.
   assert.equal(
-    A.clientNetLine("the geocode host"),
-    "this computer's network address goes with the https request to the geocode host, as any client.",
+    A.clientNetLine("the radio host"),
+    "this computer's network address goes with the https request to the radio host, as any client.",
   );
-  assert.equal(A.GEOCODE_NET, A.clientNetLine("the geocode host"));
+  assert.equal(Overlay.clientNetLine("the radio host"), A.clientNetLine("the radio host"));
+  assert.equal(A.GEOCODE_NET, A.plainNetLine("Open-Meteo"));
   assert.equal(Overlay.GEOCODE_NET, A.GEOCODE_NET);
-  assert.equal(A.GEOCODE_LOOK, `this look-up sends the typed name. ${A.GEOCODE_NET}`);
-  assert.equal(A.GEOCODE_REVERSE, `this reverse lookup sends the rounded place. ${A.GEOCODE_NET}`);
+  assert.equal(A.GEOCODE_LOOK, `This asks Open-Meteo, a weather website, to find the place you typed. It sends what you typed. ${A.GEOCODE_NET}`);
+  assert.equal(A.GEOCODE_REVERSE, `This asks Open-Meteo, a weather website, for the name of the place you sent. It sends that place, rounded to about 11 km. ${A.GEOCODE_NET}`);
   assert.equal(Overlay.GEOCODE_LOOK, A.GEOCODE_LOOK);
   assert.equal(Overlay.GEOCODE_REVERSE, A.GEOCODE_REVERSE);
   assert.ok(A.GEOCODE_LOOK.includes(A.GEOCODE_NET));
@@ -120,13 +124,13 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.equal(Overlay.geocodeMaySend("ip", true), false);
   assert.equal(
     A.SAVED_HERE_ASK,
-    "use this saved computer place for the forecast? this sends the saved place. this computer's network address goes with the https request, as any client. it does not locate again.",
+    "Use the place this computer saved for the forecast? This sends the saved place to Open-Meteo, a weather website. This computer's internet address also goes to Open-Meteo, like visiting any website. It does not find where you are again.",
   );
   assert.ok(A.SAVED_HERE_ASK.includes(A.FORECAST_NET));
-  assert.equal(A.TYPED_FORECAST, `this forecast sends the named place. ${A.FORECAST_NET}`);
+  assert.equal(A.TYPED_FORECAST, `This asks Open-Meteo, a weather website, for your forecast. It sends the place you picked. ${A.FORECAST_NET}`);
   assert.equal(
     A.SAVED_FORECAST_CONTINUE,
-    `this forecast continues the saved place you already allowed. ${A.FORECAST_NET} it does not locate again.`,
+    `This asks Open-Meteo, a weather website, for the forecast at the saved place you already said yes to. It sends that saved place. ${A.FORECAST_NET} It does not find where you are again.`,
   );
   assert.equal(Overlay.TYPED_FORECAST, A.TYPED_FORECAST);
   assert.equal(Overlay.SAVED_FORECAST_CONTINUE, A.SAVED_FORECAST_CONTINUE);
@@ -134,7 +138,7 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.equal(A.SAVED_HERE_YES, "Use this saved place");
   assert.equal(A.SAVED_HERE_NO, "Don't send");
   assert.equal(A.SAVED_HERE_HELD, "the saved place was not sent");
-  assert.equal(A.SAVED_HERE_SENT, "the saved place was sent to the forecast host");
+  assert.equal(A.SAVED_HERE_SENT, "the saved place was sent to Open-Meteo");
   assert.equal(A.SAVED_HERE_WAIT, "saved place not sent");
   assert.equal(Overlay.SAVED_HERE_ASK, A.SAVED_HERE_ASK);
   assert.equal(Overlay.SAVED_HERE_YES, A.SAVED_HERE_YES);
@@ -349,9 +353,9 @@ test("forecast and geocode refuse a fetch until the painted host line is present
   const reverse = A.GEOCODE_REVERSE;
   assert.equal(typed, Overlay.TYPED_FORECAST);
   assert.equal(look, Overlay.GEOCODE_LOOK);
-  assert.match(typed, /as any client/);
-  assert.match(look, /the geocode host/);
-  assert.match(reverse, /the geocode host/);
+  assert.match(typed, /like visiting any website/);
+  assert.match(look, /goes to Open-Meteo/);
+  assert.match(reverse, /goes to Open-Meteo/);
   assert.equal(A.forecastMayLeave(""), false);
   assert.equal(A.forecastMayLeave(A.FORECAST_NET), false);
   assert.equal(A.forecastMayLeave(A.SAVED_HERE_ASK), false);

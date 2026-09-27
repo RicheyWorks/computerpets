@@ -459,10 +459,10 @@ test("the probe script never plants a zero, and the HUD stays lockstep", () => {
   assert.match(webGpu, /STALE_MS = 20000/);
   assert.match(webGpu, /export function remember/);
   assert.match(webGpu, /export function sparkline/);
-  assert.match(cardSrc, /keeper-gpu/);
-  assert.match(cardSrc, /data-gpu=/);
-  assert.match(cardSrc, /sparkline\(\[\], UNREAD_GPU, 0\)/);
-  assert.match(cardSrc, /data-spark=/);
+  // The web card hides the GPU row: a browser cannot read the GPU, so it would always say "no reading".
+  assert.doesNotMatch(cardSrc, /keeper-gpu/);
+  assert.doesNotMatch(cardSrc, /data-gpu=|data-spark=/);
+  assert.doesNotMatch(cardSrc, /gpuLine\(|sparkline\(/);
   assert.doesNotMatch(cardSrc, /M1 11\.3/);
   assert.match(pySrc, /ioaccelerator/);
   assert.match(pySrc, /amdgpu/);

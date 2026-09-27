@@ -96,8 +96,8 @@ test("Favorites persist and empty honestly", () => {
 });
 
 test("news names the network address and waits until that line is in view", () => {
-  const rss = "this news send reads the rss feed. this computer's network address goes with the https request to the news host, as any client.";
-  const wiki = "this news send reads the featured page. this computer's network address goes with the https request to the wikipedia host, as any client.";
+  const rss = "This asks Google News, a news website, for headlines. It sends the topic you picked, if there is one. This computer's internet address also goes to Google News, like visiting any website.";
+  const wiki = "This asks Wikipedia, an encyclopedia website, for today's news page. It sends today's date. This computer's internet address also goes to Wikipedia, like visiting any website.";
   assert.equal(N.newsHonesty(N.blankNewsPrefs()), rss);
   assert.equal(Overlay.newsHonesty(Overlay.blankNewsPrefs()), rss);
   assert.equal(N.newsMaySend(N.blankNewsPrefs(), false), false);
@@ -120,7 +120,7 @@ test("news names the network address and waits until that line is in view", () =
 test("featured page refuses a fetch until the wikipedia line is present", async () => {
   const wiki = N.NEWS_WIKI_HONESTY;
   assert.equal(wiki, Overlay.NEWS_WIKI_HONESTY);
-  assert.match(wiki, /the wikipedia host/);
+  assert.match(wiki, /goes to Wikipedia, like visiting any website/);
   assert.equal(N.featuredMayLeave(""), false);
   assert.equal(N.featuredMayLeave(N.NEWS_RSS_HONESTY), false);
   assert.equal(N.featuredMayLeave(wiki), true);
@@ -206,7 +206,7 @@ test("featured page and RSS time out and deny a silent host", async () => {
 test("news RSS refuses a fetch until the news-host line is present", async () => {
   const rss = N.NEWS_RSS_HONESTY;
   assert.equal(rss, Overlay.NEWS_RSS_HONESTY);
-  assert.match(rss, /the news host/);
+  assert.match(rss, /goes to Google News, like visiting any website/);
   assert.equal(N.rssMayLeave(""), false);
   assert.equal(N.rssMayLeave(N.NEWS_WIKI_HONESTY), false);
   assert.equal(N.rssMayLeave(rss), true);

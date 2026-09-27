@@ -2316,7 +2316,14 @@ export function nextPlayWait(justFinished: boolean, rand?: number) {
   return justFinished ? 18 + roll * 10 : 7 + roll * 8;
 }
 
-function gripLift(gripY: number, work: WorkSpace) {
+/**
+ * How high a grip point sits above the floor. The exported hold-point helpers take an optional
+ * work area; with none (a caller that has not measured the screen yet), this uses the same
+ * fallback as the desktop twin `gripLift` (an 800 px tall screen, no floor lift) instead of
+ * throwing. `pickTarget` skips the play entirely when it gets no work area.
+ */
+function gripLift(gripY: number, work?: WorkSpace) {
+  if (!work) return 800 - gripY;
   const floor = work.floorLift || 0;
   return work.height - floor - gripY;
 }
@@ -2463,6 +2470,8 @@ export function pickTarget(
 ): PlayTarget | null {
   const kind = playFor(key);
   if (kind === IGNORE) return null;
+  // No work area (the screen is not measured yet): skip the play; the pet stays on the floor.
+  if (!work) return null;
   const size = sprite == null ? SPRITE : sprite;
   const workW = work.width;
   const list = Array.isArray(windows) ? windows : [];

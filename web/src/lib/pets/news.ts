@@ -1,5 +1,5 @@
-/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows this computer's network address on that https request. The featured page also refuses inside `readFeatured` when that wikipedia line is missing. An RSS read refuses inside `readRss` when that news-host line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. Same map as desktop `news.js`. */
-import { clientNetLine } from "./weather-areas.ts";
+/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows the line that names the website (Google News, Wikipedia, CoinGecko, GeckoTerminal, Yahoo Finance) and says this computer's internet address goes there too. The featured page also refuses inside `readFeatured` when that wikipedia line is missing. An RSS read refuses inside `readRss` when that news-host line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. Same map as desktop `news.js`. */
+import { plainNetLine } from "./weather-areas.ts";
 
 export const NEWS_SOURCE = "Wikipedia In the news";
 export const TOPIC_SOURCE = "Google News";
@@ -366,10 +366,14 @@ export function newsLine(items: NewsItem[] | undefined, unread = false, closed =
   return items[0]!.title;
 }
 
-export const NEWS_RSS_NET = clientNetLine("the news host");
-export const NEWS_WIKI_NET = clientNetLine("the wikipedia host");
-export const NEWS_RSS_HONESTY = `this news send reads the rss feed. ${NEWS_RSS_NET}`;
-export const NEWS_WIKI_HONESTY = `this news send reads the featured page. ${NEWS_WIKI_NET}`;
+export const NEWS_RSS_NET = plainNetLine("Google News");
+export const NEWS_WIKI_NET = plainNetLine("Wikipedia");
+/** Popular, X, and a named topic ask Google News; the topic (and, on X, "site:x.com") is in that request. */
+export const NEWS_RSS_LEAD = "This asks Google News, a news website, for headlines. It sends the topic you picked, if there is one.";
+/** World asks Wikipedia for the day's featured page; the date is in that request. */
+export const NEWS_WIKI_LEAD = "This asks Wikipedia, an encyclopedia website, for today's news page. It sends today's date.";
+export const NEWS_RSS_HONESTY = `${NEWS_RSS_LEAD} ${NEWS_RSS_NET}`;
+export const NEWS_WIKI_HONESTY = `${NEWS_WIKI_LEAD} ${NEWS_WIKI_NET}`;
 
 export type NewsSendKind = "rss" | "wiki" | "none";
 

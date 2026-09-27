@@ -1,4 +1,4 @@
-/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line says this computer's network address goes with the https request. readForecast refuses that fetch when the painted forecast line is missing. Look up and the reverse lookup after Send the place wait until that same panel shows the line for the geocode host. readGeocode and readReverse refuse those fetches when that painted line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. */
+/** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line names Open-Meteo, a weather website, and says this computer's internet address goes there too. readForecast refuses that fetch when the painted forecast line is missing. Look up and the reverse lookup after Send the place wait until that same panel shows the place-finder line that names Open-Meteo. readGeocode and readReverse refuse those fetches when that painted line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. */
 (function (root) {
   const NO_AREA = "no place yet";
   /** The closed plate's header on a clean profile: the next step is to open it (it points like Quotes). */
@@ -10,31 +10,41 @@
   const AREA_TRUTH = "Weather area. Named places you add. Not the radio station.";
   const TYPE_A_CITY = "type a city";
   const HERE_FAIL = "this computer did not share a place";
-  const HERE_SEND = "this click sends a place to the forecast host.";
-  const HERE_ASK = "send a place from this computer? a prior browser allow can satisfy the next locate without a new os or browser prompt. the house still asks in the app. this house cannot revoke that grant.";
+  const HERE_SEND = "Pressing this sends a place to Open-Meteo, a weather website.";
+  const HERE_ASK = "Send where this computer is? If you said yes to your browser or computer before, it may not ask again, but this app still asks you first. This app can't take back a yes you gave your browser or computer. You can change that in its settings.";
   const HERE_YES = "Send the place";
   const HERE_NO = "Don't send";
   const HERE_HELD = "the place was not sent";
   const HERE_KEPT = "keeping the saved place";
-  const HERE_SENT = "a place was sent to the forecast host";
+  const HERE_SENT = "a place was sent to Open-Meteo";
   // Any HTTPS client shows its network address to the host. This is not a city lookup.
-  // An empty host is the forecast sentence. "the geocode host" is that same sentence.
+  // An empty host is the bare sentence. Weather, news, and quotes now paint plainNetLine below;
+  // radio (Rui's music block), cloud talk, license, and STUN still paint this one.
   function clientNetLine(host) {
     const where = host ? ` to ${host}` : "";
     return `this computer's network address goes with the https request${where}, as any client.`;
   }
-  const FORECAST_NET = clientNetLine();
-  const GEOCODE_NET = clientNetLine("the geocode host");
-  const GEOCODE_LOOK = `this look-up sends the typed name. ${GEOCODE_NET}`;
-  const GEOCODE_REVERSE = `this reverse lookup sends the rounded place. ${GEOCODE_NET}`;
-  const SAVED_HERE_ASK = `use this saved computer place for the forecast? this sends the saved place. ${FORECAST_NET} it does not locate again.`;
+  // The weather website the forecast and the place finder ask. Same kid-plain sentence as web `plainNetLine`:
+  // it names the website in plain words; an empty name is no sentence. clientNetLine stays for radio (Rui's
+  // music block), cloud talk, license, and STUN.
+  const WEATHER_SITE = "Open-Meteo";
+  const PLAIN_NET_HEAD = "This computer's internet address also goes to ";
+  const PLAIN_NET_TAIL = ", like visiting any website.";
+  function plainNetLine(names) {
+    return names ? `${PLAIN_NET_HEAD}${names}${PLAIN_NET_TAIL}` : "";
+  }
+  const FORECAST_NET = plainNetLine(WEATHER_SITE);
+  const GEOCODE_NET = plainNetLine(WEATHER_SITE);
+  const GEOCODE_LOOK = `This asks Open-Meteo, a weather website, to find the place you typed. It sends what you typed. ${GEOCODE_NET}`;
+  const GEOCODE_REVERSE = `This asks Open-Meteo, a weather website, for the name of the place you sent. It sends that place, rounded to about 11 km. ${GEOCODE_NET}`;
+  const SAVED_HERE_ASK = `Use the place this computer saved for the forecast? This sends the saved place to Open-Meteo, a weather website. ${FORECAST_NET} It does not find where you are again.`;
   const SAVED_HERE_YES = "Use this saved place";
   const SAVED_HERE_NO = "Don't send";
   const SAVED_HERE_HELD = "the saved place was not sent";
-  const SAVED_HERE_SENT = "the saved place was sent to the forecast host";
+  const SAVED_HERE_SENT = "the saved place was sent to Open-Meteo";
   const SAVED_HERE_WAIT = "saved place not sent";
-  const TYPED_FORECAST = `this forecast sends the named place. ${FORECAST_NET}`;
-  const SAVED_FORECAST_CONTINUE = `this forecast continues the saved place you already allowed. ${FORECAST_NET} it does not locate again.`;
+  const TYPED_FORECAST = `This asks Open-Meteo, a weather website, for your forecast. It sends the place you picked. ${FORECAST_NET}`;
+  const SAVED_FORECAST_CONTINUE = `This asks Open-Meteo, a weather website, for the forecast at the saved place you already said yes to. It sends that saved place. ${FORECAST_NET} It does not find where you are again.`;
   const FORECAST_WAITS = "forecast waits";
   // A tenth of a degree is about 11 km. Rounding is not anonymity.
   const PLACE_STEP = 0.1;
@@ -624,6 +634,10 @@
     HERE_SENT,
     FORECAST_NET,
     clientNetLine,
+    WEATHER_SITE,
+    PLAIN_NET_HEAD,
+    PLAIN_NET_TAIL,
+    plainNetLine,
     GEOCODE_NET,
     GEOCODE_LOOK,
     GEOCODE_REVERSE,

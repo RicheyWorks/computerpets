@@ -1,12 +1,12 @@
-/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. A quote waits until the open quotes plate shows this computer's network address on that https request. CoinGecko, GeckoTerminal, Yahoo, and a typed look-up also refuse inside the read wrappers when that painted line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. No invented key. */
+/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. A quote waits until the open quotes plate shows the line that names the website (Google News, Wikipedia, CoinGecko, GeckoTerminal, Yahoo Finance) and says this computer's internet address goes there too. CoinGecko, GeckoTerminal, Yahoo, and a typed look-up also refuse inside the read wrappers when that painted line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. No invented key. */
 (function (root) {
   const MARKET_LABEL = "Quotes";
   const COIN_LABEL = "Coins";
   const NFT_LABEL = "NFTs";
-  const MARKET_PLACEHOLDER = "Coin, ticker, or contract — ETH, BTC, pump mint";
+  const MARKET_PLACEHOLDER = "A coin or stock — ETH, BTC, AAPL, or a coin's address";
   const NFT_PLACEHOLDER = "NFT collection — pudgy, punks";
-  const MARKET_TRUTH = "Majors and search use CoinGecko. Small/meme coins (pump.fun and kin) use GeckoTerminal by mint or contract. Stocks are Yahoo chart. No paid key.";
-  const NFT_TRUTH = "Collections use CoinGecko floors when reachable. Marketplaces are your list — OpenSea, Blur, Magic Eden, Rarible, Robinhood NFT — with honest offline when a venue needs a key.";
+  const MARKET_TRUTH = "Big coins and search come from CoinGecko. A small coin you add by its address comes from GeckoTerminal. Stocks come from Yahoo Finance. All free, no paid account.";
+  const NFT_TRUTH = "Collection floor prices come from CoinGecko when it answers. Your marketplaces (OpenSea, Blur, Magic Eden, Rarible, Robinhood NFT) are links; one that needs a paid account says so instead of showing a price.";
   const YAHOO_HOST = "query1.finance.yahoo.com";
   const COINGECKO_HOST = "api.coingecko.com";
   const GECKO_TERMINAL_HOST = "api.geckoterminal.com";
@@ -53,11 +53,11 @@
 
   /** Major NFT venues users can keep on their list. Public floor feeds often need a key — UI stays, prices stay honest. */
   const NFT_MARKETPLACES = [
-    { id: "opensea", name: "OpenSea", url: "https://opensea.io", note: "needs a key for live floors" },
-    { id: "blur", name: "Blur", url: "https://blur.io", note: "needs a key for live floors" },
-    { id: "magiceden", name: "Magic Eden", url: "https://magiceden.io", note: "needs a key for live floors" },
-    { id: "rarible", name: "Rarible", url: "https://rarible.com", note: "needs a key for live floors" },
-    { id: "robinhood-nft", name: "Robinhood NFT", url: "https://robinhood.com/us/en/support/articles/robinhood-nft/", note: "no public floor feed" },
+    { id: "opensea", name: "OpenSea", url: "https://opensea.io", note: "needs a paid account for live prices" },
+    { id: "blur", name: "Blur", url: "https://blur.io", note: "needs a paid account for live prices" },
+    { id: "magiceden", name: "Magic Eden", url: "https://magiceden.io", note: "needs a paid account for live prices" },
+    { id: "rarible", name: "Rarible", url: "https://rarible.com", note: "needs a paid account for live prices" },
+    { id: "robinhood-nft", name: "Robinhood NFT", url: "https://robinhood.com/us/en/support/articles/robinhood-nft/", note: "does not share prices publicly" },
   ];
 
   const DEFAULT_MARKETPLACES = ["opensea", "blur", "magiceden", "rarible", "robinhood-nft"];
@@ -106,7 +106,7 @@
     if (!idOrRow) return null;
     if (typeof idOrRow === "string") {
       const known = NFT_MARKETPLACES.find((m) => m.id === idOrRow);
-      return known ? { ...known } : { id: clip(idOrRow, 32).toLowerCase(), name: clip(idOrRow, 32), url: "", note: "custom venue" };
+      return known ? { ...known } : { id: clip(idOrRow, 32).toLowerCase(), name: clip(idOrRow, 32), url: "", note: "your own market" };
     }
     if (typeof idOrRow !== "object") return null;
     const id = clip(idOrRow.id, 32).toLowerCase();
@@ -116,7 +116,7 @@
       id,
       name: clip(idOrRow.name, 32) || (known && known.name) || id,
       url: clip(idOrRow.url, 120) || (known && known.url) || "",
-      note: clip(idOrRow.note, 64) || (known && known.note) || "custom venue",
+      note: clip(idOrRow.note, 64) || (known && known.note) || "your own market",
     };
   }
 
@@ -574,13 +574,18 @@
         areas = null;
       }
     }
-    if (!areas || typeof areas.clientNetLine !== "function") return "";
-    return areas.clientNetLine(host);
+    if (!areas || typeof areas.plainNetLine !== "function") return "";
+    return areas.plainNetLine(host);
   }
 
-  const QUOTE_HOST_NAME = "the quote host";
-  const TERMINAL_HOST_NAME = "the terminal host";
-  const STOCK_HOST_NAME = "the stock host";
+  // Plain names for api.coingecko.com, api.geckoterminal.com, and query1.finance.yahoo.com.
+  const QUOTE_HOST_NAME = "CoinGecko";
+  const TERMINAL_HOST_NAME = "GeckoTerminal";
+  const STOCK_HOST_NAME = "Yahoo Finance";
+  const QUOTE_LEAD = "This asks price websites for the prices on your saved list. It sends the names on that list.";
+  const LOOK_LEAD = "This asks CoinGecko, a price website, to find the name you typed. It sends what you typed.";
+  const PLAIN_NET_HEAD = "This computer's internet address also goes to ";
+  const PLAIN_NET_TAIL = ", like visiting any website.";
 
   function asMarket(market) {
     if (market && Array.isArray(market.tickers) && Array.isArray(market.nfts)) return market;
@@ -607,7 +612,7 @@
     const host = quoteHostPhrase(market);
     const net = host ? sharedNet(host) : "";
     if (!host || !net) return "";
-    return `this quote sends the saved list. ${net}`;
+    return `${QUOTE_LEAD} ${net}`;
   }
 
   function quoteMaySend(market, lineInView) {
@@ -618,8 +623,7 @@
     return line.indexOf(net) !== -1;
   }
 
-  const QUOTE_LOOK = `this look-up sends the typed name. ${sharedNet(QUOTE_HOST_NAME)}`;
-  const QUOTE_LEAD = "this quote sends the saved list.";
+  const QUOTE_LOOK = `${LOOK_LEAD} ${sharedNet(QUOTE_HOST_NAME)}`;
 
   function quoteLookMaySend(lineInView) {
     const net = sharedNet(QUOTE_HOST_NAME);
@@ -630,8 +634,8 @@
     if (typeof shown !== "string" || !hostLabel) return false;
     const alone = sharedNet(hostLabel);
     if (alone && shown.indexOf(alone) !== -1) return true;
-    const head = "this computer's network address goes with the https request to ";
-    const tail = ", as any client.";
+    const head = PLAIN_NET_HEAD;
+    const tail = PLAIN_NET_TAIL;
     let from = 0;
     while (from < shown.length) {
       const start = shown.indexOf(head, from);
@@ -902,6 +906,7 @@
     quoteMaySend,
     QUOTE_LOOK,
     QUOTE_LEAD,
+    LOOK_LEAD,
     quoteLookMaySend,
     phraseNames,
     quoteHostMayLeave,

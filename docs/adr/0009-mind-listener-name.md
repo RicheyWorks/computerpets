@@ -28,3 +28,4 @@ The keeper card shows one line: `Listening · {name}`.
 - A failed cloud call still falls back to house lines for that sentence. The card names the plugin that can be asked, not a painted success.
 - DirectX 12 / Vulkan is still open. Desktop presence (no silent file read, no keylogger, no secret capture) is still open. This line is not either of those.
 - The overlay no longer leaves the plugin key in plain text in `mind.json`. [0018](0018-mind-key-is-not-plain-text.md). The desk `/mind` key is not stored in the browser. [0020](0020-desk-mind-key-is-not-in-the-browser.md).
+- Later wording (2026-09): the unsure line now reads `Listening · not sure` (id stays `unread`). See ROADMAP (kid-plain words).

@@ -44,12 +44,20 @@ export type ActMotion =
   | "frost"
   | "align"
   | "dim"
-  | "wake";
+  | "wake"
+  /**
+   * Plain-frame acts: the pet shows its own walk, sit, or play frames with no extra offset
+   * (actPose has no branch for these, so the pose stays neutral). Many species' soft acts use them.
+   */
+  | "walk"
+  | "sit"
+  | "play";
 
 export type IdleAct = {
   name: string;
   motion: ActMotion;
-  anim?: "idle" | "sit" | "talk" | "eat" | "play";
+  /** The frames to show while the act holds. "walk" is used by a few soft acts (a slink, a steal). */
+  anim?: "idle" | "sit" | "talk" | "eat" | "play" | "walk";
   hold: number;
   weight: number;
 };
