@@ -58,8 +58,9 @@ test("any catalog species cry path; unknown keys stay silent", () => {
   assert.equal(S.isVoiceKey("toString"), false);
   assert.equal(Overlay.isVoiceKey("crow"), true);
   assert.equal(Overlay.isVoiceKey("not_a_pet"), false);
-  assert.equal(existsSync(join(root, "public/sounds", "capybara.wav")), false);
-  assert.equal(existsSync(join(root, "../desktop/renderer/sounds", "capybara.wav")), false);
+  // A catalog kind with no cry on disk yet still gets a path (capybara got its cry in #1281).
+  assert.equal(existsSync(join(root, "public/sounds", "iguana.wav")), false);
+  assert.equal(existsSync(join(root, "../desktop/renderer/sounds", "iguana.wav")), false);
   for (const row of SPECIES) {
     assert.equal(S.isVoiceKey(row.key), true, row.key);
     assert.equal(Overlay.isVoiceKey(row.key), true, row.key);
