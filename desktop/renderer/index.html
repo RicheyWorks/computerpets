@@ -21,8 +21,8 @@
         </button>
         <div id="weather-body" hidden>
           <div class="desk-plate-tabs" id="weather-tabs" role="tablist" aria-label="Weather sections">
-            <button type="button" data-hit data-weather-tab="current" role="tab" aria-selected="true">Current</button>
-            <button type="button" data-hit data-weather-tab="favorites" role="tab" aria-selected="false">Favorites</button>
+            <button type="button" data-hit data-weather-tab="current" role="tab" aria-selected="true" tabindex="0">Current</button>
+            <button type="button" data-hit data-weather-tab="favorites" role="tab" aria-selected="false" tabindex="-1">Favorites</button>
           </div>
           <div id="weather-live"></div>
           <div id="weather-current-panel">
@@ -75,10 +75,10 @@
         <div id="news-body" hidden>
           <p id="news-net" class="keeper-truth"></p>
           <div class="desk-plate-tabs" id="news-tabs" role="tablist" aria-label="News sections">
-            <button type="button" data-hit data-news-tab="popular" role="tab" aria-selected="true">Popular</button>
-            <button type="button" data-hit data-news-tab="topics" role="tab" aria-selected="false">Topics</button>
-            <button type="button" data-hit data-news-tab="x" role="tab" aria-selected="false">X</button>
-            <button type="button" data-hit data-news-tab="favorites" role="tab" aria-selected="false">Favorites</button>
+            <button type="button" data-hit data-news-tab="popular" role="tab" aria-selected="true" tabindex="0">Popular</button>
+            <button type="button" data-hit data-news-tab="topics" role="tab" aria-selected="false" tabindex="-1">Topics</button>
+            <button type="button" data-hit data-news-tab="x" role="tab" aria-selected="false" tabindex="-1">X</button>
+            <button type="button" data-hit data-news-tab="favorites" role="tab" aria-selected="false" tabindex="-1">Favorites</button>
           </div>
           <div id="news-live"></div>
           <p class="keeper-truth" id="news-truth">Popular is Google News top stories. World is Wikipedia In the news. A named topic is Google News RSS. X uses Google News with site:x.com when reachable — else Open on X. No invented headlines.</p>

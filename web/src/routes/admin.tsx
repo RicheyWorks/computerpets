@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react";
-import { REVOKED_NOTE, focusAfterGate, formatLocalWhen, ledgerCaption, markRevoked, rereadOnce, revokedListStale } from "@/lib/admin/base";
+import { REVOKED_NOTE, focusAfterGate, formatLocalWhen, ledgerCaption, markRevoked, rereadOnce, revokeAskFocus, revokedListStale } from "@/lib/admin/base";
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -48,6 +48,27 @@ export function AdminPage() {
   const searchInput = useRef<HTMLInputElement>(null);
   const gateSeen = useRef(false);
   const ledgerId = useId();
+  /** The row whose ask was kept (Keep or Escape): its Revoke gets focus back. */
+  const keptJti = useRef<string | null>(null);
+  const ledgerList = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    const kept = keptJti.current;
+    keptJti.current = null;
+    const want = revokeAskFocus(pendingJti, kept);
+    const list = ledgerList.current;
+    if (!want || !list) return;
+    const target =
+      want === "confirm"
+        ? list.querySelector<HTMLElement>("[data-revoke-confirm]")
+        : [...list.querySelectorAll<HTMLElement>("[data-revoke]")].find((el) => el.dataset.revoke === kept);
+    target?.focus();
+  }, [pendingJti]);
+
+  function keepLicense(jti: string) {
+    keptJti.current = jti;
+    setPendingJti(null);
+  }
 
   useEffect(() => {
     if (!gateSeen.current) {
@@ -281,10 +302,11 @@ export function AdminPage() {
           <h2 id={ledgerId} className="sr-only">
             {ledgerCaption(rows.length)}
           </h2>
-          <ul className="space-y-3" aria-labelledby={ledgerId}>
-            {rows.map((row) => (
+          <ul className="space-y-3" aria-labelledby={ledgerId} ref={ledgerList}>
+            {rows.map((row, i) => (
               <li
                 key={row.jti}
+                aria-labelledby={`${ledgerId}-jti-${i}`}
                 className="space-y-4 rounded-[var(--radius-lg)] border border-border bg-surface p-5"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
@@ -293,7 +315,10 @@ export function AdminPage() {
                       {row.provider} · {row.pet}
                       {row.hwidBound ? " · hwid" : ""}
                     </p>
-                    <p className="break-all font-mono text-sm text-fg">{row.jti}</p>
+                    <p id={`${ledgerId}-jti-${i}`} className="break-all font-mono text-sm text-fg">
+                      <span className="sr-only">License </span>
+                      {row.jti}
+                    </p>
                     <p className="break-all text-sm text-muted">{row.owner}</p>
                   </div>
                   <StatusBadge row={row} />
@@ -305,23 +330,44 @@ export function AdminPage() {
                   <Stamp label="Soft-deleted" value={row.deletedAt} />
                 </dl>
                 {row.revoked ? null : pendingJti === row.jti ? (
-                  <div className="flex flex-wrap items-center gap-2">
-                    <p className="text-sm text-muted">Downloads stop immediately.</p>
+                  <div
+                    className="flex flex-wrap items-center gap-2"
+                    role="group"
+                    aria-labelledby={`${ledgerId}-ask-${i} ${ledgerId}-jti-${i}`}
+                    onKeyDown={(e) => {
+                      if (e.key !== "Escape") return;
+                      e.preventDefault();
+                      keepLicense(row.jti);
+                    }}
+                  >
+                    <p id={`${ledgerId}-ask-${i}`} className="text-sm text-muted">
+                      Downloads stop immediately.
+                    </p>
                     <Button
                       type="button"
                       variant="danger"
                       size="sm"
+                      data-revoke-confirm
+                      aria-describedby={`${ledgerId}-jti-${i}`}
                       disabled={busy}
                       onClick={() => void confirmRevoke(row.jti)}
                     >
                       Confirm revoke
                     </Button>
-                    <Button type="button" variant="ghost" size="sm" onClick={() => setPendingJti(null)}>
+                    <Button type="button" variant="ghost" size="sm" onClick={() => keepLicense(row.jti)}>
                       Keep
                     </Button>
                   </div>
                 ) : (
-                  <Button type="button" variant="danger" size="sm" disabled={busy} onClick={() => setPendingJti(row.jti)}>
+                  <Button
+                    type="button"
+                    variant="danger"
+                    size="sm"
+                    data-revoke={row.jti}
+                    aria-describedby={`${ledgerId}-jti-${i}`}
+                    disabled={busy}
+                    onClick={() => setPendingJti(row.jti)}
+                  >
                     Revoke
                   </Button>
                 )}

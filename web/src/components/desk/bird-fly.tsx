@@ -42,6 +42,8 @@ export function BirdFlyer({
     onVisible?.(true);
     playVoice(FLY_BIRD_KEY);
     fly = markCalled(fly);
+    // Hidden tab: requestAnimationFrame does not fire, so the flight (and its calls) holds still, and the
+    // 0.08 s dt cap resumes it in place instead of jumping. No timer of its own to pause.
     let raf = 0;
     const tick = (now: number) => {
       const dt = Math.min(0.08, (now - last) / 1000);

@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import {
   ADVERTISED_CARE,
   DESK_PORT,
@@ -33,6 +33,7 @@ import {
   MUTE_BUSES,
   VOICE_STYLES,
   addLine,
+  afterDrop,
   clockTick,
   createCardTickReader,
   formatRemain,
@@ -56,6 +57,7 @@ import { SLEEP_AID_LABEL, SLEEP_AID_LICENSE, SLEEP_AID_MUTE_TRUTH, SLEEP_AID_PLU
 import { currentArea, parseAreas } from "@/lib/pets/weather-areas";
 import { FLY_BIRD_NAME } from "@/lib/pets/bird-fly";
 import { CALL_EMPTY, callKeys, groups as callGroups } from "@/lib/pets/call-guests";
+import { classifyKey } from "@/lib/pets/presence";
 import { LIVING_KINDS } from "@/lib/pets/living";
 import { cn } from "@/lib/utils";
 import { RETRY_LABEL, soundInterrupted, soundProblem, type SoundWhat } from "@/lib/plain-error";
@@ -97,7 +99,8 @@ export function KeeperCard({
   onCallBird?: () => void;
   onCallGuests?: (keys: string[]) => void;
   onMusicChange?: (on: boolean) => void;
-  onCollapse?: () => void;
+  /** `keys` is true when Escape closed the card, so the room can put focus on its open button. */
+  onCollapse?: (how?: { keys?: boolean }) => void;
   stayOpen?: boolean;
   openTick?: number;
   className?: string;
@@ -111,6 +114,10 @@ export function KeeperCard({
   const askedBase = asked.baseUrl;
   const [card, setCard] = useState<CardPrefs>(() => loadCard());
   const [draft, setDraft] = useState("");
+  /** A keyboard Drop removes its own button; focus goes to the line that slid up (or the field). */
+  const draftInput = useRef<HTMLInputElement>(null);
+  const lineList = useRef<HTMLUListElement>(null);
+  const dropFocus = useRef<number | null>(null);
   const [offArmed, setOffArmed] = useState(false);
   const [stations, setStations] = useState<RadioStation[]>([]);
   const [radioUnread, setRadioUnread] = useState(false);
@@ -155,10 +162,19 @@ export function KeeperCard({
     write({ ...card, sleepAid: next });
   }
 
-  function hideCard() {
+  function hideCard(how?: { keys?: boolean }) {
     write({ ...card, collapsed: true });
-    onCollapse?.();
+    onCollapse?.(how);
   }
+
+  useEffect(() => {
+    const at = dropFocus.current;
+    if (at == null) return;
+    dropFocus.current = null;
+    const drops = [...(lineList.current?.querySelectorAll<HTMLButtonElement>("[data-line-drop]") ?? [])];
+    const next = afterDrop(at, drops.length);
+    (next < 0 ? draftInput.current : drops[next])?.focus();
+  }, [guest.lines.length]);
 
   function weatherRadioArea() {
     return currentArea(parseAreas(card));
@@ -364,6 +380,13 @@ export function KeeperCard({
         if (hit) return;
         hideCard();
       }}
+      onKeyDown={(e) => {
+        // Escape closes the card (a field keeps its own Escape, ADR 0012); the room focuses the open button.
+        const note = classifyKey(e.nativeEvent);
+        if (stayOpen || note.field || note.toggle !== "dismiss") return;
+        e.stopPropagation();
+        hideCard({ keys: true });
+      }}
     >
       <button
         type="button"
@@ -451,6 +474,7 @@ export function KeeperCard({
             <label>
               Saved line
               <input
+                ref={draftInput}
                 type="text"
                 maxLength={140}
                 value={draft}
@@ -481,14 +505,16 @@ export function KeeperCard({
                 Save do
               </button>
             </div>
-            <ul className="keeper-line-list">
-              {guest.lines.map((line) => (
+            <ul className="keeper-line-list" ref={lineList}>
+              {guest.lines.map((line, at) => (
                 <li key={line.id}>
                   <span>
                     {line.kind === "do" ? "Do" : "Say"} · {line.text}
                   </span>
                   <button
                     type="button"
+                    data-line-play={line.id}
+                    aria-label={`Play: ${line.text}`}
                     onClick={(e) => {
                       e.stopPropagation();
                       playHouse(line.kind, line.text);
@@ -498,8 +524,11 @@ export function KeeperCard({
                   </button>
                   <button
                     type="button"
+                    data-line-drop={line.id}
+                    aria-label={`Drop: ${line.text}`}
                     onClick={(e) => {
                       e.stopPropagation();
+                      if (document.activeElement === e.currentTarget) dropFocus.current = at;
                       write(removeLine(card, guestKey, line.id));
                     }}
                   >

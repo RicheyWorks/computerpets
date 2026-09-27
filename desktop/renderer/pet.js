@@ -235,7 +235,7 @@ let streamAsked = false;
 let cardKeysOn = false;
 /** Plates that join the card's Tab cycle, and the data keys of the card buttons a repaint rebuilds (declared before any paint). */
 const KEY_PLATE_IDS = ["weather-plate", "news-plate", "market-plate"];
-const REBUILT_KEYS = ["color", "voice", "bus", "step", "sleep"];
+const REBUILT_KEYS = ["color", "voice", "bus", "step", "sleep", "linePlay", "lineDrop"];
 let talkAsked = false;
 let pendingTalk = null;
 let sleepNode = null;
@@ -1848,6 +1848,8 @@ function paintCard() {
       play.type = "button";
       play.textContent = "Play";
       play.dataset.hit = "1";
+      play.dataset.linePlay = line.id;
+      play.setAttribute("aria-label", `Play: ${line.text}`);
       play.addEventListener("click", (e) => {
         e.stopPropagation();
         playHouseLine(line);
@@ -1856,6 +1858,8 @@ function paintCard() {
       drop.type = "button";
       drop.textContent = "Drop";
       drop.dataset.hit = "1";
+      drop.dataset.lineDrop = line.id;
+      drop.setAttribute("aria-label", `Drop: ${line.text}`);
       drop.addEventListener("click", (e) => {
         e.stopPropagation();
         card = C.removeLine(card, kind.key, line.id);
@@ -3916,6 +3920,36 @@ function inCardOrPlate(el) {
   return keyPlates().some((plate) => plate.contains(el));
 }
 
+function inPlate(el) {
+  return !!el && keyPlates().some((plate) => plate.contains(el));
+}
+
+/** The card control that last had focus, so Escape from a plate goes back to it (else the card's first control). */
+let lastCardFocus = null;
+if (hud) hud.addEventListener("focusin", (e) => { lastCardFocus = e.target; });
+function backToCard() {
+  const list = hudFocusables();
+  const land = lastCardFocus && list.includes(lastCardFocus) ? lastCardFocus : list[0];
+  if (land) land.focus();
+}
+
+/**
+ * A plate's tabs follow the tablist pattern: one tab stop (the picked tab; desk-house.js keeps tabindex),
+ * Right / Left / Home / End move focus along the tabs, Enter or Space picks one. True when it handled the key.
+ */
+function plateTabKey(e) {
+  const K = window.PetKeeper;
+  const tab = e.target && e.target.closest ? e.target.closest('[role="tab"]') : null;
+  if (!tab || !K || !K.rovingIndex || !inPlate(tab)) return false;
+  const list = tab.closest('[role="tablist"]');
+  const tabs = list ? [...list.querySelectorAll('[role="tab"]')] : [];
+  const next = K.rovingIndex(e.key, tabs.indexOf(tab), tabs.length);
+  if (next < 0) return false;
+  e.preventDefault();
+  tabs[next].focus();
+  return true;
+}
+
 /**
  * The card rebuilds its color, voice, mute, step, and sleep buttons on every paint. A keyboard press on
  * one of them would drop focus with the old button; this remembers which one had it and puts it back.
@@ -3923,15 +3957,30 @@ function inCardOrPlate(el) {
 function rebuiltFocus() {
   const el = document.activeElement;
   if (!el || !hud || !hud.contains(el) || el.tagName !== "BUTTON") return null;
-  for (const k of REBUILT_KEYS) if (el.dataset[k] != null) return { k, v: el.dataset[k] };
+  for (const k of REBUILT_KEYS) {
+    if (el.dataset[k] == null) continue;
+    // `at`: its place among its kind, so a Drop that removed its own line can land on the next one.
+    const at = [...hud.querySelectorAll("button")].filter((b) => b.dataset[k] != null).indexOf(el);
+    return { k, v: el.dataset[k], at };
+  }
   return null;
 }
 function refocusRebuilt(was) {
   if (!was || !hud || card.collapsed) return;
   const active = document.activeElement;
   if (active && active.isConnected && hud.contains(active)) return;
-  const again = [...hud.querySelectorAll("button")].find((b) => b.dataset[was.k] === was.v);
-  if (again) again.focus();
+  const same = [...hud.querySelectorAll("button")].filter((b) => b.dataset[was.k] != null);
+  const again = same.find((b) => b.dataset[was.k] === was.v);
+  if (again) {
+    again.focus();
+    return;
+  }
+  if (was.k !== "lineDrop") return;
+  // The dropped line is gone: the line that slid up, else the one above, else the house-line field.
+  const K = window.PetKeeper;
+  const next = K && K.afterDrop ? K.afterDrop(was.at, same.length) : -1;
+  const land = next >= 0 ? same[next] : document.getElementById("hud-line-text");
+  if (land) land.focus();
 }
 
 /**
@@ -3972,16 +4021,32 @@ for (const id of KEY_PLATE_IDS) {
   }, true);
 }
 
-// Escape closes the open keeper card (after a choice menu, which closes first); Tab wraps inside it.
+// Escape closes the open keeper card (after a choice menu, which closes first; from a plate it first steps
+// back to the card); Tab wraps inside it; arrow keys walk a plate's tabs.
 document.addEventListener("keydown", (e) => {
   const K = window.PetKeeper;
   if (e.defaultPrevented || !K || !K.cardKey) return;
-  const act = K.cardKey({ key: e.key, cardOpen: !card.collapsed, menuOpen: !!(choiceOpen || plantChoiceKey) });
+  const active = document.activeElement;
+  const plate = inPlate(active) && !fieldOf(active);
+  const act = K.cardKey({ key: e.key, cardOpen: !card.collapsed, menuOpen: !!(choiceOpen || plantChoiceKey), inPlate: plate });
+  if (act === "card") {
+    // Escape on a plate steps back to the card; the next Escape closes the card.
+    e.preventDefault();
+    backToCard();
+    return;
+  }
+  if (act === "leave") {
+    e.preventDefault();
+    if (typeof active.blur === "function") active.blur();
+    if (!fieldOf(document.activeElement)) window.desk?.setFocusable?.(false);
+    return;
+  }
   if (act === "close") {
     e.preventDefault();
     collapseKeeperCard();
     return;
   }
+  if (plateTabKey(e)) return;
   if (act !== "tab" || !cardKeysOn) return;
   const list = cardFocusables();
   const next = K.tabWrap(list.length, list.indexOf(document.activeElement), e.shiftKey);
