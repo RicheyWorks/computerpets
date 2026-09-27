@@ -5,6 +5,7 @@ import { CompanionRoom } from "@/components/desk/companion-room";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { getSanctuary, hatchPet } from "@/lib/pets/actions";
+import { plainMessage } from "@/lib/plain-error";
 import { RED_PANDA_KIND } from "@/lib/pets/living";
 
 export const Route = createFileRoute("/hatch")({
@@ -44,7 +45,7 @@ function Hatchery() {
       toast.success(`${pet.name} is walking. The draw landed.`);
       await navigate({ to: "/pets/$key", params: { key: pet.id } });
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "The draw failed.");
+      toast.error(plainMessage(err, "The draw failed."));
     } finally {
       setBusy(false);
     }

@@ -1,4 +1,5 @@
 import { signAdminRequest, NONCE_HEADER, SIGNATURE_HEADER, TIMESTAMP_HEADER } from "@/lib/admin/sign";
+import { HouseError, PLAIN_LINES } from "@/lib/plain-error";
 
 const KEY_STORAGE = "cp.admin.key";
 const BASE_STORAGE = "cp.admin.apiBase";
@@ -18,12 +19,26 @@ export type LicenseAudit = {
   hwidBound: boolean;
 };
 
-export class AdminApiError extends Error {
+/**
+ * A license-service failure. `message` is always a plain line written here;
+ * the service's own body text (if any) rides in `detail`, which the admin page
+ * only shows behind a "Details" toggle.
+ */
+export class AdminApiError extends HouseError {
   status: number;
-  constructor(status: number, message: string) {
+  detail: string;
+  constructor(status: number, message: string, detail = "") {
     super(message);
     this.status = status;
+    this.detail = detail;
   }
+}
+
+/** The plain line for a failed license-service answer. */
+export function adminStatusLine(status: number, fallback: string): string {
+  if (status === 429) return PLAIN_LINES.busy;
+  if (status >= 500) return `The license service had a problem (error ${status}). Try again later.`;
+  return fallback;
 }
 
 export function loadAdminSession(): { apiBase: string; adminKey: string } {
@@ -61,13 +76,29 @@ function resolve(apiBase: string, path: string): string {
   return `${base}${path}`;
 }
 
-async function readError(res: Response, fallback: string): Promise<string> {
+/** The service's raw body text, kept for the Details toggle and the console. */
+async function readDetail(res: Response): Promise<string> {
   try {
-    const body = (await res.json()) as { error?: string; reason?: string; detail?: string };
-    return body.detail || body.error || body.reason || fallback;
+    const text = (await res.text()).trim();
+    if (!text) return "";
+    try {
+      const body = JSON.parse(text) as { error?: unknown; reason?: unknown; detail?: unknown };
+      for (const v of [body.detail, body.error, body.reason]) {
+        if (typeof v === "string" && v.trim()) return v.trim().slice(0, 300);
+      }
+    } catch {
+      // not JSON; fall through to the raw text
+    }
+    return text.slice(0, 300);
   } catch {
-    return fallback;
+    return "";
   }
+}
+
+async function failure(res: Response, fallback: string): Promise<AdminApiError> {
+  const detail = await readDetail(res);
+  if (detail) console.error(`[admin] license service ${res.status}:`, detail);
+  return new AdminApiError(res.status, adminStatusLine(res.status, fallback), detail);
 }
 
 async function adminFetch(apiBase: string, adminKey: string, path: string, init?: RequestInit): Promise<Response> {
@@ -96,11 +127,12 @@ async function adminFetch(apiBase: string, adminKey: string, path: string, init?
         ...(init?.headers ?? {}),
       },
     });
-  } catch {
+  } catch (err) {
+    console.error("[admin] license service unreachable:", err);
     throw new AdminApiError(0, "Cannot reach the license service. Check the API URL.");
   }
   if (res.status === 401) {
-    throw new AdminApiError(401, await readError(res, "Admin signature rejected."));
+    throw await failure(res, "Admin signature rejected.");
   }
   return res;
 }
@@ -108,7 +140,7 @@ async function adminFetch(apiBase: string, adminKey: string, path: string, init?
 export async function unlockAdmin(apiBase: string, adminKey: string): Promise<void> {
   const res = await adminFetch(apiBase, adminKey, "/api/admin/licenses/__unlock-check__");
   if (res.status !== 404 && !res.ok) {
-    throw new AdminApiError(res.status, await readError(res, "Unlock failed."));
+    throw await failure(res, "Unlock failed.");
   }
   saveAdminSession(apiBase, adminKey);
 }
@@ -116,7 +148,7 @@ export async function unlockAdmin(apiBase: string, adminKey: string): Promise<vo
 export async function getLicense(apiBase: string, adminKey: string, jti: string): Promise<LicenseAudit | null> {
   const res = await adminFetch(apiBase, adminKey, `/api/admin/licenses/${encodeURIComponent(jti)}`);
   if (res.status === 404) return null;
-  if (!res.ok) throw new AdminApiError(res.status, await readError(res, "Lookup failed."));
+  if (!res.ok) throw await failure(res, "Lookup failed.");
   return (await res.json()) as LicenseAudit;
 }
 
@@ -129,7 +161,7 @@ export async function listLicenses(
     ? `/api/admin/licenses?owner=${encodeURIComponent(owner)}`
     : "/api/admin/licenses";
   const res = await adminFetch(apiBase, adminKey, path);
-  if (!res.ok) throw new AdminApiError(res.status, await readError(res, "Lookup failed."));
+  if (!res.ok) throw await failure(res, "Lookup failed.");
   return (await res.json()) as LicenseAudit[];
 }
 
@@ -151,7 +183,7 @@ export async function revokeLicense(apiBase: string, adminKey: string, jti: stri
     body: JSON.stringify({ jti }),
   });
   if (res.status === 404) {
-    throw new AdminApiError(404, await readError(res, "Not found or already revoked."));
+    throw await failure(res, "Not found or already revoked.");
   }
-  if (!res.ok) throw new AdminApiError(res.status, await readError(res, "Revoke failed."));
+  if (!res.ok) throw await failure(res, "Revoke failed.");
 }
