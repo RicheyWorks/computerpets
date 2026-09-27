@@ -21,6 +21,7 @@ import {
 } from "@/lib/pets/genetics";
 import { livingByKey, RED_PANDA_KIND } from "@/lib/pets/living";
 import { canPair, duePhrase, extinctLines, fairHouse, nestPath } from "@/lib/pets/nest";
+import { plainMessage } from "@/lib/plain-error";
 
 export const Route = createFileRoute("/nest")({
   component: NestPage,
@@ -155,7 +156,7 @@ function NestPage() {
       setName("");
       await reload();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "The nest refused.");
+      toast.error(plainMessage(err, "The nest refused."));
     } finally {
       setBusy(false);
     }
