@@ -132,7 +132,6 @@ export function rereadOnce(
   return cancel;
 }
 
-/** The rows with `jti` marked revoked locally, for when the ledger confirmed it but the list did not refresh. */
 /** The ledger list's accessible name (a screen reader's caption for the rows below the search). */
 export function ledgerCaption(count: number): string {
   if (count === 0) return "Licenses: none shown";
@@ -144,6 +143,16 @@ export function focusAfterGate(unlocked: boolean): "search" | "key" {
   return unlocked ? "search" : "key";
 }
 
+/**
+ * Focus while a revoke is asked: Revoke opens the ask and focus goes to Confirm revoke; Keep (or Escape)
+ * puts it back on that row's Revoke. null leaves focus where it is (a confirmed revoke, a lock).
+ */
+export function revokeAskFocus(pending: string | null, kept: string | null): "confirm" | "revoke" | null {
+  if (pending) return "confirm";
+  return kept ? "revoke" : null;
+}
+
+/** The rows with `jti` marked revoked locally, for when the ledger confirmed it but the list did not refresh. */
 export function markRevoked<T extends { jti: string; revoked: boolean; deleted: boolean }>(rows: T[], jti: string): T[] {
   return rows.map((row) => (row.jti === jti ? { ...row, revoked: true, deleted: true } : row));
 }

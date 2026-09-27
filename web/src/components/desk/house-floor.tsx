@@ -1,15 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
 import { DayWash } from "@/components/desk/blotter";
 import { LIVING_KINDS } from "@/lib/pets/living";
 import { traitFor } from "@/lib/pets/traits";
-import { everyVisible, petTapLabel } from "@/lib/pets/keeper";
+import { everyVisible, petTapLabel, rovingIndex } from "@/lib/pets/keeper";
 import { cn } from "@/lib/utils";
 
 const KEYS = ["red_panda", "ball_python", "corn_snake", "green_tree_python"] as const;
 const STARTS = [36, 210, 390, 560];
 
-function Guest({ species, startX, scale }: { species: string; startX: number; scale: number }) {
+function Guest({
+  species,
+  startX,
+  scale,
+  tabStop,
+}: {
+  species: string;
+  startX: number;
+  scale: number;
+  tabStop: boolean;
+}) {
   const kind = LIVING_KINDS.find((k) => k.key === species) ?? LIVING_KINDS[0]!;
   const trait = traitFor(kind.key);
   const [order, setOrder] = useState<{ cmd: PetCommand; id: number }>({ cmd: "wander", id: 1 });
@@ -46,6 +56,7 @@ function Guest({ species, startX, scale }: { species: string; startX: number; sc
         if (order.cmd === "wander") setOrder((o) => ({ cmd: "idle", id: o.id + 1 }));
       }}
       tapLabel={petTapLabel(kind.name, "hello")}
+      tabStop={tabStop}
       onTap={() => {
         setSpeech(kind.greetLine());
         setOrder((o) => ({ cmd: "talk", id: o.id + 1 }));
@@ -54,10 +65,30 @@ function Guest({ species, startX, scale }: { species: string; startX: number; sc
   );
 }
 
+/**
+ * The four walkers are one "say hello" group with one Tab stop, so Tab does not stop on every one:
+ * Tab reaches the group, the arrow keys (and Home / End) move between walkers, Enter or Space says hello.
+ */
 export function HouseFloor({ framed = true }: { framed?: boolean }) {
-  const walk = KEYS.map((key, i) => (
-    <Guest key={key} species={key} startX={STARTS[i] ?? 80} scale={framed ? 0.78 : 0.92} />
-  ));
+  const groupRef = useRef<HTMLDivElement>(null);
+  const [stop, setStop] = useState(0);
+
+  function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
+    const hits = [...(groupRef.current?.querySelectorAll<HTMLElement>('[data-pet-hit][role="button"]') ?? [])];
+    const next = rovingIndex(e.key, hits.indexOf(document.activeElement as HTMLElement), hits.length);
+    if (next < 0) return;
+    e.preventDefault();
+    setStop(next);
+    hits[next]?.focus();
+  }
+
+  const walk = (
+    <div ref={groupRef} role="group" aria-label="Say hello to the walkers" className="contents" onKeyDown={onKeyDown}>
+      {KEYS.map((key, i) => (
+        <Guest key={key} species={key} startX={STARTS[i] ?? 80} scale={framed ? 0.78 : 0.92} tabStop={i === stop} />
+      ))}
+    </div>
+  );
 
   if (!framed) return <>{walk}</>;
 

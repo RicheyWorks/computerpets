@@ -105,6 +105,7 @@ CROSS_DOMAIN = {
     "web.pets_admin_music",
     "web.pets_keys_idle",
     "web.pet_keys_plates",
+    "web.menu_keys_escape",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -464,6 +465,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.pets_admin_music",
         "web.pets_keys_idle",
         "web.pet_keys_plates",
+        "web.menu_keys_escape",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -608,6 +610,13 @@ def test_web_companion_lockstep():
                  "clock=parse_on_change", "admin=expanded+caption+focus", "alarm_mute=pressed"):
         assert mark in pkp.trace, (mark, pkp.trace)
     assert (pkp.extras.get("clock") or {}).get("loads") == 2
+
+    mke = invoke("web.menu_keys_escape")
+    assert mke.ok, (mke.error, mke.detail)
+    for mark in ("menu=menuitem+arrows+escape", "card.web=escape+open_key", "plates=escape_to_card+tab_arrows",
+                 "lines.drop=focus_next", "walkers=one_stop", "admin=row_names+ask_focus", "idle=visit+flyers+p2p"):
+        assert mark in mke.trace, (mark, mke.trace)
+    assert (mke.extras.get("visit") or {}).get("whileHidden") == 1
 
 
 def test_blotter_pure_surfaces():
