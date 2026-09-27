@@ -68,6 +68,7 @@ CROSS_DOMAIN = {
     "desk.market.replay",
     "desk.nft.replay",
     "desk.gpu.replay",
+    "desk.links.open",
     "cry.decode",
     "visit.todays",
     "visit.phases",
@@ -270,6 +271,17 @@ def test_recorded_feed_replays_drive_read_parse_and_paint():
         assert aid in hole_ids
 
 
+def test_painted_links_open_in_the_browser_and_never_in_the_overlay():
+    result = invoke("desk.links.open")
+    assert result.ok, result.error
+    # 3 Popular RSS links, 2 Wikipedia pages, 1 https link from the hostile item.
+    assert result.extras["painted"] == result.extras["opened"] == 6
+    assert result.extras["refused"] >= 12
+    assert result.extras["windows"] == 0
+    assert result.extras["navigated"] == 0
+    assert "answers=deny" in " ".join(result.trace)
+
+
 def test_replay_fixtures_are_small_and_hold_no_secrets():
     from computerpets_client.app_harness import _replay_dir
 
@@ -278,7 +290,12 @@ def test_replay_fixtures_are_small_and_hold_no_secrets():
     names = {p.name for p in files}
     assert "README.md" in names
     assert {"forecast-seattle.json", "news-popular.rss", "news-topic-red-pandas.rss", "news-featured.json",
-            "gecko-simple-price.json", "yahoo-aapl.json", "nft-cryptopunks.json", "gpu-win-nvidia.txt"} <= names
+            "gecko-simple-price.json", "yahoo-aapl.json", "nft-cryptopunks.json", "gpu-win-nvidia.txt",
+            "gpu-win-two-adapters.txt"} <= names
+    # The two-adapter counters are listed as built by hand, not recorded.
+    readme = (folder / "README.md").read_text(encoding="utf-8")
+    built = readme.split("Built by hand, not recorded:", 1)[1]
+    assert "`gpu-win-two-adapters.txt`" in built
     secret = ("api_key", "apikey", "x-cg-", "x_cg_", "authorization", "bearer ", "cookie", "secret", "password")
     for path in files:
         assert path.stat().st_size < 8 * 1024, path.name

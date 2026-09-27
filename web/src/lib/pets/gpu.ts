@@ -411,6 +411,43 @@ function physOf(instance: unknown) {
 }
 
 /**
+ * One adapter is its LUID plus its physical index. Two adapters can both be phys_0
+ * (a discrete card and the Microsoft Basic Render or integrated adapter), so the
+ * index alone would mix their engines and memory. An instance with no LUID keeps
+ * the index alone.
+ */
+function adapterOf(instance: unknown) {
+  const phys = physOf(instance);
+  if (phys == null) return null;
+  const luid = /luid_(0x[0-9a-f]+)_(0x[0-9a-f]+)_phys_\d+/i.exec(String(instance || ""));
+  const key = luid ? `luid_${luid[1]}_${luid[2]}_phys_${phys}`.toLowerCase() : `phys_${phys}`;
+  return { key, phys };
+}
+
+/**
+ * Which counter adapter the line shows: the one with the most dedicated VRAM (a
+ * discrete card over an integrated or software adapter). When no adapter prints a
+ * limit, the one holding the most dedicated memory, then the one with the most
+ * readings, then the first the counters listed.
+ */
+function pickAdapter<T extends NvidiaRow>(rows: T[]): T | null {
+  let best: T | null = null;
+  let bestKey: number[] = [];
+  rows.forEach((row) => {
+    const count = METRIC_KEYS.filter((key) => row[key] != null).length;
+    if (!count) return;
+    const key = [row.memoryTotalBytes == null ? -1 : row.memoryTotalBytes, row.memoryUsedBytes == null ? -1 : row.memoryUsedBytes, count];
+    const better =
+      !best || key[0] > bestKey[0] || (key[0] === bestKey[0] && (key[1] > bestKey[1] || (key[1] === bestKey[1] && key[2] > bestKey[2])));
+    if (better) {
+      best = row;
+      bestKey = key;
+    }
+  });
+  return best;
+}
+
+/**
  * The engine counter is a rate over its own sample window, and on a busy engine it can
  * read a little over 100 (111 was seen on an RTX 4090 under NVENC). That is overshoot,
  * not a broken reading: it is kept and the engine is capped at 100, as Task Manager does.
@@ -443,10 +480,10 @@ export function reducePdh(engines: unknown, adapterMemory: unknown) {
   if ((engines != null && !Array.isArray(engines)) || (adapterMemory != null && !Array.isArray(adapterMemory))) {
     return { rows: [] as NvidiaRow[], malformed: true, rejected: false };
   }
-  const byPhys = new Map<number, { index: number; engines: Map<string, number>; used: number[]; limit: number[]; rejected: boolean }>();
-  function bucket(phys: number) {
-    if (!byPhys.has(phys)) byPhys.set(phys, { index: phys, engines: new Map(), used: [], limit: [], rejected: false });
-    return byPhys.get(phys)!;
+  const byAdapter = new Map<string, { index: number; engines: Map<string, number>; used: number[]; limit: number[]; rejected: boolean }>();
+  function bucket(adapter: { key: string; phys: number }) {
+    if (!byAdapter.has(adapter.key)) byAdapter.set(adapter.key, { index: adapter.phys, engines: new Map(), used: [], limit: [], rejected: false });
+    return byAdapter.get(adapter.key)!;
   }
   let badShape = false;
   (engines || []).forEach((row) => {
@@ -455,15 +492,15 @@ export function reducePdh(engines: unknown, adapterMemory: unknown) {
       return;
     }
     const rec = row as Record<string, unknown>;
-    const phys = physOf(rec.instance);
-    if (phys == null) {
+    const adapter = adapterOf(rec.instance);
+    if (adapter == null) {
       badShape = true;
       return;
     }
     if (rec.util == null) return;
     const token = metricToken(String(rec.util));
     const util = ranged(token, 0, ENGINE_OVERSHOOT, "1");
-    const slot = bucket(phys);
+    const slot = bucket(adapter);
     if (util === "bad" || util == null) {
       slot.rejected = true;
       return;
@@ -478,12 +515,12 @@ export function reducePdh(engines: unknown, adapterMemory: unknown) {
       return;
     }
     const rec = row as Record<string, unknown>;
-    const phys = physOf(rec.instance);
-    if (phys == null) {
+    const adapter = adapterOf(rec.instance);
+    if (adapter == null) {
       badShape = true;
       return;
     }
-    const slot = bucket(phys);
+    const slot = bucket(adapter);
     if (rec.dedicatedUsage != null) {
       const used = finiteIn(rec.dedicatedUsage, 0, 2 ** 48);
       if (used == null) badShape = true;
@@ -496,7 +533,7 @@ export function reducePdh(engines: unknown, adapterMemory: unknown) {
     }
   });
   const rows: Array<NvidiaRow & { rejected: boolean }> = [];
-  byPhys.forEach((slot) => {
+  byAdapter.forEach((slot) => {
     const utilPercent = busiestEngine(slot.engines);
     let memoryUsedBytes = slot.used.length ? slot.used.reduce((sum, n) => sum + n, 0) : null;
     let memoryTotalBytes = slot.limit.length ? Math.max(...slot.limit) : null;
@@ -554,7 +591,7 @@ export function sampleFromProbe(probe: unknown, opts: { platform?: string | null
   const nvidiaBest = pickBest(nvidiaRows);
   const amdBest = pickBest(amdRows);
   const intelBest = pickBest(intelRows);
-  const pdhBest = pickBest(pdhRows);
+  const pdhBest = pickAdapter(pdhRows);
   const nvidiaCount = nvidiaRows.filter((row) => rowHasMetric(row)).length;
   const pdhCount = pdhRows.filter((row) => rowHasMetric(row)).length;
   if (!nvidiaBest && !amdBest && !intelBest && !pdhBest) {

@@ -1097,6 +1097,7 @@ const COMMANDS = {
   market_replay: Replay.market_replay,
   nft_replay: Replay.nft_replay,
   gpu_replay: Replay.gpu_replay,
+  links_open: Replay.links_open,
 };
 
 function main(argv) {

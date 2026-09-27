@@ -300,3 +300,57 @@ test("the browser port reduces counters like Task Manager, same as the overlay",
   const saved = readFileSync(join(root, "desktop", "renderer", "fixtures", "replay", "gpu-win-pdh.txt"), "utf8");
   assert.equal(sampleFromProbe(parseProbeText(saved), { platform: "win32", nowMs: NOW }).utilPercent, 4.2);
 });
+
+// Hand-built: two adapters that both report phys_0 (see fixtures/replay/README.md).
+const TWO_ADAPTER_LINE = "GPU unread · unread · 12.5% · 2 GiB/8 GiB · unread";
+const TWO_NO_LIMIT = [
+  "NVIDIA_ABSENT",
+  "ENGINE",
+  "pid_1_luid_0x0_0xa1_phys_0_eng_0_engtype_3d\t70",
+  "pid_2_luid_0x0_0xb2_phys_0_eng_0_engtype_3d\t9",
+  "ENDENGINE",
+  "MEMORY",
+  "luid_0x0_0xa1_phys_0\t104857600\t",
+  "luid_0x0_0xB2_phys_0\t3221225472\t",
+  "ENDMEMORY",
+  "END",
+].join("\n");
+const NVIDIA_BLANK_TWO = [
+  "NVIDIA",
+  "NVIDIA GeForce RTX 4070, 60, [N/A], 3200, 12288, 40",
+  "ENDNVIDIA",
+  "ENGINE",
+  "pid_1_luid_0x0_0xa1_phys_0_eng_0_engtype_3d\t70",
+  "pid_2_luid_0x0_0xb2_phys_0_eng_0_engtype_3d\t9",
+  "ENDENGINE",
+  "END",
+].join("\n");
+
+function reversedBlocks(text) {
+  const out = [];
+  let block = null;
+  text.split("\n").forEach((line) => {
+    if (line === "ENGINE" || line === "MEMORY") {
+      out.push(line);
+      block = [];
+    } else if (line === "ENDENGINE" || line === "ENDMEMORY") {
+      out.push(...block.reverse(), line);
+      block = null;
+    } else if (block) block.push(line);
+    else out.push(line);
+  });
+  return out.join("\n");
+}
+
+test("the browser port reads two adapters that share phys_0 apart, same as the overlay", () => {
+  const text = readFileSync(join(root, "desktop", "renderer", "fixtures", "replay", "gpu-win-two-adapters.txt"), "utf8");
+  const sample = sampleFromProbe(parseProbeText(text), { platform: "win32", nowMs: NOW });
+  assert.equal(sample.source, "pdh");
+  assert.equal(sample.utilPercent, 12.5);
+  assert.equal(gpuLine(sample), TWO_ADAPTER_LINE);
+  assert.equal(gpuLine(sampleFromProbe(parseProbeText(reversedBlocks(text)), { platform: "win32", nowMs: NOW })), TWO_ADAPTER_LINE);
+  assert.equal(gpuLine(sampleFromProbe(parseProbeText(TWO_NO_LIMIT), { platform: "win32", nowMs: NOW })), "GPU unread · unread · 9% · 3 GiB/unread · unread");
+  const nvidia = sampleFromProbe(parseProbeText(NVIDIA_BLANK_TWO), { platform: "win32", nowMs: NOW });
+  assert.equal(nvidia.source, "nvidia-smi");
+  assert.equal(nvidia.utilPercent, null);
+});
