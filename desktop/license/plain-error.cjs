@@ -4,8 +4,10 @@
  * Plain words for Unlock / Signed download failures. Network trouble (refused,
  * no such host, timeout, TLS, HTTP 5xx) becomes one sentence that names the
  * host; the raw error goes to the log, never to the Settings window. The
- * house's own license codes (no_license, hwid_mismatch, ...) keep the clear
- * sentences they already carry.
+ * house's own license codes (expired, hwid_mismatch, denied, ...) each get one
+ * plain sentence here: their thrown messages are developer or server text
+ * ("license expired", "hardware binding mismatch", a server's json.error).
+ * Only the codes whose messages were written for people pass through.
  */
 
 const PETS_STILL = "Pets still work without it.";
@@ -21,7 +23,7 @@ const BUNDLE_WORDS = {
 };
 const BUNDLE_DEFAULT = "The downloaded bundle did not match what the house server promised, so it was not installed.";
 
-/** House license codes whose messages are already written for people. */
+/** House license codes (errors.cjs LicenseError): never classified as network trouble. */
 const HOUSE_CODES = new Set([
   "bad_response",
   "bundle_zip_invalid",
@@ -31,6 +33,7 @@ const HOUSE_CODES = new Set([
   "download_failed",
   "download_net_unnamed",
   "expired",
+  "fields_missing",
   "hwid_mismatch",
   "hwid_needs_fallback_yes",
   "hwid_too_long",
@@ -38,10 +41,57 @@ const HOUSE_CODES = new Set([
   "missing_backend",
   "missing_secret",
   "no_license",
+  "no_token",
   "revoked",
   "signed_url_invalid",
   "unknown_provider",
 ]);
+
+/** House codes whose thrown messages are already written for people: they reach the window as-is. */
+const PASSTHROUGH_CODES = new Set([
+  "cdn_net_unnamed",
+  "download_net_unnamed",
+  "fields_missing",
+  "hwid_needs_fallback_yes",
+  "license_net_unnamed",
+  "no_license",
+  "no_token",
+]);
+
+/** One plain sentence per house code whose thrown message is developer or server text. */
+function houseSentence(code, host) {
+  const at = where(host);
+  switch (code) {
+    case "expired":
+      return `This license has expired. Unlock again to get a new one. ${PETS_STILL}`;
+    case "hwid_mismatch":
+      return `This license belongs to a different computer, so it does not work here. Unlock again on this computer. ${PETS_STILL}`;
+    case "revoked":
+      return `${capital(at)} no longer accepts this license. Unlock again to get a new one. ${PETS_STILL}`;
+    case "denied":
+      return `${capital(at)} did not confirm that you own the game. Check the Steam ID and the App ID, then try again. ${PETS_STILL}`;
+    case "decrypt_failed":
+      return `The license on this computer could not be opened, so it was not used. Unlock again to get a fresh one. ${PETS_STILL}`;
+    case "missing_secret":
+      return `This copy of the app has no license key set up, so it cannot open a license. ${PETS_STILL}`;
+    case "missing_backend":
+      return `The Backend URL is not a web address. It should look like http://127.0.0.1:8081 or https://house.example. ${PETS_STILL}`;
+    case "bad_response":
+      return `${capital(at)} sent an answer this app does not understand. Try again later. ${PETS_STILL}`;
+    case "download_failed":
+      return `${capital(at)} did not hand over the download. Unlock again, then download. ${PETS_STILL}`;
+    case "unknown_provider":
+      return `${capital(at)} does not know this store. Pick Steam and try again. ${PETS_STILL}`;
+    case "signed_url_invalid":
+      return `The download link did not check out, so nothing was downloaded. Unlock again, then download. ${PETS_STILL}`;
+    case "hwid_too_long":
+      return `This computer's license mark is too long. Delete hwid.txt in the app's data folder, then unlock again. ${PETS_STILL}`;
+    case "bundle_zip_invalid":
+      return BUNDLE_DEFAULT;
+    default:
+      return "";
+  }
+}
 
 function hostOf(url) {
   if (typeof url !== "string" || !url) return "";
@@ -136,9 +186,11 @@ function plainLicenseError(err, opts = {}) {
     return { code: KIND_CODES[kind], message: sentence(kind, host) };
   }
   if (code === "unreachable") return { code: KIND_CODES.refused, message: sentence("refused", host) };
-  if (HOUSE_CODES.has(code) && err && typeof err.message === "string" && err.message) {
+  if (PASSTHROUGH_CODES.has(code) && err && typeof err.message === "string" && err.message) {
     return { code, message: err.message };
   }
+  const house = HOUSE_CODES.has(code) ? houseSentence(code, host) : "";
+  if (house) return { code, message: house };
   return {
     code: "failed",
     message: `Something went wrong talking to ${where(host)}. ${PETS_STILL}`,
@@ -174,6 +226,8 @@ function rawLogLine(err) {
 module.exports = {
   PETS_STILL,
   HOUSE_CODES,
+  PASSTHROUGH_CODES,
+  houseSentence,
   BUNDLE_WORDS,
   BUNDLE_DEFAULT,
   hostOf,

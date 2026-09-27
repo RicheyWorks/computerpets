@@ -12,6 +12,9 @@ const { alreadyCurrent } = require("./bundle-zip.cjs");
 const STORE_NAME = "license.json";
 const DEFAULT_BACKEND = "http://127.0.0.1:8081";
 const NO_LICENSE_MESSAGE = "No license on this computer yet. Unlock a pet first, then download it.";
+const NO_TOKEN_MESSAGE =
+  "The sign-in from the last unlock is not on this computer anymore, so nothing was downloaded. Unlock again, then download. Pets still work without it.";
+const FIELDS_MISSING_MESSAGE = "Fill in the Steam ID and the App ID first. Pets still work without it.";
 
 function readStore(file, readFile) {
   try {
@@ -71,7 +74,13 @@ function shownCdnLine(input) {
  *   mkdir?: typeof fs.mkdirSync,
  *   platform?: NodeJS.Platform | string,
  *   exec?: typeof import("child_process").execSync,
+ *   codec?: { encrypt(text: string): string, decrypt(sealed: string): string } | null
+ *     | (() => ({ encrypt(text: string): string, decrypt(sealed: string): string } | null)),
  * }} opts
+ *
+ * The download sign-in (auth.token) is never written in plain text: license.json keeps
+ * auth.sealedToken when a codec (the OS secret store) is there, and no token at all when it is not.
+ * This run still holds the token in memory, so Unlock's own download works either way.
  */
 function createLicenseSession(opts) {
   if (!opts || !opts.userDataDir) {
@@ -84,13 +93,66 @@ function createLicenseSession(opts) {
   const now = opts.now || Date.now;
   const storeFile = path.join(opts.userDataDir, STORE_NAME);
   const client = createLicenseClient({ fetchImpl: opts.fetchImpl });
+  /** @type {{ token: string, ciphertext: string } | null} */
+  let heldToken = null;
 
   function load() {
     return readStore(storeFile, readFile);
   }
 
+  function tokenCodec() {
+    let codec = null;
+    try {
+      codec = typeof opts.codec === "function" ? opts.codec() : opts.codec;
+    } catch {
+      codec = null;
+    }
+    return codec && typeof codec.encrypt === "function" && typeof codec.decrypt === "function" ? codec : null;
+  }
+
+  /** What license.json may keep of the sign-in: a sealed token, or only its expiry. */
+  function diskAuth(auth) {
+    if (!auth || typeof auth !== "object") return auth;
+    const expiresAt = auth.expiresAt == null ? null : auth.expiresAt;
+    if (typeof auth.token !== "string" || !auth.token) {
+      return typeof auth.sealedToken === "string" && auth.sealedToken ? { sealedToken: auth.sealedToken, expiresAt } : { expiresAt };
+    }
+    const codec = tokenCodec();
+    let sealed = "";
+    if (codec) {
+      try {
+        sealed = String(codec.encrypt(auth.token) || "");
+      } catch {
+        sealed = "";
+      }
+    }
+    return sealed && sealed !== auth.token ? { sealedToken: sealed, expiresAt } : { expiresAt };
+  }
+
   function save(data) {
-    writeStore(storeFile, data, writeFile, mkdir);
+    const out = data && typeof data === "object" ? { ...data } : {};
+    if (out.auth) out.auth = diskAuth(out.auth);
+    writeStore(storeFile, out, writeFile, mkdir);
+  }
+
+  /** The sign-in for a download: in memory, sealed on disk, or an older plain license.json. */
+  function tokenOf(store) {
+    const auth = store && store.auth;
+    if (auth && typeof auth.token === "string" && auth.token) return auth.token;
+    if (auth && typeof auth.sealedToken === "string" && auth.sealedToken) {
+      const codec = tokenCodec();
+      if (codec) {
+        try {
+          const opened = String(codec.decrypt(auth.sealedToken) || "");
+          if (opened) return opened;
+        } catch {
+          /* a seal this store cannot open: fall through */
+        }
+      }
+    }
+    const license = store && store.license;
+    if (heldToken && license && license.ciphertext === heldToken.ciphertext) return heldToken.token;
+    return "";
   }
 
   function deviceMark(allowRead, allowWeakFallback) {
@@ -191,8 +253,8 @@ function createLicenseSession(opts) {
         hwid: deviceId,
       };
       if (provider === "steam") {
-        if (!input.steamId || !input.appId) {
-          throw new LicenseError("denied", "steamId and appId are required");
+        if (!String(input.steamId || "").trim() || !String(input.appId || "").trim()) {
+          throw new LicenseError("fields_missing", FIELDS_MISSING_MESSAGE);
         }
         fields.steamId = String(input.steamId);
         fields.appId = String(input.appId);
@@ -228,6 +290,7 @@ function createLicenseSession(opts) {
       },
       lastDownload: null,
     };
+    heldToken = { token: verified.auth.token, ciphertext: verified.license.ciphertext };
     save(next);
 
     const downloaded = await requestDownload(
@@ -290,18 +353,20 @@ function createLicenseSession(opts) {
     const backendUrl = normalizeBackendUrl(store.backendUrl || defaultBackendUrl(env));
     const shown = typeof shownLine === "string" ? shownLine : "";
     const post = bound ? postLicenseHash : postUnboundDownload;
+    const token = tokenOf(store);
     const manifest = await post(shown, backendUrl, async () => {
       const deviceId = deviceIdArg || (bound ? deviceMark(true, allowWeakFallback === true).id : "");
       if (bound && payload.hwid !== deviceId) {
         throw new LicenseError("hwid_mismatch", "hardware binding mismatch");
       }
+      if (!token) throw new LicenseError("no_token", NO_TOKEN_MESSAGE);
       return client.download({
         backendUrl,
         petKey: payload.pet,
         ciphertext: store.license.ciphertext,
         iv: store.license.iv,
         hwid: payload.hwid ? deviceId : undefined,
-        token: store.auth && store.auth.token,
+        token,
         expect: { jti: payload.jti, petKey: payload.pet, owner: payload.owner },
         signingKey: env.BUNDLE_SIGNING_KEY || undefined,
       });
@@ -357,6 +422,7 @@ function createLicenseSession(opts) {
         };
       }
     }
+    // save() seals or drops a plain token an older license.json still carried.
     save(nextStore);
     return lastDownload;
   }
@@ -392,6 +458,7 @@ function createLicenseSession(opts) {
   }
 
   function clear() {
+    heldToken = null;
     save({});
     return publicStatus();
   }
@@ -406,4 +473,11 @@ function createLicenseSession(opts) {
   };
 }
 
-module.exports = { createLicenseSession, defaultBackendUrl, DEFAULT_BACKEND, NO_LICENSE_MESSAGE };
+module.exports = {
+  createLicenseSession,
+  defaultBackendUrl,
+  DEFAULT_BACKEND,
+  NO_LICENSE_MESSAGE,
+  NO_TOKEN_MESSAGE,
+  FIELDS_MISSING_MESSAGE,
+};

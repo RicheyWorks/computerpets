@@ -50,8 +50,12 @@ function makeElectron(ctx) {
       ctx.windows.push(this);
       return new Proxy(this, { get: (t, p) => (p in t ? t[p] : () => undefined) });
     }
-    loadFile(file) {
+    loadFile(file, options) {
       this.file = file;
+      this.loadOpts = options || {};
+    }
+    focus() {
+      this.focused = (this.focused || 0) + 1;
     }
     once() {}
     on() {}
@@ -163,11 +167,18 @@ function makeElectron(ctx) {
   };
 }
 
+/** The GPU gate a row asks for (bootMain opts.gate); writeExpect answers are counted on the ctx. */
+const GPU = { gate: null, ctx: null };
+
 const STUBS = {
   "./gpu-path.cjs": {
-    gate: async () => ({ open: true, path: "hardware", label: "GPU path · hardware (harness)" }),
+    gate: async () => GPU.gate || { open: true, path: "hardware", label: "GPU path · hardware (harness)" },
     decide: (p) => ({ open: true, path: p, label: "GPU path · harness" }),
-    writeExpect: () => false,
+    writeExpect: (_dir, _fs, want) => {
+      if (!GPU.ctx) return false;
+      GPU.ctx.expects.push(want);
+      return GPU.ctx.writeExpect === true;
+    },
   },
   "./gpu-sense.cjs": { read: () => new Promise(() => {}) },
   "./windows-enum.cjs": { listRaw: () => new Promise(() => {}), disposePump() {} },
@@ -183,9 +194,11 @@ const STUBS = {
  * Boot the real main.cjs once in this process. The ready promise resolves so the tray and the
  * overlay window are built on the stand-ins; the hit, window, GPU, and desktop ticks are recorded only.
  */
-async function bootMain() {
+async function bootMain(opts = {}) {
   const userData = fs.mkdtempSync(path.join(os.tmpdir(), "computerpets-harness-main-"));
   const ctx = {
+    expects: [],
+    writeExpect: false,
     userData,
     encryption: true,
     ready: Promise.resolve(),
@@ -207,6 +220,8 @@ async function bootMain() {
     quits: 0,
     relaunches: 0,
   };
+  GPU.gate = opts.gate || null;
+  GPU.ctx = ctx;
   const electron = makeElectron(ctx);
   const realLoad = Module._load;
   Module._load = function load(request, parent, isMain) {

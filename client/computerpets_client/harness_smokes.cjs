@@ -7,6 +7,7 @@ const fs = require("node:fs");
 const RENDERER = path.join(__dirname, "..", "..", "desktop", "renderer");
 const Replay = require("./harness_replay.cjs");
 const MainHarness = require("./harness_main.cjs");
+const WindowHarness = require("./harness_windows.cjs");
 
 function load(name) {
   return require(path.join(RENDERER, name));
@@ -1107,6 +1108,9 @@ const COMMANDS = {
   alarm_clock: MainHarness.alarm_clock,
   timer_clock: MainHarness.timer_clock,
   music_radio: MainHarness.music_radio,
+  settings_window: WindowHarness.settings_window,
+  license_offline: WindowHarness.license_offline,
+  tray_menu: WindowHarness.tray_menu,
 };
 
 function main(argv) {
