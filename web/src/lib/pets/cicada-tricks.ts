@@ -170,7 +170,7 @@ export function beginHappy(kind: string, x: number, facing?: number): CicadaHapp
   };
 }
 
-export function septendecimPose(t: number) {
+export function septendecimPose(t: number): { lift: number; rot: number; dx: number; anim: TrickAnim } {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.septendecim));
   if (u < 0.14) {
     const s = u / 0.14;
@@ -188,7 +188,7 @@ export function septendecimPose(t: number) {
   const s = (u - 0.74) / 0.26;
   return { lift: 2.4 * (1 - s), rot: 7.2 * (1 - s), dx: 0, anim: "idle" };
 }
-export function cassiniPose(t: number) {
+export function cassiniPose(t: number): { lift: number; rot: number; dx: number; anim: TrickAnim } {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.cassini));
   if (u < 0.16) {
     const s = u / 0.16;
@@ -206,7 +206,7 @@ export function cassiniPose(t: number) {
   const s = (u - 0.78) / 0.22;
   return { lift: 2.52 * (1 - s), rot: -5.4 * (1 - s), dx: 0, anim: "sit" };
 }
-export function cicadidaePose(t: number) {
+export function cicadidaePose(t: number): { lift: number; rot: number; dx: number; anim: TrickAnim } {
   return {
     lift: 2.52 + Math.abs(Math.sin(t * 0.4)) * 1.02,
     rot: Math.sin(t * 0.52) * 7.8,
@@ -294,7 +294,7 @@ export function releasePose(t: number) {
   return { lift: 2.88 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 3.6 * (1 - u) };
 }
 
-export function tymbalPose(t: number, fromX: number, facing: number) {
+export function tymbalPose(t: number, fromX: number, facing: number): { x: number; lift: number; rot: number; anim: TrickAnim } {
   const u = Math.max(0, Math.min(1, t / DUR.tymbal));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
@@ -317,7 +317,7 @@ export function tymbalPose(t: number, fromX: number, facing: number) {
     anim: "sit",
   };
 }
-export function castPose(t: number, fromX: number, facing: number) {
+export function castPose(t: number, fromX: number, facing: number): { x: number; lift: number; rot: number; anim: TrickAnim } {
   const u = Math.max(0, Math.min(1, t / DUR.cast));
   if (u < 0.2) {
     const s = smoothstep(u / 0.2);
@@ -351,7 +351,7 @@ export function castPose(t: number, fromX: number, facing: number) {
     anim: "sit",
   };
 }
-export function egressPose(t: number, fromX: number, facing: number) {
+export function egressPose(t: number, fromX: number, facing: number): { x: number; lift: number; rot: number; anim: TrickAnim } {
   const u = Math.max(0, Math.min(1, t / DUR.egress));
   if (u < 0.18) {
     const s = smoothstep(u / 0.18);
@@ -385,7 +385,7 @@ export function egressPose(t: number, fromX: number, facing: number) {
     anim: "sit",
   };
 }
-export function hardenPose(t: number, fromX: number, facing: number) {
+export function hardenPose(t: number, fromX: number, facing: number): { x: number; lift: number; rot: number; anim: TrickAnim } {
   const u = Math.max(0, Math.min(1, t / DUR.harden));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
@@ -409,7 +409,7 @@ export function hardenPose(t: number, fromX: number, facing: number) {
     anim: "sit",
   };
 }
-export function xylemPose(t: number, fromX: number, facing: number) {
+export function xylemPose(t: number, fromX: number, facing: number): { x: number; lift: number; rot: number; anim: TrickAnim } {
   const u = Math.max(0, Math.min(1, t / DUR.xylem));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
@@ -433,7 +433,7 @@ export function xylemPose(t: number, fromX: number, facing: number) {
     anim: "sit",
   };
 }
-export function pharaohPose(t: number, fromX: number, facing: number) {
+export function pharaohPose(t: number, fromX: number, facing: number): { x: number; lift: number; rot: number; anim: TrickAnim } {
   const u = Math.max(0, Math.min(1, t / DUR.pharaoh));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);

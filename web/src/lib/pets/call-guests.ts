@@ -274,7 +274,9 @@ export function beginCalled(key: string, width: number, slot: number, of: number
   };
 }
 
-export function dismissCalled(guest: CalledWalker | null | undefined) {
+export function dismissCalled(guest: CalledWalker): CalledWalker;
+export function dismissCalled(guest: CalledWalker | null | undefined): CalledWalker | null | undefined;
+export function dismissCalled(guest: CalledWalker | null | undefined): CalledWalker | null | undefined {
   if (!guest) return guest;
   return { ...guest, phase: "leave" as const, target: -160, dismissed: true, lift: guest.lift || 0 };
 }
@@ -430,7 +432,7 @@ export function windowSitBound(win: { x?: number; y?: number; width?: number; he
   return { kind: "sill" as const, x: x0 + w * 0.38, lift };
 }
 
-export function firstWindowBound(windows: Array<{ x?: number; y?: number; width?: number; height?: number }> | null | undefined, work?: { height?: number; floorLift?: number } | null) {
+export function firstWindowBound(windows: Array<{ x?: number; y?: number; width?: number; height?: number }> | null | undefined, work?: { width?: number; height?: number; floorLift?: number } | null) {
   const list = Array.isArray(windows) ? windows : [];
   for (const win of list) {
     const b = windowSitBound(win, work);

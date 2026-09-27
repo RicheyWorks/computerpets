@@ -1,3 +1,10 @@
+/* Warning text (a house server that answered and then stopped). Same names and values as web styles.css:
+   --color-warn passes WCAG AA (4.5:1) on every dark HUD colour, even see-through over a white window
+   (worst case about 4.9:1 on blotter). The overlay HUD has no light paper surface; web paper uses #7a4f14. */
+:root {
+  --color-warn: #d4a868;
+}
+
 html,
 body {
   margin: 0;
@@ -1128,7 +1135,7 @@ select {
 /* Only a server that answered and then stopped is a warning. "OFF" (optional, never seen) stays muted. */
 #hud-heartbeat[data-heartbeat="DOWN"],
 .keeper-heartbeat[data-heartbeat="DOWN"] {
-  color: #c79a5a;
+  color: var(--color-warn);
 }
 
 #hud-gpu,

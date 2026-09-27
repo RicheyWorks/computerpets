@@ -201,7 +201,7 @@ export function beginHappy(kind: GeckoHappyKind | string, x: number, facing: 1 |
 }
 
 export function denspadPose(t: number) {
-  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denssoak));
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denspad));
   if (u < 0.14) {
     const s = u / 0.14;
     return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" as TrickAnim };
@@ -220,7 +220,7 @@ export function denspadPose(t: number) {
 }
 
 export function inkpadPose(t: number) {
-  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inksoak));
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkpad));
   if (u < 0.12) {
     const s = u / 0.12;
     return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };

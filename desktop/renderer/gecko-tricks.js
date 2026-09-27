@@ -183,7 +183,7 @@
       };
   }
   function denspadPose(t) {
-      const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denssoak));
+      const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denspad));
       if (u < 0.14) {
           const s = u / 0.14;
           return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" };
@@ -201,7 +201,7 @@
       return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
   function inkpadPose(t) {
-      const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inksoak));
+      const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkpad));
       if (u < 0.12) {
           const s = u / 0.12;
           return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" };

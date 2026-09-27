@@ -1943,13 +1943,38 @@ export type PlayPhase =
   | "papillae"
   | "papillae-hold"
   | "papillae-off"
+  | "clamp-on"
+  | "clamp"
+  | "clamp-hold"
+  | "clamp-off"
+  | "cirri-on"
+  | "cirri"
+  | "cirri-hold"
+  | "cirri-off"
+  | "rays-on"
+  | "rays"
+  | "rays-hold"
+  | "rays-off"
+  | "mantle-on"
+  | "mantle"
+  | "mantle-hold"
+  | "mantle-off"
+  | "spots-on"
+  | "spots"
+  | "spots-hold"
+  | "spots-off"
+  | "hole-on"
+  | "hole"
+  | "hole-hold"
+  | "hole-off"
   | "sill-hop"
   | "sill-walk"
   | "sill-down"
   | "land"
   | "done";
 export type PlayAnim = "idle" | "walk" | "sit" | "play" | "talk";
-export type PlayPoint = { x: number; lift: number; side?: "left" | "right" | "top"; rot?: number };
+// `side` carries the target's side name through dive/drop/coil (the paths only test "left").
+export type PlayPoint = { x: number; lift: number; side?: PlayTarget["side"]; rot?: number };
 export type WorkSpace = { width: number; height: number; floorLift?: number };
 
 export type PlayTarget = {
@@ -1962,7 +1987,8 @@ export type PlayTarget = {
   | "leafdish"
   | "acorncup"
   | "barkplate"
-  | "grassperch" | "timbershelf" | "mosscup" | "leafmold" | "mossrim" | "woodgrain" | "woodwound" | "sporedish" | "warmwood" | "yeastfilm" | "barkstone" | "lampglass" | "blotterair" | "methanebowl" | "inkstone" | "lampedge" | "paperweight" | "saltdish" | "rulerline" | "lampshadow" | "dampblotter" | "dropglass" | "siltfilm" | "lampdrop" | "greenbowl" | "silicadish" | "coldhold" | "wetplate" | "trumpetrim" | "brothcup" | "saltpan" | "boulderdish" | "columndish" | "wreathcup" | "rockplate" | "stationdish" | "reefsky" | "reefhole";
+  | "grassperch" | "timbershelf" | "mosscup" | "leafmold" | "mossrim" | "woodgrain" | "woodwound" | "sporedish" | "warmwood" | "yeastfilm" | "barkstone" | "lampglass" | "blotterair" | "methanebowl" | "inkstone" | "lampedge" | "paperweight" | "saltdish" | "rulerline" | "lampshadow" | "dampblotter" | "dropglass" | "siltfilm" | "lampdrop" | "greenbowl" | "silicadish" | "coldhold" | "wetplate" | "trumpetrim" | "brothcup" | "saltpan" | "boulderdish" | "columndish" | "wreathcup" | "rockplate" | "stationdish" | "reefsky" | "reefhole"
+  | "branchhollow" | "crownperch" | "drysand" | "litter" | "mantledish" | "marshdish" | "mudrun" | "paperbark" | "reefledge" | "riffle" | "rockface" | "rockrim" | "sandwell" | "stoneburrow" | "stonerim" | "tiderock" | "vinerail" | "weedge";
   holdX: number;
   holdLift: number;
   approachX: number;
@@ -1973,7 +1999,8 @@ export type PlayTarget = {
   | "vaulted"
   | "bannered"
   | "jewelled"
-  | "laced" | "seized" | "shelved" | "warted" | "hollowed" | "forked" | "zoned" | "bearded" | "clouded" | "dripped" | "bloomed" | "plaqued" | "thirsted" | "chorded" | "floated" | "faceted" | "rimmed" | "manyed" | "frosted" | "aligned" | "cooled" | "waited" | "slippered" | "footed" | "redded" | "sphered" | "housed" | "holdfasted" | "twoed" | "trumpeted" | "tumbled" | "blushed" | "valleyed" | "tentacled" | "barsed" | "rasped" | "stationed" | "holed";
+  | "laced" | "seized" | "shelved" | "warted" | "hollowed" | "forked" | "zoned" | "bearded" | "clouded" | "dripped" | "bloomed" | "plaqued" | "thirsted" | "chorded" | "floated" | "faceted" | "rimmed" | "manyed" | "frosted" | "aligned" | "cooled" | "waited" | "slippered" | "footed" | "redded" | "sphered" | "housed" | "holdfasted" | "twoed" | "trumpeted" | "tumbled" | "blushed" | "valleyed" | "tentacled" | "barsed" | "rasped" | "stationed" | "holed"
+  | "barbels" | "cercied" | "clamps" | "crown" | "cup" | "drilled" | "eyes" | "grazed" | "ink" | "mantled" | "marks" | "papillaed" | "plated" | "rayed" | "righted" | "sand" | "sands" | "signals" | "size" | "slow" | "stays" | "thirdeye" | "wide" | "worm";
   sillEndX?: number;
   pathEndX?: number;
   pathEndLift?: number;
@@ -10911,7 +10938,7 @@ export function leanOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   };
 }
 
-export function unfurlEdgeName(win: DeskWindow, work: WorkSpace) {
+export function unfurlEdgeName(win: DeskWindow, work: WorkSpace): "left" | "right" {
   const workW = work && work.width ? work.width : 1280;
   return win.x + win.width / 2 < workW / 2 ? "left" : "right";
 }
@@ -11085,7 +11112,7 @@ export function goldOffPath(u: number, from: PlayPoint, to: PlayPoint) {
 }
 
 
-export function seedPoint(win: DeskWindow, sprite: number, work: WorkSpace) {
+export function seedPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
   const size = sprite == null ? SPRITE : sprite;
   const pad = 42;
   const span = Math.max(0, win.width - size - pad * 2);
@@ -11267,7 +11294,7 @@ export function openOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   };
 }
 
-export function mountEdgeName(win: DeskWindow, work: WorkSpace) {
+export function mountEdgeName(win: DeskWindow, work: WorkSpace): "left" | "right" {
   const workW = work && work.width ? work.width : 1280;
   return win.x + win.width / 2 < workW / 2 ? "left" : "right";
 }
@@ -27231,6 +27258,8 @@ export function stepPlay(
   }
 
   if (next.phase === "write") {
+    // The no-window check above already sends "write" to the floor; this narrows `win` for the types.
+    if (!win) return abortToFloor(next, { x: next.x, lift: next.lift }, work);
     const goingRight = (target.writeEndX != null ? target.writeEndX : target.holdX) >= target.holdX;
     const start = writePoint(win, goingRight ? 0 : 1, size, work);
     const end = writePoint(win, goingRight ? 1 : 0, size, work);
@@ -27278,6 +27307,8 @@ export function stepPlay(
   }
 
   if (next.phase === "inspect") {
+    // Same as "write": no window already went to the floor above.
+    if (!win) return abortToFloor(next, { x: next.x, lift: next.lift }, work);
     const edge = inspectEdge(target, win, size);
     const start = inspectPoint(win, edge, 0, size, work);
     const end = inspectPoint(win, edge, 1, size, work);
@@ -27815,12 +27846,11 @@ export function stepPlay(
     const endX = target.flushEndX != null ? target.flushEndX : target.holdX;
     const endLift = target.flushEndLift != null ? target.flushEndLift : target.holdLift;
     const u = next.t / DUR.flushHover;
-    const pose = win
-      ? flushPoint(win, Math.min(1, u), size, work)
-      : flushHoverPath(Math.min(1, u), next.from, { x: endX, lift: endLift });
+    const hover = flushHoverPath(Math.min(1, u), win ? { x: target.holdX, lift: target.holdLift } : next.from, { x: endX, lift: endLift });
+    const pose = win ? flushPoint(win, Math.min(1, u), size, work) : hover;
     next.x = pose.x;
     next.lift = pose.lift;
-    next.rot = win ? flushHoverPath(Math.min(1, u), { x: target.holdX, lift: target.holdLift }, { x: endX, lift: endLift }).rot : pose.rot;
+    next.rot = hover.rot;
     next.anim = "play";
     next.facing = face;
     if (u >= 1) {

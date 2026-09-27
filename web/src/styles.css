@@ -16,6 +16,9 @@
   --color-uncommon: #8fa08a;
   --color-rare: #8a97a6;
   --color-legendary: #b08968;
+  /* Warning text (a house server that answered and then stopped). WCAG AA (4.5:1) on every dark keeper card,
+     even with the card's see-through edge over a white window: worst case about 4.9:1 on blotter. */
+  --color-warn: #d4a868;
   --radius-xs: 4px;
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -374,6 +377,8 @@
     --color-subtle: #7a7268;
     --color-border: #c9bead;
     --color-bg: #e8dfd0;
+    /* Light paper: the dark-theme amber is 1.9:1 here, so paper uses a deep amber (5.38:1 on #e8dfd0). */
+    --color-warn: #7a4f14;
     background: #e8dfd0;
     color: #2a241c;
     border-color: #c9bead;
@@ -762,7 +767,7 @@
 
   /* Only a server that answered and then stopped is a warning. "OFF" (optional, never answered) stays muted. */
   .keeper-heartbeat[data-heartbeat="DOWN"] {
-    color: #c79a5a;
+    color: var(--color-warn);
   }
 
   .keeper-collapse {

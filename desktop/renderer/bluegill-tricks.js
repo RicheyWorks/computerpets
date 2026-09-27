@@ -175,7 +175,7 @@
     const name = (HAPPY).includes(kind) ? (kind) : "denspenny";
     return {
       kind: name,
-      happy,
+      happy: true,
       phase: "go",
       t: 0,
       x,
@@ -237,7 +237,7 @@
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
-      return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort };
+      return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
     const next = { ...happy, t: happy.t + Math.max(0, dt) };
     const hold = HAPPY_DUR[next.kind];
@@ -473,7 +473,7 @@
       trick.kind !== "opercle" &&
       trick.kind !== "earflap"
     ) {
-      return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort };
+      return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
     const next = { ...trick, t: trick.t + Math.max(0, dt) };
     if (next.kind === "macrochirus") {

@@ -99,7 +99,7 @@ export function windLean(age: number, windOn: boolean, selected?: boolean, mode?
   return Math.sin((age || 0) * WIND_HZ * Math.PI * 2) * 7.5 * gust * hold;
 }
 
-export function plantSrc(key: string, sprites?: { idle?: string[] | null; sit?: string[] | null } | null) {
+export function plantSrc(key: string, sprites?: { idle?: readonly string[] | null; sit?: readonly string[] | null } | null) {
   const pack = sprites && typeof sprites === "object" ? sprites : {};
   const idle = Array.isArray(pack.idle) ? pack.idle.filter(Boolean) : [];
   const sit = Array.isArray(pack.sit) ? pack.sit.filter(Boolean) : [];
@@ -191,7 +191,7 @@ export function grassBound(plant: DeskPlant | null | undefined, work?: { height?
   };
 }
 
-export function firstGrassBound(plants: DeskPlant[] | null | undefined, work?: { height?: number; floorLift?: number } | null) {
+export function firstGrassBound(plants: DeskPlant[] | null | undefined, work?: { width?: number; height?: number; floorLift?: number } | null) {
   const list = Array.isArray(plants) ? plants : [];
   const moss = list.find((p) => p && isGrass(p.key) && isMeet(p));
   if (moss) return grassBound(moss, work);

@@ -20,7 +20,11 @@ export const MAX_TICKERS = 24;
 export const MAX_NFTS = 8;
 export const MAX_MARKETS = 8;
 export const MAX_FAVORITES = 24;
-export const FAVORITES_EMPTY = "No favorites yet — star a coin or NFT.";
+export const FAVORITES_EMPTY = "Nothing saved yet. Tap ☆ next to a coin or NFT to keep it here.";
+/** The header while a price the open plate asked for is on its way. */
+export const PRICE_LOOKING = "getting the price…";
+/** The search line while a coin or collection search is on its way. */
+export const SEARCHING = "searching…";
 
 export const CRYPTO: Record<string, string> = {
   BTC: "bitcoin", ETH: "ethereum", DOGE: "dogecoin", XLM: "stellar", SOL: "solana",
@@ -738,14 +742,14 @@ export function plateLine(market: MarketPrefs | undefined, live: MarketLive | nu
   }
   if (unread && !live) return `${ticker.symbol} · ${CANT_REACH}`;
   if (!live && waiting) return `${ticker.symbol} · ${QUOTE_WAITS}`;
-  if (!live) return `${ticker.symbol} · looking up`;
+  if (!live) return `${ticker.symbol} · ${PRICE_LOOKING}`;
   return `${ticker.symbol} · ${formatPrice(live.price)}`;
 }
 export function nftLine(market: MarketPrefs | undefined, live: NftLive | null | undefined, unread = false) {
   const nft = currentNft(market);
   if (!nft) return NO_NFT;
   if (unread && !live) return `${nft.symbol || nft.name} · ${CANT_REACH}`;
-  if (!live) return `${nft.symbol || nft.name} · looking up`;
+  if (!live) return `${nft.symbol || nft.name} · ${PRICE_LOOKING}`;
   if (live.floorUsd != null) return `${nft.symbol || nft.name} · $${formatPrice(live.floorUsd)}`;
   if (live.floorNative != null) return `${nft.symbol || nft.name} · ${formatPrice(live.floorNative)} ${live.nativeSymbol || ""}`;
   return nft.symbol || nft.name;

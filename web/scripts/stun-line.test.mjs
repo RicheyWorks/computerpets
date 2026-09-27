@@ -71,6 +71,12 @@ test("a stun or turn host is kept only when the painted line names it", () => {
   );
   assert.deepEqual(both, [{ urls: [`stuns:${host}:5349`, `turns:${other}:5349`] }]);
   assert.equal(line.includes(stunNetLine("l.google.com")), false);
+  assert.equal(
+    stunNetLine(host),
+    "This asks stun.example.test, a website that helps computers find each other, so you can play together. This computer's internet address goes to stun.example.test, like visiting any website.",
+  );
+  assert.doesNotMatch(stunNetLine(host), /stun request|as any client/);
+  assert.equal(`${stunNetLine("stun.l.google.com")}`.includes(stunNetLine("l.google.com")), false);
 });
 
 test("opening the house does not construct a room", () => {

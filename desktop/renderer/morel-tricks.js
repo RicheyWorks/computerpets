@@ -14,7 +14,7 @@ const HAPPY_DUR = { esculenta: 1.28, americana: 1.16, elata: 1.22 };
 const MORCHELLA_HOLD = 11.2;
 const RELEASE_S = 1.18;
 
-const DUR = { morchella: MORCHELLA_HOLD + RELEASE_S, alveolus: 1.58, ridge: 1.64, ephemeral: 1.48, sclerotium: 1.56, stipe: 1.68, hymenium: 1.72 };
+const DUR = { morchella: MORCHELLA_HOLD + RELEASE_S, alveolus: 1.58, ridge: 1.64, ephemeral: 1.48, sclerotium: 1.56, costa: 1.68, hymenium: 1.72 };
 
 function canStart(state) {
   if (!state) return false;
@@ -388,7 +388,7 @@ function sclerotiumPose(t, fromX, facing) {
 
 /** Costa — hollow stem rise; the tell of a true morel. Never named volva/bulb/bole. */
 function costaPose(t, fromX, facing) {
-  const u = Math.max(0, Math.min(1, t / DUR.stipe));
+  const u = Math.max(0, Math.min(1, t / DUR.costa));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
     return { x: fromX, lift: s * 2.16, rot: s * -9.6 * facing, anim: "sit" };

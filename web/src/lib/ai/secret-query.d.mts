@@ -23,4 +23,4 @@ export function isSecretModel(raw: string): boolean;
  * A normal model id is returned trimmed.
  * A secret becomes `fallback`, or empty when the caller is about to store.
  */
-export function scrubSecretModel(raw: string, fallback?: string): string;
+export function scrubSecretModel(raw: string | null | undefined, fallback?: string | null): string;
