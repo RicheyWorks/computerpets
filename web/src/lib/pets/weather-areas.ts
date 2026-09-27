@@ -66,10 +66,12 @@ export type WeatherAreas = {
 
 export type LiveSky = {
   sky: Weather;
+  /** The WMO code in words. Empty when the forecast gave no known code. */
+  word: string;
   tempC: number | null;
   windKmh: number | null;
   label: string;
-  daily: Array<{ day: string; sky: Weather; maxC: number | null; minC: number | null }>;
+  daily: Array<{ day: string; sky: Weather; word: string; maxC: number | null; minC: number | null }>;
   source: "open-meteo";
 };
 
@@ -345,6 +347,48 @@ export function parseGeocode(json: unknown): WeatherArea[] {
 }
 
 /** WMO weather codes → house sky. Wind and heat can win on the numbers we actually received. */
+/**
+ * The WMO weather code in words (Open-Meteo's table). The pets keep their four art
+ * skies; the plate says what the code actually reports. An unknown code has no word.
+ */
+export const WMO_WORDS: Readonly<Record<number, string>> = {
+  0: "Clear",
+  1: "Mostly clear",
+  2: "Partly cloudy",
+  3: "Overcast",
+  45: "Fog",
+  48: "Fog",
+  51: "Drizzle",
+  53: "Drizzle",
+  55: "Drizzle",
+  56: "Freezing drizzle",
+  57: "Freezing drizzle",
+  61: "Rain",
+  63: "Rain",
+  65: "Rain",
+  66: "Freezing rain",
+  67: "Freezing rain",
+  71: "Snow",
+  73: "Snow",
+  75: "Snow",
+  77: "Snow grains",
+  80: "Showers",
+  81: "Showers",
+  82: "Showers",
+  85: "Snow showers",
+  86: "Snow showers",
+  95: "Thunderstorm",
+  96: "Thunderstorm with hail",
+  99: "Thunderstorm with hail",
+};
+
+export function skyWord(code: unknown): string {
+  if (code == null || code === "" || typeof code === "boolean") return "";
+  const wmo = Number(code);
+  if (!Number.isInteger(wmo) || !Object.prototype.hasOwnProperty.call(WMO_WORDS, wmo)) return "";
+  return WMO_WORDS[wmo];
+}
+
 export function mapLiveSky(code: unknown, tempC: unknown, windKmh: unknown): Weather {
   const wmo = Math.round(Number(code));
   const temp = num(tempC);
@@ -360,10 +404,30 @@ export function mapLiveSky(code: unknown, tempC: unknown, windKmh: unknown): Wea
   return "clear";
 }
 
-export function skyLabel(sky: Weather, tempC: number | null) {
-  const name = sky === "rain" ? "Rain" : sky === "wind" ? "Wind" : sky === "heat" ? "Heat" : "Clear";
+/**
+ * With a word (a forecast), the word leads and wind or heat is added after it.
+ * With no code the forecast did not say, so a calm sky reads "Sky unread", not "Clear".
+ * Without a word argument (the house sky) the four names stay.
+ */
+function skyName(sky: Weather, word?: string) {
+  const four = sky === "rain" ? "Rain" : sky === "wind" ? "Wind" : sky === "heat" ? "Heat" : "Clear";
+  if (word === undefined) return four;
+  if (!word) return sky === "clear" ? "Sky unread" : four;
+  if (sky === "wind") return `${word}, windy`;
+  if (sky === "heat") return `${word}, hot`;
+  return word;
+}
+
+export function skyLabel(sky: Weather, tempC: number | null, word?: string) {
+  const name = skyName(sky, word);
   if (tempC == null || !Number.isFinite(tempC)) return name;
   return `${name} · ${Math.round(tempC)}°`;
+}
+
+/** One forecast day in the plate's lower case: "overcast", "drizzle", "clear, hot". */
+export function dayLabel(day: { sky: Weather; word?: string | null } | null | undefined) {
+  if (!day || typeof day !== "object") return "sky unread";
+  return skyName(day.sky, day.word == null ? "" : day.word).toLowerCase();
 }
 
 export function parseForecast(json: unknown): LiveSky | null {
@@ -375,6 +439,7 @@ export function parseForecast(json: unknown): LiveSky | null {
   const windKmh = num(current.wind_speed_10m);
   const code = current.weather_code;
   const sky = mapLiveSky(code, tempC, windKmh);
+  const word = skyWord(code);
   const dailyRaw = o.daily && typeof o.daily === "object" ? (o.daily as Record<string, unknown>) : null;
   const days: LiveSky["daily"] = [];
   if (dailyRaw && Array.isArray(dailyRaw.time)) {
@@ -383,14 +448,15 @@ export function parseForecast(json: unknown): LiveSky | null {
       const dCode = Array.isArray(dailyRaw.weather_code) ? dailyRaw.weather_code[i] : null;
       const maxC = Array.isArray(dailyRaw.temperature_2m_max) ? num(dailyRaw.temperature_2m_max[i]) : null;
       const minC = Array.isArray(dailyRaw.temperature_2m_min) ? num(dailyRaw.temperature_2m_min[i]) : null;
-      days.push({ day, sky: mapLiveSky(dCode, maxC, null), maxC, minC });
+      days.push({ day, sky: mapLiveSky(dCode, maxC, null), word: skyWord(dCode), maxC, minC });
     }
   }
   return {
     sky,
+    word,
     tempC,
     windKmh,
-    label: skyLabel(sky, tempC),
+    label: skyLabel(sky, tempC, word),
     daily: days,
     source: "open-meteo",
   };

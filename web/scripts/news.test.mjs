@@ -261,3 +261,32 @@ test("a long Google News link is kept whole on both surfaces", () => {
   const favOverlay = Overlay.toggleFavorite(Overlay.blankNewsPrefs(), { kind: "headline", title: "A long link", url: link, summary: "Wire" });
   assert.equal(Overlay.parseNewsPrefs(Overlay.toCardPatch(favOverlay)).favorites[0].url, link);
 });
+
+test("feed words stay words: hostile titles are kept as text and only web pages become links", () => {
+  const img = "<img src=x onerror=alert(1)>";
+  for (const surface of [N, Overlay]) {
+    assert.equal(surface.webLink("https://news.example.test/a"), "https://news.example.test/a");
+    assert.equal(surface.webLink("http://news.example.test/a"), "http://news.example.test/a");
+    for (const badUrl of ["javascript:alert(1)", " JavaScript:alert(1)", "data:text/html,<b>x</b>", "./Tilcayo", "//evil.test/x", "vbscript:x", ""]) {
+      assert.equal(surface.webLink(badUrl), "", badUrl);
+    }
+    const items = surface.parseRss(
+      `<rss><channel><item><title>${img}</title><link>javascript:alert(1)</link><source url="x">&lt;script&gt;alert(1)&lt;/script&gt;</source></item>` +
+        `<item><title>&lt;script&gt;alert(1)&lt;/script&gt;</title><link>https://news.example.test/b</link></item></channel></rss>`,
+    );
+    // The parse keeps the letters; the plate paints them as text (desk-house el / React children).
+    assert.equal(items[0].title, img);
+    assert.equal(items[0].url, "");
+    assert.equal(items[0].summary, "<script>alert(1)</script>");
+    assert.equal(items[1].title, "<script>alert(1)</script>");
+    assert.equal(items[1].url, "https://news.example.test/b");
+    const wiki = surface.parseNews({
+      news: [{ story: `${img}Plain.`, links: [{ normalizedtitle: "Tilcayo", content_urls: { desktop: { page: "javascript:alert(1)" } } }] }],
+    });
+    assert.equal(wiki[0].url, "https://en.wikipedia.org/wiki/Tilcayo");
+    assert.equal(wiki[0].summary, "Plain.");
+    const fav = surface.parseNewsPrefs(surface.toCardPatch(surface.addFavorite(surface.blankNewsPrefs(), { kind: "headline", title: img, url: "javascript:alert(1)" })));
+    assert.equal(fav.favorites[0].title, img);
+    assert.equal(fav.favorites[0].url, "");
+  }
+});

@@ -32,6 +32,15 @@
   const LINK_CHARS = 2048;
 
   /**
+   * Only a web page may be a headline link. A feed that sends javascript:, data:, or a
+   * relative path gets no link, and the title stays plain words.
+   */
+  function webLink(url) {
+    const text = clip(url, LINK_CHARS);
+    return /^https?:\/\/[^\s]/i.test(text) ? text : "";
+  }
+
+  /**
    * The featured story is Wikipedia markup. The plate shows its words, not its tags.
    * A stray angle bracket is dropped so the words cannot become markup again.
    */
@@ -102,7 +111,7 @@
       };
     }
     const title = clip(raw.title, 90);
-    const url = clip(raw.url, LINK_CHARS);
+    const url = webLink(raw.url);
     if (!title) return null;
     const id = typeof raw.id === "string" && raw.id ? raw.id : `fav-${hash(title + "|" + url)}`;
     return {
@@ -281,7 +290,7 @@
     while ((m = re.exec(xml)) && out.length < 8) {
       const block = m[1];
       const title = clip(decodeXml((block.match(/<title>([\s\S]*?)<\/title>/i) || [])[1]), 90);
-      const link = clip(decodeXml((block.match(/<link>([\s\S]*?)<\/link>/i) || [])[1]), LINK_CHARS);
+      const link = webLink(decodeXml((block.match(/<link>([\s\S]*?)<\/link>/i) || [])[1]));
       const source = clip(decodeXml((block.match(/<source[^>]*>([\s\S]*?)<\/source>/i) || [])[1]), 40);
       if (!title) continue;
       out.push({ title, url: link, summary: source });
@@ -299,7 +308,7 @@
       const titles = first && first.titles && typeof first.titles === "object" ? first.titles.normalized : "";
       const title = clip(first && (first.normalizedtitle || titles || first.title), 90);
       const pages = first && first.content_urls && typeof first.content_urls === "object" ? first.content_urls : null;
-      const url = pages && pages.desktop && pages.desktop.page ? String(pages.desktop.page) : "";
+      const url = pages && pages.desktop && pages.desktop.page ? webLink(pages.desktop.page) : "";
       const summary = clip(plainText(row.story || (first && (first.extract || first.description))), 200);
       if (!title) continue;
       out.push({
@@ -507,6 +516,7 @@
     parseNews,
     plainText,
     LINK_CHARS,
+    webLink,
     newsLine,
     sourceLine,
     NEWS_RSS_NET,

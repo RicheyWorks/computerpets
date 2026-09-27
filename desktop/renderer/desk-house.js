@@ -4,6 +4,45 @@
     return document.getElementById(id);
   }
 
+  /**
+   * Build one element. Feed words (headlines, places, coin and NFT names) go in as
+   * text nodes, never as markup, so a title like <img onerror> shows as those letters.
+   * props: text, data (dataset), and plain properties (type, className, title, href...).
+   */
+  function el(tag, props, kids) {
+    const node = document.createElement(tag);
+    const p = props || {};
+    Object.keys(p).forEach((key) => {
+      const value = p[key];
+      if (value == null || value === false) return;
+      if (key === "text") node.textContent = String(value);
+      else if (key === "data") Object.keys(value).forEach((k) => (node.dataset[k] = String(value[k])));
+      else node[key] = value;
+    });
+    (kids || []).forEach((kid) => {
+      if (kid == null || kid === false || kid === "") return;
+      node.append(kid);
+    });
+    return node;
+  }
+
+  /** A paragraph of plain text. */
+  function para(text) {
+    return el("p", { text });
+  }
+
+  /** Only a web page may become a link. Anything else stays plain words. */
+  function webLink(url) {
+    const text = String(url || "");
+    return /^https?:\/\//i.test(text) ? text : "";
+  }
+
+  function link(url, text) {
+    const href = webLink(url);
+    if (!href) return text;
+    return el("a", { href, target: "_blank", rel: "noreferrer", data: { hit: "1" }, text });
+  }
+
   function clipEl(src, volume, onFail) {
     if (!src) return null;
     try {
@@ -106,42 +145,57 @@
     if (tab === "favorites") {
       const favs = A.favoriteAreas ? A.favoriteAreas(areas) : [];
       if (!favs.length) {
-        liveBox.innerHTML = `<p>${A.FAVORITES_EMPTY || "No favorites yet — star a place."}</p>`;
+        liveBox.replaceChildren(para(A.FAVORITES_EMPTY || "No favorites yet — star a place."));
       } else {
-        liveBox.innerHTML =
-          "<ul>" +
-          favs
-            .map(
-              (row) =>
-                `<li><button type="button" data-hit data-area-pick="${row.id}" data-on="${row.id === areas.currentId ? "1" : "0"}">${row.name}</button> <button type="button" class="weather-star" data-hit data-area-fav="${row.id}">★</button></li>`,
-            )
-            .join("") +
-          "</ul>";
+        liveBox.replaceChildren(
+          el(
+            "ul",
+            null,
+            favs.map((row) =>
+              el("li", null, [
+                el("button", { type: "button", data: { hit: "1", areaPick: row.id, on: row.id === areas.currentId ? "1" : "0" }, text: row.name }),
+                " ",
+                el("button", { type: "button", className: "weather-star", data: { hit: "1", areaFav: row.id }, text: "★" }),
+              ]),
+            ),
+          ),
+        );
       }
       return;
     }
     const area = A.currentArea(areas);
     const liveBits = [];
-    if (!area) liveBits.push(`<p>${A.NO_AREA}</p>`);
-    else if (held) liveBits.push(`<p>${area.name} · ${A.SAVED_HERE_WAIT}</p>`);
-    else if (unread) liveBits.push(`<p>${area.name} · unread</p>`);
-    else if (live) liveBits.push(`<p>${area.name}. ${live.label}. Open-Meteo.</p>`);
+    if (!area) liveBits.push(para(A.NO_AREA));
+    else if (held) liveBits.push(para(`${area.name} · ${A.SAVED_HERE_WAIT}`));
+    else if (unread) liveBits.push(para(`${area.name} · unread`));
+    else if (live) liveBits.push(para(`${area.name}. ${live.label}. Open-Meteo.`));
     if (live && live.daily && !held) {
-      liveBits.push("<ul>");
-      for (const d of live.daily) {
-        liveBits.push(`<li>${d.day} · ${d.sky}${d.maxC != null ? ` · ${Math.round(d.maxC)}°` : ""}</li>`);
-      }
-      liveBits.push("</ul>");
-    }
-    liveBits.push("<ul>");
-    for (const row of areas.areas) {
-      const starred = A.isFavorite ? A.isFavorite(areas, row.id) : false;
+      const dayWord = (d) => (A.dayLabel ? A.dayLabel(d) : d.sky);
       liveBits.push(
-        `<li><button type="button" data-hit data-area-pick="${row.id}" data-on="${row.id === areas.currentId ? "1" : "0"}">${row.name}</button> <button type="button" class="weather-star" data-hit data-area-fav="${row.id}" title="Favorite place">${starred ? "★" : "☆"}</button> <button type="button" data-hit data-area-del="${row.id}">Remove</button></li>`,
+        el(
+          "ul",
+          null,
+          live.daily.map((d) => el("li", { text: `${d.day} · ${dayWord(d)}${d.maxC != null ? ` · ${Math.round(d.maxC)}°` : ""}` })),
+        ),
       );
     }
-    liveBits.push("</ul>");
-    liveBox.innerHTML = liveBits.join("");
+    liveBits.push(
+      el(
+        "ul",
+        null,
+        areas.areas.map((row) => {
+          const starred = A.isFavorite ? A.isFavorite(areas, row.id) : false;
+          return el("li", null, [
+            el("button", { type: "button", data: { hit: "1", areaPick: row.id, on: row.id === areas.currentId ? "1" : "0" }, text: row.name }),
+            " ",
+            el("button", { type: "button", className: "weather-star", title: "Favorite place", data: { hit: "1", areaFav: row.id }, text: starred ? "★" : "☆" }),
+            " ",
+            el("button", { type: "button", data: { hit: "1", areaDel: row.id }, text: "Remove" }),
+          ]);
+        }),
+      ),
+    );
+    liveBox.replaceChildren(...liveBits);
   }
 
   function paintNews(items, unread, card) {
@@ -227,48 +281,45 @@
 
     if (tab === "favorites") {
       if (!prefs.favorites.length) {
-        liveBox.innerHTML = `<p>${source}</p><p>${N.FAVORITES_EMPTY}</p>`;
+        liveBox.replaceChildren(para(source), para(N.FAVORITES_EMPTY));
       } else {
-        const bits = prefs.favorites
-          .map((fav) => {
-            if (fav.kind === "topic") {
-              return `<li><button type="button" data-hit data-news-pick="${fav.topicId}">${fav.title}</button> <button type="button" class="news-star" data-hit data-news-unfav="${fav.id}">★</button></li>`;
-            }
-            const link = fav.url
-              ? `<a data-hit href="${fav.url}" target="_blank" rel="noreferrer">${fav.title}</a>`
-              : fav.title;
-            return `<li>${link}${fav.summary ? `<p>${fav.summary}</p>` : ""} <button type="button" class="news-star" data-hit data-news-unfav="${fav.id}">★</button></li>`;
-          })
-          .join("");
-        liveBox.innerHTML = `<p>${source}</p><ul>${bits}</ul>`;
+        const rows = prefs.favorites.map((fav) => {
+          const unfav = el("button", { type: "button", className: "news-star", data: { hit: "1", newsUnfav: fav.id }, text: "★" });
+          if (fav.kind === "topic") {
+            return el("li", null, [el("button", { type: "button", data: { hit: "1", newsPick: fav.topicId }, text: fav.title }), " ", unfav]);
+          }
+          return el("li", null, [link(fav.url, fav.title), fav.summary ? para(fav.summary) : null, " ", unfav]);
+        });
+        liveBox.replaceChildren(para(source), el("ul", null, rows));
       }
       return;
     }
 
-    if (tab === "x" && unread && (!items || !items.length)) {
-      const open = N.xSearchUrl(topic.query || "news");
-      liveBox.innerHTML = `<p>${source}</p><p>${N.CANT_REACH}</p><p><a data-hit href="${open}" target="_blank" rel="noreferrer">Open on X</a></p>`;
-      return;
-    }
     if (tab === "x" && (!items || !items.length)) {
       const open = N.xSearchUrl(topic.query || "news");
-      liveBox.innerHTML = `<p>${source}</p><p>${N.NO_HEADLINES}</p><p><a data-hit href="${open}" target="_blank" rel="noreferrer">Open on X</a></p>`;
-      return;
-    }
-    if (unread && (!items || !items.length)) {
-      liveBox.innerHTML = `<p>${source}</p><p>${N.CANT_REACH}</p>`;
+      liveBox.replaceChildren(para(source), para(unread ? N.CANT_REACH : N.NO_HEADLINES), el("p", null, [link(open, "Open on X")]));
       return;
     }
     if (!items || !items.length) {
-      liveBox.innerHTML = `<p>${source}</p><p>${N.NO_HEADLINES}</p>`;
+      liveBox.replaceChildren(para(source), para(unread ? N.CANT_REACH : N.NO_HEADLINES));
       return;
     }
-    liveBox.innerHTML = `<p>${source}</p><ul>${items
-      .map((it) => {
-        const starred = N.isFavorite(prefs, { kind: "headline", title: it.title, url: it.url, summary: it.summary });
-        return `<li><a data-hit href="${it.url}" target="_blank" rel="noreferrer">${it.title}</a>${it.summary ? `<p>${it.summary}</p>` : ""} <button type="button" class="news-star" data-hit data-news-fav-headline="${encodeURIComponent(it.title)}" data-url="${encodeURIComponent(it.url || "")}" data-summary="${encodeURIComponent(it.summary || "")}">${starred ? "★" : "☆"}</button></li>`;
-      })
-      .join("")}</ul>`;
+    const rows = items.map((it) => {
+      const starred = N.isFavorite(prefs, { kind: "headline", title: it.title, url: it.url, summary: it.summary });
+      const star = el("button", {
+        type: "button",
+        className: "news-star",
+        data: {
+          hit: "1",
+          newsFavHeadline: encodeURIComponent(it.title),
+          url: encodeURIComponent(it.url || ""),
+          summary: encodeURIComponent(it.summary || ""),
+        },
+        text: starred ? "★" : "☆",
+      });
+      return el("li", null, [link(it.url, it.title), it.summary ? para(it.summary) : null, " ", star]);
+    });
+    liveBox.replaceChildren(para(source), el("ul", null, rows));
   }
 
   function paintMarket(card, live, unread, extras) {
@@ -284,19 +335,21 @@
     const list = $("market-tickers");
     const ticker = M.currentTicker(house);
     if (liveBox) {
-      if (!house.tickers.length) liveBox.innerHTML = `<p>${M.NO_QUOTE}</p>`;
+      if (!house.tickers.length) liveBox.replaceChildren(para(M.NO_QUOTE));
       else {
-        const rows = house.tickers
-          .map((row) => {
-            const keyed = row.geckoId ? coinLives[row.geckoId] : null;
-            const addrKey = row.address ? coinLives[row.platform + ":" + row.address] || coinLives[row.address] : null;
-            const rowLive = keyed || addrKey || (ticker && row.id === ticker.id ? live : null);
-            const price = rowLive ? M.formatPrice(rowLive.price) : unread && ticker && row.id === ticker.id ? M.CANT_REACH : "…";
-            const kind = row.address ? (row.platform === "solana" ? "mint" : "contract") : row.kind;
-            return `<li data-on="${row.id === house.currentId ? "1" : "0"}"><strong>${row.symbol}</strong> · ${price} <span class="market-kind">${kind}</span></li>`;
-          })
-          .join("");
-        liveBox.innerHTML = `<ul class="market-live-list">${rows}</ul>`;
+        const rows = house.tickers.map((row) => {
+          const keyed = row.geckoId ? coinLives[row.geckoId] : null;
+          const addrKey = row.address ? coinLives[row.platform + ":" + row.address] || coinLives[row.address] : null;
+          const rowLive = keyed || addrKey || (ticker && row.id === ticker.id ? live : null);
+          const price = rowLive ? M.formatPrice(rowLive.price) : unread && ticker && row.id === ticker.id ? M.CANT_REACH : "…";
+          const kind = row.address ? (row.platform === "solana" ? "mint" : "contract") : row.kind;
+          return el("li", { data: { on: row.id === house.currentId ? "1" : "0" } }, [
+            el("strong", { text: row.symbol }),
+            ` · ${price} `,
+            el("span", { className: "market-kind", text: kind }),
+          ]);
+        });
+        liveBox.replaceChildren(el("ul", { className: "market-live-list" }, rows));
       }
     }
     if (list) {
@@ -342,9 +395,9 @@
     const nftBox = $("nft-live");
     if (nftBox) {
       const nft = M.currentNft(house);
-      if (!nft) nftBox.innerHTML = `<p>${M.NO_NFT}</p>`;
-      else if (nftUnread && !nftLive) nftBox.innerHTML = `<p>${nft.symbol || nft.name} · ${M.CANT_REACH}</p>`;
-      else if (!nftLive) nftBox.innerHTML = `<p>${nft.symbol || nft.name} · looking up</p>`;
+      if (!nft) nftBox.replaceChildren(para(M.NO_NFT));
+      else if (nftUnread && !nftLive) nftBox.replaceChildren(para(`${nft.symbol || nft.name} · ${M.CANT_REACH}`));
+      else if (!nftLive) nftBox.replaceChildren(para(`${nft.symbol || nft.name} · looking up`));
       else {
         const floor =
           nftLive.floorUsd != null
@@ -352,7 +405,7 @@
             : nftLive.floorNative != null
               ? M.formatPrice(nftLive.floorNative) + " " + (nftLive.nativeSymbol || "")
               : "—";
-        nftBox.innerHTML = `<p>${nft.name}. Floor ${floor}. CoinGecko.</p>`;
+        nftBox.replaceChildren(para(`${nft.name}. Floor ${floor}. CoinGecko.`));
       }
     }
     const nfts = $("nft-collections");
@@ -448,15 +501,26 @@
     if (favBox && M.favoriteRows) {
       const fav = M.favoriteRows(house);
       if (!fav.tickers.length && !fav.nfts.length) {
-        favBox.innerHTML = `<p>${M.FAVORITES_EMPTY || "No favorites yet — star a coin or NFT."}</p>`;
+        favBox.replaceChildren(para(M.FAVORITES_EMPTY || "No favorites yet — star a coin or NFT."));
       } else {
-        const coinBits = fav.tickers
-          .map((row) => `<li><button type="button" data-hit data-ticker-pick="${row.id}">${row.symbol}</button> <button type="button" class="market-star" data-hit data-ticker-fav="${row.id}">★</button></li>`)
-          .join("");
-        const nftBits = fav.nfts
-          .map((row) => `<li><button type="button" data-hit data-nft-pick="${row.id}">${row.symbol || row.name}</button> <button type="button" class="market-star" data-hit data-nft-fav="${row.id}">★</button></li>`)
-          .join("");
-        favBox.innerHTML = `${coinBits ? `<h4 class="market-subhead">Coins</h4><ul>${coinBits}</ul>` : ""}${nftBits ? `<h4 class="market-subhead">NFTs</h4><ul>${nftBits}</ul>` : ""}`;
+        const coinRows = fav.tickers.map((row) =>
+          el("li", null, [
+            el("button", { type: "button", data: { hit: "1", tickerPick: row.id }, text: row.symbol }),
+            " ",
+            el("button", { type: "button", className: "market-star", data: { hit: "1", tickerFav: row.id }, text: "★" }),
+          ]),
+        );
+        const nftRows = fav.nfts.map((row) =>
+          el("li", null, [
+            el("button", { type: "button", data: { hit: "1", nftPick: row.id }, text: row.symbol || row.name }),
+            " ",
+            el("button", { type: "button", className: "market-star", data: { hit: "1", nftFav: row.id }, text: "★" }),
+          ]),
+        );
+        const parts = [];
+        if (coinRows.length) parts.push(el("h4", { className: "market-subhead", text: "Coins" }), el("ul", null, coinRows));
+        if (nftRows.length) parts.push(el("h4", { className: "market-subhead", text: "NFTs" }), el("ul", null, nftRows));
+        favBox.replaceChildren(...parts);
       }
     }
 
@@ -469,7 +533,7 @@
     return { id: "desk-weather", x: r.left, y: r.top, width: r.width, height: r.height };
   }
 
-  const api = { playVoice, playStep, paintWeather, paintNews, paintMarket, weatherRect, clipEl };
+  const api = { playVoice, playStep, paintWeather, paintNews, paintMarket, weatherRect, clipEl, webLink };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetDeskHouse = api;
 })(typeof window !== "undefined" ? window : globalThis);
