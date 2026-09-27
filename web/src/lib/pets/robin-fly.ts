@@ -162,28 +162,6 @@ export function wingBeat(age: number, phase: RobinPhase | undefined) {
   return 0.84 + 0.16 * Math.abs(Math.sin((age || 0) * 16));
 }
 
-export function destStyle() {
-  return {
-    width: `${DEST_PX}px`,
-    height: `${DEST_PX}px`,
-    objectFit: "contain" as const,
-    objectPosition: "bottom",
-    border: "0",
-    outline: "none",
-    background: "transparent",
-    boxShadow: "none",
-  };
-}
-
-export function applyDest(img: { style?: Record<string, string>; setAttribute?: (name: string, value: string) => void } | null | undefined) {
-  if (!img) return false;
-  const style = destStyle();
-  if (img.style) Object.assign(img.style, style);
-  img.setAttribute?.("width", String(DEST_PX));
-  img.setAttribute?.("height", String(DEST_PX));
-  return true;
-}
-
 export function poseKind(fly: RobinFly | null | undefined) {
   if (!fly) return "idle";
   if (isFlying(fly.phase)) return "play";

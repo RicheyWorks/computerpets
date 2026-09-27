@@ -46,7 +46,7 @@ test("/demo Call sits dropdown, type-in, den picker, and called walkers", () => 
   assert.match(roomSrc, /collapsed: false/);
 });
 
-test("a den of walkers keeps the same img nodes across ticks", () => {
+test("a den of walkers keeps the same overlay nodes across ticks", () => {
   const nodes = [];
   const root = {
     children: nodes,
@@ -79,11 +79,11 @@ test("a den of walkers keeps the same img nodes across ticks", () => {
     return el;
   }
   const guests = ["cat", "dog", "robin"].map((key, i) => G.beginCalled(key, 800, i, 3));
-  const first = G.syncCalledPaint(root, guests, { createImg, frameOf: () => ["a.png", "b.png"] });
+  const first = Overlay.syncCalledPaint(root, guests, { createImg, frameOf: () => ["a.png", "b.png"] });
   assert.equal(first.added, 3);
   const kept = nodes.slice();
   const stepped = guests.map((g) => G.stepCalled(g, 0.16, 800));
-  const second = G.syncCalledPaint(root, stepped, { createImg, frameOf: () => ["a.png", "b.png"] });
+  const second = Overlay.syncCalledPaint(root, stepped, { createImg, frameOf: () => ["a.png", "b.png"] });
   assert.equal(second.added, 0);
   assert.equal(second.reused, 3);
   assert.strictEqual(nodes[0], kept[0]);
@@ -141,4 +141,22 @@ test("/demo Miso loafs Felt grass in Meet lockstep with the overlay", async () =
   assert.equal(miso.phase, "bound");
   assert.equal(G.tellLine(miso), Overlay.CAT_GRASS_LINE);
   assert.match(roomSrc, /CalledGuests/);
+});
+
+test("the desk keeps no img paint helpers from the pre-canvas path", async () => {
+  const R = await import(pathToFileURL(join(root, "src/lib/pets/robin-fly.ts")).href);
+  const P = await import(pathToFileURL(join(root, "src/lib/pets/desk-plants.ts")).href);
+  for (const name of ["assignSrc", "assignedSrc", "syncCalledPaint", "destFit", "GUEST_DEST"]) {
+    assert.equal(G[name], undefined, name);
+  }
+  for (const name of ["applyDest", "destStyle"]) {
+    assert.equal(R[name], undefined, `robin ${name}`);
+    assert.equal(P[name], undefined, `plant ${name}`);
+  }
+  assert.equal(typeof G.poseFrames, "function");
+  assert.equal(typeof G.poseSrc, "function");
+  assert.equal(typeof R.destSrc, "function");
+  assert.equal(typeof P.plantSrc, "function");
+  assert.equal(typeof Overlay.syncCalledPaint, "function");
+  assert.equal(typeof Overlay.assignSrc, "function");
 });

@@ -99,27 +99,6 @@ export function windLean(age: number, windOn: boolean, selected?: boolean, mode?
   return Math.sin((age || 0) * WIND_HZ * Math.PI * 2) * 7.5 * gust * hold;
 }
 
-export function destStyle() {
-  return {
-    width: `${DEST_PX}px`,
-    height: `${DEST_PX}px`,
-    objectFit: "contain" as const,
-    objectPosition: "bottom",
-    border: "0",
-    outline: "none",
-    background: "transparent",
-    boxShadow: "none",
-  };
-}
-
-export function applyDest(img: { style?: Record<string, string>; setAttribute?: (name: string, value: string) => void } | null | undefined) {
-  if (!img) return false;
-  if (img.style) Object.assign(img.style, destStyle());
-  img.setAttribute?.("width", String(DEST_PX));
-  img.setAttribute?.("height", String(DEST_PX));
-  return true;
-}
-
 export function plantSrc(key: string, sprites?: { idle?: string[] | null; sit?: string[] | null } | null) {
   const pack = sprites && typeof sprites === "object" ? sprites : {};
   const idle = Array.isArray(pack.idle) ? pack.idle.filter(Boolean) : [];

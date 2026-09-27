@@ -256,25 +256,6 @@ export function nextAutoMeet(present: Array<string | { key?: string }> | null | 
   return null;
 }
 
-export const GUEST_DEST = 128;
-
-export function destFit(img: { style?: Record<string, string>; setAttribute?: (name: string, value: string) => void } | null | undefined) {
-  if (!img) return false;
-  if (img.style) {
-    img.style.width = `${GUEST_DEST}px`;
-    img.style.height = `${GUEST_DEST}px`;
-    img.style.objectFit = "contain";
-    img.style.objectPosition = "bottom";
-    img.style.border = "0";
-    img.style.outline = "none";
-    img.style.background = "transparent";
-    img.style.boxShadow = "none";
-  }
-  img.setAttribute?.("width", String(GUEST_DEST));
-  img.setAttribute?.("height", String(GUEST_DEST));
-  return true;
-}
-
 export function beginCalled(key: string, width: number, slot: number, of: number): CalledWalker {
   const w = Math.max(320, width || 800);
   const n = Math.max(1, of || 1);
@@ -770,81 +751,4 @@ export function poseSrc(guest: CalledWalker | null | undefined, sprites?: Called
   if (!frames.length) return "";
   const i = Math.abs(guest?.frame || 0) % frames.length;
   return frames[i] || "";
-}
-
-export function assignedSrc(img: { dataset?: Record<string, string>; getAttribute?: (name: string) => string | null; src?: string } | null | undefined) {
-  if (!img) return "";
-  if (img.dataset && img.dataset.frameSrc) return img.dataset.frameSrc;
-  if (img.getAttribute) return img.getAttribute("src") || "";
-  return img.src || "";
-}
-
-export function assignSrc(img: { dataset?: Record<string, string>; setAttribute?: (name: string, value: string) => void; src?: string } | null | undefined, src: string) {
-  if (!img || !src) return false;
-  if (assignedSrc(img) === src) return false;
-  if (img.dataset) img.dataset.frameSrc = src;
-  if (img.setAttribute) img.setAttribute("src", src);
-  else img.src = src;
-  return true;
-}
-export type CalledPaintOpts = {
-  createImg?: () => { className: string; alt: string; dataset: Record<string, string>; src: string; style: { transform?: string }; draggable: boolean; addEventListener?: (type: string, fn: (e: { stopPropagation: () => void }) => void) => void; remove?: () => void };
-  frameOf?: (guest: CalledWalker) => string[] | null | undefined;
-  onDismiss?: (guest: CalledWalker) => void;
-};
-
-export function syncCalledPaint(
-  root: { children?: ArrayLike<{ dataset?: { callKey?: string }; remove?: () => void }>; appendChild?: (el: unknown) => void; removeChild?: (el: unknown) => void; querySelectorAll?: (sel: string) => ArrayLike<{ dataset?: { callKey?: string }; remove?: () => void }> } | null | undefined,
-  guests: CalledWalker[] | null | undefined,
-  opts?: CalledPaintOpts,
-) {
-  if (!root) return { reused: 0, added: 0, removed: 0 };
-  const make = opts?.createImg;
-  if (!make) return { reused: 0, added: 0, removed: 0 };
-  const visible = (Array.isArray(guests) ? guests : []).filter(stillVisible);
-  const keep: Record<string, CalledWalker> = Object.create(null);
-  for (const g of visible) keep[g.key] = g;
-  const kids = () => {
-    if (root.querySelectorAll) return Array.from(root.querySelectorAll("[data-call-key]"));
-    return Array.from(root.children || []);
-  };
-  let removed = 0;
-  for (const el of kids()) {
-    const key = el.dataset?.callKey;
-    if (!key || !keep[key]) {
-      if (el.remove) el.remove();
-      else if (root.removeChild) root.removeChild(el);
-      removed += 1;
-    }
-  }
-  let reused = 0;
-  let added = 0;
-  for (const g of visible) {
-    let img = kids().find((el) => el.dataset?.callKey === g.key) as ReturnType<NonNullable<CalledPaintOpts["createImg"]>> | undefined;
-    if (!img) {
-      img = make();
-      img.className = "called-guest";
-      img.alt = g.key;
-      img.dataset.hit = "1";
-      img.dataset.callKey = g.key;
-      img.draggable = false;
-      if (opts?.onDismiss && img.addEventListener) {
-        img.addEventListener("pointerdown", (e) => {
-          e.stopPropagation();
-          opts.onDismiss?.(g);
-        });
-      }
-      root.appendChild?.(img);
-      added += 1;
-    } else {
-      reused += 1;
-    }
-    const frames = opts?.frameOf?.(g) || poseFrames(g, (g as CalledWalker & { sprites?: CalledSprites }).sprites);
-    let src = frames && frames.length ? frames[Math.abs((g.frame as number) || 0) % frames.length] || frames[0] : "";
-    if (!src) src = poseSrc(g, (g as CalledWalker & { sprites?: CalledSprites }).sprites);
-    assignSrc(img, src || "");
-    destFit(img);
-    img.style.transform = `translate3d(${g.x}px, ${-(g.lift || 0)}px, 0) scale(${g.facing || 1}, 1)`;
-  }
-  return { reused, added, removed };
 }

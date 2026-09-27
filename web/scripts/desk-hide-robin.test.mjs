@@ -34,12 +34,10 @@ test("/demo robin paint uses one real pose and does not unmount on host hide", (
   const walk = ["walk/1.png", "walk/2.png"];
   const perched = { key: "robin", phase: "perch", frame: 3, t: 0, age: 1, x: 200, lift: 36, target: 200, facing: 1, dismissed: false };
   assert.equal(OverlayCall.poseSrc(perched, { sit, walk }), sit[1]);
-  const img = { src: "", dataset: {}, setAttribute(name, value) { this[name] = value; }, getAttribute(name) { return this[name] || ""; } };
-  assert.equal(OverlayCall.assignSrc(img, sit[1]), true);
-  assert.equal(OverlayCall.assignSrc(img, sit[1]), false);
   assert.match(callSrc, /export function poseFrames/);
-  assert.match(callSrc, /export function assignSrc/);
-  assert.match(calledSrc, /getAttribute\("src"\)/);
+  assert.doesNotMatch(callSrc, /export function (assignSrc|assignedSrc|syncCalledPaint|destFit)\b/);
+  assert.match(calledSrc, /paintCalledFrame/);
+  assert.doesNotMatch(calledSrc, /<img/);
   assert.match(calledSrc, /hiddenRef/);
   assert.doesNotMatch(calledSrc, /if \(hidden \|\| !list\.length\)/);
 });
