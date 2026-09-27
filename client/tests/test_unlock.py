@@ -769,10 +769,13 @@ def test_unlock_dialog_shows_the_no_license_sentence_not_a_traceback():
     from computerpets_client.unlock_dialog import license_error_text
 
     assert license_error_text(LicenseError("no_license", NO_LICENSE_MESSAGE)) == NO_LICENSE_MESSAGE
-    assert license_error_text(LicenseError("revoked", "license missing, expired, or tampered")) == (
-        "revoked: license missing, expired, or tampered"
+    assert license_error_text(LicenseError("revoked", "license missing, expired, or tampered"), "house.example") == (
+        "The house server at house.example no longer accepts this license. Unlock again to get a new one. "
+        "Pets still work without it."
     )
-    assert license_error_text(KeyError("license")) == "denied: 'license'"
+    assert license_error_text(KeyError("license")) == (
+        "Something went wrong talking to the house server. Pets still work without it."
+    )
 
 
 def test_session_hands_its_mkdir_to_the_hwid_mark(tmp_path, monkeypatch):
