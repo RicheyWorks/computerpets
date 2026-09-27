@@ -5,7 +5,7 @@ const assert = require("node:assert/strict");
 const os = require("os");
 const path = require("path");
 const fs = require("fs");
-const { createLicenseSession } = require("./session.cjs");
+const { createLicenseSession, NO_LICENSE_MESSAGE } = require("./session.cjs");
 const { createContractTestDouble, encryptLicense } = require("./contract-test-double.cjs");
 const { LicenseError } = require("./errors.cjs");
 const { bundleHonesty, downloadTalkHonesty, licenseHonesty } = require("./license-net.cjs");
@@ -751,5 +751,63 @@ describe("license session", () => {
     assert.equal(new URL(got).searchParams.has("hwid"), false);
     assert.equal(got.includes("secret"), true);
     assert.equal(bundleHonesty(got).includes("secret"), false);
+  });
+
+  it("says there is no license, in plain words, when download runs before unlock or after Lock", async () => {
+    const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
+    const disk = memoryFs();
+    const session = createLicenseSession({
+      userDataDir: path.join(os.tmpdir(), "cp-license-none"),
+      env: { LICENSE_SECRET_KEY: SECRET, BUNDLE_SIGNING_KEY: SIGNING, COMPUTERPETS_BACKEND_URL: "http://127.0.0.1:8080" },
+      fetchImpl: backend.fetchImpl,
+      hwid: "device-abc-123",
+      readFile: disk.readFile,
+      writeFile: disk.writeFile,
+      mkdir: disk.mkdir,
+    });
+    const noLicense = (err) => {
+      assert.ok(err instanceof LicenseError, String(err && err.stack));
+      assert.equal(err.code, "no_license");
+      assert.equal(err.message, NO_LICENSE_MESSAGE);
+      assert.doesNotMatch(err.message, /undefined|Cannot read|ciphertext/);
+      return true;
+    };
+
+    await assert.rejects(() => session.download(), noLicense);
+    assert.equal(backend.calls.length, 0);
+
+    const storeFile = path.join(os.tmpdir(), "cp-license-none", "license.json");
+    disk.writeFile(storeFile, JSON.stringify({ backendUrl: "http://127.0.0.1:8080", license: { ciphertext: "", iv: "" } }));
+    await assert.rejects(() => session.download(), noLicense);
+    assert.equal(backend.calls.length, 0);
+
+    await session.unlock({ steamId: "76561198000000000", appId: "123456", petType: "red_panda", provider: "steam" });
+    const afterUnlock = backend.calls.length;
+    assert.ok(afterUnlock > 0);
+    session.clear();
+    await assert.rejects(() => session.download(), noLicense);
+    assert.equal(backend.calls.length, afterUnlock);
+  });
+
+  it("hands its own mkdir to the hwid mark, so an injected disk makes no real folder", async () => {
+    const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
+    const disk = memoryFs();
+    const made = [];
+    const dir = path.join(os.tmpdir(), `cp-license-nomkdir-${process.pid}-${Date.now()}`);
+    const session = createLicenseSession({
+      userDataDir: dir,
+      env: { LICENSE_SECRET_KEY: SECRET, BUNDLE_SIGNING_KEY: SIGNING, COMPUTERPETS_BACKEND_URL: "http://127.0.0.1:8080" },
+      fetchImpl: backend.fetchImpl,
+      platform: "linux",
+      readFile: (p, enc) => (String(p).endsWith("machine-id") ? "machine-aaa\n" : disk.readFile(p, enc)),
+      writeFile: disk.writeFile,
+      mkdir: (p) => {
+        made.push(String(p));
+      },
+    });
+    await session.unlock({ steamId: "76561198000000000", appId: "123456", petType: "red_panda", provider: "steam" });
+    assert.ok(disk.files.has(path.join(dir, "hwid.txt")));
+    assert.ok(made.includes(dir));
+    assert.equal(fs.existsSync(dir), false);
   });
 });

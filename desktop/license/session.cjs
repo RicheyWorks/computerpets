@@ -11,6 +11,7 @@ const { alreadyCurrent } = require("./bundle-zip.cjs");
 
 const STORE_NAME = "license.json";
 const DEFAULT_BACKEND = "http://127.0.0.1:8081";
+const NO_LICENSE_MESSAGE = "No license on this computer yet. Unlock a pet first, then download it.";
 
 function readStore(file, readFile) {
   try {
@@ -19,6 +20,18 @@ function readStore(file, readFile) {
   } catch {
     return {};
   }
+}
+
+/** True when license.json holds an issued license (ciphertext + iv). */
+function hasStoredLicense(store) {
+  const license = store && store.license;
+  return Boolean(
+    license &&
+      typeof license.ciphertext === "string" &&
+      license.ciphertext &&
+      typeof license.iv === "string" &&
+      license.iv
+  );
 }
 
 function writeStore(file, data, writeFile, mkdir) {
@@ -90,6 +103,7 @@ function createLicenseSession(opts) {
       userDataDir: opts.userDataDir,
       readFile,
       writeFile,
+      mkdir,
       platform: opts.platform,
       exec: opts.exec,
       allowWeakFallback: allowWeakFallback === true,
@@ -264,6 +278,10 @@ function createLicenseSession(opts) {
 
   async function requestDownload(storeArg, payloadArg, deviceIdArg, secretArg, allowWeakFallback, shownLine, shownCdn) {
     const store = storeArg || load();
+    // Never unlocked, or Lock cleared it: say so before any decrypt or POST.
+    if (!hasStoredLicense(store)) {
+      throw new LicenseError("no_license", NO_LICENSE_MESSAGE);
+    }
     const secret = secretArg || licenseSecret(env);
     const payload = payloadArg || decryptLicense(store.license.ciphertext, store.license.iv, secret, { now });
     const bound = Boolean(payload.hwid);
@@ -386,4 +404,4 @@ function createLicenseSession(opts) {
   };
 }
 
-module.exports = { createLicenseSession, defaultBackendUrl, DEFAULT_BACKEND };
+module.exports = { createLicenseSession, defaultBackendUrl, DEFAULT_BACKEND, NO_LICENSE_MESSAGE };
