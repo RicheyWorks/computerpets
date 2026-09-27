@@ -4,7 +4,7 @@ export const TAP_PX = 8;
 export const TAP_PX_MAC = 12;
 export const TAP_PX_LINUX = 10;
 
-/** Rui, Sip, and the grid ten. The tray can pick them without burying them in two hundred twenty. */
+/** Rui, Sip, and the grid ten. The tray can pick them without burying them in two hundred twenty-one. */
 export const DESK_PICKS = [
   "red_panda",
   "hummingbird",
