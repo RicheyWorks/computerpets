@@ -811,8 +811,8 @@ test("notes: Snap ultra-polish done; ethogram dens claim true (poise sit_hold + 
   assert.equal(OverlayGround.wantsThankYou("venus_flytrap"), true);
   assert.equal(OverlayGround.tricksFor("snap"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("snap"), true);
-  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
-  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
+  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "epiphyte", "keiki", "pollinia"]);
+  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "epiphyte", "keiki", "pollinia"]);
   assert.deepEqual([...Saguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
   assert.deepEqual([...OverlaySaguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
   assert.equal(OverlayGround.tricksFor("saguaro"), OverlaySaguaro);

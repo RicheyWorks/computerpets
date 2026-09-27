@@ -183,9 +183,9 @@ test("Gleam tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
-  assert.deepEqual([...ChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
-  assert.deepEqual([...OverlayChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...T.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...ChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...OverlayChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.deepEqual([...ChickenOfWoods.HAPPY], ["sulphureus", "cincinnatus", "gilbertsonii"]);
   assert.equal(T.TRICKS.includes("sulfur"), false);
   assert.equal(T.TRICKS.includes("rosette"), false);
@@ -349,7 +349,7 @@ test("Gleam tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("antenna"), false);
   assert.equal(T.TRICKS.includes("scuttle"), false);
   assert.equal(T.HAPPY.includes("halo"), false);
-  assert.equal(T.HAPPY.includes("lumen"), false);
+  assert.equal(T.HAPPY.includes("fluence"), false);
   assert.equal(T.HAPPY.includes("gel"), false);
 
   assert.equal(T.TRICKS.includes("soar"), false);
@@ -392,7 +392,7 @@ test("Gleam tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...Overlay.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
   assert.deepEqual([...Overlay.HAPPY], ["actinic", "lux", "lambert"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
@@ -464,7 +464,7 @@ test("Gleam tricks start only on idle ground", () => {
   assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax", "obelisk", "ommatidia"]);
 });
 
-test("photon/wavelength/lumen/glass/photovore/opsin/iridophore are house-place-true, not copies of prior guests", () => {
+test("photon/wavelength/fluence/glass/photovore/opsin/iridophore are house-place-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("photovore", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -483,7 +483,7 @@ test("photon/wavelength/lumen/glass/photovore/opsin/iridophore are house-place-t
   assert.equal(release.anim, "sit");
   const doneBole = T.stepTrick(bole, T.DUR.photovore + 0.1, ground);
   assert.equal(doneBole.phase, "done");
-  assert.ok(T.nextTrickWait(true, 0, "photovore") > T.nextTrickWait(true, 0, "lumen"));
+  assert.ok(T.nextTrickWait(true, 0, "photovore") > T.nextTrickWait(true, 0, "fluence"));
   const acorn = T.beginTrick("photon", 80, 1);
   assert.equal(acorn.anim, "play");
   const acornMid = T.stepTrick(acorn, 0.5, ground);
@@ -496,7 +496,7 @@ test("photon/wavelength/lumen/glass/photovore/opsin/iridophore are house-place-t
   assert.equal(sinus.anim, "sit");
   const sinusMid = T.stepTrick(sinus, 0.5, ground);
   assert.ok(Math.abs(sinusMid.lift) > 0.8 || Math.abs(sinusMid.rot) > 2 || Math.abs(sinusMid.x - 80) > 0.2);
-  const taproot = T.beginTrick("lumen", 80, 1);
+  const taproot = T.beginTrick("fluence", 80, 1);
   assert.equal(taproot.anim, "talk");
   const taprootMid = T.stepTrick(taproot, 0.5, ground);
   assert.ok(Math.abs(taprootMid.lift) > 0.8 || Math.abs(taprootMid.rot) > 2 || Math.abs(taprootMid.x - 80) > 0.2);
@@ -517,7 +517,7 @@ test("photon/wavelength/lumen/glass/photovore/opsin/iridophore are house-place-t
     // Sundew owns the leaf-rosette settle; Flame's oak-shelf trick is tier, so no trick name is shared
     assert.equal(mod.TRICKS.includes("wavelength"), false);
     assert.equal(mod.TRICKS.includes("glass"), false);
-    assert.equal(mod.TRICKS.includes("lumen"), false);
+    assert.equal(mod.TRICKS.includes("fluence"), false);
     assert.equal(mod.TRICKS.includes("photovore"), false);
     assert.equal(mod.TRICKS.includes("opsin"), false);
     assert.equal(mod.TRICKS.includes("iridophore"), false);
@@ -556,8 +556,8 @@ test("photon/wavelength/lumen/glass/photovore/opsin/iridophore are house-place-t
   assert.equal(T.TRICKS.includes("hover"), false);
   assert.equal(T.TRICKS.includes("drone"), false);
 
-  assert.deepEqual([...HoneyQueen.TRICKS], ["pipe", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
-  assert.deepEqual([...OverlayHoneyQueen.TRICKS], ["pipe", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
+  assert.deepEqual([...HoneyQueen.TRICKS], ["tooting", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
+  assert.deepEqual([...OverlayHoneyQueen.TRICKS], ["tooting", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
   assert.deepEqual([...HoneyQueen.HAPPY], ["caucasica", "iberiensis", "apini"]);
   assert.equal(T.TRICKS.includes("pipe"), false);
   assert.equal(T.TRICKS.includes("retinue"), false);
@@ -701,7 +701,7 @@ test("photon/wavelength/lumen/glass/photovore/opsin/iridophore are house-place-t
   assert.equal(T.TRICKS.includes("antenna"), false);
   assert.equal(T.TRICKS.includes("scuttle"), false);
   assert.equal(T.HAPPY.includes("halo"), false);
-  assert.equal(T.HAPPY.includes("lumen"), false);
+  assert.equal(T.HAPPY.includes("fluence"), false);
   assert.equal(T.HAPPY.includes("gel"), false);
 
   assert.equal(T.TRICKS.includes("trade"), false);
@@ -725,7 +725,7 @@ test("photon/wavelength/lumen/glass/photovore/opsin/iridophore are house-place-t
 test("Gleam feed-happy is its own sit: actinic/lux/lambert, and two feeds are not the same", () => {
   assert.deepEqual([...T.HAPPY], ["actinic", "lux", "lambert"]);
   assert.equal(T.HAPPY.includes("halo"), false);
-  assert.equal(T.HAPPY.includes("lumen"), false);
+  assert.equal(T.HAPPY.includes("fluence"), false);
   assert.equal(T.HAPPY.includes("gel"), false);
   assert.equal(T.HAPPY.includes("bubble"), false);
   assert.equal(T.HAPPY.includes("munch"), false);
@@ -838,7 +838,7 @@ test("ground registry keeps prior guests gated; Gleam selectable; prior guests s
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...T.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...T.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -1081,7 +1081,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...Overlay.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -1146,7 +1146,7 @@ test("notes: Gleam Rui-dense ultra (PHOTOVORE_HOLD=11.2); next leftover Choir / 
   assert.equal(T.wantsThankYou("pact"), false);
   assert.equal(T.wantsThankYou("yeast"), false);
   assert.equal(T.wantsThankYou("starter"), false);
-  assert.deepEqual([...T.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...T.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
   assert.deepEqual([...T.HAPPY], ["actinic", "lux", "lambert"]);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
   assert.equal(OverlayGround.tricksFor("kite"), OverlayManta);
@@ -1249,7 +1249,7 @@ test("notes: Gleam Rui-dense ultra (PHOTOVORE_HOLD=11.2); next leftover Choir / 
   assert.equal(OverlayGround.wantsThankYou("snap"), true); // Snap still gated via VenusFlytrap
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...OverlayOak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
-  assert.deepEqual([...T.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...T.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -1292,7 +1292,7 @@ test("notes: Gleam Rui-dense ultra (PHOTOVORE_HOLD=11.2); next leftover Choir / 
   assert.equal(T.TRICKS.includes("tessera"), false);
   assert.deepEqual([...Honeycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
   assert.deepEqual([...OverlayHoneycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
-  assert.deepEqual([...Overlay.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...Overlay.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
   assert.deepEqual([...T.HAPPY], ["actinic", "lux", "lambert"]);
   assert.equal(T.TRICKS.includes("pad"), false);
   assert.equal(T.TRICKS.includes("mount"), false);
@@ -1320,8 +1320,8 @@ test("notes: Gleam Rui-dense ultra (PHOTOVORE_HOLD=11.2); next leftover Choir / 
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("snap"), OverlayVenusFlytrap);
   assert.equal(OverlayGround.wantsThankYou("snap"), true); // Snap still gated via VenusFlytrap
-  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
-  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
+  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "epiphyte", "keiki", "pollinia"]);
+  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "epiphyte", "keiki", "pollinia"]);
   assert.deepEqual([...Saguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
   assert.deepEqual([...OverlaySaguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
   assert.equal(OverlayGround.tricksFor("saguaro"), OverlaySaguaro);
@@ -1338,7 +1338,7 @@ test("notes: Gleam Rui-dense ultra (PHOTOVORE_HOLD=11.2); next leftover Choir / 
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("milk"), true);
-  assert.deepEqual([...T.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...T.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -1381,7 +1381,7 @@ test("notes: Gleam Rui-dense ultra (PHOTOVORE_HOLD=11.2); next leftover Choir / 
   assert.equal(T.TRICKS.includes("tessera"), false);
   assert.deepEqual([...Honeycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
   assert.deepEqual([...OverlayHoneycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
-  assert.deepEqual([...Overlay.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...Overlay.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
   assert.equal(OverlayGround.tricksFor("stick"), OverlayStick);
   assert.equal(OverlayGround.wantsThankYou("stick"), true);
   assert.equal(OverlayGround.tricksFor("twig"), OverlayStick);
@@ -1587,7 +1587,7 @@ test("notes: Gleam Rui-dense ultra (PHOTOVORE_HOLD=11.2); next leftover Choir / 
   assert.equal(OverlayGround.wantsThankYou("spark"), true);
   assert.deepEqual([...Firefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
   assert.deepEqual([...OverlayFirefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
-  assert.deepEqual([...T.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...T.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -1630,7 +1630,7 @@ test("notes: Gleam Rui-dense ultra (PHOTOVORE_HOLD=11.2); next leftover Choir / 
   assert.equal(T.TRICKS.includes("tessera"), false);
   assert.deepEqual([...Honeycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
   assert.deepEqual([...OverlayHoneycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
-  assert.deepEqual([...Overlay.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...Overlay.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
   assert.deepEqual([...Monarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
   assert.deepEqual([...OverlayMonarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
   assert.equal(OverlayGround.tricksFor("pitcher"), OverlayPitcher);
@@ -1649,7 +1649,7 @@ test("notes: Gleam Rui-dense ultra (PHOTOVORE_HOLD=11.2); next leftover Choir / 
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("milk"), true);
-  assert.deepEqual([...T.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...T.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -1692,7 +1692,7 @@ test("notes: Gleam Rui-dense ultra (PHOTOVORE_HOLD=11.2); next leftover Choir / 
   assert.equal(T.TRICKS.includes("tessera"), false);
   assert.deepEqual([...Honeycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
   assert.deepEqual([...OverlayHoneycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
-  assert.deepEqual([...Overlay.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...Overlay.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
   assert.equal(OverlayGround.tricksFor("sundew"), OverlaySundew);
   assert.equal(OverlayGround.wantsThankYou("sundew"), true);
   assert.equal(OverlayGround.tricksFor("dew"), OverlaySundew);

@@ -177,7 +177,7 @@ test("Flame tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...T.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.equal(T.TRICKS.includes("drip"), false);
   assert.equal(T.TRICKS.includes("shelf"), false);
   assert.equal(T.TRICKS.includes("chicken"), false);
@@ -357,7 +357,7 @@ test("Flame tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("mantle"), false);
   assert.equal(T.TRICKS.includes("jet"), false);
   assert.equal(T.TRICKS.includes("veil"), false);
-  assert.equal(T.TRICKS.includes("soft"), true);
+  assert.equal(T.TRICKS.includes("tender"), true);
   assert.equal(T.TRICKS.includes("bone"), false);
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(T.TRICKS.includes("fringe"), false);
@@ -380,7 +380,7 @@ test("Flame tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...Overlay.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.deepEqual([...Overlay.HAPPY], ["sulphureus", "cincinnatus", "gilbertsonii"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
@@ -452,7 +452,7 @@ test("Flame tricks start only on idle ground", () => {
   assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax", "obelisk", "ommatidia"]);
 });
 
-test("sulfur/tier/oak/soft/laetiporus/poroid/cluster are house-place-true, not copies of prior guests", () => {
+test("sulfur/tier/oak/tender/laetiporus/poroid/cluster are house-place-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("laetiporus", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -480,7 +480,7 @@ test("sulfur/tier/oak/soft/laetiporus/poroid/cluster are house-place-true, not c
   assert.equal(gall.anim, "talk");
   const gallMid = T.stepTrick(gall, 0.85, ground);
   assert.ok(Math.abs(gallMid.lift) > 0.8 || Math.abs(gallMid.rot) > 2 || Math.abs(gallMid.x - 80) > 0.2);
-  const sinus = T.beginTrick("soft", 80, 1);
+  const sinus = T.beginTrick("tender", 80, 1);
   assert.equal(sinus.anim, "sit");
   const sinusMid = T.stepTrick(sinus, 0.5, ground);
   assert.ok(Math.abs(sinusMid.lift) > 0.8 || Math.abs(sinusMid.rot) > 2 || Math.abs(sinusMid.x - 80) > 0.2);
@@ -496,7 +496,7 @@ test("sulfur/tier/oak/soft/laetiporus/poroid/cluster are house-place-true, not c
   assert.equal(cluster.anim, "play");
   const clusterMid = T.stepTrick(cluster, 0.5, ground);
   assert.ok(Math.abs(clusterMid.lift) > 0.8 || Math.abs(clusterMid.rot) > 2 || Math.abs(clusterMid.x - 80) > 0.2);
-  const sinusDone = T.stepTrick(sinus, T.DUR.soft + 0.1, ground);
+  const sinusDone = T.stepTrick(sinus, T.DUR.tender + 0.1, ground);
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -504,7 +504,7 @@ test("sulfur/tier/oak/soft/laetiporus/poroid/cluster are house-place-true, not c
     assert.equal(mod.TRICKS.includes("sulfur"), false);
     // Sundew owns the leaf-rosette settle; Flame's oak-shelf trick is tier, so no trick name is shared
     if (mod !== Sundew) assert.equal(mod.TRICKS.includes("rosette"), false);
-    assert.equal(mod.TRICKS.includes("soft"), false);
+    assert.equal(mod.TRICKS.includes("tender"), false);
     assert.equal(mod.TRICKS.includes("oak"), false);
     assert.equal(mod.TRICKS.includes("laetiporus"), false);
     assert.equal(mod.TRICKS.includes("poroid"), false);
@@ -543,8 +543,8 @@ test("sulfur/tier/oak/soft/laetiporus/poroid/cluster are house-place-true, not c
   assert.equal(T.TRICKS.includes("hover"), false);
   assert.equal(T.TRICKS.includes("drone"), false);
 
-  assert.deepEqual([...HoneyQueen.TRICKS], ["pipe", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
-  assert.deepEqual([...OverlayHoneyQueen.TRICKS], ["pipe", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
+  assert.deepEqual([...HoneyQueen.TRICKS], ["tooting", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
+  assert.deepEqual([...OverlayHoneyQueen.TRICKS], ["tooting", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
   assert.deepEqual([...HoneyQueen.HAPPY], ["caucasica", "iberiensis", "apini"]);
   assert.equal(T.TRICKS.includes("pipe"), false);
   assert.equal(T.TRICKS.includes("retinue"), false);
@@ -823,7 +823,7 @@ test("ground registry keeps prior guests gated; Flame selectable; prior guests s
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...T.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...T.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -1061,7 +1061,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...Overlay.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -1122,7 +1122,7 @@ test("notes: Flame Rui-dense ultra (LAETIPORUS_HOLD=11.2); next leftover Starter
   assert.equal(T.TRICK_KEY, "chicken_of_woods");
   assert.equal(T.wantsThankYou("flame"), true);
   assert.equal(T.wantsThankYou("chicken_of_woods"), true);
-  assert.deepEqual([...T.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...T.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.deepEqual([...T.HAPPY], ["sulphureus", "cincinnatus", "gilbertsonii"]);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
   assert.equal(OverlayGround.tricksFor("kite"), OverlayManta);
@@ -1225,7 +1225,7 @@ test("notes: Flame Rui-dense ultra (LAETIPORUS_HOLD=11.2); next leftover Starter
   assert.equal(OverlayGround.wantsThankYou("snap"), true); // Snap still gated via VenusFlytrap
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...OverlayOak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
-  assert.deepEqual([...T.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...T.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -1268,7 +1268,7 @@ test("notes: Flame Rui-dense ultra (LAETIPORUS_HOLD=11.2); next leftover Starter
   assert.equal(T.TRICKS.includes("tessera"), false);
   assert.deepEqual([...Honeycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
   assert.deepEqual([...OverlayHoneycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
-  assert.deepEqual([...Overlay.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...Overlay.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.deepEqual([...T.HAPPY], ["sulphureus", "cincinnatus", "gilbertsonii"]);
   assert.equal(T.TRICKS.includes("pad"), false);
   assert.equal(T.TRICKS.includes("mount"), false);
@@ -1296,8 +1296,8 @@ test("notes: Flame Rui-dense ultra (LAETIPORUS_HOLD=11.2); next leftover Starter
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("snap"), OverlayVenusFlytrap);
   assert.equal(OverlayGround.wantsThankYou("snap"), true); // Snap still gated via VenusFlytrap
-  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
-  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
+  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "epiphyte", "keiki", "pollinia"]);
+  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "epiphyte", "keiki", "pollinia"]);
   assert.deepEqual([...Saguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
   assert.deepEqual([...OverlaySaguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
   assert.equal(OverlayGround.tricksFor("saguaro"), OverlaySaguaro);
@@ -1314,7 +1314,7 @@ test("notes: Flame Rui-dense ultra (LAETIPORUS_HOLD=11.2); next leftover Starter
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("milk"), true);
-  assert.deepEqual([...T.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...T.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -1357,7 +1357,7 @@ test("notes: Flame Rui-dense ultra (LAETIPORUS_HOLD=11.2); next leftover Starter
   assert.equal(T.TRICKS.includes("tessera"), false);
   assert.deepEqual([...Honeycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
   assert.deepEqual([...OverlayHoneycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
-  assert.deepEqual([...Overlay.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...Overlay.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.equal(OverlayGround.tricksFor("stick"), OverlayStick);
   assert.equal(OverlayGround.wantsThankYou("stick"), true);
   assert.equal(OverlayGround.tricksFor("twig"), OverlayStick);
@@ -1556,7 +1556,7 @@ test("notes: Flame Rui-dense ultra (LAETIPORUS_HOLD=11.2); next leftover Starter
   assert.equal(OverlayGround.wantsThankYou("spark"), true);
   assert.deepEqual([...Firefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
   assert.deepEqual([...OverlayFirefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
-  assert.deepEqual([...T.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...T.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -1599,7 +1599,7 @@ test("notes: Flame Rui-dense ultra (LAETIPORUS_HOLD=11.2); next leftover Starter
   assert.equal(T.TRICKS.includes("tessera"), false);
   assert.deepEqual([...Honeycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
   assert.deepEqual([...OverlayHoneycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
-  assert.deepEqual([...Overlay.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...Overlay.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.deepEqual([...Monarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
   assert.deepEqual([...OverlayMonarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
   assert.equal(OverlayGround.tricksFor("pitcher"), OverlayPitcher);
@@ -1618,7 +1618,7 @@ test("notes: Flame Rui-dense ultra (LAETIPORUS_HOLD=11.2); next leftover Starter
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("milk"), true);
-  assert.deepEqual([...T.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...T.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -1661,7 +1661,7 @@ test("notes: Flame Rui-dense ultra (LAETIPORUS_HOLD=11.2); next leftover Starter
   assert.equal(T.TRICKS.includes("tessera"), false);
   assert.deepEqual([...Honeycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
   assert.deepEqual([...OverlayHoneycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
-  assert.deepEqual([...Overlay.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...Overlay.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.equal(OverlayGround.tricksFor("sundew"), OverlaySundew);
   assert.equal(OverlayGround.wantsThankYou("sundew"), true);
   assert.equal(OverlayGround.tricksFor("dew"), OverlaySundew);

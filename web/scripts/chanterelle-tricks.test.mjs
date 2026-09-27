@@ -458,8 +458,8 @@ test("apricot/funnel/decurrent/flute/cantharellus/vase/plica are house-place-tru
   assert.equal(T.TRICKS.includes("hover"), false);
   assert.equal(T.TRICKS.includes("drone"), false);
 
-  assert.deepEqual([...HoneyQueen.TRICKS], ["pipe", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
-  assert.deepEqual([...OverlayHoneyQueen.TRICKS], ["pipe", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
+  assert.deepEqual([...HoneyQueen.TRICKS], ["tooting", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
+  assert.deepEqual([...OverlayHoneyQueen.TRICKS], ["tooting", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
   assert.deepEqual([...HoneyQueen.HAPPY], ["caucasica", "iberiensis", "apini"]);
   assert.equal(T.TRICKS.includes("pipe"), false);
   assert.equal(T.TRICKS.includes("retinue"), false);
@@ -1206,8 +1206,8 @@ test("notes: Horn Rui-dense ultra (CANTHARELLUS_HOLD=11.2); Ring now Rue-dense; 
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("snap"), OverlayVenusFlytrap);
   assert.equal(OverlayGround.wantsThankYou("snap"), true); // Snap still gated via VenusFlytrap
-  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
-  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
+  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "epiphyte", "keiki", "pollinia"]);
+  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "epiphyte", "keiki", "pollinia"]);
   assert.deepEqual([...Saguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
   assert.deepEqual([...OverlaySaguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
   assert.equal(OverlayGround.tricksFor("saguaro"), OverlaySaguaro);

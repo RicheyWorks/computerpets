@@ -382,8 +382,8 @@ test("Brine tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("bell"), false);
   assert.equal(T.TRICKS.includes("medusa"), false);
   assert.equal(T.TRICKS.includes("lucent"), false);
-  assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
-  assert.deepEqual([...OverlayPhotovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...OverlayPhotovore.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
   assert.deepEqual([...Photovore.HAPPY], ["actinic", "lux", "lambert"]);
   assert.equal(T.TRICKS.includes("photon"), false);
   assert.equal(T.TRICKS.includes("wavelength"), false);
@@ -400,8 +400,8 @@ test("Brine tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("drone"), false);
   assert.equal(T.HAPPY.includes("chord"), false);
   assert.equal(T.HAPPY.includes("choir"), false);
-  assert.deepEqual([...ChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
-  assert.deepEqual([...OverlayChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...ChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...OverlayChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.deepEqual([...ChickenOfWoods.HAPPY], ["sulphureus", "cincinnatus", "gilbertsonii"]);
   assert.equal(T.TRICKS.includes("sulfur"), false);
   assert.equal(T.TRICKS.includes("rosette"), false);
@@ -800,8 +800,8 @@ test("halite/salina/rime/bittern/deliquesce/ectoine/sabkha are salt-brine-true, 
   assert.equal(T.TRICKS.includes("hover"), false);
   assert.equal(T.TRICKS.includes("drone"), false);
 
-  assert.deepEqual([...HoneyQueen.TRICKS], ["pipe", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
-  assert.deepEqual([...OverlayHoneyQueen.TRICKS], ["pipe", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
+  assert.deepEqual([...HoneyQueen.TRICKS], ["tooting", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
+  assert.deepEqual([...OverlayHoneyQueen.TRICKS], ["tooting", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
   assert.deepEqual([...HoneyQueen.HAPPY], ["caucasica", "iberiensis", "apini"]);
   assert.equal(T.TRICKS.includes("pipe"), false);
   assert.equal(T.TRICKS.includes("retinue"), false);
@@ -1255,7 +1255,7 @@ globalThis.PetHalovoreTricks = Overlay;
   assert.deepEqual([...Silica.TRICKS], ["cleavage", "twinning", "inclusion", "grit", "crescit", "hopper", "phantom"]);
   assert.deepEqual([...OverlayNimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Nimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
-  assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
   assert.equal(Pitcher.TRICKS.includes("brine"), true);
   assert.equal(T.TRICKS.includes("brine"), false);
   assert.equal(SweatBee.TRICKS.includes("salt"), true);
@@ -1281,7 +1281,7 @@ globalThis.PetHalovoreTricks = Overlay;
   assert.deepEqual([...Silica.TRICKS], ["cleavage", "twinning", "inclusion", "grit", "crescit", "hopper", "phantom"]);
   assert.deepEqual([...OverlayNimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Nimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
-  assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
   assert.equal(Moray.TRICKS.includes("knot"), true);
   assert.equal(T.TRICKS.includes("knot"), false);
 
@@ -1299,7 +1299,7 @@ globalThis.PetHalovoreTricks = Overlay;
   assert.deepEqual([...Silica.TRICKS], ["cleavage", "twinning", "inclusion", "grit", "crescit", "hopper", "phantom"]);
   assert.deepEqual([...OverlayNimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
   assert.deepEqual([...Nimbus.TRICKS], ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"]);
-  assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
+  assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "fluence", "glass", "photovore", "opsin", "iridophore"]);
 
   assert.equal(OverlayGround.tricksFor("halovore"), Overlay);
   assert.equal(OverlayGround.tricksFor("brine"), Overlay);
