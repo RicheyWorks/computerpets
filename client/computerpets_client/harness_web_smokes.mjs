@@ -181,7 +181,7 @@ async function plainReasons() {
   const read = (...p) => readFileSync(join(WEB, "src", ...p), "utf8");
   const wires = [
     ["routes/nest.tsx", 'loadProblem("nest", err)', "<LoadProblem"],
-    ["components/desk/companion-room.tsx", 'careNotSaved("play", err)', "data-play-problem"],
+    ["components/desk/companion-room.tsx", 'careFailed("play", err)', "data-care-problem"],
     ["routes/mind.tsx", "mindProblem(err)", "mindProblem"],
     ["lib/admin/api.ts", "isLicenseList(body)", "isLicenseRow(body)"],
   ];
@@ -194,6 +194,69 @@ async function plainReasons() {
     "play.save=plain+retry+meters_kept",
     "admin.search=license_rows_only",
     "mind.test=plain_reason",
+  ]);
+}
+
+/** Feed/tend saves, talk turns, revoke confirmation, desk plates, and keeper sound say why they failed. */
+async function careTalkPlates() {
+  const P = await import(pathToFileURL(join(WEB, "src", "lib", "plain-error.ts")).href);
+  const B = await import(pathToFileURL(join(WEB, "src", "lib", "admin", "base.ts")).href);
+  const quiet = () => {};
+  const refused = Object.assign(new TypeError("fetch failed"), { cause: { code: "ECONNREFUSED" } });
+  const raw = /ECONNREFUSED|fetch failed|openai|401/;
+  const care = {};
+  for (const act of ["feed", "rest", "clean", "medicine"]) {
+    const line = P.careNotSaved(act, refused, quiet);
+    if (!line.startsWith(P.CARE_NOT_SAVED[act]) || raw.test(line)) return fail(`careNotSaved ${act} drift: ${line}`);
+    care[act] = line;
+  }
+  const talk = {
+    mind: P.talkProblem(new Error("openai 401"), true, quiet),
+    house: P.talkProblem(refused, false, quiet),
+  };
+  if (talk.mind !== `${P.TALK_LINES.mind} ${P.MIND_LINES.key}` || talk.house !== `${P.TALK_LINES.house} ${P.PLAIN_LINES.unreachable}`) {
+    return fail("talkProblem drift", { talk });
+  }
+  const revoke = {
+    done: B.isRevokeDone({ revoked: true, jti: "a1" }, "a1"),
+    other: B.isRevokeDone({ revoked: true, jti: "b2" }, "a1"),
+    page: B.isRevokeDone("<html>", "a1"),
+  };
+  if (!revoke.done || revoke.other || revoke.page) return fail("isRevokeDone drift", { revoke });
+  const plates = {
+    forecast: P.plateProblem("forecast", null, quiet),
+    price: P.plateProblem("price", Object.assign(new Error("t"), { name: "QuoteTimeout" }), quiet),
+    newer: P.plateProblem("newer", refused, quiet),
+  };
+  if (
+    plates.forecast !== `${P.PLATE_LINES.forecast} ${P.PLATE_REASONS.answer}` ||
+    plates.price !== `${P.PLATE_LINES.price} ${P.PLATE_REASONS.timeout}` ||
+    plates.newer !== `${P.PLATE_LINES.newer} ${P.PLATE_REASONS.unreachable}`
+  ) {
+    return fail("plateProblem drift", { plates });
+  }
+  const sound = {
+    blocked: P.soundProblem("music", Object.assign(new Error("x"), { name: "NotAllowedError" }), quiet),
+    paused: P.soundInterrupted(Object.assign(new Error("x"), { name: "AbortError" })),
+  };
+  if (sound.blocked !== `${P.SOUND_LINES.music} ${P.SOUND_REASONS.blocked}` || !sound.paused) return fail("soundProblem drift", { sound });
+  const read = (...p) => readFileSync(join(WEB, "src", ...p), "utf8");
+  const wires = [
+    ["components/desk/companion-room.tsx", ['careFailed("feed", err)', "careFailed(saved, err)", "data-care-problem", "data-talk-problem", "talkUsesPlugin(mind, mindSettings.voice)"]],
+    ["lib/admin/api.ts", ["isRevokeDone(await readJsonBody(res), jti)"]],
+    ["components/desk/desk-plates.tsx", ['plateProblem("forecast", err)', 'data-plate-problem="news"', 'data-plate-problem="market"']],
+    ["components/desk/keeper-card.tsx", ['soundProblem("music", err)', 'soundProblem("sleep", err)', "data-sound-problem"]],
+  ];
+  for (const [rel, needs] of wires) {
+    const text = read(...rel.split("/"));
+    for (const need of needs) if (!text.includes(need)) return fail(`${rel} missing ${need}`);
+  }
+  return ok("care saves, talk, revoke, plates, and keeper sound say why", { care, talk, revoke, plates, sound }, [
+    "feed+tend.save=plain+retry+meters_kept",
+    "talk=house_line+plain_reason",
+    "admin.revoke=confirmed_only",
+    "plates=couldnt_load+retry",
+    "keeper.sound=couldnt_play+retry",
   ]);
 }
 
@@ -382,6 +445,7 @@ const COMMANDS = {
   demo_room: demoRoom,
   load_problems: loadProblems,
   plain_reasons: plainReasons,
+  care_talk_plates: careTalkPlates,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

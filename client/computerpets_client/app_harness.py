@@ -2447,6 +2447,19 @@ def _web_rows() -> list[Affordance]:
                 "isRevokeMiss so search and revoke only trust license-service answers."
             ),
         ),
+        Affordance(
+            "web.care_talk_plates",
+            "web",
+            "Care saves, talk, revoke, plates, and keeper sound say why",
+            "web/src/lib/plain-error.ts careNotSaved/talkProblem/plateProblem/soundProblem + admin/base.ts isRevokeDone",
+            notes=(
+                "Real plain-error.ts: careNotSaved for feed / rest / clean / medicine (meters stay put, Try again), "
+                "talkProblem (Minds reasons when a plugin was involved, house reasons otherwise; the house line "
+                "still speaks), plateProblem for the forecast / headlines / price plates (no house-server words), "
+                "soundProblem for music and sleep sounds (a deliberate pause says nothing); admin/base.ts "
+                "isRevokeDone so a revoke only counts on the ledger's own confirmation for that jti."
+            ),
+        ),
     ]
 
 
@@ -2460,6 +2473,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("load_problems", domain="web", action_id=aid)
     if local_id == "plain_reasons":
         return _run_web_smoke("plain_reasons", domain="web", action_id=aid)
+    if local_id == "care_talk_plates":
+        return _run_web_smoke("care_talk_plates", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []
