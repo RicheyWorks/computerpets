@@ -18,27 +18,69 @@ Python 3.11+ (3.12 recommended). On Linux, Qt also needs the usual EGL/GL
 packages (`libegl1`, `libgl1`, `libxcb-cursor0`, …) — GitHub Actions installs
 them in the `pyqt-client` job.
 
+The backend URL and the license key are optional. The blotter pets walk without
+them. You only need them to press **Unlock** against a running house backend.
+Without `COMPUTERPETS_BACKEND_URL`, Unlock uses `http://127.0.0.1:8081`.
+Without `LICENSE_SECRET_KEY`, Unlock stops with a `missing_secret` error and the
+pets keep walking.
+
+### Linux / macOS (bash)
+
 ```bash
 cd client
 python3 -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -e ".[dev]"
 
-export COMPUTERPETS_BACKEND_URL=http://127.0.0.1:8081
-export LICENSE_SECRET_KEY=         # same 32-byte standard Base64 key as the backend
+python -m computerpets_client
+```
 
+Optional, only for Unlock:
+
+```bash
+export COMPUTERPETS_BACKEND_URL=http://127.0.0.1:8081
+export LICENSE_SECRET_KEY=...      # same 32-byte standard Base64 key as the backend
+python -m computerpets_client
+```
+
+### Windows (PowerShell)
+
+```powershell
+cd client
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
+
+python -m computerpets_client
+```
+
+`py -0p` lists the Pythons you have; `py -3.12 -m venv .venv` picks one. If
+PowerShell will not run `Activate.ps1`, skip that line and type
+`.\.venv\Scripts\python.exe` wherever the steps say `python`.
+
+Optional, only for Unlock (these last until you close that PowerShell):
+
+```powershell
+$env:COMPUTERPETS_BACKEND_URL = "http://127.0.0.1:8081"
+$env:LICENSE_SECRET_KEY = "..."    # same 32-byte standard Base64 key as the backend
 python -m computerpets_client
 ```
 
 `computerpets-client` is the same entry after `pip install -e .`.
 
-Headless smoke (CI / no display):
+### Headless smoke (CI / no display)
 
 ```bash
 QT_QPA_PLATFORM=offscreen python -m computerpets_client --check
 ```
 
-`--check` opens the window (offscreen), confirms a living pet and a species plaque are on the blotter, prints the day’s weather, the day part, whether the default guest is resting at a fixture hour, who may call, the default guest’s special verb, whether they are well, the renderer line, and the two-hundred-ten count, and exits.
+```powershell
+python -m computerpets_client --check
+```
+
+`--check` sets `QT_QPA_PLATFORM=offscreen` by itself when the variable is not already set, so the PowerShell line needs no `$env:` step (and one would stay set for the rest of that PowerShell session, unlike the bash prefix).
+
+`--check` opens the window (offscreen), confirms a living pet and a species plaque are on the blotter, prints the day’s weather, the day part, whether the default guest is resting at a fixture hour, who may call, the default guest’s special verb, whether they are well, the renderer line, and the living-kinds count (221), and exits.
 
 ## Meet the house
 

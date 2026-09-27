@@ -21,6 +21,11 @@
       .ok { margin-top: 12px; color: #9a9288; font-size: 13px; }
       .err { margin-top: 12px; color: #d9a08a; font-size: 13px; }
       hr { border: 0; border-top: 1px solid #2a2621; margin: 28px 0 0; }
+      details.fold { margin: -10px 0 16px; color: #9a9288; font-size: 13px; }
+      details.fold summary { cursor: pointer; color: #c4a574; width: max-content; }
+      details.fold p { margin: 8px 0 0; }
+      fieldset.optional { border: 1px solid #2a2621; border-radius: 10px; margin: 0; padding: 2px 14px 16px; }
+      fieldset.optional legend { padding: 0 6px; font-size: 12px; color: #9a9288; }
     </style>
   </head>
   <body>
@@ -40,8 +45,14 @@
       <p class="ok" id="ok"></p>
       <hr />
       <h2>Unlock</h2>
-      <p class="lead">Prove Steam ownership against the house backend. The desk pets still live here either way — this is the published license contract, not a second overlay.</p>
-      <p class="lead" id="licenseMark">Opening this window did not read the operating-system machine id. The first Unlock reads Linux machine-id, Windows MachineGuid, or the Mac platform UUID, hashes it, and stores that hash in hwid.txt. A hash already stored is reused, so an existing license stays bound. The raw id is not sent. The house receives only the hash, and only for unlock or a bound download. That hash is a device fingerprint. The line under Backend URL names the host before that hash leaves. A backend on this computer does not send it. If that named read fails. This computer has no stable operating-system id. Unlock waits until you say yes before it hashes the computer name. If this computer has no name, that yes hashes a random id. A rename changes the computer-name hash. Deleting hwid.txt makes a random id a different mark.</p>
+      <p class="lead" id="unlockIntro">Pets work without unlocking. Unlocking is optional.</p>
+      <details class="fold" id="unlockDetails">
+        <summary>Details</summary>
+        <p id="unlockAbout">Unlocking checks that you own the game on Steam by asking the house backend named under Backend URL. The pets on your desk keep working whether or not you unlock.</p>
+        <p id="licenseMark">Opening this window did not read the operating-system machine id. Unlock, or a download for a license bound to this computer, reads one machine id only when no hash is stored yet: the machine-id file on Linux, MachineGuid on Windows, or the platform UUID on a Mac. The app mixes that id with its own name and the platform, hashes the result with SHA-256, and saves only the hash in hwid.txt in its data folder. Later unlocks reuse the stored hash, so an existing license stays bound to this computer. The raw id is not sent. The house receives only the hash, never the id itself, and only for an unlock or a bound download. The hash is still a device fingerprint, because this computer keeps giving the same hash. The line under Backend URL names the host before the hash leaves. A backend on this computer keeps the hash on this computer. If that named read fails, Unlock stops and asks you first. It hashes the computer name only after you press the button that says so, and it uses a random id instead if this computer has no name. Renaming the computer changes a computer-name hash. Deleting hwid.txt turns a random id into a different mark.</p>
+      </details>
+      <fieldset class="optional" id="unlockOptional">
+      <legend>Optional: only needed to unlock</legend>
       <label>Backend URL</label>
       <input id="backend" placeholder="http://127.0.0.1:8081" />
       <p class="lead" id="licenseNet">this unlock stays on this computer. the license hash does not leave.</p>
@@ -60,6 +71,7 @@
         <button id="lock" class="ghost" type="button">Clear</button>
         <button id="weakMark" class="ghost" type="button" hidden>Use the computer name, or a random id if there is no name</button>
       </div>
+      </fieldset>
       <p class="ok" id="licenseOk"></p>
       <p class="err" id="licenseErr"></p>
     </main>
@@ -291,15 +303,15 @@
         fallbackPetType();
       }
 
+      // The privacy detail lives folded under "Details"; the first-read wording is the markup above.
+      const firstMarkText = (document.getElementById("licenseMark") || {}).textContent || "";
+      const storedMarkText = "A license hash is already stored in hwid.txt. Unlock reuses it and does not read the operating-system id again. The raw id is not sent. The hash is still a device fingerprint, because this computer keeps giving the same hash. The line under Backend URL names the host before the hash leaves. A backend on this computer keeps the hash on this computer.";
+
       function paintMark(status) {
         const mark = status && status.hwidMark;
         const node = document.getElementById("licenseMark");
         if (!node || !mark) return;
-        if (mark.read === "stored") {
-          node.textContent = "A license hash is already stored in hwid.txt. Unlock reuses it and does not read the operating-system id again. The raw id is not sent. That hash is still a device fingerprint. The line under Backend URL names the host before that hash leaves. A backend on this computer does not send it.";
-          return;
-        }
-        node.textContent = "Opening this window did not read the operating-system machine id. The first Unlock reads Linux machine-id, Windows MachineGuid, or the Mac platform UUID, hashes it, and stores that hash in hwid.txt. A hash already stored is reused, so an existing license stays bound. The raw id is not sent. The house receives only the hash, and only for unlock or a bound download. That hash is a device fingerprint. The line under Backend URL names the host before that hash leaves. A backend on this computer does not send it. If that named read fails. This computer has no stable operating-system id. Unlock waits until you say yes before it hashes the computer name. If this computer has no name, that yes hashes a random id. A rename changes the computer-name hash. Deleting hwid.txt makes a random id a different mark.";
+        node.textContent = mark.read === "stored" ? storedMarkText : firstMarkText;
       }
 
       function showWeakYes(which) {
