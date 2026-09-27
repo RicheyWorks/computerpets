@@ -37,10 +37,26 @@
     return /^https?:\/\//i.test(text) ? text : "";
   }
 
+  /**
+   * The line a link paints before it is clicked: which host opens, and that it opens in
+   * the keeper's browser (the main process hands http(s) links to the default browser and
+   * never opens an overlay window). Same words as presence/open-link.cjs linkHostLine.
+   */
+  function linkHostLine(href) {
+    try {
+      const host = new URL(href).host;
+      return host ? `Opens ${host} in your browser` : "";
+    } catch {
+      return "";
+    }
+  }
+
   function link(url, text) {
     const href = webLink(url);
     if (!href) return text;
-    return el("a", { href, target: "_blank", rel: "noreferrer", data: { hit: "1" }, text });
+    const title = linkHostLine(href);
+    if (!title) return text;
+    return el("a", { href, target: "_blank", rel: "noreferrer", title, data: { hit: "1" }, text });
   }
 
   function clipEl(src, volume, onFail) {
@@ -533,7 +549,7 @@
     return { id: "desk-weather", x: r.left, y: r.top, width: r.width, height: r.height };
   }
 
-  const api = { playVoice, playStep, paintWeather, paintNews, paintMarket, weatherRect, clipEl, webLink };
+  const api = { playVoice, playStep, paintWeather, paintNews, paintMarket, weatherRect, clipEl, webLink, linkHostLine };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetDeskHouse = api;
 })(typeof window !== "undefined" ? window : globalThis);

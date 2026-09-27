@@ -719,12 +719,146 @@ async function nftReplay() {
 }
 
 // ---------------------------------------------------------------------------
+// Links: painted news links through the main-process seal (presence/open-link.cjs)
+// ---------------------------------------------------------------------------
+
+/** Links a plate must never hand to the browser. */
+const REFUSED_LINKS = [
+  "javascript:alert(1)",
+  "data:text/html,<b>x</b>",
+  "file:///C:/Windows/win.ini",
+  "blob:https://example.test/1",
+  "about:blank",
+  "chrome://settings",
+  "vbscript:msgbox(1)",
+  "mailto:keeper@example.test",
+  "ftp://example.test/a",
+  "//example.test/a",
+  "./Tilcayo",
+  "https://user:pass@example.test/",
+];
+
+/** A stand-in webContents: records handlers so the replay can click and navigate. */
+function fakeContents() {
+  const on = {};
+  const perms = {};
+  return {
+    on: (name, fn) => {
+      on[name] = fn;
+    },
+    setWindowOpenHandler: (fn) => {
+      on.open = fn;
+    },
+    session: {
+      setPermissionRequestHandler: (fn) => {
+        perms.request = fn;
+      },
+      setPermissionCheckHandler: (fn) => {
+        perms.check = fn;
+      },
+    },
+    handlers: on,
+    perms,
+  };
+}
+
+async function linksOpen() {
+  const dom = installDom(NEWS_IDS);
+  const { N, H } = loadPlates();
+  const Presence = require(path.join(DESKTOP, "presence.cjs"));
+  const OpenLink = require(path.join(DESKTOP, "presence", "open-link.cjs"));
+  const bad = [];
+
+  // Paint the saved Popular RSS, the saved Wikipedia featured feed, and one hostile item.
+  const painted = [];
+  function paint(label, items, card) {
+    H.paintNews(items, false, card);
+    walk(dom.get("news-live"), (n) => {
+      if (n.tagName !== "A") return;
+      const href = String(n.href || "");
+      const want = OpenLink.linkHostLine(href);
+      if (!want) bad.push(`${label}: painted a link the browser would refuse`);
+      if (n.title !== want) bad.push(`${label}: link title ${JSON.stringify(n.title)}, expected ${JSON.stringify(want)}`);
+      painted.push(href);
+    });
+  }
+  paint("popular", N.parseRss(fixture("news-popular.rss")), { newsTab: "popular" });
+  paint("world", N.parseNews(fixtureJson("news-featured.json")), N.toCardPatch(N.pickTab(N.blankNewsPrefs(), "topics")));
+  paint("hostile rss", N.parseRss(hostileRss()), { newsTab: "popular" });
+  const wikiLinks = painted.filter((h) => hostOf(h) === "en.wikipedia.org").length;
+  if (painted.length !== 6 || wikiLinks !== 2) bad.push(`painted ${painted.length} links (${wikiLinks} Wikipedia), expected 6 (2 Wikipedia)`);
+
+  // Seal a stand-in contents the way main.cjs seals the overlay.
+  const opened = [];
+  const logs = [];
+  let windows = 0;
+  const contents = fakeContents();
+  OpenLink.sealContents(contents, {
+    presence: Presence,
+    openExternal: (url) => {
+      opened.push(url);
+      return Promise.resolve();
+    },
+    log: (line) => logs.push(line),
+    sealed: new WeakSet(),
+  });
+  const h = contents.handlers;
+  if (typeof h.open !== "function") bad.push("no window-open handler was set");
+  const answers = [];
+  const click = (url) => {
+    const answer = h.open ? h.open({ url, disposition: "foreground-tab" }) : null;
+    answers.push(answer && answer.action);
+    if (answer && answer.action === "allow") windows += 1;
+  };
+  painted.forEach(click);
+  if (!same(opened, painted)) bad.push(`openExternal got ${JSON.stringify(opened.map(hostOf))}, expected the ${painted.length} painted links`);
+  const before = opened.length;
+  REFUSED_LINKS.forEach(click);
+  if (opened.length !== before) bad.push(`a refused link reached openExternal: ${JSON.stringify(opened.slice(before))}`);
+  const refusedLogs = logs.filter((line) => /^\[links\] refused /.test(line));
+  if (refusedLogs.length !== REFUSED_LINKS.length) bad.push(`${refusedLogs.length} refusals logged, expected ${REFUSED_LINKS.length}`);
+  if (logs.some((line) => /alert|win\.ini|keeper@|pass@/.test(line))) bad.push("a refusal log carried the link itself");
+  if (answers.some((a) => a !== "deny")) bad.push(`a window-open answer was not deny: ${JSON.stringify(answers)}`);
+
+  // The overlay never navigates, not even to a painted web page.
+  let navigated = 0;
+  ["will-navigate", "will-redirect", "will-frame-navigate"].forEach((name) => {
+    if (typeof h[name] !== "function") {
+      bad.push(`${name} is not refused`);
+      return;
+    }
+    painted.concat(REFUSED_LINKS).forEach((url) => {
+      let prevented = false;
+      h[name]({ preventDefault: () => (prevented = true) }, url);
+      if (!prevented) navigated += 1;
+    });
+  });
+  if (navigated) bad.push(`${navigated} navigations were not prevented`);
+  let granted = 0;
+  contents.perms.request(null, "media", (yes) => (granted += yes ? 1 : 0));
+  if (granted || contents.perms.check(null, "media")) bad.push("a permission was granted to the overlay");
+  sinksIn("links", bad);
+
+  const detail = `${opened.length} painted links to the browser, ${REFUSED_LINKS.length} refused, 0 windows`;
+  const trace = [
+    `painted=${painted.length} wikipedia=${wikiLinks}`,
+    `opened=${opened.map(hostOf).join(",")}`,
+    `refused=${refusedLogs.length} answers=${Array.from(new Set(answers)).join(",")}`,
+    `navigated=${navigated} windows=${windows}`,
+  ];
+  const extras = { painted: painted.length, opened: opened.length, refused: refusedLogs.length, windows, navigated };
+  if (bad.length) return fail(bad.join("; "), extras, trace);
+  return ok(detail, extras, trace);
+}
+
+// ---------------------------------------------------------------------------
 // GPU sense: saved probe output through desktop gpu-sense.cjs read()
 // ---------------------------------------------------------------------------
 
 const GPU_CASES = [
   { file: "gpu-win-nvidia.txt", platform: "win32" },
   { file: "gpu-win-pdh.txt", platform: "win32" },
+  { file: "gpu-win-two-adapters.txt", platform: "win32" },
   { file: "gpu-linux-amdgpu.txt", platform: "linux" },
   { file: "gpu-mac-ioaccelerator.txt", platform: "darwin" },
   { file: "gpu-linux-absent.txt", platform: "linux" },
@@ -772,10 +906,12 @@ module.exports = {
   market_replay: marketReplay,
   nft_replay: nftReplay,
   gpu_replay: gpuReplay,
+  links_open: linksOpen,
   shown,
   WMO_CASES,
   HOSTILE_IMG,
   HOSTILE_SCRIPT,
   GPU_CASES,
+  REFUSED_LINKS,
   GPU_NOW,
 };

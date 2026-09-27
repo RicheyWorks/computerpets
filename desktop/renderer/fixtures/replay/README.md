@@ -22,6 +22,7 @@ Built by hand, not recorded:
 | File | Built from |
 | --- | --- |
 | `gpu-win-pdh.txt` | `gpu-win-nvidia.txt` with the NVIDIA block replaced by `NVIDIA_ABSENT`, to replay the Windows counter path. Read like Task Manager it is 4.2% (the video decode engine) |
+| `gpu-win-two-adapters.txt` | The Windows counter format that `desktop/gpu-probe.ps1` prints, with synthetic numbers: two adapters (LUIDs `0x0000a001` and `0x0000b002`) that both report `phys_0`. The first is a small integrated adapter (512 MiB limit, 3D at 61.5%). The second is an 8 GiB card (12.5% 3D, 2 GiB used). Counters are grouped per LUID and the card with the most VRAM is shown: 12.5% and 2 GiB/8 GiB, with nothing mixed in from the other adapter |
 | `gpu-linux-amdgpu.txt` | The `AMDGPU` block format that `desktop/gpu-probe.sh` prints. Synthetic numbers |
 | `gpu-mac-ioaccelerator.txt` | The `NVIDIA` block format that `desktop/gpu-probe-mac.sh` prints, with `[N/A]` where a Mac has no reading. Synthetic numbers |
 | `gpu-linux-absent.txt` | A probe that found no GPU. The line must read unread |

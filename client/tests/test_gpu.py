@@ -668,3 +668,87 @@ def test_saved_windows_counters_read_the_busiest_engine():
     # Video decode carries 4.2%. The old reading took one process's 3D share (0.5%).
     assert sample["utilPercent"] == 4.2
     assert gpu_line(sample) == "GPU unread · unread · 4.2% · 1.5 GiB/unread · unread"
+
+# Hand-built: two adapters that both report phys_0 (see fixtures/replay/README.md).
+TWO_ADAPTER_LINE = "GPU unread · unread · 12.5% · 2 GiB/8 GiB · unread"
+TWO_NO_LIMIT = "\n".join(
+    [
+        "NVIDIA_ABSENT",
+        "ENGINE",
+        "pid_1_luid_0x0_0xa1_phys_0_eng_0_engtype_3d\t70",
+        "pid_2_luid_0x0_0xb2_phys_0_eng_0_engtype_3d\t9",
+        "ENDENGINE",
+        "MEMORY",
+        "luid_0x0_0xa1_phys_0\t104857600\t",
+        "luid_0x0_0xB2_phys_0\t3221225472\t",
+        "ENDMEMORY",
+        "END",
+    ]
+)
+NVIDIA_BLANK_TWO = "\n".join(
+    [
+        "NVIDIA",
+        "NVIDIA GeForce RTX 4070, 60, [N/A], 3200, 12288, 40",
+        "ENDNVIDIA",
+        "ENGINE",
+        "pid_1_luid_0x0_0xa1_phys_0_eng_0_engtype_3d\t70",
+        "pid_2_luid_0x0_0xb2_phys_0_eng_0_engtype_3d\t9",
+        "ENDENGINE",
+        "END",
+    ]
+)
+
+
+def _reversed_blocks(text):
+    out = []
+    block = None
+    for line in text.split("\n"):
+        if line in ("ENGINE", "MEMORY"):
+            out.append(line)
+            block = []
+        elif line in ("ENDENGINE", "ENDMEMORY"):
+            out.extend(reversed(block))
+            out.append(line)
+            block = None
+        elif block is not None:
+            block.append(line)
+        else:
+            out.append(line)
+    return "\n".join(out)
+
+
+def test_two_adapters_sharing_phys_0_are_read_apart():
+    from computerpets_client.gpu import parse_probe_text, reduce_pdh
+
+    saved = Path(__file__).resolve().parents[2] / "desktop" / "renderer" / "fixtures" / "replay" / "gpu-win-two-adapters.txt"
+    text = saved.read_text(encoding="utf-8")
+    parsed = parse_probe_text(text)
+    reduced = reduce_pdh(parsed["engines"], parsed["adapterMemory"])
+    # One row per adapter LUID, not one row for phys_0.
+    assert [row["utilPercent"] for row in reduced["rows"]] == [61.5, 12.5]
+    assert [row["memoryTotalBytes"] for row in reduced["rows"]] == [536870912, 8589934592]
+    sample = sample_from_probe(parsed, platform="win32", now_ms=NOW)
+    # The 8 GiB adapter wins. The integrated adapter's 61.5% and 128 MiB stay off its line.
+    assert sample["source"] == "pdh"
+    assert sample["utilPercent"] == 12.5
+    assert sample["memoryUsedBytes"] == 2147483648
+    assert gpu_line(sample) == TWO_ADAPTER_LINE
+    # The order the counters list them in does not change the choice.
+    flipped = sample_from_probe(parse_probe_text(_reversed_blocks(text)), platform="win32", now_ms=NOW)
+    assert gpu_line(flipped) == TWO_ADAPTER_LINE
+
+
+def test_no_vram_limit_shows_the_adapter_holding_the_most_memory():
+    from computerpets_client.gpu import parse_probe_text
+
+    sample = sample_from_probe(parse_probe_text(TWO_NO_LIMIT), platform="win32", now_ms=NOW)
+    assert sample["utilPercent"] == 9
+    assert gpu_line(sample) == "GPU unread · unread · 9% · 3 GiB/unread · unread"
+
+
+def test_nvidia_blanks_are_not_filled_when_two_counter_adapters_share_an_index():
+    from computerpets_client.gpu import parse_probe_text
+
+    sample = sample_from_probe(parse_probe_text(NVIDIA_BLANK_TWO), platform="win32", now_ms=NOW)
+    assert sample["source"] == "nvidia-smi"
+    assert sample["utilPercent"] is None

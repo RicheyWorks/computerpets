@@ -533,3 +533,75 @@ test("the saved Windows counter reading shows the busiest engine, not one proces
   assert.equal(sample.utilPercent, 4.2);
   assert.equal(G.gpuLine(sample), "GPU unread · unread · 4.2% · 1.5 GiB/unread · unread");
 });
+
+// Hand-built: two adapters that both report phys_0 (see fixtures/replay/README.md).
+const TWO_ADAPTER_LINE = "GPU unread · unread · 12.5% · 2 GiB/8 GiB · unread";
+const TWO_NO_LIMIT = [
+  "NVIDIA_ABSENT",
+  "ENGINE",
+  "pid_1_luid_0x0_0xa1_phys_0_eng_0_engtype_3d\t70",
+  "pid_2_luid_0x0_0xb2_phys_0_eng_0_engtype_3d\t9",
+  "ENDENGINE",
+  "MEMORY",
+  "luid_0x0_0xa1_phys_0\t104857600\t",
+  "luid_0x0_0xB2_phys_0\t3221225472\t",
+  "ENDMEMORY",
+  "END",
+].join("\n");
+const NVIDIA_BLANK_TWO = [
+  "NVIDIA",
+  "NVIDIA GeForce RTX 4070, 60, [N/A], 3200, 12288, 40",
+  "ENDNVIDIA",
+  "ENGINE",
+  "pid_1_luid_0x0_0xa1_phys_0_eng_0_engtype_3d\t70",
+  "pid_2_luid_0x0_0xb2_phys_0_eng_0_engtype_3d\t9",
+  "ENDENGINE",
+  "END",
+].join("\n");
+
+function reversedBlocks(text) {
+  const out = [];
+  let block = null;
+  text.split("\n").forEach((line) => {
+    if (line === "ENGINE" || line === "MEMORY") {
+      out.push(line);
+      block = [];
+    } else if (line === "ENDENGINE" || line === "ENDMEMORY") {
+      out.push(...block.reverse(), line);
+      block = null;
+    } else if (block) block.push(line);
+    else out.push(line);
+  });
+  return out.join("\n");
+}
+
+test("two adapters that share phys_0 are read apart, and the one with the most VRAM is shown", () => {
+  const text = readFileSync(join(__dirname, "fixtures", "replay", "gpu-win-two-adapters.txt"), "utf8");
+  const parsed = probe(text);
+  const reduced = G.reducePdh(parsed.engines, parsed.adapterMemory);
+  // One row per adapter LUID, not one row for phys_0.
+  assert.equal(reduced.rows.length, 2);
+  assert.deepEqual(reduced.rows.map((row) => row.utilPercent), [61.5, 12.5]);
+  assert.deepEqual(reduced.rows.map((row) => row.memoryTotalBytes), [536870912, 8589934592]);
+  const sample = G.sampleFromProbe(parsed, { platform: "win32", nowMs: NOW });
+  // The 8 GiB adapter wins. The integrated adapter's 61.5% and 128 MiB stay off its line.
+  assert.equal(sample.source, "pdh");
+  assert.equal(sample.utilPercent, 12.5);
+  assert.equal(sample.memoryUsedBytes, 2147483648);
+  assert.equal(G.gpuLine(sample), TWO_ADAPTER_LINE);
+  // The order the counters list them in does not change the choice.
+  assert.equal(G.gpuLine(G.sampleFromProbe(probe(reversedBlocks(text)), { platform: "win32", nowMs: NOW })), TWO_ADAPTER_LINE);
+});
+
+test("with no VRAM limit printed, the adapter holding the most dedicated memory is shown", () => {
+  const sample = G.sampleFromProbe(probe(TWO_NO_LIMIT), { platform: "win32", nowMs: NOW });
+  // 0xb2 holds 3 GiB (its LUID case differs between blocks and still matches), 0xa1 holds 100 MiB.
+  assert.equal(sample.utilPercent, 9);
+  assert.equal(G.gpuLine(sample), "GPU unread · unread · 9% · 3 GiB/unread · unread");
+});
+
+test("NVIDIA blanks are not filled from counters when two counter adapters share an index", () => {
+  const sample = G.sampleFromProbe(probe(NVIDIA_BLANK_TWO), { platform: "win32", nowMs: NOW });
+  assert.equal(sample.source, "nvidia-smi");
+  assert.equal(sample.utilPercent, null);
+});
