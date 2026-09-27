@@ -888,7 +888,7 @@ export function KeeperCard({
             <p className="keeper-truth">{QUIT_TRUTH}</p>
           </div>
           <p className="keeper-heartbeat" data-heartbeat={beat.status}>
-            {heartbeatLine(beat)}
+            {heartbeatLine(beat, heartbeatPoll.answered())}
           </p>
           <p className="keeper-gpu" data-gpu={UNREAD_GPU.status}>
             {gpuLine(UNREAD_GPU)}
@@ -985,7 +985,9 @@ export function MeetKeeperCard({ className }: { className?: string }) {
  * The heartbeat every keeper surface shows, from the one shared poll (lib/pets/keeper.ts heartbeatPoll):
  * one fetch every 15 seconds however many cards and lines are on the page.
  * Quiet by design: an unreachable Java service reads "DOWN" in the heartbeat line itself, and the read
- * repeats, so no separate problem line or retry button.
+ * repeats, so no separate problem line or retry button. DOWN is only for a server that answered this
+ * session and then stopped; one that never answered reads "House server not running (optional)".
+ * The line re-renders on each beat, so `heartbeatPoll.answered()` is read fresh.
  */
 function useHeartbeat(): Heartbeat {
   const [beat, setBeat] = useState<Heartbeat>(() => heartbeatPoll.current());
@@ -998,7 +1000,7 @@ export function KeeperHeartbeat({ className }: { className?: string }) {
 
   return (
     <p className={cn("keeper-heartbeat", className)} data-heartbeat={beat.status}>
-      {heartbeatLine(beat)} · {careTruth()}
+      {heartbeatLine(beat, heartbeatPoll.answered())} · {careTruth()}
     </p>
   );
 }

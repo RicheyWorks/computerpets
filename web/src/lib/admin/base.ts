@@ -152,6 +152,15 @@ export function revokeAskFocus(pending: string | null, kept: string | null): "co
   return kept ? "revoke" : null;
 }
 
+/**
+ * Focus after a revoke the ledger confirmed: the Confirm button is gone, so focus goes to the status line
+ * that says what happened (the fresh list or the stale-list note). A lock sends it to the admin key instead
+ * (focusAfterGate); a failed revoke leaves it where it is.
+ */
+export function revokeDoneFocus(outcome: "revoked" | "stale" | "locked" | "failed"): "status" | null {
+  return outcome === "revoked" || outcome === "stale" ? "status" : null;
+}
+
 /** The rows with `jti` marked revoked locally, for when the ledger confirmed it but the list did not refresh. */
 export function markRevoked<T extends { jti: string; revoked: boolean; deleted: boolean }>(rows: T[], jti: string): T[] {
   return rows.map((row) => (row.jti === jti ? { ...row, revoked: true, deleted: true } : row));

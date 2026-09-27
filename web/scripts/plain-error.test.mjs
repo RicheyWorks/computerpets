@@ -181,7 +181,7 @@ test("plain-error: admin raw detail sits behind a Details toggle, never the defa
   assert.match(text, /<p id=\{detailId\} hidden=\{!open\}/);
   assert.match(text, /const \[open, setOpen\] = useState\(false\);/);
   assert.match(text, /err instanceof AdminApiError && err\.detail/);
-  assert.equal((text.match(/<Note note=\{note\} detail=\{detail\} \/>/g) ?? []).length, 2);
+  assert.equal((text.match(/<Note note=\{note\} detail=\{detail\}(?: statusRef=\{statusLine\})? \/>/g) ?? []).length, 2);
   assert.doesNotMatch(text, /\{note\}\s*<\/p>\s*:\s*null/);
   const api = src("src/lib/admin/api.ts");
   assert.match(api, /class AdminApiError extends HouseError/);

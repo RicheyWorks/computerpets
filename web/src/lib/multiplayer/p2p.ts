@@ -1,8 +1,14 @@
 /**
- * Full-mesh WebRTC rooms: one RTCPeerConnection per remote peer, signaled
- * through /api/rtc (see signaling.server.ts), game data flowing directly
- * browser-to-browser afterwards. Client-authoritative by construction — see
- * the multiplayer-p2p skill for when NOT to use this.
+ * DORMANT. Nothing in the app constructs a P2PRoom, no page or menu offers
+ * multiplayer, and there is no signaling relay in this tree: no /api/rtc route
+ * and no signaling server file. ADR 0047 keeps the public STUN hosts behind a
+ * painted line for the day it wakes. docs/ROADMAP.md lists multiplayer as future
+ * work; waking it needs a relay first, and that is new infrastructure.
+ *
+ * What it would be: full-mesh WebRTC rooms, one RTCPeerConnection per remote
+ * peer, signaled through a relay at /api/rtc, with game data flowing directly
+ * browser-to-browser afterwards. Client-authoritative by construction, so it
+ * would only suit play where a peer cheating costs nothing.
  *
  * Negotiation follows the "perfect negotiation" pattern: on a glare (both
  * sides offering at once) the polite peer — the lexicographically smaller id —
@@ -12,9 +18,10 @@
 export type SignalKind = "offer" | "answer" | "ice";
 
 /**
- * Wire contract between this client and the signaling relay the app provides
- * at /api/rtc (see the multiplayer-p2p skill for a reference implementation).
- * The client only needs these shapes — the relay's storage is the app's choice.
+ * Wire contract between this client and a signaling relay at /api/rtc. No such
+ * relay exists in this tree (see the header): these are the shapes a future one
+ * would answer. The client only needs these shapes; the relay's storage would be
+ * its own choice.
  */
 export interface PeerRow {
   id: string;

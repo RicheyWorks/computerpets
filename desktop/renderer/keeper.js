@@ -5,6 +5,10 @@
   const HEARTBEAT_URL = "http://127.0.0.1:8081/api/public/heartbeat";
   const HOUSE_SERVER = "House server";
   const HOUSE_SERVER_HIDDEN = Object.freeze({ show: false });
+  /** A named server that has not answered once this session. Plain and calm: the server is optional. */
+  const NO_HOUSE_SERVER = "House server not running (optional)";
+  /** The one-time hello at the top of the keeper card (card.json firstHintSeen). Kid-plain words. */
+  const FIRST_HINT_OK = "Got it";
   const ADVERTISED_CARE = { feed: "/pet/feed", play: "/pet/play", rest: "/pet/rest" };
   const CARE_DOOR_STATUS = 409;
   const KEEPER_CARE = [
@@ -63,9 +67,12 @@
    * The keeper card's server row. Empty (hidden) until the keeper names a
    * server in Settings, the environment, or by holding a license (main
    * process: house-server.cjs). Plain words only: reachable or unreachable.
+   * `seen: false` (pet.js: this server has not answered once this session) reads
+   * NO_HOUSE_SERVER instead; "unreachable" is kept for one that answered, then stopped.
    */
   function houseServerLine(state) {
     if (!state || state.show !== true) return "";
+    if (state.reachable !== true && state.seen === false) return NO_HOUSE_SERVER;
     if (state.reachable !== true) return `${HOUSE_SERVER} · unreachable`;
     const up = formatUptime(state.uptimeSeconds);
     return up ? `${HOUSE_SERVER} · reachable · up ${up}` : `${HOUSE_SERVER} · reachable`;
@@ -78,6 +85,29 @@
 
   function careTruth() {
     return "Care is local. /pet/feed is not a door.";
+  }
+
+  /**
+   * The first-run hello on the keeper card, written for a child who never installed anything.
+   * It points at the card, clicking and right-clicking the pet, and the tray icon by the clock.
+   */
+  function firstHint(name) {
+    const who = String(name || "").trim() || "your pet";
+    const Who = who.charAt(0).toUpperCase() + who.slice(1);
+    return {
+      title: `Hi! ${Who} lives on your screen now.`,
+      lines: [
+        `This is ${who}'s keeper card. It shows if ${who} is hungry, sleepy, or happy. Press Feed, Play, or Rest to help.`,
+        `Click ${who} any time to open this card again. Right-click ${who} for more things to do.`,
+        "Near the clock there is a tiny ComputerPets picture. That is the tray icon. Right-click it to pick a new friend, or pick Quit to turn the pets off.",
+      ],
+      ok: FIRST_HINT_OK,
+    };
+  }
+
+  /** Shown until Got it is pressed once; card.json keeps firstHintSeen so it never comes back. */
+  function firstHintShows(card) {
+    return !(card && card.firstHintSeen === true);
   }
 
   function careDoorRefusal(verb) {
@@ -177,6 +207,10 @@
     HEARTBEAT_URL,
     HOUSE_SERVER,
     HOUSE_SERVER_HIDDEN,
+    NO_HOUSE_SERVER,
+    FIRST_HINT_OK,
+    firstHint,
+    firstHintShows,
     ADVERTISED_CARE,
     CARE_DOOR_STATUS,
     KEEPER_CARE,

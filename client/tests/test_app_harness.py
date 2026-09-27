@@ -64,6 +64,7 @@ CROSS_DOMAIN = {
     "desk.market.tickers",
     "desk.news.x",
     "desk.weather.replay",
+    "desk.plates.first_run",
     "desk.news.replay",
     "desk.market.replay",
     "desk.nft.replay",
@@ -93,6 +94,7 @@ CROSS_DOMAIN = {
     "card.alarm",
     "card.timer",
     "card.saved_lines",
+    "card.first_run",
     "card.music",
     "card.mind",
     "gui.choice_close_exit",
@@ -617,6 +619,29 @@ def test_web_companion_lockstep():
                  "lines.drop=focus_next", "walkers=one_stop", "admin=row_names+ask_focus", "idle=visit+flyers+p2p"):
         assert mark in mke.trace, (mark, mke.trace)
     assert (mke.extras.get("visit") or {}).get("whileHidden") == 1
+
+
+
+def test_first_run_rows_start_clean_and_show_the_hello_once():
+    """A brand-new keeper on desktop and web, and each network plate from a clean card."""
+    first = invoke("card.first_run")
+    assert first.ok, (first.error, first.detail)
+    for mark in ("clean=no_card_json", "defaults=open+ink+hearth+unmuted", "hint=shows_once",
+                 "persist=card.json firstHintSeen", "server=not_running_optional_until_answered",
+                 "clean=no_storage", "hint=shows_once+own_key", "heartbeat=optional>up>down",
+                 "plates=next_step+quotes_wait", "menu=overlay_matches_web", "admin=revoke_focus_status", "p2p=dormant"):
+        assert mark in first.trace, (mark, first.trace)
+    assert first.extras["desk"]["shows"] == 1
+    assert first.extras["web"]["shows"] == 1
+    assert first.extras["desk"]["rows"][1] == "House server not running (optional)"
+    assert first.extras["web"]["lines"][0] == "House server not running (optional)"
+    plates = invoke("desk.plates.first_run")
+    assert plates.ok, (plates.error, plates.detail)
+    assert plates.extras["weatherNext"] == "No place yet. Type a city below and press Look up."
+    assert plates.extras["quotesClosed"].endswith("· open to see the price")
+    assert plates.extras["stations"] == 1
+    assert any(t.startswith("weather=") and "Overcast" in t for t in plates.trace), plates.trace
+    assert any(t.startswith("news=") and "_headlines" in t for t in plates.trace), plates.trace
 
 
 def test_blotter_pure_surfaces():

@@ -61,6 +61,7 @@ import { appendJournal, loadJournal } from "@/lib/pets/journal";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { KeeperCard } from "@/components/desk/keeper-card";
 import { GuestChoice } from "@/components/desk/guest-choice";
+import { FirstHint } from "@/components/desk/first-hint";
 import { DemoWindowPlate } from "@/components/desk/demo-window-plate";
 import type { DeskWindow } from "@/lib/pets/windows";
 import { roomOf } from "@/lib/pets/rooms";
@@ -1137,6 +1138,13 @@ export function CompanionRoom({
         ) : null}
         {latestNote ? <p className="mt-2 max-w-sm text-xs text-subtle">{latestNote}</p> : null}
         <SpeciesPlaque speciesKey={kind.key} compact paper className="mt-5 max-w-sm" showDemoLink={false} />
+        <FirstHint
+          name={displayName}
+          onDone={() => {
+            // Got it is gone; keyboard focus lands on the keeper card's open (or name) button, not nowhere.
+            roomRef.current?.querySelector<HTMLElement>('[data-card="open"], [data-card="collapse"]')?.focus();
+          }}
+        />
         {cardOpen ? null : (
           <button
             type="button"
