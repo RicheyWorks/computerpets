@@ -18,6 +18,7 @@ const PlateNet = require("./presence/plate-net.cjs");
 const PlateFetch = require("./presence/plate-fetch.cjs");
 const OpenLink = require("./presence/open-link.cjs");
 const MindSecret = require("./mind-secret.cjs");
+const PetCard = require("./renderer/card.js");
 const VDesk = require("./vdesk-win.cjs");
 
 /** Buffffff opt-in: COMPUTERPETS_GUI_HARNESS=1 runs Electron smokes then quits. */
@@ -838,13 +839,13 @@ ipcMain.on("notify", (_e, payload) => {
     silent: true,
     icon: iconImage(),
   });
-  const careKey = payload?.key ? String(payload.key) : currentKey;
-  const careNeed = payload?.need ? String(payload.need) : "";
+  // A care note opens care on its need. A keeper-clock note shows the overlay and its saved line.
+  const click = PetCard.noteCommand(payload, currentKey);
   note.on("click", () => {
     if (!win) return;
     win.showInactive();
     win.setAlwaysOnTop(true, "screen-saver");
-    win.webContents.send("command", { type: "open-care", key: careKey, need: careNeed });
+    win.webContents.send("command", click);
   });
   note.show();
 });
