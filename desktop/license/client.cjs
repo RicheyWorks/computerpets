@@ -218,7 +218,7 @@ function createLicenseClient(opts = {}) {
 
   /**
    * GET the HMAC-signed CDN URL. Missing/failed CDN is reported, not invented.
-   * The license hash is not a header, a body, or a query this client adds.
+   * The code made from this computer's ID is not a header, a body, or a query this client adds.
    * When {@code expect} claims catalog version/sha256, zip digest + layout must
    * pass or the result is refused (ok:false) — fail closed.
    */

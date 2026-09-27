@@ -11,9 +11,20 @@ const { LicenseError } = require("./errors.cjs");
 const MAX_HWID_LENGTH = 128;
 
 /**
+ * @typedef {object} MachineMark
+ * @property {string} platform
+ * @property {string} source
+ * @property {string} kind
+ * @property {string} where
+ * @property {string} [value] the registry value name (Windows only)
+ * @property {string} why
+ */
+
+/**
  * Named machine marks Unlock may read. Listing them does not read them.
  * The raw value is not a field here. A hash of that value can leave on
  * unlock. The raw id does not.
+ * @type {ReadonlyArray<Readonly<MachineMark>>}
  */
 const MACHINE_MARKS = Object.freeze([
   Object.freeze({

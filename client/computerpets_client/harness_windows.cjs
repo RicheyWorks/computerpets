@@ -529,11 +529,11 @@ async function settingsWindow() {
     await page.summary.click();
     if (details.open) fails.push("the Details summary did not fold it again");
     if (!inside) fails.push("the machine-id wording is not inside Details");
-    if (!/did not read the operating-system machine id/.test(firstMark)) fails.push("the first mark line changed");
+    if (!/did not look at this computer's ID/.test(firstMark)) fails.push("the first mark line changed");
     fs.writeFileSync(path.join(ctx.userData, "hwid.txt"), HWID);
     await $("lock").click();
     await settle(4);
-    if (!/^A license hash is already stored in hwid\.txt\./.test(at.textContent)) fails.push(`with hwid.txt the mark line says "${at.textContent.slice(0, 60)}"`);
+    if (!/^A code is already saved in hwid\.txt\./.test(at.textContent)) fails.push(`with hwid.txt the mark line says "${at.textContent.slice(0, 60)}"`);
     else trace.push("details=folded_toggles", "mark=stored");
 
     // Unlock with no Steam ID, then against a refused connection: plain words only.

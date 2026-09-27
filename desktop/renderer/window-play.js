@@ -1510,7 +1510,9 @@
   }
 
   function pickTarget(windows, petX, key, work, sprite, opts) {
-    const kind = playFor(key);
+    // IGNORE is the opt-out a pet could use to skip windows. playFor gives every pet a play today (SILL is
+    // the fallback), so this guard never fires; it stays so an opt-out added later is safe, like web's.
+    const kind = /** @type {string} */ (playFor(key));
     if (kind === IGNORE) return null;
     const size = sprite == null ? SPRITE : sprite;
     const workW = work && work.width ? work.width : 800;
@@ -36097,7 +36099,6 @@ if (next.phase === "sill-hop") {
     SPRAY,
     GRIP,
     RUN,
-    SILL,
     PLANE,
     HOWL,
     LOOK,
@@ -36115,7 +36116,6 @@ if (next.phase === "sill-hop") {
     BARBEL,
     FLARE,
     BARRED,
-    IGNORE,    BARRED,
     BILL,
     DUSK,
     PADDLE,
@@ -36948,7 +36948,6 @@ if (next.phase === "sill-hop") {
     barredPath,
     barredHoldPath,
     barredOffPath,
-    pickTarget,    barredOffPath,
     billPoint,
     billFace,
     billOnPath,
@@ -37472,7 +37471,6 @@ if (next.phase === "sill-hop") {
     fieldOnPath,
     driftOffPath,
     chargeBoltPath,
-    orbitOnPath,
     beginPlay,
     abortToFloor,
     stepPlay,

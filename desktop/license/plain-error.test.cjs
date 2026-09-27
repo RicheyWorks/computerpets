@@ -92,7 +92,7 @@ test("house codes written for people keep their sentences", () => {
   assert.deepEqual(P.plainLicenseError(new LicenseError("no_license", NO_LICENSE_MESSAGE)), { code: "no_license", message: NO_LICENSE_MESSAGE });
   assert.deepEqual(P.plainLicenseError(new LicenseError("no_token", NO_TOKEN_MESSAGE)), { code: "no_token", message: NO_TOKEN_MESSAGE });
   assert.deepEqual(P.plainLicenseError(new LicenseError("fields_missing", FIELDS_MISSING_MESSAGE)), { code: "fields_missing", message: FIELDS_MISSING_MESSAGE });
-  const unnamed = new LicenseError("cdn_net_unnamed", "the signed bundle was not fetched from cdn.example. name that host before it leaves.");
+  const unnamed = new LicenseError("cdn_net_unnamed", "Your pet's files were not downloaded from cdn.example. This page has to name the download website first.");
   assert.equal(P.plainLicenseError(unnamed).message, unnamed.message);
 });
 
@@ -148,7 +148,7 @@ test("bundle refusals become sentences; caught network text is classified, never
   assertPlain(P.plainBundleError("fetch failed", { host: "cdn.example" }), "unreachable", /cdn\.example/);
   assertPlain(P.plainBundleError("backend request timed out", { host: "cdn.example" }), "timeout", /cdn\.example/);
   const odd = P.plainBundleError("Unexpected end of JSON input", { host: "cdn.example" });
-  assert.equal(odd.message, "The signed bundle was not fetched from the house server at cdn.example.");
+  assert.equal(odd.message, "Your pet's files were not downloaded from the house server at cdn.example.");
 });
 
 test("main.cjs sends only the plain sentence to Settings and logs the raw error", () => {

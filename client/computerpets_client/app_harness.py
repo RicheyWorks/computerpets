@@ -2606,6 +2606,22 @@ def _web_rows() -> list[Affordance]:
                 "denspad / inkpad thank-yous are numbers, no overlay trick throws when stopped early, and web tsc is 0."
             ),
         ),
+        Affordance(
+            "web.loop_guard_unlock_plain",
+            "web",
+            "Overlay frame loop survives a throwing trick; desktop checkJs held to its baseline; unlock privacy and license gate lines in plain words",
+            "overlay frame-guard.js + pet.js tick, cat-tricks.js with an injected fault, window-play.js api, *-tricks.js thank-yous, settings.html + unlock_dialog.py mark lines, main license-net.cjs gates, blotter license_net.py",
+            notes=(
+                "The real frame guard runs 1,200 frames with a real trick module whose step throws: the next frame is "
+                "always queued first, the error is logged once with the pet key, and the pet goes back to a safe idle "
+                "each time; pet.js runs tickFrame through that loop and guards the visit guest, bird, robin, plants, and "
+                "called guests one by one. The desktop checkJs pass is in test-all.ps1 and test-all.sh with a baseline "
+                "of 58 or less; window-play's api has no duplicate keys and no thank-you repeats itself. The Settings "
+                "and blotter Unlock details say 'this computer's ID', 'a code', and 'like a fingerprint for this "
+                "computer' with no hash / raw id / host words, the harness pin matches, the license gates' own errors "
+                "say 'Nothing was sent to <host>. This page has to name the license website first.', and ROADMAP is dated."
+            ),
+        ),
     ]
 
 
@@ -2635,6 +2651,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("consent_plain", domain="web", action_id=aid)
     if local_id == "consent_types_plain":
         return _run_web_smoke("consent_types_plain", domain="web", action_id=aid)
+    if local_id == "loop_guard_unlock_plain":
+        return _run_web_smoke("loop_guard_unlock_plain", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

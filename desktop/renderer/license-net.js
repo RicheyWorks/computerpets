@@ -1,4 +1,4 @@
-/** Unlock and a bound download name the backend host before the license hash leaves. An unbound download names that host before the POST leaves. That POST has no hash. A signed bundle GET names the CDN host before that request leaves. Each line names the website in plain words, with the same address sentence as the weather, news, and quote plates (`plainNetLine`). A loopback host stays on this computer. */
+/** Unlock and a bound download say the license website's name before the code made from this computer's ID is sent there. An unbound download says that name before it asks; it sends no such code. Downloading your pet's files says the download website's name before it asks for them. Each line names the website in plain words, with the same address sentence as the weather, news, and quote plates (`plainNetLine`). A loopback host stays on this computer. */
 (function (root) {
   const LICENSE_HOST_NAME = "the license host";
   const LOCAL_STAYS = "Unlocking stays on this computer. The code made from this computer's ID does not leave.";

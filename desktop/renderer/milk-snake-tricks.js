@@ -557,4 +557,4 @@
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetMilkSnakeTricks = api;
-})(typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : this);
+})(typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : /** @type {any} */ (this));

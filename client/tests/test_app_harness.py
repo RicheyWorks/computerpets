@@ -111,6 +111,7 @@ CROSS_DOMAIN = {
     "web.plain_words",
     "web.consent_plain",
     "web.consent_types_plain",
+    "web.loop_guard_unlock_plain",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -474,6 +475,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.plain_words",
         "web.consent_plain",
         "web.consent_types_plain",
+        "web.loop_guard_unlock_plain",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -672,6 +674,27 @@ def test_consent_types_plain_row_names_every_website_and_keeps_the_bug_fixes():
     assert all(ct.extras["gate"].values()), ct.extras["gate"]
     assert ct.extras["contrast"]["worstDark"] >= 4.5 and ct.extras["contrast"]["paperRatio"] >= 4.5
     assert ct.extras["bugs"]["overlayThrows"] == 0 and ct.extras["bugs"]["tscBaseline"] == "0"
+
+
+def test_loop_guard_row_keeps_the_overlay_moving_and_the_unlock_words_plain():
+    """A throwing trick cannot freeze the overlay; desktop checkJs holds its line; unlock and gate words are plain."""
+    lg = invoke("web.loop_guard_unlock_plain")
+    assert lg.ok, (lg.error, lg.detail)
+    for mark in ("loop=schedule_first+guarded", "fault=injected_trick_throws", "log=once_per_error+pet_key",
+                 "reset=safe_idle", "checkjs=baseline_held+wired", "bugs=thank_you_repeat+api_dup_keys+dead_compares",
+                 "unlock=plain_words+honest", "gate=plain_license_messages"):
+        assert mark in lg.trace, (mark, lg.trace)
+    run = lg.extras["guardRun"]
+    assert run["frames"] == 1200 and run["pending"] == 1 and run["logs"] == 1
+    assert run["caught"] >= 2 and run["resets"] == run["caught"]
+    assert "(cat)" in run["log"]
+    assert all(lg.extras["wired"].values()), lg.extras["wired"]
+    assert int(lg.extras["checkjs"]["baseline"]) <= 58
+    assert lg.extras["checkjs"]["apiDuplicates"] == 0 and lg.extras["checkjs"]["thankYouRepeats"] == 0
+    assert all(lg.extras["unlock"].values()), lg.extras["unlock"]
+    assert lg.extras["gates"]["messages"][0] == (
+        "Nothing was sent to license.example.test. This page has to name the license website first."
+    )
 
 
 def test_first_run_rows_start_clean_and_show_the_hello_once():
