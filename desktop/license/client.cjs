@@ -8,6 +8,21 @@ const { signMachineRequest } = require("./machine-sign.cjs");
 
 const DEFAULT_TIMEOUT_MS = 12_000;
 
+function hostOf(url) {
+  try {
+    return new URL(url).host;
+  } catch {
+    return "";
+  }
+}
+
+/** Name the host and keep the HTTP status so the window can say it plainly (plain-error.cjs). */
+function tagged(err, url, status) {
+  err.host = hostOf(url);
+  if (status) err.httpStatus = status;
+  return err;
+}
+
 function normalizeBackendUrl(raw) {
   if (typeof raw !== "string" || !raw.trim()) {
     throw new LicenseError("missing_backend", "backend base URL is missing");
@@ -47,11 +62,17 @@ function createLicenseClient(opts = {}) {
       res = await fetchImpl(url, { ...init, signal: ctrl.signal });
     } catch (err) {
       const aborted = err && (err.name === "AbortError" || err.code === "ABORT_ERR");
-      throw new LicenseError(
-        "unreachable",
-        aborted ? "backend request timed out" : "backend is unreachable",
-        err && err.message ? err.message : String(err)
+      // The raw fetch error stays in detail/cause for the log; the window gets plain words.
+      const failure = tagged(
+        new LicenseError(
+          "unreachable",
+          aborted ? "backend request timed out" : "backend is unreachable",
+          err && err.message ? err.message : String(err)
+        ),
+        url
       );
+      failure.cause = err;
+      throw failure;
     } finally {
       clearTimeout(timer);
     }
@@ -117,10 +138,10 @@ function createLicenseClient(opts = {}) {
       throw new LicenseError("hwid_too_long", "hwid too long", json);
     }
     if (res.status === 429) {
-      throw new LicenseError("unreachable", "verify rate limited", json);
+      throw tagged(new LicenseError("unreachable", "verify rate limited", json), base, 429);
     }
     if (res.status >= 500) {
-      throw new LicenseError("unreachable", json.error || "provider call failed", json);
+      throw tagged(new LicenseError("unreachable", json.error || "provider call failed", json), base, res.status);
     }
     if (!res.ok) {
       throw new LicenseError("denied", json.error || `verify failed (${res.status})`, json);
@@ -170,7 +191,10 @@ function createLicenseClient(opts = {}) {
       throw new LicenseError("denied", json.error || "download forbidden", json);
     }
     if (res.status === 429) {
-      throw new LicenseError("unreachable", "download rate limited", json);
+      throw tagged(new LicenseError("unreachable", "download rate limited", json), base, 429);
+    }
+    if (res.status >= 500) {
+      throw tagged(new LicenseError("download_failed", json.error || `download failed (${res.status})`, json), base, res.status);
     }
     if (res.status === 409) {
       throw new LicenseError("download_failed", json.error || "download token already used", json);

@@ -33,14 +33,14 @@ test("opening the house does not request a font host", () => {
   assert.match(ogSrc, /Iowan Old Style/);
 });
 
-test("the heartbeat URL is loopback and has no config override", () => {
+test("the desk heartbeat URL is loopback with no config override; the overlay row probes only a server the keeper named", () => {
   assert.match(keeperSrc, /HEARTBEAT_URL = `http:\/\/127\.0\.0\.1:\$\{JAVA_PORT\}\/api\/public\/heartbeat`/);
   assert.doesNotMatch(keeperSrc, /COMPUTERPETS_BACKEND_URL|process\.env|import\.meta\.env/);
   assert.match(cardSrc, /fetch\(HEARTBEAT_URL, \{ cache: "no-store" \}\)/);
   assert.match(overlayKeeper, /HEARTBEAT_URL = "http:\/\/127\.0\.0\.1:8081\/api\/public\/heartbeat"/);
   assert.doesNotMatch(overlayKeeper, /COMPUTERPETS_BACKEND_URL|process\.env/);
-  assert.match(overlayPet, /fetch\(K\.HEARTBEAT_URL, \{ cache: "no-store" \}\)/);
-  assert.match(overlayPet, /setInterval\(readHeartbeat, 15_000\)/);
+  assert.doesNotMatch(overlayPet, /fetch\(/);
+  assert.match(overlayPet, /setInterval\(readHouseServer, 15_000\)/);
   const keys = [...catalogSrc.matchAll(/\{ key: "([a-z0-9_]+)"/g)].map((m) => m[1]);
   assert.equal(keys.length, 221);
 });
