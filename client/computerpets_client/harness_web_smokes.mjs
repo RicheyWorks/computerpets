@@ -339,6 +339,89 @@ async function petsAdminMusic() {
   ]);
 }
 
+/** Rename / let-go lines, the music pick hint, one stale-list re-read, overlay keys, screen-reader names, idle pauses. */
+async function petsKeysIdle() {
+  const P = await import(pathToFileURL(join(WEB, "src", "lib", "plain-error.ts")).href);
+  const B = await import(pathToFileURL(join(WEB, "src", "lib", "admin", "base.ts")).href);
+  const K = await import(pathToFileURL(join(WEB, "src", "lib", "pets", "keeper.ts")).href);
+  const M = await import(pathToFileURL(join(WEB, "src", "lib", "pets", "house-music.ts")).href);
+  const V = K; // everyVisible lives beside the heartbeat poll in pets/keeper.ts
+  const OverlayMusic = require(join(RENDERER, "house-music.js"));
+  const OverlayKeeper = require(join(RENDERER, "keeper.js"));
+  const quiet = () => {};
+  const refused = Object.assign(new TypeError("fetch failed"), { cause: { code: "ECONNREFUSED" } });
+  const pet = { rename: P.petNotSaved("rename", refused, quiet), release: P.petNotSaved("release", refused, quiet) };
+  if (!pet.rename.startsWith(P.PET_NOT_SAVED.rename) || !pet.release.startsWith(P.PET_NOT_SAVED.release) || /ECONNREFUSED/.test(pet.rename)) {
+    return fail("petNotSaved drift", { pet });
+  }
+  const hint = {
+    off: M.sharedMusicHint("robin", M.parseMusic({ plugin: "off" })),
+    radio: M.sharedMusicHint("robin", M.parseMusic({ plugin: "radio" })),
+    house: M.sharedMusicHint("robin", M.parseMusic({ plugin: "house" })),
+    rui: M.sharedMusicHint("red_panda", M.parseMusic({ plugin: "off" })),
+    desk: OverlayMusic.sharedMusicHint("robin", OverlayMusic.parseMusic({ plugin: "off" })),
+  };
+  if (hint.off !== M.MUSIC_PICK_HINT || hint.radio !== M.MUSIC_PICK_HINT || hint.house || hint.rui || hint.desk !== hint.off) {
+    return fail("sharedMusicHint drift", { hint });
+  }
+  let runs = 0;
+  let fire = null;
+  const cancel = B.rereadOnce(() => runs++, { setTimeoutImpl: (fn) => ((fire = fn), 1), clearTimeoutImpl: () => {}, target: null });
+  fire();
+  fire();
+  cancel();
+  if (runs !== 1) return fail("rereadOnce ran more than once", { runs });
+  const keys = {
+    wrap: OverlayKeeper.tabWrap(3, 2, false),
+    back: OverlayKeeper.tabWrap(3, 0, true),
+    esc: OverlayKeeper.cardKey({ key: "Escape", cardOpen: true }),
+    escMenu: OverlayKeeper.cardKey({ key: "Escape", cardOpen: true, menuOpen: true }),
+  };
+  if (keys.wrap !== 0 || keys.back !== 2 || keys.esc !== "close" || keys.escMenu !== "none") return fail("overlay keys drift", { keys });
+  const fns = new Set();
+  const doc = { hidden: false, addEventListener: (_t, fn) => fns.add(fn), removeEventListener: (_t, fn) => fns.delete(fn) };
+  const timers = new Map();
+  let ticks = 0;
+  const stop = V.everyVisible(() => ticks++, 1000, {
+    doc,
+    onResume: true,
+    setIntervalImpl: (fn) => (timers.set(1, fn), 1),
+    clearIntervalImpl: (id) => timers.delete(id),
+  });
+  doc.hidden = true;
+  for (const fn of fns) fn();
+  const paused = timers.size === 0;
+  doc.hidden = false;
+  for (const fn of fns) fn();
+  const idle = { paused, resumed: timers.size === 1, ticks };
+  stop();
+  if (!idle.paused || !idle.resumed || idle.ticks !== 1) return fail("everyVisible drift", { idle });
+  const names = { art: K.petArtLabel("Rui", { asleep: true }), room: K.roomLabel("Rui") };
+  if (names.art !== "Rui, asleep" || names.room !== "Rui's room") return fail("labels drift", { names });
+  const read = (...p) => readFileSync(join(ROOT, ...p), "utf8").replace(/\r\n/g, "\n");
+  const wires = [
+    ["web/src/routes/pets.$key.tsx", ['petNotSaved("rename", err)', 'petNotSaved("release", err)', "aria-describedby={id}"]],
+    ["web/src/routes/admin.tsx", ["rereadOnce(", "cancelReread();"]],
+    ["web/src/components/desk/keeper-card.tsx", ["sharedMusicHint(guestKey, music)", 'role="meter"', "aria-describedby={soundLineId}"]],
+    ["web/src/components/desk/companion-room.tsx", ["roomLabel(displayName)", "petArtLabel(displayName", "everyVisible("]],
+    ["desktop/renderer/pet.js", ["function cardKeys", 'cmd.type === "open-card"', "if (card.collapsed) cardKeys(false);"]],
+    ["desktop/main.cjs", ['{ label: "Keeper card", click: () => openKeeperCardFromMenu() }']],
+    ["desktop/renderer/styles.css", ["#hud button:focus-visible"]],
+  ];
+  for (const [rel, needs] of wires) {
+    const text = read(...rel.split("/"));
+    for (const need of needs) if (!text.includes(need)) return fail(`${rel} missing ${need}`);
+  }
+  return ok("rename/let-go lines, music hint, one re-read, overlay keys, screen-reader names, idle pauses", { pet, hint, keys, idle, names }, [
+    "pets.rename+release=plain+retry",
+    "music.hint=pick_on_rui",
+    "admin.reread=once",
+    "overlay.keys=tab_wrap+escape",
+    "a11y=describedby+meter+names",
+    "idle=pause_while_hidden",
+  ]);
+}
+
 async function classroomLockstep(expectPath) {
   if (!expectPath) return fail("classroom_lockstep needs expect JSON path argv");
   let expect;
@@ -526,6 +609,7 @@ const COMMANDS = {
   plain_reasons: plainReasons,
   care_talk_plates: careTalkPlates,
   pets_admin_music: petsAdminMusic,
+  pets_keys_idle: petsKeysIdle,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

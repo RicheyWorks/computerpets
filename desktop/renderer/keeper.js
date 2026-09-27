@@ -127,6 +127,26 @@
     };
   }
 
+  /**
+   * Tab inside the open keeper card wraps: past the last control to the first, and Shift+Tab before the
+   * first to the last. Returns the index to focus, or -1 to let the page move focus as usual.
+   */
+  function tabWrap(count, index, shift) {
+    if (!count) return -1;
+    if (index < 0) return shift ? count - 1 : 0;
+    if (shift) return index === 0 ? count - 1 : -1;
+    return index === count - 1 ? 0 : -1;
+  }
+
+  /** What a key does to the keeper card: "close" (Escape, no menu open), "tab", or "none". */
+  function cardKey(ev) {
+    const e = ev || {};
+    if (!e.cardOpen) return "none";
+    if (e.key === "Escape") return e.menuOpen ? "none" : "close";
+    if (e.key === "Tab") return "tab";
+    return "none";
+  }
+
   const api = {
     JAVA_PORT,
     DESK_PORT,
@@ -151,6 +171,8 @@
     bondTitle,
     meters,
     poster,
+    tabWrap,
+    cardKey,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetKeeper = api;

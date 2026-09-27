@@ -2474,6 +2474,20 @@ def _web_rows() -> list[Affordance]:
                 "DOWN when unreachable); plateProblem('floor') for the NFT floor line."
             ),
         ),
+        Affordance(
+            "web.pets_keys_idle",
+            "web",
+            "Rename and let-go say why, music pick hint, one re-read, overlay keys, screen-reader names, idle pauses",
+            "web/src/lib/plain-error.ts petNotSaved + admin/base.ts rereadOnce + pets/keeper.ts everyVisible + desktop keeper.js",
+            notes=(
+                "Real modules: petNotSaved for a failed rename or let-go on /pets/$key (plain line, Try again); "
+                "house-music.ts / house-music.js sharedMusicHint ('Pick music on Rui's card.' when the music is "
+                "off or radio has no station, never on Rui's card); admin/base.ts rereadOnce (one list re-read "
+                "after a stale-list revoke, on a timer or focus); desktop keeper.js tabWrap / cardKey (Tab wraps "
+                "inside the open keeper card, Escape closes it after a menu); keeper.ts petArtLabel / roomLabel; "
+                "keeper.ts everyVisible (a hidden page pauses, showing it resumes)."
+            ),
+        ),
     ]
 
 
@@ -2491,6 +2505,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("care_talk_plates", domain="web", action_id=aid)
     if local_id == "pets_admin_music":
         return _run_web_smoke("pets_admin_music", domain="web", action_id=aid)
+    if local_id == "pets_keys_idle":
+        return _run_web_smoke("pets_keys_idle", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

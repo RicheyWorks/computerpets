@@ -218,6 +218,19 @@ export function careNotSaved(act: CareNotSavedAct, err: unknown, log: PlainLog =
   return `${CARE_NOT_SAVED[act]} ${plainMessage(err, "Try again in a moment.", log)}`;
 }
 
+/** A rename or a let-go on a pet's page the house could not save, said before the plain reason. */
+export const PET_NOT_SAVED = {
+  rename: "The new name wasn't saved.",
+  release: "They weren't let go; they're still in your kennel.",
+} as const;
+
+export type PetNotSavedAct = keyof typeof PET_NOT_SAVED;
+
+/** "The new name wasn't saved." plus the plain reason. Raw text goes to the log only. */
+export function petNotSaved(act: PetNotSavedAct, err: unknown, log: PlainLog = consoleLog): string {
+  return `${PET_NOT_SAVED[act]} ${plainMessage(err, "Try again in a moment.", log)}`;
+}
+
 /** Why a mind (AI plugin) test did not answer, in plain words. */
 export const MIND_LINES = {
   key: "The mind's service did not accept the API key. Check the key for this plugin.",

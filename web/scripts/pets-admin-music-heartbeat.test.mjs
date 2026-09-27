@@ -200,7 +200,7 @@ test("desktop overlay: #hud-house-music is outside #hud-music; Rui's overlay blo
   assert.ok(ruiAt > 0 && elseAt > ruiAt, "paint runs right after Rui's block, not inside it");
   assert.doesNotMatch(pet.slice(ruiAt, elseAt), /paintHouseMusic|houseMusicToggle|hud-house/);
   const paint = pet.slice(pet.indexOf("function paintHouseMusic"), pet.indexOf("function streamLineInView"));
-  assert.match(paint, /M\.sharedMusicShows\(kind && kind\.key, music\)/);
+  assert.match(paint, /M\.sharedMusicShows\(kind\.key, music\)/);
   assert.match(paint, /btn\.setAttribute\("aria-pressed", toggle\.audible \? "true" : "false"\);/);
   const lineEl = pet.slice(pet.indexOf("function streamLineEl"), pet.indexOf("function paintHouseMusic"));
   assert.match(lineEl, /own && hudMusic && !hudMusic\.hidden/, "a line inside a hidden block does not count");

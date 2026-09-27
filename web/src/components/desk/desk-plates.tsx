@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { holdWeatherLocate, ipPlace, noteWeatherLocateYes, readWeatherHere } from "@/lib/pets/presence";
 import {
   ackSavedHere,
@@ -301,6 +301,8 @@ export function DeskWeatherPlate({
   /** Why the forecast did not load (plain; raw error in the console). Try again bumps attempt. */
   const [problem, setProblem] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
+  /** Ties each Try again to its problem line for screen readers. */
+  const problemId = useId();
   const [query, setQuery] = useState("");
   const [hits, setHits] = useState<WeatherArea[]>([]);
   const [looking, setLooking] = useState(false);
@@ -587,7 +589,7 @@ export function DeskWeatherPlate({
                 type="button"
                 role="tab"
                 aria-selected={tab === id}
-                data-on={tab === id ? "1" : "0"}
+                data-on={tab === id ? "1" : "0"} aria-pressed={tab === id}
                 className="rounded-full border border-border/50 px-2 py-1 text-[10px] uppercase tracking-[0.12em]"
                 onClick={() => keepAreas(pickTab(areas, id))}
               >
@@ -602,7 +604,7 @@ export function DeskWeatherPlate({
               <ul className="space-y-1">
                 {favs.map((row) => (
                   <li key={row.id} className="flex items-center gap-2">
-                    <button type="button" data-on={row.id === areas.currentId ? "1" : "0"} onClick={() => keepAreas(pickArea(areas, row.id))}>
+                    <button type="button" data-on={row.id === areas.currentId ? "1" : "0"} aria-pressed={row.id === areas.currentId} onClick={() => keepAreas(pickArea(areas, row.id))}>
                       {row.name}
                     </button>
                     <button type="button" className="weather-star" title="Favorite place" onClick={() => keepAreas(toggleFavorite(areas, row.id))}>
@@ -642,8 +644,8 @@ export function DeskWeatherPlate({
               ) : null}
               {area && unread ? (
                 <p className="text-subtle" role="status" data-plate-problem="forecast">
-                  {problem ?? PLATE_LINES.forecast}{" "}
-                  <button type="button" className="underline underline-offset-2" onClick={() => setAttempt((n) => n + 1)}>
+                  <span id={`${problemId}-forecast`}>{problem ?? PLATE_LINES.forecast}</span>{" "}
+                  <button type="button" aria-describedby={`${problemId}-forecast`} className="underline underline-offset-2" onClick={() => setAttempt((n) => n + 1)}>
                     {RETRY_LABEL}
                   </button>
                 </p>
@@ -661,7 +663,7 @@ export function DeskWeatherPlate({
               <ul className="mt-3 space-y-1">
                 {areas.areas.map((row) => (
                   <li key={row.id} className="flex items-center gap-2">
-                    <button type="button" data-on={row.id === areas.currentId ? "1" : "0"} onClick={() => keepAreas(pickArea(areas, row.id))}>
+                    <button type="button" data-on={row.id === areas.currentId ? "1" : "0"} aria-pressed={row.id === areas.currentId} onClick={() => keepAreas(pickArea(areas, row.id))}>
                       {row.name}
                     </button>
                     <button type="button" className="weather-star" title="Favorite place" onClick={() => keepAreas(toggleFavorite(areas, row.id))}>
@@ -756,6 +758,8 @@ export function DeskNewsPlate() {
   /** Why headlines did not load; with older items kept, it says they are from earlier. Try again bumps attempt. */
   const [problem, setProblem] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
+  /** Ties each Try again to its problem line for screen readers. */
+  const problemId = useId();
   const itemsRef = useRef<NewsItem[]>(items);
   itemsRef.current = items;
   const [query, setQuery] = useState("");
@@ -861,7 +865,7 @@ export function DeskNewsPlate() {
                 type="button"
                 role="tab"
                 aria-selected={tab === id}
-                data-on={tab === id ? "1" : "0"}
+                data-on={tab === id ? "1" : "0"} aria-pressed={tab === id}
                 className="rounded-full border border-border/50 px-2 py-1 text-[10px] uppercase tracking-[0.12em]"
                 onClick={() => keepNews(pickTab(prefs, id))}
               >
@@ -904,8 +908,8 @@ export function DeskNewsPlate() {
             <>
               {problem ? (
                 <p className="text-subtle" role="status" data-plate-problem="news">
-                  {problem}{" "}
-                  <button type="button" className="underline underline-offset-2" onClick={() => setAttempt((n) => n + 1)}>
+                  <span id={`${problemId}-news`}>{problem}</span>{" "}
+                  <button type="button" aria-describedby={`${problemId}-news`} className="underline underline-offset-2" onClick={() => setAttempt((n) => n + 1)}>
                     {RETRY_LABEL}
                   </button>
                 </p>
@@ -948,7 +952,7 @@ export function DeskNewsPlate() {
               <ul className="mt-3 space-y-1">
                 {prefs.topics.map((row, idx) => (
                   <li key={row.id} className="flex flex-wrap items-center gap-2">
-                    <button type="button" data-on={row.id === prefs.currentId ? "1" : "0"} onClick={() => keepNews(pickTopic(prefs, row.id))}>
+                    <button type="button" data-on={row.id === prefs.currentId ? "1" : "0"} aria-pressed={row.id === prefs.currentId} onClick={() => keepNews(pickTopic(prefs, row.id))}>
                       {row.name}
                     </button>
                     {row.id !== WORLD_ID ? (
@@ -1018,6 +1022,8 @@ export function DeskMarketPlate() {
   /** Why the current coin or stock price did not load. Try again bumps attempt. */
   const [problem, setProblem] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
+  /** Ties each Try again to its problem line for screen readers. */
+  const problemId = useId();
   const [nftLive, setNftLive] = useState<NftLive | null>(null);
   const [nftUnread, setNftUnread] = useState(false);
   /** Why the NFT floor did not load. Same Try again as the price line. */
@@ -1305,7 +1311,7 @@ export function DeskMarketPlate() {
                   const kind = row.address ? (row.platform === "solana" ? "mint" : "contract") : row.kind;
                   return (
                     <li key={row.id} className="flex flex-wrap items-center gap-2">
-                      <button type="button" data-on={row.id === house.currentId ? "1" : "0"} onClick={() => keepHouse(pickTicker(house, row.id))}>
+                      <button type="button" data-on={row.id === house.currentId ? "1" : "0"} aria-pressed={row.id === house.currentId} onClick={() => keepHouse(pickTicker(house, row.id))}>
                         {row.symbol} · {price}
                       </button>
                       <span className="text-[10px] text-subtle">{kind}</span>
@@ -1321,8 +1327,8 @@ export function DeskMarketPlate() {
               </ul>
               {unread && problem ? (
                 <p className="mt-1 text-subtle" role="status" data-plate-problem="market">
-                  {problem}{" "}
-                  <button type="button" className="underline underline-offset-2" onClick={() => setAttempt((n) => n + 1)}>
+                  <span id={`${problemId}-market`}>{problem}</span>{" "}
+                  <button type="button" aria-describedby={`${problemId}-market`} className="underline underline-offset-2" onClick={() => setAttempt((n) => n + 1)}>
                     {RETRY_LABEL}
                   </button>
                 </p>
@@ -1367,8 +1373,8 @@ export function DeskMarketPlate() {
               <p className="text-subtle">{nft ? nftLine(house, nftLive, nftUnread) : NO_NFT}</p>
               {nft && nftUnread && nftProblem ? (
                 <p className="mt-1 text-subtle" role="status" data-plate-problem="floor">
-                  {nftProblem}{" "}
-                  <button type="button" className="underline underline-offset-2" onClick={() => setAttempt((n) => n + 1)}>
+                  <span id={`${problemId}-floor`}>{nftProblem}</span>{" "}
+                  <button type="button" aria-describedby={`${problemId}-floor`} className="underline underline-offset-2" onClick={() => setAttempt((n) => n + 1)}>
                     {RETRY_LABEL}
                   </button>
                 </p>
@@ -1396,7 +1402,7 @@ export function DeskMarketPlate() {
               <ul className="mt-1 space-y-1">
                 {house.nfts.map((row) => (
                   <li key={row.id} className="flex flex-wrap items-center gap-2">
-                    <button type="button" data-on={row.id === house.currentNftId ? "1" : "0"} onClick={() => keepHouse(pickNft(house, row.id))}>
+                    <button type="button" data-on={row.id === house.currentNftId ? "1" : "0"} aria-pressed={row.id === house.currentNftId} onClick={() => keepHouse(pickNft(house, row.id))}>
                       {row.symbol || row.name}
                     </button>
                     <button type="button" aria-label="Favorite NFT" onClick={() => keepHouse(toggleFavoriteNft(house, row.id))}>

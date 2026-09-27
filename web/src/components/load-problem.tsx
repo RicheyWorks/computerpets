@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { Button } from "@/components/ui/button";
 import { RETRY_LABEL } from "@/lib/plain-error";
 
@@ -16,10 +17,11 @@ export function LoadProblem({
   busy?: boolean;
   className?: string;
 }) {
+  const lineId = useId();
   return (
     <div role="alert" className={`space-y-3 ${className}`.trim()}>
-      <p className="text-sm text-muted">{line}</p>
-      <Button type="button" variant="secondary" size="sm" disabled={busy} onClick={onRetry}>
+      <p id={lineId} className="text-sm text-muted">{line}</p>
+      <Button type="button" variant="secondary" size="sm" disabled={busy} aria-describedby={lineId} onClick={onRetry}>
         {RETRY_LABEL}
       </Button>
     </div>

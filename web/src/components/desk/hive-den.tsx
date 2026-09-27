@@ -22,6 +22,7 @@ import { INSECT_KEYS } from "@/lib/pets/insects";
 import { livingByKey } from "@/lib/pets/living";
 import { plaqueFor } from "@/lib/pets/plaques";
 import { traitFor } from "@/lib/pets/traits";
+import { everyVisible } from "@/lib/pets/keeper";
 
 const HIVE_KEYS = [...INSECT_KEYS, ...BEE_KEYS];
 const WALKER_KEYS = hiveWalkers(HIVE_KEYS);
@@ -65,7 +66,7 @@ function HiveGuest({
   useEffect(() => {
     kind.preload();
     if (sit) return;
-    const id = window.setInterval(() => {
+    const stop = everyVisible(() => {
       const roll = Math.random();
       if (roll < 0.58) setOrder((o) => ({ cmd: "wander", id: o.id + 1 }));
       else if (roll < 0.8) setOrder((o) => ({ cmd: trait.wander < 0.2 ? "sit" : "idle", id: o.id + 1 }));
@@ -75,7 +76,7 @@ function HiveGuest({
         window.setTimeout(() => setSpeech(null), 3200);
       }
     }, 3600 + Math.random() * 2200);
-    return () => window.clearInterval(id);
+    return stop;
   }, [kind, trait.wander, guide?.lesson, sit]);
 
   return (
@@ -133,7 +134,7 @@ export function HiveDen({
   }, [selectedKey]);
 
   useEffect(() => {
-    const id = window.setInterval(() => {
+    const stop = everyVisible(() => {
       setOnWood((current) => {
         const waiting = nextWaiting(current, WALKER_KEYS.includes(selectedKey) ? selectedKey : null);
         if (!waiting) return current;
@@ -142,18 +143,18 @@ export function HiveDen({
         return current.map((key) => (key === leave ? waiting : key));
       });
     }, 14000);
-    return () => window.clearInterval(id);
+    return stop;
   }, [selectedKey]);
 
   useEffect(() => {
-    const id = window.setInterval(() => {
+    const stop = everyVisible(() => {
       setStats((prior) => {
         const next = tickCare(HIVE_PLACE, prior);
         saveCare(CARE_KEY, next);
         return next;
       });
-    }, 8000);
-    return () => window.clearInterval(id);
+    }, 8000, { onResume: true });
+    return stop;
   }, []);
 
   const colony = colonyOf(stats);
