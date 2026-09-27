@@ -72,8 +72,12 @@ def test_fixture_clock_is_the_house_day():
     assert is_resting_hour("hamster", 10)
     assert is_resting_hour("ball_python", 12)
     assert not is_resting_hour("red_panda", 14)
-    assert is_resting_hour("red_panda", 23)
-    assert is_resting_hour("red_panda", 6)
+    # Rui's REST is [1, 6), lockstep with desktop/renderer/hours.js since #1275.
+    assert not is_resting_hour("red_panda", 23)
+    assert not is_resting_hour("red_panda", 0)
+    assert is_resting_hour("red_panda", 1)
+    assert is_resting_hour("red_panda", 5)
+    assert not is_resting_hour("red_panda", 6)
     assert not is_resting_hour("red_panda", 7)
 
 
