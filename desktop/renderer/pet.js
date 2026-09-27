@@ -3912,28 +3912,33 @@ if (weatherPlate) {
     const q = document.getElementById("weather-q");
     const hits = document.getElementById("weather-hits");
     if (!hits) return;
+    const hitsSay = (text) => {
+      const li = document.createElement("li");
+      li.textContent = text;
+      hits.replaceChildren(li);
+    };
     const look = document.getElementById("weather-geocode-net");
     if (look && A.geocodeHonesty) look.textContent = A.geocodeHonesty("look");
     const shown = look ? look.textContent || "" : "";
     if (!A.geocodeMaySend("look", geocodeLineInView("weather-geocode-net"))) {
-      hits.innerHTML = `<li>${A.TYPE_A_CITY}</li>`;
+      hitsSay(A.TYPE_A_CITY);
       return;
     }
     const url = A.geocodeUrl(q && q.value);
     if (!url || !A.readGeocode) {
-      hits.innerHTML = `<li>${A.TYPE_A_CITY}</li>`;
+      hitsSay(A.TYPE_A_CITY);
       return;
     }
     A.readGeocode(shown, url)
       .then((json) => {
         if (json == null) {
-          hits.innerHTML = `<li>${A.CANT_REACH}</li>`;
+          hitsSay(A.CANT_REACH);
           return;
         }
         const found = A.parseGeocode(json);
         hits.replaceChildren();
         if (!found.length) {
-          hits.innerHTML = "<li>No place from that look-up.</li>";
+          hitsSay("No place from that look-up.");
           return;
         }
         for (const hit of found) {
@@ -3952,7 +3957,7 @@ if (weatherPlate) {
         }
       })
       .catch(() => {
-        hits.innerHTML = `<li>${A.CANT_REACH}</li>`;
+        hitsSay(A.CANT_REACH);
       });
   });
   function showHereAsk(on) {

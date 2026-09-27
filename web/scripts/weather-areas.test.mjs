@@ -497,3 +497,51 @@ test("forecast and geocode time out and deny a silent host", async () => {
   assert.equal(answered.current.temperature_2m, 3);
   assert.equal(A.parseForecast(answered).tempC, 3);
 });
+
+const WMO_PINS = [
+  [0, "Clear"],
+  [1, "Mostly clear"],
+  [2, "Partly cloudy"],
+  [3, "Overcast"],
+  [45, "Fog"],
+  [61, "Rain"],
+  [71, "Snow"],
+  [95, "Thunderstorm"],
+];
+
+test("the forecast says the WMO code in words; overcast is not clear (web and overlay)", () => {
+  for (const surface of [A, Overlay]) {
+    for (const [code, word] of WMO_PINS) {
+      assert.equal(surface.skyWord(code), word, `WMO ${code}`);
+      const live = surface.parseForecast({
+        current: { temperature_2m: 8.4, weather_code: code, wind_speed_10m: 5 },
+        daily: { time: ["2026-09-27"], weather_code: [code], temperature_2m_max: [16.5], temperature_2m_min: [8] },
+      });
+      assert.equal(live.word, word);
+      assert.equal(live.label, `${word} · 8°`);
+      assert.equal(live.daily[0].word, word);
+      assert.equal(surface.dayLabel(live.daily[0]), word.toLowerCase());
+    }
+    // The four art skies are unchanged: overcast and fog stay calm, snow and storms stay wet.
+    assert.equal(surface.mapLiveSky(3, 8, 5), "clear");
+    assert.equal(surface.mapLiveSky(45, 8, 5), "clear");
+    assert.equal(surface.mapLiveSky(71, 0, 5), "rain");
+    assert.equal(surface.mapLiveSky(95, 20, 5), "rain");
+    // Wind and heat are added after the word.
+    assert.equal(surface.parseForecast({ current: { temperature_2m: 8, weather_code: 3, wind_speed_10m: 30 } }).label, "Overcast, windy · 8°");
+    assert.equal(surface.parseForecast({ current: { temperature_2m: 35, weather_code: 0, wind_speed_10m: 2 } }).label, "Clear, hot · 35°");
+    // No code or an unknown code is not "Clear".
+    assert.equal(surface.parseForecast({ current: { temperature_2m: 8, wind_speed_10m: 2 } }).label, "Sky unread · 8°");
+    assert.equal(surface.parseForecast({ current: { temperature_2m: 8, weather_code: 42, wind_speed_10m: 2 } }).label, "Sky unread · 8°");
+    assert.equal(surface.skyWord(null), "");
+    assert.equal(surface.skyWord(""), "");
+    assert.equal(surface.skyWord(3.5), "");
+    // The house sky (no forecast word) keeps its four names.
+    assert.equal(surface.skyLabel("clear", 12), "Clear · 12°");
+    assert.equal(surface.skyLabel("rain", null), "Rain");
+  }
+  assert.deepEqual({ ...Overlay.WMO_WORDS }, { ...A.WMO_WORDS });
+  const plates = readFileSync(join(root, "src/components/desk/desk-plates.tsx"), "utf8");
+  assert.ok(plates.includes("dayLabel(d)"));
+  assert.ok(!plates.includes("{d.day} · {d.sky}"));
+});

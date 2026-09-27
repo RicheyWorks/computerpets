@@ -64,6 +64,15 @@ function clip(text: unknown, n = 180) {
 export const LINK_CHARS = 2048;
 
 /**
+ * Only a web page may be a headline link. A feed that sends javascript:, data:, or a
+ * relative path gets no link, and the title stays plain words.
+ */
+export function webLink(url: unknown) {
+  const text = clip(url, LINK_CHARS);
+  return /^https?:\/\/[^\s]/i.test(text) ? text : "";
+}
+
+/**
  * The featured story is Wikipedia markup. The plate shows its words, not its tags.
  * A stray angle bracket is dropped so the words cannot become markup again.
  */
@@ -136,7 +145,7 @@ export function parseFavorite(raw: unknown): NewsFavorite | null {
     };
   }
   const title = clip(o.title, 90);
-  const url = clip(o.url, LINK_CHARS);
+  const url = webLink(o.url);
   if (!title) return null;
   const id = typeof o.id === "string" && o.id ? o.id : `fav-${hash(title + "|" + url)}`;
   return {
@@ -315,7 +324,7 @@ export function parseRss(xml: unknown): NewsItem[] {
   while ((m = re.exec(xml)) && out.length < 8) {
     const block = m[1] || "";
     const title = clip(decodeXml((block.match(/<title>([\s\S]*?)<\/title>/i) || [])[1]), 90);
-    const link = clip(decodeXml((block.match(/<link>([\s\S]*?)<\/link>/i) || [])[1]), LINK_CHARS);
+    const link = webLink(decodeXml((block.match(/<link>([\s\S]*?)<\/link>/i) || [])[1]));
     const source = clip(decodeXml((block.match(/<source[^>]*>([\s\S]*?)<\/source>/i) || [])[1]), 40);
     if (!title) continue;
     out.push({ title, url: link, summary: source });
@@ -336,7 +345,7 @@ export function parseNews(json: unknown): NewsItem[] {
     const titles = first && first.titles && typeof first.titles === "object" ? (first.titles as { normalized?: string }).normalized : "";
     const title = clip(first?.normalizedtitle || titles || first?.title, 90);
     const pages = first && first.content_urls && typeof first.content_urls === "object" ? (first.content_urls as { desktop?: { page?: string } }) : null;
-    const url = pages?.desktop?.page ? String(pages.desktop.page) : "";
+    const url = pages?.desktop?.page ? webLink(pages.desktop.page) : "";
     const summary = clip(plainText(o.story || first?.extract || first?.description), 200);
     if (!title) continue;
     out.push({

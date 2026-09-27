@@ -38,7 +38,12 @@ _MAC = re.compile(r"^Mac", re.I)
 _LINUX = re.compile(r"^Linux", re.I)
 _PHYS = re.compile(r"phys_(\d+)")
 _HEADER = re.compile(r"^name\s*,", re.I)
-_3D = re.compile(r"engtype_3D", re.I)
+_PID = re.compile(r"^pid_\d+_", re.I)
+# The engine counter is a rate over its own sample window, and on a busy engine it can
+# read a little over 100 (111 was seen on an RTX 4090 under NVENC). That is overshoot,
+# not a broken reading: it is kept and the engine is capped at 100, as Task Manager does.
+# A reading past ENGINE_OVERSHOOT is still refused as broken.
+ENGINE_OVERSHOOT = 200
 
 
 def is_windows(platform: str | None) -> bool:
@@ -461,6 +466,20 @@ def _phys_of(instance):
     return int(match.group(1)) if match else None
 
 
+def _engine_of(instance) -> str:
+    """One engine is one adapter's engine index and type, whatever process used it."""
+    return _PID.sub("", str(instance or "")).lower()
+
+
+def _busiest_engine(engines: dict):
+    """Task Manager's GPU number: add every process on each engine, then take the
+    busiest engine of any type (3D, Copy, Video Decode, Compute). Engines are never
+    added together."""
+    if not engines:
+        return None
+    return min(100, round1(max(engines.values())))
+
+
 def reduce_pdh(engines, adapter_memory) -> dict:
     if engines is None and adapter_memory is None:
         return {"rows": [], "malformed": False, "rejected": False}
@@ -474,8 +493,7 @@ def reduce_pdh(engines, adapter_memory) -> dict:
         if phys not in by_phys:
             by_phys[phys] = {
                 "index": phys,
-                "utils3d": [],
-                "utils": [],
+                "engines": {},
                 "used": [],
                 "limit": [],
                 "rejected": False,
@@ -493,15 +511,15 @@ def reduce_pdh(engines, adapter_memory) -> dict:
             continue
         if row.get("util") is None:
             continue
-        util = _ranged(_metric_token(str(row.get("util"))), 0, 100, "1")
+        token = _metric_token(str(row.get("util")))
+        util = _ranged(token, 0, ENGINE_OVERSHOOT, "1")
         slot = bucket(phys)
         if util == "bad" or util is None:
             slot["rejected"] = True
             continue
-        if _3D.search(str(row.get("instance"))):
-            slot["utils3d"].append(util)
-        else:
-            slot["utils"].append(util)
+        # Add the raw share. Rounding each process first would lose small ones.
+        key = _engine_of(row.get("instance"))
+        slot["engines"][key] = slot["engines"].get(key, 0) + token["value"]
     for row in adapter_memory or []:
         if not isinstance(row, dict):
             bad_shape = True
@@ -525,12 +543,7 @@ def reduce_pdh(engines, adapter_memory) -> dict:
                 slot["limit"].append(round_int(limit))
     rows = []
     for slot in by_phys.values():
-        if slot["utils3d"]:
-            util_percent = max(slot["utils3d"])
-        elif slot["utils"]:
-            util_percent = max(slot["utils"])
-        else:
-            util_percent = None
+        util_percent = _busiest_engine(slot["engines"])
         memory_used = sum(slot["used"]) if slot["used"] else None
         memory_total = max(slot["limit"]) if slot["limit"] else None
         if memory_used is not None and memory_total is not None and memory_used > memory_total:

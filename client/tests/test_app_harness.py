@@ -244,9 +244,19 @@ def test_recorded_feed_replays_drive_read_parse_and_paint():
         assert result.ok, (aid, result.error)
         assert result.trace, aid
     weather = invoke("desk.weather.replay")
-    assert weather.extras["plate"] == "Seattle · Clear · 8°"
-    assert "2026-09-29 · rain · 15°" in weather.extras["body"]
+    # The saved forecast is WMO 3 now and for two days, then WMO 51.
+    assert weather.extras["plate"] == "Seattle · Overcast · 8°"
+    assert "2026-09-27 · overcast · 17°" in weather.extras["body"]
+    assert "2026-09-29 · drizzle · 15°" in weather.extras["body"]
+    assert "Clear" not in weather.extras["plate"]
+    assert weather.extras["wmo"] == [
+        "0=Clear", "1=Mostly clear", "2=Partly cloudy", "3=Overcast", "45=Fog", "61=Rain", "71=Snow", "95=Thunderstorm",
+    ]
     assert "Seattle · unread" in " ".join(weather.trace)
+    # Every plate paints feed words as text: no innerHTML write, no element from a hostile title.
+    for aid in ("desk.weather.replay", "desk.news.replay", "desk.market.replay", "desk.nft.replay"):
+        assert invoke(aid).extras["sinks"] == 0, aid
+    assert invoke("desk.news.replay").extras["hostile"] == "letters"
     market = invoke("desk.market.replay")
     assert market.extras["plate"] == "ETH · 2708.39"
     assert market.extras["stockPlate"] == "AAPL · 341.07"

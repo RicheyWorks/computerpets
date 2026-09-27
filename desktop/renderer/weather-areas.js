@@ -300,6 +300,48 @@
     return out;
   }
 
+  /**
+   * The WMO weather code in words (Open-Meteo's table). The pets keep their four art
+   * skies; the plate says what the code actually reports. An unknown code has no word.
+   */
+  const WMO_WORDS = {
+    0: "Clear",
+    1: "Mostly clear",
+    2: "Partly cloudy",
+    3: "Overcast",
+    45: "Fog",
+    48: "Fog",
+    51: "Drizzle",
+    53: "Drizzle",
+    55: "Drizzle",
+    56: "Freezing drizzle",
+    57: "Freezing drizzle",
+    61: "Rain",
+    63: "Rain",
+    65: "Rain",
+    66: "Freezing rain",
+    67: "Freezing rain",
+    71: "Snow",
+    73: "Snow",
+    75: "Snow",
+    77: "Snow grains",
+    80: "Showers",
+    81: "Showers",
+    82: "Showers",
+    85: "Snow showers",
+    86: "Snow showers",
+    95: "Thunderstorm",
+    96: "Thunderstorm with hail",
+    99: "Thunderstorm with hail",
+  };
+
+  function skyWord(code) {
+    if (code == null || code === "" || typeof code === "boolean") return "";
+    const wmo = Number(code);
+    if (!Number.isInteger(wmo) || !Object.prototype.hasOwnProperty.call(WMO_WORDS, wmo)) return "";
+    return WMO_WORDS[wmo];
+  }
+
   function mapLiveSky(code, tempC, windKmh) {
     const wmo = Math.round(Number(code));
     const temp = num(tempC);
@@ -315,10 +357,30 @@
     return "clear";
   }
 
-  function skyLabel(sky, tempC) {
-    const name = sky === "rain" ? "Rain" : sky === "wind" ? "Wind" : sky === "heat" ? "Heat" : "Clear";
+  /**
+   * With a word (a forecast), the word leads and wind or heat is added after it.
+   * With no code the forecast did not say, so a calm sky reads "Sky unread", not "Clear".
+   * Without a word argument (the house sky) the four names stay.
+   */
+  function skyName(sky, word) {
+    const four = sky === "rain" ? "Rain" : sky === "wind" ? "Wind" : sky === "heat" ? "Heat" : "Clear";
+    if (word === undefined) return four;
+    if (!word) return sky === "clear" ? "Sky unread" : four;
+    if (sky === "wind") return `${word}, windy`;
+    if (sky === "heat") return `${word}, hot`;
+    return word;
+  }
+
+  function skyLabel(sky, tempC, word) {
+    const name = skyName(sky, word);
     if (tempC == null || !Number.isFinite(tempC)) return name;
     return `${name} · ${Math.round(tempC)}°`;
+  }
+
+  /** One forecast day in the plate's lower case: "overcast", "drizzle", "clear, hot". */
+  function dayLabel(day) {
+    if (!day || typeof day !== "object") return "sky unread";
+    return skyName(day.sky, day.word == null ? "" : day.word).toLowerCase();
   }
 
   function parseForecast(json) {
@@ -327,6 +389,7 @@
     const tempC = num(current.temperature_2m);
     const windKmh = num(current.wind_speed_10m);
     const sky = mapLiveSky(current.weather_code, tempC, windKmh);
+    const word = skyWord(current.weather_code);
     const dailyRaw = json.daily && typeof json.daily === "object" ? json.daily : null;
     const days = [];
     if (dailyRaw && Array.isArray(dailyRaw.time)) {
@@ -334,10 +397,10 @@
         const maxC = Array.isArray(dailyRaw.temperature_2m_max) ? num(dailyRaw.temperature_2m_max[i]) : null;
         const minC = Array.isArray(dailyRaw.temperature_2m_min) ? num(dailyRaw.temperature_2m_min[i]) : null;
         const dCode = Array.isArray(dailyRaw.weather_code) ? dailyRaw.weather_code[i] : null;
-        days.push({ day: String(dailyRaw.time[i] || ""), sky: mapLiveSky(dCode, maxC, null), maxC, minC });
+        days.push({ day: String(dailyRaw.time[i] || ""), sky: mapLiveSky(dCode, maxC, null), word: skyWord(dCode), maxC, minC });
       }
     }
-    return { sky, tempC, windKmh, label: skyLabel(sky, tempC), daily: days, source: "open-meteo" };
+    return { sky, word, tempC, windKmh, label: skyLabel(sky, tempC, word), daily: days, source: "open-meteo" };
   }
 
   /**
@@ -615,7 +678,10 @@
     forecastUrl,
     parseGeocode,
     mapLiveSky,
+    WMO_WORDS,
+    skyWord,
     skyLabel,
+    dayLabel,
     parseForecast,
     plateLine,
   };

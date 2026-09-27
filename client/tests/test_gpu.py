@@ -598,3 +598,73 @@ def test_counters_do_not_sum_engines():
     assert sample["utilPercent"] == 60
     assert sample["tempC"] is None
     assert "120" not in gpu_line(sample)
+
+
+def test_counters_add_processes_per_engine_then_take_the_busiest_engine():
+    """Task Manager's number: sum every process on one engine, then the busiest engine."""
+    from computerpets_client.gpu import parse_probe_text
+
+    text = "\n".join(
+        [
+            "NVIDIA_ABSENT",
+            "ENGINE",
+            "pid_1_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t20.25",
+            "pid_2_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t30.5",
+            "pid_3_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t0.04",
+            "pid_1_luid_0x1_0x2_phys_0_eng_2_engtype_VideoDecode\t40",
+            "pid_2_luid_0x1_0x2_phys_0_eng_2_engtype_VideoDecode\t15",
+            "pid_1_luid_0x1_0x2_phys_0_eng_4_engtype_Copy\t5",
+            "ENDENGINE",
+            "END",
+        ]
+    )
+    sample = sample_from_probe(parse_probe_text(text), platform="win32", now_ms=NOW)
+    assert sample["source"] == "pdh"
+    assert sample["utilPercent"] == 55
+    over = "\n".join(
+        [
+            "NVIDIA_ABSENT",
+            "ENGINE",
+            "pid_1_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t70",
+            "pid_2_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t60",
+            "ENDENGINE",
+            "END",
+        ]
+    )
+    assert sample_from_probe(parse_probe_text(over), platform="win32", now_ms=NOW)["utilPercent"] == 100
+    small = "\n".join(
+        [
+            "NVIDIA_ABSENT",
+            "ENGINE",
+            "pid_1_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t0.04",
+            "pid_2_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t0.04",
+            "ENDENGINE",
+            "END",
+        ]
+    )
+    assert sample_from_probe(parse_probe_text(small), platform="win32", now_ms=NOW)["utilPercent"] == 0.1
+    busy = "\n".join(
+        [
+            "NVIDIA_ABSENT",
+            "ENGINE",
+            "pid_1_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t110.8",
+            "pid_2_luid_0x1_0x2_phys_0_eng_4_engtype_Copy\t2",
+            "ENDENGINE",
+            "END",
+        ]
+    )
+    busy_sample = sample_from_probe(parse_probe_text(busy), platform="win32", now_ms=NOW)
+    assert busy_sample["status"] == "read"
+    assert busy_sample["utilPercent"] == 100
+    broken = "\n".join(["NVIDIA_ABSENT", "ENGINE", "pid_1_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t5000", "ENDENGINE", "END"])
+    assert sample_from_probe(parse_probe_text(broken), platform="win32", now_ms=NOW)["utilPercent"] != 100
+
+
+def test_saved_windows_counters_read_the_busiest_engine():
+    from computerpets_client.gpu import parse_probe_text
+
+    saved = Path(__file__).resolve().parents[2] / "desktop" / "renderer" / "fixtures" / "replay" / "gpu-win-pdh.txt"
+    sample = sample_from_probe(parse_probe_text(saved.read_text(encoding="utf-8")), platform="win32", now_ms=NOW)
+    # Video decode carries 4.2%. The old reading took one process's 3D share (0.5%).
+    assert sample["utilPercent"] == 4.2
+    assert gpu_line(sample) == "GPU unread · unread · 4.2% · 1.5 GiB/unread · unread"
