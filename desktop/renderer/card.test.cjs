@@ -129,6 +129,72 @@ test("saved lines, alarm, and timer persist honestly", () => {
   assert.match(preloadSrc, /quit:/);
 });
 
+test("the keeper clock rings a passed alarm once and a timer on time, even while hidden", () => {
+  const at = (d, h, m, s = 0) => new Date(2026, 8, d, h, m, s).getTime();
+  const alarm = { on: true, hour: 7, minute: 0, lineId: "", lastRingDay: "" };
+  // Its own minute still rings with no earlier look (the old contract).
+  assert.equal(C.alarmCatch(alarm, at(27, 7, 0, 30)), at(27, 7, 0));
+  // Hidden from 6:59:58 to 7:03:10: the minute passed between looks and rings once, late.
+  assert.equal(C.alarmCatch(alarm, at(27, 7, 3, 10), at(27, 6, 59, 58)), at(27, 7, 0));
+  assert.equal(C.alarmDue(alarm, at(27, 7, 3, 10)), false, "no earlier look, no catch-up");
+  const rang = C.markAlarmRang(alarm, at(27, 7, 0));
+  assert.equal(C.alarmCatch(rang, at(27, 7, 3, 11), at(27, 6, 0)), 0, "once a day");
+  assert.equal(C.alarmCatch(rang, at(28, 7, 0, 1)), at(28, 7, 0), "next day rings again");
+  // Setting the alarm to a time already gone today does not ring now.
+  assert.equal(C.alarmCatch({ ...alarm, hour: 8 }, at(27, 9, 0, 30), at(27, 9, 0, 29)), 0);
+  assert.equal(C.alarmCatch({ ...alarm, on: false }, at(27, 7, 3), at(27, 6, 59)), 0);
+  // Across midnight: 23:59 passed while asleep rings once and keeps yesterday as its day.
+  const late = { ...alarm, hour: 23, minute: 59 };
+  const caught = C.alarmCatch(late, at(28, 0, 2), at(27, 23, 58, 30));
+  assert.equal(caught, at(27, 23, 59));
+  const marked = C.markAlarmRang(late, caught);
+  assert.equal(marked.lastRingDay, "2026-09-27");
+  assert.equal(C.alarmCatch(marked, at(28, 23, 59, 5)), at(28, 23, 59), "tonight still rings");
+
+  // One-second looks through a hidden stretch: the alarm rings exactly once, in its minute.
+  let guest = { alarm: { ...alarm, lineId: "l-1" }, timer: C.blankTimer() };
+  let since = at(27, 6, 58);
+  const rings = [];
+  for (let now = since + 1000; now <= at(27, 7, 5); now += 1000) {
+    const tick = C.clockTick(guest, now, since);
+    since = now;
+    if (tick.changed) guest = { ...guest, alarm: tick.alarm, timer: tick.timer };
+    if (tick.rang) rings.push({ ...tick, now });
+  }
+  assert.equal(rings.length, 1);
+  assert.equal(rings[0].rang, "alarm");
+  assert.equal(rings[0].lineId, "l-1");
+  assert.ok(rings[0].lateMs < 1000);
+
+  // A slow look (a sleeping computer wakes at 7:40) still rings once, late.
+  const slow = C.clockTick({ alarm, timer: C.blankTimer() }, at(27, 7, 40), at(27, 6, 50));
+  assert.equal(slow.rang, "alarm");
+  assert.equal(slow.lateMs, 40 * 60_000);
+
+  // A timer rings on the look after it ends, and only once.
+  let timer = C.startTimer(C.blankTimer(), 5000, 1_000);
+  const quiet = C.clockTick({ alarm: C.blankAlarm(), timer }, 3_000, 2_000);
+  assert.equal(quiet.rang, "");
+  assert.equal(quiet.changed, true);
+  assert.equal(quiet.timer.remainingMs, 3_000);
+  const done = C.clockTick({ alarm: C.blankAlarm(), timer }, 6_400, 5_400);
+  assert.equal(done.rang, "timer");
+  assert.equal(done.lateMs, 400);
+  assert.equal(done.timer.running, false);
+  assert.equal(C.clockTick({ alarm: C.blankAlarm(), timer: done.timer }, 7_400, 6_400).changed, false);
+
+  // The overlay keeps looking while hidden; only the weather sound waits for a visible window.
+  const clockAt = petSrc.indexOf("let clockSince = Date.now();");
+  assert.ok(clockAt > 0);
+  const body = petSrc.slice(clockAt, petSrc.indexOf("}, 1000);", clockAt));
+  assert.match(body, /clockTick\(cardGuest\(\), now, since\)/);
+  assert.doesNotMatch(body, /if \(document\.hidden[^)]*\) return/);
+  assert.match(body, /if \(!document\.hidden\) \{\s+const sky/);
+  assert.match(body, /if \(document\.hidden\) window\.desk\?\.notify\(/);
+  assert.match(cardSrc, /clockTick\(guestOf\(live, guestKey\), now, since\)/);
+  assert.match(webCard, /export function clockTick/);
+});
+
 test("an asleep guest keeps the sleep pose until a real wake; Walk is a wake", () => {
   const life = { ...Life.blank(), asleep: true, sleepHeld: true, hunger: 70 };
   assert.equal(Life.sleepHolds(life, "wander"), false);

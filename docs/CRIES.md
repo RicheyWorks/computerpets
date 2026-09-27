@@ -1,10 +1,10 @@
 # Cry credits
 
-**221 of 221** ComputerPets guests answer **Call** with real microphone field tape — not cartoon beeps. Sources include Wikimedia Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist, and open-access papers (CC BY 4.0).
+**221 of 221** ComputerPets guests answer **Call** with a real recording — not cartoon beeps. Guests with a voice play their own species where open-licensed tape exists (Jaw plays a close relative). Quiet guests play a real recording of the soft sound their life makes. Four (Sol, Shift, Spike, Lid) play a real habitat recording until open-licensed species tape exists. Sources include Wikimedia Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist, and open-access papers (CC BY 4.0).
 
 This page keeps the full recordist credits. The front door stays short; see the root [README](../README.md).
 
-**221 of 221** guests already answer **Call** with real microphone field tape — not beeps. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. When a guest has a cry file, Call plays that short dry cut.
+**221 of 221** guests answer **Call** with a real recording — not beeps. Most guests with a voice play their own species (Jaw plays a close relative, a Nile crocodile). Quiet guests — fungi, plants, microbes, and many small animals — play a real recording of the soft sound their life makes: a rustle, a drip, a wing whir. Four — **Sol**, **Shift**, **Spike**, and **Lid** — play a real habitat recording until open-licensed tape of their own species exists. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist, and open-access papers. Call plays a short dry cut.
 
 These voices are in the house:
 

@@ -4590,29 +4590,28 @@ setInterval(() => {
   fetchNews();
   fetchMarket();
 }, 20 * 60 * 1000);
+// The keeper clock keeps looking while the overlay is hidden (Hide the window, a tray click).
+// clockSince is the last look, so an alarm minute that passed during a slow tick or a sleeping
+// computer still rings once, and a timer rings when it ends. A hidden overlay also gets a notification.
+let clockSince = Date.now();
 setInterval(() => {
-  if (document.hidden || !kind || !window.PetCard) return;
-  const sky = skyOf();
-  if ((sky === "rain" || sky === "wind") && Math.random() < 0.55) playSound(sky);
-  const guest = cardGuest();
-  if (window.PetCard.alarmDue(guest.alarm)) {
-    guest.alarm = window.PetCard.markAlarmRang(guest.alarm);
-    const line = window.PetCard.lineById(card, kind.key, guest.alarm.lineId) || { text: "The clock asked.", kind: "say" };
-    card = window.PetCard.setGuest(card, kind.key, guest);
-    persistCard();
-    playHouseLine(line);
-    return;
+  if (!kind || !window.PetCard) return;
+  const now = Date.now();
+  const since = clockSince;
+  clockSince = now;
+  if (!document.hidden) {
+    const sky = skyOf();
+    if ((sky === "rain" || sky === "wind") && Math.random() < 0.55) playSound(sky);
   }
-  if (guest.timer.running) {
-    const tick = window.PetCard.timerTick(guest.timer);
-    guest.timer = tick.timer;
-    card = window.PetCard.setGuest(card, kind.key, guest);
-    persistCard();
-    if (tick.rang) {
-      const line = window.PetCard.lineById(card, kind.key, guest.timer.lineId) || { text: "The timer is done.", kind: "say" };
-      playHouseLine(line);
-    }
-  }
+  const tick = window.PetCard.clockTick(cardGuest(), now, since);
+  if (!tick.changed) return;
+  card = window.PetCard.setGuest(card, kind.key, { alarm: tick.alarm, timer: tick.timer });
+  persistCard();
+  if (!tick.rang) return;
+  const plain = tick.rang === "alarm" ? "The clock asked." : "The timer is done.";
+  const line = window.PetCard.lineById(card, kind.key, tick.lineId) || { text: plain, kind: "say" };
+  playHouseLine(line);
+  if (document.hidden) window.desk?.notify({ title: kind.name, body: line.kind === "say" ? line.text : plain, key: kind.key });
 }, 1000);
 
 window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
