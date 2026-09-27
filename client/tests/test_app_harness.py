@@ -69,6 +69,7 @@ CROSS_DOMAIN = {
     "desk.nft.replay",
     "desk.gpu.replay",
     "desk.links.open",
+    "desk.launch_check",
     "cry.decode",
     "visit.todays",
     "visit.phases",
@@ -280,6 +281,22 @@ def test_painted_links_open_in_the_browser_and_never_in_the_overlay():
     assert result.extras["windows"] == 0
     assert result.extras["navigated"] == 0
     assert "answers=deny" in " ".join(result.trace)
+
+
+def test_start_script_checks_node_and_pieces_without_installing():
+    import shutil
+
+    result = invoke("desk.launch_check")
+    assert result.ok, result.error
+    assert result.extras["script"] in {"desktop.ps1", "desktop.sh"}
+    if result.extras["expect"] == "ready to start":
+        assert result.extras["exit"] == 0
+        assert result.extras["pieces"] in {"ready", "missing", "unfinished", "changed"}
+        assert result.extras["node"] and result.extras["node"].startswith("v")
+    else:
+        # No Node, an older Node, or no npm: the start stops with plain words.
+        assert result.extras["exit"] != 0
+    assert shutil.which("node") is None or result.extras["node"]
 
 
 def test_replay_fixtures_are_small_and_hold_no_secrets():

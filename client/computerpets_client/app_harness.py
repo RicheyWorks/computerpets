@@ -17,7 +17,10 @@ No invented verbs — only real blotter / overlay / web surfaces.
 
 from __future__ import annotations
 
+import os
 import re
+import shutil
+import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Iterable
@@ -1339,6 +1342,19 @@ def _desk_rows() -> list[Affordance]:
             ),
         ),
         Affordance(
+            "desk.launch_check",
+            "desk",
+            "The start script checks Node and the pieces before it turns the pets on",
+            "desktop.ps1 -Check (Windows) / desktop.sh --check (Mac, Linux)",
+            notes=(
+                "Runs the real start script in check mode, which changes nothing. With Node 22 or newer "
+                "and npm on PATH it must print ok: node <the same version node -v prints> and a pieces "
+                "state (ready, missing, unfinished, or changed). With no Node, an older Node, or no npm "
+                "it must stop with plain words. The install stamp must not change. npm install and the "
+                "overlay are never run."
+            ),
+        ),
+        Affordance(
             "desk.links.open",
             "desk",
             "Painted news links open in the keeper's browser, never in the overlay",
@@ -1484,6 +1500,75 @@ def _desk_rows() -> list[Affordance]:
     ]
 
 
+LAUNCH_PIECES = ("ready", "missing", "unfinished", "changed")
+LAUNCH_NODE_MAJOR = 22
+
+
+def _launch_check(aid: str) -> InvokeResult:
+    """Run desktop.ps1 -Check / desktop.sh --check and hold it to what node -v says."""
+    root = repo_root()
+    if os.name == "nt":
+        shell = shutil.which("powershell") or shutil.which("pwsh")
+        script = "desktop.ps1"
+        cmd = [shell, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(root / script), "-Check"] if shell else []
+    else:
+        shell = shutil.which("sh")
+        script = "desktop.sh"
+        cmd = [shell, str(root / script), "--check"] if shell else []
+    if not cmd:
+        return InvokeResult(aid, "desk", False, error=f"no shell to run {script}")
+    node = shutil.which("node")
+    npm = shutil.which("npm")
+    version = ""
+    if node:
+        version = subprocess.run([node, "-v"], capture_output=True, text=True, timeout=60).stdout.strip()
+    match = re.match(r"v(\d+)\.", version)
+    major = int(match.group(1)) if match else 0
+    stamp = root / "desktop" / "node_modules" / ".computerpets-installed"
+    before = stamp.stat().st_mtime_ns if stamp.exists() else None
+    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=120, cwd=str(root))
+    after = stamp.stat().st_mtime_ns if stamp.exists() else None
+    out = f"{proc.stdout or ''}{proc.stderr or ''}"
+    pieces = re.search(r"^pieces: (\w+)\s*$", out, re.M)
+    fails: list[str] = []
+    if not node:
+        expect = "no node"
+        if proc.returncode == 0 or "Node is not installed" not in out:
+            fails.append("with no Node the start must stop with plain words")
+    elif major < LAUNCH_NODE_MAJOR:
+        expect = f"node {version} too old"
+        if proc.returncode == 0 or "22 or newer" not in out or version not in out:
+            fails.append(f"with Node {version} the start must stop and ask for 22 or newer")
+    elif not npm:
+        expect = "no npm"
+        if proc.returncode == 0 or "npm is missing" not in out:
+            fails.append("with no npm the start must stop with plain words")
+    else:
+        expect = "ready to start"
+        if proc.returncode != 0:
+            fails.append(f"{script} check exited {proc.returncode}: {out.strip()[:200]}")
+        if f"ok: node {version}" not in out:
+            fails.append(f"{script} check did not print ok: node {version}")
+        if not pieces or pieces.group(1) not in LAUNCH_PIECES:
+            fails.append(f"{script} check printed no pieces state")
+    if before != after:
+        fails.append("check mode changed the install stamp")
+    for word in ("npm install", "Getting the pieces"):
+        if word in out:
+            fails.append(f"check mode must not install ({word!r} printed)")
+    state = pieces.group(1) if pieces else "none"
+    ok = not fails
+    return InvokeResult(
+        aid,
+        "desk",
+        ok,
+        detail=f"{script}: node {version or 'none'}; pieces {state}; exit {proc.returncode}",
+        extras={"script": script, "node": version, "npm": bool(npm), "exit": proc.returncode, "pieces": state, "expect": expect},
+        trace=[f"script={script}", f"node={version or 'none'}", f"expect={expect}", f"exit={proc.returncode}", f"pieces={state}"],
+        error=None if ok else "; ".join(fails),
+    )
+
+
 def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
     aid = f"desk.{local_id}" if not local_id.startswith("live.") else local_id
     if local_id == "weather":
@@ -1589,6 +1674,8 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
         return _gpu_replay(aid)
     if local_id == "links.open":
         return _run_node_smoke("links_open", domain="desk", action_id=aid)
+    if local_id == "launch_check":
+        return _launch_check(aid)
     if local_id == "favorites.news":
         return _run_node_smoke("news_favorites", domain="desk", action_id=aid)
     if local_id == "favorites.market":

@@ -82,6 +82,32 @@ test("today's start is desktop.ps1 → npm start → electron .", () => {
   assert.match(startSrc, /We do not publish one/);
 });
 
+test("the start checks Node and the pieces in plain words, and a half-finished install is got again", () => {
+  const shSrc = readFileSync(join(repo, "desktop.sh"), "utf8");
+  for (const src of [ps1Src, shSrc]) {
+    assert.match(src, /22 or newer/);
+    assert.match(src, /https:\/\/nodejs\.org/);
+    assert.match(src, /npm is missing/);
+    assert.match(src, /node_modules\/?\\?electron[\\/]path\.txt/);
+    assert.match(src, /\.computerpets-installed/);
+    assert.match(src, /npm install did not finish/);
+    assert.match(src, /npm rebuild electron/);
+    // Check mode prints and leaves before anything is installed or started.
+    const check = src.search(/ok: node/);
+    assert.ok(check > 0, "check mode prints ok: node");
+    assert.ok(check < src.search(/& npm install|^\s*npm install \|\|/m), "check leaves before npm install");
+    assert.ok(check < src.lastIndexOf("npm start"), "check leaves before npm start");
+  }
+  // A failed npm install stops the start in PowerShell too (native exit codes do not throw there).
+  assert.match(ps1Src, /\$LASTEXITCODE -ne 0/);
+  assert.match(ps1Src, /param\(\[switch\]\$Check\)/);
+  assert.match(shSrc, /"--check"/);
+  // The stamp lives inside node_modules, which git already ignores.
+  assert.match(readFileSync(join(repo, ".gitignore"), "utf8"), /^desktop\/node_modules\/$/m);
+  assert.match(startSrc, /desktop\.ps1 -Check/);
+  assert.match(startSrc, /gets the pieces again/);
+});
+
 test("the taught house is the overlay that runs: keeper card, On the desk, local care", () => {
   assert.match(startSrc, /keeper card/);
   assert.match(startSrc, /Hunger, Rest, Bond/);
