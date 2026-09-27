@@ -8,9 +8,9 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-Catalog 221 field-tape pass closed for sit-able guests (Soak/capybara sat 2026-09-15).
+Catalog 221 field-tape pass: 220 of 221 have a cry (2026-09-27: garter re-sat, Sol/Shift/Spike/Beak/Lid sat from CC0 habitat rustle/water tape).
 
-Only permanent SKIPs remain (no legal PD/CC0/CC BY tape): **Sol** iguana, **Shift** chameleon, **Spike** horned_lizard, **Jaw** crocodile, **Beak** snapper, **Lid** box_turtle. Do not invent beeps.
+Only **Jaw** crocodile remains (no legal PD/CC0/CC BY American crocodile tape; a voiced guest gets no stand-in sound). Do not invent beeps.
 
 ## Seen
 
@@ -19,6 +19,10 @@ Only permanent SKIPs remain (no legal PD/CC0/CC BY tape): **Sol** iguana, **Shif
 - Path lock: build our own from internet field tape
 
 ## Log
+
+### 2026-09-27 05:05 PDT — Buffffff
+
+Re-sat Sash garter from Freesound CC0 #666175 (felix.blume, close dry tall-grass rustle, Arivaca AZ); the BigSoundBank #908 export was 4 s of zeros. Sat Sol iguana (bruno.auzet #714265 gusts in a tree), Shift chameleon (klinkenstecker #850004 bamboo leaves), Spike horned_lizard (Vrymaa #825860 blown dune sand), Beak snapper (ceich93 #318064 river lapping), Lid box_turtle (Mjeno #405140 forest-floor leaves) — all Freesound CC0 field tape of the habitat, since no legal hiss tape exists and none of the five has a voice worth faking. Web prefersHouseCry gains Soak capybara (the cry was sat 2026-09-15 but web missed it). Jaw crocodile stays cryless: no legal American crocodile tape.
 
 ### 2026-09-15 16:25 PDT — Buffffff
 

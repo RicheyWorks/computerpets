@@ -1,0 +1,11 @@
+key: snapper
+guest: Beak (Common Snapping Turtle)
+source: Freesound sound 318064 "Water_Lapping_River.wav" by ceich93
+URL: https://freesound.org/people/ceich93/sounds/318064/
+direct: https://cdn.freesound.org/previews/318/318064_4457609-hq.mp3
+author: ceich93
+license: Creative Commons Zero (CC0 1.0)
+Species: Chelydra serpentina — effectively silent (no legal PD/CC0/CC BY Chelydra air-hiss tape; iNat BY-NC/ARR). River water lapping a pebbly shore at night (Hudson River): the shallows a snapper lies in. No voice. No music. No narrator. No synth.
+Notes: House cut 3.5s mono 16-bit 44.1kHz from 10.0s of the HQ preview; highpass 80 Hz + dynaudnorm=p=0.95:m=8 + afade in 0.05s/out 0.4s, peak-normalized to 0.5. Real field recording, no synthesis.
+sat: 2026-09-27 Buffffff
+House path: build our own from field tape — not Grok Imagine

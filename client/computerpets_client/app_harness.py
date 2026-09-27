@@ -884,12 +884,8 @@ CRY_QUIET_PEAK = 0.02  # quiet on purpose (docs/CRIES.md "attenuated"); listed, 
 
 # Known holes: the file decodes but holds no sound. Listed so the run stays honest and green.
 # The row fails if another cry goes silent, or if one of these gets real sound and stays listed.
-KNOWN_SILENT_CRIES = {
-    "garter": (
-        "garter.wav is 4 seconds of digital silence (every sample is 0). docs/CRIES.md promises a "
-        "soft tall-grass rustle, so Sash plays nothing. The file needs a new export from its source."
-    ),
-}
+# None today: garter.wav was all zeros until it was re-exported from field tape (2026-09-27).
+KNOWN_SILENT_CRIES: dict[str, str] = {}
 
 
 def _wav_facts(path: Path) -> dict[str, Any]:
