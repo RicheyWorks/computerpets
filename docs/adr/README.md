@@ -149,6 +149,7 @@ address, or an API that is not on `main`.
 | [0128](0128-chromium-visit-and-demo-sprites.md) | The visit guest and the desk `/demo` pet draw on that same canvas (the 0125 gate still opens the glass; a missing context stays blank) | Accepted (living desk room pet and desk company sprites moved to 0129) |
 | [0129](0129-chromium-living-desk-sprites.md) | The living desk room pet, and desk Sip, Brick, called guests, and plants, draw on that same canvas (the 0125 gate still opens the glass; a missing context stays blank) | Accepted (day's visitor, house floor, hive, and den blotters moved to 0130) |
 | [0130](0130-chromium-visitor-floor-hive-den-sprites.md) | The day's visitor, the house floor, the hive, and the den blotters draw on that same canvas (every `LivingPet` paints the canvas; the 0125 gate still opens the glass; a missing context stays blank) | Accepted |
+| [0131](0131-windows-virtual-desktop-follow.md) | The Windows overlay follows you across virtual desktops (a helper asks `IsWindowOnCurrentVirtualDesktop` about the overlay's own HWND only; the main process re-shows its own window; tray checkbox writes `vdesk.json`; Mac and Linux keep Electron's pin) | Accepted |
 
 ## How to add one
 
