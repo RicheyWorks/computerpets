@@ -167,7 +167,7 @@ const SURFACES = [
 for (const [rel, call] of SURFACES) {
   test(`plain-error: ${rel} renders errors only through plainMessage`, () => {
     const text = src(rel);
-    assert.match(text, /import \{ plainMessage \} from "@\/lib\/plain-error";/);
+    assert.match(text, /import \{ (?:[\w, ]+, )?plainMessage(?:, [\w, ]+)? \} from "@\/lib\/plain-error";/);
     assert.ok(text.includes(call), `${rel} should call ${call}`);
     assert.doesNotMatch(text, /\berr(or)?\.message\b/, `${rel} still renders a raw message`);
     assert.doesNotMatch(text, /err instanceof Error \? err\.message/);

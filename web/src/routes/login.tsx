@@ -1,10 +1,28 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { GROK_PROVIDERS, authEnabled, signIn } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
+import { loadProblem } from "@/lib/plain-error";
 
 export const Route = createFileRoute("/login")({ component: Login });
 
 function Login() {
+  const [problem, setProblem] = useState<string | null>(null);
+  const [starting, setStarting] = useState<string | null>(null);
+
+  async function start(providerId: string) {
+    setProblem(null);
+    setStarting(providerId);
+    try {
+      await signIn(providerId, { callbackURL: "/" });
+    } catch (err) {
+      // A failed sign-in click says so in one plain sentence; the raw error goes to the console.
+      setProblem(loadProblem("signin", err));
+    } finally {
+      setStarting(null);
+    }
+  }
+
   return (
     <main className="mx-auto grid min-h-[70vh] max-w-md place-items-center">
       <div className="w-full space-y-6 rounded-[var(--radius-xl)] border border-border bg-surface p-6 sm:p-8">
@@ -23,11 +41,17 @@ function Login() {
                 type="button"
                 variant="secondary"
                 className="w-full"
-                onClick={() => signIn(p.providerId, { callbackURL: "/" })}
+                disabled={starting !== null}
+                onClick={() => void start(p.providerId)}
               >
                 Continue with {p.label}
               </Button>
             ))}
+            {problem ? (
+              <p role="alert" className="text-sm text-muted">
+                {problem}
+              </p>
+            ) : null}
           </div>
         ) : (
           <div className="space-y-3">

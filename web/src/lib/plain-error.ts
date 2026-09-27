@@ -171,6 +171,28 @@ export function plainMessage(err: unknown, fallback: string = UNKNOWN_LINE, log:
   return PLAIN_LINES[kind];
 }
 
+/** What a page could not load, said before the plain reason. */
+export const LOAD_LINES = {
+  kennel: "Couldn't load your kennel.",
+  ember: "Couldn't load your ember.",
+  desk: "Couldn't load your guests for the desk.",
+  signin: "Couldn't start sign-in.",
+} as const;
+
+export type LoadWhat = keyof typeof LOAD_LINES;
+
+/** The retry button's words, one place for every load problem. */
+export const RETRY_LABEL = "Try again";
+
+/**
+ * "Couldn't load your kennel." plus the plain reason, for a page whose first load
+ * failed. House lines pass through; anything else is logged raw and replaced, so a
+ * failed load never passes for an empty kennel, zero ember, or the default guest.
+ */
+export function loadProblem(what: LoadWhat, err: unknown, log: PlainLog = consoleLog): string {
+  return `${LOAD_LINES[what]} ${plainMessage(err, "Try again in a moment.", log)}`;
+}
+
 /**
  * Server side: log the raw error and hand back a HouseError carrying only the
  * plain sentence (no cause, no code), so nothing raw crosses the wire.
