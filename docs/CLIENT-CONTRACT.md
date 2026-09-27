@@ -400,6 +400,15 @@ request.
 | 409 | `download token already used` |
 | 503 | `download token store unavailable` |
 
+The keeper side refuses before any POST when `license.json` holds no issued
+license (never unlocked, or Lock cleared it). Both the overlay
+(`desktop/license/session.cjs`) and the blotter
+(`client/computerpets_client/license/session.py`) raise LicenseError
+`no_license` with one plain sentence: "No license on this computer yet. Unlock
+a pet first, then download it." Settings and the Unlock dialog show that
+sentence. Nothing leaves the computer. The backend's answer to an empty
+license is the 401 above, so the outcome matches without the round trip.
+
 ---
 
 ## 7. Signed download URL

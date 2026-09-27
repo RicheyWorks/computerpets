@@ -38,6 +38,16 @@ from .species import CATALOG_KEYS, SPECIES
 WEAK_FALLBACK_YES = "Use the computer name, or a random id if there is no name"
 
 
+def license_error_text(err: object) -> str:
+    """What the dialog shows for a failed license call. Never a traceback.
+
+    no_license is a plain sentence on its own; other codes keep the code prefix.
+    """
+    if isinstance(err, LicenseError):
+        return str(err) if err.code == "no_license" else f"{err.code}: {err}"
+    return f"denied: {err or type(err).__name__}"
+
+
 def _license_is_unbound(status: dict[str, Any]) -> bool:
     lic = status.get("license") if isinstance(status, dict) else None
     return isinstance(lic, dict) and not lic.get("hwid")
@@ -250,7 +260,7 @@ class UnlockDialog(QDialog):
         except LicenseError as err:
             if self._named_hold(err):
                 return
-            self.err.setText(f"{err.code}: {err}")
+            self.err.setText(license_error_text(err))
 
     def _paint_status(self, status: dict[str, Any]) -> None:
         self._license_unbound = _license_is_unbound(status)
@@ -367,11 +377,17 @@ class UnlockDialog(QDialog):
         except LicenseError as err:
             if self._named_hold(err):
                 return
-            self.err.setText(f"{err.code}: {err}")
+            text = license_error_text(err)
+            self.err.setText(text)
             if err.code == "hwid_needs_fallback_yes" and not allow_weak and self._ask_weak(str(err)):
                 self._download(allow_weak=True)
                 return
-            QMessageBox.warning(self, "Download failed", f"{err.code}: {err}")
+            QMessageBox.warning(self, "Download failed", text)
+            return
+        except Exception as err:  # noqa: BLE001 — a Qt slot must not raise; same "denied" as the overlay IPC
+            text = license_error_text(err)
+            self.err.setText(text)
+            QMessageBox.warning(self, "Download failed", text)
             return
         if isinstance(downloaded, dict):
             self._fetch_if_held({"download": downloaded})

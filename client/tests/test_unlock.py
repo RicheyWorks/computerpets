@@ -725,3 +725,81 @@ def test_fetches_a_loopback_bundle_without_the_outbound_line():
     assert "hwid" not in urlparse(got).query
     assert "secret" in got
     assert "secret" not in bundle_honesty(got)
+
+
+def test_download_without_a_stored_license_says_so_in_plain_words():
+    from computerpets_client.license.session import NO_LICENSE_MESSAGE
+
+    backend = create_contract_test_double(license_secret=SECRET, signing_key=SIGNING)
+    disk = MemoryFs()
+    session = session_for(backend, disk=disk)
+
+    def no_license(caught):
+        err = caught.value
+        assert isinstance(err, LicenseError)
+        assert err.code == "no_license"
+        assert str(err) == NO_LICENSE_MESSAGE
+        for leak in ("KeyError", "ciphertext", "Traceback"):
+            assert leak not in str(err)
+
+    with pytest.raises(LicenseError) as caught:
+        session["download"]()
+    no_license(caught)
+    assert backend["calls"] == []
+
+    store = str(Path("/tmp/cp-license-session") / "license.json")
+    disk.write(store, json.dumps({"backendUrl": "http://127.0.0.1:8080", "license": {"ciphertext": "", "iv": ""}}))
+    with pytest.raises(LicenseError) as caught:
+        session["download"]()
+    no_license(caught)
+    assert backend["calls"] == []
+
+    session["unlock"]({"steamId": "76561198000000000", "appId": "123456", "petType": "red_panda", "provider": "steam"})
+    after_unlock = len(backend["calls"])
+    assert after_unlock > 0
+    session["clear"]()
+    with pytest.raises(LicenseError) as caught:
+        session["download"]()
+    no_license(caught)
+    assert len(backend["calls"]) == after_unlock
+
+
+def test_unlock_dialog_shows_the_no_license_sentence_not_a_traceback():
+    from computerpets_client.license.session import NO_LICENSE_MESSAGE
+    from computerpets_client.unlock_dialog import license_error_text
+
+    assert license_error_text(LicenseError("no_license", NO_LICENSE_MESSAGE)) == NO_LICENSE_MESSAGE
+    assert license_error_text(LicenseError("revoked", "license missing, expired, or tampered")) == (
+        "revoked: license missing, expired, or tampered"
+    )
+    assert license_error_text(KeyError("license")) == "denied: 'license'"
+
+
+def test_session_hands_its_mkdir_to_the_hwid_mark(tmp_path, monkeypatch):
+    _pin_linux_host(monkeypatch)
+    backend = create_contract_test_double(license_secret=SECRET, signing_key=SIGNING)
+    disk = MemoryFs()
+    made: list[str] = []
+    home = tmp_path / "cp-license-nomkdir"
+
+    def read(path: str) -> str:
+        if path.endswith("machine-id"):
+            return "machine-aaa\n"
+        return disk.read(path)
+
+    session = create_license_session(
+        user_data_dir=str(home),
+        env={
+            "LICENSE_SECRET_KEY": SECRET,
+            "BUNDLE_SIGNING_KEY": SIGNING,
+            "COMPUTERPETS_BACKEND_URL": "http://127.0.0.1:8080",
+        },
+        fetch_impl=backend["fetch_impl"],
+        read_file=read,
+        write_file=disk.write,
+        mkdir=made.append,
+    )
+    session["unlock"]({"steamId": "76561198000000000", "appId": "123456", "petType": "red_panda", "provider": "steam"})
+    assert str(home / "hwid.txt") in disk.files
+    assert str(home) in made
+    assert not home.exists()
