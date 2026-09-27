@@ -1,0 +1,11 @@
+key: iguana
+guest: Sol (Iguana)
+source: Freesound sound 714265 "gusts in a tree" by bruno.auzet
+URL: https://freesound.org/people/bruno.auzet/sounds/714265/
+direct: https://cdn.freesound.org/previews/714/714265_11519060-hq.mp3
+author: bruno.auzet
+license: Creative Commons Zero (CC0 1.0)
+Species: Iguana iguana — no legal PD/CC0/CC BY iguana hiss tape (Commons spoken-word only; iNat BY-NC/ARR; Freesound none). Close-up gusts through tree leaves (St Brieuc, Brittany, Nov 2023): the canopy a basking iguana sits in. Not an iguana voice, and not a tropical tree. No music. No narrator. No synth.
+Notes: House cut 3.5s mono 16-bit 44.1kHz from 58.5s of the HQ preview; highpass 80 Hz + dynaudnorm=p=0.95:m=8 + afade in 0.05s/out 0.4s, peak-normalized to 0.5. Real field recording, no synthesis.
+sat: 2026-09-27 Buffffff
+House path: build our own from field tape — not Grok Imagine

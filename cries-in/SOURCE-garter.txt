@@ -1,11 +1,11 @@
 key: garter
 guest: Sash (Common Garter)
-source: BigSoundBank Wind in Tall Grass (sound 908)
-URL: https://bigsoundbank.com/wind-in-tall-grass-s0908.html
-direct: https://bigsoundbank.com/UPLOAD/ogg/0908.ogg
-author: Joseph SARDIN / BigSoundBank.com
-license: CC0 (public domain equivalent)
-Species: Thamnophis sirtalis — nearly silent. Soft attenuated tall-grass wind rustle as body through grass. No hiss roar. No music. No narrator.
-Notes: House cut ~4.0s mono 44.1kHz from ~8–12s of source, volume=-10dB + dynaudnorm + afade. Quiet snake sit.
-sat: 2026-09-03 Buffffff
+source: Freesound sound 666175 "Wind in dry tall grass bulrush type, close recording with muffled air sometimes, gust of wind, far away tree, recorded in Arivaca Road desert in Arizona" by felix.blume
+URL: https://freesound.org/people/felix.blume/sounds/666175/
+direct: https://cdn.freesound.org/previews/666/666175_1661766-hq.mp3
+author: felix.blume
+license: Creative Commons Zero (CC0 1.0)
+Species: Thamnophis sirtalis — nearly silent. Close dry tall-grass rustle in wind: the grass a garter slides through (Arivaca Road desert, Arizona, Oct 2013). No hiss roar. No music. No narrator. No synth.
+Notes: House cut 3.5s mono 16-bit 44.1kHz from 193.0s of the HQ preview; highpass 80 Hz + dynaudnorm=p=0.95:m=8 + afade in 0.05s/out 0.4s, peak-normalized to 0.5. Real field recording, no synthesis. Replaces the 2026-09-03 BigSoundBank #908 cut, whose exported garter.wav was 4 s of digital zeros (app harness cry.decode listed it as the one known hole).
+sat: 2026-09-27 Buffffff
 House path: build our own from field tape — not Grok Imagine

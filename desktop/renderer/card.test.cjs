@@ -328,6 +328,14 @@ assert.equal(C.prefersHouseCry("gecko"), true);
   assert.equal(C.prefersHouseCry("anole"), true);
 assert.equal(C.prefersHouseCry("skink"), true);
 assert.equal(C.prefersHouseCry("alligator"), true);
+  assert.equal(C.prefersHouseCry("capybara"), true);
+  assert.equal(C.prefersHouseCry("iguana"), true);
+  assert.equal(C.prefersHouseCry("chameleon"), true);
+  assert.equal(C.prefersHouseCry("horned_lizard"), true);
+  assert.equal(C.prefersHouseCry("snapper"), true);
+  assert.equal(C.prefersHouseCry("box_turtle"), true);
+  // Jaw has no legal American crocodile field tape yet, so no house cry.
+  assert.equal(C.prefersHouseCry("crocodile"), false);
   assert.equal(C.prefersHouseCry("tuatara"), true);
   assert.equal(C.prefersHouseCry("bass"), true);
   assert.equal(C.prefersHouseCry("brook_trout"), true);
