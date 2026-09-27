@@ -2,7 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-09-26
-- **Code:** `web/src/components/desk/living-pet.tsx`, `web/src/components/desk/companion-room.tsx`, `web/src/lib/pets/desk-sprite-surface.ts`, `desktop/renderer/sprite-surface.test.cjs`
+- **Code:** `web/src/components/desk/living-pet.tsx`, `web/src/components/desk/companion-room.tsx`, `web/src/lib/pets/desk-sprite-surface.ts`, `web/src/lib/pets/call-guests.ts`, `web/src/lib/pets/robin-fly.ts`, `web/src/lib/pets/desk-plants.ts`, `desktop/renderer/sprite-surface.test.cjs`, `web/scripts/call-guests.test.mjs`
 
 ## Context
 
@@ -31,4 +31,5 @@ This slice does not reopen presence/CSP, Hikari, bundle zip, cosign, CDN, secret
 - OffscreenCanvas is the preferred surface. It is not a shader and not a texture API this tree owns. WebGL is not opened.
 - No catalog sprite on the Chromium desk or the overlay draws through an `img` now.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** `web/src/lib/pets/call-guests.ts` still exports `assignSrc` and `syncCalledPaint`, which set an `img` src. No desk component calls them since [0129](0129-chromium-living-desk-sprites.md). A later slice can drop them or route them through this surface. The PyQt blotter is not Chromium and stays Qt OpenGL. Do not start DirectX 12, Vulkan, Solana, or Pane. Catalog stays 221.
+- **Follow-up (2026-09-26):** the desk's dead `img` helpers from the pre-canvas path are removed. `web/src/lib/pets/call-guests.ts` no longer exports `assignedSrc`, `assignSrc`, `syncCalledPaint`, `destFit`, or `GUEST_DEST`. `web/src/lib/pets/robin-fly.ts` and `web/src/lib/pets/desk-plants.ts` no longer export `destStyle` or `applyDest`. No desk component had called them since [0129](0129-chromium-living-desk-sprites.md). The overlay copies in `desktop/renderer/` stay, because `pet.js` still calls them and they paint through this surface. The frame choosers `poseFrames`, `poseSrc`, `destSrc`, and `plantSrc` stay.
+- **Next gap:** none left in this canvas arc. The PyQt blotter is not Chromium and stays Qt OpenGL. Do not start DirectX 12, Vulkan, Solana, or Pane. Catalog stays 221.

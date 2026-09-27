@@ -105,7 +105,7 @@ test("/demo hide, click, and robin from 470 still hold", () => {
   robin = G.stepCalled(robin, 24, 800, flags);
   assert.equal(robin.phase, "perch");
   assert.match(callSrc, /export function poseFrames/);
-  assert.match(calledSrc, /getAttribute\("src"\)/);
+  assert.match(calledSrc, /paintCalledFrame/);
   assert.doesNotMatch(calledSrc, /if \(hidden \|\| !list\.length\)/);
   assert.match(petSrc, /shouldTell/);
 });
