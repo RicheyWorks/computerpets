@@ -18,6 +18,12 @@ SECRET = base64.b64encode(bytes([7] * 32)).decode("ascii")
 SIGNING = "test-bundle-signing-key-not-a-placeholder"
 
 
+def _pin_linux_host(monkeypatch):
+    """These tests hand the session a fake /etc/machine-id. Pin the host token to Linux so a
+    Windows or macOS run reads that fake instead of the real registry GUID or ioreg UUID."""
+    monkeypatch.setattr("computerpets_client.license.hwid.platform.system", lambda: "Linux")
+
+
 class MemoryFs:
     def __init__(self):
         self.files: dict[str, str] = {}
@@ -313,7 +319,8 @@ def test_fails_closed_when_download_hwid_does_not_match():
     assert caught.value.code == "hwid_mismatch"
 
 
-def test_status_does_not_read_the_os_machine_id():
+def test_status_does_not_read_the_os_machine_id(tmp_path, monkeypatch):
+    _pin_linux_host(monkeypatch)
     reads: list[str] = []
     files: dict[str, str] = {}
 
@@ -331,7 +338,7 @@ def test_status_does_not_read_the_os_machine_id():
 
     backend = create_contract_test_double(license_secret=SECRET, signing_key=SIGNING)
     session = create_license_session(
-        user_data_dir="/tmp/cp-license-mark",
+        user_data_dir=str(tmp_path / "cp-license-mark"),
         env={
             "LICENSE_SECRET_KEY": SECRET,
             "BUNDLE_SIGNING_KEY": SIGNING,
@@ -360,7 +367,8 @@ def test_status_does_not_read_the_os_machine_id():
     assert [item for item in reads if "machine-id" in item] == machine_reads
 
 
-def test_missing_os_id_does_not_mint_until_yes():
+def test_missing_os_id_does_not_mint_until_yes(tmp_path, monkeypatch):
+    _pin_linux_host(monkeypatch)
     files: dict[str, str] = {}
 
     def read(path: str) -> str:
@@ -373,7 +381,7 @@ def test_missing_os_id_does_not_mint_until_yes():
 
     backend = create_contract_test_double(license_secret=SECRET, signing_key=SIGNING)
     session = create_license_session(
-        user_data_dir="/tmp/cp-license-weak",
+        user_data_dir=str(tmp_path / "cp-license-weak"),
         env={
             "LICENSE_SECRET_KEY": SECRET,
             "BUNDLE_SIGNING_KEY": SIGNING,
@@ -408,7 +416,8 @@ def test_missing_os_id_does_not_mint_until_yes():
     assert any(path.endswith("hwid.txt") for path in files)
 
 
-def test_remote_hash_waits_until_the_host_is_named():
+def test_remote_hash_waits_until_the_host_is_named(tmp_path, monkeypatch):
+    _pin_linux_host(monkeypatch)
     reads: list[str] = []
     files: dict[str, str] = {}
     seen: list[str] = []
@@ -428,7 +437,7 @@ def test_remote_hash_waits_until_the_host_is_named():
         return files[path]
 
     session = create_license_session(
-        user_data_dir="/tmp/cp-license-remote-hash",
+        user_data_dir=str(tmp_path / "cp-license-remote-hash"),
         env={
             "LICENSE_SECRET_KEY": SECRET,
             "BUNDLE_SIGNING_KEY": SIGNING,
@@ -670,7 +679,7 @@ def test_fetches_a_loopback_bundle_without_the_outbound_line():
         SECRET,
     )
     disk = MemoryFs()
-    store = "/tmp/cp-license-loop-cdn/license.json"
+    store = str(Path("/tmp/cp-license-loop-cdn") / "license.json")
     disk.write(
         store,
         json.dumps(
