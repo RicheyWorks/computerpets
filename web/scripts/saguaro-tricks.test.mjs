@@ -790,8 +790,8 @@ test("notes: Arm ultra-polish done; ethogram dens claim true (sentinel sit_hold 
   assert.equal(OverlayGround.wantsThankYou("saguaro"), true);
   assert.equal(OverlayGround.tricksFor("arm"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("arm"), true);
-  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
-  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
+  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "epiphyte", "keiki", "pollinia"]);
+  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "epiphyte", "keiki", "pollinia"]);
   assert.notEqual(OverlayGround.tricksFor("venus_flytrap"), null);
   assert.equal(OverlayGround.wantsThankYou("venus_flytrap"), true);
   assert.notEqual(OverlayGround.tricksFor("snap"), null);

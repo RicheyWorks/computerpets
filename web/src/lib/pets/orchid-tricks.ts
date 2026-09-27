@@ -1,6 +1,6 @@
-/** Moth ground tricks while idle — ultra-polish pass. House orchid — labellum / velamen / column / spike / bark / keiki / pollinia personality (labellum landing on the bark mount — never named pad (Disk owns pad) / corolla (Disk owns corolla) / flutter (Fan owns flutter) / drop (Fan owns drop), velamen aerial-root sip on the mist — never named root (Burr owns root) / rhizome (Disk owns rhizome) / taproot (Mast owns taproot) / siphon (Anchor owns siphon) / crawl (Cling owns crawl), column pose on the stem — never named rachis (Vein owns rachis) / bole (Mast owns bole) / hinge (Door owns hinge), spike slow bloom on the lamp — never named bloom as axolotl-guest collision / open (Disk window owns open) / unfurl (Vein window owns unfurl) / corolla (Disk owns corolla) / flare (Coin owns flare) / nod as ethogram-old, bark-mount desk life under the lamp, keiki Phalaenopsis baby-plantlet sprout on the spike (species-true Phalaenopsis keiki — never named sprout (Bloom owns sprout) / seedling / pup / offset as copy), pollinia orchid pollen-packet dab (species-true Orchidaceae pollinia — never named pollen as the thank-you / nectary (Sip owns nectary) / flare (Coin owns flare) / dust); not Disk pad/corolla/rhizome/calyx/sheen/peltate/hydropote, Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber/dichotomy/petiole, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest/seed, Bloom gill, parrot fan/flash, or snake guests Sash seam/moss/lap copies). Keiki is the iconic Phalaenopsis plantlet on the spent spike (not Bloom sprout). Pollinia is the orchid pollen mass (not Moth thank-you pollen, not Sip nectary). Window-play MOUNT unchanged — never names mount as a trick. Ethogram keeps bark sit_hold; adds labellum/velamen/column/spike/keiki/pollinia softs + freeze (replaces thin unfurl/lean/nod). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via orchid.wav. Thank-yous pollen / perfume / amabilis. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `orchid-tricks.js`. True house-moth-orchid desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/sheet-moss/Felt/maidenhair/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids open/gold/lean/nod/still/unfurl/fan/drop/dichotomy/petiole/biloba/flutter/frond/rachis/fiddle/pinna/saucer/sori/stipe/tuft/bead/spore/cushion/thatch/rhizoid/seta/lobe/sway/root/dig/fossil/cork/barrel/vessel/pad/corolla/rhizome/calyx/sheen/peltate/hydropote/mount/drift/float/bloom/cup/siphon/soak/sprout/nectary name collisions. Bird ultra (Soot→Ember) + Miso→Disk done; skip Rui + birds. Next guest ultra is Arm / saguaro. No cry inventing beyond house orchid.wav prefer. Never retouch Rui sprites. */
+/** Moth ground tricks while idle — ultra-polish pass. House orchid — labellum / velamen / column / spike / epiphyte / keiki / pollinia personality (labellum landing on the bark mount — never named pad (Disk owns pad) / corolla (Disk owns corolla) / flutter (Fan owns flutter) / drop (Fan owns drop), velamen aerial-root sip on the mist — never named root (Burr owns root) / rhizome (Disk owns rhizome) / taproot (Mast owns taproot) / siphon (Anchor owns siphon) / crawl (Cling owns crawl), column pose on the stem — never named rachis (Vein owns rachis) / bole (Mast owns bole) / hinge (Door owns hinge), spike slow bloom on the lamp — never named bloom as axolotl-guest collision / open (Disk window owns open) / unfurl (Vein window owns unfurl) / corolla (Disk owns corolla) / flare (Coin owns flare) / nod as ethogram-old, bark-mount desk life under the lamp, keiki Phalaenopsis baby-plantlet sprout on the spike (species-true Phalaenopsis keiki — never named sprout (Bloom owns sprout) / seedling / pup / offset as copy), pollinia orchid pollen-packet dab (species-true Orchidaceae pollinia — never named pollen as the thank-you / nectary (Sip owns nectary) / flare (Coin owns flare) / dust); not Disk pad/corolla/rhizome/calyx/sheen/peltate/hydropote, Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber/dichotomy/petiole, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest/seed, Bloom gill, parrot fan/flash, or snake guests Sash seam/moss/lap copies). Keiki is the iconic Phalaenopsis plantlet on the spent spike (not Bloom sprout). Pollinia is the orchid pollen mass (not Moth thank-you pollen, not Sip nectary). Window-play MOUNT unchanged — never names mount as a trick. Ethogram keeps epiphyte sit_hold; adds labellum/velamen/column/spike/keiki/pollinia softs + freeze (replaces thin unfurl/lean/nod). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via orchid.wav. Thank-yous pollen / perfume / amabilis. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `orchid-tricks.js`. True house-moth-orchid desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/sheet-moss/Felt/maidenhair/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids open/gold/lean/nod/still/unfurl/fan/drop/dichotomy/petiole/biloba/flutter/frond/rachis/fiddle/pinna/saucer/sori/stipe/tuft/bead/spore/cushion/thatch/rhizoid/seta/lobe/sway/root/dig/fossil/cork/barrel/vessel/pad/corolla/rhizome/calyx/sheen/peltate/hydropote/mount/drift/float/bloom/cup/siphon/soak/sprout/nectary name collisions. Bird ultra (Soot→Ember) + Miso→Disk done; skip Rui + birds. Next guest ultra is Arm / saguaro. No cry inventing beyond house orchid.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "orchid";
-export const TRICKS = ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"] as const;
+export const TRICKS = ["labellum", "velamen", "column", "spike", "epiphyte", "keiki", "pollinia"] as const;
 export const HAPPY = ["pollen", "perfume", "amabilis"] as const;
 export type OrchidTrickKind = (typeof TRICKS)[number];
 export type OrchidHappyKind = (typeof HAPPY)[number];
@@ -50,12 +50,12 @@ export const HAPPY_DUR: Record<OrchidHappyKind, number> = {
   amabilis: 1.76,
 };
 
-/** Bark hold — Moth parks epiphyte-mount calm on the blotter. Not window-play MOUNT. */
-export const BARK_HOLD = 11.2;
+/** Epiphyte hold — Moth parks epiphyte-mount calm on the blotter. Not window-play MOUNT. */
+export const EPIPHYTE_HOLD = 11.2;
 export const RELEASE_S = 1.18;
 
 export const DUR: Record<OrchidTrickKind, number> = {
-  bark: BARK_HOLD + RELEASE_S,
+  epiphyte: EPIPHYTE_HOLD + RELEASE_S,
   labellum: 2.48,
   velamen: 2.42,
   column: 2.40,
@@ -92,16 +92,16 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: OrchidTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "bark") return 38 + roll * 24;
+  if (kind === "epiphyte") return 38 + roll * 24;
   if (kind === "keiki" || kind === "pollinia" || kind === "spike") return 12 + roll * 9;
   if (kind === "labellum" || kind === "velamen" || kind === "column") return 11 + roll * 8;
   return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: OrchidTrickKind | string | null) {
-  if (musicOn) return "bark" as const;
+  if (musicOn) return "epiphyte" as const;
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "bark") {
+  if (lastKind === "epiphyte") {
     if (roll < 0.18) return "labellum" as const;
     if (roll < 0.34) return "velamen" as const;
     if (roll < 0.5) return "column" as const;
@@ -110,7 +110,7 @@ export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: OrchidTri
     return "pollinia" as const;
   }
   if (lastKind === "labellum") {
-    if (roll < 0.2) return "bark" as const;
+    if (roll < 0.2) return "epiphyte" as const;
     if (roll < 0.36) return "velamen" as const;
     if (roll < 0.52) return "column" as const;
     if (roll < 0.68) return "spike" as const;
@@ -118,7 +118,7 @@ export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: OrchidTri
     return "pollinia" as const;
   }
   if (lastKind === "spike") {
-    if (roll < 0.18) return "bark" as const;
+    if (roll < 0.18) return "epiphyte" as const;
     if (roll < 0.34) return "labellum" as const;
     if (roll < 0.5) return "velamen" as const;
     if (roll < 0.66) return "column" as const;
@@ -126,14 +126,14 @@ export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: OrchidTri
     return "pollinia" as const;
   }
   if (lastKind === "keiki" || lastKind === "pollinia") {
-    if (roll < 0.16) return "bark" as const;
+    if (roll < 0.16) return "epiphyte" as const;
     if (roll < 0.32) return "labellum" as const;
     if (roll < 0.48) return "velamen" as const;
     if (roll < 0.64) return "column" as const;
     if (roll < 0.8) return "spike" as const;
     return lastKind === "keiki" ? ("pollinia" as const) : ("keiki" as const);
   }
-  if (roll < 0.14) return "bark" as const;
+  if (roll < 0.14) return "epiphyte" as const;
   if (roll < 0.28) return "labellum" as const;
   if (roll < 0.42) return "velamen" as const;
   if (roll < 0.56) return "column" as const;
@@ -287,7 +287,7 @@ export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
 
 export function beginTrick(kind: OrchidTrickKind, x: number, facing: 1 | -1): OrchidTrick {
   const anim: TrickAnim =
-    kind === "bark"
+    kind === "epiphyte"
       ? "sit"
       : kind === "labellum"
         ? "sit"
@@ -304,7 +304,7 @@ export function beginTrick(kind: OrchidTrickKind, x: number, facing: 1 | -1): Or
                   : "sit";
   return {
     kind: kind,
-    phase: kind === "bark" ? "hold" : "go",
+    phase: kind === "epiphyte" ? "hold" : "go",
     t: 0,
     x: x,
     lift: 0,
@@ -320,7 +320,7 @@ function smoothstep(t: number) {
   return x * x * (3 - 2 * x);
 }
 
-export function barkPose(t: number) {
+export function epiphytePose(t: number) {
   const breath = Math.sin(t * 0.42) + 0.12 * Math.sin(t * 1.15);
   return {
     lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
@@ -553,17 +553,17 @@ export function stepTrick(trick: OrchidTrick, dt: number, flags: TrickFlags): Or
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: OrchidTrick = { ...trick, t: trick.t + Math.max(0, dt) };
-  if (next.kind === "bark") {
-    if (next.t < BARK_HOLD) {
-      const pose = barkPose(next.t);
+  if (next.kind === "epiphyte") {
+    if (next.t < EPIPHYTE_HOLD) {
+      const pose = epiphytePose(next.t);
       next.phase = "hold";
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = "sit";
       return next;
     }
-    if (next.t < BARK_HOLD + RELEASE_S) {
-      const pose = releasePose(next.t - BARK_HOLD);
+    if (next.t < EPIPHYTE_HOLD + RELEASE_S) {
+      const pose = releasePose(next.t - EPIPHYTE_HOLD);
       next.phase = "release";
       next.lift = pose.lift;
       next.rot = pose.rot;

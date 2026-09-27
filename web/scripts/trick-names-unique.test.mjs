@@ -4,15 +4,16 @@ import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
-// Every guest's idle trick names and feed-happy thank-you names must be its own.
-// When two guests shared a name (veil, rosette, eyespot, band; pearl, candela,
-// gracilis), the earliest owner kept it and the later guest got a species-true
-// rename. This test fails if any trick name or any happy name is ever shared again.
+// Every guest's idle trick names and feed-happy thank-you names must be its own,
+// across both kinds: a name used as one guest's trick may not be another guest's
+// thank-you. When two guests shared a name, the earliest owner kept it and the
+// later guest got a species-true rename. Ethogram *_soft names follow the same
+// rule: no soft may sit in two guests' rows.
 
 const petsDir = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "lib", "pets");
 
 function readNames() {
-  const out = { TRICKS: new Map(), HAPPY: new Map() };
+  const out = { TRICKS: new Map(), HAPPY: new Map(), ALL: new Map() };
   let modules = 0;
   for (const file of readdirSync(petsDir).filter((f) => f.endsWith("-tricks.ts")).sort()) {
     const guest = file.slice(0, -"-tricks.ts".length);
@@ -21,14 +22,33 @@ function readNames() {
     for (const m of src.matchAll(/export const (TRICKS|HAPPY) = \[([^\]]*)\]/g)) {
       found = true;
       for (const n of m[2].matchAll(/"([^"]+)"/g)) {
-        const owners = out[m[1]].get(n[1]) ?? [];
-        owners.push(guest);
-        out[m[1]].set(n[1], owners);
+        for (const map of [out[m[1]], out.ALL]) {
+          const owners = map.get(n[1]) ?? [];
+          if (!owners.includes(guest)) owners.push(guest);
+          map.set(n[1], owners);
+        }
       }
     }
     if (found) modules += 1;
   }
   return { ...out, modules };
+}
+
+function readSofts() {
+  const src = readFileSync(join(petsDir, "ethogram.ts"), "utf8");
+  const softs = new Map();
+  let rows = 0;
+  for (const line of src.split(/\r?\n/)) {
+    const row = line.match(/^\s*"?([a-z_]+)"?: \[(A\(.*)\],?\s*$/);
+    if (!row) continue;
+    rows += 1;
+    for (const a of row[2].matchAll(/A\("([a-z_]+_soft)"/g)) {
+      const owners = softs.get(a[1]) ?? [];
+      if (!owners.includes(row[1])) owners.push(row[1]);
+      softs.set(a[1], owners);
+    }
+  }
+  return { softs, rows };
 }
 
 function shared(map) {
@@ -50,14 +70,34 @@ test("no feed-happy thank-you name is shared by two guests", () => {
   assert.deepEqual(shared(readNames().HAPPY), []);
 });
 
+test("no name is used by two guests across tricks and thank-yous combined", () => {
+  assert.deepEqual(shared(readNames().ALL), []);
+});
+
+test("no ethogram *_soft name sits in two guests' rows", () => {
+  const { softs, rows } = readSofts();
+  assert.ok(rows >= 220, `expected at least 220 ethogram rows, scanned ${rows}`);
+  assert.ok(softs.size >= 1000);
+  assert.deepEqual(shared(softs), []);
+});
+
 test("earliest owners keep the formerly shared names; later guests carry the renames", () => {
-  const { TRICKS, HAPPY } = readNames();
-  const keep = { veil: "octopus", rosette: "sundew", eyespot: "euglena", band: "kingsnake" };
-  for (const [name, guest] of Object.entries(keep)) assert.deepEqual(TRICKS.get(name), [guest]);
-  const renamed = { flake: "fly_agaric", tier: "chicken_of_woods", tornusflash: "swallowtail", zonate: "turkey_tail" };
-  for (const [name, guest] of Object.entries(renamed)) assert.deepEqual(TRICKS.get(name), [guest]);
-  const keepHappy = { pearl: "nautilus", candela: "firefly", gracilis: "scorpion" };
-  for (const [name, guest] of Object.entries(keepHappy)) assert.deepEqual(HAPPY.get(name), [guest]);
-  const renamedHappy = { amabilis: "orchid", lambert: "photovore", mutabilis: "euglena" };
-  for (const [name, guest] of Object.entries(renamedHappy)) assert.deepEqual(HAPPY.get(name), [guest]);
+  const { ALL } = readNames();
+  const keep = {
+    veil: "octopus", rosette: "sundew", eyespot: "euglena", band: "kingsnake",
+    pearl: "nautilus", candela: "firefly", gracilis: "scorpion",
+    bark: "chinchilla", press: "iguana", lumen: "moon_jelly", bead: "moss", pipe: "seahorse", soft: "hedgehog",
+  };
+  const renamed = {
+    flake: "fly_agaric", tier: "chicken_of_woods", tornusflash: "swallowtail", zonate: "turkey_tail",
+    amabilis: "orchid", lambert: "photovore", mutabilis: "euglena",
+    epiphyte: "orchid", adhere: "sea_star", fluence: "photovore", hemolymph: "ladybird", tooting: "honey_queen", tender: "chicken_of_woods",
+  };
+  for (const [name, guest] of Object.entries({ ...keep, ...renamed })) assert.deepEqual(ALL.get(name), [guest], name);
+  const { softs } = readSofts();
+  assert.deepEqual(softs.get("bulb_soft"), ["fly_agaric"]);
+  assert.deepEqual(softs.get("stipe_soft"), ["maidenhair"]);
+  for (const [soft, guest] of Object.entries({ fluence_soft: "photovore", tooting_soft: "honey_queen", tender_soft: "chicken_of_woods" })) {
+    assert.deepEqual(softs.get(soft), [guest], soft);
+  }
 });
