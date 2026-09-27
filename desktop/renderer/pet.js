@@ -1392,6 +1392,26 @@ if ("speechSynthesis" in window) {
 }
 setInterval(readHeartbeat, 15_000);
 readHeartbeat();
+/* ADR 0132: the overlay followed the keeper to another Windows desktop. Keep the pet's
+ * spot for the desktop it left; go back to the kept spot on this one, or stay put. */
+let deskSpotPending = null;
+if (window.desk && window.desk.onDeskArrive && window.PetDeskSpots) {
+  window.desk.onDeskArrive((move) => {
+    const S = window.PetDeskSpots;
+    const now = Date.now();
+    const out = S.arrive(card.deskSpots, move, {
+      x: sim.x,
+      width: window.innerWidth,
+      min: PAD,
+      max: Math.max(PAD, window.innerWidth - BASE - PAD),
+      now,
+    });
+    if (!out) return;
+    card.deskSpots = out.spots;
+    persistCard();
+    deskSpotPending = out.x == null ? null : { x: out.x, until: now + S.HOLD_MS };
+  });
+}
 if (window.desk && window.desk.onGpu && window.PetGpu) {
   window.desk.onGpu((raw) => {
     const now = Date.now();
@@ -3249,6 +3269,13 @@ function tick(now) {
       sim.shiftAge = 0.85;
     }
     if (sim.shiftAge > 0) sim.shiftAge = Math.max(0, sim.shiftAge - dt);
+    if (deskSpotPending && Date.now() > deskSpotPending.until) deskSpotPending = null;
+    if (deskSpotPending && !leaving && !sim.play && !sim.trick && !sim.happy && !sim.dragging) {
+      sim.x = deskSpotPending.x;
+      sim.target = null;
+      sim.waypoints = [];
+      deskSpotPending = null;
+    }
     if (!leaving && !sim.play && !sim.trick) sim.x = clamp(sim.x, PAD, maxX);
 
     if (life?.asleep && !sim.happy && window.PetLife?.sleepHolds(life, sim.cmd)) {

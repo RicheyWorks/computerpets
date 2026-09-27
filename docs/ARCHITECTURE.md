@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-26 (The Windows overlay follows you across virtual desktops. A helper asks about the overlay's own HWND only; the main process re-shows its own window. Tray checkbox, `vdesk.json`. ADR 0131. Not DX12/Vulkan. Catalog 221.) |
+| **Last Updated** | 2026-09-26 (A pet spot per Windows virtual desktop in `card.json` `deskSpots`, keyed by the overlay's own desktop id. Inert where Windows gives the overlay no id, as on Windows 11 26200. ADR 0132. Not DX12/Vulkan. Catalog 221.) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |

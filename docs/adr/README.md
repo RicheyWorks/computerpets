@@ -150,6 +150,7 @@ address, or an API that is not on `main`.
 | [0129](0129-chromium-living-desk-sprites.md) | The living desk room pet, and desk Sip, Brick, called guests, and plants, draw on that same canvas (the 0125 gate still opens the glass; a missing context stays blank) | Accepted (day's visitor, house floor, hive, and den blotters moved to 0130) |
 | [0130](0130-chromium-visitor-floor-hive-den-sprites.md) | The day's visitor, the house floor, the hive, and the den blotters draw on that same canvas (every `LivingPet` paints the canvas; the 0125 gate still opens the glass; a missing context stays blank) | Accepted |
 | [0131](0131-windows-virtual-desktop-follow.md) | The Windows overlay follows you across virtual desktops (a helper asks `IsWindowOnCurrentVirtualDesktop` about the overlay's own HWND only; the main process re-shows its own window; tray checkbox writes `vdesk.json`; Mac and Linux keep Electron's pin) | Accepted |
+| [0132](0132-windows-per-desktop-pet-spot.md) | The pet keeps a spot per Windows virtual desktop in `card.json` `deskSpots`, keyed by `GetWindowDesktopId` of the overlay's own HWND (12 ids, 90 days; no spot means the pet stays put) | Accepted (inert on Windows 11 26200: the overlay's window style gets no desktop id) |
 
 ## How to add one
 

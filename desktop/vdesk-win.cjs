@@ -10,9 +10,13 @@
  * process re-shows its own window: hide, showInactive, always-on-top again.
  * The follower waits SETTLE_MS before it acts and SETTLE_MS after, so a fast flip
  * through desktops does not bounce the pet. vdesk.json { follow } turns it off.
+ * ADR 0132: the same ask also reads GetWindowDesktopId for that one HWND. When the
+ * overlay turns up on the current desktop with a different id than last time, the
+ * follower calls onArrive({ from, to }) so the renderer can keep a spot per desktop.
  */
 const { spawn } = require("child_process");
 const path = require("path");
+const Spots = require("./renderer/desk-spots.js");
 
 const FILE = "vdesk.json";
 const POLL_MS = 750;
@@ -54,7 +58,12 @@ public static class DeskVd {
       bool current;
       if (mgr.IsWindowOnCurrentVirtualDesktop(h, out current) == 0) on = current ? "1" : "0";
     } catch { mgr = null; on = "?"; }
-    return on + " " + cloaked;
+    string desk = "-";
+    try {
+      Guid g;
+      if (mgr != null && mgr.GetWindowDesktopId(h, out g) == 0 && g != Guid.Empty) desk = g.ToString("D");
+    } catch { desk = "-"; }
+    return on + " " + cloaked + " " + desk;
   }
 }
 "@
@@ -81,18 +90,18 @@ function cleanHwnd(hwnd) {
   return /^[1-9][0-9]{0,19}$/.test(text) ? text : "";
 }
 
-/** "gone" | "<1|0|?> <cloaked>" -> { gone, on, cloaked } or null. */
+/** "gone" | "<1|0|?> <cloaked> [<desktop id>|-]" -> { gone, on, cloaked, desk } or null. */
 function parseProbeText(text) {
   const line = String(text || "")
     .split(/\r?\n/)
     .map((s) => s.trim())
     .find((s) => s.length > 0);
   if (!line || line === "bad") return null;
-  if (line === "gone") return { gone: true, on: null, cloaked: 0 };
+  if (line === "gone") return { gone: true, on: null, cloaked: 0, desk: "" };
   const parts = line.split(/\s+/);
   const on = parts[0] === "1" ? true : parts[0] === "0" ? false : null;
   const cloaked = Number.parseInt(parts[1], 10);
-  return { gone: false, on, cloaked: Number.isFinite(cloaked) ? cloaked : 0 };
+  return { gone: false, on, cloaked: Number.isFinite(cloaked) ? cloaked : 0, desk: Spots.cleanDeskId(parts[2]) };
 }
 
 /** The manager's answer wins. The shell cloak bit only speaks when the manager could not. */
@@ -220,6 +229,8 @@ function createProbe(opts) {
  * Poll the overlay's own HWND and bring it to the current desktop.
  * win: { hwnd(), visible(), reshow(), move?() }. move is tried first when present and
  * must resolve true; the re-show is the fallback. Windows has no cross-process move.
+ * onArrive({ from, to }) runs when the overlay is on the current desktop and its desktop
+ * id is not the one it last had there (ADR 0132). The first id after start only records.
  */
 function createFollower(opts) {
   const o = opts || {};
@@ -231,7 +242,8 @@ function createFollower(opts) {
   const maxMisses = o.maxMisses > 0 ? o.maxMisses : MAX_MISSES;
   const now = typeof o.now === "function" ? o.now : Date.now;
   const timers = o.timers || { setInterval, clearInterval, setTimeout, clearTimeout };
-  const stats = { probes: 0, moves: 0, reshows: 0, misses: 0 };
+  const onArrive = typeof o.onArrive === "function" ? o.onArrive : null;
+  const stats = { probes: 0, moves: 0, reshows: 0, misses: 0, arrivals: 0 };
   let poll = null;
   let settleTimer = null;
   let busy = false;
@@ -239,6 +251,7 @@ function createFollower(opts) {
   let quietUntil = 0;
   let acted = false;
   let misses = 0;
+  let hereDesk = "";
 
   function live() {
     return !!poll && enabled() && !!win && win.visible();
@@ -252,6 +265,21 @@ function createFollower(opts) {
       return await probe.ask(id);
     } catch {
       return null;
+    }
+  }
+
+  /** The manager said "on the current desktop": note its id, and tell on a change. */
+  function noteDesk(sample) {
+    if (!sample || sample.gone || sample.on !== true || !sample.desk) return;
+    const from = hereDesk;
+    hereDesk = sample.desk;
+    if (!from || from === sample.desk) return;
+    stats.arrivals += 1;
+    if (!onArrive) return;
+    try {
+      onArrive({ from, to: sample.desk });
+    } catch {
+      /* the renderer may be gone */
     }
   }
 
@@ -301,6 +329,7 @@ function createFollower(opts) {
         offSince = 0;
         acted = false;
         misses = 0;
+        noteDesk(sample);
         return null;
       }
       const t = now();
@@ -345,6 +374,7 @@ function createFollower(opts) {
     quietUntil = 0;
     acted = false;
     misses = 0;
+    hereDesk = "";
   }
 
   return {
@@ -353,6 +383,7 @@ function createFollower(opts) {
     tick,
     nudge: () => tick("poll"),
     running: () => !!poll,
+    desk: () => hereDesk,
     stats,
   };
 }
