@@ -87,9 +87,13 @@ test("the overlay HUD is a keeper card with full care verbs and a heartbeat", ()
   assert.match(petSrc, /hudStage/);
   assert.match(petSrc, /hudBondTitle/);
   assert.match(petSrc, /if \(id\) handle\(id\)/);
-  assert.match(petSrc, /play\.textContent = music\.playing \? "Pause" : "Play"/);
+  // A saved station is not streaming until Play or a pick asks for it (#1404), so the label follows audible, not music.playing.
+  assert.match(petSrc, /const audible = !!\(music\.playing && music\.plugin !== "off" && \(!remoteStream \|\| streamAsked\)\)/);
+  assert.match(petSrc, /play\.textContent = audible \? "Pause" : "Play"/);
+  assert.doesNotMatch(petSrc, /play\.textContent = music\.playing \?/);
   assert.match(petSrc, /play\.hidden = music\.plugin === "off"/);
   assert.doesNotMatch(petSrc, /music\.playing \? "Stop"/);
+  assert.doesNotMatch(petSrc, /audible \? "Stop"/);
   assert.doesNotMatch(petSrc, /\/pet\/feed/);
   assert.match(styleSrc, /#hud-care button/);
   assert.match(styleSrc, /#hud-care,[\s\S]*flex-wrap:\s*wrap/);

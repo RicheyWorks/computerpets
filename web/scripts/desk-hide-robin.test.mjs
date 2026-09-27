@@ -43,8 +43,22 @@ test("/demo robin paint uses one real pose and does not unmount on host hide", (
 });
 
 test("/demo Rui idle is not a parked card sit, and hide still tucks", () => {
-  assert.match(livingSrc, /if \(false && cardRef\.current/);
-  assert.match(petSrc, /if \(false && cardOpen\(\)/);
+  // An open keeper card holds Rui still on the idle loop (sleep if asleep), never the sit pose;
+  // the "still Rui while card open" hold replaced the old disabled `if (false && ...)` branch.
+  const cardHold = (src, head) => {
+    const at = src.indexOf(head);
+    assert.ok(at > 0, head);
+    return src.slice(at, src.indexOf("return;", at));
+  };
+  const deskHold = cardHold(livingSrc, "if (cardRef.current && (cmd === \"wander\" || cmd === \"idle\")) {");
+  assert.match(deskHold, /s\.anim = asleepRef\.current \? "sleep" : "idle";/);
+  assert.doesNotMatch(deskHold, /"sit"/);
+  const overlayHold = cardHold(petSrc, "if (cardOpen() && (sim.cmd === \"wander\" || sim.cmd === \"idle\")) {");
+  assert.match(overlayHold, /sim\.anim = life\?\.asleep \? "sleep" : "idle";/);
+  assert.doesNotMatch(overlayHold, /"sit"/);
+  assert.doesNotMatch(livingSrc, /if \(false && /);
+  assert.doesNotMatch(petSrc, /if \(false && /);
+  assert.match(petSrc, /if \(cardOpen\(\) && sim\.anim === "walk" && !sim\.dragging\) \{\s*collapseKeeperCard\(\);/);
   assert.match(livingSrc, /pointerEvents: "auto"/);
   assert.match(cssSrc, /#pet\.hidden[\s\S]{0,80}pointer-events:\s*auto/);
 });

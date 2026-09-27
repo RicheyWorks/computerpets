@@ -12,7 +12,7 @@ export const Route = createFileRoute("/catalog")({
       { title: "The shelf — ComputerPets" },
       {
         name: "description",
-        content: "The shelf is a room. The two hundred twenty sit by den, not by rarity.",
+        content: "The shelf is a room. The two hundred twenty-one sit by den, not by rarity.",
       },
     ],
   }),
@@ -27,16 +27,16 @@ function Catalog() {
       detail="Shelf"
       line={
         <p className="mt-3 max-w-sm text-sm text-muted">
-          The shelf is a room. The two hundred twenty sit by den, not by rarity. Open a room, or pick a name.
+          The shelf is a room. The two hundred twenty-one sit by den, not by rarity. Open a room, or pick a name.
         </p>
       }
       aside={
         <div className="mt-5 max-h-[calc(100dvh-16rem)] max-w-sm space-y-3 overflow-y-auto pr-1">
           <aside className="paper-card rounded-[var(--radius-lg)] border p-4">
             <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Shelf</p>
-            <h2 className="mt-1 font-display text-2xl">The two hundred twenty.</h2>
+            <h2 className="mt-1 font-display text-2xl">The two hundred twenty-one.</h2>
             <p className="mt-2 text-sm text-muted">
-              Two hundred twenty guests, on their shelves. By den, not by rarity. They will be walking when the page opens.
+              Two hundred twenty-one guests, on their shelves. By den, not by rarity. They will be walking when the page opens.
             </p>
           </aside>
 

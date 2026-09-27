@@ -149,7 +149,7 @@ test("Mortar tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
+  assert.deepEqual([...T.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"]);
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...Moss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch", "rhizoid", "seta"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
@@ -192,9 +192,9 @@ test("Mortar tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("cavity"), false);
   assert.equal(T.TRICKS.includes("parcel"), false);
   assert.equal(T.TRICKS.includes("megachile"), false);
-  assert.ok(T.TRICKS.includes("mudpack"));
+  assert.ok(T.TRICKS.includes("mudseptum"));
   assert.ok(T.TRICKS.includes("tubeprovision"));
-  assert.ok(Overlay.TRICKS.includes("mudpack"));
+  assert.ok(Overlay.TRICKS.includes("mudseptum"));
   assert.ok(Overlay.TRICKS.includes("tubeprovision"));
 
   assert.equal(T.TRICKS.includes("coil"), false);
@@ -253,7 +253,7 @@ test("Mortar tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
+  assert.deepEqual([...Overlay.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"]);
   assert.deepEqual([...Overlay.HAPPY], ["lignaria", "cornifrons", "osmiini"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
@@ -325,14 +325,14 @@ test("Mortar tricks start only on idle ground", () => {
   assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax", "obelisk", "ommatidia"]);
 });
 
-test("trowel/beebread/orchard/plug/mudpack/tubeprovision/osmia are house-mason-bee-true, not copies of prior guests", () => {
+test("trowel/beebread/orchard/plug/mudseptum/tubeprovision/osmia are house-mason-bee-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("osmia", 80, 1);
 
-  const mud = T.beginTrick("mudpack", 80, 1);
+  const mud = T.beginTrick("mudseptum", 80, 1);
   assert.equal(mud.anim, "play");
   const mudMid = T.stepTrick(mud, 0.9, ground);
-  assert.ok(mudMid.lift > 1.5 || Math.abs(mudMid.rot) > 4, "Rui-visible mudpack");
+  assert.ok(mudMid.lift > 1.5 || Math.abs(mudMid.rot) > 4, "Rui-visible mudseptum");
   const tube = T.beginTrick("tubeprovision", 80, -1);
   assert.equal(tube.anim, "play");
   const tubeMid = T.stepTrick(tube, 1.0, ground);
@@ -379,7 +379,7 @@ test("trowel/beebread/orchard/plug/mudpack/tubeprovision/osmia are house-mason-b
     assert.equal(mod.TRICKS.includes("orchard"), false);
     assert.equal(mod.TRICKS.includes("plug"), false);
     assert.equal(mod.TRICKS.includes("osmia"), false);
-    assert.equal(mod.TRICKS.includes("mudpack"), false);
+    assert.equal(mod.TRICKS.includes("mudseptum"), false);
     assert.equal(mod.TRICKS.includes("tubeprovision"), false);
     assert.equal(mod.HAPPY.includes("lignaria"), false);
     assert.equal(mod.HAPPY.includes("cornifrons"), false);
@@ -601,7 +601,7 @@ test("ground registry keeps prior guests gated; Mortar selectable; prior guests 
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...T.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
+  assert.deepEqual([...T.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"]);
   assert.equal(T.wantsThankYou("mason_bee"), true);
   assert.equal(T.wantsThankYou("mortar"), true);
   assert.equal(Turtle.wantsThankYou("ink"), true);
@@ -785,7 +785,7 @@ globalThis.PetLeafcutterTricks = OverlayLeafcutter;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
+  assert.deepEqual([...Overlay.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -953,8 +953,8 @@ test("notes: Mortar ultra-polish done; ethogram dens claim true; next Disc / lea
   assert.equal(OverlayGround.wantsThankYou("snap"), true); // Snap still gated via VenusFlytrap
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...OverlayOak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
-  assert.deepEqual([...T.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
-  assert.deepEqual([...Overlay.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
+  assert.deepEqual([...T.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"]);
+  assert.deepEqual([...Overlay.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"]);
   assert.deepEqual([...T.HAPPY], ["lignaria", "cornifrons", "osmiini"]);
   assert.equal(T.TRICKS.includes("pad"), false);
   assert.equal(T.TRICKS.includes("mount"), false);
@@ -1000,8 +1000,8 @@ test("notes: Mortar ultra-polish done; ethogram dens claim true; next Disc / lea
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("milk"), true);
-  assert.deepEqual([...T.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
-  assert.deepEqual([...Overlay.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
+  assert.deepEqual([...T.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"]);
+  assert.deepEqual([...Overlay.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"]);
   assert.equal(OverlayGround.tricksFor("stick"), OverlayStick);
   assert.equal(OverlayGround.wantsThankYou("stick"), true);
   assert.equal(OverlayGround.tricksFor("twig"), OverlayStick);
@@ -1082,8 +1082,8 @@ test("notes: Mortar ultra-polish done; ethogram dens claim true; next Disc / lea
   assert.equal(OverlayGround.wantsThankYou("spark"), true);
   assert.deepEqual([...Firefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
   assert.deepEqual([...OverlayFirefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
-  assert.deepEqual([...T.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
-  assert.deepEqual([...Overlay.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
+  assert.deepEqual([...T.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"]);
+  assert.deepEqual([...Overlay.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"]);
   assert.deepEqual([...Monarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
   assert.deepEqual([...OverlayMonarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
   assert.equal(OverlayGround.tricksFor("pitcher"), OverlayPitcher);
@@ -1102,8 +1102,8 @@ test("notes: Mortar ultra-polish done; ethogram dens claim true; next Disc / lea
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("milk"), true);
-  assert.deepEqual([...T.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
-  assert.deepEqual([...Overlay.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
+  assert.deepEqual([...T.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"]);
+  assert.deepEqual([...Overlay.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"]);
   assert.equal(OverlayGround.tricksFor("sundew"), OverlaySundew);
   assert.equal(OverlayGround.wantsThankYou("sundew"), true);
   assert.equal(OverlayGround.tricksFor("dew"), OverlaySundew);

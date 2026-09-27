@@ -1,7 +1,7 @@
-/** Mortar ground tricks while idle — ultra-polish pass. House blue orchard mason bee — trowel / beebread / orchard / plug / mudpack / tubeprovision / osmia personality (trowel mandibular mud-mortar pack into an inkstone cell wall — never named daub (window DAUB) / seal (retired ethogram + special) / partition (Auger) / rasp (Auger) / gallery (Column) / chew / dig (Thimble) / gnaw (beaver) / fossor (Thrum) / nest (Clip + Column window) / bank (window DIG) / cell (ethogram talk), beebread pollen-nectar provision loaf pack into a solitary tube cell — never named corbicula (Comb) / scopa (Thrum) / pollen (Moth happy) / hive (Comb) / hex (Comb) / crumb (Column) / loaf (Whee ethogram talk), orchard gentle spring bloom visit — never named forage (Thrum window) / figure (Comb) / sonicate (Thrum) / picket (Auger) / hover (Sepia + retired ethogram) / lumber (Thrum) / thrum (Vesper) / drone (Hum window), plug mud entrance finish — never named seal / daub (window) / partition (Auger) / cap (Cap guest) / nest (Clip) / hive (Comb), mudpack iconic Osmia mud-pack tamp into a reed-tube cell (not trowel shallow mortar / partition Auger / gallery Column / daub window), tubeprovision iconic Osmia solitary tube provision loaf shove (not beebread soft pack / corbicula Comb / scopa Thrum / hive Comb), osmia desk life as an Osmia lignaria blue orchard mason with hornfaced cousins in the thank-yous; not Comb / Thrum / Auger / Column / Brood / Fold / Seven / Twig / Dart / Spark / Ghost / Milk / Hum / Sheen / Cap / Disc / *Dragon copies). Mudpack is the iconic Osmia mud-pack tamp (not trowel). Tubeprovision is the iconic tube provision shove (not beebread). Window-play DAUB unchanged — never names daub as a trick. Ethogram keeps osmia sit_hold; adds trowel/beebread/orchard/plug/mudpack/tubeprovision softs + freeze (replaces thin seal/hover/still — Cap owns seal flavor; Sepia owns hover; window DAUB owns daub). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via mason_bee.wav. Thank-yous lignaria / cornifrons / osmiini. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web `mason_bee-tricks.ts`. True house-mason desk life — not Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold/cicada/Brood/bumblebee/Thrum/honey_drone/Hum/carpenter_bee/Auger/leafcutter/Disc/stingless/Pot/sweat_bee/Sheen or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids daub/seal/hover/still/partition/rasp/gallery/camponotus/fossor/bombus/hive/guard/thrum/circle/liner/cavity/parcel/megachile name collisions. Bird ultra + denser guests done; skip Rui + birds. Auger now owns tunnelrasp/baldflash dens; Thrum owns thoraxload/corbicularub. OSMIA_HOLD=11.2 RELEASE_S=1.18 (house ultra norm). Next: Disc / leafcutter. Catalog 221. No cry inventing beyond house mason_bee.wav prefer. Never retouch Rui sprites. No gallery, not Column. No daub, not window DAUB. */
+/** Mortar ground tricks while idle — ultra-polish pass. House blue orchard mason bee — trowel / beebread / orchard / plug / mudseptum / tubeprovision / osmia personality (trowel mandibular mud-mortar pack into an inkstone cell wall — never named daub (window DAUB) / seal (retired ethogram + special) / partition (Auger) / rasp (Auger) / gallery (Column) / chew / dig (Thimble) / gnaw (beaver) / fossor (Thrum) / nest (Clip + Column window) / bank (window DIG) / cell (ethogram talk), beebread pollen-nectar provision loaf pack into a solitary tube cell — never named corbicula (Comb) / scopa (Thrum) / pollen (Moth happy) / hive (Comb) / hex (Comb) / crumb (Column) / loaf (Whee ethogram talk), orchard gentle spring bloom visit — never named forage (Thrum window) / figure (Comb) / sonicate (Thrum) / picket (Auger) / hover (Sepia + retired ethogram) / lumber (Thrum) / thrum (Vesper) / drone (Hum window), plug mud entrance finish — never named seal / daub (window) / partition (Auger) / cap (Cap guest) / nest (Clip) / hive (Comb), mudseptum iconic Osmia mud partition-wall tamp between reed-tube cells (renamed from mudseptum, which Dam the beaver owns; not trowel shallow mortar / partition Auger / gallery Column / daub window), tubeprovision iconic Osmia solitary tube provision loaf shove (not beebread soft pack / corbicula Comb / scopa Thrum / hive Comb), osmia desk life as an Osmia lignaria blue orchard mason with hornfaced cousins in the thank-yous; not Comb / Thrum / Auger / Column / Brood / Fold / Seven / Twig / Dart / Spark / Ghost / Milk / Hum / Sheen / Cap / Disc / *Dragon copies). Mudseptum is the iconic Osmia mud-septum tamp (not trowel). Tubeprovision is the iconic tube provision shove (not beebread). Window-play DAUB unchanged — never names daub as a trick. Ethogram keeps osmia sit_hold; adds trowel/beebread/orchard/plug/mudseptum/tubeprovision softs + freeze (replaces thin seal/hover/still — Cap owns seal flavor; Sepia owns hover; window DAUB owns daub). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via mason_bee.wav. Thank-yous lignaria / cornifrons / osmiini. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web `mason_bee-tricks.ts`. True house-mason desk life — not Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold/cicada/Brood/bumblebee/Thrum/honey_drone/Hum/carpenter_bee/Auger/leafcutter/Disc/stingless/Pot/sweat_bee/Sheen or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids daub/seal/hover/still/partition/rasp/gallery/camponotus/fossor/bombus/hive/guard/thrum/circle/liner/cavity/parcel/megachile name collisions. Bird ultra + denser guests done; skip Rui + birds. Auger now owns tunnelrasp/baldflash dens; Thrum owns thoraxload/corbicularub. OSMIA_HOLD=11.2 RELEASE_S=1.18 (house ultra norm). Next: Disc / leafcutter. Catalog 221. No cry inventing beyond house mason_bee.wav prefer. Never retouch Rui sprites. No gallery, not Column. No daub, not window DAUB. */
 (function (root) {
   const TRICK_KEY = "mason_bee";
-  const TRICKS = ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"];
+  const TRICKS = ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"];
   const HAPPY = ["lignaria", "cornifrons", "osmiini"];
 
   const HAPPY_DUR = {
@@ -20,7 +20,7 @@
     beebread: 2.48,
     orchard: 2.42,
     plug: 2.44,
-    mudpack: 2.52,
+    mudseptum: 2.52,
     tubeprovision: 2.48,
   };
 
@@ -53,7 +53,7 @@
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
     if (kind === "osmia") return 38 + roll * 24;
-    if (kind === "mudpack" || kind === "tubeprovision" || kind === "beebread") return 12 + roll * 9;
+    if (kind === "mudseptum" || kind === "tubeprovision" || kind === "beebread") return 12 + roll * 9;
     if (kind === "trowel" || kind === "orchard" || kind === "plug") return 11 + roll * 8;
     return justFinished ? 8 + roll * 8 : 4 + roll * 7;
   }
@@ -66,7 +66,7 @@
       if (roll < 0.34) return "beebread";
       if (roll < 0.5) return "orchard";
       if (roll < 0.66) return "plug";
-      if (roll < 0.83) return "mudpack";
+      if (roll < 0.83) return "mudseptum";
       return "tubeprovision";
     }
     if (lastKind === "trowel") {
@@ -74,7 +74,7 @@
       if (roll < 0.36) return "beebread";
       if (roll < 0.52) return "orchard";
       if (roll < 0.68) return "plug";
-      if (roll < 0.84) return "mudpack";
+      if (roll < 0.84) return "mudseptum";
       return "tubeprovision";
     }
     if (lastKind === "beebread") {
@@ -82,10 +82,10 @@
       if (roll < 0.34) return "trowel";
       if (roll < 0.5) return "orchard";
       if (roll < 0.66) return "plug";
-      if (roll < 0.83) return "mudpack";
+      if (roll < 0.83) return "mudseptum";
       return "tubeprovision";
     }
-    if (lastKind === "mudpack") {
+    if (lastKind === "mudseptum") {
       if (roll < 0.2) return "osmia";
       if (roll < 0.36) return "trowel";
       if (roll < 0.52) return "beebread";
@@ -98,7 +98,7 @@
     if (roll < 0.44) return "beebread";
     if (roll < 0.58) return "orchard";
     if (roll < 0.72) return "plug";
-    if (roll < 0.86) return "mudpack";
+    if (roll < 0.86) return "mudseptum";
     return "tubeprovision";
   }
 
@@ -250,7 +250,7 @@
               ? "talk"
               : kind === "plug"
                 ? "play"
-                : kind === "mudpack"
+                : kind === "mudseptum"
                   ? "play"
                   : kind === "tubeprovision"
                     ? "play"
@@ -399,8 +399,8 @@
     };
   }
 
-  function mudpackPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.mudpack));
+  function mudseptumPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.mudseptum));
     if (u < 0.16) {
       const s = smoothstep(u / 0.16);
       return { x: fromX, lift: s * 3.1, rot: s * 10 * facing, anim: "play" };
@@ -480,7 +480,7 @@
       trick.kind !== "beebread" &&
       trick.kind !== "orchard" &&
       trick.kind !== "plug" &&
-      trick.kind !== "mudpack" &&
+      trick.kind !== "mudseptum" &&
       trick.kind !== "tubeprovision"
     ) {
       return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
@@ -532,8 +532,8 @@
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "mudpack") {
-      const pose = mudpackPose(next.t, fromX, trick.facing);
+    } else if (next.kind === "mudseptum") {
+      const pose = mudseptumPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
@@ -568,7 +568,7 @@
     beebreadPose,
     orchardPose,
     plugPose,
-    mudpackPose,
+    mudseptumPose,
     tubeprovisionPose,
     stepTrick,
     happyCanStart,

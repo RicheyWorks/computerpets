@@ -1316,7 +1316,7 @@ test("hopwalk/monocle/fossick/anting/scrutinize/glean/corvid are Corvus-true, no
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
   assert.deepEqual([...OverlayLeafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "discpress", "cellcup", "megachile"]);
-  assert.deepEqual([...MasonBee.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
+  assert.deepEqual([...MasonBee.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"]);
   assert.equal(T.TRICKS.includes("circle"), false);
   assert.equal(T.TRICKS.includes("liner"), false);
   assert.equal(T.TRICKS.includes("cavity"), false);
