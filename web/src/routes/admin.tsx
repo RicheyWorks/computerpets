@@ -1,5 +1,5 @@
-import { useEffect, useState, type FormEvent, type ReactNode } from "react";
-import { REVOKED_NOTE, formatLocalWhen, markRevoked, revokedListStale } from "@/lib/admin/base";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { REVOKED_NOTE, formatLocalWhen, markRevoked, rereadOnce, revokedListStale } from "@/lib/admin/base";
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -40,6 +40,17 @@ export function AdminPage() {
   const [note, setNote] = useState<string | null>(null);
   const [detail, setDetail] = useState<string | null>(null);
   const [pendingJti, setPendingJti] = useState<string | null>(null);
+  /** After a stale-list revoke: cancel for the one scheduled re-read, and a generation so a late answer is dropped. */
+  const reread = useRef<(() => void) | null>(null);
+  const rereadGen = useRef(0);
+
+  function cancelReread() {
+    rereadGen.current += 1;
+    reread.current?.();
+    reread.current = null;
+  }
+
+  useEffect(() => cancelReread, []);
 
   useEffect(() => {
     if (!saved.adminKey) return;
@@ -60,6 +71,7 @@ export function AdminPage() {
   }
 
   async function openLedger(base: string, key: string) {
+    cancelReread();
     setBusy(true);
     clearNote();
     try {
@@ -86,6 +98,7 @@ export function AdminPage() {
 
   async function onSearch(e: FormEvent) {
     e.preventDefault();
+    cancelReread();
     setBusy(true);
     clearNote();
     try {
@@ -103,7 +116,26 @@ export function AdminPage() {
     }
   }
 
+  /**
+   * The one quiet re-read after a stale-list revoke. Success replaces the local mark with the ledger's
+   * rows and the plain revoked note; a failure leaves the stale note as it is (no loop).
+   */
+  async function rereadAfterRevoke(base: string, key: string, q: string) {
+    const gen = rereadGen.current;
+    try {
+      const next = await lookupLicenses(base, key, q);
+      if (gen !== rereadGen.current) return;
+      setRows(next);
+      setNote(REVOKED_NOTE);
+      setDetail(null);
+    } catch (err) {
+      if (gen !== rereadGen.current) return;
+      if (err instanceof AdminApiError && err.status === 401) lock(`License revoked. ${ADMIN_KEY_REJECTED}`);
+    }
+  }
+
   async function confirmRevoke(jti: string) {
+    cancelReread();
     setBusy(true);
     clearNote();
     try {
@@ -131,12 +163,19 @@ export function AdminPage() {
       setRows((was) => markRevoked(was, jti));
       setNote(revokedListStale(plainMessage(err, "Try again in a moment.")));
       setDetail(err instanceof AdminApiError && err.detail ? err.detail : null);
+      // Read the list once more shortly (or when this window gets focus back), then stop.
+      const [base, key, q] = [apiBase, adminKey, query];
+      reread.current = rereadOnce(() => {
+        reread.current = null;
+        void rereadAfterRevoke(base, key, q);
+      });
     } finally {
       setBusy(false);
     }
   }
 
   function lock(message?: string) {
+    cancelReread();
     clearAdminSession();
     setUnlocked(false);
     setRows([]);

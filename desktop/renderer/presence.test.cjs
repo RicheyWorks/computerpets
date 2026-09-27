@@ -445,7 +445,7 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.equal(require("./house-music.js").RADIO_TIMEOUT_MS, 12_000);
   const beatAt = petSrc.indexOf("setInterval(readHeartbeat");
   assert.doesNotMatch(petSrc.slice(beatAt, beatAt + 80), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
-  const gpuAt = petSrc.indexOf("setInterval(() => {\n  if (!window.PetGpu");
+  const gpuAt = petSrc.indexOf("setInterval(() => {\n  if (document.hidden || !window.PetGpu");
   assert.ok(gpuAt > 0, "the GPU tick is found");
   assert.doesNotMatch(petSrc.slice(gpuAt, gpuAt + 500), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
   const lifeAt = petSrc.indexOf("setInterval(() => {\n  if (document.hidden || !kind || !life)");

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { BlotterMarks, DayWash, type BlotterMark, randomLureX, randomTreatX } from "@/components/desk/blotter";
 import { BlotterCare, type CareMark } from "@/components/desk/blotter-care";
@@ -71,6 +71,7 @@ import { phoneOrient, type PhoneOrient } from "@/lib/pets/phone-desk";
 import { guestMarks, guestPick, guestTap, type GuestChoiceId } from "@/lib/pets/guest-choice";
 import { classifyKey, installFileDropGuard } from "@/lib/pets/presence";
 import { careNotSaved, RETRY_LABEL, talkProblem as talkProblemLine, type CareNotSavedAct } from "@/lib/plain-error";
+import { everyVisible, petArtLabel, roomLabel } from "@/lib/pets/keeper";
 
 type DeskCare = "rest" | "clean" | "medicine" | "bath" | "praise";
 
@@ -173,6 +174,8 @@ export function CompanionRoom({
   const [leaving, setLeaving] = useState(false);
   const [order, setOrder] = useState<{ cmd: PetCommand; id: number }>({ cmd: "wander", id: 1 });
   const speechUntil = useRef(0);
+  /** Ties each Try again to its problem line for screen readers. */
+  const problemId = useId();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const statsRef = useRef(stats);
   const markRef = useRef(mark);
@@ -244,7 +247,8 @@ export function CompanionRoom({
 
   useEffect(() => {
     if (kind.key !== "red_panda" || stats.hidden || leaving) return;
-    const id = window.setInterval(() => {
+    // A hidden tab pauses the house's auto-meet; it resumes when the room shows again.
+    const stopMeet = everyVisible(() => {
       setCalledKeys((keys) => {
         const next = nextAutoMeet(keys, kind.key);
         return next ? [...keys, next] : keys;
@@ -257,7 +261,7 @@ export function CompanionRoom({
       });
     }, 4500);
     return () => {
-      window.clearInterval(id);
+      stopMeet();
       window.clearTimeout(first);
     };
   }, [kind.key, leaving, stats.hidden]);
@@ -324,10 +328,15 @@ export function CompanionRoom({
   }, []);
 
   useEffect(() => {
-    const id = window.setInterval(() => {
-      if (speech && performance.now() > speechUntil.current) setSpeech(null);
-    }, 350);
-    return () => window.clearInterval(id);
+    // Only while a line is up, and only while the room shows; on return an expired line clears at once.
+    if (!speech) return;
+    return everyVisible(
+      () => {
+        if (performance.now() > speechUntil.current) setSpeech(null);
+      },
+      350,
+      { onResume: true },
+    );
   }, [speech]);
 
   useEffect(() => {
@@ -804,6 +813,7 @@ export function CompanionRoom({
   return (
     <section
       className="relative isolate h-dvh min-h-[520px] w-full overflow-hidden bg-elevated"
+      aria-label={roomLabel(displayName)}
       data-tablet-floor={pad ? "" : undefined}
       data-tablet-orient={pad ? orient : undefined}
       data-tablet-tending={pad && tending ? "" : undefined}
@@ -878,6 +888,7 @@ export function CompanionRoom({
         onLieHold={setRuiLieHold}
         windows={demoWindow ? deskWindows : []}
         musicOn={kind.key === "red_panda" && musicOn}
+        label={petArtLabel(displayName, { hidden: stats.hidden || deskOff, asleep: !!stats.asleep, unwell: stats.sick })}
         cardOpen={cardOpen}
         onArrived={() => {
           const act = playClaim("arrive", {
@@ -1060,10 +1071,11 @@ export function CompanionRoom({
         {line}
         {careProblem ? (
           <p role="status" aria-live="polite" data-care-problem={careProblem.act} className="mt-2 max-w-sm text-sm text-muted">
-            {careProblem.line}{" "}
+            <span id={`${problemId}-care`}>{careProblem.line}</span>{" "}
             <button
               type="button"
               disabled={busy}
+              aria-describedby={`${problemId}-care`}
               onClick={retryCare}
               className="text-fg underline underline-offset-2 hover:text-primary disabled:opacity-40"
             >
@@ -1073,10 +1085,11 @@ export function CompanionRoom({
         ) : null}
         {talkProblem ? (
           <p role="status" aria-live="polite" data-talk-problem className="mt-2 max-w-sm text-sm text-muted">
-            {talkProblem.line}{" "}
+            <span id={`${problemId}-talk`}>{talkProblem.line}</span>{" "}
             <button
               type="button"
               disabled={busy}
+              aria-describedby={`${problemId}-talk`}
               onClick={() => void talk(talkProblem.message)}
               className="text-fg underline underline-offset-2 hover:text-primary disabled:opacity-40"
             >

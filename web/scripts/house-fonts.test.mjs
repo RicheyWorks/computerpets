@@ -42,7 +42,7 @@ test("the desk heartbeat URL is loopback with no config override; the overlay ro
   assert.match(overlayKeeper, /HEARTBEAT_URL = "http:\/\/127\.0\.0\.1:8081\/api\/public\/heartbeat"/);
   assert.doesNotMatch(overlayKeeper, /COMPUTERPETS_BACKEND_URL|process\.env/);
   assert.doesNotMatch(overlayPet, /fetch\(/);
-  assert.match(overlayPet, /setInterval\(readHouseServer, 15_000\)/);
+  assert.match(overlayPet, /setInterval\(\(\) => \{\r?\n  if \(!document\.hidden\) readHouseServer\(\);\r?\n\}, 15_000\);/);
   const keys = [...catalogSrc.matchAll(/\{ key: "([a-z0-9_]+)"/g)].map((m) => m[1]);
   assert.equal(keys.length, 221);
 });

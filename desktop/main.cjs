@@ -272,6 +272,14 @@ function deskPickMenu() {
     .map(guestRadio);
 }
 
+/** Tray / pet menu "Keeper card": show the overlay and open the card with the keyboard on it. */
+function openKeeperCardFromMenu() {
+  if (!win || win.isDestroyed()) return;
+  win.showInactive();
+  win.setAlwaysOnTop(true, "screen-saver");
+  win.webContents.send("command", { type: "open-card" });
+}
+
 function careMenu() {
   return [
     { label: "Feed", click: () => win?.webContents.send("command", "feed") },
@@ -342,6 +350,7 @@ function trayTemplate() {
     { type: "separator" },
     ...careMenu(),
     { type: "separator" },
+    { label: "Keeper card", click: () => openKeeperCardFromMenu() },
     { label: "Unlock…", click: () => openSettings("unlock") },
     { label: "Minds…", click: () => openSettings("minds") },
     {
@@ -539,6 +548,7 @@ function popupPetMenu(x, y) {
     { type: "separator" },
     ...careMenu(),
     { type: "separator" },
+    { label: "Keeper card", click: () => openKeeperCardFromMenu() },
     { label: "Unlock…", click: () => openSettings("unlock") },
     { label: "Minds…", click: () => openSettings("minds") },
     { type: "separator" },

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import {
   ADVERTISED_CARE,
   DESK_PORT,
@@ -50,7 +50,7 @@ import {
 } from "@/lib/pets/card";
 import { playDeskSound, playStep, playVoice } from "@/lib/pets/desk-audio";
 import { STEP_KINDS, STEP_LABELS, parseStep, stepOf } from "@/lib/pets/house-sounds";
-import { HOUSE_LOOP_LICENSE, HOUSE_MUSIC_LABEL, MUSIC_PLUGINS, houseMusicToggle, sharedMusicShows, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_FIND, RADIO_LABEL, RADIO_LOCAL, RADIO_PLACEHOLDER, openStationStream, parseMusic, playSrc, radioHonesty, radioMaySend, readRadioSearch, streamHonesty, streamMaySend, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
+import { HOUSE_LOOP_LICENSE, HOUSE_MUSIC_LABEL, MUSIC_PLUGINS, houseMusicToggle, sharedMusicHint, sharedMusicShows, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_FIND, RADIO_LABEL, RADIO_LOCAL, RADIO_PLACEHOLDER, openStationStream, parseMusic, playSrc, radioHonesty, radioMaySend, readRadioSearch, streamHonesty, streamMaySend, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
 import { SLEEP_AID_LABEL, SLEEP_AID_LICENSE, SLEEP_AID_MUTE_TRUTH, SLEEP_AID_PLUGINS, parseSleepAid, playSrc as sleepPlaySrc, type SleepAidPrefs } from "@/lib/pets/house-sleep";
 import { currentArea, parseAreas } from "@/lib/pets/weather-areas";
 import { FLY_BIRD_NAME } from "@/lib/pets/bird-fly";
@@ -115,6 +115,7 @@ export function KeeperCard({
   const [streamAsked, setStreamAsked] = useState(false);
   /** Music or sleep sounds the keeper turned on that did not play, and why. Try again bumps soundTry. */
   const [soundLine, setSoundLine] = useState<{ what: SoundWhat; line: string } | null>(null);
+  const soundLineId = useId();
   const [soundTry, setSoundTry] = useState(0);
   const [callQ, setCallQ] = useState("");
   const [callPick, setCallPick] = useState("");
@@ -415,6 +416,7 @@ export function KeeperCard({
                 key={color.id}
                 type="button"
                 data-on={card.color === color.id ? "1" : "0"}
+                aria-pressed={card.color === color.id}
                 onClick={(e) => {
                   e.stopPropagation();
                   write({ ...card, color: color.id });
@@ -430,6 +432,7 @@ export function KeeperCard({
                 key={style.id}
                 type="button"
                 data-on={card.voiceStyle === style.id ? "1" : "0"}
+                aria-pressed={card.voiceStyle === style.id}
                 onClick={(e) => {
                   e.stopPropagation();
                   write({ ...card, voiceStyle: style.id });
@@ -578,6 +581,7 @@ export function KeeperCard({
                 key={kind}
                 type="button"
                 data-on={houseStep === kind ? "1" : "0"}
+                aria-pressed={houseStep === kind}
                 onClick={(e) => {
                   e.stopPropagation();
                   write({ ...card, stepKind: kind });
@@ -596,6 +600,7 @@ export function KeeperCard({
                 key={plugin.id}
                 type="button"
                 data-on={sleepAid.plugin === plugin.id ? "1" : "0"}
+                aria-pressed={sleepAid.plugin === plugin.id}
                 data-sleep={plugin.id}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -630,11 +635,18 @@ export function KeeperCard({
               ) : null}
             </div>
           ) : null}
+          {sharedMusicHint(guestKey, music) ? (
+            // Off, or radio with no station: nothing for the shared Pause/Play yet, so say where to pick.
+            <p className="keeper-truth" data-house-music-hint>
+              {sharedMusicHint(guestKey, music)}
+            </p>
+          ) : null}
           {soundLine ? (
             <p className="keeper-truth" role="status" aria-live="polite" data-sound-problem={soundLine.what}>
-              {soundLine.line}{" "}
+              <span id={soundLineId}>{soundLine.line}</span>{" "}
               <button
                 type="button"
+                aria-describedby={soundLineId}
                 onClick={(e) => {
                   e.stopPropagation();
                   setSoundLine(null);
@@ -864,12 +876,21 @@ export function KeeperCard({
   );
 }
 
+/** One care meter: the text for sighted keepers, and a named 0-100 meter for screen readers. */
 function Meter({ label, value }: { label: string; value: number }) {
   return (
     <div>
       <dt>{label}</dt>
       <dd>{value}</dd>
-      <i style={{ ["--w" as string]: `${value}%` }} />
+      <i
+        role="meter"
+        aria-label={label}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={value}
+        aria-valuetext={`${value} of 100`}
+        style={{ ["--w" as string]: `${value}%` }}
+      />
     </div>
   );
 }
