@@ -92,7 +92,7 @@ More in [desktop/README.md](desktop/README.md).
 
 ## They make real noise
 
-**221 of 221** guests already answer **Call** with real microphone field tape — not beeps. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. When a guest has a cry file, Call plays that short dry cut.
+**221 of 221** guests answer **Call** with a real recording — not beeps. Most guests with a voice play their own species (Jaw plays a close relative, a Nile crocodile). Quiet guests — fungi, plants, microbes, and many small animals — play a real recording of the soft sound their life makes: a rustle, a drip, a wing whir. Four — **Sol**, **Shift**, **Spike**, and **Lid** — play a real habitat recording until open-licensed tape of their own species exists. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist, and open-access papers. Call plays a short dry cut.
 
 A few you might know by name:
 

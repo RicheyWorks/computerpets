@@ -301,3 +301,24 @@ assert.equal(C.prefersHouseCry("ground_dragon"), true);
   assert.match(cardSrc, /SLEEP_AID_LABEL/);
   assert.match(overlayHtml, /id="hud-sleep"/);
 });
+
+test("the desk clock catches a passed alarm minute once and rings a timer on time", () => {
+  const at = (d, h, m, s = 0) => new Date(2026, 8, d, h, m, s).getTime();
+  const alarm = { on: true, hour: 7, minute: 0, lineId: "l-1", lastRingDay: "" };
+  assert.equal(C.alarmCatch(alarm, at(27, 7, 3, 10), at(27, 6, 59, 58)), at(27, 7, 0));
+  assert.equal(C.alarmCatch(alarm, at(27, 7, 3, 10)), 0);
+  const tab = C.clockTick({ alarm, timer: C.blankTimer() }, at(27, 7, 1, 5), at(27, 6, 59, 50));
+  assert.equal(tab.rang, "alarm");
+  assert.equal(tab.lineId, "l-1");
+  assert.equal(tab.alarm.lastRingDay, "2026-09-27");
+  assert.equal(C.clockTick({ alarm: tab.alarm, timer: C.blankTimer() }, at(27, 7, 1, 6), at(27, 6, 0)).rang, "");
+  const late = { ...alarm, hour: 23, minute: 59 };
+  const caught = C.clockTick({ alarm: late, timer: C.blankTimer() }, at(28, 0, 2), at(27, 23, 58, 30));
+  assert.equal(caught.alarm.lastRingDay, "2026-09-27");
+  const timer = C.startTimer(C.blankTimer(), 4000, 1000);
+  const done = C.clockTick({ alarm: C.blankAlarm(), timer }, 5600, 4600);
+  assert.equal(done.rang, "timer");
+  assert.equal(done.lateMs, 600);
+  assert.match(cardSrc, /clockTick\(guestOf\(live, guestKey\), now, since\)/);
+  assert.match(overlayCard, /function clockTick/);
+});

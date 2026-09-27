@@ -260,12 +260,31 @@
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   }
 
-  function alarmDue(alarm, now = Date.now()) {
+  /** The latest alarm moment at or before now: today's, or yesterday's while today's is still ahead. */
+  function alarmMoment(alarm, now = Date.now()) {
     const a = parseAlarm(alarm);
-    if (!a.on) return false;
     const d = new Date(now);
-    if (dayKey(now) === a.lastRingDay) return false;
-    return d.getHours() === a.hour && d.getMinutes() === a.minute;
+    const today = new Date(d.getFullYear(), d.getMonth(), d.getDate(), a.hour, a.minute, 0, 0).getTime();
+    if (today <= now) return today;
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate() - 1, a.hour, a.minute, 0, 0).getTime();
+  }
+
+  /**
+   * The alarm moment to ring now, or 0. It rings in its own minute, and a moment that passed
+   * since the last look (a hidden overlay, a slow tick, a sleeping computer) rings once, late.
+   * Once a day: the day of the moment is kept as lastRingDay.
+   */
+  function alarmCatch(alarm, now = Date.now(), since = now) {
+    const a = parseAlarm(alarm);
+    if (!a.on) return 0;
+    const moment = alarmMoment(a, now);
+    if (dayKey(moment) === a.lastRingDay) return 0;
+    if (now - moment < 60_000 || moment > since) return moment;
+    return 0;
+  }
+
+  function alarmDue(alarm, now = Date.now(), since = now) {
+    return alarmCatch(alarm, now, since) > 0;
   }
 
   function markAlarmRang(alarm, now = Date.now()) {
@@ -304,6 +323,25 @@
       return { timer: t, rang: true };
     }
     return { timer: t, rang: false };
+  }
+
+  /**
+   * One look at the keeper clock. It runs while the overlay is hidden too. since is the last look,
+   * so an alarm minute that passed between looks still rings once, and a timer rings when it ends.
+   * rang is "alarm", "timer", or ""; lateMs is how long after its moment it rang.
+   */
+  function clockTick(guest, now = Date.now(), since = now) {
+    const alarm = parseAlarm(guest && guest.alarm);
+    const timer = parseTimer(guest && guest.timer);
+    const moment = alarmCatch(alarm, now, since);
+    if (moment) {
+      return { alarm: markAlarmRang(alarm, moment), timer, rang: "alarm", lineId: alarm.lineId, lateMs: Math.max(0, now - moment), changed: true };
+    }
+    if (!timer.running) return { alarm, timer, rang: "", lineId: "", lateMs: 0, changed: false };
+    const endsAt = timer.endsAt;
+    const tick = timerTick(timer, now);
+    if (!tick.rang) return { alarm, timer: tick.timer, rang: "", lineId: "", lateMs: 0, changed: true };
+    return { alarm, timer: tick.timer, rang: "timer", lineId: timer.lineId, lateMs: Math.max(0, now - endsAt), changed: true };
   }
 
   function formatRemain(ms) {
@@ -434,12 +472,15 @@
     removeLine,
     lineById,
     clipLine,
+    alarmMoment,
+    alarmCatch,
     alarmDue,
     markAlarmRang,
     dayKey,
     startTimer,
     stopTimer,
     timerTick,
+    clockTick,
     formatRemain,
     voiceStyleOf,
     pickSystemVoice,

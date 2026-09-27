@@ -1355,6 +1355,40 @@ def _desk_rows() -> list[Affordance]:
             ),
         ),
         Affordance(
+            "desk.tray.switch",
+            "desk",
+            "Tray On the desk and switch-pet change the guest; Hide the window / Show",
+            "main.cjs trayTemplate deskPickMenu / switch-pet / Hide the window / Show",
+            notes=(
+                "Loads the real desktop/main.cjs under a stand-in Electron (harness_main.cjs): no window, tray icon, network, or quit. "
+                "On the desk lists the desk picks in order with the current guest checked; a click sends one "
+                "switch to the overlay and the rebuilt tray checks and names that guest. switch-pet ignores an "
+                "unknown key. Companions lists the whole roster."
+            ),
+        ),
+        Affordance(
+            "desk.quit",
+            "desk",
+            "Turn off / Quit reach app.quit through every door",
+            "main.cjs quit-desk / tray Quit / pet-menu Quit + pet.js hud-off + preload quit",
+            notes=(
+                "Loads the real desktop/main.cjs under a stand-in Electron (harness_main.cjs): no window, tray icon, network, or quit. "
+                "quit-desk, tray Quit, and the pet menu Quit each ask app.quit once (counted, never called). "
+                "Turn off on the keeper card asks twice before it sends quit-desk."
+            ),
+        ),
+        Affordance(
+            "desk.market.search",
+            "desk",
+            "Quotes look-up through main market-search",
+            "main.cjs market-search / market.js searchUrl + parseSearchCoins/Nfts",
+            notes=(
+                "Loads the real desktop/main.cjs under a stand-in Electron (harness_main.cjs): no window, tray icon, network, or quit. "
+                "An empty name stays home; no painted look-up line holds the read; a fake CoinGecko answer "
+                "reads as coins and NFT rows; an HTTP 500 reads as unread, not as no coins."
+            ),
+        ),
+        Affordance(
             "desk.links.open",
             "desk",
             "Painted news links open in the keeper's browser, never in the overlay",
@@ -1676,6 +1710,12 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("links_open", domain="desk", action_id=aid)
     if local_id == "launch_check":
         return _launch_check(aid)
+    if local_id == "tray.switch":
+        return _run_node_smoke("tray_on_the_desk", domain="desk", action_id=aid)
+    if local_id == "quit":
+        return _run_node_smoke("quit_desk", domain="desk", action_id=aid)
+    if local_id == "market.search":
+        return _run_node_smoke("market_search", domain="desk", action_id=aid)
     if local_id == "favorites.news":
         return _run_node_smoke("news_favorites", domain="desk", action_id=aid)
     if local_id == "favorites.market":
@@ -1872,6 +1912,64 @@ def _card_rows() -> list[Affordance]:
                 "The blotter has no bus. No key, URL, or model on the line."
             ),
         ),
+        Affordance(
+            "card.alarm",
+            "card",
+            "Alarm rings once while the overlay is hidden and keeps its day",
+            "card.js alarmCatch / clockTick + pet.js keeper clock + main card-set/card-get",
+            notes=(
+                "Loads the real desktop/main.cjs under a stand-in Electron (harness_main.cjs): no window, tray icon, network, or quit. "
+                "One-second looks through a hidden stretch ring once in the alarm minute; the ring day reaches "
+                "card.json so a restart does not ring again; a computer asleep over the minute rings once, late; "
+                "23:59 across midnight keeps yesterday; a past time or an off alarm stays quiet. pet.js keeps the "
+                "clock running while hidden and sends a notification."
+            ),
+        ),
+        Affordance(
+            "card.timer",
+            "card",
+            "Timer rings on time while hidden and survives a reload",
+            "card.js startTimer / stopTimer / clockTick + main card-set/card-get",
+            notes=(
+                "Loads the real desktop/main.cjs under a stand-in Electron (harness_main.cjs): no window, tray icon, network, or quit. "
+                "A five-minute timer rings once, on the second it ends; a running timer saved to card.json comes "
+                "back and still ends on the wall clock; stop keeps the time left."
+            ),
+        ),
+        Affordance(
+            "card.saved_lines",
+            "card",
+            "Saved lines trim, clip, cap, persist, and ring from the alarm",
+            "card.js addLine / removeLine / lineById + main card-set/card-get",
+            notes=(
+                "Loads the real desktop/main.cjs under a stand-in Electron (harness_main.cjs): no window, tray icon, network, or quit. "
+                "Blank lines are skipped, long lines clip to 140 characters, the newest 12 are kept, lines come "
+                "back from card.json, a removed line stays gone, and an alarm rings its named line."
+            ),
+        ),
+        Affordance(
+            "card.music",
+            "card",
+            "House loop plays a real file; Radio find goes through main radio-search",
+            "house-music.js MUSIC_PLUGINS / overlayPlaySrc + main.cjs radio-search",
+            notes=(
+                "Loads the real desktop/main.cjs under a stand-in Electron (harness_main.cjs): no window, tray icon, network, or quit. "
+                "The house loop is a real wav in the overlay folder. radio-search holds the read with no painted "
+                "line, reads only Radio Browser hosts with the house user agent, drops a station with no safe "
+                "stream, and reads a dead directory as can't reach. A live stream is not played."
+            ),
+        ),
+        Affordance(
+            "card.mind",
+            "card",
+            "Minds mind-set seals the key; mind-get opens it",
+            "main.cjs mind-set / mind-get + mind-secret.cjs",
+            notes=(
+                "Loads the real desktop/main.cjs under a stand-in Electron (harness_main.cjs): no window, tray icon, network, or quit. "
+                "With a stand-in OS secret store the key is sealed (kept os) and mind.json holds no plain key; "
+                "mind-get opens it with the plugin and voice. With no store the key is not written and not invented."
+            ),
+        ),
     ]
 
 
@@ -1913,6 +2011,15 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
         )
     if local_id == "paint_wire":
         return _run_node_smoke("card_paint_wire", domain="card", action_id=aid)
+    main_rows = {
+        "alarm": "alarm_clock",
+        "timer": "timer_clock",
+        "saved_lines": "saved_lines",
+        "music": "music_radio",
+        "mind": "mind_get_set",
+    }
+    if local_id in main_rows:
+        return _run_node_smoke(main_rows[local_id], domain="card", action_id=aid)
     if local_id == "house_server":
         return _run_node_smoke("house_server_row", domain="card", action_id=aid)
     if local_id == "notify_open":
