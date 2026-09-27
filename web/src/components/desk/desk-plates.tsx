@@ -170,6 +170,7 @@ import {
   type PlateKey,
 } from "@/lib/pets/desk-plates";
 import { cn } from "@/lib/utils";
+import { PLATE_LINES, RETRY_LABEL, plateProblem } from "@/lib/plain-error";
 
 
 function usePlateChrome(key: PlateKey) {
@@ -297,6 +298,9 @@ export function DeskWeatherPlate({
   const [open, setOpen] = useState(false);
   const [live, setLive] = useState<LiveSky | null>(null);
   const [unread, setUnread] = useState(false);
+  /** Why the forecast did not load (plain; raw error in the console). Try again bumps attempt. */
+  const [problem, setProblem] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
   const [query, setQuery] = useState("");
   const [hits, setHits] = useState<WeatherArea[]>([]);
   const [looking, setLooking] = useState(false);
@@ -369,12 +373,14 @@ export function DeskWeatherPlate({
     liveKey.current = "";
     setLive(null);
     setUnread(false);
+    setProblem(null);
     void readForecast(line, url)
       .then((json) => {
         if (cancelled) return;
         if (json == null) {
           liveKey.current = "";
           setUnread(true);
+          setProblem(plateProblem("forecast", null));
           setLive(null);
           onSky?.(null);
           return;
@@ -382,20 +388,22 @@ export function DeskWeatherPlate({
         const next = parseForecast(json);
         liveKey.current = next ? key : "";
         setUnread(!next);
+        setProblem(next ? null : plateProblem("forecast", null));
         setLive(next);
         onSky?.(next);
       })
-      .catch(() => {
+      .catch((err) => {
         if (cancelled) return;
         liveKey.current = "";
         setUnread(true);
+        setProblem(plateProblem("forecast", err));
         setLive(null);
         onSky?.(null);
       });
     return () => {
       cancelled = true;
     };
-  }, [areas, card.hereForecastAck, onSky, open, tab]);
+  }, [areas, card.hereForecastAck, onSky, open, tab, attempt]);
 
   function geocodeShown(id: string) {
     if (typeof document === "undefined") return "";
@@ -632,7 +640,14 @@ export function DeskWeatherPlate({
                   {live.windKmh != null ? ` · wind ${Math.round(live.windKmh)}` : ""}. Open-Meteo.
                 </p>
               ) : null}
-              {area && unread ? <p className="text-subtle">Unread. The look-up did not land.</p> : null}
+              {area && unread ? (
+                <p className="text-subtle" role="status" data-plate-problem="forecast">
+                  {problem ?? PLATE_LINES.forecast}{" "}
+                  <button type="button" className="underline underline-offset-2" onClick={() => setAttempt((n) => n + 1)}>
+                    {RETRY_LABEL}
+                  </button>
+                </p>
+              ) : null}
               {live?.daily?.length ? (
                 <ul className="mt-2 space-y-1 text-subtle">
                   {live.daily.map((d) => (
@@ -738,6 +753,11 @@ export function DeskNewsPlate() {
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState<NewsItem[]>([]);
   const [unread, setUnread] = useState(false);
+  /** Why headlines did not load; with older items kept, it says they are from earlier. Try again bumps attempt. */
+  const [problem, setProblem] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
+  const itemsRef = useRef<NewsItem[]>(items);
+  itemsRef.current = items;
   const [query, setQuery] = useState("");
   const prefs = useMemo(() => parseNewsPrefs(card), [card]);
   const topic = currentTopic(prefs);
@@ -752,50 +772,58 @@ export function DeskNewsPlate() {
     if (!open) return;
     const line = newsHonesty(prefs);
     if (!line) {
-      if (tab === "favorites") setUnread(false);
+      if (tab === "favorites") {
+        setUnread(false);
+        setProblem(null);
+      }
       return;
     }
+    setProblem(null);
     let cancelled = false;
+    /** A feed that answered: keep what it gave; an empty or unreadable answer is said plainly. */
+    function landed(next: NewsItem[]) {
+      if (next.length) setItems(next);
+      setUnread(!next.length);
+      setProblem(next.length ? null : plateProblem(itemsRef.current.length ? "newer" : "headlines", null));
+    }
     async function load() {
       const el = document.getElementById("news-net");
       const shown = !!el && (el.textContent || "").includes(line);
       if (!newsMaySend(prefs, shown)) return;
       try {
         if (tab === "favorites") {
-          if (!cancelled) setUnread(false);
+          if (!cancelled) {
+            setUnread(false);
+            setProblem(null);
+          }
           return;
         }
         if (tab === "popular") {
           const xml = await readRss(line, popularRssUrl());
           if (xml == null || cancelled) return;
-          const next = parseRss(xml);
-          if (next.length) setItems(next);
-          setUnread(!next.length);
+          landed(parseRss(xml));
           return;
         }
         if (tab === "x") {
           const xml = await readRss(line, xTopicRssUrl(topic.query || "news"));
           if (xml == null || cancelled) return;
-          const next = parseRss(xml);
-          if (next.length) setItems(next);
-          setUnread(!next.length);
+          landed(parseRss(xml));
           return;
         }
         if (topic.id !== WORLD_ID && topic.query) {
           const xml = await readRss(line, topicRssUrl(topic.query));
           if (xml == null || cancelled) return;
-          const next = parseRss(xml);
-          if (next.length) setItems(next);
-          setUnread(!next.length);
+          landed(parseRss(xml));
           return;
         }
         const json = await readFeatured(line);
         if (json == null || cancelled) return;
-        const next = parseNews(json);
-        if (next.length) setItems(next);
-        setUnread(!next.length);
-      } catch {
-        if (!cancelled) setUnread((was) => was || !items.length);
+        landed(parseNews(json));
+      } catch (err) {
+        if (cancelled) return;
+        const kept = itemsRef.current.length > 0;
+        setUnread((was) => was || !kept);
+        setProblem(plateProblem(kept ? "newer" : "headlines", err));
       }
     }
     void load();
@@ -804,7 +832,7 @@ export function DeskNewsPlate() {
       cancelled = true;
       window.clearInterval(id);
     };
-  }, [open, prefs, tab, topic.id, topic.query]);
+  }, [open, prefs, tab, topic.id, topic.query, attempt]);
 
   return (
     <article
@@ -874,8 +902,17 @@ export function DeskNewsPlate() {
             )
           ) : (
             <>
-              {unread && !items.length ? <p className="text-subtle">{CANT_REACH}</p> : null}
-              {!unread && !items.length ? <p className="text-subtle">{NO_HEADLINES}</p> : null}
+              {problem ? (
+                <p className="text-subtle" role="status" data-plate-problem="news">
+                  {problem}{" "}
+                  <button type="button" className="underline underline-offset-2" onClick={() => setAttempt((n) => n + 1)}>
+                    {RETRY_LABEL}
+                  </button>
+                </p>
+              ) : unread && !items.length ? (
+                <p className="text-subtle">{CANT_REACH}</p>
+              ) : null}
+              {!unread && !problem && !items.length ? <p className="text-subtle">{NO_HEADLINES}</p> : null}
               {tab === "x" && !items.length ? (
                 <p className="mt-1">
                   <a href={xSearchUrl(topic.query || "news")} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
@@ -978,6 +1015,9 @@ export function DeskMarketPlate() {
   const [live, setLive] = useState<MarketLive | null>(null);
   const [coinLives, setCoinLives] = useState<Record<string, MarketLive>>({});
   const [unread, setUnread] = useState(false);
+  /** Why the current coin or stock price did not load. Try again bumps attempt. */
+  const [problem, setProblem] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
   const [nftLive, setNftLive] = useState<NftLive | null>(null);
   const [nftUnread, setNftUnread] = useState(false);
   const [query, setQuery] = useState("");
@@ -1037,10 +1077,17 @@ export function DeskMarketPlate() {
             if (ticker?.geckoId && lives[ticker.geckoId]) {
               setLive(lives[ticker.geckoId]!);
               setUnread(false);
+              setProblem(null);
+            } else if (ticker?.geckoId && geckoIds.includes(ticker.geckoId)) {
+              // Answered, but not with this coin (a rate-limit or error body): say so instead of "…" forever.
+              setUnread(true);
+              setProblem(plateProblem("price", null));
             }
           })
-          .catch(() => {
-            if (!cancelled) setUnread(true);
+          .catch((err) => {
+            if (cancelled) return;
+            setUnread(true);
+            setProblem(plateProblem("price", err));
           }),
       );
     }
@@ -1051,15 +1098,24 @@ export function DeskMarketPlate() {
           .then((json) => {
             if (json == null || cancelled) return;
             const next = parseTerminalToken(json);
-            if (!next) return;
+            if (!next) {
+              if (ticker?.id === row.id) {
+                setUnread(true);
+                setProblem(plateProblem("price", null));
+              }
+              return;
+            }
             setCoinLives((prev) => ({ ...prev, [row.platform + ":" + row.address]: next, [row.address]: next }));
             if (ticker?.id === row.id) {
               setLive(next);
               setUnread(false);
+              setProblem(null);
             }
           })
-          .catch(() => {
-            if (!cancelled && ticker?.id === row.id) setUnread(true);
+          .catch((err) => {
+            if (cancelled || ticker?.id !== row.id) return;
+            setUnread(true);
+            setProblem(plateProblem("price", err));
           }),
       );
     }
@@ -1072,9 +1128,12 @@ export function DeskMarketPlate() {
             const next = parseYahoo(json);
             if (next) setLive(next);
             setUnread(!next);
+            setProblem(next ? null : plateProblem("price", null));
           })
-          .catch(() => {
-            if (!cancelled) setUnread(true);
+          .catch((err) => {
+            if (cancelled) return;
+            setUnread(true);
+            setProblem(plateProblem("price", err));
           }),
       );
     }
@@ -1097,6 +1156,7 @@ export function DeskMarketPlate() {
     if (!house.tickers.length) {
       setLive(null);
       setUnread(false);
+      setProblem(null);
     }
     if (!nft) {
       setNftLive(null);
@@ -1106,7 +1166,7 @@ export function DeskMarketPlate() {
     return () => {
       cancelled = true;
     };
-  }, [open, house, house.tickers, house.nfts, ticker?.id, nft?.id]);
+  }, [open, house, house.tickers, house.nfts, ticker?.id, nft?.id, attempt]);
 
   async function lookupCoins() {
     const typed = query;
@@ -1141,7 +1201,11 @@ export function DeskMarketPlate() {
     setTruth("looking up…");
     try {
       const json = await readQuoteSearch(QUOTE_LOOK, typed);
-      if (json == null) return;
+      if (json == null) {
+        // Nothing was sent; do not leave "looking up…" standing.
+        setTruth("");
+        return;
+      }
       const coins = parseSearchCoins(json);
       const best = pickBestSearchCoin(coins, typed);
       if (!best) {
@@ -1171,7 +1235,10 @@ export function DeskMarketPlate() {
     setNftTruth("looking up…");
     try {
       const json = await readQuoteSearch(QUOTE_LOOK, typed);
-      if (json == null) return;
+      if (json == null) {
+        setNftTruth("");
+        return;
+      }
       const found = parseSearchNfts(json);
       setNftHits(found);
       setNftTruth(found.length ? "" : "no collection from that look-up");
@@ -1245,6 +1312,14 @@ export function DeskMarketPlate() {
                   );
                 })}
               </ul>
+              {unread && problem ? (
+                <p className="mt-1 text-subtle" role="status" data-plate-problem="market">
+                  {problem}{" "}
+                  <button type="button" className="underline underline-offset-2" onClick={() => setAttempt((n) => n + 1)}>
+                    {RETRY_LABEL}
+                  </button>
+                </p>
+              ) : null}
               <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">{MARKET_TRUTH}</p>
               <form
                 className="mt-2 flex gap-2"

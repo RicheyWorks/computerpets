@@ -70,6 +70,16 @@ export function isRevokeMiss(body: unknown): boolean {
 }
 
 /**
+ * True when a revoke 200 is the license service's own confirmation for this jti
+ * ({"revoked":true, "jti":<the same jti>, ...}). Any other 200 came from something else.
+ */
+export function isRevokeDone(body: unknown, jti: string): boolean {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return false;
+  const row = body as { revoked?: unknown; jti?: unknown };
+  return row.revoked === true && typeof row.jti === "string" && row.jti === jti;
+}
+
+/**
  * A ledger timestamp in the viewer's local time (text), with the exact ISO instant kept for a tooltip.
  * `locale` / `timeZone` default to the viewer's; tests pin them.
  */

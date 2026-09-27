@@ -42,16 +42,17 @@ test("companion room: a failed play save is told plainly with a retry, and the m
   assert.doesNotMatch(text, /\.catch\(\(\) => undefined\)/, "no swallowed play save");
   assert.match(text, /\.catch\(\(err\) => playNotSaved\(err\)\)/);
   assert.match(text, /await persist\("play"\);\n      \} catch \(err\) \{\n        playNotSaved\(err\);\n        return;/);
-  const fn = text.slice(text.indexOf("function playNotSaved"), text.indexOf("async function retryPlay"));
+  const fn = text.slice(text.indexOf("function playNotSaved"), text.indexOf("function retryCare"));
   assert.match(fn, /takenRef\.current = false;/);
   assert.match(fn, /setMark\(null\);/);
-  assert.match(fn, /setPlayProblem\(careNotSaved\("play", err\)\);/);
+  assert.match(fn, /careFailed\("play", err\);/);
   assert.doesNotMatch(fn, /setStats/, "a failed save does not move the meters");
-  assert.match(text, /<p role="status" aria-live="polite" data-play-problem/);
-  assert.match(text, /onClick=\{\(\) => void retryPlay\(\)\}/);
+  assert.match(text, /setCareProblem\(\{ act, line: careNotSaved\(act, err\) \}\);/);
+  assert.match(text, /<p role="status" aria-live="polite" data-care-problem=\{careProblem\.act\}/);
+  assert.match(text, /if \(act === "play"\) void retryPlay\(\);/);
   assert.match(text, /\{RETRY_LABEL\}/);
   // persist only sets stats after the house answered.
-  const persist = text.slice(text.indexOf("async function persist"), text.indexOf("function playNotSaved"));
+  const persist = text.slice(text.indexOf("async function persist"), text.indexOf("function careFailed"));
   assert.ok(persist.indexOf("await onCare(action)") < persist.indexOf("setStats(next)"));
 });
 

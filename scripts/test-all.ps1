@@ -16,6 +16,8 @@
     tftest     terraform test in deploy/terraform (after you ran terraform init there)
 
   A suite whose tool is missing is reported as SKIP with the reason. Nothing is installed.
+  On Windows, deploy-sh needs a python3 with PyYAML that bash can find (the Store alias does not
+  count); see "deploy-sh on Windows" in docs/CONTRIBUTING.md for the one-time setup.
   Exit code is 1 when any suite fails, else 0. Logs go to %TEMP%\computerpets-test-all.
 
 .PARAMETER Only
@@ -298,7 +300,7 @@ function Run-DeploySh {
   $bashExe = $found.Path
   # Most of these meta-tests parse YAML and HCL with python3 and PyYAML.
   $probe = Invoke-Logged "deploy-sh" $bashExe @("-c", "python3 -c 'import yaml'") $Root
-  if ($probe.Code -ne 0) { return Result "SKIP" "" "python3 with PyYAML is not available to bash (these tests need it)" }
+  if ($probe.Code -ne 0) { return Result "SKIP" "" "python3 with PyYAML is not available to bash (see 'deploy-sh on Windows' in docs/CONTRIBUTING.md)" }
   $tests = @(Get-ChildItem -Path (Join-Path $Root "deploy") -Recurse -Filter "*.test.sh" | Sort-Object FullName)
   if ($tests.Count -eq 0) { return Result "SKIP" "" "no deploy/*.test.sh" }
   $failed = @()
