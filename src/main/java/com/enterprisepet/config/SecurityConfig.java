@@ -1,6 +1,7 @@
 package com.enterprisepet.config;
 
 import com.enterprisepet.security.JwtAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -13,6 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -55,13 +57,29 @@ public class SecurityConfig {
     }
 
     /**
+     * The origin patterns allowed to call {@code /api/admin/**} from a browser, from
+     * {@code admin.allowed-origins} (env {@code ADMIN_ALLOWED_ORIGINS}): comma-separated,
+     * blanks dropped, trailing slashes trimmed. Empty means {@code "*"} (the old behavior).
+     */
+    static List<String> adminOriginPatterns(String raw) {
+        List<String> origins = raw == null ? List.of() : Arrays.stream(raw.split(","))
+                .map(String::trim)
+                .map(o -> o.replaceAll("/+$", ""))
+                .filter(o -> !o.isEmpty())
+                .toList();
+        return origins.isEmpty() ? List.of("*") : origins;
+    }
+
+    /**
      * Browser house {@code /admin} calls these endpoints from another origin
      * with the admin request HMAC headers. CORS only unblocks the preflight.
+     * {@code admin.allowed-origins} narrows which web sites may do so (default any).
      */
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource(
+            @Value("${admin.allowed-origins:*}") String adminAllowedOrigins) {
         CorsConfiguration admin = new CorsConfiguration();
-        admin.setAllowedOriginPatterns(List.of("*"));
+        admin.setAllowedOriginPatterns(adminOriginPatterns(adminAllowedOrigins));
         admin.setAllowedMethods(List.of("GET", "POST", "OPTIONS"));
         admin.setAllowedHeaders(List.of(
                 "Content-Type",
