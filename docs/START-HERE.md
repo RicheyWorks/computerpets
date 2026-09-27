@@ -458,6 +458,64 @@ Once that window is running, [http://localhost:8080/demo/rui](http://localhost:8
 
 ---
 
+## Blotter (optional)
+
+This is **not** the main quest. You can skip it. The pets on your desktop do not need it.
+
+The blotter is one more way to visit. It is a small window with a wooden desk inside. Rui walks on it first, and all the animals can visit. It is made with Python, not Node.
+
+You need one more free helper: **Python 3.11 or newer**.
+
+1. Open [https://www.python.org/downloads](https://www.python.org/downloads).
+2. Click the big **Download Python** button.
+3. Open the file that landed in your Downloads folder.
+4. Click **Install Now**. If Windows asks "Do you want to allow this app," that is a grown-up / password moment.
+5. Close PowerShell. Open a **new** PowerShell in the `computerpets` folder (Step 4).
+
+Type these lines, one at a time, and press Enter after each:
+
+```powershell
+cd client
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -e .
+python -m computerpets_client
+```
+
+- `py -3 -m venv .venv` makes a little box for the blotter's pieces. It lives in `client\.venv`.
+- `Activate.ps1` steps into that box. The line before your cursor starts with `(.venv)`.
+- `pip install` means "get the pieces." It can take a few minutes the first time.
+- `python -m computerpets_client` turns the blotter on.
+
+**What you should see:** a window named **ComputerPets — blotter**. Rui walks on the wood. Close that window to turn the blotter off.
+
+You do not need a backend. You do not need a license key. The blotter pets walk without them. Unlock is a grown-up door here too. Leave it alone.
+
+### If Windows says it will not run scripts
+
+Open a **new** PowerShell in the `computerpets` folder. Type these lines instead:
+
+```powershell
+cd client
+.\.venv\Scripts\python.exe -m pip install -e .
+.\.venv\Scripts\python.exe -m computerpets_client
+```
+
+### If it says the Python is too old
+
+Type `py -0p`. It lists the Pythons on this computer. You need 3.11 or newer. Install a newer one from [https://www.python.org/downloads](https://www.python.org/downloads), delete the `client\.venv` folder, and start this section again.
+
+### Next time
+
+```powershell
+cd client
+.\.venv\Scripts\Activate.ps1
+python -m computerpets_client
+```
+
+Grown-up words for the blotter live in [client/README.md](../client/README.md).
+
+---
 ## You did it
 
 If Rui is walking on your desktop, you did the main quest.
