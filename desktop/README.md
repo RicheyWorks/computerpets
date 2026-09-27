@@ -44,6 +44,8 @@ npm start
 Windows: `..\desktop.ps1`  
 Mac and Linux: `sh ../desktop.sh`
 
+Both start scripts check for Node 22 or newer and npm first, and stop with plain words if either is missing. They run `npm install` when the pieces are missing, half-finished (no Electron binary, or no `node_modules/.computerpets-installed` stamp from a finished install), or older than `package.json`, and stop if `npm install` fails. `desktop.ps1 -Check` / `sh desktop.sh --check` print what they see and change nothing.
+
 Windows toasts use the tray identity `works.richey.computerpets.desk`. The overlay sits the Windows 10/11 work area under the cursor, across DPI and monitor changes. Empty glass click-throughs; the tray watches the cursor against hit rects because DWM layered glass does not reliably forward a hover. First click is a sit, not a focus steal. The tray can pick Rui, Sip, and the grid ten without scrolling two hundred twenty-one names. The overlay asks main for `desktop/renderer/roster.json` through preload IPC — a sandboxed `file://` fetch is not a door. Spark stays `spark_dragon` / `/demo/crackle`. Ion stays `ion_dragon` / `/demo/ion`. Gauss stays `gauss_dragon` / `/demo/gauss`. Relay stays `relay_dragon` / `/demo/relay`. This is still Chromium compositing, not DirectX 12 or Vulkan. On a Mac the extra is a template mark, the overlay is a panel, and the floor follows the desk under the cursor. On Linux the mark is a StatusNotifier sit, the overlay is a toolbar, and the floor follows the desk under the cursor.
 
 ## Unlock (client contract)

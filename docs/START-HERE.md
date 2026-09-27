@@ -231,10 +231,11 @@ If it says it cannot find the file, you are in the wrong folder. Go back to File
 
 The desktop pet lives in the `desktop/` folder. It does **not** need the web app first. You do **not** need Java. You do **not** need a license.
 
-The helper script `desktop.ps1` does two honest jobs:
+The helper script `desktop.ps1` does three honest jobs:
 
-1. If the pieces are missing, it runs `npm install` (that means "get the pieces")
-2. Then it runs `npm start` (that means "turn the pets on"). `npm start` is `electron .`. That is the overlay.
+1. It checks that Node is installed and is version 22 or newer. If not, it says so in plain words and stops.
+2. If the pieces are missing, half-finished, or out of date after an update, it runs `npm install` (that means "get the pieces")
+3. Then it runs `npm start` (that means "turn the pets on"). `npm start` is `electron .`. That is the overlay.
 
 In the PowerShell that is already inside `computerpets`, type this and press Enter:
 
@@ -334,7 +335,8 @@ You are in the wrong folder.
 Read the last few lines.
 
 - If it talks about `npm` or `install`, the pieces did not finish downloading. Check the internet. Stay in the `computerpets` folder (or `desktop` if you used the three-line start). Run `npm install` again, then `npm start`.
-- If you closed the window while words were still scrolling, open a new one and start again. The first get-the-pieces step must finish.
+- If you closed the window while words were still scrolling, open a new one and run `.\desktop.ps1` again. It sees the pieces are half-finished and gets the pieces again.
+- To see what the start sees without turning anything on, type `.\desktop.ps1 -Check`. It prints your Node version and whether the pieces are `ready`, `missing`, `unfinished`, or `changed`.
 
 ### A window flashed and vanished
 

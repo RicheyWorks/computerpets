@@ -339,7 +339,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 | `JwtService`          | Issue short-lived (default 30 min) HS256 JWTs carrying owner/pet/provider plus a `jti`; parse & validate | JJWT 0.12 + Spring @Value   | `security/JwtService.java`             | SecretKey from config            |
 | `PetBundleService`    | Generate 15-minute HMAC-SHA256 signed CDN download URLs bound to (petKey, owner, jti, expiry); optional catalog metadata; verify MAC on redeem | javax.crypto.Mac + Spring   | `bundle/PetBundleService.java`, `bundle/BundleCatalog.java`, `bundle/BundleZipContract.java` | Signing key + `bundle.catalog` |
 | `DownloadGrantService` / `DownloadGrantIndex` | Issue one-time IP-bound grants on `jti`+`exp`; atomic redeem for edge/`GET /api/bundles/{pet}/redeem` | Redis SETEX + Lua (or in-memory) | `bundle/DownloadGrantService.java`, `bundle/RedisDownloadGrantIndex.java` | Same Redis as rate limits |
-| `PetCatalog` / `PetType` | Static catalog of 210 living kinds across 4 rarity tiers; lookup + grouping utilities   | Java enum + Spring @Service | `pet/PetType.java`, `pet/PetCatalog.java` | —                                |
+| `PetCatalog` / `PetType` | Static catalog of 221 living kinds across 4 rarity tiers; lookup + grouping utilities   | Java enum + Spring @Service | `pet/PetType.java`, `pet/PetCatalog.java` | —                                |
 
 ### 4.4 Cross-Cutting & Infrastructure
 - **`SecurityConfig`** + **`JwtAuthenticationFilter`**: Stateless JWT auth (permitAll on verify/pets/bundles, authenticated on download). Filter populates `SecurityContext` with a `Map` principal for claim access.
