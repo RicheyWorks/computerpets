@@ -108,8 +108,6 @@ type LivingPetProps = {
   onPose?: (x: number, facing: 1 | -1) => void;
   /** Rui's closed-eye lie hold (not the stretch / backflip). */
   onLieHold?: (on: boolean) => void;
-  /** Living desk and `/demo` draw the catalog frame on the shared canvas. A visit walker, the house floor, and den blotters stay an image. */
-  spriteSurface?: boolean;
 };
 
 type Dust = { x: number; y: number; vx: number; vy: number; life: number; size: number };
@@ -196,14 +194,10 @@ export function LivingPet({
   cardOpen = false,
   onPose,
   onLieHold,
-  spriteSurface = false,
 }: LivingPetProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const hitRef = useRef<HTMLDivElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const surfaceRef = useRef(spriteSurface);
-  surfaceRef.current = spriteSurface;
   const bindCanvas = useCallback((node: HTMLCanvasElement | null) => {
     canvasRef.current = node;
     if (!node) return;
@@ -905,13 +899,8 @@ export function LivingPet({
             ? "center center"
             : "center bottom";
       }
-      if (surfaceRef.current) {
-        paintDemoFrame(canvasRef.current, src);
-      } else if (imgRef.current) {
-        if (imgRef.current.src !== new URL(src, window.location.origin).href) {
-          imgRef.current.src = src;
-        }
-      }
+      /* Every walker draws the catalog frame on the shared canvas. A refused canvas stays blank. */
+      paintDemoFrame(canvasRef.current, src);
       if (shadowRef.current) {
         const shrink = 1 - hopPx / 90;
         shadowRef.current.style.transform = `translate3d(${drawX + 34}px, ${8}px, 0) scale(${shrink}, ${shrink})`;
@@ -1109,40 +1098,21 @@ export function LivingPet({
           pointerEvents: "auto",
         }}
       >
-        {spriteSurface ? (
-          <canvas
-            ref={bindCanvas}
-            data-pet-art
-            role="img"
-            aria-label=""
-            className="pointer-events-none block h-44 w-44 bg-transparent"
-            style={{
-              background: "transparent",
-              padding: 0,
-              border: 0,
-              opacity: hidden ? 0.22 : 1,
-              filter: dull ? "saturate(0.42) brightness(0.82) contrast(0.92)" : unwell ? "saturate(0.5) brightness(0.88)" : undefined,
-              transition: "opacity 280ms ease, filter 280ms ease",
-            }}
-          />
-        ) : (
-          <img
-            ref={imgRef}
-            data-pet-art
-            src={sprites.idle[0]}
-            alt=""
-            draggable={false}
-            className="pointer-events-none block h-44 w-44 object-contain object-bottom"
-            style={{
-              background: "transparent",
-              padding: 0,
-              border: 0,
-              opacity: hidden ? 0.22 : 1,
-              filter: dull ? "saturate(0.42) brightness(0.82) contrast(0.92)" : unwell ? "saturate(0.5) brightness(0.88)" : undefined,
-              transition: "opacity 280ms ease, filter 280ms ease",
-            }}
-          />
-        )}
+        <canvas
+          ref={bindCanvas}
+          data-pet-art
+          role="img"
+          aria-label=""
+          className="pointer-events-none block h-44 w-44 bg-transparent"
+          style={{
+            background: "transparent",
+            padding: 0,
+            border: 0,
+            opacity: hidden ? 0.22 : 1,
+            filter: dull ? "saturate(0.42) brightness(0.82) contrast(0.92)" : unwell ? "saturate(0.5) brightness(0.88)" : undefined,
+            transition: "opacity 280ms ease, filter 280ms ease",
+          }}
+        />
       </div>
     </div>
   );

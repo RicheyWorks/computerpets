@@ -596,12 +596,11 @@ test("the visit guest and the desk /demo pet paint on the shared canvas and stay
   assert.doesNotMatch(htmlSrc, /<img id="guest"/);
   assert.match(petSrc, /paintActor\(guestEl, [^;]*"guest"\)/);
   assert.doesNotMatch(petSrc, /guestEl\.src\s*=/);
-  assert.match(roomSrc, /\bspriteSurface\b/);
-  assert.doesNotMatch(roomSrc, /spriteSurface=\{demoWindow\}/);
-  assert.match(livingSrc, /spriteSurface \? \(/);
+  assert.doesNotMatch(roomSrc, /spriteSurface/);
+  assert.doesNotMatch(livingSrc, /spriteSurface/);
   assert.match(livingSrc, /<canvas/);
   assert.match(livingSrc, /paintDemoFrame\(canvasRef\.current, src\)/);
-  assert.match(livingSrc, /<img/);
+  assert.doesNotMatch(livingSrc, /<img/);
   assert.match(demoPaintSrc, /paintHeld/);
   assert.match(demoPaintSrc, /"host"/);
   assert.doesNotMatch(demoPaintSrc, /\.src\s*=/);
@@ -626,8 +625,7 @@ test("the living desk room pet and desk Sip, Brick, called guests, and plants pa
   const hiveSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "hive-den.tsx"), "utf8");
   const blotterSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "blotter-guests.tsx"), "utf8");
 
-  assert.match(roomSrc, /\bspriteSurface\b/);
-  assert.doesNotMatch(roomSrc, /spriteSurface=\{demoWindow\}/);
+  assert.doesNotMatch(roomSrc, /spriteSurface/);
   assert.match(livingSrc, /paintDemoFrame\(canvasRef\.current, src\)/);
   assert.match(sipSrc, /paintSipFrame/);
   assert.match(sipSrc, /<canvas/);
@@ -706,4 +704,113 @@ test("the living desk room pet and desk Sip, Brick, called guests, and plants pa
   assert.match(gateSrc, /0129/);
   assert.doesNotMatch(gateSrc, /paintHeld/);
   assert.doesNotMatch(gateSrc, /getContext\(\s*["']webgl/);
+});
+
+test("the day's visitor, the house floor, the hive, and the den blotters paint on the shared canvas and stay blank when it refuses", () => {
+  const desk = (name) => readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", name), "utf8");
+  const livingSrc = desk("living-pet.tsx");
+  const roomSrc = desk("companion-room.tsx");
+  const paintSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "desk-sprite-surface.ts"), "utf8");
+  const walkers = {
+    visit: desk("house-visit.tsx"),
+    floor: desk("house-floor.tsx"),
+    hive: desk("hive-den.tsx"),
+    blotter: desk("blotter-guests.tsx"),
+  };
+
+  for (const [name, src] of Object.entries(walkers)) {
+    assert.match(src, /<LivingPet\b/, name);
+    assert.doesNotMatch(src, /spriteSurface/, name);
+  }
+  assert.match(roomSrc, /<LivingPet\b/);
+  assert.doesNotMatch(roomSrc, /spriteSurface/);
+  assert.doesNotMatch(livingSrc, /spriteSurface/);
+  assert.doesNotMatch(livingSrc, /surfaceRef/);
+  assert.doesNotMatch(livingSrc, /imgRef/);
+  assert.doesNotMatch(livingSrc, /<img/);
+  assert.doesNotMatch(livingSrc, /HTMLImageElement/);
+  assert.doesNotMatch(livingSrc, /\.src\s*=/);
+  assert.doesNotMatch(livingSrc, /setAttribute\(\s*"src"/);
+  assert.equal([...livingSrc.matchAll(/<canvas\b/g)].length, 1);
+  assert.match(livingSrc, /<canvas\s+ref=\{bindCanvas\}\s+data-pet-art/);
+  assert.match(livingSrc, /\n\s*paintDemoFrame\(canvasRef\.current, src\);/);
+  assert.doesNotMatch(livingSrc, /if \([^)]*\)\s*\{\s*paintDemoFrame\(canvasRef\.current, src\)/);
+  assert.doesNotMatch(livingSrc, /getContext\(\s*["']webgl/);
+  assert.match(paintSrc, /export function paintDemoFrame[^{]*\{\s*return paintBox\(canvas, src, box\("host"\)\);/);
+  assert.doesNotMatch(paintSrc, /\.src\s*=/);
+  assert.doesNotMatch(paintSrc, /getContext\(\s*["']webgl/);
+
+  const frames = [
+    { src: "/sprites/cat/walk/1.png", width: 80, height: 160 },
+    { src: "/sprites/corn_snake/idle/1.png", width: 160, height: 80 },
+    { src: "/sprites/bumblebee/sit/2.png", width: 80, height: 160 },
+    { src: "/sprites/moss/talk/1.png", width: 160, height: 80 },
+  ];
+  const Image = imagesFrom(fixture.frames.concat(frames));
+  const fits = [
+    [44, 0, 88, 176],
+    [0, 88, 176, 88],
+    [44, 0, 88, 176],
+    [0, 88, 176, 88],
+  ];
+  frames.forEach((frame, i) => {
+    const ctx = fake2d();
+    const canvas = fakeCanvas().provide("2d", ctx);
+    canvas.src = "";
+    canvas.setAttribute = (name) => {
+      if (name === "src") throw new Error("img-src");
+    };
+    const painted = Surface.paintHeld(canvas, frame.src, { OffscreenCanvas: null, Image, devicePixelRatio: 1, cssSize: Surface.BOX.host });
+    assert.equal(painted.ok, true, frame.src);
+    assert.equal(canvas.dataset.surface, "canvas");
+    assert.equal(canvas.dataset.frame, frame.src);
+    assert.equal(canvas.width, 176);
+    assert.deepEqual(drawCall(ctx)[0].slice(1), [frame.src].concat(fits[i]));
+    assert.equal(canvas.src, "");
+
+    const offCtx = fake2d();
+    const bitmap = { transfers: [], transferFromImageBitmap(b) { this.transfers.push(b); } };
+    const offCanvas = fakeCanvas().provide("bitmaprenderer", bitmap);
+    const offPaint = Surface.paintHeld(offCanvas, frame.src, { OffscreenCanvas: FakeOffscreen(offCtx), Image, devicePixelRatio: 1, cssSize: Surface.BOX.host });
+    assert.equal(offPaint.ok, true, frame.src);
+    assert.equal(offCanvas.dataset.surface, "offscreencanvas");
+    assert.equal(offCanvas.dataset.frame, frame.src);
+    assert.equal(bitmap.transfers.length, 1);
+    assert.deepEqual(drawCall(offCtx)[0].slice(1), [frame.src].concat(fits[i]));
+  });
+
+  function DeadOffscreen() {}
+  DeadOffscreen.prototype.getContext = () => null;
+  const closedDoors = [
+    ["canvas-context", () => fakeCanvas(), null],
+    ["offscreencanvas-context", () => fakeCanvas().provide("2d", fake2d()).provide("bitmaprenderer", { transferFromImageBitmap() {} }), DeadOffscreen],
+    ["bitmaprenderer", () => fakeCanvas().provide("bitmaprenderer", {}).provide("2d", fake2d()), FakeOffscreen(fake2d())],
+  ];
+  for (const frame of frames) {
+    for (const [reason, make, Offscreen] of closedDoors) {
+      const closed = make();
+      closed.src = "keep";
+      closed.setAttribute = () => {
+        throw new Error("img-src");
+      };
+      const refused = Surface.paintHeld(closed, frame.src, { OffscreenCanvas: Offscreen, Image, devicePixelRatio: 1, cssSize: Surface.BOX.host });
+      assert.equal(refused.ok, false, reason);
+      assert.equal(refused.reason, reason);
+      assert.equal(closed.dataset.surface, "refused");
+      assert.equal(closed.dataset.frame, undefined);
+      assert.equal(closed.src, "keep");
+      const again = Surface.paintHeld(closed, frame.src, { OffscreenCanvas: Offscreen, Image, devicePixelRatio: 1, cssSize: Surface.BOX.host });
+      assert.equal(again.ok, false);
+      assert.equal(closed.dataset.frame, undefined);
+      assert.equal(closed.src, "keep");
+    }
+  }
+
+  assert.match(gateSrc, /0130/);
+  assert.doesNotMatch(gateSrc, /paintHeld/);
+  assert.doesNotMatch(gateSrc, /getContext\(\s*["']webgl/);
+  const hard = GpuPath.decide("hardware", { kind: "hardware", because: "enabled" });
+  const soft = GpuPath.decide("hardware", { kind: "software", because: "gpu-compositing" });
+  assert.equal(hard.open, true);
+  assert.equal(soft.open, false);
 });
