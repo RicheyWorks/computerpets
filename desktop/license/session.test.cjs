@@ -695,7 +695,7 @@ describe("license session", () => {
     assert.equal(line.includes("secret"), false);
     assert.equal(line.includes("/api"), false);
     assert.equal(line.includes("frag"), false);
-    assert.match(line, /this download talks to license\.example\.test/);
+    assert.match(line, /This asks license\.example\.test, the license website, for your pet\./);
 
     await assert.rejects(
       () => session.download(),

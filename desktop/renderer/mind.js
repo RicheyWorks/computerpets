@@ -486,12 +486,36 @@
   }
 
   const TALK_HOST_NAME = "the talk host";
+  // Plain names for the AI websites the mind page offers; any other host is named as typed. Same as web talk-net.ts.
+  const AI_SITES = new Map([
+    ["api.x.ai", "xAI"],
+    ["api.openai.com", "OpenAI"],
+    ["api.anthropic.com", "Anthropic"],
+    ["generativelanguage.googleapis.com", "Google Gemini"],
+    ["api.groq.com", "Groq"],
+    ["openrouter.ai", "OpenRouter"],
+    ["api.together.xyz", "Together AI"],
+    ["api.fireworks.ai", "Fireworks AI"],
+    ["api.deepseek.com", "DeepSeek"],
+    ["api.mistral.ai", "Mistral"],
+  ]);
+  const AI_SITE_KIND = "an AI website";
+  const AI_SITE_OWN = "the AI website you set up";
 
-  function weatherNet(host) {
+  function aiSite(host) {
+    const h = String(host || "").toLowerCase();
+    const known = AI_SITES.get(h);
+    if (known) return { name: known, who: `${known}, ${AI_SITE_KIND}` };
+    if (h && h !== TALK_HOST_NAME) return { name: h, who: `${h}, ${AI_SITE_OWN}` };
+    return { name: AI_SITE_OWN, who: AI_SITE_OWN };
+  }
+
+  // The kid-plain address sentence from weather-areas.js (plainNetLine), naming the AI website.
+  function weatherNet(name) {
     const root = typeof window !== "undefined" ? window : globalThis;
     const areas = root.PetWeatherAreas;
-    if (!areas || typeof areas.clientNetLine !== "function") return "";
-    return areas.clientNetLine(host);
+    if (!areas || typeof areas.plainNetLine !== "function") return "";
+    return areas.plainNetLine(name);
   }
 
   function talkHostName(raw) {
@@ -520,15 +544,16 @@
   function talkHonesty(bind) {
     const target = talkTarget(bind);
     if (!target || target.local) return "";
-    const net = weatherNet(target.label);
+    const site = aiSite(target.label);
+    const net = weatherNet(site.name);
     if (!net) return "";
-    return `this talk sends the keeper line. ${net}`;
+    return `This sends what you typed, your pet's name, and how hungry, happy, and rested it is to ${site.who}, so your pet can answer. It also sends your key for ${site.name}, if you saved one. ${net}`;
   }
 
   function talkMaySend(bind, lineInView) {
     const target = talkTarget(bind);
     if (!target || target.local) return true;
-    const net = weatherNet(target.label);
+    const net = weatherNet(aiSite(target.label).name);
     const line = talkHonesty(bind);
     if (!net || !line || lineInView !== true) return false;
     return line.indexOf(net) !== -1;

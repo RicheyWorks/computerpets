@@ -145,7 +145,7 @@ function zephyrPose(t) {
 }
 
 function fogbowPose(t) {
-  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.lux));
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.fogbow));
   if (u < 0.18) {
     const s = u / 0.18;
     return { lift: s * 3.6, rot: s * -12, dx: 0, anim: "play" };

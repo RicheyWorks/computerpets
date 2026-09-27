@@ -56,8 +56,8 @@
       <legend>Optional: only needed to unlock</legend>
       <label>Backend URL</label>
       <input id="backend" placeholder="http://127.0.0.1:8081" />
-      <p class="lead" id="licenseNet">this unlock stays on this computer. the license hash does not leave.</p>
-      <p class="lead" id="bundleNet">a signed bundle is not fetched until this line names the host.</p>
+      <p class="lead" id="licenseNet">Unlocking stays on this computer. The code made from this computer's ID does not leave.</p>
+      <p class="lead" id="bundleNet">Your pet's files are not downloaded until this line names the website.</p>
       <label>Provider</label>
       <select id="provider"><option value="steam">Steam</option></select>
       <label>Steam ID</label>
@@ -227,7 +227,7 @@
           return window.desk.licenseFetchBundle({ cdnLine: line });
         });
         if (fetched && fetched.held === true) {
-          licenseErr.textContent = "the signed bundle was not fetched. name the host before it leaves.";
+          licenseErr.textContent = "Your pet's files were not downloaded. This page has to name the download website first.";
           return status;
         }
         if (!fetched) return status;
@@ -278,8 +278,8 @@
             });
         if (sent && sent.held === true) {
           licenseErr.textContent = unboundDownload
-            ? "this download was not sent. name the host before it leaves."
-            : "the license hash was not sent. name the host before it leaves.";
+            ? "Nothing was sent. This page has to name the license website first."
+            : "Nothing was sent. This page has to name the license website first.";
           licenseOk.textContent = "Locked. Pets on the desk still work.";
           return null;
         }

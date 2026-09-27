@@ -289,14 +289,14 @@ class UnlockDialog(QDialog):
     def _named_hold(self, err: LicenseError) -> bool:
         if err.code == "license_net_unnamed":
             self.ok.setText("Locked. The pet on the blotter still works.")
-            self.err.setText("the license hash was not sent. name the host before it leaves.")
+            self.err.setText("Nothing was sent. This page has to name the license website first.")
             return True
         if err.code == "download_net_unnamed":
             self.ok.setText("Locked. The pet on the blotter still works.")
-            self.err.setText("this download was not sent. name the host before it leaves.")
+            self.err.setText("Nothing was sent. This page has to name the license website first.")
             return True
         if err.code == "cdn_net_unnamed":
-            self.err.setText("the signed bundle was not fetched. name the host before it leaves.")
+            self.err.setText("Your pet's files were not downloaded. This page has to name the download website first.")
             return True
         return False
 

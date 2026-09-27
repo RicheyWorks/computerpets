@@ -110,6 +110,7 @@ CROSS_DOMAIN = {
     "web.menu_keys_escape",
     "web.plain_words",
     "web.consent_plain",
+    "web.consent_types_plain",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -472,6 +473,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.menu_keys_escape",
         "web.plain_words",
         "web.consent_plain",
+        "web.consent_types_plain",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -655,6 +657,21 @@ def test_consent_plain_row_names_the_website_and_keeps_the_gates():
     assert cp.extras["lines"]["quote"].endswith("goes to CoinGecko and GeckoTerminal, like visiting any website.")
     assert all(cp.extras["gate"].values()), cp.extras["gate"]
     assert cp.extras["tones"]["webNever"] == "OFF" and cp.extras["tones"]["webStopped"] == "DOWN"
+
+
+def test_consent_types_plain_row_names_every_website_and_keeps_the_bug_fixes():
+    """Talk, voice, license, and STUN lines in plain words on every surface; AA warning colour; type-found bugs fixed."""
+    ct = invoke("web.consent_types_plain")
+    assert ct.ok, (ct.error, ct.detail)
+    for mark in ("consent=talk+voice+license+stun_plain", "lockstep=web+overlay+main+blotter", "gate=same_painted_lines",
+                 "warn=css_var+wcag_aa", "words=favorites+waits+price_plain",
+                 "bugs=morel_costa+thank_you_nan+overlay_shorthand", "tsc=0", "gpu.ts=kept_for_parity"):
+        assert mark in ct.trace, (mark, ct.trace)
+    assert ct.extras["lines"]["talk"].startswith("This sends what you typed, your pet's name, and how hungry, happy, and rested it is to xAI, an AI website")
+    assert ct.extras["lines"]["unlock"].startswith("This asks license.example.test, the license website, to check your license.")
+    assert all(ct.extras["gate"].values()), ct.extras["gate"]
+    assert ct.extras["contrast"]["worstDark"] >= 4.5 and ct.extras["contrast"]["paperRatio"] >= 4.5
+    assert ct.extras["bugs"]["overlayThrows"] == 0 and ct.extras["bugs"]["tscBaseline"] == "0"
 
 
 def test_first_run_rows_start_clean_and_show_the_hello_once():

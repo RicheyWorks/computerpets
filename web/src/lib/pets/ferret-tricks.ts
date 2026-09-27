@@ -250,7 +250,7 @@ export function stepHappy(happy: FerretHappy | null | undefined, dt: number, fla
   return next;
 }
 
-export function sleepHoldFrame(_key: string | undefined, _frameCount: number) {
+export function sleepHoldFrame(_key: string | undefined, _frameCount?: number) {
   return null;
 }
 

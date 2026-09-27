@@ -61,7 +61,7 @@ export const DUR: Record<MorelTrickKind, number> = {
   ridge: 1.64,
   ephemeral: 1.48,
   sclerotium: 1.56,
-  stipe: 1.68,
+  costa: 1.68,
   hymenium: 1.72,
 };
 
@@ -444,7 +444,7 @@ export function sclerotiumPose(t: number, fromX: number, facing: 1 | -1) {
 
 /** Costa — hollow stem rise; the tell of a true morel. Never named volva/bulb/bole. */
 export function costaPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.stipe));
+  const u = Math.max(0, Math.min(1, t / DUR.costa));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
     return { x: fromX, lift: s * 2.16, rot: s * -9.6 * facing, anim: "sit" as TrickAnim };

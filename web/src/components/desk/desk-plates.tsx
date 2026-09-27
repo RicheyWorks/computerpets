@@ -31,7 +31,7 @@ import {
   HERE_SENT,
   HERE_YES,
   dayLabel,
-  isFavorite,
+  isFavorite as isFavoriteArea,
   locateGate,
   NO_AREA_NEXT,
   parseAreas,
@@ -44,15 +44,15 @@ import {
   parseGeocode,
   parseReverse,
   pickArea,
-  pickTab,
+  pickTab as pickWeatherTab,
   plateLine,
   removeArea,
   renameArea,
   reverseUrl,
   sharePlace,
   stickHereForecastAck,
-  toCardPatch,
-  toggleFavorite,
+  toCardPatch as weatherToCardPatch,
+  toggleFavorite as toggleFavoriteArea,
   TYPE_A_CITY,
   WEATHER_TABS,
   type LiveSky,
@@ -63,7 +63,7 @@ import {
   CANT_REACH,
   currentTopic,
   FAVORITES_EMPTY,
-  isFavorite,
+  isFavorite as isFavoriteNews,
   moveTopic,
   NEWS_TABS,
   newsHonesty,
@@ -75,7 +75,7 @@ import {
   parseRss,
   readFeatured,
   readRss,
-  pickTab,
+  pickTab as pickNewsTab,
   pickTopic,
   popularRssUrl,
   removeFavorite,
@@ -86,7 +86,7 @@ import {
   TOPIC_PLACEHOLDER,
   TOPIC_TRUTH,
   toCardPatch as newsToCardPatch,
-  toggleFavorite,
+  toggleFavorite as toggleFavoriteNews,
   topicRssUrl,
   WORLD_ID,
   xSearchUrl,
@@ -104,6 +104,7 @@ import {
   detectContract,
   favoriteRows,
   FAVORITES_EMPTY as MARKET_FAVORITES_EMPTY,
+  SEARCHING,
   formatPrice,
   isFavoriteNft,
   isFavoriteTicker,
@@ -145,7 +146,7 @@ import {
   removeNft,
   removeTicker,
   searchUrl,
-  toCardPatch,
+  toCardPatch as marketToCardPatch,
   toggleFavoriteNft,
   toggleFavoriteTicker,
   type MarketLive,
@@ -341,7 +342,7 @@ export function DeskWeatherPlate({
   function keepAreas(house: ReturnType<typeof parseAreas>) {
     const ack = stickHereForecastAck(house, card.hereForecastAck);
     if (house.currentId !== areas.currentId) setSavedLine("");
-    setCard(writeCard({ ...toCardPatch(house), hereForecastAck: ack }));
+    setCard(writeCard({ ...weatherToCardPatch(house), hereForecastAck: ack }));
   }
 
   useEffect(() => {
@@ -494,7 +495,7 @@ export function DeskWeatherPlate({
     function keep(next: WeatherArea) {
       const house = addArea(areas, next);
       const ack = ackSavedHere(house);
-      setCard(writeCard({ ...toCardPatch(house), hereForecastAck: ack }));
+      setCard(writeCard({ ...weatherToCardPatch(house), hereForecastAck: ack }));
       setHits([]);
       setQuery("");
       setHereLine(HERE_SENT);
@@ -612,7 +613,7 @@ export function DeskWeatherPlate({
                 tabIndex={tab === id ? 0 : -1}
                 data-on={tab === id ? "1" : "0"}
                 className="rounded-full border border-border/50 px-2 py-1 text-[10px] uppercase tracking-[0.12em]"
-                onClick={() => keepAreas(pickTab(areas, id))}
+                onClick={() => keepAreas(pickWeatherTab(areas, id))}
               >
                 {id === "current" ? "Current" : "Favorites"}
               </button>
@@ -629,7 +630,7 @@ export function DeskWeatherPlate({
                     <button type="button" data-on={row.id === areas.currentId ? "1" : "0"} aria-pressed={row.id === areas.currentId} onClick={() => keepAreas(pickArea(areas, row.id))}>
                       {row.name}
                     </button>
-                    <button type="button" className="weather-star" title="Favorite place" onClick={() => keepAreas(toggleFavorite(areas, row.id))}>
+                    <button type="button" className="weather-star" title="Favorite place" onClick={() => keepAreas(toggleFavoriteArea(areas, row.id))}>
                       ★
                     </button>
                   </li>
@@ -688,8 +689,8 @@ export function DeskWeatherPlate({
                     <button type="button" data-on={row.id === areas.currentId ? "1" : "0"} aria-pressed={row.id === areas.currentId} onClick={() => keepAreas(pickArea(areas, row.id))}>
                       {row.name}
                     </button>
-                    <button type="button" className="weather-star" title="Favorite place" onClick={() => keepAreas(toggleFavorite(areas, row.id))}>
-                      {isFavorite(areas, row.id) ? "★" : "☆"}
+                    <button type="button" className="weather-star" title="Favorite place" onClick={() => keepAreas(toggleFavoriteArea(areas, row.id))}>
+                      {isFavoriteArea(areas, row.id) ? "★" : "☆"}
                     </button>
                     <input
                       aria-label={`Name ${row.name}`}
@@ -903,7 +904,7 @@ export function DeskNewsPlate() {
                 tabIndex={tab === id ? 0 : -1}
                 data-on={tab === id ? "1" : "0"}
                 className="rounded-full border border-border/50 px-2 py-1 text-[10px] uppercase tracking-[0.12em]"
-                onClick={() => keepNews(pickTab(prefs, id))}
+                onClick={() => keepNews(pickNewsTab(prefs, id))}
               >
                 {id === "x" ? "X" : id[0]!.toUpperCase() + id.slice(1)}
               </button>
@@ -975,9 +976,9 @@ export function DeskNewsPlate() {
                     <button
                       type="button"
                       aria-label="Favorite headline"
-                      onClick={() => keepNews(toggleFavorite(prefs, { kind: "headline", title: item.title, url: item.url, summary: item.summary }))}
+                      onClick={() => keepNews(toggleFavoriteNews(prefs, { kind: "headline", title: item.title, url: item.url, summary: item.summary }))}
                     >
-                      {isFavorite(prefs, { kind: "headline", title: item.title, url: item.url }) ? "★" : "☆"}
+                      {isFavoriteNews(prefs, { kind: "headline", title: item.title, url: item.url }) ? "★" : "☆"}
                     </button>
                   </li>
                 ))}
@@ -994,8 +995,8 @@ export function DeskNewsPlate() {
                     </button>
                     {row.id !== WORLD_ID ? (
                       <>
-                        <button type="button" onClick={() => keepNews(toggleFavorite(prefs, { kind: "topic", id: row.id, name: row.name, query: row.query }))}>
-                          {isFavorite(prefs, { kind: "topic", id: row.id, name: row.name, query: row.query }) ? "★" : "☆"}
+                        <button type="button" onClick={() => keepNews(toggleFavoriteNews(prefs, { kind: "topic", id: row.id, name: row.name, query: row.query }))}>
+                          {isFavoriteNews(prefs, { kind: "topic", id: row.id, name: row.name, query: row.query }) ? "★" : "☆"}
                         </button>
                         <button type="button" disabled={idx <= 1} onClick={() => keepNews(moveTopic(prefs, row.id, -1))}>
                           Up
@@ -1082,13 +1083,13 @@ export function DeskMarketPlate() {
   }
 
   function keepHouse(next: ReturnType<typeof parseMarket>) {
-    keep(toCardPatch(next));
+    keep(marketToCardPatch(next));
   }
 
   useEffect(() => {
     // Seed defaults into card when empty so customize persists.
     if ((!card.marketTickers || !card.marketTickers.length) && house.tickers.length) {
-      keep(toCardPatch(house));
+      keep(marketToCardPatch(house));
     }
   }, []);
 
@@ -1249,11 +1250,11 @@ export function DeskMarketPlate() {
       setTruth("type a coin, ticker, or contract");
       return;
     }
-    setTruth("looking up…");
+    setTruth(SEARCHING);
     try {
       const json = await readQuoteSearch(QUOTE_LOOK, typed);
       if (json == null) {
-        // Nothing was sent; do not leave "looking up…" standing.
+        // Nothing was sent; do not leave "searching…" standing.
         setTruth("");
         return;
       }
@@ -1283,7 +1284,7 @@ export function DeskMarketPlate() {
       setNftTruth("type a collection name");
       return;
     }
-    setNftTruth("looking up…");
+    setNftTruth(SEARCHING);
     try {
       const json = await readQuoteSearch(QUOTE_LOOK, typed);
       if (json == null) {

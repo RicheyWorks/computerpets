@@ -9,6 +9,38 @@ stale paragraph in `ARCHITECTURE.md`.
 ADRs are not a wishlist. Do not file one for Solana, a live NFT collection
 address, or an API that is not on `main`.
 
+## In plain words: the ones you can see in the app
+
+Most ADRs are about the house server. These are the ones a keeper runs into on the
+desk, the overlay, or the blotter:
+
+- **Nothing leaves without saying so first** (0032 to 0047, 0052). Before the
+  forecast, the place finder, news, prices, a radio station, cloud talk and voice,
+  a license unlock or download, or finding a friend to play with asks a website,
+  the app shows a line that names the website and says what it sends, for example
+  "This sends what you typed, your pet's name, and how hungry, happy, and rested it
+  is to xAI, an AI website, so your pet can answer." Nothing is sent until that line
+  is on the screen.
+- **Where you are** (0013 to 0017, 0031). The weather asks you in the app before it
+  sends where this computer is, rounds that place to about 11 km, and never asks a
+  website to guess your place from your internet address.
+- **Your AI key** (0009, 0018, 0020 to 0028). A key you paste for cloud talk is
+  scrambled on disk, is not kept in the browser, is not sent to the house server,
+  and is cut out of a pasted link or model name. The keeper card says who is
+  listening, never the key.
+- **What the pet does not look at** (0010 to 0012, 0029, 0115, 0116). The pet does not
+  open a file you drop on it, list your folders, read window titles, or listen to
+  keys outside its own text boxes. Window play only reads where windows are. There
+  is no global keyboard shortcut.
+- **Your license** (0019, 0030, 0037 to 0039, 0045). Unlocking sends a scrambled code
+  made from this computer's ID, never the ID itself, and asks you first before it
+  uses a weaker code when that ID is missing.
+- **Slow websites** (0049 to 0052). A website that does not answer in time counts as
+  a no; nothing waits forever.
+- **Fonts and the GPU line** (0046, 0008, 0117 to 0124). Fonts come from this
+  computer. The overlay and blotter GPU line reads this computer only and says so
+  when it cannot read something.
+
 | Field | Value |
 |-------|--------|
 | **Template** | Status, Context, Decision, Consequences ([Nygard](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)) |

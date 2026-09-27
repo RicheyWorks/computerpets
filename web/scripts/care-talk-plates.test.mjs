@@ -135,7 +135,7 @@ test("desk plates: forecast, headlines, and prices say couldn't load with Try ag
   assert.equal((market.match(/setProblem\(plateProblem\("price", err\)\);/g) || []).length, 3);
   assert.match(market, /data-plate-problem="market"/);
   assert.match(market, /nft\?\.id, attempt\]\);/);
-  assert.equal((market.match(/if \(json == null\) return;\n      const (coins|found) = parseSearch/g) || []).length, 0, "a look-up never leaves \"looking up…\" standing");
+  assert.equal((market.match(/if \(json == null\) return;\n      const (coins|found) = parseSearch/g) || []).length, 0, "a search never leaves \"searching…\" standing");
   assert.equal((text.match(/setAttempt\(\(n\) => n \+ 1\)/g) || []).length, 4, "forecast, news, price, and NFT floor");
 });
 

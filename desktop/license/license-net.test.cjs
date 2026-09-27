@@ -4,7 +4,7 @@ const { describe, it } = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("fs");
 const path = require("path");
-const { licenseHonesty, licenseMaySend, licenseHostName, LOCAL_STAYS, clientNetLine, bundleHonesty, bundleMayFetch, bundleHostName, BUNDLE_LOCAL, BUNDLE_IDLE, downloadTalkHonesty, downloadMayPost, DOWNLOAD_LOCAL, postLicenseHash, postUnboundDownload, getSignedBundle } = require("./license-net.cjs");
+const { licenseHonesty, licenseMaySend, licenseHostName, LOCAL_STAYS, plainNetLine, bundleHonesty, bundleMayFetch, bundleHostName, BUNDLE_LOCAL, BUNDLE_IDLE, downloadTalkHonesty, downloadMayPost, DOWNLOAD_LOCAL, postLicenseHash, postUnboundDownload, getSignedBundle } = require("./license-net.cjs");
 const { LicenseError } = require("./errors.cjs");
 
 describe("license hash names the backend host", () => {
@@ -14,7 +14,7 @@ describe("license hash names the backend host", () => {
     assert.equal(licenseHostName(dirty), "license.example.test");
     assert.equal(
       line,
-      `this unlock sends the license hash. ${clientNetLine("license.example.test")} a bound download sends that same hash.`
+      `This asks license.example.test, the license website, to check your license. It sends what you typed for your license and a scrambled code made from this computer's ID. The ID itself stays here. ${plainNetLine("license.example.test")} A download tied to this computer sends that same code.`
     );
     assert.equal(line.includes("secret"), false);
     assert.equal(line.includes("raw-id"), false);
@@ -23,7 +23,7 @@ describe("license hash names the backend host", () => {
     assert.equal(line.includes("frag"), false);
     assert.equal(licenseMaySend(dirty, line), true);
     assert.equal(licenseMaySend(dirty, ""), false);
-    assert.equal(licenseMaySend(dirty, clientNetLine("other.example.test")), false);
+    assert.equal(licenseMaySend(dirty, plainNetLine("other.example.test")), false);
     assert.equal(licenseHonesty("http://127.0.0.1:8081"), "");
     assert.equal(licenseHonesty("http://localhost:8081"), "");
     assert.equal(licenseHonesty("http://[::1]:8081"), "");
@@ -68,11 +68,11 @@ describe("unbound download names the backend host", () => {
     const hash = licenseHonesty(dirty);
     assert.equal(
       hash,
-      `this unlock sends the license hash. ${clientNetLine("license.example.test")} a bound download sends that same hash.`
+      `This asks license.example.test, the license website, to check your license. It sends what you typed for your license and a scrambled code made from this computer's ID. The ID itself stays here. ${plainNetLine("license.example.test")} A download tied to this computer sends that same code.`
     );
     assert.equal(
       line,
-      `this download talks to license.example.test. ${clientNetLine("license.example.test")} the license hash is not on that request.`
+      `This asks license.example.test, the license website, for your pet. It sends your saved license and the pass from unlocking. ${plainNetLine("license.example.test")} It does not send the code made from this computer's ID.`
     );
     assert.equal(line.includes("sends the license hash"), false);
     assert.equal(line.includes("secret"), false);
@@ -83,14 +83,14 @@ describe("unbound download names the backend host", () => {
     assert.equal(downloadMayPost(dirty, line), true);
     assert.equal(downloadMayPost(dirty, ""), false);
     assert.equal(downloadMayPost(dirty, hash), false);
-    assert.equal(downloadMayPost(dirty, clientNetLine("license.example.test")), false);
-    assert.equal(downloadMayPost(dirty, clientNetLine("other.example.test")), false);
+    assert.equal(downloadMayPost(dirty, plainNetLine("license.example.test")), false);
+    assert.equal(downloadMayPost(dirty, plainNetLine("other.example.test")), false);
     assert.equal(downloadTalkHonesty("http://127.0.0.1:8081"), "");
     assert.equal(downloadTalkHonesty("http://localhost:8081"), "");
     assert.equal(downloadTalkHonesty("http://[::1]:8081"), "");
     assert.equal(downloadMayPost("http://127.0.0.1:8081", ""), true);
     assert.equal(DOWNLOAD_LOCAL.includes("talks to this computer"), true);
-    assert.equal(DOWNLOAD_LOCAL.includes("not on that request"), true);
+    assert.equal(DOWNLOAD_LOCAL.includes("does not send the code made from this computer's ID"), true);
     assert.equal(DOWNLOAD_LOCAL.includes("https request"), false);
     assert.equal(DOWNLOAD_LOCAL.includes("sends the license hash"), false);
   });
@@ -123,7 +123,7 @@ describe("signed bundle names the CDN host", () => {
     assert.equal(bundleHostName(dirty), "cdn.example.test");
     assert.equal(
       line,
-      `this download gets the signed bundle. ${clientNetLine("cdn.example.test")} the license hash is not on that request.`
+      `This gets your pet's files from cdn.example.test, the download website, with the link the license website gave. ${plainNetLine("cdn.example.test")} It does not send the code made from this computer's ID.`
     );
     assert.equal(line.includes("secret"), false);
     assert.equal(line.includes("raw-id"), false);
@@ -133,14 +133,14 @@ describe("signed bundle names the CDN host", () => {
     assert.equal(line.includes("hwid"), false);
     assert.equal(bundleMayFetch(dirty, line), true);
     assert.equal(bundleMayFetch(dirty, ""), false);
-    assert.equal(bundleMayFetch(dirty, clientNetLine("other.example.test")), false);
+    assert.equal(bundleMayFetch(dirty, plainNetLine("other.example.test")), false);
     assert.equal(bundleHonesty("http://127.0.0.1:9/bundles/pet.zip"), "");
     assert.equal(bundleHonesty("http://localhost/pet.zip"), "");
     assert.equal(bundleHonesty("http://[::1]/pet.zip"), "");
     assert.equal(bundleHonesty("file:///tmp/red_panda.zip"), "");
     assert.equal(bundleMayFetch("http://127.0.0.1:9/pet.zip", ""), true);
     assert.equal(bundleMayFetch("file:///tmp/red_panda.zip", ""), true);
-    assert.equal(BUNDLE_LOCAL.includes("does not leave"), true);
+    assert.equal(BUNDLE_LOCAL.includes("come from this computer"), true);
     assert.equal(BUNDLE_LOCAL.includes("https request"), false);
     assert.equal(BUNDLE_IDLE.includes("https request"), false);
     assert.equal(licenseHonesty(dirty).includes("signed bundle"), false);
@@ -180,7 +180,7 @@ describe("license requests leave only through the refusing wrapper", () => {
       (err) => err instanceof LicenseError && err.code === "license_net_unnamed" && !/can't reach|unreachable|sig=/.test(err.message)
     );
     await assert.rejects(
-      () => postLicenseHash(clientNetLine("other.example.test"), remote, async () => { calls += 1; return "sent"; }),
+      () => postLicenseHash(plainNetLine("other.example.test"), remote, async () => { calls += 1; return "sent"; }),
       (err) => err instanceof LicenseError && err.code === "license_net_unnamed"
     );
     assert.equal(calls, 0);

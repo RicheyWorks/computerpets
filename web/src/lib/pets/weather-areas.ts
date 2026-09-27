@@ -20,9 +20,8 @@ export const HERE_KEPT = "keeping the saved place";
 export const HERE_SENT = "a place was sent to Open-Meteo";
 /**
  * Any HTTPS client shows its network address to the host. This is not a city lookup.
- * An empty host is the bare sentence. The weather, news, and quote plates now paint
- * the kid-plain `plainNetLine` below; radio (Rui's music block), cloud talk, license,
- * and STUN still paint this one.
+ * An empty host is the bare sentence. Every consent line now paints the kid-plain
+ * `plainNetLine` below; only radio (Rui's music block, left as it is) still paints this one.
  */
 export function clientNetLine(host = ""): string {
   const where = host ? ` to ${host}` : "";
@@ -36,8 +35,8 @@ export const PLAIN_NET_TAIL = ", like visiting any website.";
  * The kid-plain network-address sentence the weather, news, and quote plates paint.
  * It names the website (or websites, joined with "and") in plain words. Any website
  * sees the address of the computer that asks, so the sentence says so. An empty name
- * is no sentence. `clientNetLine` stays for the lines that still use it (radio in
- * Rui's music block, cloud talk and voice, license, STUN).
+ * is no sentence. Weather, news, quotes, cloud talk and voice, license, and STUN paint it.
+ * `clientNetLine` stays only for radio in Rui's music block.
  */
 export function plainNetLine(names = ""): string {
   return names ? `${PLAIN_NET_HEAD}${names}${PLAIN_NET_TAIL}` : "";
@@ -54,11 +53,14 @@ export const SAVED_HERE_SENT = "the saved place was sent to Open-Meteo";
 export const SAVED_HERE_WAIT = "saved place not sent";
 export const TYPED_FORECAST = `This asks Open-Meteo, a weather website, for your forecast. It sends the place you picked. ${FORECAST_NET}`;
 export const SAVED_FORECAST_CONTINUE = `This asks Open-Meteo, a weather website, for the forecast at the saved place you already said yes to. It sends that saved place. ${FORECAST_NET} It does not find where you are again.`;
-export const FORECAST_WAITS = "forecast waits";
+/** The header while the forecast line is out of view: the forecast is asked only once that line is shown. */
+export const FORECAST_WAITS = "open to see the weather";
+/** The header while a shown, allowed forecast is on its way. */
+export const FORECAST_LOOKING = "getting the weather…";
 /** A tenth of a degree is about 11 km. Rounding is not anonymity. */
 export const PLACE_STEP = 0.1;
 export const CANT_REACH = "can't reach";
-export const FAVORITES_EMPTY = "No favorites yet — star a place.";
+export const FAVORITES_EMPTY = "Nothing saved yet. Tap ☆ next to a place to keep it here.";
 export const GEOCODE_HOST = "geocoding-api.open-meteo.com";
 export const FORECAST_HOST = "api.open-meteo.com";
 export const MAX_AREAS = 8;
@@ -708,6 +710,6 @@ export function plateLine(
   if (!area) return closed ? NO_AREA_WAITS : NO_AREA;
   if (held) return `${area.name} · ${SAVED_HERE_WAIT}`;
   if (unread) return `${area.name} · ${CANT_REACH}`;
-  if (!live) return waiting ? `${area.name} · ${FORECAST_WAITS}` : `${area.name} · looking up`;
+  if (!live) return waiting ? `${area.name} · ${FORECAST_WAITS}` : `${area.name} · ${FORECAST_LOOKING}`;
   return `${area.name} · ${live.label}`;
 }

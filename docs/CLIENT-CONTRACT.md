@@ -590,7 +590,7 @@ paths are not this contract.
 `GET /api/public/heartbeat` still reports `care.feed`, `care.play`, and
 `care.rest` as `false` and `care.door` as `local`. It does not list these paths.
 
-Wording note (2026-09): the keeper card and overlay no longer print this `detail`; they say "Your pet's care stays on this computer." The weather, news, and quotes plates now paint a kid-plain line that names the website ("This computer's internet address also goes to Google News, like visiting any website."); radio, cloud talk, license, and the CDN and backend lines above keep the older sentence. See ROADMAP.
+Wording note (2026-09): the keeper card and overlay no longer print this `detail`; they say "Your pet's care stays on this computer." The weather, news, quotes, cloud talk and voice, license, CDN, backend, and STUN lines now paint a kid-plain line that names the website ("This computer's internet address also goes to Google News, like visiting any website."); only radio (Rui's music block) keeps the older sentence. See ROADMAP.
 
 ---
 

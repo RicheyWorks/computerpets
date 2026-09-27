@@ -62,7 +62,7 @@ function petNameOk(name: string): boolean {
 }
 
 function bindingPrefs(raw: unknown, fallbackPlugin: string): MindBinding {
-  const row = raw && typeof raw === "object" ? (raw as MindBinding) : {};
+  const row = (raw && typeof raw === "object" ? raw : {}) as { plugin?: unknown; model?: unknown; baseUrl?: unknown };
   const next: MindBinding = { plugin: fallbackPlugin };
   if (typeof row.plugin === "string" && row.plugin.trim()) next.plugin = row.plugin.trim().slice(0, 64);
   if (typeof row.model === "string") {
