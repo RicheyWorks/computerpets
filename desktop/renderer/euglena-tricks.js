@@ -1,10 +1,10 @@
-/** Spot ground tricks while idle — ultra-polish pass. House neighborly Euglena desk life — eyespot / flagellum / chloroplast / phototaxis / euglenid / metaboly / paramylon personality (eyespot stigma turn without naming turn or glance or still or dart or red, flagellum anterior whip without naming whip or swim or still or dart, chloroplast green drink without naming drink or glow or still or dart, phototaxis lamp-seek without naming seek or swim or still or red, long euglenid Euglena desk hold under the lamp drop, metaboly euglenoid shape-change without naming stretch or dart or still or foot (THE euglena metaboly tell), paramylon storage-grain glint without naming glint or flare or still or dart (THE euglena paramylon tell) — never named wait or wake or still or hide or cover or glue or flare or dart or nest or zig or swim or gulp or drift or glint or hinge or sucker or latch or crawl or dig or burrow or pedal or radula or pneumostome or ommatophore or lymnaeid or adductor or protractor or inhalant or ctenidium or unionid or acetabulum or prostomium or looping or undulatory or hirudinean or botryoidal or auricle or spiggin or zigzag or spinous or fanning or gasterosteid or nuptial or pelvic or cilia or pellicle or cytostome or vacuole or ciliophora or trichocyst or avoiding or slipper or row or wiggle or scute or pseudopod or ectoplasm or endoplasm or foodcup or proteus or uroid or streaming or chaos or discoides or dubia or eyespotturn or flagellumwhip or chloroplastdrink or phototaxisswim or longspothush as trick kinds; ethogram softs + freeze own those words; window-play RED owns the lamp-drop red; Coin owns flare/dart/drift/gulp/glint; Twig owns stick-insect life; Latch owns acetabulum/prostomium/looping/undulatory/hirudinean/botryoidal/auricle; Hinge owns adductor/protractor/inhalant/ctenidium/unionid/ligament/glochid; Whorl owns radula/pedal/pneumostome/ommatophore/lymnaeid/odontophore/neuston; Prickle owns spiggin/zigzag/spinous/fanning/gasterosteid/nuptial/pelvic; Boot owns cilia/pellicle/cytostome/vacuole/ciliophora/trichocyst/avoiding; Reach owns pseudopod/ectoplasm/endoplasm/foodcup/proteus/uroid/streaming; Door owns hinge; Anchor owns siphon; guest slug Spot / key euglena only for isKey matching — accept "euglena" and "spot"; do NOT name a trick "euglena" or "spot" or "glue" or "flare" or "dart" or "still" or "foot" or "red" or "drink" or "glow" or "swim" or "whip") — not Reach amoeba life, not Boot paramecium life, not Prickle stickleback life, not Coin goldfish life, not Latch leech life, not Hinge mussel life, not Twig stick-insect life, not Door moray, not Anchor seahorse, not Kite manta, not Gauss filing-dragon, not Orb volvox. Eyespot stigma turn on the drop without naming glance, flagellum anterior whip without naming dart, chloroplast green drink without naming glow, phototaxis lamp-seek without naming swim, euglenid long Euglena metabolic hold under the scrap lamp, metaboly euglenoid shape-change (THE euglena metaboly tell), paramylon storage-grain glint (THE euglena paramylon tell); viridis / gracilis / sanguinea thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play RED do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web euglena-tricks.ts. Window-play RED unchanged. Ethogram softs + freeze — never names spot/red/still as bare ethogram-only trick kinds. True Euglena desk life only — distinct from Reach amoeba, Boot paramecium, Prickle stickleback, Coin goldfish, Latch leech, Hinge mussel, Twig stick insect, Door moray, Anchor seahorse, Kite manta, Gauss filing-dragon, and Orb volvox. Spin owns the next seat. No cry inventing — thank-yous are silent desk motion only. Amplitudes raised toward Rui richness; denser waits/weights (EUGLENID_HOLD=11.2 RELEASE_S=1.18). Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; Drake now Rue-dense; Vee now Rue-dense; Drum now Rue-dense; Sip now Rue-dense; Echo now Rue-dense; Peck now Rue-dense; Quill now Rue-dense; Brood now Rue-dense; Frill now Rue-dense; Cap now Rue-dense; Lattice now Rue-dense; Horn now Rue-dense; Ring now Rue-dense; Mane now Rue-dense; next leftover Puff / puffball. prefersHouseCry via euglena.wav. */
+/** Spot ground tricks while idle — ultra-polish pass. House neighborly Euglena desk life — eyespot / flagellum / chloroplast / phototaxis / euglenid / metaboly / paramylon personality (eyespot stigma turn without naming turn or glance or still or dart or red, flagellum anterior whip without naming whip or swim or still or dart, chloroplast green drink without naming drink or glow or still or dart, phototaxis lamp-seek without naming seek or swim or still or red, long euglenid Euglena desk hold under the lamp drop, metaboly euglenoid shape-change without naming stretch or dart or still or foot (THE euglena metaboly tell), paramylon storage-grain glint without naming glint or flare or still or dart (THE euglena paramylon tell) — never named wait or wake or still or hide or cover or glue or flare or dart or nest or zig or swim or gulp or drift or glint or hinge or sucker or latch or crawl or dig or burrow or pedal or radula or pneumostome or ommatophore or lymnaeid or adductor or protractor or inhalant or ctenidium or unionid or acetabulum or prostomium or looping or undulatory or hirudinean or botryoidal or auricle or spiggin or zigzag or spinous or fanning or gasterosteid or nuptial or pelvic or cilia or pellicle or cytostome or vacuole or ciliophora or trichocyst or avoiding or slipper or row or wiggle or scute or pseudopod or ectoplasm or endoplasm or foodcup or proteus or uroid or streaming or chaos or discoides or dubia or eyespotturn or flagellumwhip or chloroplastdrink or phototaxisswim or longspothush as trick kinds; ethogram softs + freeze own those words; window-play RED owns the lamp-drop red; Coin owns flare/dart/drift/gulp/glint; Twig owns stick-insect life; Latch owns acetabulum/prostomium/looping/undulatory/hirudinean/botryoidal/auricle; Hinge owns adductor/protractor/inhalant/ctenidium/unionid/ligament/glochid; Whorl owns radula/pedal/pneumostome/ommatophore/lymnaeid/odontophore/neuston; Prickle owns spiggin/zigzag/spinous/fanning/gasterosteid/nuptial/pelvic; Boot owns cilia/pellicle/cytostome/vacuole/ciliophora/trichocyst/avoiding; Reach owns pseudopod/ectoplasm/endoplasm/foodcup/proteus/uroid/streaming; Door owns hinge; Anchor owns siphon; guest slug Spot / key euglena only for isKey matching — accept "euglena" and "spot"; do NOT name a trick "euglena" or "spot" or "glue" or "flare" or "dart" or "still" or "foot" or "red" or "drink" or "glow" or "swim" or "whip") — not Reach amoeba life, not Boot paramecium life, not Prickle stickleback life, not Coin goldfish life, not Latch leech life, not Hinge mussel life, not Twig stick-insect life, not Door moray, not Anchor seahorse, not Kite manta, not Gauss filing-dragon, not Orb volvox. Eyespot stigma turn on the drop without naming glance, flagellum anterior whip without naming dart, chloroplast green drink without naming glow, phototaxis lamp-seek without naming swim, euglenid long Euglena metabolic hold under the scrap lamp, metaboly euglenoid shape-change (THE euglena metaboly tell), paramylon storage-grain glint (THE euglena paramylon tell); viridis / mutabilis / sanguinea thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play RED do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web euglena-tricks.ts. Window-play RED unchanged. Ethogram softs + freeze — never names spot/red/still as bare ethogram-only trick kinds. True Euglena desk life only — distinct from Reach amoeba, Boot paramecium, Prickle stickleback, Coin goldfish, Latch leech, Hinge mussel, Twig stick insect, Door moray, Anchor seahorse, Kite manta, Gauss filing-dragon, and Orb volvox. Spin owns the next seat. No cry inventing — thank-yous are silent desk motion only. Amplitudes raised toward Rui richness; denser waits/weights (EUGLENID_HOLD=11.2 RELEASE_S=1.18). Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; Drake now Rue-dense; Vee now Rue-dense; Drum now Rue-dense; Sip now Rue-dense; Echo now Rue-dense; Peck now Rue-dense; Quill now Rue-dense; Brood now Rue-dense; Frill now Rue-dense; Cap now Rue-dense; Lattice now Rue-dense; Horn now Rue-dense; Ring now Rue-dense; Mane now Rue-dense; next leftover Puff / puffball. prefersHouseCry via euglena.wav. */
 (function (root) {
   const TRICK_KEY = "euglena";
   const TRICKS = ["eyespot", "flagellum", "chloroplast", "phototaxis", "euglenid", "metaboly", "paramylon"];
-  const HAPPY = ["viridis", "gracilis", "sanguinea"];
+  const HAPPY = ["viridis", "mutabilis", "sanguinea"];
 
-  const HAPPY_DUR = { viridis: 1.70, gracilis: 1.82, sanguinea: 1.71 };
+  const HAPPY_DUR = { viridis: 1.70, mutabilis: 1.82, sanguinea: 1.71 };
   const EUGLENID_HOLD = 11.2;
   const RELEASE_S = 1.18;
   const DUR = {
@@ -121,7 +121,7 @@
       t: 0,x,
       lift: 0,
       rot: 0,
-      anim: name === "viridis" ? "sit" : name === "gracilis" ? "play" : "sit",
+      anim: name === "viridis" ? "sit" : name === "mutabilis" ? "play" : "sit",
       facing: facing == null ? 1 : facing,fromX,
     };
   }
@@ -145,8 +145,8 @@
     return { lift: 2.4 * (1 - s), rot: 7.2 * (1 - s), dx: 0, anim: "idle" };
   }
 
-  function gracilisPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.gracilis));
+  function mutabilisPose(t) {
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.mutabilis));
     if (u < 0.14) {
       const s = u / 0.14;
       return { lift: s * 4.44, rot: s * -16.8, dx: s * 0.18, anim: "play" };
@@ -184,8 +184,8 @@
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "gracilis") {
-      const pose = gracilisPose(next.t);
+    } else if (next.kind === "mutabilis") {
+      const pose = mutabilisPose(next.t);
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
@@ -523,7 +523,7 @@
     pickHappy,
     beginHappy,
     viridisPose,
-    gracilisPose,
+    mutabilisPose,
     sanguineaPose,
     stepHappy
   };

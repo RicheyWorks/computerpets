@@ -1,6 +1,6 @@
-/** Banner ground tricks while idle — ultra-polish pass. House neighborly Papilionidae / Papilio glaucus Eastern Tiger Swallowtail desk life (swallowtail / Banner) — wingbanner / puddlesip / flutterhop / tailglidesettle / eyespot / tigerband / papiliohush personality (wingbanner forewing open-close bask pulse without naming asclepias or oyamel or plumose or lunule or wing alone as wait, puddlesip mineral puddle-sip desk cue without naming proboscis or figure or sip alone as wait, flutterhop short flutter desk hop without naming hopskip or hindleap or hop or flutter alone as wait, tailglidesettle hindwing-tail flick then soft glide settle without naming tailflick or stream or tail alone as wait, eyespot hindwing eyespot flash warn without naming eye or spot or flash alone as wait, tigerband tiger-stripe band pulse without naming stripe or band or tiger alone as wait, long papiliohush Papilio swallowtail hush hold (THE papiliohush sit_hold tell) — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or asclepias or oyamel or plumose or lunule or densmilk or inkmilk or densdanaus or densghost or inkghost or densactias or hopskip or hindleap or deskbask or mandiblegraze or femurrasp or tympanal or saltatory or caeliferahush or densvault or inkvault or denscaelifera or leafstill or antennatick or tegminasong or leafwalk or tegminlift or greenmimic or tettigonihush or densblade or inkblade or denstettigonia or stridulate or antennasweep or burrowmouth or cerciflick or tegmenraise or gryllushush or denschirp or inkchirp or densgryllus or bury or flat or still or sit or walk or hop or spring or vault or banner or swallowtail as bare ethogram-only trick kinds; ethogram softs + freeze own those words; window-play unchanged if already fine; Milk monarch owns asclepias/oyamel — do NOT reuse; Ghost luna owns plumose/lunule — do NOT reuse; Comb honeybee owns proboscis/figure — do NOT reuse; Dart darner — do NOT reuse; Chirp owns hopskip/stridulate/gryllushush — do NOT reuse; Vault owns hindleap/deskbask/mandiblegraze/femurrasp/tympanal/saltatory/caeliferahush — do NOT reuse (Banner owns wingbanner/puddlesip/flutterhop/tailglidesettle/eyespot/tigerband/papiliohush, not Vault); Blade owns leafstill/tettigonihush — do NOT reuse; squirrel may own tailflick — do NOT reuse; Jewel jewelwing next — do NOT reuse bare banner/swallowtail; header forbids bare bury/flat/still/sit/wait and bare swallowtail/banner as trick kinds; guest slug Banner / key swallowtail only for wantsThankYou matching — accept "swallowtail" and "banner"; do NOT accept bare "banner" as a trick id; do NOT name a trick "swallowtail" or "banner" or "monarch" or "milk" or "luna" or "ghost" or "honeybee" or "comb" or "darner" or "dart" or "grasshopper" or "vault" or "katydid" or "blade" or "field_cricket" or "chirp" or "asclepias" or "oyamel" or "plumose" or "lunule" or "hopskip" or "hindleap" or "caeliferahush" or "densvault" or "densblade" or "denschirp") — not Milk Danaus monarch life, not Ghost Actias luna life, not Comb Apis honeybee life, not Dart Aeshnidae darner life, not Vault Melanoplus grasshopper life, not Blade Tettigoniidae katydid life, not Chirp Gryllus field-cricket life, not Jewel Calopterygidae jewelwing life (next guest), not Rui red_panda life. Wingbanner without naming wing alone, puddlesip without naming sip alone, flutterhop without naming hop alone, tailglidesettle without naming tail alone, eyespot without naming eye alone, tigerband without naming tiger alone, papiliohush long sit_hold on the Papilio swallowtail hush (THE papiliohush sit_hold tell); densbanner / inkbanner / denspapilio thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop swallowtail-tricks.js. Window-play unchanged. Ethogram softs + freeze — never names hunt/sit/still/wait/walk/banner as bare ethogram-only trick kinds. True Eastern Tiger Swallowtail Papilio glaucus Papilionidae desk life only — forewing bask pulse, puddle sip, flutter hop, tail-glide settle, eyespot flash, tiger-band pulse, and Papilio hush; distinct from Milk monarch asclepias/oyamel, Ghost luna plumose/lunule, Comb honeybee, Dart darner, Vault grasshopper hindleap/deskbask/mandiblegraze/femurrasp/tympanal/saltatory/caeliferahush, Blade katydid, Chirp cricket hopskip, Jewel jewelwing next, creek peers, Ink, Shift, Dash, Wink, Sol, Reed, Dapple, Eft, Slip, Soak, Coal, Whee, Spine, Burr, Grin, Stripe, Wash, Cache, Cape, Flag, Rui, ferret, Prickle, Quill, and birds. Next house-order ultra: Jewel / jewelwing. No cry inventing — thank-yous are silent desk motion only; swallowtail.wav EXISTS so prefersHouseCry adds swallowtail after grasshopper. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
+/** Banner ground tricks while idle — ultra-polish pass. House neighborly Papilionidae / Papilio glaucus Eastern Tiger Swallowtail desk life (swallowtail / Banner) — wingbanner / puddlesip / flutterhop / tailglidesettle / tornusflash / tigerband / papiliohush personality (wingbanner forewing open-close bask pulse without naming asclepias or oyamel or plumose or lunule or wing alone as wait, puddlesip mineral puddle-sip desk cue without naming proboscis or figure or sip alone as wait, flutterhop short flutter desk hop without naming hopskip or hindleap or hop or flutter alone as wait, tailglidesettle hindwing-tail flick then soft glide settle without naming tailflick or stream or tail alone as wait, tornusflash hindwing tornusflash flash warn without naming eye or spot or flash alone as wait, tigerband tiger-stripe band pulse without naming stripe or band or tiger alone as wait, long papiliohush Papilio swallowtail hush hold (THE papiliohush sit_hold tell) — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or asclepias or oyamel or plumose or lunule or densmilk or inkmilk or densdanaus or densghost or inkghost or densactias or hopskip or hindleap or deskbask or mandiblegraze or femurrasp or tympanal or saltatory or caeliferahush or densvault or inkvault or denscaelifera or leafstill or antennatick or tegminasong or leafwalk or tegminlift or greenmimic or tettigonihush or densblade or inkblade or denstettigonia or stridulate or antennasweep or burrowmouth or cerciflick or tegmenraise or gryllushush or denschirp or inkchirp or densgryllus or bury or flat or still or sit or walk or hop or spring or vault or banner or swallowtail as bare ethogram-only trick kinds; ethogram softs + freeze own those words; window-play unchanged if already fine; Milk monarch owns asclepias/oyamel — do NOT reuse; Ghost luna owns plumose/lunule — do NOT reuse; Comb honeybee owns proboscis/figure — do NOT reuse; Dart darner — do NOT reuse; Chirp owns hopskip/stridulate/gryllushush — do NOT reuse; Vault owns hindleap/deskbask/mandiblegraze/femurrasp/tympanal/saltatory/caeliferahush — do NOT reuse (Banner owns wingbanner/puddlesip/flutterhop/tailglidesettle/tornusflash/tigerband/papiliohush, not Vault); Blade owns leafstill/tettigonihush — do NOT reuse; squirrel may own tailflick — do NOT reuse; Jewel jewelwing next — do NOT reuse bare banner/swallowtail; header forbids bare bury/flat/still/sit/wait and bare swallowtail/banner as trick kinds; guest slug Banner / key swallowtail only for wantsThankYou matching — accept "swallowtail" and "banner"; do NOT accept bare "banner" as a trick id; do NOT name a trick "swallowtail" or "banner" or "monarch" or "milk" or "luna" or "ghost" or "honeybee" or "comb" or "darner" or "dart" or "grasshopper" or "vault" or "katydid" or "blade" or "field_cricket" or "chirp" or "asclepias" or "oyamel" or "plumose" or "lunule" or "hopskip" or "hindleap" or "caeliferahush" or "densvault" or "densblade" or "denschirp") — not Milk Danaus monarch life, not Ghost Actias luna life, not Comb Apis honeybee life, not Dart Aeshnidae darner life, not Vault Melanoplus grasshopper life, not Blade Tettigoniidae katydid life, not Chirp Gryllus field-cricket life, not Jewel Calopterygidae jewelwing life (next guest), not Rui red_panda life. Wingbanner without naming wing alone, puddlesip without naming sip alone, flutterhop without naming hop alone, tailglidesettle without naming tail alone, tornusflash without naming eye alone, tigerband without naming tiger alone, papiliohush long sit_hold on the Papilio swallowtail hush (THE papiliohush sit_hold tell); densbanner / inkbanner / denspapilio thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop swallowtail-tricks.js. Window-play unchanged. Ethogram softs + freeze — never names hunt/sit/still/wait/walk/banner as bare ethogram-only trick kinds. True Eastern Tiger Swallowtail Papilio glaucus Papilionidae desk life only — forewing bask pulse, puddle sip, flutter hop, tail-glide settle, tornusflash flash, tiger-band pulse, and Papilio hush; distinct from Milk monarch asclepias/oyamel, Ghost luna plumose/lunule, Comb honeybee, Dart darner, Vault grasshopper hindleap/deskbask/mandiblegraze/femurrasp/tympanal/saltatory/caeliferahush, Blade katydid, Chirp cricket hopskip, Jewel jewelwing next, creek peers, Ink, Shift, Dash, Wink, Sol, Reed, Dapple, Eft, Slip, Soak, Coal, Whee, Spine, Burr, Grin, Stripe, Wash, Cache, Cape, Flag, Rui, ferret, Prickle, Quill, and birds. Next house-order ultra: Jewel / jewelwing. No cry inventing — thank-yous are silent desk motion only; swallowtail.wav EXISTS so prefersHouseCry adds swallowtail after grasshopper. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 export const TRICK_KEY = "swallowtail";
-export const TRICKS = ["wingbanner", "puddlesip", "flutterhop", "tailglidesettle", "eyespot", "tigerband", "papiliohush"] as const;
+export const TRICKS = ["wingbanner", "puddlesip", "flutterhop", "tailglidesettle", "tornusflash", "tigerband", "papiliohush"] as const;
 export const HAPPY = ["densbanner", "inkbanner", "denspapilio"] as const;
 export type SwallowtailTrickKind = (typeof TRICKS)[number];
 export type SwallowtailHappyKind = (typeof HAPPY)[number];
@@ -53,7 +53,7 @@ export const DUR = {
   puddlesip: 2.42,
   flutterhop: 2.40,
   tailglidesettle: 2.44,
-  eyespot: 2.38,
+  tornusflash: 2.38,
   tigerband: 2.56,
 } as const;
 
@@ -86,7 +86,7 @@ export function shouldAbort(state: TrickFlags | undefined) {
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: SwallowtailTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
   if (kind === "papiliohush") return 40 + roll * 26;
-  if (kind === "eyespot" || kind === "wingbanner" || kind === "tailglidesettle") return 12.8 + roll * 9.4;
+  if (kind === "tornusflash" || kind === "wingbanner" || kind === "tailglidesettle") return 12.8 + roll * 9.4;
   if (kind === "flutterhop" || kind === "puddlesip" || kind === "tigerband") return 11.6 + roll * 8.5;
   return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
@@ -99,7 +99,7 @@ export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: Swallowta
     if (roll < 0.33) return "puddlesip" as const;
     if (roll < 0.49) return "flutterhop" as const;
     if (roll < 0.65) return "tailglidesettle" as const;
-    if (roll < 0.83) return "eyespot" as const;
+    if (roll < 0.83) return "tornusflash" as const;
     return "tigerband" as const;
   }
   if (lastKind === "wingbanner") {
@@ -107,7 +107,7 @@ export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: Swallowta
     if (roll < 0.32) return "puddlesip" as const;
     if (roll < 0.48) return "flutterhop" as const;
     if (roll < 0.64) return "tailglidesettle" as const;
-    if (roll < 0.82) return "eyespot" as const;
+    if (roll < 0.82) return "tornusflash" as const;
     return "tigerband" as const;
   }
   if (lastKind === "puddlesip") {
@@ -115,7 +115,7 @@ export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: Swallowta
     if (roll < 0.3) return "wingbanner" as const;
     if (roll < 0.46) return "flutterhop" as const;
     if (roll < 0.62) return "tailglidesettle" as const;
-    if (roll < 0.8) return "eyespot" as const;
+    if (roll < 0.8) return "tornusflash" as const;
     return "tigerband" as const;
   }
   if (lastKind === "flutterhop") {
@@ -123,7 +123,7 @@ export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: Swallowta
     if (roll < 0.31) return "wingbanner" as const;
     if (roll < 0.47) return "puddlesip" as const;
     if (roll < 0.63) return "tailglidesettle" as const;
-    if (roll < 0.81) return "eyespot" as const;
+    if (roll < 0.81) return "tornusflash" as const;
     return "tigerband" as const;
   }
   if (lastKind === "tailglidesettle") {
@@ -131,10 +131,10 @@ export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: Swallowta
     if (roll < 0.32) return "wingbanner" as const;
     if (roll < 0.48) return "puddlesip" as const;
     if (roll < 0.64) return "flutterhop" as const;
-    if (roll < 0.82) return "eyespot" as const;
+    if (roll < 0.82) return "tornusflash" as const;
     return "tigerband" as const;
   }
-  if (lastKind === "eyespot") {
+  if (lastKind === "tornusflash") {
     if (roll < 0.15) return "papiliohush" as const;
     if (roll < 0.31) return "wingbanner" as const;
     if (roll < 0.47) return "puddlesip" as const;
@@ -148,14 +148,14 @@ export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: Swallowta
     if (roll < 0.48) return "puddlesip" as const;
     if (roll < 0.64) return "flutterhop" as const;
     if (roll < 0.82) return "tailglidesettle" as const;
-    return "eyespot" as const;
+    return "tornusflash" as const;
   }
   if (roll < 0.14) return "papiliohush" as const;
   if (roll < 0.28) return "wingbanner" as const;
   if (roll < 0.42) return "puddlesip" as const;
   if (roll < 0.56) return "flutterhop" as const;
   if (roll < 0.7) return "tailglidesettle" as const;
-  if (roll < 0.85) return "eyespot" as const;
+  if (roll < 0.85) return "tornusflash" as const;
   return "tigerband" as const;
 }
 
@@ -316,7 +316,7 @@ export function beginTrick(kind: SwallowtailTrickKind, x: number, facing: 1 | -1
               ? "sit"
               : kind === "tailglidesettle"
                 ? "play"
-                : kind === "eyespot"
+                : kind === "tornusflash"
                   ? "walk"
                   : "sit";
   return {
@@ -449,8 +449,8 @@ export function tailglidesettlePose(t: number, fromX: number, facing: 1 | -1) {
   };
 }
 
-export function eyespotPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.eyespot));
+export function tornusflashPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.tornusflash));
   const face = facing == null ? 1 : facing;
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
@@ -507,7 +507,7 @@ export function stepTrick(trick: SwallowtailTrick | null | undefined, dt: number
     trick.kind !== "puddlesip" &&
     trick.kind !== "flutterhop" &&
     trick.kind !== "tailglidesettle" &&
-    trick.kind !== "eyespot" &&
+    trick.kind !== "tornusflash" &&
     trick.kind !== "tigerband"
   ) {
     return { ...trick, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
@@ -559,8 +559,8 @@ export function stepTrick(trick: SwallowtailTrick | null | undefined, dt: number
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
-  } else if (next.kind === "eyespot") {
-    const pose = eyespotPose(next.t, fromX, trick.facing);
+  } else if (next.kind === "tornusflash") {
+    const pose = tornusflashPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
