@@ -97,8 +97,69 @@ export type HeartbeatPoll = {
 };
 
 /**
+ * An interval that only runs while the page is showing. A hidden tab (another tab in front, a
+ * minimized window) pauses it; showing the page again resumes it, and with `onResume` runs the
+ * work once right away so a meter or a heartbeat is not a full period stale. It lives beside the
+ * heartbeat poll that uses it; with no document (node tests) it just runs.
+ */
+export type VisibleDoc = {
+  hidden: boolean;
+  addEventListener: (type: "visibilitychange", fn: () => void) => void;
+  removeEventListener: (type: "visibilitychange", fn: () => void) => void;
+};
+
+export type EveryVisibleOpts = {
+  /** Defaults to the page's document; null means "always showing" (tests, node). */
+  doc?: VisibleDoc | null;
+  setIntervalImpl?: (fn: () => void, ms: number) => unknown;
+  clearIntervalImpl?: (id: unknown) => void;
+  /** Run `fn` once when the page shows again, before the interval restarts. */
+  onResume?: boolean;
+};
+
+function pageDoc(): VisibleDoc | null {
+  return typeof document !== "undefined" ? (document as unknown as VisibleDoc) : null;
+}
+
+/** Start `fn` every `ms` while the page shows. Returns stop (clears the interval and the listener). */
+export function everyVisible(fn: () => void, ms: number, opts: EveryVisibleOpts = {}): () => void {
+  const doc = opts.doc === undefined ? pageDoc() : opts.doc;
+  const every = opts.setIntervalImpl ?? ((f, m) => setInterval(f, m));
+  const clear = opts.clearIntervalImpl ?? ((id) => clearInterval(id as ReturnType<typeof setInterval>));
+  let id: unknown = null;
+  let stopped = false;
+  const start = () => {
+    if (id == null && !stopped) id = every(fn, ms);
+  };
+  const pause = () => {
+    if (id != null) {
+      clear(id);
+      id = null;
+    }
+  };
+  const onVis = () => {
+    if (!doc || stopped) return;
+    if (doc.hidden) {
+      pause();
+      return;
+    }
+    if (id != null) return;
+    if (opts.onResume) fn();
+    start();
+  };
+  if (!doc || !doc.hidden) start();
+  doc?.addEventListener("visibilitychange", onVis);
+  return () => {
+    stopped = true;
+    pause();
+    doc?.removeEventListener("visibilitychange", onVis);
+  };
+}
+
+/**
  * One shared heartbeat poll: the first subscriber starts one interval, the last one stops it, and every
  * subscriber sees the same beat. An unreachable service reads as UNREAD_HEARTBEAT ("DOWN").
+ * A hidden page pauses the interval; showing it again reads once right away and resumes.
  */
 export function createHeartbeatPoll(opts: {
   fetchImpl?: HeartbeatFetch;
@@ -106,6 +167,8 @@ export function createHeartbeatPoll(opts: {
   clearIntervalImpl?: (id: unknown) => void;
   url?: string;
   ms?: number;
+  /** Defaults to the page's document; null means always showing. */
+  doc?: VisibleDoc | null;
 } = {}): HeartbeatPoll {
   const fetchImpl: HeartbeatFetch = opts.fetchImpl ?? ((url, init) => fetch(url, init));
   const every = opts.setIntervalImpl ?? ((fn, ms) => setInterval(fn, ms));
@@ -114,7 +177,7 @@ export function createHeartbeatPoll(opts: {
   const ms = opts.ms ?? HEARTBEAT_POLL_MS;
   const subs = new Set<(beat: Heartbeat) => void>();
   let beat: Heartbeat = UNREAD_HEARTBEAT;
-  let timer: unknown = null;
+  let stopPoll: (() => void) | null = null;
 
   async function read(): Promise<Heartbeat> {
     try {
@@ -135,17 +198,34 @@ export function createHeartbeatPoll(opts: {
       fn(beat);
       if (subs.size === 1) {
         void read();
-        timer = every(() => void read(), ms);
+        stopPoll = everyVisible(() => void read(), ms, {
+          doc: opts.doc,
+          setIntervalImpl: every,
+          clearIntervalImpl: stop,
+          onResume: true,
+        });
       }
       return () => {
         subs.delete(fn);
-        if (!subs.size && timer != null) {
-          stop(timer);
-          timer = null;
+        if (!subs.size && stopPoll) {
+          stopPoll();
+          stopPoll = null;
         }
       };
     },
   };
+}
+
+/** The pet art's accessible name: the guest's name and what they are doing that a keeper could see. */
+export function petArtLabel(name: string, state: { hidden?: boolean; asleep?: boolean; unwell?: boolean; speech?: string | null } = {}): string {
+  const doing = state.hidden ? "hiding" : state.asleep ? "asleep" : state.unwell ? "unwell" : "";
+  const base = doing ? `${name}, ${doing}` : name;
+  return state.speech ? `${base}, saying "${state.speech}"` : base;
+}
+
+/** The companion room's accessible name. */
+export function roomLabel(name: string): string {
+  return `${name}'s room`;
 }
 
 /** The page's one heartbeat poll. It starts on the first subscribe (in an effect), never at import. */

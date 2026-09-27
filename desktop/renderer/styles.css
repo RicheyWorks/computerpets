@@ -1354,3 +1354,13 @@ select {
     grid-template-columns: 1fr 1fr 1fr;
   }
 }
+
+/* Keyboard: a visible ring on whatever Tab reached inside the open keeper card. */
+#hud button:focus-visible,
+#hud input:focus-visible,
+#hud select:focus-visible,
+#hud textarea:focus-visible,
+#hud a:focus-visible {
+  outline: 2px solid #d8cfc0;
+  outline-offset: 2px;
+}

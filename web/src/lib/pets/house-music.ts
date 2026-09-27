@@ -587,6 +587,19 @@ export function sharedMusicShows(guestKey: string | null | undefined, music: Mus
   return music.plugin === "radio" && !!music.stationUrl;
 }
 
+/** Said on another guest's card when there is nothing for the shared Pause/Play to play yet. */
+export const MUSIC_PICK_HINT = "Pick music on Rui's card.";
+
+/**
+ * The hint shows off the owner's card when the music is off or radio has no station: only the
+ * owner's block can pick the house loop or find a station, so the shared Pause/Play is hidden then.
+ */
+export function sharedMusicHint(guestKey: string | null | undefined, music: MusicPrefs | null | undefined): string {
+  if (!music || guestKey === HOUSE_MUSIC_OWNER) return "";
+  if (music.plugin === "off" || (music.plugin === "radio" && !music.stationUrl)) return MUSIC_PICK_HINT;
+  return "";
+}
+
 /** What the shared Pause/Play shows and commits. Same rule as the owner's Play button. */
 export function houseMusicToggle(music: MusicPrefs, streamAsked: boolean) {
   const remote = music.plugin === "radio" && !!music.stationUrl;

@@ -525,6 +525,16 @@
     return music.plugin === "radio" && !!music.stationUrl;
   }
 
+  /** Said on another guest's card when there is nothing for the shared Pause/Play to play yet. */
+  const MUSIC_PICK_HINT = "Pick music on Rui's card.";
+
+  /** Off, or radio with no station: only the owner's block can pick. Same as web house-music.ts. */
+  function sharedMusicHint(guestKey, music) {
+    if (!music || guestKey === HOUSE_MUSIC_OWNER) return "";
+    if (music.plugin === "off" || (music.plugin === "radio" && !music.stationUrl)) return MUSIC_PICK_HINT;
+    return "";
+  }
+
   /** What the shared Pause/Play shows and commits. Same rule as the owner's Play button. */
   function houseMusicToggle(music, streamAsked) {
     const remote = music.plugin === "radio" && !!music.stationUrl;
@@ -569,6 +579,8 @@
     HOUSE_MUSIC_LABEL,
     sharedMusicShows,
     houseMusicToggle,
+    MUSIC_PICK_HINT,
+    sharedMusicHint,
     RADIO_NET,
     RADIO_FIND,
     radioHonesty,
