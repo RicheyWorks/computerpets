@@ -57,7 +57,7 @@ function linkHostLine(raw) {
 /**
  * Hand one link to the default browser if it is a web page. Never throws.
  * @param {unknown} raw
- * @param {{ openExternal: (url: string) => unknown, log?: (line: string) => void }} deps
+ * @param {{ openExternal: (url: string) => any, log?: (line: string) => void }} deps
  */
 function openLink(raw, deps) {
   const log = deps && typeof deps.log === "function" ? deps.log : () => {};

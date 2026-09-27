@@ -94,6 +94,10 @@ function licenseIpc(fn) {
 }
 
 /** @type {Awaited<ReturnType<typeof GpuPath.gate>> | null} */
+/**
+ * GpuPath.gate() adds what it read (expect, stored, kind); GpuPath.decide() alone does not.
+ * @type {({ open: boolean, path?: string, reason: string, label: string } & Record<string, any>) | null}
+ */
 let gpuGate = null;
 /** @type {BrowserWindow | null} */
 let win = null;
@@ -313,6 +317,7 @@ function requireHardwareCompositing() {
 
 function gpuPathRows() {
   if (!gpuGate || !gpuGate.open) return [];
+  /** @type {Array<Record<string, any>>} */
   const rows = [{ label: gpuGate.label, enabled: false }];
   if (gpuGate.path === "software") {
     rows.push({ label: "Require hardware compositing", click: () => requireHardwareCompositing() });
@@ -322,6 +327,7 @@ function gpuPathRows() {
 }
 
 function refusedTrayTemplate() {
+  /** @type {Array<Record<string, any>>} */
   const rows = [
     { label: gpuGate.label, enabled: false },
     { type: "separator" },

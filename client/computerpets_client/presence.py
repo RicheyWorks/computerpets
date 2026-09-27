@@ -16,9 +16,10 @@ HOUSE_FILES = ("card.json", "mind.json")
 # does not call for a place. It does not call a geocode host. News RSS,
 # market quotes, and radio find are not this client. A station stream
 # is not this client. Cloud talk and cloud voice are not this client.
-# A license hash names its host before it leaves. Opening this process
-# does not post one. A signed bundle names the CDN host before that GET.
-# Opening this process does not fetch one.
+# Unlock says the license website's name before the code made from this
+# computer's ID goes there. Opening this process does not send it. Your
+# pet's files are asked for only after the download website is named.
+# Opening this process does not download them.
 # Electron 35
 # cannot revoke a Chromium grant.
 WEATHER_LOCATE_MS = 120_000

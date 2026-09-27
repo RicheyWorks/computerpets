@@ -253,7 +253,7 @@ def create_license_client(
         return payload
 
     def fetch_bundle(download_url: str, expect: dict[str, Any] | None = None) -> dict[str, Any]:
-        """GET the signed bundle. The license hash is not added to this request.
+        """Download your pet's files from the signed link. The code made from this computer's ID is not added.
 
         When ``expect`` claims catalog version/sha256, zip digest + layout must
         pass or the result is ``ok: False`` — fail closed.

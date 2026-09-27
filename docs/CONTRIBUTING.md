@@ -176,6 +176,7 @@ When making architectural changes, remember to update the **"Last Updated"** dat
   | `desktop` | `npm test` in `desktop/` | Node |
   | `web` | `npm test` in `web/` | `npm ci` in `web/` with npm 11 (Node 24; npm 10 says the lock is out of sync), and Python with Pillow and numpy for `walker-art.test.mjs` |
   | `tsc` | `node scripts/tsc-baseline.mjs` in `web/` | `web/node_modules` |
+  | `checkjs` | `node scripts/checkjs-baseline.mjs` (tsc `checkJs` over `desktop/renderer`, `desktop/*.cjs`, `license/`, `presence/`) | `web/node_modules` (desktop uses web's TypeScript) |
   | `python` | pytest in `client/` | `client/.venv` (see above; the script prints the command when it is missing) |
   | `check` | `python -m computerpets_client --check` | `client/.venv` |
   | `harness` | `computerpets_client.app_harness` and `.care_harness` (see [APP-HARNESS.md](APP-HARNESS.md)) | `client/.venv` |
@@ -193,6 +194,7 @@ When making architectural changes, remember to update the **"Last Updated"** dat
 
   Then `-Bash "C:\Program Files\Git\bin\bash.exe"` runs `deploy-sh`. `test-all` itself never installs these.
 - `web` has 1,593 known TypeScript errors at last count; `web/tsc-baseline.txt` always holds the current number (the line count of `tsc --noEmit`). `node scripts/tsc-baseline.mjs` in `web/` fails when the count goes up and passes with a note when it goes down. After you fix some, lock in the lower number with `node scripts/tsc-baseline.mjs --update` and commit `web/tsc-baseline.txt`. CI runs the web tests and this check in the `web-desk` job.
+- The desktop JavaScript is type-checked too: `node scripts/checkjs-baseline.mjs` runs tsc `checkJs` with `desktop/tsconfig.checkjs.json` and compares the error count with `desktop/checkjs-baseline.txt` (58 at last count). More errors fail, fewer pass with a note; lock in the lower number with `node scripts/checkjs-baseline.mjs --update`, and `--list` prints every error. `desktop/types/renderer-globals.d.ts` types the `window.Pet*` globals from each module's own exports, and `desktop/types/electron.d.ts` stands in for Electron so the count is the same with or without `desktop/node_modules`.
 - Shell scripts are LF on every checkout (`*.sh text eol=lf` in `.gitattributes`). On a Windows clone made before that line, re-check them out once in PowerShell: `$sh = git ls-files "*.sh"; Remove-Item $sh; git checkout -- $sh`
 
 ### 5. Open a Pull Request

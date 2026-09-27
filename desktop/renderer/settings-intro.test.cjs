@@ -82,24 +82,31 @@ test("settings: the privacy detail is whole, careful sentences", () => {
   assertWholeSentences(paragraph("unlockAbout"), "unlockAbout");
   assert.doesNotMatch(mark, /If that named read fails\./, "the old fragment is gone");
   for (const claim of [
-    /did not read the operating-system machine id/,
+    /did not look at this computer's ID/,
     /machine-id file on Linux, MachineGuid on Windows, or the platform UUID on a Mac/,
-    /hashes the result with SHA-256/,
-    /saves only the hash in hwid\.txt/,
-    /reuse the stored hash/,
-    /The raw id is not sent\./,
-    /device fingerprint/,
-    /names the host before the hash leaves/,
-    /If that named read fails, Unlock stops and asks you first\./,
-    /random id instead if this computer has no name/,
+    /scrambles the result with SHA-256 into a code/,
+    /saves only that code in hwid\.txt/,
+    /use the saved code again/,
+    /The ID itself is never sent\./,
+    /like a fingerprint for this computer/,
+    /names the website before the code is sent/,
+    /If the app cannot read that ID, Unlock stops and asks you first\./,
+    /random ID instead if this computer has no name/,
   ]) {
     assert.match(mark, claim);
   }
   const stored = html.match(/const storedMarkText = "([^"]+)";/);
-  assert.ok(stored, "the stored-hash wording is one string");
+  assert.ok(stored, "the stored-code wording is one string");
   assertWholeSentences(stored[1], "storedMarkText");
+  assert.match(stored[1], /^A code is already saved in hwid\.txt\./);
+  assert.match(stored[1], /The ID itself is never sent\./);
+  assert.match(stored[1], /like a fingerprint for this computer/);
+  // Kid-plain and still honest: no hash, raw id, host, or operating-system words in either line.
+  for (const text of [mark, stored[1]]) {
+    assert.doesNotMatch(text, /\bhash|raw id|device fingerprint|operating-system|the host\b|\bleaves\b|mark\./i);
+  }
   // The first-read wording lives once, in the markup; paintMark restores it rather than keeping a second copy.
-  assert.equal(html.split("Opening this window did not read").length - 1, 1);
+  assert.equal(html.split("Opening this window did not look").length - 1, 1);
   assert.match(html, /node\.textContent = mark\.read === "stored" \? storedMarkText : firstMarkText;/);
 });
 
