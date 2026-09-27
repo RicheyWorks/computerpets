@@ -160,6 +160,32 @@ When making architectural changes, remember to update the **"Last Updated"** dat
   - `-rs` prints the reason for each skip. The one Windows skip is the half of `tests/test_gpu.py` that runs the POSIX `desktop/gpu-probe*.sh` scripts through `/bin/sh`.
   - A test that needs a license folder uses pytest's `tmp_path`, not a hard-coded `/tmp/...` path. When an in-memory fake disk is keyed by path, build the key with `Path(...) / name` so it matches on Windows.
   - A test that fakes `/etc/machine-id` pins the host to Linux, so a Windows run never reads the real registry GUID.
+- Run everything at once with `scripts/test-all.ps1` (Windows PowerShell 5.1 or PowerShell 7) or `scripts/test-all.sh` (Linux, Mac, Git Bash). It installs nothing. It runs each suite it can, skips the rest with the reason, prints a table, and exits non-zero if any suite fails:
+
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File scripts\test-all.ps1           # every suite
+  powershell -ExecutionPolicy Bypass -File scripts\test-all.ps1 -Quick    # desktop, python, check, harness, cdn
+  powershell -ExecutionPolicy Bypass -File scripts\test-all.ps1 -Only web,tsc
+  powershell -ExecutionPolicy Bypass -File scripts\test-all.ps1 -Skip java -List
+  ```
+
+  The shell twin takes `--quick`, `--only a,b`, `--skip a,b`, and `--list`. The suites, in order:
+
+  | Suite | What runs | Needs |
+  |---|---|---|
+  | `desktop` | `npm test` in `desktop/` | Node |
+  | `web` | `npm test` in `web/` | `npm ci` in `web/` with npm 11 (Node 24; npm 10 says the lock is out of sync), and Python with Pillow and numpy for `walker-art.test.mjs` |
+  | `tsc` | `node scripts/tsc-baseline.mjs` in `web/` | `web/node_modules` |
+  | `python` | pytest in `client/` | `client/.venv` (see above; the script prints the command when it is missing) |
+  | `check` | `python -m computerpets_client --check` | `client/.venv` |
+  | `harness` | `computerpets_client.app_harness` and `.care_harness` (see [APP-HARNESS.md](APP-HARNESS.md)) | `client/.venv` |
+  | `cdn` | `node deploy/cdn/edge-redeem.test.cjs` | Node |
+  | `java` | `mvnw verify` or `mvn verify` | Java and Maven, else skipped |
+  | `deploy-sh` | every `deploy/**/*.test.sh` | bash and `python3` with PyYAML, else skipped |
+  | `tftest` | `terraform test` in `deploy/terraform` | terraform and a prior `terraform init`, else skipped |
+
+  `-Quick` leaves out `web`, `tsc`, `java`, `deploy-sh`, and `tftest`. Logs go to `%TEMP%\computerpets-test-all` (or `$TMPDIR/computerpets-test-all`). On Windows, Git Bash is not on PATH by default, so `deploy-sh` is skipped; pass `-Bash "C:\Program Files\Git\bin\bash.exe"` to try it (it still needs a real `python3`, not the Store alias).
+- `web` has about 1,500 known TypeScript errors. `web/tsc-baseline.txt` holds the line count of `tsc --noEmit`. `node scripts/tsc-baseline.mjs` in `web/` fails when the count goes up and passes with a note when it goes down. After you fix some, lock in the lower number with `node scripts/tsc-baseline.mjs --update` and commit `web/tsc-baseline.txt`. CI runs the web tests and this check in the `web-desk` job.
 - Shell scripts are LF on every checkout (`*.sh text eol=lf` in `.gitattributes`). On a Windows clone made before that line, re-check them out once in PowerShell: `$sh = git ls-files "*.sh"; Remove-Item $sh; git checkout -- $sh`
 
 ### 5. Open a Pull Request
