@@ -364,7 +364,7 @@ async function weatherReplay() {
   }
   H.paintWeather(card, null, unread);
   const miss = dom.get("weather-line").textContent;
-  if (miss !== "Seattle · unread") bad.push(`failed forecast shows ${JSON.stringify(miss)}`);
+  if (miss !== "Seattle · can't reach") bad.push(`failed forecast shows ${JSON.stringify(miss)}`);
   if (/\d°/.test(shown(dom.get("weather-live")))) bad.push("failed forecast still paints a temperature");
   sinksIn("weather plate", bad);
 
@@ -944,7 +944,7 @@ async function platesFirstRun() {
   // Weather: closed and clean, then open, then the typed look-up (its line is the yes), then the forecast.
   H.paintWeather(card, null, false);
   const closedWeather = dom.get("weather-line").textContent;
-  if (closedWeather !== A.NO_AREA) bad.push(`clean closed weather reads ${JSON.stringify(closedWeather)}`);
+  if (closedWeather !== A.NO_AREA_WAITS || !/^open to /.test(closedWeather)) bad.push(`clean closed weather reads ${JSON.stringify(closedWeather)}`);
   dom.get("weather-body").hidden = false;
   H.paintWeather(card, null, false);
   const nextStep = shown(dom.get("weather-live"));
@@ -974,7 +974,7 @@ async function platesFirstRun() {
   // News: the closed header is the open button; open paints the honesty line (the yes) and reads the feed.
   H.paintNews([], false, card);
   const closedNews = dom.get("news-line").textContent;
-  if (closedNews !== N.NO_HEADLINES) bad.push(`clean closed news reads ${JSON.stringify(closedNews)}`);
+  if (closedNews !== N.NEWS_WAITS || !/^open to /.test(closedNews)) bad.push(`clean closed news reads ${JSON.stringify(closedNews)}`);
   const prefs = N.parseNewsPrefs(card);
   const newsLine = N.newsHonesty(prefs);
   dom.get("news-net").textContent = newsLine;

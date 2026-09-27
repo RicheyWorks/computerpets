@@ -812,7 +812,7 @@ async function firstRun() {
       K.houseServerLine({ show: true, reachable: true, seen: true }),
       K.houseServerLine({ show: true, reachable: false, seen: true }),
     ];
-    const wantRows = ["", "House server not running (optional)", "House server · reachable", "House server · unreachable"];
+    const wantRows = ["", "House server not running (optional)", "House server running", "House server stopped answering (optional). Pets still work."];
     if (JSON.stringify(rows) !== JSON.stringify(wantRows)) fails.push(`house server rows ${JSON.stringify(rows)}`);
     return fails.length
       ? fail(fails.join("; "), { defaults, rows })

@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from "react";
 import { holdWeatherLocate, ipPlace, noteWeatherLocateYes, readWeatherHere } from "@/lib/pets/presence";
 import {
   ackSavedHere,
@@ -153,7 +153,7 @@ import {
   CANT_REACH as MARKET_CANT_REACH,
 } from "@/lib/pets/market";
 import { loadCard, saveCard, type CardPrefs } from "@/lib/pets/card";
-import { everyVisible, isStale } from "@/lib/pets/keeper";
+import { everyVisible, isStale, tabKey } from "@/lib/pets/keeper";
 import type { DeskWindow } from "@/lib/pets/windows";
 import {
   SWATCHES,
@@ -286,6 +286,19 @@ const NEWS_ID = "desk-news";
 const NEWS_REFRESH_MS = 20 * 60 * 1000;
 /** Stale a little before the next tick, so a timer that lands a hair early still reads. */
 const NEWS_STALE_MS = NEWS_REFRESH_MS - 30_000;
+
+/**
+ * A plate's tabs are one Tab stop (the picked tab has tabIndex 0). Right / Left / Home / End move focus
+ * along them, the same keys as the overlay (keeper.ts tabKey); Enter or Space picks the focused tab.
+ */
+function onPlateTabKey(e: ReactKeyboardEvent<HTMLDivElement>) {
+  const tabs = [...e.currentTarget.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+  const next = tabKey(e.key, tabs.indexOf(e.target as HTMLButtonElement), tabs.length);
+  if (next < 0) return;
+  e.preventDefault();
+  e.stopPropagation();
+  tabs[next]?.focus();
+}
 
 function writeCard(patch: Partial<CardPrefs>) {
   return saveCard({ ...loadCard(), ...patch });
@@ -583,11 +596,11 @@ export function DeskWeatherPlate({
         onClick={() => chrome.toggleOpen(setOpen)}
       >
         <span className="text-[10px] uppercase tracking-[0.16em] text-subtle">Weather area</span>
-        <span className="truncate text-sm text-ink">{plateLine(areas, live, unread, shownGate.act === "hold", forecastWaiting)}</span>
+        <span className="truncate text-sm text-ink">{plateLine(areas, live, unread, shownGate.act === "hold", forecastWaiting, !open)}</span>
       </button>
       {open ? (
         <div className="border-t border-border/40 px-3 py-2 text-sm">
-          <div className="mb-2 flex flex-wrap gap-1" role="tablist" aria-label="Weather sections">
+          <div className="mb-2 flex flex-wrap gap-1" role="tablist" aria-label="Weather sections" onKeyDown={onPlateTabKey}>
             {WEATHER_TABS.map((id) => (
               <button
                 key={id}
@@ -596,7 +609,8 @@ export function DeskWeatherPlate({
                 id={`${problemId}-tab-${id}`}
                 aria-controls={`${problemId}-panel`}
                 aria-selected={tab === id}
-                data-on={tab === id ? "1" : "0"} aria-pressed={tab === id}
+                tabIndex={tab === id ? 0 : -1}
+                data-on={tab === id ? "1" : "0"}
                 className="rounded-full border border-border/50 px-2 py-1 text-[10px] uppercase tracking-[0.12em]"
                 onClick={() => keepAreas(pickTab(areas, id))}
               >
@@ -873,11 +887,11 @@ export function DeskNewsPlate() {
     >
       <button type="button" className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left" onPointerDown={chrome.onTogglePointerDown} onPointerMove={chrome.onTogglePointerMove} onPointerUp={chrome.onTogglePointerUp} onClick={() => chrome.toggleOpen(setOpen)}>
         <span className="text-[10px] uppercase tracking-[0.16em] text-subtle">News</span>
-        <span className="truncate text-sm text-ink">{newsLine(tab === "favorites" ? prefs.favorites.map((f) => ({ title: f.title, url: f.url, summary: f.summary })) : items, unread)}</span>
+        <span className="truncate text-sm text-ink">{newsLine(tab === "favorites" ? prefs.favorites.map((f) => ({ title: f.title, url: f.url, summary: f.summary })) : items, unread, !open)}</span>
       </button>
       {open ? (
         <div className="border-t border-border/40 px-3 py-2 text-sm">
-          <div className="mb-2 flex flex-wrap gap-1" role="tablist" aria-label="News sections">
+          <div className="mb-2 flex flex-wrap gap-1" role="tablist" aria-label="News sections" onKeyDown={onPlateTabKey}>
             {NEWS_TABS.map((id) => (
               <button
                 key={id}
@@ -886,7 +900,8 @@ export function DeskNewsPlate() {
                 id={`${problemId}-tab-${id}`}
                 aria-controls={`${problemId}-panel`}
                 aria-selected={tab === id}
-                data-on={tab === id ? "1" : "0"} aria-pressed={tab === id}
+                tabIndex={tab === id ? 0 : -1}
+                data-on={tab === id ? "1" : "0"}
                 className="rounded-full border border-border/50 px-2 py-1 text-[10px] uppercase tracking-[0.12em]"
                 onClick={() => keepNews(pickTab(prefs, id))}
               >

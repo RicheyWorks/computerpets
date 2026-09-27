@@ -167,8 +167,8 @@ test("keeper card: music and sleep sounds that fail say so with Try again; quiet
   // The sound line sits with the sleep aid for every guest, outside the guest-only music block.
   const line = text.indexOf("data-sound-problem");
   assert.ok(line > text.indexOf('aria-label="Sleep aid"') && line < text.indexOf('guestKey === "red_panda" ? ('));
-  assert.match(text, /Quiet by design: an unreachable Java service reads "DOWN"/);
-  assert.match(text, /Quiet by design: a failed read shows "Listening · unread"/);
+  assert.match(text, /Quiet by design: an unreachable house server says so in the heartbeat line itself/);
+  assert.match(text, /Quiet by design: a failed read shows "Listening · not sure"/);
   assert.match(text, /a held stream is the honesty gate, not a failure \(quiet\)/);
 });
 

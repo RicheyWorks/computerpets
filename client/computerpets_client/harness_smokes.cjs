@@ -223,7 +223,7 @@ function houseServerRow() {
     K.houseServerLine({ show: true, reachable: true, uptimeSeconds: 7200 }),
     K.houseServerLine({ show: true, reachable: false }),
   ];
-  if (lines[0] !== "House server · reachable · up 2h" || lines[1] !== "House server · unreachable") {
+  if (lines[0] !== "House server running · up 2h" || lines[1] !== "House server stopped answering (optional). Pets still work.") {
     return fail("row words drifted", { lines });
   }
   if (lines.some((line) => /unread|Java|DOWN/.test(line))) return fail("raw token on the row", { lines });

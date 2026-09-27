@@ -823,7 +823,7 @@ async function firstRun() {
     up = false;
     await poll.read();
     lines.push(K.heartbeatLine(poll.current(), poll.answered()));
-    const wantLines = ["House server not running (optional)", "Java 8081 · UP · local · 5s", "Java 8081 · DOWN · unread · unread"];
+    const wantLines = ["House server not running (optional)", "House server running · up 5s", "House server stopped answering (optional). Pets still work."];
     if (JSON.stringify(lines) !== JSON.stringify(wantLines)) bad.push(`heartbeat lines ${JSON.stringify(lines)}`);
 
     const Areas = require(join(RENDERER, "weather-areas.js"));
@@ -868,6 +868,110 @@ async function firstRun() {
   }
 }
 
+/**
+ * Kid-plain words on the keeper card and desk plates, web and overlay in lockstep: the heartbeat and the
+ * overlay's house-server row say running / stopped answering / not running (optional), with the port and
+ * profile only in the tooltip; the care, Turn off, GPU, listener, and forecast-miss lines never say
+ * "unread", a port, a path, or "door"; the closed weather and news headers say to open the plate; and
+ * the web plate tabs are one Tab stop (no aria-pressed) that take the overlay's arrow / Home / End keys.
+ */
+async function plainWords() {
+  const lib = (rel) => import(pathToFileURL(join(WEB, "src", "lib", ...rel.split("/"))).href);
+  const K = await lib("pets/keeper.ts");
+  const G = await lib("pets/gpu.ts");
+  const L = await lib("ai/listener.ts");
+  const WA = await lib("pets/weather-areas.ts");
+  const N = await lib("pets/news.ts");
+  const OK = require(join(RENDERER, "keeper.js"));
+  const OG = require(join(RENDERER, "gpu.js"));
+  const OL = require(join(RENDERER, "listener.js"));
+  const OWA = require(join(RENDERER, "weather-areas.js"));
+  const ON = require(join(RENDERER, "news.js"));
+  const JARGON = /\bunread\b|\bJava\b|\b808[01]\b|\/pet\/|\bdoor\b|\bDOWN\b|\bRSS\b|site:|\bmalformed\b/;
+  const bad = [];
+
+  const beat = K.parseHeartbeat({ status: "UP", profile: "local", uptimeSeconds: 7200, port: 8081 });
+  const heartbeat = {
+    never: K.heartbeatLine(K.UNREAD_HEARTBEAT, false),
+    up: K.heartbeatLine(beat, true),
+    stopped: K.heartbeatLine(K.UNREAD_HEARTBEAT, true),
+    tooltip: K.heartbeatDetail(beat),
+  };
+  const rows = {
+    never: OK.houseServerLine({ show: true, reachable: false, seen: false }),
+    up: OK.houseServerLine({ show: true, reachable: true, seen: true, uptimeSeconds: 7200 }),
+    stopped: OK.houseServerLine({ show: true, reachable: false, seen: true }),
+  };
+  if (heartbeat.never !== "House server not running (optional)") bad.push(`never answered reads ${heartbeat.never}`);
+  if (heartbeat.up !== "House server running · up 2h") bad.push(`up reads ${heartbeat.up}`);
+  if (heartbeat.stopped !== "House server stopped answering (optional). Pets still work.") bad.push(`stopped reads ${heartbeat.stopped}`);
+  if (heartbeat.tooltip !== "Java 8081 · UP · local · 2h") bad.push(`tooltip lost the detail: ${heartbeat.tooltip}`);
+  if (JSON.stringify(rows) !== JSON.stringify({ never: heartbeat.never, up: heartbeat.up, stopped: heartbeat.stopped })) {
+    bad.push(`overlay row drifted from the web line ${JSON.stringify(rows)}`);
+  }
+
+  const mac = G.sampleFromProbe({ nvidiaCsv: "Apple M2, [N/A], 16, 542, [N/A], [N/A]" }, { platform: "darwin", nowMs: 1790000000000 });
+  const gpu = [G.gpuLine(G.UNREAD_GPU), G.gpuLine(G.parseSample(0)), G.gpuLine(mac), ...Object.values(G.GPU_WORDS)];
+  const overlayGpu = [OG.gpuLine(OG.UNREAD), OG.gpuLine(OG.parseSample(0)), OG.gpuLine(mac), ...Object.values(OG.GPU_WORDS)];
+  if (JSON.stringify(gpu) !== JSON.stringify(overlayGpu)) bad.push(`GPU words drifted ${JSON.stringify([gpu, overlayGpu])}`);
+  if (gpu[0] !== "GPU · no reading" || gpu[2] !== "GPU Apple M2 · — · 16% · 542 MiB/— · —") bad.push(`GPU lines ${JSON.stringify(gpu)}`);
+
+  const seattle = WA.addArea(WA.blankAreas(), { name: "Seattle", lat: 47.6, lon: -122.3 });
+  const lines = {
+    care: K.careTruth(),
+    quitWeb: K.QUIT_TRUTH,
+    quitOverlay: OK.QUIT_TRUTH,
+    listener: L.UNREAD_LISTENER.line,
+    forecastMiss: WA.plateLine(seattle, null, true),
+    sky: WA.skyLabel("clear", 8, ""),
+    weatherClosed: WA.plateLine(WA.blankAreas(), null, false, false, false, true),
+    weatherOpen: WA.plateLine(WA.blankAreas(), null),
+    newsClosed: N.newsLine([], false, true),
+    newsOpen: N.newsLine([], false, false),
+    topics: N.TOPIC_TRUTH,
+  };
+  if (lines.care !== OK.careTruth() || lines.care !== "Your pet's care stays on this computer.") bad.push(`care line ${lines.care}`);
+  if (!/Sit again/.test(lines.quitWeb) || !/type \.\\desktop\.ps1 again/.test(lines.quitOverlay)) bad.push("Turn off lines lost their next step");
+  if (lines.listener !== OL.UNREAD.line || lines.listener !== "Listening · not sure") bad.push(`listener line ${lines.listener}`);
+  if (lines.forecastMiss !== "Seattle · can't reach" || OWA.plateLine(seattle, null, true) !== lines.forecastMiss) bad.push(`forecast miss ${lines.forecastMiss}`);
+  if (lines.weatherClosed !== "open to add a place" || OWA.plateLine(OWA.blankAreas(), null, false, false, false, true) !== lines.weatherClosed) bad.push(`closed weather ${lines.weatherClosed}`);
+  if (lines.newsClosed !== "open to see headlines" || ON.newsLine([], false, true) !== lines.newsClosed) bad.push(`closed news ${lines.newsClosed}`);
+  if (lines.weatherOpen !== "no place yet" || lines.newsOpen !== "no headlines yet") bad.push("open headers changed");
+  if (N.TOPIC_TRUTH !== ON.TOPIC_TRUTH) bad.push("topic words drifted");
+  const said = [...Object.values(heartbeat).slice(0, 3), ...Object.values(rows), ...gpu, ...Object.entries(lines).filter(([k]) => k !== "quitOverlay").map(([, v]) => v)];
+  const leaks = said.filter((s) => JARGON.test(s));
+  if (leaks.length) bad.push(`developer words on screen: ${JSON.stringify(leaks)}`);
+
+  const html = readFileSync(join(RENDERER, "index.html"), "utf8");
+  const text = (id) => (html.match(new RegExp(`id="${id}"[^>]*>([^<]*)<`)) || [])[1];
+  if (text("hud-truth") !== lines.care || text("hud-gpu-line") !== gpu[0] || text("weather-line") !== lines.weatherClosed || text("news-line") !== lines.newsClosed) {
+    bad.push("overlay index.html ships old words before the first paint");
+  }
+  if (text("hud-off-truth") !== lines.quitOverlay) bad.push("overlay Turn off line drifted from keeper.js");
+
+  const plates = readFileSync(join(WEB, "src", "components", "desk", "desk-plates.tsx"), "utf8");
+  const tabs = plates.split(/role="tab"\s/).slice(1).map((s) => s.slice(0, s.indexOf("onClick")));
+  if (tabs.length !== 2 || tabs.some((t) => /aria-pressed/.test(t) || !/aria-selected=\{tab === id\}/.test(t) || !/tabIndex=\{tab === id \? 0 : -1\}/.test(t))) {
+    bad.push("web plate tabs are not a roving tablist without aria-pressed");
+  }
+  if ((plates.match(/onKeyDown=\{onPlateTabKey\}/g) || []).length !== 2) bad.push("web plate tablists do not take arrow keys");
+  const keys = ["ArrowRight", "ArrowLeft", "Home", "End", "ArrowUp", "ArrowDown", "Enter", " "];
+  const drift = keys.filter((k) => K.tabKey(k, 1, 4) !== OK.rovingIndex(k, 1, 4));
+  if (drift.length) bad.push(`web tab keys drift from the overlay: ${drift.join(", ")}`);
+
+  if (bad.length) return fail(bad.join("; "), { heartbeat, rows, gpu, lines });
+  return ok("kid-plain keeper card and plates on web and overlay; web plate tabs rove like the overlay", { heartbeat, rows, gpu, lines }, [
+    "heartbeat=optional+running+stopped",
+    "tooltip=port_profile",
+    "care=plain",
+    "gpu=no_unread",
+    "listener=not_sure",
+    "plates.closed=open_to",
+    "tabs.web=roving+no_pressed",
+    "lockstep=web+overlay",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -879,6 +983,7 @@ const COMMANDS = {
   pet_keys_plates: petKeysPlates,
   menu_keys_escape: menuKeysEscape,
   first_run: firstRun,
+  plain_words: plainWords,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

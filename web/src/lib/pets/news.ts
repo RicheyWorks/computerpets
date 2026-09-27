@@ -10,11 +10,13 @@ export const TOPIC_HOST = "news.google.com";
 export const X_HOST = "x.com";
 export const CANT_REACH = "can't reach";
 export const NO_HEADLINES = "no headlines yet";
+/** The closed plate's header before the first headline: headlines are read only while the plate is open. */
+export const NEWS_WAITS = "open to see headlines";
 export const FAVORITES_EMPTY = "No favorites yet — star a headline or topic.";
 export const TOPIC_LABEL = "News topic";
 export const TOPIC_PLACEHOLDER = "A topic — esports, Halo, baseball, football";
 export const TOPIC_TRUTH =
-  "Popular is Google News top stories. World is Wikipedia In the news. A named topic is Google News RSS. X uses Google News with site:x.com when reachable — else Open on X. No invented headlines.";
+  "Popular is Google News top stories. World is Wikipedia In the news. A topic you name is looked up on Google News. X shows Google News stories from x.com when it can — or press Open on X. No made-up headlines.";
 export const WORLD_ID = "world";
 export const MAX_TOPICS = 20;
 export const MAX_FAVORITES = 24;
@@ -357,9 +359,10 @@ export function parseNews(json: unknown): NewsItem[] {
   return out.slice(0, 8);
 }
 
-export function newsLine(items: NewsItem[] | undefined, unread = false) {
+/** `closed`: the plate is shut and has nothing yet, so its header says to open it (NEWS_WAITS). */
+export function newsLine(items: NewsItem[] | undefined, unread = false, closed = false) {
   if (unread && (!items || !items.length)) return CANT_REACH;
-  if (!items || !items.length) return NO_HEADLINES;
+  if (!items || !items.length) return closed ? NEWS_WAITS : NO_HEADLINES;
   return items[0]!.title;
 }
 

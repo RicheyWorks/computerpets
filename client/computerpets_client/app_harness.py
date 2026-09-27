@@ -813,13 +813,13 @@ GPU_REPLAYS = (
     ("gpu-win-nvidia.txt", "win32", "GPU NVIDIA GeForce RTX 4090 · 36°C · 11% · 1.5 GiB/24 GiB · 9.6 W"),
     # Counters only: the busiest engine after adding every process on it (Task Manager's
     # number). Here the video decode engine at 4.2%, not one process's 3D share (0.5%).
-    ("gpu-win-pdh.txt", "win32", "GPU unread · unread · 4.2% · 1.5 GiB/unread · unread"),
+    ("gpu-win-pdh.txt", "win32", "GPU · — · 4.2% · 1.5 GiB/— · —"),
     # Hand-built: two adapters that both report phys_0. They are read apart by LUID, and the
     # one with the most VRAM (8 GiB, 12.5%) is shown, not the integrated one's 61.5%.
-    ("gpu-win-two-adapters.txt", "win32", "GPU unread · unread · 12.5% · 2 GiB/8 GiB · unread"),
+    ("gpu-win-two-adapters.txt", "win32", "GPU · — · 12.5% · 2 GiB/8 GiB · —"),
     ("gpu-linux-amdgpu.txt", "linux", "GPU AMD Radeon RX 7800 XT · 51°C · 23% · 2.2 GiB/16 GiB · 38.5 W"),
-    ("gpu-mac-ioaccelerator.txt", "darwin", "GPU Apple M2 Pro · unread · 18% · 3 GiB/unread · unread"),
-    ("gpu-linux-absent.txt", "linux", "GPU unread"),
+    ("gpu-mac-ioaccelerator.txt", "darwin", "GPU Apple M2 Pro · — · 18% · 3 GiB/— · —"),
+    ("gpu-linux-absent.txt", "linux", "GPU · no reading"),
 )
 GPU_REPLAY_NOW = 1790000000000
 
@@ -2560,6 +2560,20 @@ def _web_rows() -> list[Affordance]:
                 "house visit, flyers, overlay pet.js / desk-house.js / index.html use them."
             ),
         ),
+        Affordance(
+            "web.plain_words",
+            "web",
+            "Kid-plain keeper card and plate words (web and overlay), closed plate headers, roving web plate tabs",
+            "web keeper.ts heartbeatLine / heartbeatDetail / tabKey + gpu.ts + listener.ts + weather-areas.ts + news.ts, overlay keeper.js / gpu.js / listener.js",
+            notes=(
+                "Real modules on both surfaces: the heartbeat and the overlay house-server row read 'House server "
+                "not running (optional)', 'House server running · up 2h', or 'House server stopped answering "
+                "(optional). Pets still work.' with the port and profile only in the tooltip; the care, Turn off, "
+                "GPU, listener, and forecast-miss lines carry no 'unread', port, path, or 'door'; closed weather and "
+                "news headers say 'open to add a place' / 'open to see headlines'; index.html ships the same words; "
+                "the web plate tabs drop aria-pressed, keep one Tab stop, and take the overlay's arrow / Home / End keys."
+            ),
+        ),
     ]
 
 
@@ -2583,6 +2597,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("pet_keys_plates", domain="web", action_id=aid)
     if local_id == "menu_keys_escape":
         return _run_web_smoke("menu_keys_escape", domain="web", action_id=aid)
+    if local_id == "plain_words":
+        return _run_web_smoke("plain_words", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

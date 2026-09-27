@@ -1,7 +1,9 @@
 /** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line says this computer's network address goes with the https request. readForecast refuses that fetch when the painted forecast line is missing. Look up and the reverse lookup after Send the place wait until that same panel shows the line for the geocode host. readGeocode and readReverse refuse those fetches when that painted line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. */
 (function (root) {
-  const NO_AREA = "no area set";
-  /** The open panel's next step on a clean profile (the header keeps the short NO_AREA). */
+  const NO_AREA = "no place yet";
+  /** The closed plate's header on a clean profile: the next step is to open it (it points like Quotes). */
+  const NO_AREA_WAITS = "open to add a place";
+  /** The open panel's next step on a clean profile (the open header keeps the short NO_AREA). */
   const NO_AREA_NEXT = "No place yet. Type a city below and press Look up.";
   const AREA_LABEL = "Weather area";
   const AREA_PLACEHOLDER = "A city or place — weather, not radio";
@@ -361,13 +363,13 @@
 
   /**
    * With a word (a forecast), the word leads and wind or heat is added after it.
-   * With no code the forecast did not say, so a calm sky reads "Sky unread", not "Clear".
+   * With no code the forecast did not say, so a calm sky reads "Sky not known", not "Clear".
    * Without a word argument (the house sky) the four names stay.
    */
   function skyName(sky, word) {
     const four = sky === "rain" ? "Rain" : sky === "wind" ? "Wind" : sky === "heat" ? "Heat" : "Clear";
     if (word === undefined) return four;
-    if (!word) return sky === "clear" ? "Sky unread" : four;
+    if (!word) return sky === "clear" ? "Sky not known" : four;
     if (sky === "wind") return `${word}, windy`;
     if (sky === "heat") return `${word}, hot`;
     return word;
@@ -381,7 +383,7 @@
 
   /** One forecast day in the plate's lower case: "overcast", "drizzle", "clear, hot". */
   function dayLabel(day) {
-    if (!day || typeof day !== "object") return "sky unread";
+    if (!day || typeof day !== "object") return "sky not known";
     return skyName(day.sky, day.word == null ? "" : day.word).toLowerCase();
   }
 
@@ -594,17 +596,19 @@
     return readJson(url, fetchImpl, timeoutMs);
   }
 
-  function plateLine(areas, live, unread, held, waiting) {
+  /** `closed`: the plate is shut, so a clean profile's header says to open it (NO_AREA_WAITS). */
+  function plateLine(areas, live, unread, held, waiting, closed) {
     const area = currentArea(areas);
-    if (!area) return NO_AREA;
+    if (!area) return closed ? NO_AREA_WAITS : NO_AREA;
     if (held) return `${area.name} · ${SAVED_HERE_WAIT}`;
-    if (unread) return `${area.name} · unread`;
+    if (unread) return `${area.name} · ${CANT_REACH}`;
     if (!live) return waiting ? `${area.name} · ${FORECAST_WAITS}` : `${area.name} · looking up`;
     return `${area.name} · ${live.label}`;
   }
 
   const api = {
     NO_AREA,
+    NO_AREA_WAITS,
     NO_AREA_NEXT,
     AREA_LABEL,
     AREA_PLACEHOLDER,

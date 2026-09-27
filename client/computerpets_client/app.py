@@ -321,7 +321,7 @@ class DeskWindow(QMainWindow):
         layout.addWidget(self.choice_bar)
         layout.addWidget(self.plaque)
         layout.addWidget(self.vital_label)
-        self.gpu_label = QLabel("GPU unread")
+        self.gpu_label = QLabel("GPU · no reading")
         self.gpu_label.setObjectName("gpuSense")
         self.gpu_spark = GpuSpark()
         self._gpu_history: list = []

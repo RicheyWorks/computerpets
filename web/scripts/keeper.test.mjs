@@ -40,7 +40,9 @@ test("Java is 8081, the desk is 8080, and /pet/feed is not a door", () => {
   assert.equal(K.careDoorRefusal("feed").detail, "Care is local. /pet/feed is not a door.");
   assert.equal(K.careDoorRefusal("play").verb, "play");
   assert.equal(K.careDoorRefusal("rest").status, 409);
-  assert.equal(K.careTruth(), "Care is local. /pet/feed is not a door.");
+  // The API refusal keeps its developer detail; the card's care line is plain words.
+  assert.equal(K.careTruth(), "Your pet's care stays on this computer.");
+  assert.doesNotMatch(K.careTruth(), /\/pet\/|door|local\./);
   assert.match(overlayKeeper, /CARE_DOOR_STATUS = 409/);
   assert.match(overlayKeeper, /careDoorRefusal/);
   assert.match(javaSrc, /\/api\/public/);
@@ -55,8 +57,10 @@ test("Java is 8081, the desk is 8080, and /pet/feed is not a door", () => {
 test("unread heartbeat stays DOWN; a live door can be UP", () => {
   assert.equal(K.parseHeartbeat(null).status, "DOWN");
   assert.equal(K.parseHeartbeat({ status: "UP", profile: "local", uptimeSeconds: 125, port: 8081 }).status, "UP");
-  assert.match(K.heartbeatLine(K.UNREAD_HEARTBEAT), /Java 8081 · DOWN · unread · unread/);
+  assert.equal(K.heartbeatLine(K.UNREAD_HEARTBEAT), "House server stopped answering (optional). Pets still work.");
+  assert.equal(K.heartbeatDetail(K.UNREAD_HEARTBEAT), "Java 8081 · DOWN", "port and status stay in the tooltip");
   assert.equal(K.formatUptime(125), "2m");
+  assert.equal(K.formatUptime(null), "");
   assert.equal(K.keeperMeters({ hunger: 12, energy: 80, bond: 80 }).bondTitle, "Devoted");
 });
 
@@ -73,10 +77,11 @@ test("the poster face is name, stage, bond title, meters, verbs, heartbeat", () 
   assert.ok(face.verbs.includes("feed"));
   assert.ok(face.verbs.includes("play"));
   assert.ok(face.verbs.includes("rest"));
-  assert.match(face.heartbeat, /Java 8081 · DOWN/);
+  assert.equal(face.heartbeat, K.HOUSE_SERVER_STOPPED);
   assert.equal(face.truth, K.careTruth());
   assert.equal(face.voiceTruth, K.VOICE_TRUTH);
-  assert.match(face.quitTruth, /desktop\.ps1/);
+  assert.match(face.quitTruth, /Sit again/);
+  assert.doesNotMatch(face.quitTruth, /desktop\.ps1|overlay/, "the web page has its own Sit again");
 });
 
 test("the same poster keeper card sits desk, /demo, Live, Meet, and the Windows overlay", () => {
