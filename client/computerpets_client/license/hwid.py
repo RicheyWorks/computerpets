@@ -228,6 +228,7 @@ def resolve_hwid_detail(
     fallback_id: str | None = None,
     hostname: str | None = None,
     allow_weak_fallback: bool = False,
+    mkdir: Callable[[str], None] | None = None,
 ) -> dict[str, object]:
     """Stable license mark. A stored hwid.txt wins and is not rewritten.
 
@@ -236,6 +237,7 @@ def resolve_hwid_detail(
     The platform token is plat, or platform.system().lower() when plat is omitted.
     That token is "windows" here and "win32" in the overlay. Each client keeps its own file.
     A missing named id does not hash the computer name or a random id until allow_weak_fallback.
+    An injected write_file owns its storage: no real folder is made unless mkdir is also passed.
     """
     stored = peek_hwid(user_data_dir=user_data_dir, read_file=read_file)
     if stored["read"] == "stored":
@@ -254,8 +256,10 @@ def resolve_hwid_detail(
 
     if user_data_dir:
         persist = Path(user_data_dir) / "hwid.txt"
+        maker = mkdir or (None if write_file else (lambda p: Path(p).mkdir(parents=True, exist_ok=True)))
         try:
-            persist.parent.mkdir(parents=True, exist_ok=True)
+            if maker:
+                maker(str(persist.parent))
             writer(str(persist), digest)
         except OSError:
             pass
@@ -272,6 +276,7 @@ def resolve_hwid(
     fallback_id: str | None = None,
     hostname: str | None = None,
     allow_weak_fallback: bool = False,
+    mkdir: Callable[[str], None] | None = None,
 ) -> str:
     detail = resolve_hwid_detail(
         user_data_dir=user_data_dir,
@@ -282,5 +287,6 @@ def resolve_hwid(
         fallback_id=fallback_id,
         hostname=hostname,
         allow_weak_fallback=allow_weak_fallback,
+        mkdir=mkdir,
     )
     return str(detail["id"])

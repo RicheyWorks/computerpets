@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from computerpets_client.license.errors import LicenseError
 from computerpets_client.license.hwid import MAX_HWID_LENGTH, assert_hwid, resolve_hwid
 
@@ -178,3 +180,49 @@ def test_windows_hostname_fallback_waits_for_a_yes(tmp_path):
     assert win["where"] == "HKLM\\SOFTWARE\\Microsoft\\Cryptography"
     assert win["value"] == "MachineGuid"
     assert describe_machine_marks("linux")[0]["where"] == "/etc/machine-id"
+
+
+def _machine_only(path: str) -> str:
+    if path.endswith("hwid.txt"):
+        raise FileNotFoundError(path)
+    return "machine-aaa\n"
+
+
+def test_injected_writer_makes_no_real_folder(tmp_path):
+    from computerpets_client.license.hwid import resolve_hwid_detail
+
+    home = tmp_path / "cp-hwid-nomkdir"
+    written: dict[str, str] = {}
+    detail = resolve_hwid_detail(
+        user_data_dir=str(home),
+        plat="linux",
+        read_file=_machine_only,
+        write_file=lambda path, data: written.__setitem__(path, data),
+    )
+    assert written[str(home / "hwid.txt")] == detail["id"]
+    assert not home.exists()
+
+    made: list[str] = []
+    resolve_hwid_detail(
+        user_data_dir=str(home),
+        plat="linux",
+        read_file=_machine_only,
+        write_file=lambda path, data: None,
+        mkdir=made.append,
+    )
+    assert made == [str(home)]
+    assert not home.exists()
+
+
+def test_real_disk_still_makes_the_folder_and_writes_the_mark(tmp_path):
+    from computerpets_client.license.hwid import resolve_hwid_detail
+
+    home = tmp_path / "nested" / "user-data"
+
+    def read(path: str) -> str:
+        if path.endswith("hwid.txt"):
+            return Path(path).read_text(encoding="utf-8")
+        return "machine-aaa\n"
+
+    detail = resolve_hwid_detail(user_data_dir=str(home), plat="linux", read_file=read)
+    assert (home / "hwid.txt").read_text(encoding="utf-8") == detail["id"]
