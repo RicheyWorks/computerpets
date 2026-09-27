@@ -60,6 +60,34 @@ function clip(text: unknown, n = 180) {
     .slice(0, n);
 }
 
+/** Room for a whole Google News article link. A cut link opens a broken page. */
+export const LINK_CHARS = 2048;
+
+/**
+ * The featured story is Wikipedia markup. The plate shows its words, not its tags.
+ * A stray angle bracket is dropped so the words cannot become markup again.
+ */
+export function plainText(text: unknown) {
+  return String(text || "")
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&#(\d+);/g, (_m, d: string) => {
+      const n = Number(d);
+      return n > 0 && n <= 0x10ffff ? String.fromCodePoint(n) : "";
+    })
+    .replace(/&#x([0-9a-f]+);/gi, (_m, h: string) => {
+      const n = parseInt(h, 16);
+      return n > 0 && n <= 0x10ffff ? String.fromCodePoint(n) : "";
+    })
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&lt;|&gt;/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/[<>]/g, "")
+    .replace(/\s+([,.;:!?])/g, "$1");
+}
+
 function hash(text: string) {
   let n = 0;
   for (let i = 0; i < text.length; i++) n = (n * 31 + text.charCodeAt(i)) | 0;
@@ -108,7 +136,7 @@ export function parseFavorite(raw: unknown): NewsFavorite | null {
     };
   }
   const title = clip(o.title, 90);
-  const url = clip(o.url, 240);
+  const url = clip(o.url, LINK_CHARS);
   if (!title) return null;
   const id = typeof o.id === "string" && o.id ? o.id : `fav-${hash(title + "|" + url)}`;
   return {
@@ -287,7 +315,7 @@ export function parseRss(xml: unknown): NewsItem[] {
   while ((m = re.exec(xml)) && out.length < 8) {
     const block = m[1] || "";
     const title = clip(decodeXml((block.match(/<title>([\s\S]*?)<\/title>/i) || [])[1]), 90);
-    const link = clip(decodeXml((block.match(/<link>([\s\S]*?)<\/link>/i) || [])[1]), 240);
+    const link = clip(decodeXml((block.match(/<link>([\s\S]*?)<\/link>/i) || [])[1]), LINK_CHARS);
     const source = clip(decodeXml((block.match(/<source[^>]*>([\s\S]*?)<\/source>/i) || [])[1]), 40);
     if (!title) continue;
     out.push({ title, url: link, summary: source });
@@ -309,7 +337,7 @@ export function parseNews(json: unknown): NewsItem[] {
     const title = clip(first?.normalizedtitle || titles || first?.title, 90);
     const pages = first && first.content_urls && typeof first.content_urls === "object" ? (first.content_urls as { desktop?: { page?: string } }) : null;
     const url = pages?.desktop?.page ? String(pages.desktop.page) : "";
-    const summary = clip(o.story || first?.extract || first?.description, 200);
+    const summary = clip(plainText(o.story || first?.extract || first?.description), 200);
     if (!title) continue;
     out.push({
       title,

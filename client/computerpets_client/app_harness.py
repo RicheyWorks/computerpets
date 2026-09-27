@@ -127,6 +127,8 @@ def _run_node_smoke(command: str, *, domain: str, action_id: str) -> InvokeResul
             [node, str(script), command],
             capture_output=True,
             text=True,
+            encoding="utf-8",
+            errors="replace",
             cwd=str(repo_root()),
             timeout=30,
             check=False,
@@ -799,6 +801,194 @@ def _cry_wav(key: str) -> Path | None:
     return None
 
 
+def _replay_dir() -> Path:
+    return repo_root() / "desktop" / "renderer" / "fixtures" / "replay"
+
+
+# Saved probe outputs and the platform each one came from (see fixtures/replay/README.md).
+GPU_REPLAYS = (
+    ("gpu-win-nvidia.txt", "win32", "GPU NVIDIA GeForce RTX 4090 · 36°C · 11% · 1.5 GiB/24 GiB · 9.6 W"),
+    ("gpu-win-pdh.txt", "win32", "GPU unread · unread · 0.5% · 1.5 GiB/unread · unread"),
+    ("gpu-linux-amdgpu.txt", "linux", "GPU AMD Radeon RX 7800 XT · 51°C · 23% · 2.2 GiB/16 GiB · 38.5 W"),
+    ("gpu-mac-ioaccelerator.txt", "darwin", "GPU Apple M2 Pro · unread · 18% · 3 GiB/unread · unread"),
+    ("gpu-linux-absent.txt", "linux", "GPU unread"),
+)
+GPU_REPLAY_NOW = 1790000000000
+
+
+def _gpu_replay(aid: str) -> InvokeResult:
+    """Feed saved probe output to gpu.read_local (no process runs) and to desktop gpu-sense read()."""
+    import subprocess
+    from unittest import mock
+
+    from . import gpu as gpu_mod
+
+    fails: list[str] = []
+    trace: list[str] = []
+    py_lines: dict[str, str] = {}
+    for name, platform, want in GPU_REPLAYS:
+        path = _replay_dir() / name
+        if not path.is_file():
+            fails.append(f"missing replay {name}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        seen: list[str] = []
+
+        def fake_run(cmd, *args, _text=text, _seen=seen, **kwargs):
+            _seen.append(" ".join(str(c) for c in cmd))
+            return subprocess.CompletedProcess(cmd, 0, stdout=_text, stderr="")
+
+        with mock.patch.object(gpu_mod.subprocess, "run", fake_run):
+            sample = gpu_mod.read_local(platform, now_ms=GPU_REPLAY_NOW)
+        line = gpu_mod.gpu_line(gpu_mod.present(sample, GPU_REPLAY_NOW))
+        py_lines[name] = line
+        script = {"win32": "gpu-probe.ps1", "darwin": "gpu-probe-mac.sh"}.get(platform, "gpu-probe.sh")
+        if len(seen) != 1 or script not in seen[0]:
+            fails.append(f"{name}: blotter probe ran {seen}")
+        if line != want:
+            fails.append(f"{name}: blotter line {line!r} != {want!r}")
+        trace.append(f"py.{name}={line}")
+    smoked = _run_node_smoke("gpu_replay", domain="desk", action_id=aid)
+    desk_rows = {row.get("file"): row for row in (smoked.extras.get("rows") or [])}
+    if not smoked.ok:
+        fails.append(smoked.error or "desktop gpu replay failed")
+    for name, _platform, want in GPU_REPLAYS:
+        desk_line = (desk_rows.get(name) or {}).get("line")
+        if desk_line != want:
+            fails.append(f"{name}: desktop line {desk_line!r} != {want!r}")
+        elif py_lines.get(name) != desk_line:
+            fails.append(f"{name}: desktop and blotter lines differ")
+    trace += smoked.trace
+    ok = not fails
+    return InvokeResult(
+        aid,
+        "desk",
+        ok,
+        detail=f"{len(GPU_REPLAYS)} probe replays, desktop == blotter" if ok else "gpu replay drifted",
+        extras={"py": py_lines, "desk": {k: v.get("line") for k, v in desk_rows.items()}},
+        trace=trace,
+        error=None if ok else "; ".join(fails[:8]),
+    )
+
+
+# A cry is a short call. Footsteps and the house loop are not cries and are not checked here.
+CRY_MIN_S = 0.05
+CRY_MAX_S = 6.0
+CRY_SILENT_PEAK = 0.0001  # below this every sample is zero or one step from it: nothing plays
+CRY_QUIET_PEAK = 0.02  # quiet on purpose (docs/CRIES.md "attenuated"); listed, not failed
+
+# Known holes: the file decodes but holds no sound. Listed so the run stays honest and green.
+# The row fails if another cry goes silent, or if one of these gets real sound and stays listed.
+KNOWN_SILENT_CRIES = {
+    "garter": (
+        "garter.wav is 4 seconds of digital silence (every sample is 0). docs/CRIES.md promises a "
+        "soft tall-grass rustle, so Sash plays nothing. The file needs a new export from its source."
+    ),
+}
+
+
+def _wav_facts(path: Path) -> dict[str, Any]:
+    """Decode one wav with the standard library. Raises on a file that is not PCM wav."""
+    import array
+    import sys
+    import wave
+
+    with wave.open(str(path), "rb") as handle:
+        channels = handle.getnchannels()
+        width = handle.getsampwidth()
+        rate = handle.getframerate()
+        frames = handle.getnframes()
+        raw = handle.readframes(frames)
+    if width == 2:
+        samples = array.array("h")
+        samples.frombytes(raw[: len(raw) - (len(raw) % 2)])
+        if sys.byteorder == "big":
+            samples.byteswap()
+        peak = max((abs(s) for s in samples), default=0) / 32768.0
+    elif width == 1:
+        peak = max((abs(b - 128) for b in raw), default=0) / 128.0
+    else:
+        peak = -1.0
+    return {
+        "channels": channels,
+        "width": width,
+        "rate": rate,
+        "frames": frames,
+        "bytes": len(raw),
+        "seconds": frames / rate if rate else 0.0,
+        "peak": peak,
+    }
+
+
+def _cry_decode(aid: str) -> InvokeResult:
+    keys = sorted(_prefers_house_cry_keys())
+    fails: list[str] = []
+    known: list[str] = []
+    quiet: list[str] = []
+    lengths: dict[str, float] = {}
+    for key in keys:
+        wav = _cry_wav(key)
+        if wav is None:
+            fails.append(f"{key}: no wav")
+            continue
+        try:
+            facts = _wav_facts(wav)
+        except Exception as exc:  # oracle: name the file, do not crash the runner
+            fails.append(f"{key}: does not decode ({type(exc).__name__}: {exc})")
+            continue
+        if facts["channels"] not in (1, 2):
+            fails.append(f"{key}: {facts['channels']} channels")
+        if facts["width"] not in (1, 2):
+            fails.append(f"{key}: {facts['width'] * 8}-bit samples are not checked")
+        if facts["rate"] not in (22050, 44100, 48000):
+            fails.append(f"{key}: sample rate {facts['rate']}")
+        if facts["bytes"] != facts["frames"] * facts["channels"] * facts["width"]:
+            fails.append(f"{key}: {facts['bytes']} bytes read for {facts['frames']} frames")
+        if not (CRY_MIN_S <= facts["seconds"] <= CRY_MAX_S):
+            fails.append(f"{key}: {facts['seconds']:.3f}s is outside {CRY_MIN_S}-{CRY_MAX_S}s")
+        silent = 0 <= facts["peak"] < CRY_SILENT_PEAK
+        if silent and key in KNOWN_SILENT_CRIES:
+            known.append(key)
+        elif silent:
+            fails.append(f"{key}: silent, every sample is zero (peak {facts['peak']:.5f})")
+        elif key in KNOWN_SILENT_CRIES:
+            fails.append(f"{key}: has sound now (peak {facts['peak']:.4f}); drop it from KNOWN_SILENT_CRIES")
+        elif facts["peak"] < CRY_QUIET_PEAK:
+            quiet.append(key)
+        lengths[key] = round(facts["seconds"], 3)
+    ok = bool(keys) and not fails
+    shortest = min(lengths, key=lengths.get) if lengths else ""
+    longest = max(lengths, key=lengths.get) if lengths else ""
+    return InvokeResult(
+        aid,
+        "cry",
+        ok,
+        detail=(
+            f"{len(lengths)}/{len(keys)} cries decode; silent (known hole): {', '.join(known) or 'none'}"
+            if ok
+            else f"{len(fails)} cry files failed"
+        ),
+        extras={
+            "n": len(keys),
+            "decoded": len(lengths),
+            "shortest": shortest,
+            "longest": longest,
+            "known_silent": known,
+            "quiet": quiet,
+            "fails": fails,
+        },
+        trace=[
+            f"prefersHouseCry={len(keys)}",
+            f"decoded={len(lengths)}",
+            f"shortest={shortest}:{lengths.get(shortest, 0)}s" if shortest else "shortest=none",
+            f"longest={longest}:{lengths.get(longest, 0)}s" if longest else "longest=none",
+            f"known_silent={','.join(known) or 'none'}",
+            f"quiet={','.join(quiet) or 'none'}",
+        ],
+        error=None if ok else "; ".join(fails[:12]),
+    )
+
+
 def _cry_rows() -> list[Affordance]:
     rows = [
         Affordance(
@@ -831,6 +1021,16 @@ def _cry_rows() -> list[Affordance]:
             notes="Mock Audio + real overlayVoiceSrc/wav; live speakers stay out of default run_all.",
         ),
         Affordance(
+            "cry.decode",
+            "cry",
+            "Every house cry decodes to real sound",
+            "desktop/renderer/sounds/{key}.wav via Python wave",
+            notes=(
+                "Opens and reads every prefersHouseCry wav without speakers: PCM header, sample rate, "
+                "channels, a length between 0.05 and 6 seconds, and samples that are not silence."
+            ),
+        ),
+        Affordance(
             "live.cry_playback",
             "cry",
             "Play house cry through real speakers",
@@ -839,7 +1039,7 @@ def _cry_rows() -> list[Affordance]:
             fate="excluded",
             exclude_reason=(
                 "Real speakers/Electron session. Stubbed playVoice path is driven as cry.playback; "
-                "wav + pet.js wire remain driven offline."
+                "every cry file is decoded as cry.decode. Nothing checks that a speaker made a sound."
             ),
         ),
     ]
@@ -893,6 +1093,8 @@ def _invoke_cry(local_id: str, **opts: Any) -> InvokeResult:
     if local_id == "playback":
         smoked = _run_node_smoke("cry_playback", domain="cry", action_id=aid)
         return smoked
+    if local_id == "decode":
+        return _cry_decode(aid)
     return InvokeResult(aid, "cry", False, error=f"unknown cry id {local_id!r}")
 
 
@@ -1080,6 +1282,53 @@ def _desk_rows() -> list[Affordance]:
             notes="Fixture JSON through the real parser; no HTTP.",
         ),
         Affordance(
+            "desk.weather.replay",
+            "desk",
+            "Recorded forecast replay to the painted plate",
+            "weather-areas.js forecastGate / readForecast / parseForecast + desk-house.js paintWeather",
+            notes=(
+                "A saved Open-Meteo response goes through the real read, parse, and paint with a fake fetch. "
+                "Checks the plate words, the daily rows, the one forecast URL, and unread after a failed read."
+            ),
+        ),
+        Affordance(
+            "desk.news.replay",
+            "desk",
+            "Recorded news replay to the painted plate",
+            "news.js readRss / readFeatured / parseRss / parseNews + desk-house.js paintNews",
+            notes=(
+                "Saved Google News Popular and topic RSS plus a saved Wikipedia featured feed. Checks titles, "
+                "sources, whole links, and that no Wikipedia markup reaches the plate."
+            ),
+        ),
+        Affordance(
+            "desk.market.replay",
+            "desk",
+            "Recorded coin and stock replay to the painted plate",
+            "market.js readGeckoMany / readYahoo / parseGeckoMany / parseYahoo + desk-house.js paintMarket",
+            notes=(
+                "Saved CoinGecko prices for the default list and a saved Yahoo AAPL chart. A coin missing from "
+                "the response reads … and gets no invented price."
+            ),
+        ),
+        Affordance(
+            "desk.nft.replay",
+            "desk",
+            "Recorded NFT floor replay to the painted plate",
+            "market.js readNft / parseNftLive + desk-house.js paintMarket",
+            notes="Saved CoinGecko cryptopunks floor. A failed read says can't reach with no number.",
+        ),
+        Affordance(
+            "desk.gpu.replay",
+            "desk",
+            "Saved GPU probe output through both readers",
+            "gpu-sense.cjs read + gpu.js gpuLine / gpu.py read_local + gpu_line",
+            notes=(
+                "A recorded Windows probe plus built Windows-counter, Linux amdgpu, Mac, and no-GPU outputs. "
+                "Desktop and blotter must print the same line. A missing reading stays unread."
+            ),
+        ),
+        Affordance(
             "desk.favorites.news",
             "desk",
             "News Favorites load/persist/list",
@@ -1167,7 +1416,7 @@ def _desk_rows() -> list[Affordance]:
             "weather-areas.ts forecastUrl",
             mode="live",
             fate="excluded",
-            exclude_reason="True live network. Offline parseForecast path is driven as desk.weather.resolve; pass --live to attempt HTTP.",
+            exclude_reason="True live network. A saved response is replayed through read, parse, and paint as desk.weather.replay; pass --live to attempt HTTP.",
         ),
         Affordance(
             "live.news_rss",
@@ -1176,7 +1425,7 @@ def _desk_rows() -> list[Affordance]:
             "news.ts",
             mode="live",
             fate="excluded",
-            exclude_reason="True live network. Offline parseRss path is driven as desk.news.resolve; pass --live to attempt HTTP.",
+            exclude_reason="True live network. Saved RSS and featured feeds are replayed through read, parse, and paint as desk.news.replay; pass --live to attempt HTTP.",
         ),
         Affordance(
             "live.market_quote",
@@ -1185,7 +1434,7 @@ def _desk_rows() -> list[Affordance]:
             "market.ts",
             mode="live",
             fate="excluded",
-            exclude_reason="True live network. Offline parseGecko/Yahoo path is driven as desk.market.resolve; pass --live to attempt HTTP.",
+            exclude_reason="True live network. Saved CoinGecko and Yahoo responses are replayed through read, parse, and paint as desk.market.replay; pass --live to attempt HTTP.",
         ),
         Affordance(
             "live.nft_floor",
@@ -1194,7 +1443,7 @@ def _desk_rows() -> list[Affordance]:
             "market.ts nftUrl",
             mode="live",
             fate="excluded",
-            exclude_reason="True live network. Offline parseNftLive path is driven as desk.nft.resolve; pass --live to attempt HTTP.",
+            exclude_reason="True live network. A saved floor is replayed through read, parse, and paint as desk.nft.replay; pass --live to attempt HTTP.",
         ),
         Affordance(
             "live.gpu_sense",
@@ -1204,7 +1453,7 @@ def _desk_rows() -> list[Affordance]:
             mode="live",
             fate="excluded",
             exclude_reason=(
-                "Reads the keeper machine. Offline contract is card.gpu. "
+                "Reads the keeper machine. Offline contract is card.gpu; saved probe output is replayed as desk.gpu.replay. "
                 "Pass --live to probe. Linux reads nvidia-smi. Mac reads IOAccelerator. Never invents numbers."
             ),
         ),
@@ -1304,6 +1553,16 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("market_resolve", domain="desk", action_id=aid)
     if local_id == "nft.resolve":
         return _run_node_smoke("nft_resolve", domain="desk", action_id=aid)
+    if local_id == "weather.replay":
+        return _run_node_smoke("weather_replay", domain="desk", action_id=aid)
+    if local_id == "news.replay":
+        return _run_node_smoke("news_replay", domain="desk", action_id=aid)
+    if local_id == "market.replay":
+        return _run_node_smoke("market_replay", domain="desk", action_id=aid)
+    if local_id == "nft.replay":
+        return _run_node_smoke("nft_replay", domain="desk", action_id=aid)
+    if local_id == "gpu.replay":
+        return _gpu_replay(aid)
     if local_id == "favorites.news":
         return _run_node_smoke("news_favorites", domain="desk", action_id=aid)
     if local_id == "favorites.market":

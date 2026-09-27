@@ -1,0 +1,20 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "USD",
+          "symbol": "AAPL",
+          "exchangeName": "NMS",
+          "regularMarketPrice": 341.07,
+          "regularMarketChangePercent": 1.533,
+          "chartPreviousClose": 335.92,
+          "previousClose": 335.92,
+          "shortName": "Apple Inc.",
+          "longName": "Apple Inc."
+        }
+      }
+    ],
+    "error": null
+  }
+}

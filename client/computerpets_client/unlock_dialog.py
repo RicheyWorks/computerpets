@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Callable
 
-from PyQt6.QtCore import QObject, QThread, pyqtSignal
+from PyQt6.QtCore import QObject, QThread, Qt, pyqtSignal
 from PyQt6.QtWidgets import (
     QComboBox,
     QDialog,
@@ -15,6 +15,7 @@ from PyQt6.QtWidgets import (
     QLineEdit,
     QMessageBox,
     QPushButton,
+    QToolButton,
     QVBoxLayout,
 )
 
@@ -36,6 +37,46 @@ from .license.license_net import (
 from .species import CATALOG_KEYS, SPECIES
 
 WEAK_FALLBACK_YES = "Use the computer name, or a random id if there is no name"
+
+# The short first line. The privacy detail folds under Details, in whole sentences.
+UNLOCK_INTRO = "Pets work without unlocking. Unlocking is optional."
+UNLOCK_WHAT = "Unlock proves Steam ownership to the house backend. It does not open a second overlay."
+DETAILS_LABEL = "Details"
+
+# Each sentence is checked against license/hwid.py and license/session.py:
+# the three named sources, sha256("computerpets:" + platform + ":" + raw), hwid.txt in the
+# blotter data folder, a stored hash reused and not rewritten, and the weak fallback that
+# waits for a yes (computer name, else a random id).
+MARK_UNREAD_TEXT = " ".join(
+    (
+        "Opening this window did not read the operating-system machine id.",
+        "Unlock, or a download for a license bound to this computer, reads one machine id only when no hash is stored yet:",
+        "the machine-id file on Linux, MachineGuid on Windows, or the platform UUID on a Mac.",
+        "The blotter mixes that id with the app's name and the platform, hashes the result with SHA-256,",
+        "and saves only the hash in hwid.txt in its data folder.",
+        "Later unlocks reuse the stored hash, so an existing license stays bound to this computer.",
+        "The raw id is not sent.",
+        "The house receives only the hash, never the id itself, and only for an unlock or a bound download.",
+        "The hash is still a device fingerprint, because this computer keeps giving the same hash.",
+        "The line under Backend URL names the host before the hash leaves.",
+        "A backend on this computer keeps the hash on this computer.",
+        "If that named read fails, Unlock stops and asks you first.",
+        "It hashes the computer name only after you say yes, and it uses a random id instead if this computer has no name.",
+        "Renaming the computer changes a computer-name hash.",
+        "Deleting hwid.txt turns a random id into a different mark.",
+    )
+)
+
+MARK_STORED_TEXT = " ".join(
+    (
+        "A license hash is already stored in hwid.txt.",
+        "Unlock reuses it and does not read the operating-system machine id again.",
+        "The raw id is not sent.",
+        "The hash is still a device fingerprint, because this computer keeps giving the same hash.",
+        "The line under Backend URL names the host before the hash leaves.",
+        "A backend on this computer keeps the hash on this computer.",
+    )
+)
 
 
 def license_error_text(err: object) -> str:
@@ -82,14 +123,25 @@ class UnlockDialog(QDialog):
         self._unlock_allowed_weak = False
 
         status = session["status"]()
-        lead = QLabel(
-            "Prove Steam ownership against the house backend. "
-            "The blotter pet still lives here either way — this is the published "
-            "license contract, not a second overlay."
-        )
+        lead = QLabel(UNLOCK_INTRO)
+        lead.setObjectName("unlockIntro")
         lead.setWordWrap(True)
+        what = QLabel(UNLOCK_WHAT)
+        what.setWordWrap(True)
+        # The privacy detail folds under a Details toggle, closed until the keeper opens it.
+        self.details = QToolButton()
+        self.details.setObjectName("unlockDetails")
+        self.details.setText(DETAILS_LABEL)
+        self.details.setCheckable(True)
+        self.details.setChecked(False)
+        self.details.setAutoRaise(True)
+        self.details.setArrowType(Qt.ArrowType.RightArrow)
+        self.details.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
         self.mark = QLabel(self._mark_text(status))
+        self.mark.setObjectName("unlockMark")
         self.mark.setWordWrap(True)
+        self.mark.setVisible(False)
+        self.details.toggled.connect(self._toggle_details)
 
         self._license_backend = str(status.get("backendUrl") or "")
         self._license_unbound = _license_is_unbound(status)
@@ -152,6 +204,8 @@ class UnlockDialog(QDialog):
 
         layout = QVBoxLayout(self)
         layout.addWidget(lead)
+        layout.addWidget(what)
+        layout.addWidget(self.details)
         layout.addWidget(self.mark)
         layout.addLayout(form)
         layout.addLayout(row)
@@ -162,22 +216,13 @@ class UnlockDialog(QDialog):
     def _mark_text(self, status: dict[str, Any]) -> str:
         mark = status.get("hwidMark") if isinstance(status, dict) else None
         if isinstance(mark, dict) and mark.get("read") == "stored":
-            return (
-                "A license hash is already stored in hwid.txt. Unlock reuses it and does not "
-                "read the operating-system id again. The raw id is not sent. That hash is still "
-                "a device fingerprint. The line under Backend URL names the host before that hash leaves. "
-                "A backend on this computer does not send it."
-            )
-        return (
-            "Opening this window did not read the operating-system machine id. "
-            "The first Unlock reads Linux machine-id, Windows MachineGuid, or the Mac platform UUID, "
-            "hashes it, and stores that hash in hwid.txt. A hash already stored is reused, so an "
-            "existing license stays bound. The raw id is not sent. The house receives only the hash, "
-            "and only for unlock or a bound download. That hash is a device fingerprint. "
-            "The line under Backend URL names the host before that hash leaves. "
-            "A backend on this computer does not send it. "
-            "If that named read fails. " + WEAK_FALLBACK_MESSAGE
-        )
+            return MARK_STORED_TEXT
+        return MARK_UNREAD_TEXT
+
+    def _toggle_details(self, shown: bool) -> None:
+        self.mark.setVisible(bool(shown))
+        self.details.setArrowType(Qt.ArrowType.DownArrow if shown else Qt.ArrowType.RightArrow)
+        self.adjustSize()
 
     def _unlock_target(self) -> str:
         typed = self.backend.text().strip()
@@ -298,7 +343,7 @@ class UnlockDialog(QDialog):
         answer = QMessageBox.question(
             self,
             "No stable operating-system id",
-            message + "\n\n" + WEAK_FALLBACK_YES + "?",
+            (message or WEAK_FALLBACK_MESSAGE) + "\n\n" + WEAK_FALLBACK_YES + "?",
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No,
         )
