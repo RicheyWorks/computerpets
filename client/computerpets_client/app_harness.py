@@ -2502,6 +2502,21 @@ def _web_rows() -> list[Affordance]:
                 "kept across a repaint, alarm and mutes pressed), and desktop/README (the Keeper card item) use them."
             ),
         ),
+        Affordance(
+            "web.menu_keys_escape",
+            "web",
+            "Sit menu keys, Escape and a key to open the card, plate tabs, Drop keeps focus, one walker stop, revoke focus, idle",
+            "web/src/lib/pets/keeper.ts rovingIndex / menuKey / visibleTimeline + card.ts afterDrop + admin/base.ts + p2p.ts",
+            notes=(
+                "Real modules: keeper.ts rovingIndex / menuKey (the sit choice is a menu: arrows, Home / End, Escape "
+                "closes and focus goes back to the guest; the /meet walkers are one hello group) and visibleTimeline "
+                "(the house visit runs on shown time); card.ts afterDrop and desktop keeper.js afterDrop (a keyboard "
+                "Drop lands on the next saved line); keeper.js cardKey inPlate / rovingIndex (Escape on a plate steps "
+                "back to the card; plate tabs take the arrow keys); admin/base.ts revokeAskFocus; p2p.ts pollDelay "
+                "(the relay poll slows while hidden). Also checks the menu, room, keeper card, walkers, admin page, "
+                "house visit, flyers, overlay pet.js / desk-house.js / index.html use them."
+            ),
+        ),
     ]
 
 
@@ -2523,6 +2538,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("pets_keys_idle", domain="web", action_id=aid)
     if local_id == "pet_keys_plates":
         return _run_web_smoke("pet_keys_plates", domain="web", action_id=aid)
+    if local_id == "menu_keys_escape":
+        return _run_web_smoke("menu_keys_escape", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

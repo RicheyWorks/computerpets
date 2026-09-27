@@ -459,7 +459,7 @@ async function petKeysPlates() {
     return fail("admin names drift", { admin });
   const text = (...p) => readFileSync(join(ROOT, ...p), "utf8").replace(/\r\n/g, "\n");
   const wires = [
-    ["web/src/components/desk/living-pet.tsx", ['role={onTap && tapLabel ? "button" : undefined}', "tabIndex={onTap && tapLabel ? 0 : undefined}", "isTapKey(e.key, e.repeat)", "tapRef.current?.({ keys: true })"]],
+    ["web/src/components/desk/living-pet.tsx", ['role={onTap && tapLabel ? "button" : undefined}', "tabIndex={onTap && tapLabel ? (tabStop ? 0 : -1) : undefined}", "isTapKey(e.key, e.repeat)", "tapRef.current?.({ keys: true })"]],
     ["web/src/components/desk/companion-room.tsx", ['petTapLabel(displayName, "choice"', "choiceByKeys.current = !!how?.keys;", "everyVisible(age, 20_000, { onResume: true })"]],
     ["web/src/components/desk/house-floor.tsx", ["everyVisible(", 'petTapLabel(kind.name, "hello")']],
     ["web/src/components/desk/desk-plates.tsx", ["isStale(newsReadAt.current, Date.now(), NEWS_STALE_MS)", "{ onResume: true }"]],
@@ -483,6 +483,96 @@ async function petKeysPlates() {
     "clock=parse_on_change",
     "admin=expanded+caption+focus",
     "alarm_mute=pressed",
+  ]);
+}
+
+/** Sit menu keys, Escape and a key for the web card, plate Escape and tabs, Drop focus, one walker stop, revoke focus, hidden-tab rests. */
+async function menuKeysEscape() {
+  const K = await import(pathToFileURL(join(WEB, "src", "lib", "pets", "keeper.ts")).href);
+  const Card = await import(pathToFileURL(join(WEB, "src", "lib", "pets", "card.ts")).href);
+  const B = await import(pathToFileURL(join(WEB, "src", "lib", "admin", "base.ts")).href);
+  const P2P = await import(pathToFileURL(join(WEB, "src", "lib", "multiplayer", "p2p.ts")).href);
+  const OverlayKeeper = require(join(ROOT, "desktop", "renderer", "keeper.js"));
+  const menu = {
+    right: K.rovingIndex("ArrowRight", 3, 4),
+    left: K.rovingIndex("ArrowLeft", 0, 4),
+    end: K.menuKey("End", 0, 4),
+    esc: K.menuKey("Escape", 1, 4),
+    tab: K.menuKey("Tab", 1, 4),
+  };
+  if (menu.right !== 0 || menu.left !== 3 || menu.end !== 3 || menu.esc !== "close" || menu.tab !== null) return fail("menu keys drift", { menu });
+  // The visit on shown time: a hidden page holds the next step; showing it again runs it on time.
+  let now = 0;
+  const timers = new Map();
+  let seq = 0;
+  const listeners = new Set();
+  const doc = { hidden: false, addEventListener: (_t, fn) => listeners.add(fn), removeEventListener: (_t, fn) => listeners.delete(fn) };
+  const flip = (h) => { doc.hidden = h; for (const fn of [...listeners]) fn(); };
+  const advance = (ms) => {
+    const end = now + ms;
+    for (;;) {
+      const due = [...timers.entries()].filter(([, t]) => t.at <= end).sort((a, b) => a[1].at - b[1].at)[0];
+      if (!due) break;
+      timers.delete(due[0]);
+      now = due[1].at;
+      due[1].fn();
+    }
+    now = end;
+  };
+  const ran = [];
+  const stop = K.visibleTimeline([{ at: 1000, run: () => ran.push("in") }, { at: 2000, run: () => ran.push("gone") }], {
+    doc,
+    now: () => now,
+    setTimeoutImpl: (fn, ms) => { timers.set(++seq, { fn, at: now + ms }); return seq; },
+    clearTimeoutImpl: (id) => timers.delete(id),
+  });
+  advance(1500);
+  flip(true);
+  advance(60_000);
+  const whileHidden = ran.length;
+  flip(false);
+  advance(500);
+  stop();
+  const visit = { whileHidden, after: ran.join(","), listeners: listeners.size };
+  if (visit.whileHidden !== 1 || visit.after !== "in,gone" || visit.listeners !== 0) return fail("visit timeline ran behind a hidden tab", { visit });
+  const plates = {
+    esc: OverlayKeeper.cardKey({ key: "Escape", cardOpen: true, inPlate: true }),
+    closed: OverlayKeeper.cardKey({ key: "Escape", cardOpen: false, inPlate: true }),
+    card: OverlayKeeper.cardKey({ key: "Escape", cardOpen: true }),
+    tab: OverlayKeeper.rovingIndex("ArrowRight", 3, 4),
+  };
+  if (plates.esc !== "card" || plates.closed !== "leave" || plates.card !== "close" || plates.tab !== 0) return fail("plate keys drift", { plates });
+  const drop = [Card.afterDrop(1, 3), Card.afterDrop(3, 3), Card.afterDrop(0, 0), OverlayKeeper.afterDrop(3, 3)];
+  if (JSON.stringify(drop) !== JSON.stringify([1, 2, -1, 2])) return fail("afterDrop drift", { drop });
+  const ask = [B.revokeAskFocus("a", null), B.revokeAskFocus(null, "a"), B.revokeAskFocus(null, null)];
+  if (JSON.stringify(ask) !== JSON.stringify(["confirm", "revoke", null])) return fail("revokeAskFocus drift", { ask });
+  const poll = [P2P.pollDelay(true, true), P2P.pollDelay(false, false), P2P.pollDelay(false, true)];
+  if (JSON.stringify(poll) !== JSON.stringify([400, 2000, 10000])) return fail("pollDelay drift", { poll });
+  const text = (...p) => readFileSync(join(ROOT, ...p), "utf8").replace(/\r\n/g, "\n");
+  const wires = [
+    ["web/src/components/desk/guest-choice.tsx", ['role="menuitem"', "tabIndex={i === stop ? 0 : -1}", "menuKey(e.key", "onClose?.();"]],
+    ["web/src/components/desk/companion-room.tsx", ['data-card="open"', "function openCardByKeys()", 'if (how?.keys) cardFocus.current = "open";', "onClose={() => {"]],
+    ["web/src/components/desk/keeper-card.tsx", ["hideCard({ keys: true });", "data-line-drop={line.id}", "afterDrop(at, drops.length)"]],
+    ["web/src/components/desk/house-floor.tsx", ['role="group" aria-label="Say hello to the walkers"', "tabStop={i === stop}"]],
+    ["web/src/components/desk/house-visit.tsx", ["return visibleTimeline(["]],
+    ["web/src/routes/admin.tsx", ["revokeAskFocus(pendingJti, kept)", "data-revoke-confirm", "keepLicense(row.jti)"]],
+    ["web/src/lib/multiplayer/p2p.ts", ["this.schedulePoll(this.nextDelay());", 'this.doc?.removeEventListener("visibilitychange", this.onVisible);']],
+    ["desktop/renderer/pet.js", ["backToCard();", "if (plateTabKey(e)) return;", '"linePlay", "lineDrop"', 'document.getElementById("hud-line-text")']],
+    ["desktop/renderer/desk-house.js", ["btn.tabIndex = on ? 0 : -1;"]],
+  ];
+  for (const [rel, needs] of wires) {
+    const body = text(...rel.split("/"));
+    for (const need of needs) if (!body.includes(need)) return fail(`${rel} missing ${need}`);
+  }
+  if (/globalShortcut/.test(text("desktop", "main.cjs"))) return fail("main.cjs registers a global shortcut (ADR 0012)");
+  return ok("sit menu keys, Escape and a key for the card, plate Escape and tabs, Drop keeps focus, one walker stop, revoke focus, hidden rests", { menu, visit, plates, drop, ask, poll }, [
+    "menu=menuitem+arrows+escape",
+    "card.web=escape+open_key",
+    "plates=escape_to_card+tab_arrows",
+    "lines.drop=focus_next",
+    "walkers=one_stop",
+    "admin=row_names+ask_focus",
+    "idle=visit+flyers+p2p",
   ]);
 }
 
@@ -675,6 +765,7 @@ const COMMANDS = {
   pets_admin_music: petsAdminMusic,
   pets_keys_idle: petsKeysIdle,
   pet_keys_plates: petKeysPlates,
+  menu_keys_escape: menuKeysEscape,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

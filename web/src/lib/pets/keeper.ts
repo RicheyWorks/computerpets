@@ -249,6 +249,94 @@ export function isStale(at: number | null, now: number, ms: number): boolean {
   return at == null || now - at >= ms;
 }
 
+/**
+ * Arrow keys inside one roving group (the sit menu, the walkers on /meet): Right or Down steps forward,
+ * Left or Up steps back, both wrap; Home and End jump to the ends. Returns the index to focus, or -1
+ * when the key is not a move (Tab and every other key are left to the page).
+ */
+export function rovingIndex(key: string, at: number, count: number): number {
+  if (count <= 0) return -1;
+  switch (key) {
+    case "ArrowRight":
+    case "ArrowDown":
+      return at < 0 ? 0 : (at + 1) % count;
+    case "ArrowLeft":
+    case "ArrowUp":
+      return at <= 0 ? count - 1 : at - 1;
+    case "Home":
+      return 0;
+    case "End":
+      return count - 1;
+    default:
+      return -1;
+  }
+}
+
+/** A key inside the sit menu: "close" for Escape, the index to focus for a move, or null for anything else. */
+export function menuKey(key: string, at: number, count: number): number | "close" | null {
+  if (key === "Escape" || key === "Esc") return "close";
+  const next = rovingIndex(key, at, count);
+  return next < 0 ? null : next;
+}
+
+export type VisibleTimelineOpts = {
+  /** Defaults to the page's document; null means "always showing" (tests, node). */
+  doc?: VisibleDoc | null;
+  setTimeoutImpl?: (fn: () => void, ms: number) => unknown;
+  clearTimeoutImpl?: (id: unknown) => void;
+  now?: () => number;
+};
+
+/**
+ * Steps that run at set points of shown time: each `at` ms after the start, counting only while the page
+ * shows. A hidden tab freezes the clock and showing it again picks up where it stopped, so a visitor who
+ * was about to walk in still walks in when the keeper is back. Returns stop.
+ */
+export function visibleTimeline(
+  steps: ReadonlyArray<{ at: number; run: () => void }>,
+  opts: VisibleTimelineOpts = {},
+): () => void {
+  const doc = opts.doc === undefined ? pageDoc() : opts.doc;
+  const later = opts.setTimeoutImpl ?? ((f, m) => setTimeout(f, m));
+  const clear = opts.clearTimeoutImpl ?? ((id) => clearTimeout(id as ReturnType<typeof setTimeout>));
+  const now = opts.now ?? (() => Date.now());
+  const queue = [...steps].sort((a, b) => a.at - b.at);
+  let shown = 0;
+  let since = 0;
+  let id: unknown = null;
+  let next = 0;
+  let stopped = false;
+  const arm = () => {
+    if (stopped || id != null || next >= queue.length || (doc && doc.hidden)) return;
+    since = now();
+    id = later(fire, Math.max(0, queue[next]!.at - shown));
+  };
+  const fire = () => {
+    id = null;
+    shown = Math.max(shown + (now() - since), queue[next]!.at);
+    while (!stopped && next < queue.length && queue[next]!.at <= shown) queue[next++]!.run();
+    arm();
+  };
+  const pause = () => {
+    if (id == null) return;
+    clear(id);
+    id = null;
+    shown += now() - since;
+  };
+  const onVis = () => {
+    if (!doc || stopped) return;
+    if (doc.hidden) pause();
+    else arm();
+  };
+  arm();
+  doc?.addEventListener("visibilitychange", onVis);
+  return () => {
+    stopped = true;
+    pause();
+    doc?.removeEventListener("visibilitychange", onVis);
+  };
+}
+
 /** The page's one heartbeat poll. It starts on the first subscribe (in an effect), never at import. */
 export const heartbeatPoll = createHeartbeatPoll();
 

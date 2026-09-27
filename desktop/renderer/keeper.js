@@ -138,13 +138,37 @@
     return index === count - 1 ? 0 : -1;
   }
 
-  /** What a key does to the keeper card: "close" (Escape, no menu open), "tab", or "none". */
+  /**
+   * What a key does to the keeper card: "close" (Escape, no menu open), "tab", or "none".
+   * Escape with focus on a weather, news, or market plate (`inPlate`) steps back instead: "card" (focus
+   * returns to the open card; the next Escape closes it) or, with the card closed, "leave" (focus lets go).
+   */
   function cardKey(ev) {
     const e = ev || {};
+    if (e.key === "Escape" && e.inPlate && !e.menuOpen) return e.cardOpen ? "card" : "leave";
     if (!e.cardOpen) return "none";
     if (e.key === "Escape") return e.menuOpen ? "none" : "close";
     if (e.key === "Tab") return "tab";
     return "none";
+  }
+
+  /**
+   * Arrow keys on a plate's tabs (the tablist pattern): Right and Left step (wrapping), Home and End jump.
+   * Returns the tab index to focus, or -1 when the key is not a move. The tab is picked with Enter or Space.
+   */
+  function rovingIndex(key, at, count) {
+    if (!count) return -1;
+    if (key === "ArrowRight") return at < 0 ? 0 : (at + 1) % count;
+    if (key === "ArrowLeft") return at <= 0 ? count - 1 : at - 1;
+    if (key === "Home") return 0;
+    if (key === "End") return count - 1;
+    return -1;
+  }
+
+  /** After Drop removes saved line `at`: focus the line that slid into its place, else the one above, else -1. */
+  function afterDrop(at, left) {
+    if (!left || left <= 0) return -1;
+    return Math.min(Math.max(at, 0), left - 1);
   }
 
   const api = {
@@ -173,6 +197,8 @@
     poster,
     tabWrap,
     cardKey,
+    rovingIndex,
+    afterDrop,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetKeeper = api;

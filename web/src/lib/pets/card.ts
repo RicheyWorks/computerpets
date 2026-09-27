@@ -507,6 +507,15 @@ export function createCardTickReader(opts: { getRaw?: () => string | null; load?
   };
 }
 
+/**
+ * Where keyboard focus goes after Drop removes saved line `at`: the line that slid into its place, else
+ * the one above, else -1 (no lines left: the caller falls back to the house-line field).
+ */
+export function afterDrop(at: number, left: number): number {
+  if (left <= 0) return -1;
+  return Math.min(Math.max(at, 0), left - 1);
+}
+
 export function saveCard(next: unknown): CardPrefs {
   const card = parseCard(next);
   if (typeof window !== "undefined") {
