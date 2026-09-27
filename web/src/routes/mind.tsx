@@ -9,6 +9,7 @@ import { converseWithPet } from "@/lib/pets/talk";
 import { talkBody } from "@/lib/pets/talk-post";
 import { talkHonesty } from "@/lib/pets/talk-net";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { mindProblem } from "@/lib/plain-error";
 import type { MindBinding, MindSettings, VoiceKind } from "@/lib/ai/types";
 
 export const Route = createFileRoute("/mind")({
@@ -109,8 +110,9 @@ function MindPage() {
         }),
       });
       setTestLine(`${res.source}: ${res.text}`);
-    } catch {
-      setTestLine("The mind did not answer. House lines will.");
+    } catch (err) {
+      // The plain reason (key, rate limit, address, timeout, refused…); the raw error goes to the console.
+      setTestLine(mindProblem(err));
     } finally {
       setBusy(false);
     }

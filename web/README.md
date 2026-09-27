@@ -35,6 +35,8 @@ Ownership, licenses, and NFT verify stay in the Java service at the repo root (`
 
 The admin ledger (`/admin`) starts its License service field from `VITE_LICENSE_API_URL` when that is set at build time, otherwise from this site's own address. Only a page running on this computer (localhost) starts from `http://localhost:8081`. The field stays editable. An address that answers but is not the license service (a 404, or anything that is not a license list) is refused in plain words and nothing is saved.
 
+When the web site is deployed (Vercel), set `VITE_LICENSE_API_URL` in the project environment to the license service's public address. `web/.env.example` lists it with the other build-time settings. The Java service must also allow this web site's origin for browser calls to `/api/admin/**`: set `ADMIN_ALLOWED_ORIGINS` to the web site's origin (comma-separated for more than one). See the "Admin ledger from the web site" section in `deploy/k8s/README.md`. Neither is a secret.
+
 Operators open `/admin` (not in the house nav) and paste `ADMIN_API_KEY`. The page signs each lookup and revoke. It does not send the key.
 
 ## Advertising demos

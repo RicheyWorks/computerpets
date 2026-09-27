@@ -145,6 +145,58 @@ async function loadProblems() {
   ]);
 }
 
+/** Nest load, companion-room play save, admin search answers, and Minds test failures say why plainly. */
+async function plainReasons() {
+  const P = await import(pathToFileURL(join(WEB, "src", "lib", "plain-error.ts")).href);
+  const B = await import(pathToFileURL(join(WEB, "src", "lib", "admin", "base.ts")).href);
+  const logged = [];
+  const log = (label, err) => logged.push([label, err]);
+  const refused = Object.assign(new TypeError("fetch failed"), { cause: { code: "ECONNREFUSED" } });
+  const nest = P.loadProblem("nest", refused, log);
+  if (!nest.startsWith(P.LOAD_LINES.nest) || /ECONNREFUSED|fetch failed/.test(nest)) return fail(`nest drift: ${nest}`);
+  const play = P.careNotSaved("play", refused, log);
+  if (!play.startsWith(P.CARE_NOT_SAVED.play) || /ECONNREFUSED|fetch failed/.test(play)) return fail(`play drift: ${play}`);
+  const minds = {
+    key: P.mindProblemKind(new Error("openai 401")),
+    busy: P.mindProblemKind(new Error("anthropic 429")),
+    address: P.mindProblemKind(new Error("openai 404")),
+    server: P.mindProblemKind(new Error("openai 503")),
+    url: P.mindProblemKind(new Error("https only")),
+    unreachable: P.mindProblemKind(refused),
+  };
+  for (const [want, got] of Object.entries(minds)) {
+    if (want !== got) return fail(`mindProblemKind ${want} -> ${got}`, { minds });
+  }
+  const before = logged.length;
+  const mind = P.mindProblem(new Error("openai 401"), log);
+  if (!mind.startsWith("The mind did not answer. ") || mind.includes("401") || logged.length !== before + 1) {
+    return fail(`mindProblem drift: ${mind}`);
+  }
+  const admin = {
+    row: B.isLicenseRow({ jti: "a" }) && !B.isLicenseRow([{ jti: "a" }]) && !B.isLicenseRow("<html>"),
+    missing: B.isLicenseMissing({ error: "license not found", jti: "a" }) && !B.isLicenseMissing({ error: "Not Found" }),
+    revokeMiss: B.isRevokeMiss({ revoked: false, jti: "a" }) && !B.isRevokeMiss({ status: 404 }),
+  };
+  if (!admin.row || !admin.missing || !admin.revokeMiss) return fail("admin answer checks drift", { admin });
+  const read = (...p) => readFileSync(join(WEB, "src", ...p), "utf8");
+  const wires = [
+    ["routes/nest.tsx", 'loadProblem("nest", err)', "<LoadProblem"],
+    ["components/desk/companion-room.tsx", 'careNotSaved("play", err)', "data-play-problem"],
+    ["routes/mind.tsx", "mindProblem(err)", "mindProblem"],
+    ["lib/admin/api.ts", "isLicenseList(body)", "isLicenseRow(body)"],
+  ];
+  for (const [rel, a, b] of wires) {
+    const text = read(...rel.split("/"));
+    if (!text.includes(a) || !text.includes(b)) return fail(`${rel} missing ${a} / ${b}`);
+  }
+  return ok("nest, play save, admin search, and Minds test failures plain", { nest, play, mind, minds, admin }, [
+    "nest=plain+retry",
+    "play.save=plain+retry+meters_kept",
+    "admin.search=license_rows_only",
+    "mind.test=plain_reason",
+  ]);
+}
+
 async function classroomLockstep(expectPath) {
   if (!expectPath) return fail("classroom_lockstep needs expect JSON path argv");
   let expect;
@@ -329,6 +381,7 @@ const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
   load_problems: loadProblems,
+  plain_reasons: plainReasons,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

@@ -100,6 +100,7 @@ CROSS_DOMAIN = {
     "web.ethogram_tricks",
     "web.demo_room",
     "web.load_problems",
+    "web.plain_reasons",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -453,6 +454,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.ethogram_tricks",
         "web.demo_room",
         "web.load_problems",
+        "web.plain_reasons",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -566,6 +568,12 @@ def test_web_companion_lockstep():
     assert loads.ok, (loads.error, loads.detail)
     assert "admin.404=not_license_service" in loads.trace
     assert set(loads.extras.get("lines") or {}) == {"kennel", "ember", "desk", "signin"}
+
+    reasons = invoke("web.plain_reasons")
+    assert reasons.ok, (reasons.error, reasons.detail)
+    assert "play.save=plain+retry+meters_kept" in reasons.trace
+    assert "mind.test=plain_reason" in reasons.trace
+    assert (reasons.extras.get("minds") or {}).get("key") == "key"
 
 
 def test_blotter_pure_surfaces():

@@ -70,6 +70,7 @@ import { isPhone, isTablet, readSit, tabletOrient, type TabletOrient } from "@/l
 import { phoneOrient, type PhoneOrient } from "@/lib/pets/phone-desk";
 import { guestMarks, guestPick, guestTap, type GuestChoiceId } from "@/lib/pets/guest-choice";
 import { classifyKey, installFileDropGuard } from "@/lib/pets/presence";
+import { careNotSaved, RETRY_LABEL } from "@/lib/plain-error";
 
 type DeskCare = "rest" | "clean" | "medicine" | "bath" | "praise";
 
@@ -164,6 +165,7 @@ export function CompanionRoom({
   const [draft, setDraft] = useState("");
   const [latestNote, setLatestNote] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [playProblem, setPlayProblem] = useState<string | null>(null);
   const [mark, setMark] = useState<BlotterMark | null>(null);
   const [leaving, setLeaving] = useState(false);
   const [order, setOrder] = useState<{ cmd: PetCommand; id: number }>({ cmd: "wander", id: 1 });
@@ -466,6 +468,35 @@ export function CompanionRoom({
     }
   }
 
+  /**
+   * A play the house could not save: the meters stay where they were (persist only sets stats on
+   * success), the claim and the mark are released, and one quiet line says why with a retry.
+   */
+  function playNotSaved(err: unknown) {
+    takenRef.current = false;
+    markRef.current = null;
+    setMark(null);
+    setPlayProblem(careNotSaved("play", err));
+  }
+
+  async function retryPlay() {
+    if (busy) return;
+    setPlayProblem(null);
+    const prev = statsRef.current;
+    let next: CareStats;
+    try {
+      next = (await persist("play")) ?? statsRef.current;
+    } catch (err) {
+      playNotSaved(err);
+      return;
+    }
+    say(kind.careLine("play"));
+    note(`${displayName} played.`);
+    const bond = maybeBondLine(prev.bond, next.bond);
+    if (bond) window.setTimeout(() => say(bond), 900);
+    issue("play");
+  }
+
   function cloudLinesInView() {
     if (talkLine) {
       const el = document.getElementById("hud-talk-net");
@@ -575,9 +606,11 @@ export function CompanionRoom({
     if (onCare) {
       try {
         await persist("play");
-      } catch {
+      } catch (err) {
+        playNotSaved(err);
         return;
       }
+      setPlayProblem(null);
     } else {
       setStats(applyPlay(prev));
     }
@@ -849,6 +882,7 @@ export function CompanionRoom({
             takenRef.current = true;
             const prev = statsRef.current;
             const finishPlay = (next: CareStats) => {
+              setPlayProblem(null);
               setStats(next);
               if (trait.special === "ribbon" && markRef.current?.kind === "lure") {
                 const stolen = { ...stealRibbon(markRef.current, poseRef.current.x), kind: "lure" as const };
@@ -868,7 +902,8 @@ export function CompanionRoom({
             if (onCare) {
               void persist("play")
                 .then((remote) => finishPlay(remote ?? applyPlay(prev)))
-                .catch(() => undefined);
+                // Not swallowed: the keeper hears the play wasn't saved, and the meters stay put.
+                .catch((err) => playNotSaved(err));
             } else {
               finishPlay(applyPlay(prev));
             }
@@ -999,6 +1034,19 @@ export function CompanionRoom({
         </h1>
         <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>
         {line}
+        {playProblem ? (
+          <p role="status" aria-live="polite" data-play-problem className="mt-2 max-w-sm text-sm text-muted">
+            {playProblem}{" "}
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => void retryPlay()}
+              className="text-fg underline underline-offset-2 hover:text-primary disabled:opacity-40"
+            >
+              {RETRY_LABEL}
+            </button>
+          </p>
+        ) : null}
         {latestNote ? <p className="mt-2 max-w-sm text-xs text-subtle">{latestNote}</p> : null}
         <SpeciesPlaque speciesKey={kind.key} compact paper className="mt-5 max-w-sm" showDemoLink={false} />
         <KeeperCard

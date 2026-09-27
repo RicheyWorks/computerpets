@@ -30,7 +30,7 @@ test("loadProblem: 'Couldn't load …' plus a plain reason, never raw text", () 
   // A deliberate house line passes through unchanged.
   const house = new P.HouseError("The sign-in window closed before sign-in finished. Try again.");
   assert.equal(P.loadProblem("signin", house, quiet), "Couldn't start sign-in. The sign-in window closed before sign-in finished. Try again.");
-  assert.deepEqual(Object.keys(P.LOAD_LINES).sort(), ["desk", "ember", "kennel", "signin"]);
+  assert.deepEqual(Object.keys(P.LOAD_LINES).sort(), ["desk", "ember", "kennel", "nest", "signin"]);
   assert.equal(P.RETRY_LABEL, "Try again");
 });
 
@@ -111,7 +111,7 @@ test("admin: only a real license list opens the ledger; a 404 says it is not the
   assert.doesNotMatch(api, /__unlock-check__/);
   assert.doesNotMatch(api, /res\.status !== 404 && !res\.ok/, "a 404 must not count as success");
   assert.match(api, /adminFetch\(apiBase, adminKey, "\/api\/admin\/licenses"\);\n  if \(res\.status === 404\) throw await failure\(res, NOT_LICENSE_SERVICE\);/);
-  assert.match(api, /if \(!isLicenseList\(body\)\) \{/);
+  assert.match(api, /if \(!isLicenseList\(body\)\) throw notTheService\(res\.status, "a license list"\);/);
   // saveAdminSession only after the answer checks out.
   assert.ok(api.indexOf("if (!isLicenseList(body))") < api.indexOf("saveAdminSession(apiBase, adminKey);\n  return body"));
   const page = src("src/routes/admin.tsx");

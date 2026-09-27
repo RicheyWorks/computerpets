@@ -177,6 +177,7 @@ export const LOAD_LINES = {
   ember: "Couldn't load your ember.",
   desk: "Couldn't load your guests for the desk.",
   signin: "Couldn't start sign-in.",
+  nest: "Couldn't load the nest.",
 } as const;
 
 export type LoadWhat = keyof typeof LOAD_LINES;
@@ -191,6 +192,67 @@ export const RETRY_LABEL = "Try again";
  */
 export function loadProblem(what: LoadWhat, err: unknown, log: PlainLog = consoleLog): string {
   return `${LOAD_LINES[what]} ${plainMessage(err, "Try again in a moment.", log)}`;
+}
+
+/** A care act the house could not save: said plainly, and the meters stay where they were. */
+export const CARE_NOT_SAVED = {
+  play: "The play wasn't saved, so the meters didn't change.",
+} as const;
+
+export type CareNotSavedAct = keyof typeof CARE_NOT_SAVED;
+
+/** "The play wasn't saved…" plus the plain reason. Raw text goes to the log only. */
+export function careNotSaved(act: CareNotSavedAct, err: unknown, log: PlainLog = consoleLog): string {
+  return `${CARE_NOT_SAVED[act]} ${plainMessage(err, "Try again in a moment.", log)}`;
+}
+
+/** Why a mind (AI plugin) test did not answer, in plain words. */
+export const MIND_LINES = {
+  key: "The mind's service did not accept the API key. Check the key for this plugin.",
+  busy: "The mind's service is rate limiting this key right now. Try again in a minute.",
+  address: "The mind's service answered, but not at that address or for that model. Check the Base URL and the model.",
+  server: "The mind's service had a problem. Try again later.",
+  timeout: "The mind took too long to answer.",
+  unreachable: "Couldn't reach the mind's service. Check the Base URL and that the service is running.",
+  not_found: "Couldn't find the mind's service. Check the Base URL.",
+  tls: "Couldn't make a secure connection to the mind's service.",
+  url: "The Base URL was refused before anything was sent. Use an https address (http only for a mind on this computer) with no name or password in it.",
+  empty: "The mind answered with nothing.",
+  unknown: "Something went wrong on the way to the mind's service.",
+} as const;
+
+export type MindProblemKind = keyof typeof MIND_LINES;
+
+/** Plugin failures (web/src/lib/ai/complete.ts) read "<plugin> <status>"; safe-url refusals are short words. */
+const MIND_STATUS = /^[\w.-]+ (\d{3})$/;
+const MIND_URL_REFUSED = /^(missing url|bad url|userinfo|protocol|localhost blocked|https only|private host)$/;
+
+/** Which plain reason a mind test failure gets. */
+export function mindProblemKind(err: unknown): MindProblemKind {
+  const e = err && typeof err === "object" ? (err as Loose) : null;
+  const message = (typeof err === "string" ? err : typeof e?.message === "string" ? e.message : "").trim();
+  const hit = MIND_STATUS.exec(message);
+  const status = hit ? Number(hit[1]) : statusOf(err);
+  if (status === 401 || status === 403) return "key";
+  if (status === 429) return "busy";
+  if (status === 404) return "address";
+  if (status >= 500) return "server";
+  if (MIND_URL_REFUSED.test(message)) return "url";
+  if (message === "empty") return "empty";
+  const kind = classify(err);
+  if (kind === "tls" || kind === "not_found" || kind === "timeout" || kind === "unreachable") return kind;
+  if (kind === "busy") return "busy";
+  if (kind === "server") return "server";
+  return "unknown";
+}
+
+/**
+ * The Minds page test line when the mind did not answer: the plain reason, then the promise that
+ * house lines still speak. The raw error goes to the log only.
+ */
+export function mindProblem(err: unknown, log: PlainLog = consoleLog): string {
+  log("[mind] test did not answer:", err);
+  return `The mind did not answer. ${MIND_LINES[mindProblemKind(err)]} House lines will.`;
 }
 
 /**

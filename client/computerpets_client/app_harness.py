@@ -2434,6 +2434,19 @@ def _web_rows() -> list[Affordance]:
                 "non-list is not the license service), and formatLocalWhen (local time, ISO in the tooltip)."
             ),
         ),
+        Affordance(
+            "web.plain_reasons",
+            "web",
+            "Nest, play save, admin search, and Minds test say why",
+            "web/src/lib/plain-error.ts careNotSaved/mindProblem + web/src/lib/admin/base.ts",
+            notes=(
+                "Real plain-error.ts: loadProblem('nest') for a failed nest load, careNotSaved('play') for a "
+                "play the house could not save (meters stay put, retry offered), and mindProblemKind / "
+                "mindProblem for a Minds test (key rejected, rate limited, wrong address, server, refused URL, "
+                "unreachable; raw text only in the log); admin/base.ts isLicenseRow / isLicenseMissing / "
+                "isRevokeMiss so search and revoke only trust license-service answers."
+            ),
+        ),
     ]
 
 
@@ -2445,6 +2458,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("demo_room", domain="web", action_id=aid)
     if local_id == "load_problems":
         return _run_web_smoke("load_problems", domain="web", action_id=aid)
+    if local_id == "plain_reasons":
+        return _run_web_smoke("plain_reasons", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []
