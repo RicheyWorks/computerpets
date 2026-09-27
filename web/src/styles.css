@@ -744,18 +744,6 @@
     color: var(--color-muted);
   }
 
-  .keeper-gpu {
-    margin: 0.25rem 0 0;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    color: #5c564e;
-  }
-
-  .keeper-gpu[data-gpu="read"] {
-    color: var(--color-muted);
-  }
-
   .keeper-listener {
     margin: 0.25rem 0 0;
     font-family: var(--font-mono);
@@ -768,30 +756,13 @@
     color: #5c564e;
   }
 
-  .gpu-spark {
-    display: inline-block;
-    width: 72px;
-    height: 14px;
-    margin-left: 8px;
-    vertical-align: middle;
-    color: #5c564e;
-  }
-
-  .gpu-spark[data-spark="empty"] {
-    color: #5c564e;
-  }
-
-  .gpu-spark[data-spark="trail"] {
-    color: #9a9288;
-  }
-
-  .gpu-spark svg {
-    display: block;
-    overflow: visible;
-  }
-
   .keeper-heartbeat[data-heartbeat="UP"] {
     color: var(--color-uncommon);
+  }
+
+  /* Only a server that answered and then stopped is a warning. "OFF" (optional, never answered) stays muted. */
+  .keeper-heartbeat[data-heartbeat="DOWN"] {
+    color: #c79a5a;
   }
 
   .keeper-collapse {

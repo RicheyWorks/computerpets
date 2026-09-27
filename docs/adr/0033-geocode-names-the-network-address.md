@@ -29,3 +29,4 @@ This slice shows the same network-address sentence before those two requests lea
 - License `hwid` still reads a named machine id only when a bind needs it. A missing OS id still waits for its own yes. [0030](0030-missing-os-id-waits-for-a-yes.md). This slice does not change that door.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.
 - News RSS, market quotes, and Radio Find name the network address in [0034](0034-news-quotes-and-radio-name-the-network-address.md).
+- Later wording (2026-09): Look up now reads "This asks Open-Meteo, a weather website, to find the place you typed. It sends what you typed." and the reverse lookup "… for the name of the place you sent. It sends that place, rounded to about 11 km.", each followed by "This computer's internet address also goes to Open-Meteo, like visiting any website." Same gate. See ROADMAP (network consent lines in plain words).

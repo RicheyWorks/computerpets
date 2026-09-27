@@ -227,7 +227,7 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.match(html, /id="market-net"/);
   assert.match(html, /id="market-look-net"/);
   assert.match(html, /id="hud-radio-net"/);
-  assert.match(html, /this look-up sends the typed name\. this computer's network address goes with the https request to the quote host, as any client\./);
+  assert.match(html, /This asks CoinGecko, a price website, to find the name you typed\. It sends what you typed\. This computer's internet address also goes to CoinGecko, like visiting any website\./);
   assert.match(html, /this find sends the station look-up\. this computer's network address goes with the https request to the radio host, as any client\./);
   assert.match(plates, /id="news-net"/);
   assert.match(plates, /newsMaySend/);

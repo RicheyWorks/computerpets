@@ -34,3 +34,4 @@ This slice does not send a later forecast on load or while the weather panel is 
 - License `hwid` still reads a named machine id only when a bind needs it. A missing OS id still waits for its own yes. [0030](0030-missing-os-id-waits-for-a-yes.md). This slice does not change that door.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.
 - News RSS, market quotes, and Radio Find name the network address in [0034](0034-news-quotes-and-radio-name-the-network-address.md).
+- Later wording (2026-09): the weather, news, and quotes plates now paint a kid-plain line that names the website, e.g. "This asks Open-Meteo, a weather website, for your forecast. It sends the place you picked. This computer's internet address also goes to Open-Meteo, like visiting any website." (`plainNetLine`); the gate still waits for that exact painted line. See ROADMAP (network consent lines in plain words).

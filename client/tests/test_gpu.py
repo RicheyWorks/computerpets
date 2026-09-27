@@ -567,7 +567,8 @@ def test_sparkline_contract_is_lockstep():
     assert 'data-spark="empty"' in overlay
     assert "function remember" in desk and "function sparkline" in desk
     assert "export function remember" in web and "export function sparkline" in web
-    assert "sparkline([], UNREAD_GPU, 0)" in card
+    # The web card hides the GPU row: a browser cannot read the GPU, so it would always say "no reading".
+    assert "sparkline(" not in card and "keeper-gpu" not in card
     assert "M1 11.3" not in card
     assert "gpu_spark" in blotter and "sparkline" in blotter
     assert sparkline(remember(remember([], _at(14, NOW), NOW), _at(40, NOW + 1000), NOW + 1000), _at(40, NOW + 1000), NOW + 1000)["path"] == TRAIL

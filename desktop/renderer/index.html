@@ -28,14 +28,14 @@
           <div id="weather-live"></div>
           <div id="weather-current-panel">
             <div id="weather-saved-ask" hidden>
-              <p id="weather-saved-ask-line" class="keeper-truth">use this saved computer place for the forecast? this sends the saved place. this computer's network address goes with the https request, as any client. it does not locate again.</p>
+              <p id="weather-saved-ask-line" class="keeper-truth">Use the place this computer saved for the forecast? This sends the saved place to Open-Meteo, a weather website. This computer's internet address also goes to Open-Meteo, like visiting any website. It does not find where you are again.</p>
               <button type="button" data-hit id="weather-saved-yes">Use this saved place</button>
               <button type="button" data-hit id="weather-saved-no">Don't send</button>
             </div>
             <p id="weather-saved-truth" class="keeper-truth"></p>
             <p id="weather-forecast-net" class="keeper-truth"></p>
             <p class="keeper-truth">Weather area. Named places you add. Not the radio station.</p>
-            <p id="weather-geocode-net" class="keeper-truth">this look-up sends the typed name. this computer's network address goes with the https request to the geocode host, as any client.</p>
+            <p id="weather-geocode-net" class="keeper-truth">This asks Open-Meteo, a weather website, to find the place you typed. It sends what you typed. This computer's internet address also goes to Open-Meteo, like visiting any website.</p>
             <form id="weather-add" data-hit>
               <label>Weather area
                 <input data-hit id="weather-q" type="text" autocomplete="off" spellcheck="false" placeholder="A city or place — weather, not radio" aria-label="Weather area" />
@@ -43,10 +43,10 @@
               <button data-hit type="submit" id="weather-lookup">Look up</button>
             </form>
             <button type="button" data-hit id="weather-here" aria-describedby="weather-here-send">Use this computer's location</button>
-            <p id="weather-here-send" class="keeper-truth">this click sends a place to the forecast host.</p>
-            <p id="weather-reverse-net" class="keeper-truth">this reverse lookup sends the rounded place. this computer's network address goes with the https request to the geocode host, as any client.</p>
+            <p id="weather-here-send" class="keeper-truth">Pressing this sends a place to Open-Meteo, a weather website.</p>
+            <p id="weather-reverse-net" class="keeper-truth">This asks Open-Meteo, a weather website, for the name of the place you sent. It sends that place, rounded to about 11 km. This computer's internet address also goes to Open-Meteo, like visiting any website.</p>
             <div id="weather-here-ask" hidden>
-              <p id="weather-here-ask-line" class="keeper-truth">send a place from this computer? a prior browser allow can satisfy the next locate without a new os or browser prompt. the house still asks in the app. this house cannot revoke that grant.</p>
+              <p id="weather-here-ask-line" class="keeper-truth">Send where this computer is? If you said yes to your browser or computer before, it may not ask again, but this app still asks you first. This app can't take back a yes you gave your browser or computer. You can change that in its settings.</p>
               <button type="button" data-hit id="weather-here-yes">Send the place</button>
               <button type="button" data-hit id="weather-here-no">Don't send</button>
             </div>
@@ -118,15 +118,15 @@
         </button>
         <div id="market-body" hidden>
           <p id="market-net" class="keeper-truth"></p>
-          <p id="market-look-net" class="keeper-truth">this look-up sends the typed name. this computer's network address goes with the https request to the quote host, as any client.</p>
+          <p id="market-look-net" class="keeper-truth">This asks CoinGecko, a price website, to find the name you typed. It sends what you typed. This computer's internet address also goes to CoinGecko, like visiting any website.</p>
           <div class="market-panes">
             <section class="market-pane" data-market-pane="coins" aria-label="Coins">
               <h3 class="market-pane-title">Coins</h3>
               <div id="market-live"></div>
-              <p class="keeper-truth">Majors and search use CoinGecko. Small or meme coins (pump.fun and kin) use a mint or contract paste via GeckoTerminal. Stocks still Yahoo. No paid key.</p>
+              <p class="keeper-truth">Big coins and search come from CoinGecko. A small coin you add by its address comes from GeckoTerminal. Stocks come from Yahoo Finance. All free, no paid account.</p>
               <form id="market-add" data-hit>
                 <label>Add a coin
-                  <input data-hit id="market-q" type="text" autocomplete="off" spellcheck="false" placeholder="Coin, ticker, or contract — ETH, BTC, pump mint" aria-label="Add a coin" />
+                  <input data-hit id="market-q" type="text" autocomplete="off" spellcheck="false" placeholder="A coin or stock — ETH, BTC, AAPL, or a coin's address" aria-label="Add a coin" />
                 </label>
                 <button data-hit type="submit" id="market-lookup">Look up</button>
               </form>
@@ -137,7 +137,7 @@
             <section class="market-pane" data-market-pane="nfts" aria-label="NFTs">
               <h3 class="market-pane-title">NFTs</h3>
               <div id="nft-live"></div>
-              <p class="keeper-truth">Collections use CoinGecko floors when reachable. Marketplaces stay on your list with an honest offline note when a venue needs a key.</p>
+              <p class="keeper-truth">Collection floor prices come from CoinGecko when it answers. Your marketplaces (OpenSea, Blur, Magic Eden, Rarible, Robinhood NFT) are links; one that needs a paid account says so instead of showing a price.</p>
               <h4 class="market-subhead">Marketplaces</h4>
               <ul id="nft-marketplaces"></ul>
               <div id="nft-marketplace-catalog" class="nft-marketplace-catalog"></div>
@@ -304,7 +304,7 @@
             <button type="button" id="hud-off" data-hit data-card="off">Turn off</button>
             <p id="hud-off-truth" class="keeper-truth">Turns the pets off. To bring them back, type .\desktop.ps1 again, just like the first time.</p>
           </div>
-          <p id="hud-heartbeat" class="keeper-heartbeat" data-heartbeat="DOWN" hidden></p>
+          <p id="hud-heartbeat" class="keeper-heartbeat" data-heartbeat="OFF" hidden></p>
           <p id="hud-gpu" class="keeper-gpu" data-gpu="unread"><span id="hud-gpu-line">GPU · no reading</span><span id="hud-gpu-spark" class="gpu-spark" data-spark="empty" aria-hidden="true"></span></p>
           <p id="hud-listener" class="keeper-listener" data-listener="local">Listening · House lines</p>
           <p id="hud-truth" class="keeper-truth">Your pet's care stays on this computer.</p>

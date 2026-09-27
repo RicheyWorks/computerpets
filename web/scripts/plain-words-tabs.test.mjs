@@ -45,7 +45,7 @@ test("heartbeat: plain words on web and overlay; the port and profile only in th
   assert.equal(OK.HOUSE_SERVER_UP, K.HOUSE_SERVER_UP);
   assert.equal(OK.houseServerLine({ show: true, reachable: true, seen: true, uptimeSeconds: 125 }), K.heartbeatLine(up, true));
   assert.equal(OK.houseServerLine({ show: true, reachable: false, seen: true }), K.HOUSE_SERVER_STOPPED);
-  assert.equal(card.match(/data-heartbeat=\{beat\.status\} title=\{heartbeatDetail\(beat\)\}/g)?.length, 2);
+  assert.equal(card.match(/data-heartbeat=\{heartbeatTone\(beat, heartbeatPoll\.answered\(\)\)\} title=\{heartbeatDetail\(beat\)\}/g)?.length, 2);
   assert.doesNotMatch(card, /Desk \{DESK_PORT\}|ADVERTISED_CARE\.feed/);
 });
 

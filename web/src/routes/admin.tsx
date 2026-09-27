@@ -23,7 +23,7 @@ export const Route = createFileRoute("/admin")({
       { title: "License ledger — ComputerPets" },
       {
         name: "description",
-        content: "Look up and revoke issued licenses. Requires the admin API key.",
+        content: "Look up and revoke issued licenses. Needs the admin key.",
       },
     ],
   }),
@@ -236,10 +236,11 @@ export function AdminPage() {
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">License ledger</p>
         <h1 className="font-display text-4xl leading-none sm:text-5xl">Look up. Revoke. Leave a mark.</h1>
         <p className="text-sm text-muted sm:text-base">
-          Same gate as the API: <span className="font-mono text-fg">ADMIN_API_KEY</span> signs each
-          request. The key stays in this tab and is not sent as a header.
-          Issued, last used, revoked, soft-deleted, provider, and pet are on each row.
-          Revoke soft-deletes; it does not wipe the ledger.
+          This page needs the same admin key as the license service
+          (<span className="font-mono text-fg">ADMIN_API_KEY</span>). The key stays in this tab: it signs
+          each request and is never sent itself. Each row shows when a license was issued, last used,
+          revoked, or marked deleted, where it came from, and which pet it unlocks. Revoking a license
+          marks it deleted; its row stays on the ledger as a record.
         </p>
       </header>
 
@@ -285,7 +286,7 @@ export function AdminPage() {
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
                 <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Find a license</p>
-                <p className="mt-1 text-sm text-muted">jti or owner. Empty search shows the newest fifty.</p>
+                <p className="mt-1 text-sm text-muted">A license ID or an owner. Leave it empty to see the newest fifty.</p>
               </div>
               <Button type="button" variant="ghost" size="sm" onClick={() => lock()}>
                 Lock
@@ -296,8 +297,8 @@ export function AdminPage() {
                 ref={searchInput}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="jti or owner"
-                aria-label="jti or owner"
+                placeholder="License ID or owner"
+                aria-label="License ID or owner"
                 autoComplete="off"
                 spellCheck={false}
                 className="h-11 min-w-0 flex-1 rounded-[var(--radius-sm)] border border-border bg-elevated px-3 font-mono text-sm"
@@ -324,7 +325,7 @@ export function AdminPage() {
                   <div className="min-w-0 space-y-1">
                     <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">
                       {row.provider} · {row.pet}
-                      {row.hwidBound ? " · hwid" : ""}
+                      {row.hwidBound ? " · one computer only" : ""}
                     </p>
                     <p id={`${ledgerId}-jti-${i}`} className="break-all font-mono text-sm text-fg">
                       <span className="sr-only">License </span>
@@ -338,7 +339,7 @@ export function AdminPage() {
                   <Stamp label="Issued" value={row.issuedAt} />
                   <Stamp label="Last used" value={row.lastUsedAt} />
                   <Stamp label="Revoked" value={row.revokedAt} />
-                  <Stamp label="Soft-deleted" value={row.deletedAt} />
+                  <Stamp label="Marked deleted" value={row.deletedAt} />
                 </dl>
                 {row.revoked ? null : pendingJti === row.jti ? (
                   <div

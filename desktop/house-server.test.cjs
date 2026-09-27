@@ -109,7 +109,7 @@ test("the Settings Backend URL is saved and cleared in house-server.json", () =>
 });
 
 test("the overlay row ships hidden and is painted from the main-process probe", () => {
-  assert.match(htmlSrc, /<p id="hud-heartbeat" class="keeper-heartbeat" data-heartbeat="DOWN" hidden><\/p>/);
+  assert.match(htmlSrc, /<p id="hud-heartbeat" class="keeper-heartbeat" data-heartbeat="OFF" hidden><\/p>/);
   assert.doesNotMatch(htmlSrc, /Java 8081 · DOWN · unread/);
   assert.doesNotMatch(petSrc, /fetch\(/);
   assert.match(petSrc, /window\.desk\s*\.houseServer\(\)/);

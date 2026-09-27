@@ -81,7 +81,10 @@ test("overlay house server row: 'not running (optional)' until it answered; 'unr
   const pet = desk("renderer/pet.js");
   assert.match(pet, /if \(houseServer\.show && houseServer\.reachable === true\) houseServerSeenHost = houseServer\.host \|\| "";/);
   assert.match(pet, /K\.houseServerLine\(\{ \.\.\.houseServer, seen \}\)/);
-  assert.match(pet, /houseServer\.reachable === true \? "UP" : seen \? "DOWN" : "OFF"/);
+  assert.match(pet, /setAttribute\("data-heartbeat", K\.houseServerTone\(\{ \.\.\.houseServer, seen \}\)\)/);
+  assert.equal(OK.houseServerTone({ show: true, reachable: true, seen: true }), "UP");
+  assert.equal(OK.houseServerTone({ show: true, reachable: false, seen: true }), "DOWN");
+  assert.equal(OK.houseServerTone({ show: true, reachable: false, seen: false }), "OFF");
 });
 
 test("web first hint: kid-plain words, shown until Got it, then never again", () => {
