@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast, Toaster } from "sonner";
 import { CompanionRoom } from "@/components/desk/companion-room";
+import { LoadProblem } from "@/components/load-problem";
 import { PetPortrait } from "@/components/pet-card";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
@@ -21,7 +22,7 @@ import {
 } from "@/lib/pets/genetics";
 import { livingByKey, RED_PANDA_KIND } from "@/lib/pets/living";
 import { canPair, duePhrase, extinctLines, fairHouse, nestPath } from "@/lib/pets/nest";
-import { plainMessage } from "@/lib/plain-error";
+import { loadProblem, plainMessage } from "@/lib/plain-error";
 
 export const Route = createFileRoute("/nest")({
   component: NestPage,
@@ -48,6 +49,8 @@ function NestPage() {
   const [watch, setWatch] = useState<string>("eyes");
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
+  const [problem, setProblem] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
 
   async function reload() {
     const d = await getSanctuary();
@@ -59,11 +62,18 @@ function NestPage() {
 
   useEffect(() => {
     if (!user) return;
-    void reload().catch(() => {
-      setEmber(0);
-      setPets([]);
-    });
-  }, [user]);
+    // A failed load is not zero ember and an empty nest: say it did not load, with a retry.
+    void reload()
+      .then(() => setProblem(null))
+      .catch((err) => setProblem(loadProblem("nest", err)));
+  }, [user, attempt]);
+
+  function retryLoad() {
+    setProblem(null);
+    setEmber(null);
+    setPets(null);
+    setAttempt((n) => n + 1);
+  }
 
   const a = pets?.find((p) => p.id === seatA) ?? null;
   const b = pets?.find((p) => p.id === seatB) ?? null;
@@ -135,6 +145,15 @@ function NestPage() {
 
   if (isPending) return <div className="h-dvh animate-pulse bg-surface" />;
   if (!user) return <RedirectToSignIn />;
+  if (problem) {
+    return (
+      <main className="mx-auto max-w-lg space-y-3 px-6 py-20">
+        <Toaster theme="dark" position="bottom-center" />
+        <h1 className="font-display text-3xl">The nest did not open.</h1>
+        <LoadProblem line={problem} onRetry={retryLoad} />
+      </main>
+    );
+  }
 
   async function pair() {
     if (!a) return;

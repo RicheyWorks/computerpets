@@ -16,6 +16,10 @@ data:
   RATE_LIMIT_BACKEND: redis
   # Optional: comma CIDRs for X-Forwarded-For / Forwarded (ADR 0067). Empty = remoteAddr only.
   # TRUSTED_PROXY_CIDRS: "10.0.0.0/8"
+  # Optional: web sites whose /admin page may call /api/admin/** from a browser (comma-separated
+  # origins). Unset = any origin (every admin call is still HMAC-signed, ADR 0071). Put your own
+  # web site's origin here; this repo does not invent one.
+  # ADMIN_ALLOWED_ORIGINS: "https://replace-with-your-web-site.example"
   MICROSOFT_DEV_MODE: "false"
   # Public listener TLS stays off. The Service is HTTP on 8081 (ADR 0077).
   SERVER_PORT: "8081"

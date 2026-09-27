@@ -46,6 +46,29 @@ export function isLicenseList(body: unknown): boolean {
   return Array.isArray(body) && body.every((row) => !!row && typeof row === "object" && typeof (row as { jti?: unknown }).jti === "string");
 }
 
+/** True when `body` is one ledger row (an object with a string jti), as GET /api/admin/licenses/{jti} returns. */
+export function isLicenseRow(body: unknown): boolean {
+  return !!body && typeof body === "object" && !Array.isArray(body) && typeof (body as { jti?: unknown }).jti === "string";
+}
+
+/**
+ * True when a 404 is the license service's own "no such license" answer
+ * ({"error":"license not found", ...}). Any other 404 came from something else.
+ */
+export function isLicenseMissing(body: unknown): boolean {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return false;
+  const error = (body as { error?: unknown }).error;
+  return typeof error === "string" && /\blicense not found\b/i.test(error);
+}
+
+/**
+ * True when a revoke 404 is the license service's own "not found or already revoked" answer
+ * ({"revoked":false, ...}). Any other 404 came from something else.
+ */
+export function isRevokeMiss(body: unknown): boolean {
+  return !!body && typeof body === "object" && !Array.isArray(body) && (body as { revoked?: unknown }).revoked === false;
+}
+
 /**
  * A ledger timestamp in the viewer's local time (text), with the exact ISO instant kept for a tooltip.
  * `locale` / `timeZone` default to the viewer's; tests pin them.

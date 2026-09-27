@@ -1,6 +1,13 @@
 import { signAdminRequest, NONCE_HEADER, SIGNATURE_HEADER, TIMESTAMP_HEADER } from "@/lib/admin/sign";
 import { HouseError, PLAIN_LINES } from "@/lib/plain-error";
-import { NOT_LICENSE_SERVICE, isLicenseList, pickApiBase } from "@/lib/admin/base";
+import {
+  NOT_LICENSE_SERVICE,
+  isLicenseList,
+  isLicenseMissing,
+  isLicenseRow,
+  isRevokeMiss,
+  pickApiBase,
+} from "@/lib/admin/base";
 
 const KEY_STORAGE = "cp.admin.key";
 const BASE_STORAGE = "cp.admin.apiBase";
@@ -110,6 +117,21 @@ async function failure(res: Response, fallback: string): Promise<AdminApiError> 
   return new AdminApiError(res.status, adminStatusLine(res.status, fallback), detail);
 }
 
+/** The answer's JSON, or null when it is not JSON (a web page, an empty body). */
+async function readJsonBody(res: Response): Promise<unknown> {
+  try {
+    return JSON.parse(await res.text());
+  } catch {
+    return null;
+  }
+}
+
+/** The address answered, but not like the ComputerPets license service. Plain line; the shape goes to the console. */
+function notTheService(status: number, expected: string): AdminApiError {
+  console.error(`[admin] the address answered ${status} with something that is not ${expected}`);
+  return new AdminApiError(status, NOT_LICENSE_SERVICE);
+}
+
 async function adminFetch(apiBase: string, adminKey: string, path: string, init?: RequestInit): Promise<Response> {
   if (init?.body != null && typeof init.body !== "string") {
     throw new AdminApiError(0, "Admin request body must be the exact string that was signed.");
@@ -155,25 +177,23 @@ export async function unlockAdmin(apiBase: string, adminKey: string): Promise<Li
   const res = await adminFetch(apiBase, adminKey, "/api/admin/licenses");
   if (res.status === 404) throw await failure(res, NOT_LICENSE_SERVICE);
   if (!res.ok) throw await failure(res, "Unlock failed.");
-  let body: unknown = null;
-  try {
-    body = await res.json();
-  } catch {
-    body = null;
-  }
-  if (!isLicenseList(body)) {
-    console.error("[admin] the address answered with something that is not a license list");
-    throw new AdminApiError(res.status, NOT_LICENSE_SERVICE);
-  }
+  const body = await readJsonBody(res);
+  if (!isLicenseList(body)) throw notTheService(res.status, "a license list");
   saveAdminSession(apiBase, adminKey);
   return body as LicenseAudit[];
 }
 
 export async function getLicense(apiBase: string, adminKey: string, jti: string): Promise<LicenseAudit | null> {
   const res = await adminFetch(apiBase, adminKey, `/api/admin/licenses/${encodeURIComponent(jti)}`);
-  if (res.status === 404) return null;
+  if (res.status === 404) {
+    // Only the ledger's own "license not found" means no such jti; any other 404 is not the service.
+    if (isLicenseMissing(await readJsonBody(res))) return null;
+    throw notTheService(404, "the ledger's not-found answer");
+  }
   if (!res.ok) throw await failure(res, "Lookup failed.");
-  return (await res.json()) as LicenseAudit;
+  const body = await readJsonBody(res);
+  if (!isLicenseRow(body)) throw notTheService(res.status, "a license row");
+  return body as LicenseAudit;
 }
 
 export async function listLicenses(
@@ -185,8 +205,12 @@ export async function listLicenses(
     ? `/api/admin/licenses?owner=${encodeURIComponent(owner)}`
     : "/api/admin/licenses";
   const res = await adminFetch(apiBase, adminKey, path);
+  if (res.status === 404) throw await failure(res, NOT_LICENSE_SERVICE);
   if (!res.ok) throw await failure(res, "Lookup failed.");
-  return (await res.json()) as LicenseAudit[];
+  // Same check as unlock: only a license list is an answer from the license service.
+  const body = await readJsonBody(res);
+  if (!isLicenseList(body)) throw notTheService(res.status, "a license list");
+  return body as LicenseAudit[];
 }
 
 export async function lookupLicenses(
@@ -207,7 +231,11 @@ export async function revokeLicense(apiBase: string, adminKey: string, jti: stri
     body: JSON.stringify({ jti }),
   });
   if (res.status === 404) {
-    throw await failure(res, "Not found or already revoked.");
+    const body = await readJsonBody(res);
+    if (!isRevokeMiss(body)) throw notTheService(404, "the ledger's revoke answer");
+    const reason = body && typeof body === "object" ? (body as { reason?: unknown }).reason : undefined;
+    if (typeof reason === "string" && reason) console.error("[admin] license service 404:", reason);
+    throw new AdminApiError(404, "Not found or already revoked.", typeof reason === "string" ? reason : "");
   }
   if (!res.ok) throw await failure(res, "Revoke failed.");
 }

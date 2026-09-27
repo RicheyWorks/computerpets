@@ -23,6 +23,9 @@ services:
       - JWT_SECRET_KEY=${JWT_SECRET_KEY:-dev-jwt-key-change-me}
       - BUNDLE_SIGNING_KEY=${BUNDLE_SIGNING_KEY:-dev-bundle-key-change-me}
       - ADMIN_API_KEY=${ADMIN_API_KEY:-dev-admin-key-must-be-overridden}
+      # Web sites whose /admin page may call /api/admin/** from a browser (comma-separated origins).
+      # "*" (the default) allows any; every admin call is still HMAC-signed (ADR 0071).
+      - ADMIN_ALLOWED_ORIGINS=${ADMIN_ALLOWED_ORIGINS:-*}
       # Steam (optional - can be disabled via ownership.providers)
       - STEAM_API_KEY=${STEAM_API_KEY:-}
       - STEAM_APP_ID=${STEAM_APP_ID:-}
