@@ -11,10 +11,10 @@ const Card = await import(pathToFileURL(join(root, "src/lib/pets/card.ts")).href
 const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/weather-areas.js"));
 
 test("the house does not guess a city", () => {
-  assert.equal(A.NO_AREA, "no area set");
+  assert.equal(A.NO_AREA, "no place yet");
   assert.equal(A.AREA_LABEL, "Weather area");
   assert.equal(Overlay.AREA_LABEL, A.AREA_LABEL);
-  assert.equal(A.plateLine(A.blankAreas(), null), "no area set");
+  assert.equal(A.plateLine(A.blankAreas(), null), "no place yet");
   assert.equal(A.currentArea(A.blankAreas()), null);
   assert.equal(Overlay.NO_AREA, A.NO_AREA);
 });
@@ -245,7 +245,7 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.equal(live?.sky, "rain");
   assert.equal(live?.source, "open-meteo");
   assert.equal(Overlay.mapLiveSky(61, 12, 4), "rain");
-  assert.equal(Overlay.plateLine(Overlay.blankAreas(), null), "no area set");
+  assert.equal(Overlay.plateLine(Overlay.blankAreas(), null), "no place yet");
 });
 
 test("favorites star places and persist", () => {
@@ -531,8 +531,8 @@ test("the forecast says the WMO code in words; overcast is not clear (web and ov
     assert.equal(surface.parseForecast({ current: { temperature_2m: 8, weather_code: 3, wind_speed_10m: 30 } }).label, "Overcast, windy · 8°");
     assert.equal(surface.parseForecast({ current: { temperature_2m: 35, weather_code: 0, wind_speed_10m: 2 } }).label, "Clear, hot · 35°");
     // No code or an unknown code is not "Clear".
-    assert.equal(surface.parseForecast({ current: { temperature_2m: 8, wind_speed_10m: 2 } }).label, "Sky unread · 8°");
-    assert.equal(surface.parseForecast({ current: { temperature_2m: 8, weather_code: 42, wind_speed_10m: 2 } }).label, "Sky unread · 8°");
+    assert.equal(surface.parseForecast({ current: { temperature_2m: 8, wind_speed_10m: 2 } }).label, "Sky not known · 8°");
+    assert.equal(surface.parseForecast({ current: { temperature_2m: 8, weather_code: 42, wind_speed_10m: 2 } }).label, "Sky not known · 8°");
     assert.equal(surface.skyWord(null), "");
     assert.equal(surface.skyWord(""), "");
     assert.equal(surface.skyWord(3.5), "");

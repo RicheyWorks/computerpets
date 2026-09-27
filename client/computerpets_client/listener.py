@@ -30,7 +30,7 @@ PRESETS: tuple[dict, ...] = (
 _BY_ID = {row["id"]: row for row in PRESETS}
 LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1"}
 HOUSE = {"id": "local", "name": "House lines", "line": "Listening · House lines"}
-UNREAD = {"id": "unread", "name": "unread", "line": "Listening · unread"}
+UNREAD = {"id": "unread", "name": "not sure", "line": "Listening · not sure"}
 
 
 def _private_ipv4(host: str) -> bool:

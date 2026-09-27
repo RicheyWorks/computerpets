@@ -4506,6 +4506,8 @@ if (newsPlate) {
         const open = !body.hidden;
         toggle.setAttribute("aria-expanded", open ? "true" : "false");
         if (open) fetchNews();
+        // Repaint either way: the header drops or brings back "open to see headlines".
+        paintHousePlates();
       }
       return;
     }

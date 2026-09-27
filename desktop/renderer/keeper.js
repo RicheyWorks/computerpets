@@ -7,6 +7,12 @@
   const HOUSE_SERVER_HIDDEN = Object.freeze({ show: false });
   /** A named server that has not answered once this session. Plain and calm: the server is optional. */
   const NO_HOUSE_SERVER = "House server not running (optional)";
+  /** A named server that answered this session, then stopped. Same words as the web heartbeat line. */
+  const HOUSE_SERVER_STOPPED = "House server stopped answering (optional). Pets still work.";
+  /** A named server that is answering; "· up 2h" follows when it says how long. */
+  const HOUSE_SERVER_UP = "House server running";
+  /** The keeper card's care line: plain words for "care never goes to the house server". */
+  const CARE_TRUTH = "Your pet's care stays on this computer.";
   /** The one-time hello at the top of the keeper card (card.json firstHintSeen). Kid-plain words. */
   const FIRST_HINT_OK = "Got it";
   const ADVERTISED_CARE = { feed: "/pet/feed", play: "/pet/play", rest: "/pet/rest" };
@@ -30,7 +36,7 @@
   const HUD_WIDTH_COLLAPSED = 168;
   const KEEPER_KICKER = "Keeper card";
   const VOICE_TRUTH = "Rui, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Echo, Peck, Quill, Keel, Ember, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Rue, Wick, Burr, Floss, Bloom, Vesper, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Ochre, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Well, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Wax, Frill, Cap, Lattice, Horn, Ring, Mane, Puff, Flame, Starter, Pact, Gleam, Choir, Drift, Shard, Dusk, Knot, Brine, Beacon, Hush, Arca, Reed, Pebble, Eft, Dapple, Slip, Pinch, Whorl, Hinge, Latch, Prickle, Boot, Reach, Spot, Orb, Pane, Hold, Loom, and Leap talk with house cry first; system speech is the backup.";
-  const QUIT_TRUTH = "Turns the overlay off. Start again with .\\desktop.ps1.";
+  const QUIT_TRUTH = "Turns the pets off. To bring them back, type .\\desktop.ps1 again, just like the first time.";
 
   const UNREAD = {
     status: "DOWN",
@@ -66,16 +72,17 @@
   /**
    * The keeper card's server row. Empty (hidden) until the keeper names a
    * server in Settings, the environment, or by holding a license (main
-   * process: house-server.cjs). Plain words only: reachable or unreachable.
+   * process: house-server.cjs). Plain words only, the same as the web heartbeat line:
+   * running (with how long) or stopped answering.
    * `seen: false` (pet.js: this server has not answered once this session) reads
-   * NO_HOUSE_SERVER instead; "unreachable" is kept for one that answered, then stopped.
+   * NO_HOUSE_SERVER instead; HOUSE_SERVER_STOPPED is kept for one that answered, then stopped.
    */
   function houseServerLine(state) {
     if (!state || state.show !== true) return "";
     if (state.reachable !== true && state.seen === false) return NO_HOUSE_SERVER;
-    if (state.reachable !== true) return `${HOUSE_SERVER} · unreachable`;
+    if (state.reachable !== true) return HOUSE_SERVER_STOPPED;
     const up = formatUptime(state.uptimeSeconds);
-    return up ? `${HOUSE_SERVER} · reachable · up ${up}` : `${HOUSE_SERVER} · reachable`;
+    return up ? `${HOUSE_SERVER_UP} · up ${up}` : HOUSE_SERVER_UP;
   }
 
   function houseServerTitle(state) {
@@ -84,7 +91,7 @@
   }
 
   function careTruth() {
-    return "Care is local. /pet/feed is not a door.";
+    return CARE_TRUTH;
   }
 
   /**
@@ -208,6 +215,9 @@
     HOUSE_SERVER,
     HOUSE_SERVER_HIDDEN,
     NO_HOUSE_SERVER,
+    HOUSE_SERVER_STOPPED,
+    HOUSE_SERVER_UP,
+    CARE_TRUTH,
     FIRST_HINT_OK,
     firstHint,
     firstHintShows,

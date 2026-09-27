@@ -97,7 +97,7 @@ test("Mac spawns the IOAccelerator probe and keeps a real reading", SH_ONLY, asy
   assert.equal(sample.memoryTotalBytes, null);
   assert.equal(sample.tempC, null);
   assert.equal(sample.powerWatts, null);
-  assert.equal(Gpu.gpuLine(sample), "GPU Apple M2 · unread · 16% · 542 MiB/unread · unread");
+  assert.equal(Gpu.gpuLine(sample), "GPU Apple M2 · — · 16% · 542 MiB/— · —");
   assert.doesNotMatch(Gpu.gpuLine(sample), /0°C|0 W|0%/);
 });
 
@@ -137,7 +137,7 @@ test("Mac without ioreg, or with no accepted field, stays unread and is not zero
   assert.equal(zeroSample.utilPercent, 0);
   assert.equal(zeroSample.memoryUsedBytes, 0);
   assert.equal(zeroSample.tempC, null);
-  assert.equal(Gpu.gpuLine(zeroSample), "GPU AGXAccelerator · unread · 0% · 0 MiB/unread · unread");
+  assert.equal(Gpu.gpuLine(zeroSample), "GPU AGXAccelerator · — · 0% · 0 MiB/— · —");
 
   const tiny = runMacProbe([
     "+-o AGXAccelerator  <class AGXAccelerator, id 0x1, registered>",
@@ -183,7 +183,7 @@ test("Mac temperature and power keys stay off the shared line", SH_ONLY, () => {
   assert.equal(onlySample.status, "unread");
   assert.equal(onlySample.tempC, null);
   assert.equal(onlySample.powerWatts, null);
-  assert.equal(Gpu.gpuLine(onlySample), "GPU unread");
+  assert.equal(Gpu.gpuLine(onlySample), "GPU · no reading");
 
   const beside = runMacProbe([
     "+-o AGXAccelerator  <class AGXAccelerator, id 0x1, registered>",
@@ -200,7 +200,7 @@ test("Mac temperature and power keys stay off the shared line", SH_ONLY, () => {
   assert.equal(sample.utilPercent, 16);
   assert.equal(sample.tempC, null);
   assert.equal(sample.powerWatts, null);
-  assert.equal(Gpu.gpuLine(sample), "GPU Apple M2 · unread · 16% · 542 MiB/unread · unread");
+  assert.equal(Gpu.gpuLine(sample), "GPU Apple M2 · — · 16% · 542 MiB/— · —");
   assert.doesNotMatch(Gpu.gpuLine(sample), /72°C|18\.4 W|0°C|0 W/);
 });
 
@@ -218,7 +218,7 @@ test("a platform without a probe does not spawn", async () => {
   assert.equal(sample.status, "unsupported");
   assert.equal(sample.reason, "unsupported");
   assert.equal(sample.utilPercent, null);
-  assert.equal(Gpu.gpuLine(sample), "GPU unread · unsupported");
+  assert.equal(Gpu.gpuLine(sample), "GPU · not read on this computer");
 });
 
 test("Linux spawns the shell probe and keeps a real nvidia-smi reading", async () => {
@@ -391,7 +391,7 @@ test("Linux amdgpu sysfs prints the shared line and ignores Intel and decoys", S
     assert.equal(sample.powerWatts, null);
     assert.equal(sample.memoryUsedBytes, 2048 * 1024 * 1024);
     assert.equal(sample.memoryTotalBytes, 8192 * 1024 * 1024);
-    assert.equal(Gpu.gpuLine(sample), "GPU amdgpu 1002:73BF · unread · 37% · 2 GiB/8 GiB · unread");
+    assert.equal(Gpu.gpuLine(sample), "GPU amdgpu 1002:73BF · — · 37% · 2 GiB/8 GiB · —");
 
     const tieRoot = mkdtempSync(join(tmpdir(), "gpu-tie-"));
     try {
@@ -422,7 +422,7 @@ test("Linux amdgpu sysfs prints the shared line and ignores Intel and decoys", S
       assert.equal(zeroSample.memoryUsedBytes, 0);
       assert.equal(zeroSample.memoryTotalBytes, 8192 * 1024 * 1024);
       assert.equal(zeroSample.tempC, null);
-      assert.equal(Gpu.gpuLine(zeroSample), "GPU amdgpu 1002:73BF · unread · 0% · 0 MiB/8 GiB · unread");
+      assert.equal(Gpu.gpuLine(zeroSample), "GPU amdgpu 1002:73BF · — · 0% · 0 MiB/8 GiB · —");
     } finally {
       rmSync(quiet, { recursive: true, force: true });
     }
@@ -654,7 +654,7 @@ test("Linux amdgpu hwmon copies edge temperature and PPT power and leaves the ot
       assert.equal(zeroSample.tempC, 0);
       assert.equal(zeroSample.powerWatts, 0);
       assert.equal(zeroSample.utilPercent, null);
-      assert.equal(Gpu.gpuLine(zeroSample), "GPU amdgpu 1002:164E · 0°C · unread · unread · 0 W");
+      assert.equal(Gpu.gpuLine(zeroSample), "GPU amdgpu 1002:164E · 0°C · — · — · 0 W");
     } finally {
       rmSync(closed, { recursive: true, force: true });
     }
@@ -770,7 +770,7 @@ test("Linux i915 and xe sysfs stay unread and do not paint a percent or a memory
     assert.equal(sample.memoryTotalBytes, null);
     assert.equal(sample.tempC, null);
     assert.equal(sample.powerWatts, null);
-    assert.equal(Gpu.gpuLine(sample), "GPU unread");
+    assert.equal(Gpu.gpuLine(sample), "GPU · no reading");
     assert.doesNotMatch(Gpu.gpuLine(sample), /0%/);
 
     const decoy = mkdtempSync(join(tmpdir(), "gpu-decoy-"));
@@ -861,7 +861,7 @@ test("Linux i915 and xe device VRAM files stay off the shared line", SH_ONLY, ()
     assert.equal(sample.utilPercent, 50);
     assert.equal(sample.memoryUsedBytes, null);
     assert.equal(sample.memoryTotalBytes, null);
-    assert.equal(Gpu.gpuLine(sample), "GPU i915 8086:9A49 · unread · 50% · unread · unread");
+    assert.equal(Gpu.gpuLine(sample), "GPU i915 8086:9A49 · — · 50% · — · —");
     assert.doesNotMatch(Gpu.gpuLine(sample), /0 MiB/);
 
     const xeRoot = mkdtempSync(join(tmpdir(), "gpu-xvram-"));
@@ -901,7 +901,7 @@ test("Linux i915 and xe device VRAM files stay off the shared line", SH_ONLY, ()
       assert.equal(xeSample.utilPercent, 40);
       assert.equal(xeSample.memoryUsedBytes, null);
       assert.equal(xeSample.memoryTotalBytes, null);
-      assert.equal(Gpu.gpuLine(xeSample), "GPU xe 8086:E20B · unread · 40% · unread · unread");
+      assert.equal(Gpu.gpuLine(xeSample), "GPU xe 8086:E20B · — · 40% · — · —");
     } finally {
       rmSync(xeRoot, { recursive: true, force: true });
       rmSync(xe1, { recursive: true, force: true });
@@ -928,7 +928,7 @@ test("Linux i915 and xe device VRAM files stay off the shared line", SH_ONLY, ()
       assert.equal(emptySample.status, "unread");
       assert.equal(emptySample.memoryUsedBytes, null);
       assert.equal(emptySample.memoryTotalBytes, null);
-      assert.equal(Gpu.gpuLine(emptySample), "GPU unread");
+      assert.equal(Gpu.gpuLine(emptySample), "GPU · no reading");
     } finally {
       rmSync(only, { recursive: true, force: true });
     }
@@ -1020,7 +1020,7 @@ test("Linux DRM fdinfo prints i915 and xe utilization from two reads and fails c
     assert.equal(sample.powerWatts, null);
     assert.equal(sample.memoryUsedBytes, null);
     assert.equal(sample.memoryTotalBytes, null);
-    assert.equal(Gpu.gpuLine(sample), "GPU i915 8086:9A49 · unread · 50% · unread · unread");
+    assert.equal(Gpu.gpuLine(sample), "GPU i915 8086:9A49 · — · 50% · — · —");
 
     const xeRoot = mkdtempSync(join(tmpdir(), "gpu-xe-"));
     const xe1 = mkdtempSync(join(tmpdir(), "gpu-xe1-"));
@@ -1041,7 +1041,7 @@ test("Linux DRM fdinfo prints i915 and xe utilization from two reads and fails c
       assert.equal(xeSample.source, "fdinfo");
       assert.equal(xeSample.utilPercent, 40);
       assert.equal(xeSample.memoryUsedBytes, null);
-      assert.equal(Gpu.gpuLine(xeSample), "GPU xe 8086:E20B · unread · 40% · unread · unread");
+      assert.equal(Gpu.gpuLine(xeSample), "GPU xe 8086:E20B · — · 40% · — · —");
       client(xe2, 4, 3, xeBody(100, 50001000));
       const idleXe = runLinuxProbe({
         GPU_SYSFS_ROOT: xeRoot,

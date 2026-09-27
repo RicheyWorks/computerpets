@@ -1949,7 +1949,7 @@ export type PlayPhase =
   | "land"
   | "done";
 export type PlayAnim = "idle" | "walk" | "sit" | "play" | "talk";
-export type PlayPoint = { x: number; lift: number; side?: "left" | "right" | "top" };
+export type PlayPoint = { x: number; lift: number; side?: "left" | "right" | "top"; rot?: number };
 export type WorkSpace = { width: number; height: number; floorLift?: number };
 
 export type PlayTarget = {
@@ -14967,7 +14967,7 @@ export function runOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * haste,
     lift: fromLift + (toLift - fromLift) * haste + skim,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : -1.4) * (1 - haste),
+    rot: (from.rot != null ? from.rot : -1.4) * (1 - haste),
   };
 }
 
@@ -15039,7 +15039,7 @@ export function flagOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : -14) * (1 - ease),
+    rot: (from.rot != null ? from.rot : -14) * (1 - ease),
   };
 }
 
@@ -15107,7 +15107,7 @@ export function foldOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 180) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 180) * (1 - ease),
   };
 }
 
@@ -15180,7 +15180,7 @@ export function buryOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + hop,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 9) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 9) * (1 - ease),
   };
 }
 
@@ -15247,7 +15247,7 @@ export function slideSlipPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + wet * 0.2,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 16) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 16) * (1 - ease),
   };
 }
 export function earthStepOffPath(u: number, from: PlayPoint, to: PlayPoint) {
@@ -15354,7 +15354,7 @@ export function rinseOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 4.8) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 4.8) * (1 - ease),
   };
 }
 
@@ -15471,7 +15471,7 @@ export function stillOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 34) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 34) * (1 - ease),
   };
 }
 
@@ -15541,7 +15541,7 @@ export function gnawOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : -11) * (1 - ease),
+    rot: (from.rot != null ? from.rot : -11) * (1 - ease),
   };
 }
 
@@ -15612,7 +15612,7 @@ export function bristleOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 13) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 13) * (1 - ease),
   };
 }
 
@@ -15682,7 +15682,7 @@ export function browseOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : -11) * (1 - ease),
+    rot: (from.rot != null ? from.rot : -11) * (1 - ease),
   };
 }
 
@@ -15746,7 +15746,7 @@ export function reachOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + unhook,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 118) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 118) * (1 - ease),
   };
 }
 
@@ -15812,7 +15812,7 @@ export function warmOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease + step * 3.8 * (1 - t),
     lift: fromLift + (toLift - fromLift) * ease + bob,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 28) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 28) * (1 - ease),
   };
 }
 
@@ -15880,7 +15880,7 @@ export function singOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease + pend,
     lift: fromLift + (toLift - fromLift) * ease + unhook,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : -7) * (1 - ease),
+    rot: (from.rot != null ? from.rot : -7) * (1 - ease),
   };
 }
 
@@ -15947,7 +15947,7 @@ export function wrapOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + unhook,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 38) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 38) * (1 - ease),
   };
 }
 
@@ -16014,7 +16014,7 @@ export function clingOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 16) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 16) * (1 - ease),
   };
 }
 
@@ -16080,7 +16080,7 @@ export function planeOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + hop,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 9) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 9) * (1 - ease),
   };
 }
 
@@ -16149,7 +16149,7 @@ export function howlOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + hop,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 6.4) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 6.4) * (1 - ease),
   };
 }
 
@@ -16221,7 +16221,7 @@ export function lookOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + leap,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 11.4) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 11.4) * (1 - ease),
   };
 }
 
@@ -16283,7 +16283,7 @@ export function creepOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + creep,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 3.5) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 3.5) * (1 - ease),
   };
 }
 
@@ -16354,7 +16354,7 @@ export function chewOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + hop,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 4.3) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 4.3) * (1 - ease),
   };
 }
 
@@ -16425,7 +16425,7 @@ export function chirpOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + climb,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 3) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 3) * (1 - ease),
   };
 }
 
@@ -16495,7 +16495,7 @@ export function flashOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + sit,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 2) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 2) * (1 - ease),
   };
 }
 
@@ -16570,7 +16570,7 @@ export function scootOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + step,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 2.5) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 2.5) * (1 - ease),
   };
 }
 
@@ -16638,7 +16638,7 @@ export function aimOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 8.4) * (1 - ease),
+    rot: (from.rot != null ? from.rot : 8.4) * (1 - ease),
   };
 }
 
@@ -16777,7 +16777,7 @@ export function bankOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : -2.8) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : -2.8) * (1 - ease),
   };
 }
 
@@ -16847,7 +16847,7 @@ export function showOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 5.6) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 5.6) * (1 - ease),
   };
 }
 
@@ -16917,7 +16917,7 @@ export function snapOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 5.2) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 5.2) * (1 - ease),
   };
 }
 
@@ -16980,7 +16980,7 @@ export function shutOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 9.4) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 9.4) * (1 - ease),
   };
 }
 
@@ -17050,7 +17050,7 @@ export function crestOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 5.8) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 5.8) * (1 - ease),
   };
 }
 
@@ -17118,7 +17118,7 @@ export function mouthOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 3.8) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 3.8) * (1 - ease),
   };
 }
 
@@ -17188,7 +17188,7 @@ export function markOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 2.1) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 2.1) * (1 - ease),
   };
 }
 
@@ -17258,7 +17258,7 @@ export function barbelOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : -5.2) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : -5.2) * (1 - ease),
   };
 }
 
@@ -17329,7 +17329,7 @@ export function flareOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 6.8) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 6.8) * (1 - ease),
   };
 }
 
@@ -17398,7 +17398,7 @@ export function barredOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 8.0) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 8.0) * (1 - ease),
   };
 }
 
@@ -17466,7 +17466,7 @@ export function billOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 5.6) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 5.6) * (1 - ease),
   };
 }
 
@@ -17536,7 +17536,7 @@ export function duskOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 7.2) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 7.2) * (1 - ease),
   };
 }
 
@@ -17604,7 +17604,7 @@ export function paddleOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : -1.8) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : -1.8) * (1 - ease),
   };
 }
 
@@ -17683,7 +17683,7 @@ export function diskOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 7.4) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 7.4) * (1 - ease),
   };
 }
 
@@ -17751,7 +17751,7 @@ export function goOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 10.4) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 10.4) * (1 - ease),
   };
 }
 
@@ -17822,7 +17822,7 @@ export function huntOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 8.1) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 8.1) * (1 - ease),
   };
 }
 
@@ -17890,7 +17890,7 @@ export function oilOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 4.6) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 4.6) * (1 - ease),
   };
 }
 
@@ -17958,7 +17958,7 @@ export function rollOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 16) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 16) * (1 - ease),
   };
 }
 
@@ -18025,7 +18025,7 @@ export function bandOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 8.6) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 8.6) * (1 - ease),
   };
 }
 
@@ -18093,7 +18093,7 @@ export function velvetOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 8.8) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 8.8) * (1 - ease),
   };
 }
 
@@ -18153,7 +18153,7 @@ export function springOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 3.4) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 3.4) * (1 - ease),
   };
 }
 
@@ -18219,7 +18219,7 @@ export function dryOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 12.2) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 12.2) * (1 - ease),
   };
 }
 
@@ -18337,7 +18337,7 @@ export function thrashOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 4.8) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 4.8) * (1 - ease),
   };
 }
 
@@ -18405,7 +18405,7 @@ export function sideOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 86.4) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 86.4) * (1 - ease),
   };
 }
 
@@ -18472,7 +18472,7 @@ export function signalOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 27.2) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 27.2) * (1 - ease),
   };
 }
 
@@ -18486,7 +18486,7 @@ export function splitOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 1.6) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 1.6) * (1 - ease),
   };
 }
 
@@ -18553,7 +18553,7 @@ export function sandOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 9.2) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 9.2) * (1 - ease),
   };
 }
 
@@ -18621,7 +18621,7 @@ export function clampOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : -11.2) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : -11.2) * (1 - ease),
   };
 }
 
@@ -18690,7 +18690,7 @@ export function cirriOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 6.1) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 6.1) * (1 - ease),
   };
 }
 
@@ -18758,7 +18758,7 @@ export function eightOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : -5.1) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : -5.1) * (1 - ease),
   };
 }
 
@@ -18827,7 +18827,7 @@ export function rockOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 12.1) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 12.1) * (1 - ease),
   };
 }
 
@@ -18895,7 +18895,7 @@ export function flatOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 7.1) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 7.1) * (1 - ease),
   };
 }
 
@@ -18963,7 +18963,7 @@ export function spinesOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 14.8) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 14.8) * (1 - ease),
   };
 }
 
@@ -19031,7 +19031,7 @@ export function knobsOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 11.2) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 11.2) * (1 - ease),
   };
 }
 
@@ -19163,7 +19163,7 @@ export function waggleOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 15.2) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 15.2) * (1 - ease),
   };
 }
 
@@ -19231,7 +19231,7 @@ export function weedOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   return {
     x: fromX + (toX - fromX) * ease,
     lift: fromLift + (toLift - fromLift) * ease + stride,
-    rot: (from && (from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 6.6) * (1 - ease),
+    rot: (from && from.rot != null ? from.rot : 6.6) * (1 - ease),
   };
 }
 
@@ -19942,7 +19942,7 @@ export function leafOffPath(u: number, from: PlayPoint, to: PlayPoint) {
 
 
 
-export function jumpPoint(win: DeskWindow, sprite: number | undefined, work: WorkArea) {
+export function jumpPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
   const size = sprite == null ? SPRITE : sprite;
   const pad = 36;
   const span = Math.max(0, win.width - size - pad * 2);
@@ -20015,7 +20015,7 @@ export function jumpOffPath(u: number, from: PlayPoint, to: PlayPoint) {
 }
 
 
-export function tailsPoint(win: DeskWindow, sprite: number | undefined, work: WorkArea) {
+export function tailsPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
   const size = sprite == null ? SPRITE : sprite;
   const pad = 28;
   const span = Math.max(0, win.width - size - pad * 2);
@@ -20088,7 +20088,7 @@ export function tailsOffPath(u: number, from: PlayPoint, to: PlayPoint) {
 }
 
 
-export function blackPoint(win: DeskWindow, sprite: number | undefined, work: WorkArea) {
+export function blackPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
   const size = sprite == null ? SPRITE : sprite;
   const pad = 30;
   const span = Math.max(0, win.width - size - pad * 2);
@@ -20161,7 +20161,7 @@ export function blackOffPath(u: number, from: PlayPoint, to: PlayPoint) {
 }
 
 
-export function netPoint(win: DeskWindow, sprite: number | undefined, work: WorkArea) {
+export function netPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
   const size = sprite == null ? SPRITE : sprite;
   const pad = 32;
   const span = Math.max(0, win.width - size - pad * 2);
@@ -20234,7 +20234,7 @@ export function netOffPath(u: number, from: PlayPoint, to: PlayPoint) {
 }
 
 
-export function cerciPoint(win: DeskWindow, sprite: number | undefined, work: WorkArea) {
+export function cerciPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
   const size = sprite == null ? SPRITE : sprite;
   const pad = 30;
   const span = Math.max(0, win.width - size - pad * 2);
@@ -20307,7 +20307,7 @@ export function cerciOffPath(u: number, from: PlayPoint, to: PlayPoint) {
 }
 
 
-export function drillPoint(win: DeskWindow, sprite: number | undefined, work: WorkArea) {
+export function drillPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
   const size = sprite == null ? SPRITE : sprite;
   const pad = 34;
   const span = Math.max(0, win.width - size - pad * 2);
@@ -20380,7 +20380,7 @@ export function drillOffPath(u: number, from: PlayPoint, to: PlayPoint) {
 }
 
 
-export function rightPoint(win: DeskWindow, sprite: number | undefined, work: WorkArea) {
+export function rightPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
   const size = sprite == null ? SPRITE : sprite;
   const pad = 32;
   const span = Math.max(0, win.width - size - pad * 2);
@@ -20453,7 +20453,7 @@ export function rightOffPath(u: number, from: PlayPoint, to: PlayPoint) {
 }
 
 
-export function seizePoint(win: WindowBounds, sprite = SPRITE, work?: WorkSpace): PlayPoint {
+export function seizePoint(win: DeskWindow, sprite = SPRITE, work?: WorkSpace): PlayPoint {
   const size = sprite == null ? SPRITE : sprite;
   const pad = 31;
   const span = Math.max(0, win.width - size - pad * 2);
@@ -20465,7 +20465,7 @@ export function seizePoint(win: WindowBounds, sprite = SPRITE, work?: WorkSpace)
   return { x, lift: clamp(lift, 16, maxLift) };
 }
 
-export function seizeFace(target: PlayTarget): number {
+export function seizeFace(target: PlayTarget): 1 | -1 {
   return target.approachX >= target.holdX ? -1 : 1;
 }
 
@@ -20527,7 +20527,7 @@ export function seizeOffPath(u: number, from: PlayPoint & { rot?: number }, to: 
 
 
 
-export function shelfPoint(win: WindowBounds, sprite = SPRITE, work?: WorkSpace): PlayPoint {
+export function shelfPoint(win: DeskWindow, sprite = SPRITE, work?: WorkSpace): PlayPoint {
   const size = sprite == null ? SPRITE : sprite;
   const pad = 9;
   const span = Math.max(0, win.width - size - pad * 2);
@@ -20539,7 +20539,7 @@ export function shelfPoint(win: WindowBounds, sprite = SPRITE, work?: WorkSpace)
   return { x, lift: clamp(lift, 36, maxLift) };
 }
 
-export function shelfFace(target: PlayTarget): number {
+export function shelfFace(target: PlayTarget): 1 | -1 {
   return target.approachX >= target.holdX ? -1 : 1;
 }
 
@@ -20601,7 +20601,7 @@ export function shelfOffPath(u: number, from: PlayPoint & { rot?: number }, to: 
 
 
 
-export function wartsPoint(win: WindowBounds, sprite = SPRITE, work?: WorkSpace): PlayPoint {
+export function wartsPoint(win: DeskWindow, sprite = SPRITE, work?: WorkSpace): PlayPoint {
   const size = sprite == null ? SPRITE : sprite;
   const pad = 34;
   const span = Math.max(0, win.width - size - pad * 2);
@@ -20613,7 +20613,7 @@ export function wartsPoint(win: WindowBounds, sprite = SPRITE, work?: WorkSpace)
   return { x, lift: clamp(lift, 16, maxLift) };
 }
 
-export function wartsFace(target: PlayTarget): number {
+export function wartsFace(target: PlayTarget): 1 | -1 {
   return target.approachX >= target.holdX ? -1 : 1;
 }
 
@@ -20674,7 +20674,7 @@ export function wartsOffPath(u: number, from: PlayPoint & { rot?: number }, to: 
 }
 
 
-export function hollowPoint(win: WindowBounds, sprite = SPRITE, work?: WorkSpace): PlayPoint {
+export function hollowPoint(win: DeskWindow, sprite = SPRITE, work?: WorkSpace): PlayPoint {
   const size = sprite == null ? SPRITE : sprite;
   const pad = 36;
   const span = Math.max(0, win.width - size - pad * 2);
@@ -20687,7 +20687,7 @@ export function hollowPoint(win: WindowBounds, sprite = SPRITE, work?: WorkSpace
   return { x, lift: clamp(lift, 36, maxLift) };
 }
 
-export function hollowFace(target: PlayTarget): number {
+export function hollowFace(target: PlayTarget): 1 | -1 {
   return target.approachX >= target.holdX ? -1 : 1;
 }
 
@@ -20748,7 +20748,7 @@ export function hollowOffPath(u: number, from: PlayPoint & { rot?: number }, to:
 }
 
 
-export function forkPoint(win: WindowBounds, sprite = SPRITE, work?: WorkSpace): PlayPoint {
+export function forkPoint(win: DeskWindow, sprite = SPRITE, work?: WorkSpace): PlayPoint {
   const size = sprite == null ? SPRITE : sprite;
   const pad = 34;
   const span = Math.max(0, win.width - size - pad * 2);
@@ -20761,7 +20761,7 @@ export function forkPoint(win: WindowBounds, sprite = SPRITE, work?: WorkSpace):
   return { x, lift: clamp(lift, 28, maxLift) };
 }
 
-export function forkFace(target: PlayTarget): number {
+export function forkFace(target: PlayTarget): 1 | -1 {
   return target.approachX >= target.holdX ? -1 : 1;
 }
 
@@ -20822,7 +20822,7 @@ export function forkOffPath(u: number, from: PlayPoint & { rot?: number }, to: P
 }
 
 
-export function zonesPoint(win: WindowBounds, sprite = SPRITE, work?: WorkSpace): PlayPoint {
+export function zonesPoint(win: DeskWindow, sprite = SPRITE, work?: WorkSpace): PlayPoint {
   const size = sprite == null ? SPRITE : sprite;
   const pad = 12;
   const span = Math.max(0, win.width - size - pad * 2);
@@ -20835,7 +20835,7 @@ export function zonesPoint(win: WindowBounds, sprite = SPRITE, work?: WorkSpace)
   return { x, lift: clamp(lift, 36, maxLift) };
 }
 
-export function zonesFace(target: PlayTarget): number {
+export function zonesFace(target: PlayTarget): 1 | -1 {
   return target.approachX >= target.holdX ? -1 : 1;
 }
 
@@ -20900,7 +20900,7 @@ export function zonesOffPath(u: number, from: PlayPoint & { rot?: number }, to: 
 }
 
 
-export function teethPoint(win: WindowBounds, sprite = SPRITE, work?: WorkSpace): PlayPoint {
+export function teethPoint(win: DeskWindow, sprite = SPRITE, work?: WorkSpace): PlayPoint {
   const size = sprite == null ? SPRITE : sprite;
   const mouth = size * 0.12;
   // right sash gap as a wood wound — walk into the gap, sit the teeth; not Mortar's left inkstone daub, not Ring's right wood-grain stile, not Frill's left timber shelf, not Horn's moss rim, not Lattice's leaf mold, not Cap's moss cup, not Hinge's meeting-rail silt
@@ -20912,7 +20912,7 @@ export function teethPoint(win: WindowBounds, sprite = SPRITE, work?: WorkSpace)
   return { x, lift: clamp(lift, 32, maxLift) };
 }
 
-export function teethFace(target: PlayTarget): number {
+export function teethFace(target: PlayTarget): 1 | -1 {
   return target.approachX >= target.holdX ? -1 : 1;
 }
 
@@ -20978,7 +20978,7 @@ export function teethOffPath(u: number, from: PlayPoint & { rot?: number }, to: 
 
 
 
-export function cloudPoint(win, sprite, work) {
+export function cloudPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
 
   const size = sprite == null ? SPRITE : sprite;
 
@@ -21004,7 +21004,7 @@ export function cloudPoint(win, sprite, work) {
 
 
 
-export function cloudFace(target) {
+export function cloudFace(target: PlayTarget) {
 
   return target.approachX >= target.holdX ? -1 : 1;
 
@@ -21012,7 +21012,7 @@ export function cloudFace(target) {
 
 
 
-export function cloudOnPath(u, from, to) {
+export function cloudOnPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21042,7 +21042,7 @@ export function cloudOnPath(u, from, to) {
 
 
 
-export function cloudPath(u) {
+export function cloudPath(u: number) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21088,7 +21088,7 @@ export function cloudPath(u) {
 
 
 
-export function cloudHoldPath(u) {
+export function cloudHoldPath(u: number) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21102,7 +21102,7 @@ export function cloudHoldPath(u) {
 
 
 
-export function cloudOffPath(u, from, to) {
+export function cloudOffPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21135,7 +21135,7 @@ export function cloudOffPath(u, from, to) {
 
 
 
-export function dripPoint(win, sprite, work) {
+export function dripPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
 
   const size = sprite == null ? SPRITE : sprite;
 
@@ -21161,7 +21161,7 @@ export function dripPoint(win, sprite, work) {
 
 
 
-export function dripFace(target) {
+export function dripFace(target: PlayTarget) {
 
   return target.approachX >= target.holdX ? -1 : 1;
 
@@ -21169,7 +21169,7 @@ export function dripFace(target) {
 
 
 
-export function dripOnPath(u, from, to) {
+export function dripOnPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21199,7 +21199,7 @@ export function dripOnPath(u, from, to) {
 
 
 
-export function dripPath(u) {
+export function dripPath(u: number) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21245,7 +21245,7 @@ export function dripPath(u) {
 
 
 
-export function dripHoldPath(u) {
+export function dripHoldPath(u: number) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21259,7 +21259,7 @@ export function dripHoldPath(u) {
 
 
 
-export function dripOffPath(u, from, to) {
+export function dripOffPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21292,7 +21292,7 @@ export function dripOffPath(u, from, to) {
 
 
 
-export function bloomPoint(win, sprite, work) {
+export function bloomPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
 
   const size = sprite == null ? SPRITE : sprite;
 
@@ -21318,7 +21318,7 @@ export function bloomPoint(win, sprite, work) {
 
 
 
-export function bloomFace(target) {
+export function bloomFace(target: PlayTarget) {
 
   return target.approachX >= target.holdX ? -1 : 1;
 
@@ -21326,7 +21326,7 @@ export function bloomFace(target) {
 
 
 
-export function bloomOnPath(u, from, to) {
+export function bloomOnPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21356,7 +21356,7 @@ export function bloomOnPath(u, from, to) {
 
 
 
-export function bloomPath(u) {
+export function bloomPath(u: number) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21402,7 +21402,7 @@ export function bloomPath(u) {
 
 
 
-export function bloomHoldPath(u) {
+export function bloomHoldPath(u: number) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21416,7 +21416,7 @@ export function bloomHoldPath(u) {
 
 
 
-export function bloomOffPath(u, from, to) {
+export function bloomOffPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21449,7 +21449,7 @@ export function bloomOffPath(u, from, to) {
 
 
 
-export function plaquePoint(win, sprite, work) {
+export function plaquePoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
 
   const size = sprite == null ? SPRITE : sprite;
 
@@ -21475,7 +21475,7 @@ export function plaquePoint(win, sprite, work) {
 
 
 
-export function plaqueFace(target) {
+export function plaqueFace(target: PlayTarget) {
 
   return target.approachX >= target.holdX ? -1 : 1;
 
@@ -21483,7 +21483,7 @@ export function plaqueFace(target) {
 
 
 
-export function plaqueOnPath(u, from, to) {
+export function plaqueOnPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21513,7 +21513,7 @@ export function plaqueOnPath(u, from, to) {
 
 
 
-export function plaquePath(u) {
+export function plaquePath(u: number) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21559,7 +21559,7 @@ export function plaquePath(u) {
 
 
 
-export function plaqueHoldPath(u) {
+export function plaqueHoldPath(u: number) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21573,7 +21573,7 @@ export function plaqueHoldPath(u) {
 
 
 
-export function plaqueOffPath(u, from, to) {
+export function plaqueOffPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21606,7 +21606,7 @@ export function plaqueOffPath(u, from, to) {
 
 
 
-export function thirstPoint(win, sprite, work) {
+export function thirstPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
 
   const size = sprite == null ? SPRITE : sprite;
 
@@ -21632,7 +21632,7 @@ export function thirstPoint(win, sprite, work) {
 
 
 
-export function thirstFace(target) {
+export function thirstFace(target: PlayTarget) {
 
   return target.approachX >= target.holdX ? -1 : 1;
 
@@ -21640,7 +21640,7 @@ export function thirstFace(target) {
 
 
 
-export function thirstOnPath(u, from, to) {
+export function thirstOnPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21670,7 +21670,7 @@ export function thirstOnPath(u, from, to) {
 
 
 
-export function thirstPath(u) {
+export function thirstPath(u: number) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21716,7 +21716,7 @@ export function thirstPath(u) {
 
 
 
-export function thirstHoldPath(u) {
+export function thirstHoldPath(u: number) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21730,7 +21730,7 @@ export function thirstHoldPath(u) {
 
 
 
-export function thirstOffPath(u, from, to) {
+export function thirstOffPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21761,7 +21761,7 @@ export function thirstOffPath(u, from, to) {
 
 
 
-﻿export function chordPoint(win, sprite, work) {
+﻿export function chordPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
 
   const size = sprite == null ? SPRITE : sprite;
 
@@ -21787,7 +21787,7 @@ export function thirstOffPath(u, from, to) {
 
 
 
-export function chordFace(target) {
+export function chordFace(target: PlayTarget) {
 
   return target.approachX >= target.holdX ? -1 : 1;
 
@@ -21795,7 +21795,7 @@ export function chordFace(target) {
 
 
 
-export function chordOnPath(u, from, to) {
+export function chordOnPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21825,7 +21825,7 @@ export function chordOnPath(u, from, to) {
 
 
 
-export function chordPath(u) {
+export function chordPath(u: number) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21871,7 +21871,7 @@ export function chordPath(u) {
 
 
 
-export function chordHoldPath(u) {
+export function chordHoldPath(u: number) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21885,7 +21885,7 @@ export function chordHoldPath(u) {
 
 
 
-export function chordOffPath(u, from, to) {
+export function chordOffPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -21912,7 +21912,7 @@ export function chordOffPath(u, from, to) {
   };
 
 }
-export function floatPoint(win, sprite, work) {
+export function floatPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
 
 
 
@@ -21964,7 +21964,7 @@ export function floatPoint(win, sprite, work) {
 
 
 
-export function floatFace(target) {
+export function floatFace(target: PlayTarget) {
 
 
 
@@ -21980,7 +21980,7 @@ export function floatFace(target) {
 
 
 
-export function floatOnPath(u, from, to) {
+export function floatOnPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
 
 
@@ -22040,7 +22040,7 @@ export function floatOnPath(u, from, to) {
 
 
 
-export function floatPath(u) {
+export function floatPath(u: number) {
 
 
 
@@ -22132,7 +22132,7 @@ export function floatPath(u) {
 
 
 
-export function floatHoldPath(u) {
+export function floatHoldPath(u: number) {
 
 
 
@@ -22160,7 +22160,7 @@ export function floatHoldPath(u) {
 
 
 
-export function floatOffPath(u, from, to) {
+export function floatOffPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
 
 
@@ -22214,7 +22214,7 @@ export function floatOffPath(u, from, to) {
 
 }
 
-export function facetPoint(win, sprite, work) {
+export function facetPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
 
   const size = sprite == null ? SPRITE : sprite;
 
@@ -22238,7 +22238,7 @@ export function facetPoint(win, sprite, work) {
 
 
 
-export function facetFace(target) {
+export function facetFace(target: PlayTarget) {
 
   return target.approachX >= target.holdX ? -1 : 1;
 
@@ -22246,7 +22246,7 @@ export function facetFace(target) {
 
 
 
-export function facetOnPath(u, from, to) {
+export function facetOnPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -22276,7 +22276,7 @@ export function facetOnPath(u, from, to) {
 
 
 
-export function facetPath(u) {
+export function facetPath(u: number) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -22324,7 +22324,7 @@ export function facetPath(u) {
 
 
 
-export function facetHoldPath(u) {
+export function facetHoldPath(u: number) {
 
   const t = Math.max(0, Math.min(1, u));
 
@@ -22338,7 +22338,7 @@ export function facetHoldPath(u) {
 
 
 
-export function facetOffPath(u, from, to) {
+export function facetOffPath(u: number, from: PlayPoint | null | undefined, to: PlayPoint | null | undefined) {
 
   const t = Math.max(0, Math.min(1, u));
 

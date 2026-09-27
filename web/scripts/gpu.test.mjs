@@ -60,14 +60,14 @@ test("the browser contract matches the overlay: valid, missing, malformed, stale
     { platform: "win32", nowMs: NOW },
   );
   assert.equal(missing.status, "unread");
-  assert.equal(gpuLine(missing), "GPU unread");
-  assert.equal(gpuLine(UNREAD_GPU), "GPU unread");
+  assert.equal(gpuLine(missing), "GPU · no reading");
+  assert.equal(gpuLine(UNREAD_GPU), "GPU · no reading");
   assert.equal(missing.utilPercent, null);
 
   const malformed = parseSample(0);
   assert.equal(malformed.status, "malformed");
   assert.equal(malformed.utilPercent, null);
-  assert.equal(gpuLine(malformed), "GPU unread · malformed");
+  assert.equal(gpuLine(malformed), "GPU · reading looked wrong");
   assert.doesNotMatch(gpuLine(malformed), /0%/);
   const typedZero = parseSample({ status: "read", platform: "win32", utilPercent: "0", readAtMs: NOW });
   assert.equal(typedZero.status, "malformed");
@@ -75,7 +75,7 @@ test("the browser contract matches the overlay: valid, missing, malformed, stale
   const stale = present(valid, NOW + STALE_MS + 1);
   assert.equal(stale.status, "stale");
   assert.equal(stale.tempC, null);
-  assert.equal(gpuLine(stale), "GPU unread · stale");
+  assert.equal(gpuLine(stale), "GPU · reading is old");
   assert.doesNotMatch(gpuLine(stale), /62/);
   assert.equal(present(valid, NOW + STALE_MS).status, "read");
 
@@ -96,14 +96,14 @@ test("the browser contract matches the overlay: valid, missing, malformed, stale
   assert.equal(mac.utilPercent, 16);
   assert.equal(mac.tempC, null);
   assert.equal(mac.powerWatts, null);
-  assert.equal(gpuLine(mac), "GPU Apple M2 · unread · 16% · 542 MiB/unread · unread");
+  assert.equal(gpuLine(mac), "GPU Apple M2 · — · 16% · 542 MiB/— · —");
   assert.equal(linux.status, "read");
   assert.equal(linux.tempC, 62);
   assert.equal(linux.utilPercent, 14);
   assert.equal(gpuLine(linux), VALID_LINE);
   assert.equal(other.status, "unsupported");
   assert.equal(other.tempC, null);
-  assert.equal(gpuLine(other), "GPU unread · unsupported");
+  assert.equal(gpuLine(other), "GPU · not read on this computer");
   assert.equal(linux.powerWatts, 48.5);
   const amdText = [
     "NVIDIA_ABSENT",
@@ -120,7 +120,7 @@ test("the browser contract matches the overlay: valid, missing, malformed, stale
   assert.equal(amd.utilPercent, 37);
   assert.equal(amd.tempC, null);
   assert.equal(amd.powerWatts, null);
-  assert.equal(gpuLine(amd), "GPU amdgpu 1002:73BF · unread · 37% · 2 GiB/8 GiB · unread");
+  assert.equal(gpuLine(amd), "GPU amdgpu 1002:73BF · — · 37% · 2 GiB/8 GiB · —");
   const amdHot = sampleFromProbe(
     parseProbeText(["NVIDIA_ABSENT", "AMDGPU", "amdgpu 1002:73BF, 45.5, 37, 2048, 8192, 33", "ENDAMDGPU", "ENGINE_ABSENT", "MEMORY_ABSENT", "END"].join("\n")),
     { platform: "linux", nowMs: NOW },
@@ -172,7 +172,7 @@ test("the browser contract matches the overlay: valid, missing, malformed, stale
   assert.equal(intel.powerWatts, null);
   assert.equal(intel.memoryUsedBytes, null);
   assert.equal(intel.memoryTotalBytes, null);
-  assert.equal(gpuLine(intel), "GPU i915 8086:9A49 · unread · 50% · unread · unread");
+  assert.equal(gpuLine(intel), "GPU i915 8086:9A49 · — · 50% · — · —");
   const over = sampleFromProbe(
     parseProbeText(["NVIDIA_ABSENT", "AMDGPU_ABSENT", "INTEL", "xe 8086:E20B, [N/A], 101, [N/A], [N/A], [N/A]", "ENDINTEL", "ENGINE_ABSENT", "MEMORY_ABSENT", "END"].join("\n")),
     { platform: "linux", nowMs: NOW },
@@ -302,7 +302,7 @@ test("the browser port reduces counters like Task Manager, same as the overlay",
 });
 
 // Hand-built: two adapters that both report phys_0 (see fixtures/replay/README.md).
-const TWO_ADAPTER_LINE = "GPU unread · unread · 12.5% · 2 GiB/8 GiB · unread";
+const TWO_ADAPTER_LINE = "GPU · — · 12.5% · 2 GiB/8 GiB · —";
 const TWO_NO_LIMIT = [
   "NVIDIA_ABSENT",
   "ENGINE",
@@ -349,7 +349,7 @@ test("the browser port reads two adapters that share phys_0 apart, same as the o
   assert.equal(sample.utilPercent, 12.5);
   assert.equal(gpuLine(sample), TWO_ADAPTER_LINE);
   assert.equal(gpuLine(sampleFromProbe(parseProbeText(reversedBlocks(text)), { platform: "win32", nowMs: NOW })), TWO_ADAPTER_LINE);
-  assert.equal(gpuLine(sampleFromProbe(parseProbeText(TWO_NO_LIMIT), { platform: "win32", nowMs: NOW })), "GPU unread · unread · 9% · 3 GiB/unread · unread");
+  assert.equal(gpuLine(sampleFromProbe(parseProbeText(TWO_NO_LIMIT), { platform: "win32", nowMs: NOW })), "GPU · — · 9% · 3 GiB/— · —");
   const nvidia = sampleFromProbe(parseProbeText(NVIDIA_BLANK_TWO), { platform: "win32", nowMs: NOW });
   assert.equal(nvidia.source, "nvidia-smi");
   assert.equal(nvidia.utilPercent, null);

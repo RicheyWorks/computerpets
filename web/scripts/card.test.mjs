@@ -24,7 +24,7 @@ test("the desk card law matches the overlay card", () => {
   assert.deepEqual([...C.MUTE_BUSES], ["talk", "special", "weather", "treats", "steps", "music"]);
   assert.equal(C.VOICE_TRUTH, "Rui, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Echo, Peck, Quill, Keel, Ember, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Rue, Wick, Burr, Floss, Bloom, Vesper, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Ochre, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Well, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Wax, Frill, Cap, Lattice, Horn, Ring, Mane, Puff, Flame, Starter, Pact, Gleam, Choir, Drift, Shard, Dusk, Knot, Brine, Beacon, Hush, Arca, Reed, Pebble, Eft, Dapple, Slip, Pinch, Whorl, Hinge, Latch, Prickle, Boot, Reach, Spot, Orb, Pane, Hold, Loom, and Leap talk with house cry first; system speech is the backup.");
   assert.equal(K.VOICE_TRUTH, C.VOICE_TRUTH);
-  assert.match(K.QUIT_TRUTH, /desktop\.ps1/);
+  assert.match(K.QUIT_TRUTH, /Sit again/);
   assert.equal(C.busOf("chirp"), "talk");
   assert.equal(C.isMuted({ talk: true }, "chirp"), true);
   assert.match(overlayCard, /VOICE_TRUTH/);

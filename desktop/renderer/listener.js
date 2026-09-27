@@ -19,7 +19,7 @@
 
   const LOCAL_HOSTS = new Set(["127.0.0.1", "localhost", "::1"]);
   const HOUSE = { id: "local", name: "House lines", line: "Listening · House lines" };
-  const UNREAD = { id: "unread", name: "unread", line: "Listening · unread" };
+  const UNREAD = { id: "unread", name: "not sure", line: "Listening · not sure" };
 
   function presetById(id) {
     return PRESETS.find((p) => p.id === id) || null;
