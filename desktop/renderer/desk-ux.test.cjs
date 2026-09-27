@@ -33,7 +33,8 @@ test("life alerts carry need ids and map to care commands", () => {
 test("notify IPC payload and click open-care wiring", () => {
   assert.match(preloadSrc, /typeof title === "object"/);
   assert.match(mainSrc, /note\.on\("click"/);
-  assert.match(mainSrc, /type: "open-care"/);
+  assert.match(mainSrc, /PetCard\.noteCommand\(payload, currentKey\)/);
+  assert.match(mainSrc, /webContents\.send\("command", click\)/);
   assert.match(petSrc, /function openCareFromNotify/);
   assert.match(petSrc, /cmd\.type === "open-care"/);
   assert.match(petSrc, /desk\?\.notify\(\{[\s\S]*need:/);

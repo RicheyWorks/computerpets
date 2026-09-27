@@ -2602,6 +2602,20 @@ function pickChoice(id) {
   }
 }
 
+/**
+ * A keeper-clock notification was clicked: main has shown the overlay. The guest that rang comes back
+ * and its saved line sits in the bubble again (words only; the ring already played). Care stays closed.
+ */
+function showClockNote(payload) {
+  const key = payload && payload.key ? String(payload.key) : "";
+  if (key && kind && key !== kind.key && roster.some((r) => r.key === key)) switchTo(key);
+  const line = payload && typeof payload.line === "string" ? payload.line.trim() : "";
+  if (!line) return;
+  bubbleText.textContent = line;
+  bubble.classList.add("open");
+  speechUntil = performance.now() + 6000;
+}
+
 ﻿function openCareFromNotify(payload) {
   const key = payload && payload.key ? String(payload.key) : "";
   const need = payload && payload.need ? String(payload.need) : "";
@@ -4538,6 +4552,10 @@ window.desk?.onCommand((cmd) => {
     openCareFromNotify(cmd);
     return;
   }
+  if (cmd && typeof cmd === "object" && cmd.type === "clock-note") {
+    showClockNote(cmd);
+    return;
+  }
   handle(cmd);
 });
 window.desk?.onSwitch((key) => switchTo(key));
@@ -4609,9 +4627,9 @@ setInterval(() => {
   persistCard();
   if (!tick.rang) return;
   const plain = tick.rang === "alarm" ? "The clock asked." : "The timer is done.";
-  const line = window.PetCard.lineById(card, kind.key, tick.lineId) || { text: plain, kind: "say" };
-  playHouseLine(line);
-  if (document.hidden) window.desk?.notify({ title: kind.name, body: line.kind === "say" ? line.text : plain, key: kind.key });
+  const named = window.PetCard.lineById(card, kind.key, tick.lineId);
+  playHouseLine(named || { text: plain, kind: "say" });
+  if (document.hidden) window.desk?.notify(window.PetCard.clockNote(tick.rang, kind.name, kind.key, named));
 }, 1000);
 
 window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
