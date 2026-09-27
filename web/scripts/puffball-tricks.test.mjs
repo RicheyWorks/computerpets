@@ -225,8 +225,8 @@ test("Puff tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("beard"), false);
   assert.equal(T.TRICKS.includes("frost"), false);
   assert.equal(T.TRICKS.includes("perlatum"), false);
-  assert.deepEqual([...TurkeyTail.TRICKS], ["pore", "bracket", "band", "leathery", "trametes", "concentric", "tomentum"]);
-  assert.deepEqual([...OverlayTurkeyTail.TRICKS], ["pore", "bracket", "band", "leathery", "trametes", "concentric", "tomentum"]);
+  assert.deepEqual([...TurkeyTail.TRICKS], ["pore", "bracket", "zonate", "leathery", "trametes", "concentric", "tomentum"]);
+  assert.deepEqual([...OverlayTurkeyTail.TRICKS], ["pore", "bracket", "zonate", "leathery", "trametes", "concentric", "tomentum"]);
   assert.deepEqual([...TurkeyTail.HAPPY], ["versicolor", "ochracea", "pubescens"]);
   assert.deepEqual([...LionsMane.TRICKS], ["spine", "icicle", "cascade", "wound", "hericium", "pompon", "hydnoid"]);
   assert.deepEqual([...OverlayLionsMane.TRICKS], ["spine", "icicle", "cascade", "wound", "hericium", "pompon", "hydnoid"]);
@@ -1400,8 +1400,8 @@ test("notes: Puff Rui-dense ultra (LYCOPERDON_HOLD=11.2); next leftover Flame / 
   assert.equal(OverlayGround.wantsThankYou("fly_agaric"), true);
   assert.equal(OverlayGround.tricksFor("cap"), OverlayFlyAgaric);
   assert.equal(OverlayGround.wantsThankYou("cap"), true);
-  assert.deepEqual([...FlyAgaric.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
-  assert.deepEqual([...OverlayFlyAgaric.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...FlyAgaric.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...OverlayFlyAgaric.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
   assert.equal(OverlayGround.tricksFor("morel"), OverlayMorel);
   assert.equal(OverlayGround.tricksFor("lattice"), OverlayMorel);
   assert.deepEqual([...Morel.TRICKS], ["alveolus", "ridge", "ephemeral", "sclerotium", "morchella", "costa", "hymenium"]);
@@ -1414,8 +1414,8 @@ test("notes: Puff Rui-dense ultra (LYCOPERDON_HOLD=11.2); next leftover Flame / 
   assert.equal(OverlayGround.wantsThankYou("turkey_tail"), true);
   assert.equal(OverlayGround.tricksFor("ring"), OverlayTurkeyTail);
   assert.equal(OverlayGround.wantsThankYou("ring"), true);
-  assert.deepEqual([...TurkeyTail.TRICKS], ["pore", "bracket", "band", "leathery", "trametes", "concentric", "tomentum"]);
-  assert.deepEqual([...OverlayTurkeyTail.TRICKS], ["pore", "bracket", "band", "leathery", "trametes", "concentric", "tomentum"]);
+  assert.deepEqual([...TurkeyTail.TRICKS], ["pore", "bracket", "zonate", "leathery", "trametes", "concentric", "tomentum"]);
+  assert.deepEqual([...OverlayTurkeyTail.TRICKS], ["pore", "bracket", "zonate", "leathery", "trametes", "concentric", "tomentum"]);
   assert.equal(OverlayGround.tricksFor("puffball"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("puffball"), true);
   assert.equal(OverlayGround.tricksFor("puff"), Overlay);
@@ -1467,8 +1467,8 @@ test("notes: Puff Rui-dense ultra (LYCOPERDON_HOLD=11.2); next leftover Flame / 
   assert.equal(OverlayGround.wantsThankYou("fly_agaric"), true);
   assert.equal(OverlayGround.tricksFor("cap"), OverlayFlyAgaric);
   assert.equal(OverlayGround.wantsThankYou("cap"), true);
-  assert.deepEqual([...FlyAgaric.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
-  assert.deepEqual([...OverlayFlyAgaric.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...FlyAgaric.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...OverlayFlyAgaric.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
   assert.equal(OverlayGround.tricksFor("morel"), OverlayMorel);
   assert.equal(OverlayGround.tricksFor("lattice"), OverlayMorel);
   assert.deepEqual([...Morel.TRICKS], ["alveolus", "ridge", "ephemeral", "sclerotium", "morchella", "costa", "hymenium"]);

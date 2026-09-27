@@ -165,7 +165,7 @@ test("Cap tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...T.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -242,7 +242,7 @@ test("Cap tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("preen"), false);
   assert.equal(T.TRICKS.includes("mantle"), false);
   assert.equal(T.TRICKS.includes("jet"), false);
-  assert.equal(T.TRICKS.includes("veil"), true);
+  assert.equal(T.TRICKS.includes("flake"), true);
   assert.equal(T.TRICKS.includes("bone"), false);
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(T.TRICKS.includes("fringe"), false);
@@ -265,7 +265,7 @@ test("Cap tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...Overlay.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
   assert.deepEqual([...Overlay.HAPPY], ["muscaria", "regalis", "frostiana"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
@@ -337,7 +337,7 @@ test("Cap tricks start only on idle ground", () => {
   assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax", "obelisk", "ommatidia"]);
 });
 
-test("annulus/volva/veil/symbiont/amanita/pileus/bulb are house-place-true, not copies of prior guests", () => {
+test("annulus/volva/flake/symbiont/amanita/pileus/bulb are house-place-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("amanita", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -365,7 +365,7 @@ test("annulus/volva/veil/symbiont/amanita/pileus/bulb are house-place-true, not 
   assert.equal(gall.anim, "talk");
   const gallMid = T.stepTrick(gall, 0.85, ground);
   assert.ok(Math.abs(gallMid.lift) > 0.05 || Math.abs(gallMid.rot) > 1 || Math.abs(gallMid.x - 80) > 0.05);
-  const sinus = T.beginTrick("veil", 80, 1);
+  const sinus = T.beginTrick("flake", 80, 1);
   assert.equal(sinus.anim, "talk");
   const sinusMid = T.stepTrick(sinus, 0.5, ground);
   assert.ok(Math.abs(sinusMid.lift) > 0.05 || Math.abs(sinusMid.rot) > 1 || Math.abs(sinusMid.x - 80) > 0.05);
@@ -381,7 +381,7 @@ test("annulus/volva/veil/symbiont/amanita/pileus/bulb are house-place-true, not 
   assert.equal(bulb.anim, "play");
   const bulbMid = T.stepTrick(bulb, 0.5, ground);
   assert.ok(Math.abs(bulbMid.lift) > 0.8 || Math.abs(bulbMid.rot) > 2 || Math.abs(bulbMid.x - 80) > 0.2);
-  const sinusDone = T.stepTrick(sinus, T.DUR.veil + 0.1, ground);
+  const sinusDone = T.stepTrick(sinus, T.DUR.flake + 0.1, ground);
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -707,7 +707,7 @@ test("ground registry keeps prior guests gated; Cap selectable; prior guests sti
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...T.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...T.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -915,7 +915,7 @@ globalThis.PetFlyAgaricTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...Overlay.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -1076,7 +1076,7 @@ test("notes: Cap Rui-dense ultra (AMANITA_HOLD=11.2); Lattice now Rue-dense; Hor
   assert.equal(OverlayGround.wantsThankYou("snap"), true); // Snap still gated via VenusFlytrap
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...OverlayOak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
-  assert.deepEqual([...T.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...T.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -1093,7 +1093,7 @@ test("notes: Cap Rui-dense ultra (AMANITA_HOLD=11.2); Lattice now Rue-dense; Hor
   assert.equal(T.TRICKS.includes("flush"), false);
   assert.deepEqual([...Honeycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
   assert.deepEqual([...OverlayHoneycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
-  assert.deepEqual([...Overlay.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...Overlay.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
   assert.deepEqual([...T.HAPPY], ["muscaria", "regalis", "frostiana"]);
   assert.equal(T.TRICKS.includes("pad"), false);
   assert.equal(T.TRICKS.includes("mount"), false);
@@ -1139,7 +1139,7 @@ test("notes: Cap Rui-dense ultra (AMANITA_HOLD=11.2); Lattice now Rue-dense; Hor
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("milk"), true);
-  assert.deepEqual([...T.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...T.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -1156,7 +1156,7 @@ test("notes: Cap Rui-dense ultra (AMANITA_HOLD=11.2); Lattice now Rue-dense; Hor
   assert.equal(T.TRICKS.includes("flush"), false);
   assert.deepEqual([...Honeycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
   assert.deepEqual([...OverlayHoneycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
-  assert.deepEqual([...Overlay.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...Overlay.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
   assert.equal(OverlayGround.tricksFor("stick"), OverlayStick);
   assert.equal(OverlayGround.wantsThankYou("stick"), true);
   assert.equal(OverlayGround.tricksFor("twig"), OverlayStick);
@@ -1303,7 +1303,7 @@ test("notes: Cap Rui-dense ultra (AMANITA_HOLD=11.2); Lattice now Rue-dense; Hor
   assert.equal(OverlayGround.wantsThankYou("spark"), true);
   assert.deepEqual([...Firefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
   assert.deepEqual([...OverlayFirefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
-  assert.deepEqual([...T.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...T.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -1320,7 +1320,7 @@ test("notes: Cap Rui-dense ultra (AMANITA_HOLD=11.2); Lattice now Rue-dense; Hor
   assert.equal(T.TRICKS.includes("flush"), false);
   assert.deepEqual([...Honeycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
   assert.deepEqual([...OverlayHoneycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
-  assert.deepEqual([...Overlay.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...Overlay.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
   assert.deepEqual([...Monarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
   assert.deepEqual([...OverlayMonarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
   assert.equal(OverlayGround.tricksFor("pitcher"), OverlayPitcher);
@@ -1339,7 +1339,7 @@ test("notes: Cap Rui-dense ultra (AMANITA_HOLD=11.2); Lattice now Rue-dense; Hor
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("milk"), true);
-  assert.deepEqual([...T.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...T.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -1356,7 +1356,7 @@ test("notes: Cap Rui-dense ultra (AMANITA_HOLD=11.2); Lattice now Rue-dense; Hor
   assert.equal(T.TRICKS.includes("flush"), false);
   assert.deepEqual([...Honeycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
   assert.deepEqual([...OverlayHoneycomb.TRICKS], ["festoon", "capped", "midrib", "stores", "tessera", "alveoli", "foundation"]);
-  assert.deepEqual([...Overlay.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...Overlay.TRICKS], ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"]);
   assert.equal(OverlayGround.tricksFor("sundew"), OverlaySundew);
   assert.equal(OverlayGround.wantsThankYou("sundew"), true);
   assert.equal(OverlayGround.tricksFor("dew"), OverlaySundew);
