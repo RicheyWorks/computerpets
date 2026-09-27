@@ -56,7 +56,8 @@ test("Quotes crypto + NFT panes lockstep with overlay market helpers", () => {
   assert.ok(house.marketplaces.some((m) => m.id === "robinhood-nft"));
   assert.match(deskSrc, /Add a coin/);
   assert.match(deskSrc, /Marketplaces/);
-  assert.match(deskSrc, /pump mint|contract/);
+  assert.match(deskSrc, /placeholder=\{MARKET_PLACEHOLDER\}/);
+  assert.equal(Market.MARKET_PLACEHOLDER, "A coin or stock — ETH, BTC, AAPL, or a coin's address");
   const OverlayMarket = createRequire(import.meta.url)(join(root, "../desktop/renderer/market.js"));
   assert.deepEqual(
     Market.DEFAULT_MARKETPLACES.slice().sort(),
@@ -75,7 +76,7 @@ test("Quotes crypto + NFT panes lockstep with overlay market helpers", () => {
   assert.equal(Market.quoteHonesty(Market.parseMarket({})), OverlayMarket.quoteHonesty({}));
   assert.equal(Market.quoteMaySend(Market.parseMarket({}), false), false);
   assert.equal(Market.QUOTE_LOOK, OverlayMarket.QUOTE_LOOK);
-  assert.equal(News.newsHonesty(News.blankNewsPrefs()), "this news send reads the rss feed. this computer's network address goes with the https request to the news host, as any client.");
+  assert.equal(News.newsHonesty(News.blankNewsPrefs()), "This asks Google News, a news website, for headlines. It sends the topic you picked, if there is one. This computer's internet address also goes to Google News, like visiting any website.");
   assert.ok(deskSrc.includes('id="news-net"'));
   assert.ok(deskSrc.includes('id="market-net"'));
   assert.ok(deskSrc.includes('id="market-look-net"'));
@@ -89,7 +90,7 @@ test("Quotes crypto + NFT panes lockstep with overlay market helpers", () => {
   assert.doesNotMatch(deskSrc, /fetch\(popularRssUrl/);
   assert.ok(deskSrc.indexOf("if (!quoteMaySend") < deskSrc.indexOf("readGeckoMany(line"));
   assert.ok(deskSrc.indexOf("if (!quoteLookMaySend") < deskSrc.indexOf("readQuoteSearch("));
-  assert.ok(Market.quoteHonesty(Market.parseMarket({})).includes(Weather.clientNetLine("the quote host")));
+  assert.ok(Market.quoteHonesty(Market.parseMarket({})).includes(Weather.plainNetLine("CoinGecko")));
   assert.equal(News.NEWS_TIMEOUT_MS, 12_000);
   assert.equal(Market.QUOTE_TIMEOUT_MS, 12_000);
   assert.equal(News.NewsTimeout.name, "NewsTimeout");

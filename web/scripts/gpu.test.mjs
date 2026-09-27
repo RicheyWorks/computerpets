@@ -245,16 +245,17 @@ test("a sparkline grows only from fresh read samples and stays empty otherwise",
   assert.deepEqual(cleared.history, []);
 });
 
-test("demo and overlay keeper surfaces share the unread GPU row", () => {
+test("the overlay and blotter show the GPU row; the web card hides it (a browser cannot read the GPU)", () => {
   const card = readFileSync(join(root, "web/src/components/desk/keeper-card.tsx"), "utf8");
   const overlay = readFileSync(join(root, "desktop/renderer/index.html"), "utf8");
   const blotter = readFileSync(join(root, "client/computerpets_client/app.py"), "utf8");
   const deskGpu = readFileSync(join(root, "desktop/renderer/gpu.js"), "utf8");
   const blotterGpu = readFileSync(join(root, "client/computerpets_client/gpu.py"), "utf8");
-  assert.match(card, /keeper-gpu/);
-  assert.match(card, /gpuLine\(UNREAD_GPU\)/);
-  assert.match(card, /sparkline\(\[\], UNREAD_GPU, 0\)/);
-  assert.match(card, /data-spark=/);
+  assert.doesNotMatch(card, /keeper-gpu/);
+  assert.doesNotMatch(card, /gpuLine\(/);
+  assert.doesNotMatch(card, /sparkline\(/);
+  assert.doesNotMatch(card, /data-gpu=|data-spark=/);
+  assert.match(card, /No GPU line on the web page/);
   assert.doesNotMatch(card, /M1 11\.3/);
   assert.match(overlay, /id="hud-gpu"/);
   assert.match(overlay, /data-gpu="unread"/);

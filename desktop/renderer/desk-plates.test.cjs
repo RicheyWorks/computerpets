@@ -108,7 +108,8 @@ test("Quotes expansion carries crypto list customize and shared plate styles", (
   assert.match(htmlSrc, /data-market-pane="coins"/);
   assert.match(htmlSrc, /data-market-pane="nfts"/);
   assert.match(htmlSrc, /nft-marketplaces/);
-  assert.match(htmlSrc, /pump mint/);
+  assert.ok(htmlSrc.includes(`placeholder="${require("./market.js").MARKET_PLACEHOLDER}"`));
+  assert.doesNotMatch(htmlSrc, /pump mint|mint or contract|honest offline|needs a key/);
   assert.match(cssSrc, /\.market-pane/);
   assert.match(cssSrc, /--plate-bg/);
   const mem = store();

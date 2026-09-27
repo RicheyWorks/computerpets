@@ -5,8 +5,8 @@ const P = require("./desk-plates.js");
 
 test("quotes name the network address and wait until that line is in view", () => {
   const house = M.parseMarket({});
-  const line = "this quote sends the saved list. this computer's network address goes with the https request to the quote host, as any client.";
-  assert.equal(M.quoteHostPhrase(house), "the quote host");
+  const line = "This asks price websites for the prices on your saved list. It sends the names on that list. This computer's internet address also goes to CoinGecko, like visiting any website.";
+  assert.equal(M.quoteHostPhrase(house), "CoinGecko");
   assert.equal(M.quoteHonesty(house), line);
   assert.equal(M.quoteMaySend(house, false), false);
   assert.equal(M.quoteMaySend(house, true), true);
@@ -21,8 +21,8 @@ test("quotes name the network address and wait until that line is in view", () =
     nftCollections: [],
     nftCustomized: true,
   });
-  assert.equal(M.quoteHostPhrase(mixed), "the quote host and the terminal host");
-  assert.match(M.quoteHonesty(mixed), /to the quote host and the terminal host, as any client/);
+  assert.equal(M.quoteHostPhrase(mixed), "CoinGecko and GeckoTerminal");
+  assert.match(M.quoteHonesty(mixed), /goes to CoinGecko and GeckoTerminal, like visiting any website/);
   let stock = M.parseMarket({
     marketTickers: [
       { symbol: "ETH", kind: "crypto", geckoId: "ethereum", name: "Ethereum" },
@@ -33,16 +33,16 @@ test("quotes name the network address and wait until that line is in view", () =
   });
   const aapl = stock.tickers.find((row) => row.symbol === "AAPL");
   stock = M.pickTicker(stock, aapl.id);
-  assert.equal(M.quoteHostPhrase(stock), "the quote host and the stock host");
+  assert.equal(M.quoteHostPhrase(stock), "CoinGecko and Yahoo Finance");
   assert.equal(M.quoteLookMaySend(false), false);
   assert.equal(M.quoteLookMaySend(true), true);
-  assert.match(M.QUOTE_LOOK, /this look-up sends the typed name\. this computer's network address goes with the https request to the quote host, as any client\./);
+  assert.equal(M.QUOTE_LOOK, "This asks CoinGecko, a price website, to find the name you typed. It sends what you typed. This computer's internet address also goes to CoinGecko, like visiting any website.");
 });
 
 test("quote wrappers refuse a fetch until the painted host line is present", async () => {
-  const quote = "this quote sends the saved list. this computer's network address goes with the https request to the quote host, as any client.";
-  const mixed = "this quote sends the saved list. this computer's network address goes with the https request to the quote host and the terminal host, as any client.";
-  const stock = "this quote sends the saved list. this computer's network address goes with the https request to the stock host, as any client.";
+  const quote = "This asks price websites for the prices on your saved list. It sends the names on that list. This computer's internet address also goes to CoinGecko, like visiting any website.";
+  const mixed = "This asks price websites for the prices on your saved list. It sends the names on that list. This computer's internet address also goes to CoinGecko and GeckoTerminal, like visiting any website.";
+  const stock = "This asks price websites for the prices on your saved list. It sends the names on that list. This computer's internet address also goes to Yahoo Finance, like visiting any website.";
   assert.equal(M.quoteHostMayLeave("", M.QUOTE_HOST_NAME), false);
   assert.equal(M.quoteHostMayLeave(M.QUOTE_LOOK, M.QUOTE_HOST_NAME), false);
   assert.equal(M.quoteHostMayLeave(quote, M.QUOTE_HOST_NAME), true);
@@ -85,7 +85,7 @@ test("quote wrappers refuse a fetch until the painted host line is present", asy
 test("quote wrappers time out and deny a silent host", async () => {
   assert.equal(M.QUOTE_TIMEOUT_MS, 12_000);
   assert.equal(M.QuoteTimeout.name, "QuoteTimeout");
-  const quote = "this quote sends the saved list. this computer's network address goes with the https request to the quote host, as any client.";
+  const quote = "This asks price websites for the prices on your saved list. It sends the names on that list. This computer's internet address also goes to CoinGecko, like visiting any website.";
   const hang = () => new Promise(() => {});
   const calls = [];
   await assert.rejects(
@@ -97,7 +97,7 @@ test("quote wrappers time out and deny a silent host", async () => {
     (err) => err instanceof M.QuoteTimeout,
   );
   await assert.rejects(
-    () => M.readYahoo("this quote sends the saved list. this computer's network address goes with the https request to the stock host, as any client.", "AAPL", () => hang(), 30),
+    () => M.readYahoo("This asks price websites for the prices on your saved list. It sends the names on that list. This computer's internet address also goes to Yahoo Finance, like visiting any website.", "AAPL", () => hang(), 30),
     (err) => err instanceof M.QuoteTimeout,
   );
   assert.equal(calls.length, 1);
@@ -182,7 +182,7 @@ test("NFT collections and marketplaces customize with honest venue labels", () =
     assert.ok(ids.includes(id), id);
   }
   const open = house.marketplaces.find((m) => m.id === "opensea");
-  assert.match(open.note, /key|offline|floor/i);
+  assert.equal(open.note, "needs a paid account for live prices");
   house = M.removeMarketplace(house, "robinhood-nft");
   assert.equal(house.marketplaces.some((m) => m.id === "robinhood-nft"), false);
   house = M.addMarketplace(house, "robinhood-nft");

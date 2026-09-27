@@ -1,4 +1,4 @@
-/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows this computer's network address on that https request. The featured page also refuses inside readFeatured when that wikipedia line is missing. An RSS read refuses inside readRss when that news-host line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. No invented keys or headlines. */
+/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows the line that names the website (Google News, Wikipedia, CoinGecko, GeckoTerminal, Yahoo Finance) and says this computer's internet address goes there too. The featured page also refuses inside readFeatured when that wikipedia line is missing. An RSS read refuses inside readRss when that news-host line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. No invented keys or headlines. */
 (function (root) {
   const NEWS_SOURCE = "Wikipedia In the news";
   const TOPIC_SOURCE = "Google News";
@@ -339,14 +339,16 @@
         areas = null;
       }
     }
-    if (!areas || typeof areas.clientNetLine !== "function") return "";
-    return areas.clientNetLine(host);
+    if (!areas || typeof areas.plainNetLine !== "function") return "";
+    return areas.plainNetLine(host);
   }
 
-  const NEWS_RSS_NET = sharedNet("the news host");
-  const NEWS_WIKI_NET = sharedNet("the wikipedia host");
-  const NEWS_RSS_HONESTY = NEWS_RSS_NET ? `this news send reads the rss feed. ${NEWS_RSS_NET}` : "";
-  const NEWS_WIKI_HONESTY = NEWS_WIKI_NET ? `this news send reads the featured page. ${NEWS_WIKI_NET}` : "";
+  const NEWS_RSS_NET = sharedNet("Google News");
+  const NEWS_WIKI_NET = sharedNet("Wikipedia");
+  const NEWS_RSS_LEAD = "This asks Google News, a news website, for headlines. It sends the topic you picked, if there is one.";
+  const NEWS_WIKI_LEAD = "This asks Wikipedia, an encyclopedia website, for today's news page. It sends today's date.";
+  const NEWS_RSS_HONESTY = NEWS_RSS_NET ? `${NEWS_RSS_LEAD} ${NEWS_RSS_NET}` : "";
+  const NEWS_WIKI_HONESTY = NEWS_WIKI_NET ? `${NEWS_WIKI_LEAD} ${NEWS_WIKI_NET}` : "";
 
   function newsSendKind(prefs) {
     const house = parseNewsPrefs(prefs);
@@ -525,6 +527,8 @@
     sourceLine,
     NEWS_RSS_NET,
     NEWS_WIKI_NET,
+    NEWS_RSS_LEAD,
+    NEWS_WIKI_LEAD,
     NEWS_RSS_HONESTY,
     NEWS_WIKI_HONESTY,
     newsSendKind,

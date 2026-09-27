@@ -2212,9 +2212,9 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
             "surfaces": (
                 'id="hud-gpu"' in overlay
                 and 'data-spark="empty"' in overlay
-                and "keeper-gpu" in card
-                and "data-gpu" in card
-                and "sparkline([], UNREAD_GPU, 0)" in card
+                and "keeper-gpu" not in card
+                and "gpuLine(" not in card
+                and "No GPU line on the web page" in card
                 and "function remember" in desk
                 and "function sparkline" in desk
                 and "export function sparkline" in web
@@ -2574,6 +2574,22 @@ def _web_rows() -> list[Affordance]:
                 "the web plate tabs drop aria-pressed, keep one Tab stop, and take the overlay's arrow / Home / End keys."
             ),
         ),
+        Affordance(
+            "web.consent_plain",
+            "web",
+            "Network consent lines in plain words (name the website, say what is sent), same gates; web GPU hidden; calm server tone",
+            "web weather-areas.ts plainNetLine + news.ts + market.ts + keeper.ts heartbeatTone + admin/base.ts, overlay weather-areas.js / news.js / market.js / keeper.js, main plate-net.cjs",
+            notes=(
+                "Real modules on both surfaces: the forecast, place finder, locate, news, and quotes lines name "
+                "Open-Meteo, Google News, Wikipedia, CoinGecko, GeckoTerminal, or Yahoo Finance, say what is sent, "
+                "and say this computer's internet address goes there too, with no 'https request' / 'geocode host' / "
+                "'rss feed' / 'os or browser prompt'; the web, overlay, and main plate-net gates still open only on "
+                "those exact painted lines, and Radio Find (Rui's music block) keeps its older sentence; index.html "
+                "ships the same words; the web card has no GPU line; 'not running (optional)' is neutral and only "
+                "'stopped answering' is styled as a warning; the quotes plate and admin page carry no jti, "
+                "soft-delete, mint, or key jargon."
+            ),
+        ),
     ]
 
 
@@ -2599,6 +2615,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("menu_keys_escape", domain="web", action_id=aid)
     if local_id == "plain_words":
         return _run_web_smoke("plain_words", domain="web", action_id=aid)
+    if local_id == "consent_plain":
+        return _run_web_smoke("consent_plain", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

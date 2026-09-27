@@ -46,10 +46,11 @@ test("a confirmed revoke says it worked; only the list refresh can fail after th
   ]);
   assert.equal(rows[1].revoked, false, "the old rows are not mutated");
   const stale = B.revokedListStale("Couldn't reach the house server.");
-  assert.ok(stale.startsWith("License revoked. Downloads for this jti stop immediately."), stale);
+  assert.ok(stale.startsWith("License revoked. Downloads with this license stop right away."), stale);
   assert.match(stale, /The list couldn't refresh: Couldn't reach the house server\./);
   assert.doesNotMatch(stale, /failed/i);
-  assert.match(B.REVOKED_NOTE, /^License revoked and soft-deleted\./);
+  assert.match(B.REVOKED_NOTE, /^License revoked\. Downloads with this license stop right away\./);
+  assert.doesNotMatch(`${B.REVOKED_NOTE} ${stale}`, /jti|soft-delet/);
   const page = src("src/routes/admin.tsx");
   const body = page.slice(page.indexOf("async function confirmRevoke"), page.indexOf("function lock("));
   const revokeAt = body.indexOf("await revokeLicense(");

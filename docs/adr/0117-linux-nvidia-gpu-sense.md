@@ -39,3 +39,4 @@ This slice does not reopen presence/CSP, Hikari, bundle zip, cosign, CDN, secret
 - Wayland without an X11 display stays empty. That is [0115](0115-linux-x11-window-play.md). Windows virtual desktops stay a later door. Neither blocks this probe.
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
 - **Next gap:** Mac GPU sense (`mac-gpu-sense`). The honest candidate is an IOAccelerator `PerformanceStatistics` read that does not prompt. `powermetrics` needs root and is not that read. Linux amdgpu and Intel sysfs stay unread until a later probe prints real fields into this same protocol. Do not start Pane. Do not start DirectX 12, Vulkan, or Solana. Catalog stays 221.
+- Later wording (2026-09): the unread GPU line now reads `GPU · no reading` (`GPU · not read on this computer` when unsupported), and a missing number is `—`. The web card hides the GPU line (a browser cannot read the GPU). See ROADMAP (kid-plain words).

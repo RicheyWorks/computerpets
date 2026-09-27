@@ -81,14 +81,14 @@ export function isRevokeDone(body: unknown, jti: string): boolean {
 
 /** Said after the ledger confirmed a revoke and the list came back. */
 export const REVOKED_NOTE =
-  "License revoked and soft-deleted. Downloads for this jti stop immediately. The row stays on the ledger.";
+  "License revoked. Downloads with this license stop right away. Its row stays on the ledger as a record.";
 
 /**
  * Said after the ledger confirmed a revoke but the list refresh failed: the revoke stands, only the
  * list is stale. `reason` is the plain reason for the refresh (never raw text).
  */
 export function revokedListStale(reason: string): string {
-  return `License revoked. Downloads for this jti stop immediately. The list couldn't refresh: ${reason} This row is marked revoked here, and the list reads again in a few seconds.`;
+  return `License revoked. Downloads with this license stop right away. The list couldn't refresh: ${reason} This row is marked revoked here, and the list reads again in a few seconds.`;
 }
 
 /** How long after a stale list the ledger page reads the list once more (or sooner, on focus). */

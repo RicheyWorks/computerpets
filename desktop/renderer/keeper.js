@@ -85,6 +85,15 @@
     return up ? `${HOUSE_SERVER_UP} · up ${up}` : HOUSE_SERVER_UP;
   }
 
+  /**
+   * The server row's tone, for data-heartbeat (same values as the web card). "OFF" (not seen this
+   * session; the server is optional) is neutral; only "DOWN" (answered, then stopped) is a warning.
+   */
+  function houseServerTone(state) {
+    if (state && state.reachable === true) return "UP";
+    return state && state.seen === true ? "DOWN" : "OFF";
+  }
+
   function houseServerTitle(state) {
     if (!state || state.show !== true || !state.host) return "";
     return `${HOUSE_SERVER} at ${state.host}`;
@@ -216,6 +225,7 @@
     HOUSE_SERVER_HIDDEN,
     NO_HOUSE_SERVER,
     HOUSE_SERVER_STOPPED,
+    houseServerTone,
     HOUSE_SERVER_UP,
     CARE_TRUTH,
     FIRST_HINT_OK,
