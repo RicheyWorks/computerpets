@@ -1,13 +1,13 @@
-/** Moth ground tricks while idle — ultra-polish pass. House orchid — labellum / velamen / column / spike / bark / keiki / pollinia personality (labellum landing on the bark mount — never named pad (Disk owns pad) / corolla (Disk owns corolla) / flutter (Fan owns flutter) / drop (Fan owns drop), velamen aerial-root sip on the mist — never named root (Burr owns root) / rhizome (Disk owns rhizome) / taproot (Mast owns taproot) / siphon (Anchor owns siphon) / crawl (Cling owns crawl), column pose on the stem — never named rachis (Vein owns rachis) / bole (Mast owns bole) / hinge (Door owns hinge), spike slow bloom on the lamp — never named bloom as axolotl-guest collision / open (Disk window owns open) / unfurl (Vein window owns unfurl) / corolla (Disk owns corolla) / flare (Coin owns flare) / nod as ethogram-old, bark-mount desk life under the lamp, keiki Phalaenopsis baby-plantlet sprout on the spike (species-true Phalaenopsis keiki — never named sprout (Bloom owns sprout) / seedling / pup / offset as copy), pollinia orchid pollen-packet dab (species-true Orchidaceae pollinia — never named pollen as the thank-you / nectary (Sip owns nectary) / flare (Coin owns flare) / dust); not Disk pad/corolla/rhizome/calyx/sheen/peltate/hydropote, Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber/dichotomy/petiole, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest/seed, Bloom gill, parrot fan/flash, or snake guests Sash seam/moss/lap copies). Keiki is the iconic Phalaenopsis plantlet on the spent spike (not Bloom sprout). Pollinia is the orchid pollen mass (not Moth thank-you pollen, not Sip nectary). Window-play MOUNT unchanged — never names mount as a trick. Ethogram keeps bark sit_hold; adds labellum/velamen/column/spike/keiki/pollinia softs + freeze (replaces thin unfurl/lean/nod). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via orchid.wav. Thank-yous pollen / perfume / pearl. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web orchid-tricks.ts. True house-moth-orchid desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/sheet-moss/Felt/maidenhair/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids open/gold/lean/nod/still/unfurl/fan/drop/dichotomy/petiole/biloba/flutter/frond/rachis/fiddle/pinna/saucer/sori/stipe/tuft/bead/spore/cushion/thatch/rhizoid/seta/lobe/sway/root/dig/fossil/cork/barrel/vessel/pad/corolla/rhizome/calyx/sheen/peltate/hydropote/mount/drift/float/bloom/cup/siphon/soak/sprout/nectary name collisions. Bird ultra (Soot→Ember) + Miso→Disk done; skip Rui + birds. Next guest ultra is Arm / saguaro. No cry inventing beyond house orchid.wav prefer. Never retouch Rui sprites. */
+/** Moth ground tricks while idle — ultra-polish pass. House orchid — labellum / velamen / column / spike / bark / keiki / pollinia personality (labellum landing on the bark mount — never named pad (Disk owns pad) / corolla (Disk owns corolla) / flutter (Fan owns flutter) / drop (Fan owns drop), velamen aerial-root sip on the mist — never named root (Burr owns root) / rhizome (Disk owns rhizome) / taproot (Mast owns taproot) / siphon (Anchor owns siphon) / crawl (Cling owns crawl), column pose on the stem — never named rachis (Vein owns rachis) / bole (Mast owns bole) / hinge (Door owns hinge), spike slow bloom on the lamp — never named bloom as axolotl-guest collision / open (Disk window owns open) / unfurl (Vein window owns unfurl) / corolla (Disk owns corolla) / flare (Coin owns flare) / nod as ethogram-old, bark-mount desk life under the lamp, keiki Phalaenopsis baby-plantlet sprout on the spike (species-true Phalaenopsis keiki — never named sprout (Bloom owns sprout) / seedling / pup / offset as copy), pollinia orchid pollen-packet dab (species-true Orchidaceae pollinia — never named pollen as the thank-you / nectary (Sip owns nectary) / flare (Coin owns flare) / dust); not Disk pad/corolla/rhizome/calyx/sheen/peltate/hydropote, Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber/dichotomy/petiole, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest/seed, Bloom gill, parrot fan/flash, or snake guests Sash seam/moss/lap copies). Keiki is the iconic Phalaenopsis plantlet on the spent spike (not Bloom sprout). Pollinia is the orchid pollen mass (not Moth thank-you pollen, not Sip nectary). Window-play MOUNT unchanged — never names mount as a trick. Ethogram keeps bark sit_hold; adds labellum/velamen/column/spike/keiki/pollinia softs + freeze (replaces thin unfurl/lean/nod). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via orchid.wav. Thank-yous pollen / perfume / amabilis. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web orchid-tricks.ts. True house-moth-orchid desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/sheet-moss/Felt/maidenhair/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids open/gold/lean/nod/still/unfurl/fan/drop/dichotomy/petiole/biloba/flutter/frond/rachis/fiddle/pinna/saucer/sori/stipe/tuft/bead/spore/cushion/thatch/rhizoid/seta/lobe/sway/root/dig/fossil/cork/barrel/vessel/pad/corolla/rhizome/calyx/sheen/peltate/hydropote/mount/drift/float/bloom/cup/siphon/soak/sprout/nectary name collisions. Bird ultra (Soot→Ember) + Miso→Disk done; skip Rui + birds. Next guest ultra is Arm / saguaro. No cry inventing beyond house orchid.wav prefer. Never retouch Rui sprites. */
 (function (root) {
   const TRICK_KEY = "orchid";
   const TRICKS = ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"];
-  const HAPPY = ["pollen", "perfume", "pearl"];
+  const HAPPY = ["pollen", "perfume", "amabilis"];
 
   const HAPPY_DUR = {
     pollen: 1.70,
     perfume: 1.84,
-    pearl: 1.76,
+    amabilis: 1.76,
   };
 
   /** Bark hold — Moth parks epiphyte-mount calm on the blotter. Not window-play MOUNT. */
@@ -199,7 +199,7 @@
     return { lift: 2.0 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "idle" };
   }
 
-  function pearlPose(t) {
+  function amabilisPose(t) {
     return {
       lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
       rot: Math.sin(t * 0.72) * 8,
@@ -226,7 +226,7 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = pearlPose(next.t);
+      const pose = amabilisPose(next.t);
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
@@ -601,7 +601,7 @@
     beginHappy,
     pollenPose,
     perfumePose,
-    pearlPose,
+    amabilisPose,
     stepHappy,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;

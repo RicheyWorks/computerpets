@@ -1278,7 +1278,7 @@ assert.ok(names("swallowtail").includes("wingbanner_soft"));
 assert.ok(names("swallowtail").includes("puddlesip_soft"));
 assert.ok(names("swallowtail").includes("flutterhop_soft"));
 assert.ok(names("swallowtail").includes("tailglidesettle_soft"));
-assert.ok(names("swallowtail").includes("eyespot_soft"));
+assert.ok(names("swallowtail").includes("tornusflash_soft"));
 assert.ok(names("swallowtail").includes("tigerband_soft"));
 assert.ok(names("swallowtail").includes("freeze"));
 assert.equal(names("swallowtail").includes("hunt"), false);

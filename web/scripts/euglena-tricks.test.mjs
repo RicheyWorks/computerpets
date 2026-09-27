@@ -880,7 +880,7 @@ test("Spot tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("lucent"), false);
   assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
   assert.deepEqual([...OverlayPhotovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
-  assert.deepEqual([...Photovore.HAPPY], ["actinic", "lux", "candela"]);
+  assert.deepEqual([...Photovore.HAPPY], ["actinic", "lux", "lambert"]);
   assert.equal(T.TRICKS.includes("photon"), false);
   assert.equal(T.TRICKS.includes("wavelength"), false);
   assert.equal(T.TRICKS.includes("lumen"), false);
@@ -896,8 +896,8 @@ test("Spot tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("drone"), false);
   assert.equal(T.HAPPY.includes("chord"), false);
   assert.equal(T.HAPPY.includes("choir"), false);
-  assert.deepEqual([...ChickenOfWoods.TRICKS], ["sulfur", "rosette", "oak", "soft", "laetiporus", "poroid", "cluster"]);
-  assert.deepEqual([...OverlayChickenOfWoods.TRICKS], ["sulfur", "rosette", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...ChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...OverlayChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
   assert.deepEqual([...ChickenOfWoods.HAPPY], ["sulphureus", "cincinnatus", "gilbertsonii"]);
   assert.equal(T.TRICKS.includes("sulfur"), false);
   assert.equal(T.TRICKS.includes("rosette"), false);
@@ -1002,8 +1002,8 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.equal(T.TRICKS.includes("beard"), false);
   assert.equal(T.TRICKS.includes("frost"), false);
   assert.equal(T.TRICKS.includes("actinic"), false);
-  assert.deepEqual([...TurkeyTail.TRICKS], ["pore", "bracket", "band", "leathery", "trametes", "concentric", "tomentum"]);
-  assert.deepEqual([...OverlayTurkeyTail.TRICKS], ["pore", "bracket", "band", "leathery", "trametes", "concentric", "tomentum"]);
+  assert.deepEqual([...TurkeyTail.TRICKS], ["pore", "bracket", "zonate", "leathery", "trametes", "concentric", "tomentum"]);
+  assert.deepEqual([...OverlayTurkeyTail.TRICKS], ["pore", "bracket", "zonate", "leathery", "trametes", "concentric", "tomentum"]);
   assert.deepEqual([...TurkeyTail.HAPPY], ["versicolor", "ochracea", "pubescens"]);
   assert.deepEqual([...LionsMane.TRICKS], ["spine", "icicle", "cascade", "wound", "hericium", "pompon", "hydnoid"]);
   assert.deepEqual([...OverlayLionsMane.TRICKS], ["spine", "icicle", "cascade", "wound", "hericium", "pompon", "hydnoid"]);
@@ -1131,7 +1131,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
   assert.deepEqual([...Overlay.TRICKS], ["eyespot", "flagellum", "chloroplast", "phototaxis", "euglenid", "metaboly", "paramylon"]);
-  assert.deepEqual([...Overlay.HAPPY], ["viridis", "gracilis", "sanguinea"]);
+  assert.deepEqual([...Overlay.HAPPY], ["viridis", "mutabilis", "sanguinea"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
   assert.equal(T.TRICKS.includes("gape"), false);
@@ -1260,7 +1260,7 @@ test("eyespot/flagellum/chloroplast/phototaxis/euglenid/metaboly/paramylon are E
     assert.equal(mod.TRICKS.includes("metaboly"), false);
     assert.equal(mod.TRICKS.includes("paramylon"), false);
     assert.equal(mod.HAPPY.includes("viridis"), false);
-    assert.equal(mod.HAPPY.includes("gracilis"), false);
+    assert.equal(mod.HAPPY.includes("mutabilis"), false);
     assert.equal(mod.HAPPY.includes("sanguinea"), false);
     assert.equal(mod.TRICKS.includes("float"), false);
     assert.equal(mod.TRICKS.includes("nimbus"), false);
@@ -1463,8 +1463,8 @@ test("eyespot/flagellum/chloroplast/phototaxis/euglenid/metaboly/paramylon are E
   assert.equal(Hedgehog.TRICKS.includes("curl"), true);
 });
 
-test("Spot feed-happy is its own sit: viridis/gracilis/sanguinea, and two feeds are not the same", () => {
-  assert.deepEqual([...T.HAPPY], ["viridis", "gracilis", "sanguinea"]);
+test("Spot feed-happy is its own sit: viridis/mutabilis/sanguinea, and two feeds are not the same", () => {
+  assert.deepEqual([...T.HAPPY], ["viridis", "mutabilis", "sanguinea"]);
   assert.equal(T.HAPPY.includes("halo"), false);
   assert.equal(T.HAPPY.includes("lumen"), false);
   assert.equal(T.HAPPY.includes("gel"), false);
@@ -1485,9 +1485,9 @@ test("Spot feed-happy is its own sit: viridis/gracilis/sanguinea, and two feeds 
   assert.equal(T.HAPPY.includes("pulse"), false);
   assert.equal(T.HAPPY.includes("glow"), false);
   assert.equal(T.HAPPY.includes("tribute"), false);
-  assert.equal(T.pickHappy("viridis", 0), "gracilis");
+  assert.equal(T.pickHappy("viridis", 0), "mutabilis");
   assert.notEqual(T.pickHappy("viridis", 0.9), "ceil");
-  assert.equal(Overlay.pickHappy("gracilis", 0) !== "peat", true);
+  assert.equal(Overlay.pickHappy("mutabilis", 0) !== "peat", true);
   assert.equal(T.happyCanStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.happyCanStart({ asleep: false, hidden: false, leaving: false, cmd: "idle", card: true }), true);
   assert.equal(T.happyCanStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
@@ -1499,7 +1499,7 @@ test("Spot feed-happy is its own sit: viridis/gracilis/sanguinea, and two feeds 
   const cupuleMid = T.stepHappy(cupuleH, 0.4, { cmd: "idle" });
   assert.ok(cupuleMid.lift !== 0 || Math.abs(cupuleMid.rot) > 0.5);
   assert.notEqual(cupuleMid.phase, "done");
-  const tanninH = T.beginHappy("gracilis", 80, 1);
+  const tanninH = T.beginHappy("mutabilis", 80, 1);
   assert.equal(tanninH.anim, "play");
   const tanninMid = T.stepHappy(tanninH, 0.3, { cmd: "idle" });
   assert.ok(tanninMid.lift !== 0 || Math.abs(tanninMid.rot) > 0.5);
@@ -2154,7 +2154,7 @@ globalThis.PetMorelTricks = OverlayMorel;
 test("notes: Spot Rui-dense ultra (EUGLENID_HOLD=11.2); Orb now Rue-dense; Pane now Rue-dense; Hold now Rue-dense; Spin now Rue-dense; Bell now Rue-dense; Rod now Rue-dense; Rose now Rue-dense; Brick now Rue-dense; Drake now Rue-dense; Vee now Rue-dense; Drum now Rue-dense; Sip now Rue-dense; Echo now Rue-dense; Peck now Rue-dense; Quill now Rue-dense; Brood now Rue-dense; Frill now Rue-dense; Cap now Rue-dense; Lattice now Rue-dense; Horn now Rue-dense; Ring now Rue-dense; Mane now Rue-dense; next leftover Puff / puffball", () => {
   assert.equal(T.TRICK_KEY, "euglena");
   assert.deepEqual([...T.TRICKS], ["eyespot", "flagellum", "chloroplast", "phototaxis", "euglenid", "metaboly", "paramylon"]);
-  assert.deepEqual([...T.HAPPY], ["viridis", "gracilis", "sanguinea"]);
+  assert.deepEqual([...T.HAPPY], ["viridis", "mutabilis", "sanguinea"]);
   assert.equal(OverlayGround.tricksFor("newt"), OverlayNewt);
   assert.equal(OverlayGround.tricksFor("eft"), OverlayNewt);
   assert.equal(OverlayGround.tricksFor("salamander"), OverlaySalamander);

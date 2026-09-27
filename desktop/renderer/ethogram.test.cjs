@@ -337,7 +337,7 @@ test("fly_agaric ethogram is Cap ultra (amanita + softs + freeze, not lean/flush
   assert.ok(names.includes("amanita"));
   assert.ok(names.includes("annulus_soft"));
   assert.ok(names.includes("volva_soft"));
-  assert.ok(names.includes("veil_soft"));
+  assert.ok(names.includes("flake_soft"));
   assert.ok(names.includes("symbiont_soft"));
   assert.ok(names.includes("pileus_soft"));
   assert.ok(names.includes("bulb_soft"));
@@ -385,7 +385,7 @@ test("turkey_tail ethogram is Ring ultra (trametes + softs + freeze, not lean/zo
   assert.ok(names.includes("trametes"));
   assert.ok(names.includes("pore_soft"));
   assert.ok(names.includes("bracket_soft"));
-  assert.ok(names.includes("band_soft"));
+  assert.ok(names.includes("zonate_soft"));
   assert.ok(names.includes("leathery_soft"));
   assert.ok(names.includes("concentric_soft"));
   assert.ok(names.includes("tomentum_soft"));
@@ -432,7 +432,7 @@ test("chicken_of_woods ethogram is Flame ultra (laetiporus + softs + freeze, not
   const names = E.actsFor("chicken_of_woods").map((a) => a.name);
   assert.ok(names.includes("laetiporus"));
   assert.ok(names.includes("sulfur_soft"));
-  assert.ok(names.includes("rosette_soft"));
+  assert.ok(names.includes("tier_soft"));
   assert.ok(names.includes("oak_soft"));
   assert.ok(names.includes("soft_soft"));
   assert.ok(names.includes("poroid_soft"));
@@ -1027,7 +1027,7 @@ test("shore and meadow keys never schedule scratch or a snake tongue", () => {
   assert.ok(E.actsFor("swallowtail").some((a) => a.name === "puddlesip_soft"));
   assert.ok(E.actsFor("swallowtail").some((a) => a.name === "flutterhop_soft"));
   assert.ok(E.actsFor("swallowtail").some((a) => a.name === "tailglidesettle_soft"));
-  assert.ok(E.actsFor("swallowtail").some((a) => a.name === "eyespot_soft"));
+  assert.ok(E.actsFor("swallowtail").some((a) => a.name === "tornusflash_soft"));
   assert.ok(E.actsFor("swallowtail").some((a) => a.name === "tigerband_soft"));
   assert.ok(E.actsFor("swallowtail").some((a) => a.name === "freeze"));
   assert.equal(E.actsFor("swallowtail").some((a) => a.name === "banner"), false);
