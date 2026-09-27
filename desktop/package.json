@@ -6,7 +6,7 @@
   "main": "main.cjs",
   "scripts": {
     "start": "electron .",
-    "test": "node --test license/*.test.cjs renderer/*.test.cjs presence/*.test.cjs gpu-sense.test.cjs gpu-path.test.cjs",
+    "test": "node --test license/*.test.cjs renderer/*.test.cjs presence/*.test.cjs gpu-sense.test.cjs gpu-path.test.cjs vdesk-win.test.cjs",
     "dist": "electron-builder --win --mac --linux",
     "dist:win": "electron-builder --win",
     "dist:mac": "electron-builder --mac",
@@ -26,6 +26,7 @@
       "presence.cjs",
       "mind-secret.cjs",
       "windows-enum.cjs",
+      "vdesk-win.cjs",
       "gpu-sense.cjs",
       "gpu-path.cjs",
       "gpu-probe.ps1",
