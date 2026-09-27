@@ -81,6 +81,7 @@ from .life import (
     switch_care,
 )
 from .license.session import create_license_session
+from .license.token_store import default_token_codec
 from .paths import default_user_data_dir
 from .pet_item import GiftItem, LivingPetItem, LureItem, MessPileItem, ShedCoatItem, TreatItem
 from .play import BUG_LINE, CATCH_LINE, FLEE_MS, RIBBON_LINE, PlayChase, play_hop
@@ -175,7 +176,8 @@ class DeskWindow(QMainWindow):
     def __init__(self, session: dict[str, Any] | None = None, user_data_dir: Any = None):
         super().__init__()
         self._user_data_dir = user_data_dir if user_data_dir is not None else default_user_data_dir()
-        self.session = session or create_license_session(user_data_dir=self._user_data_dir)
+        # The download sign-in is sealed by the OS secret store (DPAPI / optional keyring), or kept in memory only.
+        self.session = session or create_license_session(user_data_dir=self._user_data_dir, codec=default_token_codec)
         self.species: Species = species_by_key(DEFAULT_SPECIES_KEY)
         self.care = keep_hive(
             load_care(user_data_dir=self._user_data_dir, key=DEFAULT_SPECIES_KEY),

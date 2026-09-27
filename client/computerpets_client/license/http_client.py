@@ -45,6 +45,17 @@ class HttpResponse:
 FetchImpl = Callable[..., HttpResponse]
 
 
+def _tagged(err: LicenseError, url: str, status: int = 0) -> LicenseError:
+    """Name the host (and HTTP status) on an error so the dialog can say where, in plain words."""
+    try:
+        err.host = urlparse(url).netloc  # type: ignore[attr-defined]
+    except Exception:  # noqa: BLE001
+        pass
+    if status:
+        err.http_status = status  # type: ignore[attr-defined]
+    return err
+
+
 def normalize_backend_url(raw: str | None) -> str:
     if not isinstance(raw, str) or not raw.strip():
         raise LicenseError("missing_backend", "backend base URL is missing")
@@ -88,15 +99,20 @@ def create_license_client(
     def request(url: str, *, method: str, headers: dict[str, str] | None = None, body: bytes | None = None) -> HttpResponse:
         try:
             return fetch(url, method=method, headers=headers, body=body, timeout=timeout_s)
-        except LicenseError:
+        except LicenseError as err:
+            if err.code == "unreachable" and not getattr(err, "host", None):
+                _tagged(err, url)
             raise
         except Exception as err:
             name = type(err).__name__
             aborted = name in ("TimeoutError", "AbortError") or "timed out" in str(err).lower()
-            raise LicenseError(
-                "unreachable",
-                "backend request timed out" if aborted else "backend is unreachable",
-                str(err),
+            raise _tagged(
+                LicenseError(
+                    "unreachable",
+                    "backend request timed out" if aborted else "backend is unreachable",
+                    str(err),
+                ),
+                url,
             ) from err
 
     def verify(
@@ -152,9 +168,9 @@ def create_license_client(
         if res.status == 400 and payload.get("error") == "hwid too long":
             raise LicenseError("hwid_too_long", "hwid too long", payload)
         if res.status == 429:
-            raise LicenseError("unreachable", "verify rate limited", payload)
+            raise _tagged(LicenseError("unreachable", "verify rate limited", payload), base, 429)
         if res.status >= 500:
-            raise LicenseError("unreachable", payload.get("error") or "provider call failed", payload)
+            raise _tagged(LicenseError("unreachable", payload.get("error") or "provider call failed", payload), base, res.status)
         if not res.ok:
             raise LicenseError("denied", payload.get("error") or f"verify failed ({res.status})", payload)
         if payload.get("status") != "success" or not payload.get("license") or not (payload.get("auth") or {}).get("token"):
@@ -206,7 +222,13 @@ def create_license_client(
         if res.status == 403:
             raise LicenseError("denied", payload.get("error") or "download forbidden", payload)
         if res.status == 429:
-            raise LicenseError("unreachable", "download rate limited", payload)
+            raise _tagged(LicenseError("unreachable", "download rate limited", payload), base, 429)
+        if res.status >= 500:
+            raise _tagged(
+                LicenseError("download_failed", payload.get("error") or f"download failed ({res.status})", payload),
+                base,
+                res.status,
+            )
         if res.status == 409:
             raise LicenseError(
                 "download_failed",
