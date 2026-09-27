@@ -170,7 +170,7 @@ test("overlay keyboard: Tab wraps in the open card, Escape closes it, a tray ite
   assert.equal((main.match(/\{ label: "Keeper card", click: \(\) => openKeeperCardFromMenu\(\) \}/g) || []).length, 2, "tray and pet menu");
   assert.match(main, /win\.webContents\.send\("command", \{ type: "open-card" \}\);/);
   const css = read(repo, "desktop/renderer/styles.css");
-  assert.match(css, /#hud button:focus-visible,[\s\S]{0,140}outline: 2px solid #d8cfc0;/);
+  assert.match(css, /#hud button:focus-visible,[\s\S]{0,320}outline: 2px solid #d8cfc0;/);
 });
 
 test("screen readers: Try again names its problem, meters are meters, the room and pet art have names", () => {

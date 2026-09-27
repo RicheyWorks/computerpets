@@ -476,6 +476,37 @@ export function loadCard(): CardPrefs {
   }
 }
 
+/**
+ * The keeper clock's once-a-second read. It parses the saved card only when the stored text changed
+ * (this tab's writes, another tab's storage event, a clear), so a still card costs one string read a tick.
+ * The clock itself keeps running while the page is hidden (#1521); only the parse is skipped.
+ */
+export function createCardTickReader(opts: { getRaw?: () => string | null; load?: () => CardPrefs } = {}): () => CardPrefs {
+  const getRaw =
+    opts.getRaw ?? (() => (typeof window === "undefined" ? null : window.localStorage.getItem(CARD_STORE)));
+  const load = opts.load ?? loadCard;
+  let memo: { raw: string | null; card: CardPrefs } | null = null;
+  return () => {
+    let raw: string | null;
+    try {
+      raw = getRaw();
+    } catch {
+      return load();
+    }
+    if (memo && memo.raw === raw) return memo.card;
+    const card = load();
+    let after = raw;
+    try {
+      // loadCard may rewrite an old pin; remember the text as it now stands.
+      after = getRaw();
+    } catch {
+      /* keep the text read before */
+    }
+    memo = { raw: after, card };
+    return card;
+  };
+}
+
 export function saveCard(next: unknown): CardPrefs {
   const card = parseCard(next);
   if (typeof window !== "undefined") {

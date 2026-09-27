@@ -67,7 +67,7 @@ test("the desk keeps time; a demo does not write the desk key", () => {
   assert.match(roomSrc, /sittingRef\.current === kind\.localKey/);
   assert.match(roomSrc, /if \(!persistLocal && !liveTick\) return;/);
   assert.match(roomSrc, /applyFeedFor/);
-  assert.match(roomSrc, /setInterval/);
+  assert.match(roomSrc, /everyVisible\(age, 20_000/);
   assert.match(deskSrc, /CompanionRoom/);
   assert.match(liveSrc, /CompanionRoom/);
   assert.doesNotMatch(deskSrc, /persistLocal=\{false\}/);

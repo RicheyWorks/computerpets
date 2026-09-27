@@ -233,6 +233,9 @@ let musicNode = null;
 let streamAsked = false;
 /** The keeper card holds keyboard focus (Tab reaches its controls) while it is open. */
 let cardKeysOn = false;
+/** Plates that join the card's Tab cycle, and the data keys of the card buttons a repaint rebuilds (declared before any paint). */
+const KEY_PLATE_IDS = ["weather-plate", "news-plate", "market-plate"];
+const REBUILT_KEYS = ["color", "voice", "bus", "step", "sleep"];
 let talkAsked = false;
 let pendingTalk = null;
 let sleepNode = null;
@@ -1636,6 +1639,7 @@ function paintCard() {
   const C = window.PetCard;
   const K = window.PetKeeper;
   if (!hud || !C) return;
+  const refocus = rebuiltFocus();
   const guest = cardGuest();
   hud.dataset.color = card.color || "ink";
   hud.dataset.collapsed = card.collapsed ? "1" : "0";
@@ -1655,6 +1659,8 @@ function paintCard() {
   if (hudAlarmOn) {
     hudAlarmOn.textContent = guest.alarm.on ? "On" : "Off";
     hudAlarmOn.dataset.on = guest.alarm.on ? "1" : "0";
+    hudAlarmOn.setAttribute("aria-label", guest.alarm.on ? "Alarm on" : "Alarm off");
+    hudAlarmOn.setAttribute("aria-pressed", guest.alarm.on ? "true" : "false");
   }
   if (hudTimerMins && !guest.timer.running) hudTimerMins.value = String(Math.max(1, Math.round(guest.timer.durationMs / 60000)));
   if (hudTimer) hudTimer.textContent = guest.timer.running ? "Stop" : "Start";
@@ -1704,6 +1710,7 @@ function paintCard() {
       btn.dataset.hit = "1";
       btn.dataset.bus = bus;
       btn.dataset.on = card.mutes[bus] ? "1" : "0";
+      btn.setAttribute("aria-pressed", card.mutes[bus] ? "true" : "false");
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
         card.mutes = { ...card.mutes, [bus]: !card.mutes[bus] };
@@ -1859,6 +1866,7 @@ function paintCard() {
     }
   }
   fillCallLists();
+  refocusRebuilt(refocus);
 }
 
 function fillCallLists() {
@@ -3875,13 +3883,55 @@ document.addEventListener("focusout", () => {
 });
 
 /** Controls in the open keeper card that Tab can reach, in page order. Hidden and disabled ones are skipped. */
-function hudFocusables() {
-  if (!hud || card.collapsed) return [];
-  return [...hud.querySelectorAll("button, input, select, textarea, a[href], [tabindex]")].filter((el) => {
+function focusablesIn(root) {
+  if (!root) return [];
+  return [...root.querySelectorAll("button, input, select, textarea, a[href], [tabindex]")].filter((el) => {
     if (el.disabled || el.getAttribute("tabindex") === "-1") return false;
     if (el.closest("[hidden]")) return false;
     return el.getClientRects().length > 0;
   });
+}
+
+function hudFocusables() {
+  if (!hud || card.collapsed) return [];
+  return focusablesIn(hud);
+}
+
+/** The weather, news, and market plates that are on the glass now (a plate turned off has no box). */
+function keyPlates() {
+  return KEY_PLATE_IDS.map((id) => document.getElementById(id)).filter((plate) => plate && !plate.hidden && plate.getClientRects().length > 0);
+}
+
+/** Tab order while the card has the keyboard: the card's controls first, then each plate on the glass. */
+function cardFocusables() {
+  if (!hud || card.collapsed) return [];
+  const out = hudFocusables();
+  for (const plate of keyPlates()) out.push(...focusablesIn(plate));
+  return out;
+}
+
+function inCardOrPlate(el) {
+  if (!el) return false;
+  if (hud && hud.contains(el)) return true;
+  return keyPlates().some((plate) => plate.contains(el));
+}
+
+/**
+ * The card rebuilds its color, voice, mute, step, and sleep buttons on every paint. A keyboard press on
+ * one of them would drop focus with the old button; this remembers which one had it and puts it back.
+ */
+function rebuiltFocus() {
+  const el = document.activeElement;
+  if (!el || !hud || !hud.contains(el) || el.tagName !== "BUTTON") return null;
+  for (const k of REBUILT_KEYS) if (el.dataset[k] != null) return { k, v: el.dataset[k] };
+  return null;
+}
+function refocusRebuilt(was) {
+  if (!was || !hud || card.collapsed) return;
+  const active = document.activeElement;
+  if (active && active.isConnected && hud.contains(active)) return;
+  const again = [...hud.querySelectorAll("button")].find((b) => b.dataset[was.k] === was.v);
+  if (again) again.focus();
 }
 
 /**
@@ -3903,13 +3953,21 @@ function cardKeys(on, opts) {
   if (!cardKeysOn) return;
   cardKeysOn = false;
   const active = document.activeElement;
-  if (active && hud && hud.contains(active) && typeof active.blur === "function") active.blur();
+  if (inCardOrPlate(active) && typeof active.blur === "function") active.blur();
   if (!fieldOf(document.activeElement)) window.desk?.setFocusable?.(false);
 }
 
 if (hud) {
   // A click inside the open card hands it the keyboard too, so Tab and Escape work from there.
   hud.addEventListener("pointerdown", () => {
+    if (!card.collapsed) cardKeys(true);
+  }, true);
+}
+// With the card open, a click on a plate joins the same Tab cycle (a closed card leaves plates as they were).
+for (const id of KEY_PLATE_IDS) {
+  const plate = document.getElementById(id);
+  if (!plate) continue;
+  plate.addEventListener("pointerdown", () => {
     if (!card.collapsed) cardKeys(true);
   }, true);
 }
@@ -3925,7 +3983,7 @@ document.addEventListener("keydown", (e) => {
     return;
   }
   if (act !== "tab" || !cardKeysOn) return;
-  const list = hudFocusables();
+  const list = cardFocusables();
   const next = K.tabWrap(list.length, list.indexOf(document.activeElement), e.shiftKey);
   if (next >= 0) {
     e.preventDefault();

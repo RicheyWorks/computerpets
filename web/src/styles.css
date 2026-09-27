@@ -479,6 +479,13 @@
     box-sizing: content-box;
   }
 
+  /* The pet is a keyboard button (Enter or Space taps); only a keyboard focus draws the ring. */
+  [data-pet-hit]:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+    border-radius: var(--radius-md);
+  }
+
   [data-phone-floor] [data-pet-hit] {
     padding: 12px 12px 0;
   }

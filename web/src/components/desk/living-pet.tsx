@@ -25,6 +25,7 @@ import {
   type ActMotion,
 } from "@/lib/pets/ethogram";
 import { dayPart } from "@/lib/pets/hours";
+import { isTapKey } from "@/lib/pets/keeper";
 import { traitFor } from "@/lib/pets/traits";
 import { afterPlace, arriveFinish, pointerUp, walkLand } from "@/lib/pets/arrive";
 import { carePointer } from "@/lib/pets/mac-desk";
@@ -96,7 +97,8 @@ type LivingPetProps = {
   stage?: "hatchling" | "grown" | "elder";
   seekX?: number;
   onArrived?: () => void;
-  onTap?: () => void;
+  /** A click, touch, or (with a tapLabel) Enter or Space on the focused pet; `keys` says it came from the keyboard. */
+  onTap?: (how?: { keys?: boolean }) => void;
   /** A long-press tends. A tablet has no right-click. A phone has no right-click. */
   onTend?: () => void;
   /** Overlay: real window rects. /demo: a drawn plate. */
@@ -110,6 +112,8 @@ type LivingPetProps = {
   onLieHold?: (on: boolean) => void;
   /** The art's accessible name (lib/pets/keeper.ts petArtLabel). Empty keeps it decorative. */
   label?: string;
+  /** With onTap: the hit area is a keyboard button with this name (lib/pets/keeper.ts petTapLabel). */
+  tapLabel?: string;
 };
 
 type Dust = { x: number; y: number; vx: number; vy: number; life: number; size: number };
@@ -197,6 +201,7 @@ export function LivingPet({
   onPose,
   onLieHold,
   label = "",
+  tapLabel = "",
 }: LivingPetProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const hitRef = useRef<HTMLDivElement>(null);
@@ -1093,6 +1098,18 @@ export function LivingPet({
         ref={hitRef}
         data-pet
         data-pet-hit
+        role={onTap && tapLabel ? "button" : undefined}
+        tabIndex={onTap && tapLabel ? 0 : undefined}
+        aria-label={onTap && tapLabel ? tapLabel : undefined}
+        onKeyDown={
+          onTap && tapLabel
+            ? (e) => {
+                if (e.target !== e.currentTarget || !isTapKey(e.key, e.repeat)) return;
+                e.preventDefault();
+                tapRef.current?.({ keys: true });
+              }
+            : undefined
+        }
         className="pointer-events-auto absolute bottom-0 left-0 cursor-grab active:cursor-grabbing select-none touch-none"
         style={{
           willChange: "transform",
