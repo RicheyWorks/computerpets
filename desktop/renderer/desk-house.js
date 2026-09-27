@@ -155,6 +155,9 @@
         btn.dataset.on = on ? "1" : "0";
       });
     }
+    // The one tabpanel is named by the tab that shows it (index.html aria-controls="weather-panel").
+    const weatherPanel = $("weather-panel");
+    if (weatherPanel) weatherPanel.setAttribute("aria-labelledby", `weather-tab-${tab}`);
     const currentPanel = $("weather-current-panel");
     if (currentPanel) currentPanel.hidden = tab !== "current";
     const liveBox = $("weather-live");
@@ -182,7 +185,7 @@
     }
     const area = A.currentArea(areas);
     const liveBits = [];
-    if (!area) liveBits.push(para(A.NO_AREA));
+    if (!area) liveBits.push(para(A.NO_AREA_NEXT || A.NO_AREA));
     else if (held) liveBits.push(para(`${area.name} · ${A.SAVED_HERE_WAIT}`));
     else if (unread) liveBits.push(para(`${area.name} · unread`));
     else if (live) liveBits.push(para(`${area.name}. ${live.label}. Open-Meteo.`));
@@ -235,6 +238,8 @@
         btn.dataset.on = on ? "1" : "0";
       });
     }
+    const newsPanel = $("news-panel");
+    if (newsPanel) newsPanel.setAttribute("aria-labelledby", `news-tab-${tab}`);
     const topicsPanel = $("news-topics-panel");
     if (topicsPanel) topicsPanel.hidden = tab !== "topics";
     const truth = $("news-truth");
@@ -348,7 +353,10 @@
     const coinLives = (extras && extras.coinLives) || {};
     const nftLive = extras && extras.nftLive;
     const nftUnread = !!(extras && extras.nftUnread);
-    line.textContent = M.plateLine(house, live, unread);
+    // A closed plate never reads prices, so it says how to see them instead of "looking up" forever.
+    const marketBody = $("market-body");
+    const closed = !marketBody || marketBody.hidden;
+    line.textContent = M.plateLine(house, live, unread, closed);
     const liveBox = $("market-live");
     const list = $("market-tickers");
     const ticker = M.currentTicker(house);

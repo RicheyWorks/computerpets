@@ -1482,6 +1482,19 @@ def _desk_rows() -> list[Affordance]:
             notes="Swatch chrome + drag-place persist via memory store.",
         ),
         Affordance(
+            "desk.plates.first_run",
+            "desk",
+            "Weather, news, quotes, and radio reach content from a clean card after the in-app yes",
+            "card.js parseCard(null) + weather-areas / news / market / house-music read + desk-house paint",
+            notes=(
+                "Replay with saved answers (no network): a clean card's closed weather reads 'no area set' and "
+                "the open panel says 'No place yet. Type a city below and press Look up.'; Look up (its painted "
+                "line is the yes) finds Seattle and the forecast paints; news opens to headlines; a closed Quotes "
+                "plate says 'open to see the price' and opens to prices; radio Find returns a station. An empty "
+                "radio Find with no weather area still finds nothing (Rui's music block, left alone)."
+            ),
+        ),
+        Affordance(
             "desk.plants.place",
             "desk",
             "Garden plant drag-place",
@@ -1742,6 +1755,8 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("nft_resolve", domain="desk", action_id=aid)
     if local_id == "weather.replay":
         return _run_node_smoke("weather_replay", domain="desk", action_id=aid)
+    if local_id == "plates.first_run":
+        return _run_node_smoke("plates_first_run", domain="desk", action_id=aid)
     if local_id == "news.replay":
         return _run_node_smoke("news_replay", domain="desk", action_id=aid)
     if local_id == "market.replay":
@@ -1989,6 +2004,19 @@ def _card_rows() -> list[Affordance]:
             ),
         ),
         Affordance(
+            "card.first_run",
+            "card",
+            "A brand-new keeper: house defaults, a one-time hello, and a calm heartbeat (desktop and web)",
+            "main card-get/card-set + card.js firstHintSeen + keeper.js firstHint + web first-run.ts / keeper.ts",
+            notes=(
+                "Loads the real desktop/main.cjs under a stand-in Electron with a fresh userData (no card.json): the "
+                "card starts open with the house defaults, the hello shows, Got it writes firstHintSeen, and after a "
+                "restart and an unrelated write it never shows again. The web half starts with empty storage: the "
+                "card loads the defaults, the hello shows once (its own key), and the heartbeat reads 'House server "
+                "not running (optional)' until the server answers, DOWN only after it answered and stopped."
+            ),
+        ),
+        Affordance(
             "card.saved_lines",
             "card",
             "Saved lines trim, clip, cap, persist, and ring from the alarm",
@@ -2072,6 +2100,21 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
     }
     if local_id in main_rows:
         return _run_node_smoke(main_rows[local_id], domain="card", action_id=aid)
+    if local_id == "first_run":
+        desk = _run_node_smoke("first_run_desk", domain="card", action_id=aid)
+        if not desk.ok:
+            return desk
+        web = _run_web_smoke("first_run", domain="card", action_id=aid)
+        if not web.ok:
+            return web
+        return InvokeResult(
+            aid,
+            "card",
+            True,
+            detail=f"desk={desk.detail}; web={web.detail}",
+            extras={"desk": desk.extras, "web": web.extras},
+            trace=[*list(desk.trace), *list(web.trace)],
+        )
     if local_id == "house_server":
         return _run_node_smoke("house_server_row", domain="card", action_id=aid)
     if local_id == "notify_open":

@@ -900,7 +900,137 @@ async function gpuReplay() {
   return ok(`${rows.length} probe replays`, { rows }, trace);
 }
 
+// ---------------------------------------------------------------------------
+// First run: each network plate from a clean card, through the in-app yes, to content.
+// ---------------------------------------------------------------------------
+
+const FIRST_RUN_IDS = [
+  "weather-line", "weather-body", "weather-live", "weather-forecast-net", "weather-geocode-net", "weather-reverse-net",
+  "weather-current-panel", "weather-saved-ask",
+  "news-line", "news-body", "news-live", "news-net",
+  "market-line", "market-body", "market-live", "market-net", "nft-live", "market-favorites",
+];
+
+/** A saved geocode answer for "Seattle" (the forecast fixture is the same place). */
+const GEOCODE_SEATTLE = {
+  results: [{ name: "Seattle", latitude: 47.6062, longitude: -122.3321, admin1: "Washington", country: "United States" }],
+};
+
+/** A saved radio look-up answer for "KEXP". */
+const RADIO_KEXP = [
+  {
+    stationuuid: "kexp-903",
+    name: "KEXP 90.3 FM",
+    url_resolved: "https://kexp.streamguys1.com/kexp160.aac",
+    tags: "indie,alternative",
+    state: "Washington",
+    country: "United States",
+    countrycode: "US",
+  },
+];
+
+async function platesFirstRun() {
+  const dom = installDom(FIRST_RUN_IDS);
+  const { A, N, M, H } = loadPlates();
+  const C = fresh("card.js");
+  const R = fresh("house-music.js");
+  const bad = [];
+  const trace = [];
+  let card = C.parseCard(null);
+  ["weather-body", "news-body", "market-body"].forEach((id) => {
+    dom.get(id).hidden = true;
+  });
+
+  // Weather: closed and clean, then open, then the typed look-up (its line is the yes), then the forecast.
+  H.paintWeather(card, null, false);
+  const closedWeather = dom.get("weather-line").textContent;
+  if (closedWeather !== A.NO_AREA) bad.push(`clean closed weather reads ${JSON.stringify(closedWeather)}`);
+  dom.get("weather-body").hidden = false;
+  H.paintWeather(card, null, false);
+  const nextStep = shown(dom.get("weather-live"));
+  if (nextStep !== A.NO_AREA_NEXT || !/Look up/.test(nextStep)) bad.push(`clean open weather is a dead end: ${JSON.stringify(nextStep)}`);
+  const lookLine = dom.get("weather-geocode-net").textContent;
+  if (!A.geocodeMaySend("look", true)) bad.push("the painted look-up line did not allow Look up");
+  const goWeather = fakeFetch([
+    { match: (u) => hostOf(u) === "geocoding-api.open-meteo.com", body: GEOCODE_SEATTLE },
+    { match: (u) => hostOf(u) === "api.open-meteo.com", body: fixture("forecast-seattle.json") },
+  ]);
+  const hits = A.parseGeocode(await A.readGeocode(lookLine, A.geocodeUrl("Seattle"), goWeather));
+  if (!hits.length) bad.push("Look up found no place");
+  else {
+    card = { ...card, ...A.toCardPatch(A.addArea(card, hits[0])) };
+    const gate = A.forecastGate(card, card.hereForecastAck);
+    H.paintWeather(card, null, false);
+    const forecastLine = dom.get("weather-forecast-net").textContent;
+    if (gate.act !== "send" || !A.forecastMaySend(gate, true)) bad.push(`a looked-up place did not open the forecast (${gate.act})`);
+    const live = A.parseForecast(await A.readForecast(forecastLine, A.forecastUrl(gate.area.lat, gate.area.lon), goWeather));
+    H.paintWeather(card, live, false);
+    const plate = dom.get("weather-line").textContent;
+    if (!/^Seattle, Washington, United States · Overcast · 8°$/.test(plate)) bad.push(`weather after the yes reads ${JSON.stringify(plate)}`);
+    trace.push(`weather=${JSON.stringify(closedWeather)}>next_step>look_up>${plate}`);
+  }
+  if (goWeather.calls.length !== 2) bad.push(`weather fetch calls ${JSON.stringify(goWeather.calls)}`);
+
+  // News: the closed header is the open button; open paints the honesty line (the yes) and reads the feed.
+  H.paintNews([], false, card);
+  const closedNews = dom.get("news-line").textContent;
+  if (closedNews !== N.NO_HEADLINES) bad.push(`clean closed news reads ${JSON.stringify(closedNews)}`);
+  const prefs = N.parseNewsPrefs(card);
+  const newsLine = N.newsHonesty(prefs);
+  dom.get("news-net").textContent = newsLine;
+  if (!N.newsMaySend(prefs, true)) bad.push("the painted news line did not allow the read");
+  const goNews = fakeFetch([{ match: (u) => u === N.popularRssUrl(), body: fixture("news-popular.rss") }]);
+  const items = N.parseRss(await N.readRss(newsLine, N.popularRssUrl(), goNews));
+  H.paintNews(items, false, card);
+  const newsPlate = dom.get("news-line").textContent;
+  if (!items.length || newsPlate !== items[0].title) bad.push(`news after the yes reads ${JSON.stringify(newsPlate)}`);
+  trace.push(`news=${JSON.stringify(closedNews)}>open>${items.length}_headlines`);
+
+  // Quotes: closed says how to see prices (it never reads while closed), open reads the saved list.
+  const house = M.parseMarket(card);
+  const ticker = M.currentTicker(house);
+  const marketCard = { ...card, ...M.toCardPatch(house) };
+  H.paintMarket(marketCard, null, false, { coinLives: {}, nftLive: null, nftUnread: false });
+  const closedMarket = dom.get("market-line").textContent;
+  if (!ticker || closedMarket !== `${ticker.symbol} · ${M.QUOTE_WAITS}`) bad.push(`clean closed quotes reads ${JSON.stringify(closedMarket)}`);
+  dom.get("market-body").hidden = false;
+  const quoteLine = M.quoteHonesty(house);
+  dom.get("market-net").textContent = quoteLine;
+  if (!M.quoteMaySend(house, true)) bad.push("the painted quote line did not allow the read");
+  const ids = house.tickers.filter((r) => r.kind === "crypto" && r.geckoId && !r.address).map((r) => r.geckoId);
+  const goMarket = fakeFetch([{ match: (u) => hostOf(u) === "api.coingecko.com", body: fixture("gecko-simple-price.json") }]);
+  const lives = M.parseGeckoMany(await M.readGeckoMany(quoteLine, ids, goMarket));
+  const live = ticker ? lives[ticker.geckoId] || null : null;
+  H.paintMarket(marketCard, live, false, { coinLives: lives, nftLive: null, nftUnread: false });
+  const marketPlate = dom.get("market-line").textContent;
+  if (!live || !/ · \d/.test(marketPlate)) bad.push(`quotes after the yes reads ${JSON.stringify(marketPlate)}`);
+  trace.push(`quotes=${JSON.stringify(closedMarket)}>open>${marketPlate}`);
+
+  // Radio (Rui's card): Find paints its line (the yes) and a named station comes back.
+  const radioLine = R.radioHonesty();
+  if (!R.radioMaySend(true)) bad.push("the painted radio line did not allow Find");
+  const goRadio = fakeFetch([{ match: () => true, body: RADIO_KEXP }]);
+  const stations = await R.readRadioSearch(radioLine, "KEXP", null, goRadio);
+  if (!Array.isArray(stations) || !stations.length || stations[0].name !== "KEXP 90.3 FM") bad.push(`radio after the yes found ${JSON.stringify(stations)}`);
+  // Known and left alone (Rui's music block): an empty Find with no weather area sends nothing and finds nothing.
+  const goEmpty = fakeFetch([{ match: () => true, body: RADIO_KEXP }]);
+  const empty = await R.readRadioSearch(radioLine, "", null, goEmpty);
+  const emptyNote = Array.isArray(empty) && !empty.length && !goEmpty.calls.length ? "no_station_no_fetch" : "changed";
+  trace.push(`radio=find>${stations && stations.length}_station`, `radio.empty=${emptyNote}`);
+
+  sinksIn("first-run plates", bad);
+  return bad.length
+    ? fail(bad.join("; "), { weather: closedWeather, news: closedNews, quotes: closedMarket }, trace)
+    : ok("weather, news, quotes, and radio each reach content from a clean card after the in-app yes", {
+        weatherNext: nextStep,
+        quotesClosed: closedMarket,
+        stations: stations.length,
+        radioEmpty: emptyNote,
+      }, trace);
+}
+
 module.exports = {
+  plates_first_run: platesFirstRun,
   weather_replay: weatherReplay,
   news_replay: newsReplay,
   market_replay: marketReplay,

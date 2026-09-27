@@ -13,6 +13,8 @@ export const COINGECKO_HOST = "api.coingecko.com";
 export const GECKO_TERMINAL_HOST = "api.geckoterminal.com";
 export const CANT_REACH = "can't reach";
 export const NO_QUOTE = "no quote yet";
+/** The closed plate's header before the first price: prices are read only while the plate is open. */
+export const QUOTE_WAITS = "open to see the price";
 export const NO_NFT = "no NFT yet";
 export const MAX_TICKERS = 24;
 export const MAX_NFTS = 8;
@@ -724,7 +726,7 @@ export function formatPrice(price: number) {
   if (price >= 0.01) return price.toFixed(4);
   return Number(price).toPrecision(3);
 }
-export function plateLine(market: MarketPrefs | undefined, live: MarketLive | null | undefined, unread = false) {
+export function plateLine(market: MarketPrefs | undefined, live: MarketLive | null | undefined, unread = false, waiting = false) {
   const house = market && market.tickers ? market : parseMarket(market);
   const ticker = currentTicker(house);
   if (!ticker) {
@@ -733,6 +735,7 @@ export function plateLine(market: MarketPrefs | undefined, live: MarketLive | nu
     return NO_QUOTE;
   }
   if (unread && !live) return `${ticker.symbol} · ${CANT_REACH}`;
+  if (!live && waiting) return `${ticker.symbol} · ${QUOTE_WAITS}`;
   if (!live) return `${ticker.symbol} · looking up`;
   return `${ticker.symbol} · ${formatPrice(live.price)}`;
 }

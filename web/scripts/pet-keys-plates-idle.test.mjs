@@ -139,7 +139,8 @@ test("admin: Details is a real toggle, the list has a name, focus follows lock a
   assert.match(page, /aria-expanded=\{open\}\n\s+aria-controls=\{detailId\}/);
   assert.match(page, /<p id=\{detailId\} hidden=\{!open\}/);
   assert.match(page, /useEffect\(\(\) => setOpen\(false\), \[detail\]\);/);
-  assert.match(page, /<div className="space-y-1" role="status">/);
+  // The status line also takes focus after a confirmed revoke (first-run-hints.test.mjs).
+  assert.match(page, /<div className="space-y-1" role="status"[ >]/);
   assert.match(page, /<h2 id=\{ledgerId\} className="sr-only">\n\s+\{ledgerCaption\(rows\.length\)\}/);
   assert.match(page, /<ul className="space-y-3" aria-labelledby=\{ledgerId\} ref=\{ledgerList\}>/);
   assert.match(page, /\(focusAfterGate\(unlocked\) === "search" \? searchInput : keyInput\)\.current\?\.focus\(\);/);
@@ -153,7 +154,8 @@ test("overlay: the open card's Tab cycle takes in the plates on the glass; a rep
   assert.match(pet, /const KEY_PLATE_IDS = \["weather-plate", "news-plate", "market-plate"\];/);
   assert.ok(pet.indexOf("const KEY_PLATE_IDS") < pet.indexOf("function paintCard"), "declared before any paint");
   assert.ok(pet.indexOf("const REBUILT_KEYS") < pet.indexOf("function paintCard"), "declared before any paint");
-  assert.match(pet, /function cardFocusables\(\) \{\n\s+if \(!hud \|\| card\.collapsed\) return \[\];\n\s+const out = hudFocusables\(\);\n\s+for \(const plate of keyPlates\(\)\) out\.push\(\.\.\.focusablesIn\(plate\)\);/);
+  // An open choice menu is one stop ahead of the card (first-run-hints.test.mjs); the plates still follow it.
+  assert.match(pet, /function cardFocusables\(\) \{\n\s+if \(!hud \|\| card\.collapsed\) return \[\];\n(?:\s+\/\/[^\n]*\n)?\s+const out = choiceOpen && choiceEl \? focusablesIn\(choiceEl\) : \[\];\n\s+out\.push\(\.\.\.hudFocusables\(\)\);\n\s+for \(const plate of keyPlates\(\)\) out\.push\(\.\.\.focusablesIn\(plate\)\);/);
   assert.match(pet, /if \(act !== "tab" \|\| !cardKeysOn\) return;\n\s+const list = cardFocusables\(\);/);
   assert.match(pet, /if \(inCardOrPlate\(active\) && typeof active\.blur === "function"\) active\.blur\(\);/);
   assert.match(pet, /for \(const id of KEY_PLATE_IDS\) \{[\s\S]{0,200}if \(!card\.collapsed\) cardKeys\(true\);/);

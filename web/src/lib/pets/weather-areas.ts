@@ -2,6 +2,8 @@
 import type { Weather } from "./weather";
 
 export const NO_AREA = "no area set";
+/** The open panel's next step on a clean profile (the header keeps the short NO_AREA). */
+export const NO_AREA_NEXT = "No place yet. Type a city below and press Look up.";
 export const AREA_LABEL = "Weather area";
 export const AREA_PLACEHOLDER = "A city or place — weather, not radio";
 export const AREA_TRUTH = "Weather area. Named places you add. Not the radio station.";

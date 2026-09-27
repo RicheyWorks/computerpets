@@ -755,6 +755,118 @@ async function volumeMutes() {
   ]);
 }
 
+/**
+ * First run on the web for a brand-new keeper: no saved storage at all. The card loads the house defaults,
+ * the one-time hello shows, Got it keeps it gone across reloads (its own key, not the card), the heartbeat
+ * says "House server not running (optional)" until the server answers once, and the clean-profile plate
+ * words match the overlay. Also: the overlay choice menu keys match the web, and a confirmed revoke focuses
+ * the status line.
+ */
+async function firstRun() {
+  const store = new Map();
+  const storage = {
+    getItem: (k) => (store.has(k) ? store.get(k) : null),
+    setItem: (k, v) => store.set(k, String(v)),
+    removeItem: (k) => store.delete(k),
+  };
+  const hadWindow = Object.prototype.hasOwnProperty.call(globalThis, "window");
+  const oldWindow = globalThis.window;
+  globalThis.window = { localStorage: storage };
+  try {
+    const lib = (rel) => import(pathToFileURL(join(WEB, "src", "lib", ...rel.split("/"))).href);
+    const Card = await lib("pets/card.ts");
+    const F = await lib("pets/first-run.ts");
+    const K = await lib("pets/keeper.ts");
+    const WA = await lib("pets/weather-areas.ts");
+    const M = await lib("pets/market.ts");
+    const B = await lib("admin/base.ts");
+    const OverlayKeeper = require(join(RENDERER, "keeper.js"));
+    const OverlayChoice = require(join(RENDERER, "choice.js"));
+    const bad = [];
+    if (store.size) bad.push("the stand-in storage is not clean");
+    const card = Card.loadCard();
+    const defaults = { collapsed: card.collapsed, off: card.off, color: card.color, voiceStyle: card.voiceStyle };
+    const blank = Card.blankCard();
+    if (JSON.stringify(defaults) !== JSON.stringify({ collapsed: blank.collapsed, off: false, color: blank.color, voiceStyle: blank.voiceStyle })) {
+      bad.push(`clean card is not the house defaults ${JSON.stringify(defaults)}`);
+    }
+    if (store.size) bad.push("loading a clean card wrote storage");
+    let shows = 0;
+    if (!F.firstHintSeen()) shows += 1;
+    else bad.push("the hello does not show on a clean browser");
+    if (F.firstHintSeen()) bad.push("the hello vanished before Got it");
+    const hint = F.firstHintWeb("Rui");
+    if (hint.title !== "Hi! This is Rui." || hint.ok !== "Got it" || hint.lines.length !== 3) bad.push("the web hello lost its words");
+    F.markFirstHintSeen();
+    // An older card write (the keeper card writes from its own copy) must not bring it back.
+    Card.saveCard({ ...card, color: "moss" });
+    if (!F.firstHintSeen()) shows += 1;
+    if (shows !== 1) bad.push(`the hello showed ${shows} times across Got it and a reload`);
+    if (JSON.stringify(OverlayKeeper.firstHint("Rui")) !== JSON.stringify(F.firstHintOverlay("Rui"))) bad.push("overlay hello words drifted from the web copy");
+
+    let up = false;
+    const poll = K.createHeartbeatPoll({
+      doc: null,
+      setIntervalImpl: () => 1,
+      clearIntervalImpl: () => {},
+      fetchImpl: async () => {
+        if (!up) throw new TypeError("fetch failed");
+        return { json: async () => ({ status: "UP", profile: "local", uptimeSeconds: 5, port: 8081 }) };
+      },
+    });
+    const lines = [];
+    await poll.read();
+    lines.push(K.heartbeatLine(poll.current(), poll.answered()));
+    up = true;
+    await poll.read();
+    lines.push(K.heartbeatLine(poll.current(), poll.answered()));
+    up = false;
+    await poll.read();
+    lines.push(K.heartbeatLine(poll.current(), poll.answered()));
+    const wantLines = ["House server not running (optional)", "Java 8081 · UP · local · 5s", "Java 8081 · DOWN · unread · unread"];
+    if (JSON.stringify(lines) !== JSON.stringify(wantLines)) bad.push(`heartbeat lines ${JSON.stringify(lines)}`);
+
+    const Areas = require(join(RENDERER, "weather-areas.js"));
+    const Market = require(join(RENDERER, "market.js"));
+    if (WA.NO_AREA_NEXT !== Areas.NO_AREA_NEXT || !/Look up/.test(WA.NO_AREA_NEXT)) bad.push("weather next step drifted");
+    if (M.QUOTE_WAITS !== Market.QUOTE_WAITS) bad.push("quotes waiting words drifted");
+    const house = M.parseMarket(undefined);
+    const closed = M.plateLine(house, null, false, true);
+    if (!closed.endsWith("· open to see the price")) bad.push(`closed web quotes read ${JSON.stringify(closed)}`);
+
+    const keys = ["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft", "Home", "End", "Escape", "x"];
+    const drift = keys.filter((k) => JSON.stringify(OverlayChoice.menuKey(k, 1, 4)) !== JSON.stringify(K.menuKey(k, 1, 4)));
+    if (drift.length) bad.push(`overlay menu keys drift from the web: ${drift.join(", ")}`);
+    if (B.revokeDoneFocus("revoked") !== "status" || B.revokeDoneFocus("failed") !== null) bad.push("revokeDoneFocus drifted");
+    const read = (...p) => readFileSync(join(ROOT, ...p), "utf8");
+    const room = read("web", "src", "components", "desk", "companion-room.tsx");
+    const plates = read("web", "src", "components", "desk", "desk-plates.tsx");
+    const admin = read("web", "src", "routes", "admin.tsx");
+    const html = read("desktop", "renderer", "index.html");
+    const p2p = read("web", "src", "lib", "multiplayer", "p2p.ts");
+    if (!room.includes("<FirstHint")) bad.push("the room does not show the hello");
+    if ((plates.match(/role="tabpanel"/g) || []).length !== 2) bad.push("web plate tabs have no tabpanel");
+    if (!/aria-controls="weather-panel"/.test(html) || !/role="tabpanel"/.test(html)) bad.push("overlay plate tabs have no tabpanel");
+    if (!admin.includes("statusLine.current?.focus()")) bad.push("a confirmed revoke does not focus the status line");
+    if (/signaling\.server\.ts/.test(p2p) || !/DORMANT/.test(p2p)) bad.push("p2p still points at a missing relay");
+    if (/globalShortcut/.test(read("desktop", "main.cjs"))) bad.push("main.cjs registers a global shortcut");
+    return bad.length
+      ? fail(bad.join("; "), { defaults, lines })
+      : ok("a clean browser gets the house defaults, the hello once, and a calm heartbeat until the server answers", { defaults, lines, shows }, [
+          "clean=no_storage",
+          "defaults=house",
+          "hint=shows_once+own_key",
+          "heartbeat=optional>up>down",
+          "plates=next_step+quotes_wait",
+          "menu=overlay_matches_web",
+          "admin=revoke_focus_status",
+          "p2p=dormant",
+        ]);
+  } finally {
+    if (hadWindow) globalThis.window = oldWindow;
+    else delete globalThis.window;
+  }
+}
 
 const COMMANDS = {
   guest_choice: guestChoice,
@@ -766,6 +878,7 @@ const COMMANDS = {
   pets_keys_idle: petsKeysIdle,
   pet_keys_plates: petKeysPlates,
   menu_keys_escape: menuKeysEscape,
+  first_run: firstRun,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

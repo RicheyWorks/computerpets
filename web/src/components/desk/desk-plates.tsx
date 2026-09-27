@@ -33,7 +33,7 @@ import {
   dayLabel,
   isFavorite,
   locateGate,
-  NO_AREA,
+  NO_AREA_NEXT,
   parseAreas,
   parseForecast,
   SAVED_HERE_ASK,
@@ -593,6 +593,8 @@ export function DeskWeatherPlate({
                 key={id}
                 type="button"
                 role="tab"
+                id={`${problemId}-tab-${id}`}
+                aria-controls={`${problemId}-panel`}
                 aria-selected={tab === id}
                 data-on={tab === id ? "1" : "0"} aria-pressed={tab === id}
                 className="rounded-full border border-border/50 px-2 py-1 text-[10px] uppercase tracking-[0.12em]"
@@ -602,6 +604,7 @@ export function DeskWeatherPlate({
               </button>
             ))}
           </div>
+          <div id={`${problemId}-panel`} role="tabpanel" aria-labelledby={`${problemId}-tab-${tab}`}>
           {tab === "favorites" ? (
             !favs.length ? (
               <p className="text-subtle">{WEATHER_FAVORITES_EMPTY}</p>
@@ -640,7 +643,7 @@ export function DeskWeatherPlate({
                 </p>
               ) : null}
               {savedLine && shownGate.act !== "hold" ? <p className="mb-2 text-subtle">{savedLine}</p> : null}
-              {!area ? <p className="text-subtle">{NO_AREA}</p> : null}
+              {!area ? <p className="text-subtle">{NO_AREA_NEXT}</p> : null}
               {area && live ? (
                 <p>
                   {area.name}. {live.label}
@@ -748,6 +751,7 @@ export function DeskWeatherPlate({
               {hereLine ? <p className="mt-1 text-subtle">{hereLine}</p> : null}
             </>
           )}
+          </div>
           {chrome.colorUi}
         </div>
       ) : null}
@@ -879,6 +883,8 @@ export function DeskNewsPlate() {
                 key={id}
                 type="button"
                 role="tab"
+                id={`${problemId}-tab-${id}`}
+                aria-controls={`${problemId}-panel`}
                 aria-selected={tab === id}
                 data-on={tab === id ? "1" : "0"} aria-pressed={tab === id}
                 className="rounded-full border border-border/50 px-2 py-1 text-[10px] uppercase tracking-[0.12em]"
@@ -888,6 +894,7 @@ export function DeskNewsPlate() {
               </button>
             ))}
           </div>
+          <div id={`${problemId}-panel`} role="tabpanel" aria-labelledby={`${problemId}-tab-${tab}`}>
           {newsHonesty(prefs) ? (
             <p id="news-net" className="text-[10px] uppercase tracking-[0.16em] text-subtle">
               {newsHonesty(prefs)}
@@ -1021,6 +1028,7 @@ export function DeskNewsPlate() {
           ) : (
             <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">{TOPIC_TRUTH}</p>
           )}
+          </div>
           {chrome.colorUi}
         </div>
       ) : null}
@@ -1301,7 +1309,7 @@ export function DeskMarketPlate() {
         onClick={() => chrome.toggleOpen(setOpen)}
       >
         <span className="text-[10px] uppercase tracking-[0.16em] text-subtle">{MARKET_LABEL}</span>
-        <span className="truncate text-sm text-ink">{marketLine(house, live, unread)}</span>
+        <span className="truncate text-sm text-ink">{marketLine(house, live, unread, !open)}</span>
       </button>
       {open ? (
         <div className="border-t border-border/40 px-3 py-2 text-sm">

@@ -756,8 +756,81 @@ async function marketSearch() {
   }
 }
 
+/**
+ * A brand-new keeper: no card.json in a fresh userData. The card starts open with the house defaults,
+ * the first-run hello shows, Got it saves firstHintSeen through card-set, and after a restart (card-get)
+ * and an unrelated card write it never shows again. A named server that never answered reads
+ * "House server not running (optional)"; "unreachable" only after it answered.
+ */
+async function firstRun() {
+  const ctx = await bootMain();
+  try {
+    const fails = [];
+    const Presence = require(path.join(DESKTOP, "presence.cjs"));
+    const file = Presence.houseFile(ctx.userData, "card.json");
+    if (fs.existsSync(file)) fails.push("a clean profile already has card.json");
+    const { C, forget } = cardThroughMain(ctx);
+    const K = loadFresh("keeper.js");
+    let card = C.load();
+    const defaults = {
+      collapsed: card.collapsed,
+      off: card.off,
+      color: card.color,
+      voiceStyle: card.voiceStyle,
+      pets: Object.keys(card.pets || {}).length,
+      firstHintSeen: card.firstHintSeen,
+    };
+    const want = { collapsed: false, off: false, color: "ink", voiceStyle: "hearth", pets: 0, firstHintSeen: false };
+    if (JSON.stringify(defaults) !== JSON.stringify(want)) fails.push(`clean defaults ${JSON.stringify(defaults)}`);
+    if (Object.values(card.mutes || {}).some(Boolean)) fails.push("a new keeper starts with something muted");
+    let shows = 0;
+    if (K.firstHintShows(card)) shows += 1;
+    else fails.push("the hello does not show on a clean profile");
+    const hint = K.firstHint("Rui");
+    if (hint.ok !== "Got it" || hint.lines.length !== 3 || !/tray icon/.test(hint.lines[2])) fails.push("the hello lost its words");
+    if (/\b(npm|install|overlay|IPC|Electron)\b/i.test([hint.title, ...hint.lines].join(" "))) fails.push("the hello uses grown-up words");
+    // A reload before Got it still shows it (it waits for the keeper, not for a timer).
+    forget();
+    if (!K.firstHintShows(C.load())) fails.push("the hello vanished before Got it");
+    // Got it.
+    card = C.load();
+    card.firstHintSeen = true;
+    C.save(card);
+    const disk = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, "utf8")) : null;
+    if (!disk || disk.firstHintSeen !== true) fails.push("card-set did not write firstHintSeen to card.json");
+    forget();
+    card = C.load();
+    if (K.firstHintShows(card)) shows += 1;
+    // An unrelated write (a color pick) keeps it gone.
+    card = C.save({ ...card, color: "moss" });
+    forget();
+    if (K.firstHintShows(C.load())) shows += 1;
+    if (shows !== 1) fails.push(`the hello showed ${shows} times across Got it and two restarts`);
+    const rows = [
+      K.houseServerLine({ show: false, seen: false }),
+      K.houseServerLine({ show: true, reachable: false, seen: false }),
+      K.houseServerLine({ show: true, reachable: true, seen: true }),
+      K.houseServerLine({ show: true, reachable: false, seen: true }),
+    ];
+    const wantRows = ["", "House server not running (optional)", "House server · reachable", "House server · unreachable"];
+    if (JSON.stringify(rows) !== JSON.stringify(wantRows)) fails.push(`house server rows ${JSON.stringify(rows)}`);
+    return fails.length
+      ? fail(fails.join("; "), { defaults, rows })
+      : ok("a clean profile starts open with the house defaults, the hello shows once, and Got it survives restarts", { defaults, rows, shows }, [
+          "clean=no_card_json",
+          "defaults=open+ink+hearth+unmuted",
+          "hint=shows_once",
+          "persist=card.json firstHintSeen",
+          "server=not_running_optional_until_answered",
+        ]);
+  } finally {
+    ctx.cleanup();
+  }
+}
+
 module.exports = {
   bootMain,
+  first_run: firstRun,
   tray_on_the_desk: trayOnTheDesk,
   quit_desk: quitDesk,
   mind_get_set: mindGetSet,
