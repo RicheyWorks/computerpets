@@ -8,9 +8,9 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-Catalog 221 field-tape pass: 220 of 221 have a cry (2026-09-27: garter re-sat, Sol/Shift/Spike/Beak/Lid sat from CC0 habitat rustle/water tape).
+Catalog 221 field-tape pass: 221 of 221 have a cry (2026-09-27: garter re-sat; Beak and Jaw got real animal voices from CC BY 4.0 papers; Sol/Shift/Spike/Lid sat from CC0 habitat rustle tape).
 
-Only **Jaw** crocodile remains (no legal PD/CC0/CC BY American crocodile tape; a voiced guest gets no stand-in sound). Do not invent beeps.
+The four habitat stand-ins (**Sol** iguana, **Shift** chameleon, **Spike** horned_lizard, **Lid** box_turtle) stay until open-licensed species tape exists. Do not invent beeps.
 
 ## Seen
 
@@ -19,6 +19,10 @@ Only **Jaw** crocodile remains (no legal PD/CC0/CC BY American crocodile tape; a
 - Path lock: build our own from internet field tape
 
 ## Log
+
+### 2026-09-27 06:20 PDT — Buffffff
+
+Beak snapper now plays its own species: an underwater hydrophone grunt from Jorgewich-Cohen et al. 2022 (Nat Commun 13:6089, CC BY 4.0, Supplementary Data 2 `Chelydra serpentina 4.mp4`, hosted on the authors' Drive); it replaces the river stand-in. Sat Jaw crocodile from Chabert et al. 2015 (Sci Rep 5:15547, CC BY 4.0, Supplementary Audio 1): two Nile crocodile juvenile calls, a genus relative, not an American crocodile. Sounds 3–5 of that file are synthetic and are cut out. 221 of 221 now have a cry.
 
 ### 2026-09-27 05:05 PDT — Buffffff
 
