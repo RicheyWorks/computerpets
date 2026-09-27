@@ -130,7 +130,7 @@ run_java() {
 run_deploy_sh() {
   have bash || { STATUS=SKIP; NOTE="bash not installed"; return; }
   have python3 || { STATUS=SKIP; NOTE="python3 not installed (these tests need it)"; return; }
-  python3 -c "import yaml" >/dev/null 2>&1 || { STATUS=SKIP; NOTE="python3 has no PyYAML (pip install pyyaml)"; return; }
+  python3 -c "import yaml" >/dev/null 2>&1 || { STATUS=SKIP; NOTE="python3 with PyYAML is not available to bash (python3 -m pip install --user pyyaml; on Windows see 'deploy-sh on Windows' in docs/CONTRIBUTING.md)"; return; }
   local total=0 bad=0 t
   while IFS= read -r t; do
     total=$((total + 1))
