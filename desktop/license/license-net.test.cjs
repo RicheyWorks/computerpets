@@ -7,7 +7,7 @@ const path = require("path");
 const { licenseHonesty, licenseMaySend, licenseHostName, LOCAL_STAYS, plainNetLine, bundleHonesty, bundleMayFetch, bundleHostName, BUNDLE_LOCAL, BUNDLE_IDLE, downloadTalkHonesty, downloadMayPost, DOWNLOAD_LOCAL, postLicenseHash, postUnboundDownload, getSignedBundle } = require("./license-net.cjs");
 const { LicenseError } = require("./errors.cjs");
 
-describe("license hash names the backend host", () => {
+describe("the code made from this computer's ID names the license website first", () => {
   it("uses the shared network sentence and leaves the path off the line", () => {
     const dirty = "https://user:secret@license.example.test:8443/api/verify?hwid=raw-id#frag";
     const line = licenseHonesty(dirty);
@@ -42,8 +42,8 @@ describe("license hash names the backend host", () => {
     assert.equal(send.includes("licenseMaySend"), false);
     assert.equal(settings.slice(0, settings.indexOf("async function sendLicense")).includes("licenseUnlock("), false);
     assert.match(settings, /id="licenseNet"/);
-    assert.match(settings, /device fingerprint/);
-    assert.match(settings, /raw id is not sent/);
+    assert.match(settings, /like a fingerprint for this computer/);
+    assert.match(settings, /The ID itself is never sent/);
     const unlock = dialog.slice(dialog.indexOf("def _unlock(self"), dialog.indexOf("def _on_ok"));
     const download = dialog.slice(dialog.indexOf("def _download(self"), dialog.indexOf("def _clear"));
     const begin = dialog.slice(dialog.indexOf("def _begin_unlock"), dialog.indexOf("def _unlock(self"));
@@ -55,8 +55,8 @@ describe("license hash names the backend host", () => {
     assert.ok(worker.indexOf('["unlock"]') >= 0);
     assert.ok(download.indexOf("post_license_hash") < download.indexOf('["download"]') || download.indexOf("def go") < download.indexOf("post_license_hash"));
     assert.equal(download.includes("_hash_may_leave"), false);
-    assert.match(dialog, /device fingerprint/);
-    assert.match(dialog, /raw id is not sent/);
+    assert.match(dialog, /like a fingerprint for this computer/);
+    assert.match(dialog, /The ID itself is never sent/);
     assert.equal(dialog.includes("licenseUnlock"), false);
   });
 });
@@ -116,7 +116,7 @@ describe("unbound download names the backend host", () => {
   });
 });
 
-describe("signed bundle names the CDN host", () => {
+describe("downloading your pet's files names the download website first", () => {
   it("uses the shared network sentence and leaves the path off the line", () => {
     const dirty = "https://user:secret@cdn.example.test:8443/bundles/red_panda.zip?owner=o&jti=j&exp=1&sig=abc&hwid=raw-id#frag";
     const line = bundleHonesty(dirty);

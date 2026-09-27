@@ -52,32 +52,37 @@ DETAILS_LABEL = "Details"
 # waits for a yes (computer name, else a random id).
 MARK_UNREAD_TEXT = " ".join(
     (
-        "Opening this window did not read the operating-system machine id.",
-        "Unlock, or a download for a license bound to this computer, reads one machine id only when no hash is stored yet:",
-        "the machine-id file on Linux, MachineGuid on Windows, or the platform UUID on a Mac.",
-        "The blotter mixes that id with the app's name and the platform, hashes the result with SHA-256,",
-        "and saves only the hash in hwid.txt in its data folder.",
-        "Later unlocks reuse the stored hash, so an existing license stays bound to this computer.",
-        "The raw id is not sent.",
-        "The house receives only the hash, never the id itself, and only for an unlock or a bound download.",
-        "The hash is still a device fingerprint, because this computer keeps giving the same hash.",
-        "The line under Backend URL names the host before the hash leaves.",
-        "A backend on this computer keeps the hash on this computer.",
-        "If that named read fails, Unlock stops and asks you first.",
-        "It hashes the computer name only after you say yes, and it uses a random id instead if this computer has no name.",
-        "Renaming the computer changes a computer-name hash.",
-        "Deleting hwid.txt turns a random id into a different mark.",
+        "Opening this window did not look at this computer's ID.",
+        "Unlock, or downloading a pet whose license belongs to this computer, looks at the ID only when "
+        "no code is saved yet: the machine-id file on Linux, MachineGuid on Windows, or the platform "
+        "UUID on a Mac.",
+        "The blotter mixes that ID with the app's name and the kind of computer, scrambles the result "
+        "with SHA-256 into a code, and saves only that code in hwid.txt in its data folder.",
+        "Later unlocks use the saved code again, so your license keeps working on this computer.",
+        "The ID itself is never sent.",
+        "Only the code goes to the license website, and only when you unlock or download a pet whose "
+        "license belongs to this computer.",
+        "The code still works like a fingerprint for this computer, because this computer always makes "
+        "the same code.",
+        "The line under Backend URL names the website before the code is sent.",
+        "If the backend is on this computer, the code stays on this computer.",
+        "If the app cannot read that ID, Unlock stops and asks you first.",
+        "It uses the computer's name only after you say yes, and it uses a random ID instead if this "
+        "computer has no name.",
+        "Renaming the computer changes a code made from its name.",
+        "If the code came from a random ID, deleting hwid.txt gives this computer a different code.",
     )
 )
 
 MARK_STORED_TEXT = " ".join(
     (
-        "A license hash is already stored in hwid.txt.",
-        "Unlock reuses it and does not read the operating-system machine id again.",
-        "The raw id is not sent.",
-        "The hash is still a device fingerprint, because this computer keeps giving the same hash.",
-        "The line under Backend URL names the host before the hash leaves.",
-        "A backend on this computer keeps the hash on this computer.",
+        "A code is already saved in hwid.txt.",
+        "Unlock uses it again and does not look at this computer's ID again.",
+        "The ID itself is never sent.",
+        "The code still works like a fingerprint for this computer, because this computer always makes "
+        "the same code.",
+        "The line under Backend URL names the website before the code is sent.",
+        "If the backend is on this computer, the code stays on this computer.",
     )
 )
 

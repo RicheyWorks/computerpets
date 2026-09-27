@@ -7,6 +7,8 @@
     desktop    npm test in desktop/ (overlay, license, presence)
     web        npm test in web/ (needs web/node_modules)
     tsc        web type-check held to web/tsc-baseline.txt (node web/scripts/tsc-baseline.mjs)
+    checkjs    desktop JavaScript type-check (tsc checkJs) held to desktop/checkjs-baseline.txt
+               (node scripts/checkjs-baseline.mjs; uses web's TypeScript)
     python     pytest in client/ using client/.venv
     check      python -m computerpets_client --check (offscreen window with a living pet)
     harness    python -m computerpets_client.app_harness, then .care_harness (docs/APP-HARNESS.md)
@@ -61,6 +63,7 @@ $Suites = @(
   @{ Name = "desktop";   Slow = $false; What = "npm test in desktop/" },
   @{ Name = "web";       Slow = $true;  What = "npm test in web/" },
   @{ Name = "tsc";       Slow = $true;  What = "web tsc --noEmit vs web/tsc-baseline.txt" },
+  @{ Name = "checkjs";   Slow = $false; What = "desktop tsc checkJs vs desktop/checkjs-baseline.txt" },
   @{ Name = "python";    Slow = $false; What = "pytest in client/ (client/.venv)" },
   @{ Name = "check";     Slow = $false; What = "python -m computerpets_client --check" },
   @{ Name = "harness";   Slow = $false; What = "app_harness + care_harness (offline)" },
@@ -200,6 +203,22 @@ function Run-Tsc {
   return Result "FAIL" $counts "new tsc output"
 }
 
+function Run-CheckJs {
+  if (-not $Node) { return Result "SKIP" "" "node not installed" }
+  if (-not (Test-Path (Join-Path $Root "web/node_modules/typescript"))) { return Result "SKIP" "" "no web/node_modules: run npm ci in web/ (desktop uses web's TypeScript)" }
+  $r = Invoke-Logged "checkjs" $Node @("scripts/checkjs-baseline.mjs") $Root
+  $m = [regex]::Match($r.Text, 'checkjs: (\d+) errors in (\d+) files, baseline (\d+)')
+  $counts = ""
+  $note = ""
+  if ($m.Success) {
+    $counts = "$($m.Groups[1].Value) errors / baseline $($m.Groups[3].Value)"
+    if ([int]$m.Groups[1].Value -lt [int]$m.Groups[3].Value) { $note = "fewer than baseline: node scripts/checkjs-baseline.mjs --update" }
+  }
+  if ($r.Code -eq 0) { return Result "PASS" $counts $note }
+  Show-Tail $r.Text
+  return Result "FAIL" $counts "new checkJs errors"
+}
+
 function Run-Python {
   if (-not (Test-Path $VenvPy)) { return Result "SKIP" "" "no client/.venv. Create it: $VenvHelp" }
   $r = Invoke-Logged "python" $VenvPy @("-m", "pytest", "-q", "-rs", "-p", "no:cacheprovider") (Join-Path $Root "client")
@@ -329,7 +348,7 @@ function Run-Tftest {
 }
 
 $Runners = @{
-  "desktop" = { Run-Desktop }; "web" = { Run-Web }; "tsc" = { Run-Tsc }; "python" = { Run-Python }
+  "desktop" = { Run-Desktop }; "web" = { Run-Web }; "tsc" = { Run-Tsc }; "checkjs" = { Run-CheckJs }; "python" = { Run-Python }
   "check" = { Run-Check }; "harness" = { Run-Harness }; "cdn" = { Run-Cdn }; "java" = { Run-Java }
   "deploy-sh" = { Run-DeploySh }; "tftest" = { Run-Tftest }
 }

@@ -455,4 +455,4 @@
   } else {
     root.PetGoldfishTricks = api;
   }
-})(typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : this);
+})(typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : /** @type {any} */ (this));

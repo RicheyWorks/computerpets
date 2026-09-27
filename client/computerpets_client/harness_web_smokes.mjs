@@ -1228,6 +1228,151 @@ async function consentTypesPlain() {
   ]);
 }
 
+async function loopGuardUnlockPlain() {
+  const bad = [];
+  const fs = await import("node:fs");
+  const FG = require(join(RENDERER, "frame-guard.js"));
+  const Cat = require(join(RENDERER, "cat-tricks.js"));
+  // A real trick module whose step throws, run through the same guarded loop pet.js uses.
+  const Broken = { ...Cat, stepTrick() { throw new Error("injected trick fault"); } };
+  const queue = [];
+  const schedule = (fn) => queue.push(fn);
+  const logs = [];
+  const sim = { x: 300, facing: 1, anim: "idle", hop: 0, land: 0, cmd: "wander", trick: null, trickWait: 0, happy: null, play: null, thankYou: false, act: null };
+  const guard = FG.makeGuard({ log: (t) => logs.push(t), reset: (key) => { if (key === Cat.TRICK_KEY) FG.safeIdle(sim); } });
+  let frames = 0;
+  let begun = 0;
+  let resets = 0;
+  let last = 0;
+  function frame(now) {
+    const dt = Math.min(0.08, (now - last) / 1000);
+    last = now;
+    frames += 1;
+    if (sim.trick) {
+      sim.trick = Broken.stepTrick(sim.trick, dt, { cmd: sim.cmd });
+      sim.x = sim.trick.x;
+    } else {
+      sim.trickWait -= dt;
+      if (sim.trickWait <= 0) {
+        sim.trick = Broken.beginTrick(Broken.TRICKS[0], sim.x, sim.facing);
+        sim.anim = sim.trick.anim;
+        begun += 1;
+        sim.trickWait = Broken.nextTrickWait(false);
+      }
+    }
+  }
+  const tick = FG.guardedLoop(frame, schedule, guard, () => Cat.TRICK_KEY);
+  schedule(tick);
+  let now = 0;
+  for (let i = 0; i < 1200 && queue.length; i += 1) {
+    const hadTrick = !!sim.trick;
+    now += 1000 / 60;
+    queue.shift()(now);
+    if (hadTrick && !sim.trick && sim.anim === "idle") resets += 1;
+  }
+  const guardRun = { frames, pending: queue.length, caught: guard.caught(), logs: logs.length, begun, resets, idle: sim.anim === "idle" && sim.trick === null, log: logs[0] || "" };
+  if (frames !== 1200 || queue.length !== 1) bad.push(`loop stopped: ${frames} frames, ${queue.length} queued`);
+  if (guard.caught() < 2 || begun < 2 || resets !== guard.caught()) bad.push(`broken trick was not reset each time ${JSON.stringify(guardRun)}`);
+  if (logs.length !== 1 || !logs[0].includes("(cat)") || !logs[0].includes("injected trick fault")) bad.push(`log was not once with the pet key: ${JSON.stringify(logs)}`);
+  const pet = readFileSync(join(RENDERER, "pet.js"), "utf8");
+  const html = readFileSync(join(RENDERER, "index.html"), "utf8");
+  const body = pet.slice(pet.indexOf("function tickFrame(now)"), pet.indexOf("function resetAfterFrameError"));
+  const wired = {
+    loop: /const tick = window\.PetFrameGuard\.guardedLoop\(tickFrame,/.test(pet),
+    noTailRaf: body.length > 1000 && !/requestAnimationFrame\(tick\)/.test(body),
+    guests: ["visit guest", "bird", "robin", "plants", "called guests"].every((k) => body.includes(`"${k}")`)),
+    reset: /window\.PetFrameGuard\.safeIdle\(sim\)/.test(pet),
+    script: html.indexOf('src="frame-guard.js"') > 0 && html.indexOf('src="frame-guard.js"') < html.indexOf('src="pet.js"'),
+  };
+  const unwired = Object.entries(wired).filter(([, v]) => !v).map(([k]) => k);
+  if (unwired.length) bad.push(`pet.js loop guard not wired: ${unwired.join(", ")}`);
+  // checkJs: the pass is wired, and the bugs it found stay fixed.
+  const baselineJs = readFileSync(join(ROOT, "desktop", "checkjs-baseline.txt"), "utf8").trim();
+  const WP = require(join(RENDERER, "window-play.js"));
+  const wpSrc = readFileSync(join(RENDERER, "window-play.js"), "utf8");
+  const apiStart = wpSrc.indexOf("  const api = {");
+  const apiKeys = wpSrc.slice(apiStart, wpSrc.indexOf("\n  };", apiStart)).match(/[A-Za-z_$][\w$]*(?=\s*,)/g) || [];
+  const repeats = [];
+  const realRandom = Math.random;
+  try {
+    for (const f of fs.readdirSync(RENDERER).filter((n) => n.endsWith("-tricks.js") && n !== "ground-tricks.js")) {
+      const Mod = require(join(RENDERER, f));
+      if (typeof Mod.startThankYou !== "function" || !Array.isArray(Mod.HAPPY) || Mod.HAPPY.length < 2) continue;
+      Math.random = () => 0;
+      const got = Mod.startThankYou(Mod.TRICK_KEY, Mod.HAPPY[0], 100, 1, { cmd: "idle" });
+      if (got && got.kind === Mod.HAPPY[0]) repeats.push(f);
+    }
+  } finally {
+    Math.random = realRandom;
+  }
+  const checkjs = {
+    baseline: baselineJs,
+    wired: ["test-all.ps1", "test-all.sh"].every((f) => readFileSync(join(ROOT, "scripts", f), "utf8").includes("checkjs-baseline.mjs")),
+    apiDuplicates: apiKeys.length - new Set(apiKeys).size,
+    thankYouRepeats: repeats.length,
+    ignoreGuard: WP.playFor("cat") !== WP.IGNORE && /if \(kind === IGNORE\) return null;/.test(wpSrc),
+  };
+  if (!/^\d+$/.test(baselineJs) || Number(baselineJs) > 58) bad.push(`desktop checkJs baseline is ${baselineJs}, above 58`);
+  if (!checkjs.wired) bad.push("checkjs is not in test-all.ps1 and test-all.sh");
+  if (checkjs.apiDuplicates) bad.push(`window-play api has ${checkjs.apiDuplicates} duplicate key(s)`);
+  if (repeats.length) bad.push(`a thank-you repeats itself: ${repeats.slice(0, 5).join(", ")}`);
+
+  // Unlock privacy words: kid-plain on the overlay Settings and the blotter dialog, still honest.
+  const settings = readFileSync(join(RENDERER, "settings.html"), "utf8");
+  const dialogSrc = readFileSync(join(ROOT, "client", "computerpets_client", "unlock_dialog.py"), "utf8");
+  const firstMark = (settings.match(/<p id="licenseMark">([^<]*)<\/p>/) || [])[1] || "";
+  const storedMark = (settings.match(/const storedMarkText = "([^"]*)";/) || [])[1] || "";
+  const OLD_MARK = /\bhash|raw id|device fingerprint|operating-system|the host\b|\bleaves\b/i;
+  const unlock = {
+    first: /did not look at this computer's ID/.test(firstMark) && /The ID itself is never sent\./.test(firstMark) && /like a fingerprint for this computer/.test(firstMark) && /MachineGuid/.test(firstMark),
+    stored: /^A code is already saved in hwid\.txt\./.test(storedMark) && /The ID itself is never sent\./.test(storedMark),
+    plain: !OLD_MARK.test(firstMark) && !OLD_MARK.test(storedMark),
+    dialog: dialogSrc.includes('"A code is already saved in hwid.txt."') && dialogSrc.includes('"The ID itself is never sent."') && !/raw id is not sent|device fingerprint|A license hash is already stored/.test(dialogSrc),
+    pin: /A code is already saved in hwid\\\.txt/.test(readFileSync(join(here, "harness_windows.cjs"), "utf8")),
+  };
+  const unplain = Object.entries(unlock).filter(([, v]) => !v).map(([k]) => k);
+  if (unplain.length) bad.push(`unlock privacy words: ${unplain.join(", ")}`);
+
+  // The license gate's own error lines (they reach Settings as-is) use the same plain words.
+  const Net = require(join(ROOT, "desktop", "license", "license-net.cjs"));
+  const gateMessages = [];
+  for (const run of [
+    () => Net.postLicenseHash("", "https://license.example.test", () => ({})),
+    () => Net.postUnboundDownload("", "https://license.example.test", () => ({})),
+    () => Net.getSignedBundle("", "https://cdn.example.test/p.zip?sig=x", () => ({}), true),
+  ]) {
+    try {
+      await run();
+      gateMessages.push("(sent)");
+    } catch (err) {
+      gateMessages.push(String(err && err.message));
+    }
+  }
+  const pySrc = readFileSync(join(ROOT, "client", "computerpets_client", "license", "license_net.py"), "utf8");
+  const OLD_GATE = /license hash|signed bundle|name that host|before it leaves/i;
+  const gates = {
+    messages: gateMessages,
+    plain: gateMessages.length === 3 && gateMessages.every((m) => /^(Nothing was sent to|Your pet's files were not downloaded from) \S+\. This page has to name the (license|download) website first\.$/.test(m)),
+    py: !/name that host before it leaves|the license hash was not sent/.test(pySrc) && pySrc.includes("This page has to name the license website first."),
+    hosts: gateMessages[0].includes("license.example.test") && gateMessages[2].includes("cdn.example.test") && !gateMessages[2].includes("sig="),
+  };
+  if (!gates.plain || !gates.py || !gates.hosts || gateMessages.some((m) => OLD_GATE.test(m))) bad.push(`license gate messages: ${JSON.stringify(gateMessages)}`);
+  const roadmap = readFileSync(join(ROOT, "docs", "ROADMAP.md"), "utf8");
+  const updated = (roadmap.match(/Last Updated[^0-9]*(\d{4}-\d{2}-\d{2})/) || [])[1] || "";
+  if (updated < "2026-09-27") bad.push(`ROADMAP Last Updated is ${updated}`);
+  if (bad.length) return fail(bad.join("; "), { guardRun, wired, checkjs, unlock, gates });
+  return ok("the overlay loop schedules first and survives a throwing trick; desktop checkJs is held to its baseline and its bugs stay fixed; unlock privacy and license gate lines are kid-plain", { guardRun, wired, checkjs, unlock, gates, updated }, [
+    "loop=schedule_first+guarded",
+    "fault=injected_trick_throws",
+    "log=once_per_error+pet_key",
+    "reset=safe_idle",
+    "checkjs=baseline_held+wired",
+    "bugs=thank_you_repeat+api_dup_keys+dead_compares",
+    "unlock=plain_words+honest",
+    "gate=plain_license_messages",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -1242,6 +1387,7 @@ const COMMANDS = {
   plain_words: plainWords,
   consent_plain: consentPlain,
   consent_types_plain: consentTypesPlain,
+  loop_guard_unlock_plain: loopGuardUnlockPlain,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

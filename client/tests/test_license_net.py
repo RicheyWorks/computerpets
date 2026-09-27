@@ -1,4 +1,4 @@
-"""The license hash names its host before it leaves."""
+"""Unlock names the license website before the code made from this computer's ID is sent there."""
 
 from pathlib import Path
 
@@ -63,8 +63,8 @@ def test_blotter_paints_the_line_before_unlock_or_download():
     assert "UnlockWorker" in begin
     assert '["unlock"]' in worker
     assert download.index("def go") < download.index("post_license_hash")
-    assert "device fingerprint" in dialog
-    assert "raw id is not sent" in dialog
+    assert "like a fingerprint for this computer" in dialog
+    assert "The ID itself is never sent" in dialog
 
 
 def test_unbound_download_line_names_the_host_and_does_not_say_a_hash_is_sent():

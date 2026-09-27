@@ -305,6 +305,21 @@ function createLicenseSession(opts) {
     return { ...publicStatus(), download: downloaded };
   }
 
+  /**
+   * @typedef {object} BundleRead
+   * @property {boolean} ok
+   * @property {number} status
+   * @property {number} bytes
+   * @property {boolean} [held] true when the download website was not named, so nothing was asked
+   * @property {string} [update] install | replace | current | refuse
+   * @property {string} [error]
+   * @property {string} [petKey]
+   * @property {string} [version]
+   * @property {string | null} [platform]
+   * @property {string} [sha256]
+   */
+
+  /** @returns {Promise<BundleRead>} */
   function readBundle(downloadUrl, shown, strict, expect) {
     return getSignedBundle(
       shown,
@@ -373,6 +388,7 @@ function createLicenseSession(opts) {
     });
 
     const expect = catalogExpect(manifest, store);
+    /** @type {BundleRead} */
     let bundle;
     if (alreadyCurrent(expect)) {
       bundle = {

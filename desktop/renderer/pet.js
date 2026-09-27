@@ -98,15 +98,15 @@ const firstHintTitle = document.getElementById("first-hint-title");
 const firstHintList = document.getElementById("first-hint-lines");
 const firstHintOk = document.getElementById("first-hint-ok");
 const hudBody = document.getElementById("hud-body");
-const hudVolume = document.getElementById("hud-volume");
+const hudVolume = /** @type {HTMLInputElement | null} */ (document.getElementById("hud-volume"));
 const hudColors = document.getElementById("hud-colors");
 const hudVoices = document.getElementById("hud-voices");
 const hudVoiceTruth = document.getElementById("hud-voice-truth");
-const hudLineText = document.getElementById("hud-line-text");
+const hudLineText = /** @type {HTMLInputElement | null} */ (document.getElementById("hud-line-text"));
 const hudLines = document.getElementById("hud-lines");
-const hudAlarmTime = document.getElementById("hud-alarm-time");
+const hudAlarmTime = /** @type {HTMLInputElement | null} */ (document.getElementById("hud-alarm-time"));
 const hudAlarmOn = document.getElementById("hud-alarm-on");
-const hudTimerMins = document.getElementById("hud-timer-mins");
+const hudTimerMins = /** @type {HTMLInputElement | null} */ (document.getElementById("hud-timer-mins"));
 const hudTimer = document.getElementById("hud-timer");
 const hudTimerLeft = document.getElementById("hud-timer-left");
 const hudMutes = document.getElementById("hud-mutes");
@@ -115,9 +115,9 @@ const hudMusic = document.getElementById("hud-music");
 const hudSleep = document.getElementById("hud-sleep");
 const hudHouseMusic = document.getElementById("hud-house-music");
 const hudCallBird = document.getElementById("hud-call-bird");
-const hudCallPick = document.getElementById("hud-call-pick");
-const hudCallQ = document.getElementById("hud-call-q");
-const hudCallGroup = document.getElementById("hud-call-group");
+const hudCallPick = /** @type {HTMLSelectElement | null} */ (document.getElementById("hud-call-pick"));
+const hudCallQ = /** @type {HTMLInputElement | null} */ (document.getElementById("hud-call-q"));
+const hudCallGroup = /** @type {HTMLSelectElement | null} */ (document.getElementById("hud-call-group"));
 const hudCallGo = document.getElementById("hud-call-go");
 const hudCallTruth = document.getElementById("hud-call-truth");
 const hudOff = document.getElementById("hud-off");
@@ -140,6 +140,18 @@ let roster = [];
 let kind = null;
 let trait = null;
 let life = null;
+
+/**
+ * The element under a DOM event that matches `sel`, or null. An event's target is typed EventTarget,
+ * so this is the one place that treats it as an element.
+ * @param {Event} e
+ * @param {string} sel
+ * @returns {HTMLElement | null}
+ */
+function closestTarget(e, sel) {
+  const t = /** @type {any} */ (e && e.target);
+  return t && typeof t.closest === "function" ? t.closest(sel) : null;
+}
 
 const sim = {
   x: 80,
@@ -1353,7 +1365,7 @@ function readHouseServer() {
 
 if (hudCare) {
   hudCare.addEventListener("click", (e) => {
-    const btn = e.target && e.target.closest && e.target.closest("[data-care]");
+    const btn = closestTarget(e, "[data-care]");
     if (!btn) return;
     e.stopPropagation();
     const id = btn.getAttribute("data-care");
@@ -1369,7 +1381,7 @@ if (hudCollapse) {
 }
 if (hud) {
   hud.addEventListener("click", (e) => {
-    const hit = e.target && e.target.closest && e.target.closest("[data-care], [data-card], [data-first-hint], input, button, label");
+    const hit = closestTarget(e, "[data-care], [data-card], [data-first-hint], input, button, label");
     if (hit) return;
     if (card.collapsed) return;
     card.collapsed = true;
@@ -2381,8 +2393,10 @@ function applyCommand() {
     sim.lastOrder = sim.order;
     return;
   }
-  if ((sim.cmd === "seek" || sim.cmd === "eat" || sim.anim === "eat" || sim.thankYou) && (sim.cmd === "wander" || sim.cmd === "idle")) {
-    if (sim.thankYou && sim.anim !== "eat" && sim.cmd !== "seek" && sim.cmd !== "eat") {
+  // A wander or idle order does not cut off a meal or a pending thank-you. (The old test also asked about
+  // "seek" and "eat" orders, but those can never be true once the order is wander or idle; tsc caught it.)
+  if ((sim.anim === "eat" || sim.thankYou) && (sim.cmd === "wander" || sim.cmd === "idle")) {
+    if (sim.thankYou && sim.anim !== "eat") {
       applyThankYou();
     }
     sim.lastOrder = sim.order;
@@ -3166,13 +3180,13 @@ function switchTo(key) {
   startVisit.timer = window.setTimeout(startVisit, window.PetVisitor?.VISIT_WAIT_MS || 7500);
 }
 
-function tick(now) {
-  const dt = Math.min(0.08, (now - tick.last) / 1000);
-  tick.last = now;
-  if (!kind || !trait) {
-    requestAnimationFrame(tick);
-    return;
-  }
+// One frame of the overlay. `tick` below is the loop: it schedules the next frame first and runs this
+// through the frame guard (frame-guard.js), so a thrown error cannot stop the pets.
+let lastTickAt = performance.now();
+function tickFrame(now) {
+  const dt = Math.min(0.08, (now - lastTickAt) / 1000);
+  lastTickAt = now;
+  if (!kind || !trait) return;
   const width = window.innerWidth;
   const maxX = Math.max(PAD, width - BASE - PAD);
   const scale = window.PetLife.sizeScale(life, trait);
@@ -3282,7 +3296,8 @@ function tick(now) {
       !sim.happy &&
       !leaving &&
       window.PetWindowPlay.canStart(playFlags) &&
-      window.PetWindowPlay.playFor(kind.key) !== "ignore" &&
+      // No pet opts out of window play today (see pickTarget in window-play.js); the guard stays for one that does.
+      /** @type {string} */ (window.PetWindowPlay.playFor(kind.key)) !== "ignore" &&
       wins.length
     ) {
       sim.playWait -= dt;
@@ -3410,8 +3425,7 @@ function tick(now) {
       sim.settle <= 0 &&
       (sim.anim === "idle" || sim.anim === "sit") &&
       !life.hidden &&
-      !life.asleep &&
-      sim.anim !== "sleep"
+      !life.asleep
     ) {
       sim.actWait -= dt;
       if (sim.actWait <= 0) {
@@ -3544,11 +3558,11 @@ function tick(now) {
     el.style.transform = `translate3d(${d.x}px, ${d.y}px, 0)`;
   }
 
-  tickVisit(dt, now, width);
-  tickBird(dt);
-  tickRobin(dt);
-  tickPlants(dt);
-  tickCalled(dt);
+  frameGuard.step(() => tickVisit(dt, now, width), undefined, "visit guest");
+  frameGuard.step(tickBird, dt, "bird");
+  frameGuard.step(tickRobin, dt, "robin");
+  frameGuard.step(tickPlants, dt, "plants");
+  frameGuard.step(tickCalled, dt, "called guests");
   if (kind && kind.key === "red_panda" && !(life && life.hidden) && window.PetCallGuests && window.PetCallGuests.nextAutoMeet) {
     autoMeetWait -= dt;
     if (autoMeetWait <= 0) {
@@ -3559,10 +3573,15 @@ function tick(now) {
   }
   paintLure();
   reportHits();
-
-  requestAnimationFrame(tick);
 }
-tick.last = performance.now();
+
+// A frame error puts the host pet back to a safe idle (no trick, no thank-you, no window play).
+// Guests, plants, and the visit only log: their next frame starts fresh.
+function resetAfterFrameError(petKey) {
+  if (kind && petKey === kind.key) window.PetFrameGuard.safeIdle(sim);
+}
+const frameGuard = window.PetFrameGuard.makeGuard({ reset: resetAfterFrameError });
+const tick = window.PetFrameGuard.guardedLoop(tickFrame, (next) => requestAnimationFrame(next), frameGuard, () => (kind && kind.key) || "");
 
 let visit = null;
 let called = [];
@@ -3640,7 +3659,7 @@ function tickVisit(dt, now, width) {
     visit.target = -140;
     visit.tapped = false;
     visit.placed = false;
-  } else if (visit.placed && phase !== "leave") {
+  } else if (visit.placed) {
     visit.target = visit.x;
   } else if (phase === "wander" && !visit.wandered) {
     visit.wandered = true;
@@ -3696,7 +3715,7 @@ pet.addEventListener("pointerdown", (e) => {
 });
 window.addEventListener("pointermove", (e) => {
   sim.cursorX = e.clientX;
-  const over = e.target && e.target.closest && e.target.closest("[data-hit]");
+  const over = closestTarget(e, "[data-hit]");
   setClickable(!!over || sim.dragging || !!plantDrag || !!plantPress || !!plantChoiceKey || !!plateDrag || !!platePress || !!calledPress || !!calledDrag || !!visitPress || !!visitDrag);
   if (plantPress && window.PetDeskPlants) {
     const P = window.PetDeskPlants;
@@ -4031,7 +4050,7 @@ function backToCard() {
  */
 function plateTabKey(e) {
   const K = window.PetKeeper;
-  const tab = e.target && e.target.closest ? e.target.closest('[role="tab"]') : null;
+  const tab = closestTarget(e, '[role="tab"]');
   if (!tab || !K || !K.rovingIndex || !inPlate(tab)) return false;
   const list = tab.closest('[role="tablist"]');
   const tabs = list ? [...list.querySelectorAll('[role="tab"]')] : [];
@@ -4223,7 +4242,7 @@ if (weatherPlate) {
     fetchWeather();
   }
   weatherPlate.addEventListener("click", (e) => {
-    const toggle = e.target && e.target.closest && e.target.closest("#weather-toggle");
+    const toggle = closestTarget(e, "#weather-toggle");
     if (toggle) {
       e.stopPropagation();
       if (plateSkipToggle) {
@@ -4241,25 +4260,25 @@ if (weatherPlate) {
       return;
     }
     if (!window.PetWeatherAreas) return;
-    const tabBtn = e.target && e.target.closest && e.target.closest("[data-weather-tab]");
+    const tabBtn = closestTarget(e, "[data-weather-tab]");
     if (tabBtn) {
       e.stopPropagation();
       applyWeatherHouse(window.PetWeatherAreas.pickTab(card, tabBtn.getAttribute("data-weather-tab")));
       return;
     }
-    const pick = e.target && e.target.closest && e.target.closest("[data-area-pick]");
+    const pick = closestTarget(e, "[data-area-pick]");
     if (pick) {
       e.stopPropagation();
       applyWeatherHouse(window.PetWeatherAreas.pickArea(card, pick.getAttribute("data-area-pick")));
       return;
     }
-    const fav = e.target && e.target.closest && e.target.closest("[data-area-fav]");
+    const fav = closestTarget(e, "[data-area-fav]");
     if (fav) {
       e.stopPropagation();
       applyWeatherHouse(window.PetWeatherAreas.toggleFavorite(card, fav.getAttribute("data-area-fav")));
       return;
     }
-    const del = e.target && e.target.closest && e.target.closest("[data-area-del]");
+    const del = closestTarget(e, "[data-area-del]");
     if (del) {
       e.stopPropagation();
       applyWeatherHouse(window.PetWeatherAreas.removeArea(card, del.getAttribute("data-area-del")));
@@ -4271,7 +4290,7 @@ if (weatherPlate) {
     e.preventDefault();
     e.stopPropagation();
     const A = window.PetWeatherAreas;
-    const q = document.getElementById("weather-q");
+    const q = /** @type {HTMLInputElement | null} */ (document.getElementById("weather-q"));
     const hits = document.getElementById("weather-hits");
     if (!hits) return;
     const hitsSay = (text) => {
@@ -4493,7 +4512,7 @@ if (newsPlate) {
     fetchNews();
   }
   newsPlate.addEventListener("click", (e) => {
-    const toggle = e.target && e.target.closest && e.target.closest("#news-toggle");
+    const toggle = closestTarget(e, "#news-toggle");
     if (toggle) {
       e.stopPropagation();
       if (plateSkipToggle) {
@@ -4512,38 +4531,38 @@ if (newsPlate) {
       return;
     }
     if (!window.PetNews) return;
-    const tabBtn = e.target && e.target.closest && e.target.closest("[data-news-tab]");
+    const tabBtn = closestTarget(e, "[data-news-tab]");
     if (tabBtn) {
       e.stopPropagation();
       applyNewsHouse(window.PetNews.pickTab(card, tabBtn.getAttribute("data-news-tab")));
       return;
     }
-    const chip = e.target && e.target.closest && e.target.closest("[data-news-chip]");
+    const chip = closestTarget(e, "[data-news-chip]");
     if (chip) {
       e.stopPropagation();
       const name = chip.getAttribute("data-news-chip");
       applyNewsHouse(window.PetNews.addTopic(card, { name, query: name }));
       return;
     }
-    const pick = e.target && e.target.closest && e.target.closest("[data-news-pick]");
+    const pick = closestTarget(e, "[data-news-pick]");
     if (pick) {
       e.stopPropagation();
       applyNewsHouse(window.PetNews.pickTopic(card, pick.getAttribute("data-news-pick")));
       return;
     }
-    const del = e.target && e.target.closest && e.target.closest("[data-news-del]");
+    const del = closestTarget(e, "[data-news-del]");
     if (del) {
       e.stopPropagation();
       applyNewsHouse(window.PetNews.removeTopic(card, del.getAttribute("data-news-del")));
       return;
     }
-    const move = e.target && e.target.closest && e.target.closest("[data-news-move]");
+    const move = closestTarget(e, "[data-news-move]");
     if (move) {
       e.stopPropagation();
       applyNewsHouse(window.PetNews.moveTopic(card, move.getAttribute("data-news-move"), Number(move.getAttribute("data-dir") || 1)));
       return;
     }
-    const favTopic = e.target && e.target.closest && e.target.closest("[data-news-fav-topic]");
+    const favTopic = closestTarget(e, "[data-news-fav-topic]");
     if (favTopic) {
       e.stopPropagation();
       const id = favTopic.getAttribute("data-news-fav-topic");
@@ -4552,7 +4571,7 @@ if (newsPlate) {
       if (row) applyNewsHouse(window.PetNews.toggleFavorite(card, { kind: "topic", id: row.id, name: row.name, query: row.query }));
       return;
     }
-    const favHeadline = e.target && e.target.closest && e.target.closest("[data-news-fav-headline]");
+    const favHeadline = closestTarget(e, "[data-news-fav-headline]");
     if (favHeadline) {
       e.stopPropagation();
       applyNewsHouse(
@@ -4565,7 +4584,7 @@ if (newsPlate) {
       );
       return;
     }
-    const unfav = e.target && e.target.closest && e.target.closest("[data-news-unfav]");
+    const unfav = closestTarget(e, "[data-news-unfav]");
     if (unfav) {
       e.stopPropagation();
       applyNewsHouse(window.PetNews.removeFavorite(card, unfav.getAttribute("data-news-unfav")));
@@ -4575,7 +4594,7 @@ if (newsPlate) {
     if (!e.target || e.target.id !== "news-add" || !window.PetNews) return;
     e.preventDefault();
     e.stopPropagation();
-    const q = document.getElementById("news-q");
+    const q = /** @type {HTMLInputElement | null} */ (document.getElementById("news-q"));
     const text = q && q.value;
     if (!String(text || "").trim()) return;
     applyNewsHouse(window.PetNews.addTopic(card, { name: text, query: text }));
@@ -4589,7 +4608,7 @@ if (marketPlate) {
     fetchMarket();
   }
   marketPlate.addEventListener("click", (e) => {
-    const toggle = e.target && e.target.closest && e.target.closest("#market-toggle");
+    const toggle = closestTarget(e, "#market-toggle");
     if (toggle) {
       e.stopPropagation();
       if (plateSkipToggle) {
@@ -4606,73 +4625,73 @@ if (marketPlate) {
       return;
     }
     if (!window.PetMarket) return;
-    const pick = e.target && e.target.closest && e.target.closest("[data-ticker-pick]");
+    const pick = closestTarget(e, "[data-ticker-pick]");
     if (pick) {
       e.stopPropagation();
       applyMarketHouse(window.PetMarket.pickTicker(card, pick.getAttribute("data-ticker-pick")));
       return;
     }
-    const tickerFav = e.target && e.target.closest && e.target.closest("[data-ticker-fav]");
+    const tickerFav = closestTarget(e, "[data-ticker-fav]");
     if (tickerFav) {
       e.stopPropagation();
       applyMarketHouse(window.PetMarket.toggleFavoriteTicker(card, tickerFav.getAttribute("data-ticker-fav")));
       return;
     }
-    const nftFav = e.target && e.target.closest && e.target.closest("[data-nft-fav]");
+    const nftFav = closestTarget(e, "[data-nft-fav]");
     if (nftFav) {
       e.stopPropagation();
       applyMarketHouse(window.PetMarket.toggleFavoriteNft(card, nftFav.getAttribute("data-nft-fav")));
       return;
     }
-    const del = e.target && e.target.closest && e.target.closest("[data-ticker-del]");
+    const del = closestTarget(e, "[data-ticker-del]");
     if (del) {
       e.stopPropagation();
       applyMarketHouse(window.PetMarket.removeTicker(card, del.getAttribute("data-ticker-del")));
       return;
     }
-    const move = e.target && e.target.closest && e.target.closest("[data-ticker-move]");
+    const move = closestTarget(e, "[data-ticker-move]");
     if (move) {
       e.stopPropagation();
       applyMarketHouse(window.PetMarket.moveTicker(card, move.getAttribute("data-ticker-move"), Number(move.getAttribute("data-dir") || 1)));
       return;
     }
-    const nftPick = e.target && e.target.closest && e.target.closest("[data-nft-pick]");
+    const nftPick = closestTarget(e, "[data-nft-pick]");
     if (nftPick) {
       e.stopPropagation();
       applyMarketHouse(window.PetMarket.pickNft(card, nftPick.getAttribute("data-nft-pick")));
       return;
     }
-    const nftDel = e.target && e.target.closest && e.target.closest("[data-nft-del]");
+    const nftDel = closestTarget(e, "[data-nft-del]");
     if (nftDel) {
       e.stopPropagation();
       applyMarketHouse(window.PetMarket.removeNft(card, nftDel.getAttribute("data-nft-del")));
       return;
     }
-    const nftMove = e.target && e.target.closest && e.target.closest("[data-nft-move]");
+    const nftMove = closestTarget(e, "[data-nft-move]");
     if (nftMove) {
       e.stopPropagation();
       applyMarketHouse(window.PetMarket.moveNft(card, nftMove.getAttribute("data-nft-move"), Number(nftMove.getAttribute("data-dir") || 1)));
       return;
     }
-    const mpDel = e.target && e.target.closest && e.target.closest("[data-mp-del]");
+    const mpDel = closestTarget(e, "[data-mp-del]");
     if (mpDel) {
       e.stopPropagation();
       applyMarketHouse(window.PetMarket.removeMarketplace(card, mpDel.getAttribute("data-mp-del")));
       return;
     }
-    const mpMove = e.target && e.target.closest && e.target.closest("[data-mp-move]");
+    const mpMove = closestTarget(e, "[data-mp-move]");
     if (mpMove) {
       e.stopPropagation();
       applyMarketHouse(window.PetMarket.moveMarketplace(card, mpMove.getAttribute("data-mp-move"), Number(mpMove.getAttribute("data-dir") || 1)));
       return;
     }
-    const mpAdd = e.target && e.target.closest && e.target.closest("[data-mp-add]");
+    const mpAdd = closestTarget(e, "[data-mp-add]");
     if (mpAdd) {
       e.stopPropagation();
       applyMarketHouse(window.PetMarket.addMarketplace(card, mpAdd.getAttribute("data-mp-add")));
       return;
     }
-    const hit = e.target && e.target.closest && e.target.closest("[data-coin-hit]");
+    const hit = closestTarget(e, "[data-coin-hit]");
     if (hit) {
       e.stopPropagation();
       try {
@@ -4683,7 +4702,7 @@ if (marketPlate) {
       } catch {}
       return;
     }
-    const nftHit = e.target && e.target.closest && e.target.closest("[data-nft-hit]");
+    const nftHit = closestTarget(e, "[data-nft-hit]");
     if (nftHit) {
       e.stopPropagation();
       try {
@@ -4699,7 +4718,7 @@ if (marketPlate) {
     if (e.target && e.target.id === "market-add") {
       e.preventDefault();
       e.stopPropagation();
-      const q = document.getElementById("market-q");
+      const q = /** @type {HTMLInputElement | null} */ (document.getElementById("market-q"));
       const truth = document.getElementById("market-truth");
       const hits = document.getElementById("market-hits");
       const typed = q && q.value;
@@ -4786,7 +4805,7 @@ if (marketPlate) {
     if (e.target && e.target.id === "nft-add") {
       e.preventDefault();
       e.stopPropagation();
-      const q = document.getElementById("nft-q");
+      const q = /** @type {HTMLInputElement | null} */ (document.getElementById("nft-q"));
       const truth = document.getElementById("nft-truth");
       const hits = document.getElementById("nft-hits");
       const typed = q && q.value;
@@ -4877,7 +4896,7 @@ document.addEventListener("input", (e) => {
   persistPlateColors(key, { [which]: t.value });
 });
 document.addEventListener("click", (e) => {
-  const sw = e.target && e.target.closest && e.target.closest("[data-plate-swatch]");
+  const sw = closestTarget(e, "[data-plate-swatch]");
   if (!sw) return;
   const key = sw.getAttribute("data-plate-key");
   const id = sw.getAttribute("data-plate-swatch");
