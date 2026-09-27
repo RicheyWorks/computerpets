@@ -70,6 +70,9 @@ CROSS_DOMAIN = {
     "desk.gpu.replay",
     "desk.links.open",
     "desk.launch_check",
+    "desk.tray.switch",
+    "desk.quit",
+    "desk.market.search",
     "cry.decode",
     "visit.todays",
     "visit.phases",
@@ -84,6 +87,11 @@ CROSS_DOMAIN = {
     "card.volume_mutes",
     "card.listener",
     "card.house_server",
+    "card.alarm",
+    "card.timer",
+    "card.saved_lines",
+    "card.music",
+    "card.mind",
     "gui.choice_close_exit",
     "web.guest_choice",
     "web.ethogram_tricks",
@@ -297,6 +305,29 @@ def test_start_script_checks_node_and_pieces_without_installing():
         # No Node, an older Node, or no npm: the start stops with plain words.
         assert result.extras["exit"] != 0
     assert shutil.which("node") is None or result.extras["node"]
+
+
+def test_main_rows_drive_the_real_main_process_offline():
+    """Keeper card and tray rows load desktop/main.cjs under a stand-in Electron."""
+    rows = {
+        "desk.tray.switch": "tray_switch=",
+        "desk.quit": "quit-desk=1",
+        "desk.market.search": "http_500=unread",
+        "card.alarm": "hidden_rings=1",
+        "card.timer": "late_ms=0",
+        "card.saved_lines": "persist=card.json",
+        "card.music": "radio_no_line=held",
+        "card.mind": "disk_plain_key=0",
+    }
+    for aid, mark in rows.items():
+        result = invoke(aid)
+        assert result.ok, f"{aid}: {result.error}"
+        assert any(mark in t for t in result.trace), (aid, result.trace)
+    alarm = invoke("card.alarm")
+    assert "pet_clock_hidden=runs" in alarm.trace
+    tray = invoke("desk.tray.switch")
+    assert tray.extras["companions"] == 221
+    assert tray.extras["picks"][0] == "red_panda"
 
 
 def test_replay_fixtures_are_small_and_hold_no_secrets():
