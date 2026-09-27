@@ -1478,6 +1478,17 @@ def _card_rows() -> list[Affordance]:
             ),
         ),
         Affordance(
+            "card.house_server",
+            "card",
+            "House-server row hidden until a server is named; saved URL probed",
+            "house-server.cjs target / keeper.js houseServerLine / pet.js readHouseServer",
+            notes=(
+                "Offline: no Backend URL and no license keeps the row hidden with no probe; a URL saved in "
+                "Settings wins over env and license; the row reads House server · reachable/unreachable, "
+                "never Java 8081 or unread. The live probe itself is unit-tested with a fake fetch."
+            ),
+        ),
+        Affordance(
             "card.listener",
             "card",
             "Honest mind-bus listener name",
@@ -1530,6 +1541,8 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
         )
     if local_id == "paint_wire":
         return _run_node_smoke("card_paint_wire", domain="card", action_id=aid)
+    if local_id == "house_server":
+        return _run_node_smoke("house_server_row", domain="card", action_id=aid)
     if local_id == "notify_open":
         return _run_node_smoke("notify_open", domain="card", action_id=aid)
     if local_id == "needs_persist":

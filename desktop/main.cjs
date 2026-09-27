@@ -2,7 +2,8 @@ const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, screen, Notificati
 const fs = require("fs");
 const path = require("path");
 const { createLicenseSession } = require("./license/session.cjs");
-const { LicenseError } = require("./license/errors.cjs");
+const PlainError = require("./license/plain-error.cjs");
+const HouseServer = require("./house-server.cjs");
 const Desk = require("./renderer/desk.js");
 const Roster = require("./renderer/roster-load.js");
 const Windows = require("./renderer/windows.js");
@@ -47,14 +48,37 @@ function getLicenseSession() {
   return licenseSession;
 }
 
+/** The host a license call was aimed at, for the plain sentence when the error does not carry one. */
+function licenseHost(input) {
+  const typed = input && typeof input.backendUrl === "string" ? PlainError.hostOf(input.backendUrl.trim()) : "";
+  if (typed) return typed;
+  try {
+    return PlainError.hostOf(getLicenseSession().status().backendUrl || "");
+  } catch {
+    return "";
+  }
+}
+
+/** A bundle refusal comes back as a code or caught text; the window gets its sentence. */
+function plainLicenseResult(result) {
+  if (result && typeof result.error === "string" && result.error) {
+    const host = PlainError.hostOf(result.downloadUrl || "");
+    console.warn(`[license] bundle: ${result.error}`);
+    return { ...result, error: PlainError.plainBundleError(result.error, { host }) };
+  }
+  return result;
+}
+
 function licenseIpc(fn) {
   return async (_e, ...args) => {
     try {
       const result = await fn(...args);
-      return result && typeof result === "object" ? { ok: true, ...result } : { ok: true, result };
+      return plainLicenseResult(result && typeof result === "object" ? { ok: true, ...result } : { ok: true, result });
     } catch (err) {
-      const code = err instanceof LicenseError ? err.code : "denied";
-      return { ok: false, unlocked: false, error: { code, message: err.message || String(err) } };
+      // Raw network text (ECONNREFUSED, fetch failed, certificate ...) goes to the log, not the Settings window.
+      const plain = PlainError.plainLicenseError(err, { host: licenseHost(args[0]) });
+      console.warn(`[license] ${plain.code}: ${PlainError.rawLogLine(err)}`);
+      return { ok: false, unlocked: false, error: plain };
     }
   };
 }
@@ -1136,6 +1160,27 @@ ipcMain.handle("license-unlock", licenseIpc((input) => getLicenseSession().unloc
 ipcMain.handle("license-download", licenseIpc((input) => getLicenseSession().download(input || {})));
 ipcMain.handle("license-fetch-bundle", licenseIpc((input) => getLicenseSession().fetchSigned(input || {})));
 ipcMain.handle("license-clear", licenseIpc(() => getLicenseSession().clear()));
+
+// Keeper card house-server row: hidden unless a server is named (Settings, env, or a held license).
+ipcMain.handle("house-server-get", async () => {
+  let licenseHeld = false;
+  let licenseBackendUrl = "";
+  try {
+    const status = getLicenseSession().status();
+    licenseHeld = status.held === true || status.unlocked === true;
+    licenseBackendUrl = status.backendUrl || "";
+  } catch {
+    licenseHeld = false;
+  }
+  return HouseServer.houseServerState({
+    savedUrl: HouseServer.readSaved(app.getPath("userData")),
+    env: process.env,
+    licenseHeld,
+    licenseBackendUrl,
+  });
+});
+ipcMain.handle("house-server-saved", () => ({ url: HouseServer.readSaved(app.getPath("userData")) }));
+ipcMain.handle("house-server-set", (_e, url) => HouseServer.writeSaved(app.getPath("userData"), url));
 
 app.on("will-quit", () => {
   stopDesktopFollow();

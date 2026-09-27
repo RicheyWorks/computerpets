@@ -157,12 +157,12 @@ test("hardcoded talk, news, quote, radio, and weather hosts match the connect-sr
   assert.equal(connect.includes("fonts.gstatic.com"), false);
 });
 
-test("the overlay renderer fetches only loopback heartbeat and painted cloud talk", () => {
+test("the overlay renderer fetches only painted cloud talk; the house-server probe runs in main", () => {
   const fetchers = readdirSync(join(repo, "desktop/renderer"))
     .filter((name) => name.endsWith(".js"))
     .filter((name) => readFileSync(join(repo, "desktop/renderer", name), "utf8").includes("fetch("));
-  assert.deepEqual(fetchers.sort(), ["mind.js", "pet.js"]);
-  assert.match(petSrc, /fetch\(K\.HEARTBEAT_URL, \{ cache: "no-store" \}\)/);
+  assert.deepEqual(fetchers.sort(), ["mind.js"]);
+  assert.match(petSrc, /window\.desk\s*\.houseServer\(\)/);
   assert.doesNotMatch(petSrc, /https:\/\//);
   assert.ok(mindSrc.indexOf("function readTalk") < mindSrc.indexOf("fetch("));
   assert.match(mindSrc, /ADR 0048/);

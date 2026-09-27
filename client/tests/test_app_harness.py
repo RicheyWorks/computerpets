@@ -75,6 +75,7 @@ CROSS_DOMAIN = {
     "card.speak_opts",
     "card.volume_mutes",
     "card.listener",
+    "card.house_server",
     "gui.choice_close_exit",
     "web.guest_choice",
     "web.ethogram_tricks",
@@ -210,6 +211,7 @@ def test_gaps_are_honest_and_accounted():
     assert "card.speak_opts" in driven_ids
     assert "card.volume_mutes" in driven_ids
     assert "card.listener" in driven_ids
+    assert "card.house_server" in driven_ids
     assert "desk.market.tickers" in driven_ids
     assert "desk.news.x" in driven_ids
     assert "visit.todays" in driven_ids
@@ -260,6 +262,8 @@ def test_offline_resolves_and_playback_leave_traces():
         "card.speak_opts",
         "card.volume_mutes",
         "card.listener",
+        "card.house_server",
+    "card.house_server",
         "gui.choice_close_exit",
         "web.guest_choice",
         "web.ethogram_tricks",

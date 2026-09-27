@@ -122,7 +122,7 @@ const barMood = document.getElementById("bar-mood");
 const barEnergy = document.getElementById("bar-energy");
 const barHygiene = document.getElementById("bar-hygiene");
 const barBond = document.getElementById("bar-bond");
-let heartbeat = window.PetKeeper ? { ...window.PetKeeper.UNREAD } : { status: "DOWN", profile: null, uptimeSeconds: null, port: 8081 };
+let houseServer = { show: false };
 let gpuSample = window.PetGpu ? window.PetGpu.UNREAD : { status: "unread" };
 let gpuHistory = window.PetGpu ? window.PetGpu.emptyHistory() : [];
 for (let i = 0; i < 12; i++) dustRoot.appendChild(document.createElement("span"));
@@ -1275,17 +1275,17 @@ function persist() {
   if (kind && life) window.PetLife.save(kind.key, life);
 }
 
-function readHeartbeat() {
-  const K = window.PetKeeper;
-  if (!K) return;
-  fetch(K.HEARTBEAT_URL, { cache: "no-store" })
-    .then((r) => r.json())
-    .then((raw) => {
-      heartbeat = K.parseHeartbeat(raw);
+// The main process probes the server the keeper named (house-server.cjs). No server named: the row stays hidden.
+function readHouseServer() {
+  if (!window.desk || typeof window.desk.houseServer !== "function") return;
+  window.desk
+    .houseServer()
+    .then((state) => {
+      houseServer = state && state.show === true ? state : { show: false };
       paintHud();
     })
     .catch(() => {
-      heartbeat = { ...K.UNREAD };
+      houseServer = { show: false };
       paintHud();
     });
 }
@@ -1390,8 +1390,8 @@ if ("speechSynthesis" in window) {
   refreshVoices();
   window.speechSynthesis.addEventListener("voiceschanged", refreshVoices);
 }
-setInterval(readHeartbeat, 15_000);
-readHeartbeat();
+setInterval(readHouseServer, 15_000);
+readHouseServer();
 if (window.desk && window.desk.onGpu && window.PetGpu) {
   window.desk.onGpu((raw) => {
     const now = Date.now();
@@ -1507,8 +1507,11 @@ function paintHud() {
   if (hudRest) hudRest.textContent = String(meters.rest);
   if (hudBond) hudBond.textContent = String(meters.bond);
   if (hudHeartbeat && K) {
-    hudHeartbeat.textContent = K.heartbeatLine(heartbeat);
-    hudHeartbeat.setAttribute("data-heartbeat", heartbeat.status || "DOWN");
+    const serverLine = K.houseServerLine(houseServer);
+    hudHeartbeat.hidden = !serverLine;
+    hudHeartbeat.textContent = serverLine;
+    hudHeartbeat.title = K.houseServerTitle(houseServer);
+    hudHeartbeat.setAttribute("data-heartbeat", houseServer.reachable === true ? "UP" : "DOWN");
   }
   if (hudGpu && window.PetGpu) {
     const now = Date.now();
