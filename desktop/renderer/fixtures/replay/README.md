@@ -21,7 +21,7 @@ Built by hand, not recorded:
 
 | File | Built from |
 | --- | --- |
-| `gpu-win-pdh.txt` | `gpu-win-nvidia.txt` with the NVIDIA block replaced by `NVIDIA_ABSENT`, to replay the Windows counter path |
+| `gpu-win-pdh.txt` | `gpu-win-nvidia.txt` with the NVIDIA block replaced by `NVIDIA_ABSENT`, to replay the Windows counter path. Read like Task Manager it is 4.2% (the video decode engine) |
 | `gpu-linux-amdgpu.txt` | The `AMDGPU` block format that `desktop/gpu-probe.sh` prints. Synthetic numbers |
 | `gpu-mac-ioaccelerator.txt` | The `NVIDIA` block format that `desktop/gpu-probe-mac.sh` prints, with `[N/A]` where a Mac has no reading. Synthetic numbers |
 | `gpu-linux-absent.txt` | A probe that found no GPU. The line must read unread |

@@ -474,3 +474,62 @@ test("the probe script never plants a zero, and the HUD stays lockstep", () => {
   assert.match(appSrc, /sparkline/);
   assert.match(VALID_LINE, /48\.5 W/);
 });
+
+const PDH_SAME_ENGINE = [
+  "NVIDIA_ABSENT",
+  "ENGINE",
+  // Three processes on one 3D engine: Task Manager adds them.
+  "pid_1_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t20.25",
+  "pid_2_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t30.5",
+  "pid_3_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t0.04",
+  // A busier video engine wins over the 3D engine; engines are never added together.
+  "pid_1_luid_0x1_0x2_phys_0_eng_2_engtype_VideoDecode\t40",
+  "pid_2_luid_0x1_0x2_phys_0_eng_2_engtype_VideoDecode\t15",
+  "pid_1_luid_0x1_0x2_phys_0_eng_4_engtype_Copy\t5",
+  "ENDENGINE",
+  "END",
+].join("\n");
+const PDH_OVER = [
+  "NVIDIA_ABSENT",
+  "ENGINE",
+  "pid_1_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t70",
+  "pid_2_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t60",
+  "ENDENGINE",
+  "END",
+].join("\n");
+
+test("performance counters add processes on each engine, then take the busiest engine (Task Manager)", () => {
+  const sample = G.sampleFromProbe(probe(PDH_SAME_ENGINE), { platform: "win32", nowMs: NOW });
+  assert.equal(sample.source, "pdh");
+  // 3D engine = 20.25 + 30.5 + 0.04 = 50.79; video decode = 55; copy = 5. Busiest = 55.
+  assert.equal(sample.utilPercent, 55);
+  const over = G.sampleFromProbe(probe(PDH_OVER), { platform: "win32", nowMs: NOW });
+  assert.equal(over.utilPercent, 100);
+  // Small shares are added before rounding, not lost.
+  const small = G.sampleFromProbe(
+    probe(["NVIDIA_ABSENT", "ENGINE", "pid_1_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t0.04", "pid_2_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t0.04", "ENDENGINE", "END"].join("\n")),
+    { platform: "win32", nowMs: NOW },
+  );
+  assert.equal(small.utilPercent, 0.1);
+  // Counter overshoot on a busy engine (111 seen live) is kept and capped, not refused.
+  const busy = G.sampleFromProbe(
+    probe(["NVIDIA_ABSENT", "ENGINE", "pid_1_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t110.8", "pid_2_luid_0x1_0x2_phys_0_eng_4_engtype_Copy\t2", "ENDENGINE", "END"].join("\n")),
+    { platform: "win32", nowMs: NOW },
+  );
+  assert.equal(busy.status, "read");
+  assert.equal(busy.utilPercent, 100);
+  // A reading far past overshoot is still broken; the busiest honest engine is not faked up.
+  const broken = G.sampleFromProbe(
+    probe(["NVIDIA_ABSENT", "ENGINE", "pid_1_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t5000", "ENDENGINE", "END"].join("\n")),
+    { platform: "win32", nowMs: NOW },
+  );
+  assert.notEqual(broken.utilPercent, 100);
+});
+
+test("the saved Windows counter reading shows the busiest engine, not one process's 3D share", () => {
+  const text = readFileSync(join(__dirname, "fixtures", "replay", "gpu-win-pdh.txt"), "utf8");
+  const sample = G.sampleFromProbe(probe(text), { platform: "win32", nowMs: NOW });
+  // The video decode engine carries 4.2%. The old reading took one process's 3D share (0.5%).
+  assert.equal(sample.utilPercent, 4.2);
+  assert.equal(G.gpuLine(sample), "GPU unread · unread · 4.2% · 1.5 GiB/unread · unread");
+});

@@ -808,7 +808,9 @@ def _replay_dir() -> Path:
 # Saved probe outputs and the platform each one came from (see fixtures/replay/README.md).
 GPU_REPLAYS = (
     ("gpu-win-nvidia.txt", "win32", "GPU NVIDIA GeForce RTX 4090 · 36°C · 11% · 1.5 GiB/24 GiB · 9.6 W"),
-    ("gpu-win-pdh.txt", "win32", "GPU unread · unread · 0.5% · 1.5 GiB/unread · unread"),
+    # Counters only: the busiest engine after adding every process on it (Task Manager's
+    # number). Here the video decode engine at 4.2%, not one process's 3D share (0.5%).
+    ("gpu-win-pdh.txt", "win32", "GPU unread · unread · 4.2% · 1.5 GiB/unread · unread"),
     ("gpu-linux-amdgpu.txt", "linux", "GPU AMD Radeon RX 7800 XT · 51°C · 23% · 2.2 GiB/16 GiB · 38.5 W"),
     ("gpu-mac-ioaccelerator.txt", "darwin", "GPU Apple M2 Pro · unread · 18% · 3 GiB/unread · unread"),
     ("gpu-linux-absent.txt", "linux", "GPU unread"),
@@ -1288,7 +1290,9 @@ def _desk_rows() -> list[Affordance]:
             "weather-areas.js forecastGate / readForecast / parseForecast + desk-house.js paintWeather",
             notes=(
                 "A saved Open-Meteo response goes through the real read, parse, and paint with a fake fetch. "
-                "Checks the plate words, the daily rows, the one forecast URL, and unread after a failed read."
+                "Checks the plate words, the daily rows, the one forecast URL, and unread after a failed read. "
+                "WMO 0/1/2/3/45/61/71/95 each show their own word (3 is Overcast, not Clear). A hostile place "
+                "name paints as letters, and no plate writes innerHTML."
             ),
         ),
         Affordance(
@@ -1298,7 +1302,9 @@ def _desk_rows() -> list[Affordance]:
             "news.js readRss / readFeatured / parseRss / parseNews + desk-house.js paintNews",
             notes=(
                 "Saved Google News Popular and topic RSS plus a saved Wikipedia featured feed. Checks titles, "
-                "sources, whole links, and that no Wikipedia markup reaches the plate."
+                "sources, whole links, and that no Wikipedia markup reaches the plate. Hostile titles "
+                "(<img onerror>, &lt;script&gt;) show as letters with no element made, and a javascript: link "
+                "gets no link."
             ),
         ),
         Affordance(
@@ -1308,7 +1314,7 @@ def _desk_rows() -> list[Affordance]:
             "market.js readGeckoMany / readYahoo / parseGeckoMany / parseYahoo + desk-house.js paintMarket",
             notes=(
                 "Saved CoinGecko prices for the default list and a saved Yahoo AAPL chart. A coin missing from "
-                "the response reads … and gets no invented price."
+                "the response reads … and gets no invented price. A hostile coin name makes no element."
             ),
         ),
         Affordance(
@@ -1316,7 +1322,10 @@ def _desk_rows() -> list[Affordance]:
             "desk",
             "Recorded NFT floor replay to the painted plate",
             "market.js readNft / parseNftLive + desk-house.js paintMarket",
-            notes="Saved CoinGecko cryptopunks floor. A failed read says can't reach with no number.",
+            notes=(
+                "Saved CoinGecko cryptopunks floor. A failed read says can't reach with no number. A hostile "
+                "currency symbol from the feed paints as letters."
+            ),
         ),
         Affordance(
             "desk.gpu.replay",
@@ -1325,7 +1334,8 @@ def _desk_rows() -> list[Affordance]:
             "gpu-sense.cjs read + gpu.js gpuLine / gpu.py read_local + gpu_line",
             notes=(
                 "A recorded Windows probe plus built Windows-counter, Linux amdgpu, Mac, and no-GPU outputs. "
-                "Desktop and blotter must print the same line. A missing reading stays unread."
+                "Desktop and blotter must print the same line. A missing reading stays unread. Counters "
+                "read like Task Manager: add processes per engine, then the busiest engine."
             ),
         ),
         Affordance(
