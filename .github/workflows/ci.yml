@@ -66,6 +66,43 @@ jobs:
         working-directory: desktop
         run: npm test
 
+  web-desk:
+    name: Web desk tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # web/package-lock.json needs npm 11 (Node 24); npm 10 reports it out of sync.
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      # walker-art.test.mjs runs web/scripts/assert-walker-art.py, which reads the sprites.
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install sprite check tools
+        run: python -m pip install pillow numpy
+
+      - name: Install web dependencies
+        working-directory: web
+        run: npm ci
+
+      - name: Web tests
+        working-directory: web
+        run: npm test
+
+      # Holds tsc output at web/tsc-baseline.txt: more lines fail, fewer pass with a note.
+      - name: Type-check holds the baseline
+        working-directory: web
+        run: node scripts/tsc-baseline.mjs
+
   pyqt-client:
     name: PyQt blotter client
     runs-on: ubuntu-latest
