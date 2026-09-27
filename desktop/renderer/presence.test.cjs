@@ -8,6 +8,7 @@ const { readSource } = require("../test-source.cjs");
 
 const mainSrc = readSource(join(__dirname, "..", "main.cjs"));
 const preloadSrc = readSource(join(__dirname, "..", "preload.cjs"));
+const sealSrc = readSource(join(__dirname, "..", "presence", "open-link.cjs"));
 const petSrc = readSource(join(__dirname, "pet.js"));
 const htmlSrc = readSource(join(__dirname, "index.html"));
 const settingsSrc = readSource(join(__dirname, "settings.html"));
@@ -338,14 +339,15 @@ test("the drop guard never reads a path or the file bytes", () => {
 
 test("overlay main seals navigation and permissions and scrubs window rows", () => {
   assert.match(mainSrc, /sealDeskContents/);
-  assert.match(mainSrc, /will-navigate/);
-  assert.match(mainSrc, /will-redirect/);
-  assert.match(mainSrc, /will-frame-navigate/);
-  assert.match(mainSrc, /setWindowOpenHandler/);
-  assert.match(mainSrc, /action: "deny"/);
-  assert.match(mainSrc, /setPermissionRequestHandler/);
-  assert.match(mainSrc, /setPermissionCheckHandler/);
-  assert.match(mainSrc, /Presence\.allowPermission/);
+  assert.match(mainSrc, /OpenLink\.sealContents\(contents, \{\s*presence: Presence,/);
+  assert.match(sealSrc, /will-navigate/);
+  assert.match(sealSrc, /will-redirect/);
+  assert.match(sealSrc, /will-frame-navigate/);
+  assert.match(sealSrc, /setWindowOpenHandler/);
+  assert.match(sealSrc, /action: "deny"/);
+  assert.match(sealSrc, /setPermissionRequestHandler/);
+  assert.match(sealSrc, /setPermissionCheckHandler/);
+  assert.match(sealSrc, /presence\.allowPermission/);
   assert.match(mainSrc, /weather-locate-arm/);
   assert.match(mainSrc, /weather-locate-clear/);
   assert.match(mainSrc, /weatherLocateSender/);

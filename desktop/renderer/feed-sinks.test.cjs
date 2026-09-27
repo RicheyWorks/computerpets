@@ -49,3 +49,17 @@ test("desk-house paints feed words through text nodes and links only web pages",
   // No markup is built from template strings in the plate painters.
   assert.doesNotMatch(src, /`<(p|li|ul|a|button|strong|span|h4)\b/);
 });
+
+test("an overlay link paints the host it opens and that it opens in the keeper's browser", () => {
+  const H = require("./desk-house.js");
+  const OpenLink = require("../presence/open-link.cjs");
+  for (const url of ["https://en.wikipedia.org/wiki/Tilcayo", "https://news.google.com/rss/articles/abc?oc=5", "http://example.test:8080/a"]) {
+    assert.equal(H.linkHostLine(url), OpenLink.linkHostLine(url), url);
+    assert.match(H.linkHostLine(url), /^Opens \S+ in your browser$/);
+  }
+  assert.equal(H.linkHostLine("https://en.wikipedia.org/wiki/Tilcayo"), "Opens en.wikipedia.org in your browser");
+  const src = readFileSync(join(__dirname, "desk-house.js"), "utf8");
+  // The link carries that line as its title, and a link with no host stays plain words.
+  assert.match(src, /target: "_blank", rel: "noreferrer", title,/);
+  assert.match(src, /if \(!title\) return text;/);
+});

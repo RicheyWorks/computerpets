@@ -37,6 +37,7 @@ _WIN = re.compile(r"^Win", re.I)
 _MAC = re.compile(r"^Mac", re.I)
 _LINUX = re.compile(r"^Linux", re.I)
 _PHYS = re.compile(r"phys_(\d+)")
+_LUID = re.compile(r"luid_(0x[0-9a-f]+)_(0x[0-9a-f]+)_phys_\d+", re.I)
 _HEADER = re.compile(r"^name\s*,", re.I)
 _PID = re.compile(r"^pid_\d+_", re.I)
 # The engine counter is a rate over its own sample window, and on a busy engine it can
@@ -466,6 +467,41 @@ def _phys_of(instance):
     return int(match.group(1)) if match else None
 
 
+def _adapter_of(instance):
+    """One adapter is its LUID plus its physical index. Two adapters can both be phys_0
+    (a discrete card and the Microsoft Basic Render or integrated adapter), so the index
+    alone would mix their engines and memory. An instance with no LUID keeps the index
+    alone."""
+    phys = _phys_of(instance)
+    if phys is None:
+        return None
+    luid = _LUID.search(str(instance or ""))
+    key = f"luid_{luid.group(1)}_{luid.group(2)}_phys_{phys}".lower() if luid else f"phys_{phys}"
+    return {"key": key, "phys": phys}
+
+
+def _pick_adapter(rows: list[dict]):
+    """Which counter adapter the line shows: the one with the most dedicated VRAM (a
+    discrete card over an integrated or software adapter). When no adapter prints a
+    limit, the one holding the most dedicated memory, then the one with the most
+    readings, then the first the counters listed."""
+    best = None
+    best_key = None
+    for row in rows:
+        count = sum(1 for key in METRIC_KEYS if row.get(key) is not None)
+        if not count:
+            continue
+        key = (
+            -1 if row.get("memoryTotalBytes") is None else row["memoryTotalBytes"],
+            -1 if row.get("memoryUsedBytes") is None else row["memoryUsedBytes"],
+            count,
+        )
+        if best is None or key > best_key:
+            best = row
+            best_key = key
+    return best
+
+
 def _engine_of(instance) -> str:
     """One engine is one adapter's engine index and type, whatever process used it."""
     return _PID.sub("", str(instance or "")).lower()
@@ -487,33 +523,33 @@ def reduce_pdh(engines, adapter_memory) -> dict:
         adapter_memory is not None and not isinstance(adapter_memory, list)
     ):
         return {"rows": [], "malformed": True, "rejected": False}
-    by_phys: dict[int, dict] = {}
+    by_adapter: dict[str, dict] = {}
 
-    def bucket(phys: int) -> dict:
-        if phys not in by_phys:
-            by_phys[phys] = {
-                "index": phys,
+    def bucket(adapter: dict) -> dict:
+        if adapter["key"] not in by_adapter:
+            by_adapter[adapter["key"]] = {
+                "index": adapter["phys"],
                 "engines": {},
                 "used": [],
                 "limit": [],
                 "rejected": False,
             }
-        return by_phys[phys]
+        return by_adapter[adapter["key"]]
 
     bad_shape = False
     for row in engines or []:
         if not isinstance(row, dict):
             bad_shape = True
             continue
-        phys = _phys_of(row.get("instance"))
-        if phys is None:
+        adapter = _adapter_of(row.get("instance"))
+        if adapter is None:
             bad_shape = True
             continue
         if row.get("util") is None:
             continue
         token = _metric_token(str(row.get("util")))
         util = _ranged(token, 0, ENGINE_OVERSHOOT, "1")
-        slot = bucket(phys)
+        slot = bucket(adapter)
         if util == "bad" or util is None:
             slot["rejected"] = True
             continue
@@ -524,11 +560,11 @@ def reduce_pdh(engines, adapter_memory) -> dict:
         if not isinstance(row, dict):
             bad_shape = True
             continue
-        phys = _phys_of(row.get("instance"))
-        if phys is None:
+        adapter = _adapter_of(row.get("instance"))
+        if adapter is None:
             bad_shape = True
             continue
-        slot = bucket(phys)
+        slot = bucket(adapter)
         if row.get("dedicatedUsage") is not None:
             used = _finite_in(row.get("dedicatedUsage"), 0, 2**48)
             if used is None:
@@ -542,7 +578,7 @@ def reduce_pdh(engines, adapter_memory) -> dict:
             else:
                 slot["limit"].append(round_int(limit))
     rows = []
-    for slot in by_phys.values():
+    for slot in by_adapter.values():
         util_percent = _busiest_engine(slot["engines"])
         memory_used = sum(slot["used"]) if slot["used"] else None
         memory_total = max(slot["limit"]) if slot["limit"] else None
@@ -602,7 +638,7 @@ def sample_from_probe(probe, *, platform: str | None, now_ms) -> dict:
     nvidia_best = _pick_best(nvidia_rows)
     amd_best = _pick_best(amd_rows)
     intel_best = _pick_best(intel_rows)
-    pdh_best = _pick_best(pdh_rows)
+    pdh_best = _pick_adapter(pdh_rows)
     nvidia_count = sum(1 for row in nvidia_rows if _row_has_metric(row))
     pdh_count = sum(1 for row in pdh_rows if _row_has_metric(row))
     if nvidia_best is None and amd_best is None and intel_best is None and pdh_best is None:

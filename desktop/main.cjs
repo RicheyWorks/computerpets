@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, screen, Notification, powerMonitor } = require("electron");
+const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, screen, Notification, powerMonitor, shell } = require("electron");
 const fs = require("fs");
 const path = require("path");
 const { createLicenseSession } = require("./license/session.cjs");
@@ -16,6 +16,7 @@ const PetMarket = require("./renderer/market.js");
 const Presence = require("./presence.cjs");
 const PlateNet = require("./presence/plate-net.cjs");
 const PlateFetch = require("./presence/plate-fetch.cjs");
+const OpenLink = require("./presence/open-link.cjs");
 const MindSecret = require("./mind-secret.cjs");
 const VDesk = require("./vdesk-win.cjs");
 
@@ -189,28 +190,19 @@ function writeMind(data) {
 
 const sealedContents = new WeakSet();
 
-/** Renderer navigation and capture stay refused. Main loadFile is not this path. */
+/**
+ * Renderer navigation and capture stay refused. Main loadFile is not this path.
+ * A clicked http(s) link goes to the keeper's default browser (shell.openExternal);
+ * every other scheme is refused and logged. The window-open answer is always "deny",
+ * so no Electron window is made for a link. See presence/open-link.cjs.
+ */
 function sealDeskContents(contents) {
-  if (!contents || sealedContents.has(contents)) return;
-  sealedContents.add(contents);
-  const refuseNav = (event) => {
-    if (!Presence.allowNavigation()) event.preventDefault();
-  };
-  contents.on("will-navigate", refuseNav);
-  contents.on("will-redirect", refuseNav);
-  contents.on("will-frame-navigate", refuseNav);
-  if (typeof contents.setWindowOpenHandler === "function") {
-    contents.setWindowOpenHandler(() => ({ action: "deny" }));
-  }
-  const session = contents.session;
-  if (session && typeof session.setPermissionRequestHandler === "function") {
-    session.setPermissionRequestHandler((_wc, permission, callback) => {
-      callback(Presence.allowPermission(permission));
-    });
-  }
-  if (session && typeof session.setPermissionCheckHandler === "function") {
-    session.setPermissionCheckHandler((_wc, permission) => Presence.allowPermission(permission));
-  }
+  OpenLink.sealContents(contents, {
+    presence: Presence,
+    openExternal: (url) => shell.openExternal(url),
+    log: (line) => console.warn(line),
+    sealed: sealedContents,
+  });
 }
 
 /** The weather control on the overlay glass. The minds window is not that control. */
