@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
+  ADMIN_KEY_REJECTED,
   AdminApiError,
   clearAdminSession,
   defaultApiBase,
@@ -71,6 +72,8 @@ export function AdminPage() {
     } catch (err) {
       setUnlocked(false);
       setRows([]);
+      // A rejected key must not stay in this tab, or every reload retries it and shows the same refusal.
+      if (err instanceof AdminApiError && err.status === 401) clearAdminSession();
       showError(err, "Unlock failed.");
     } finally {
       setBusy(false);
@@ -92,7 +95,7 @@ export function AdminPage() {
       if (found.length === 0) setNote("No licenses match.");
     } catch (err) {
       if (err instanceof AdminApiError && err.status === 401) {
-        lock("Admin key rejected.");
+        lock(ADMIN_KEY_REJECTED);
         return;
       }
       showError(err, "Lookup failed.");
@@ -112,7 +115,7 @@ export function AdminPage() {
       setNote("License revoked and soft-deleted. Downloads for this jti stop immediately. The row stays on the ledger.");
     } catch (err) {
       if (err instanceof AdminApiError && err.status === 401) {
-        lock("Admin key rejected.");
+        lock(ADMIN_KEY_REJECTED);
         return;
       }
       showError(err, "Revoke failed.");

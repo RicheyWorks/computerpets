@@ -18,6 +18,16 @@ from .bundle_zip import already_current
 STORE_NAME = "license.json"
 DEFAULT_BACKEND = "http://127.0.0.1:8081"
 NO_LICENSE_MESSAGE = "No license on this computer yet. Unlock a pet first, then download it."
+NO_TOKEN_MESSAGE = (
+    "The sign-in from the last unlock is not on this computer anymore, so nothing was downloaded. "
+    "Unlock again, then download. Pets still work without it."
+)
+FIELDS_MISSING_MESSAGE = "Fill in the Steam ID and the App ID first. Pets still work without it."
+TOKEN_MEMORY_NOTE = (
+    "This computer has no secret store, so the download sign-in is kept only until the app closes. "
+    "Unlock again later to download."
+)
+TOKEN_GONE_NOTE = "The download sign-in was kept only until the app last closed. Unlock again before a Signed download."
 
 
 def _has_stored_license(store: dict[str, Any] | None) -> bool:
@@ -66,7 +76,13 @@ def create_license_session(
     read_file: Callable[[str], str] | None = None,
     write_file: Callable[[str, str], None] | None = None,
     mkdir: Callable[[str], None] | None = None,
+    codec: Any = None,
 ) -> dict[str, Callable[..., Any]]:
+    """``codec`` seals the download sign-in (see token_store.py): an object with
+    ``encrypt``/``decrypt``, or a no-argument callable returning one (or None).
+    license.json keeps ``auth.sealedToken`` with a codec and no token at all without one;
+    this run holds the token in memory either way. It is never written in plain text.
+    """
     if not user_data_dir:
         raise LicenseError("missing_backend", "userDataDir is required")
 
@@ -77,17 +93,91 @@ def create_license_session(
     store_file = str(Path(user_data_dir) / STORE_NAME)
     client = create_license_client(fetch_impl=fetch_impl)
     now_fn = now
+    held: dict[str, str] = {}
 
     def load() -> dict[str, Any]:
+        data = read_disk()
+        auth = data.get("auth")
+        token = auth.get("token") if isinstance(auth, dict) else None
+        if isinstance(token, str) and token:
+            # An older license.json kept the sign-in in plain text: hold it for this run, then seal
+            # it (or drop it when there is no store) once. It is never written in plain text again.
+            body = data.get("license") if isinstance(data.get("license"), dict) else {}
+            held.clear()
+            held.update({"token": token, "ciphertext": str(body.get("ciphertext") or "")})
+            data = {**data, "auth": disk_auth(auth)}
+            try:
+                maker(str(Path(store_file).parent))
+                writer(store_file, json.dumps(data, indent=2))
+            except OSError:
+                pass
+        return data
+
+    def read_disk() -> dict[str, Any]:
         try:
             parsed = json.loads(reader(store_file))
             return parsed if isinstance(parsed, dict) else {}
         except (OSError, json.JSONDecodeError):
             return {}
 
+    def token_codec() -> Any:
+        try:
+            found = codec() if callable(codec) and not hasattr(codec, "encrypt") else codec
+        except Exception:  # noqa: BLE001 — a store that will not open is no store
+            found = None
+        if found is not None and callable(getattr(found, "encrypt", None)) and callable(getattr(found, "decrypt", None)):
+            return found
+        return None
+
+    def disk_auth(auth: Any) -> Any:
+        """What license.json may keep of the sign-in: a sealed token, or only its expiry."""
+        if not isinstance(auth, dict):
+            return auth
+        expires = auth.get("expiresAt")
+        token = auth.get("token")
+        if not isinstance(token, str) or not token:
+            sealed_prev = auth.get("sealedToken")
+            if isinstance(sealed_prev, str) and sealed_prev:
+                return {"sealedToken": sealed_prev, "expiresAt": expires}
+            return {"expiresAt": expires}
+        found = token_codec()
+        sealed = ""
+        if found is not None:
+            try:
+                sealed = str(found.encrypt(token) or "")
+            except Exception:  # noqa: BLE001
+                sealed = ""
+        if sealed and sealed != token:
+            return {"sealedToken": sealed, "expiresAt": expires}
+        return {"expiresAt": expires}
+
     def save(data: dict[str, Any]) -> None:
+        out = dict(data) if isinstance(data, dict) else {}
+        if out.get("auth"):
+            out["auth"] = disk_auth(out["auth"])
         maker(str(Path(store_file).parent))
-        writer(store_file, json.dumps(data, indent=2))
+        writer(store_file, json.dumps(out, indent=2))
+
+    def token_of(store: dict[str, Any]) -> str:
+        """The sign-in for a download: in memory, sealed on disk, or an older plain license.json."""
+        auth = store.get("auth") if isinstance(store.get("auth"), dict) else {}
+        token = auth.get("token")
+        if isinstance(token, str) and token:
+            return token
+        sealed = auth.get("sealedToken")
+        if isinstance(sealed, str) and sealed:
+            found = token_codec()
+            if found is not None:
+                try:
+                    opened = str(found.decrypt(sealed) or "")
+                    if opened:
+                        return opened
+                except Exception:  # noqa: BLE001 — a seal this store cannot open
+                    pass
+        body = store.get("license") if isinstance(store.get("license"), dict) else {}
+        if held.get("token") and body.get("ciphertext") == held.get("ciphertext"):
+            return held["token"]
+        return ""
 
     def device_mark(allow_read: bool, allow_weak: bool = False) -> dict[str, Any]:
         if isinstance(hwid, str) and hwid:
@@ -158,8 +248,19 @@ def create_license_session(
                 else None
             ),
             "lastDownload": store.get("lastDownload"),
+            "tokenKept": token_kept(store) if payload else "none",
             "error": error,
         }
+
+    def token_kept(store: dict[str, Any]) -> str:
+        """Where the download sign-in lives: "sealed" (OS store), "memory" (this run only), or "none"."""
+        auth = store.get("auth") if isinstance(store.get("auth"), dict) else {}
+        if isinstance(auth.get("sealedToken"), str) and auth["sealedToken"]:
+            return "sealed"
+        body = store.get("license") if isinstance(store.get("license"), dict) else {}
+        if held.get("token") and body.get("ciphertext") == held.get("ciphertext"):
+            return "memory"
+        return "none"
 
     def request_download(
         store_arg: dict[str, Any] | None = None,
@@ -180,18 +281,21 @@ def create_license_session(
         bound = bool(payload.get("hwid"))
         backend_url = normalize_backend_url(store.get("backendUrl") or default_backend_url(env))
         shown = license_line if isinstance(license_line, str) else ""
+        token = token_of(store)
 
         def post() -> dict[str, Any]:
             current = device_id_arg or (device_mark(True, allow_weak_fallback is True)["id"] if bound else "")
             if bound and payload.get("hwid") != current:
                 raise LicenseError("hwid_mismatch", "hardware binding mismatch")
+            if not token:
+                raise LicenseError("no_token", NO_TOKEN_MESSAGE)
             return client["download"](
                 backend_url=backend_url,
                 pet_key=payload["pet"],
                 ciphertext=store["license"]["ciphertext"],
                 iv=store["license"]["iv"],
                 hwid=current if payload.get("hwid") else None,
-                token=(store.get("auth") or {}).get("token"),
+                token=token,
                 expect={"jti": payload["jti"], "petKey": payload["pet"], "owner": payload["owner"]},
                 signing_key=env.get("BUNDLE_SIGNING_KEY") or None,
             )
@@ -252,6 +356,7 @@ def create_license_session(
                 "platform": bundle.get("platform"),
                 "sha256": bundle["sha256"],
             }
+        # save() seals or drops a plain token an older license.json still carried.
         save(next_store)
         return last_download
 
@@ -300,8 +405,8 @@ def create_license_session(
                 "hwid": current_id,
             }
             if provider == "steam":
-                if not input_fields.get("steamId") or not input_fields.get("appId"):
-                    raise LicenseError("denied", "steamId and appId are required")
+                if not str(input_fields.get("steamId") or "").strip() or not str(input_fields.get("appId") or "").strip():
+                    raise LicenseError("fields_missing", FIELDS_MISSING_MESSAGE)
                 fields_out["steamId"] = str(input_fields["steamId"])
                 fields_out["appId"] = str(input_fields["appId"])
             elif isinstance(input_fields.get("fields"), dict):
@@ -347,6 +452,8 @@ def create_license_session(
             },
             "lastDownload": None,
         }
+        held.clear()
+        held.update({"token": verified["auth"]["token"], "ciphertext": verified["license"]["ciphertext"]})
         save(next_store)
         downloaded = request_download(
             next_store,
@@ -396,6 +503,13 @@ def create_license_session(
         return next_download
 
     def clear() -> dict[str, Any]:
+        held.clear()
+        found = token_codec()
+        if found is not None and callable(getattr(found, "forget", None)):
+            try:
+                found.forget()
+            except Exception:  # noqa: BLE001
+                pass
         save({})
         return public_status()
 

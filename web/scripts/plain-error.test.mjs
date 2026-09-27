@@ -186,6 +186,11 @@ test("plain-error: admin raw detail sits behind a Details toggle, never the defa
   assert.match(api, /status === 429\) return PLAIN_LINES\.busy/);
   assert.match(api, /status >= 500\) return `The license service had a problem \(error \$\{status\}\)\. Try again later\.`/);
   assert.doesNotMatch(api, /readError/, "service body text is detail, not the message");
+  // One plain 401 line everywhere (no "signature" jargon), and a rejected key is not kept for the next reload.
+  assert.match(api, /export const ADMIN_KEY_REJECTED =/);
+  assert.doesNotMatch(api + text, /signature rejected|Admin key rejected/);
+  assert.match(text, /err\.status === 401\) clearAdminSession\(\);/);
+  assert.equal((text.match(/lock\(ADMIN_KEY_REJECTED\)/g) ?? []).length, 2);
 });
 
 test("plain-error: the house's deliberate server lines are HouseErrors", () => {
