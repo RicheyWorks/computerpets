@@ -16,6 +16,7 @@ const Presence = require("./presence.cjs");
 const PlateNet = require("./presence/plate-net.cjs");
 const PlateFetch = require("./presence/plate-fetch.cjs");
 const MindSecret = require("./mind-secret.cjs");
+const VDesk = require("./vdesk-win.cjs");
 
 /** Buffffff opt-in: COMPUTERPETS_GUI_HARNESS=1 runs Electron smokes then quits. */
 const GUI_HARNESS = process.env.COMPUTERPETS_GUI_HARNESS === "1";
@@ -325,6 +326,7 @@ function trayTemplate() {
       },
     },
     { label: "Hide the window", click: () => win?.hide() },
+    ...desktopFollowRows(),
     { type: "separator" },
     { label: "Quit", click: () => app.quit() },
   ];
@@ -449,7 +451,7 @@ function createWindow() {
 
   sealDeskContents(win.webContents);
   win.setAlwaysOnTop(true, "screen-saver");
-  win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+  if (Desk.spacesWalk(process.platform)) win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
   win.setIgnoreMouseEvents(true, { forward: true });
   win.setMenuBarVisibility(false);
   if (GUI_HARNESS) {
@@ -662,6 +664,7 @@ function bootDesk() {
       startHitForward();
       startWindowTick();
       startGpuTick();
+      startDesktopFollow();
       screen.on("display-metrics-changed", fitWorkArea);
       screen.on("display-added", fitWorkArea);
       screen.on("display-removed", fitWorkArea);
@@ -692,6 +695,69 @@ if (GUI_HARNESS) {
     });
     bootDesk();
   }
+}
+
+/** Windows virtual desktops (ADR 0131). The probe asks about the overlay's own HWND only. */
+/** @type {ReturnType<typeof VDesk.createProbe> | null} */
+let vdeskProbe = null;
+/** @type {ReturnType<typeof VDesk.createFollower> | null} */
+let vdeskFollower = null;
+let followDesktops = true;
+
+function overlayHere() {
+  return !!(win && !win.isDestroyed() && win.isVisible() && !win.isMinimized());
+}
+
+function startDesktopFollow() {
+  if (!Desk.desktopFollow(process.platform) || vdeskFollower) return;
+  followDesktops = VDesk.readFollow(app.getPath("userData"), fs);
+  vdeskProbe = VDesk.createProbe();
+  vdeskFollower = VDesk.createFollower({
+    probe: vdeskProbe,
+    enabled: () => followDesktops,
+    win: {
+      hwnd: () => (win && !win.isDestroyed() ? Windows.hwndFromHandle(win.getNativeWindowHandle()) : ""),
+      visible: overlayHere,
+      reshow: () => {
+        if (!overlayHere()) return;
+        win.hide();
+        win.showInactive();
+        fitWorkArea();
+      },
+    },
+  });
+  if (followDesktops) vdeskFollower.start();
+  refreshMenus();
+}
+
+function setDesktopFollow(on) {
+  followDesktops = !!on;
+  VDesk.writeFollow(app.getPath("userData"), fs, followDesktops);
+  if (vdeskFollower && followDesktops) vdeskFollower.start();
+  if (vdeskFollower && !followDesktops) {
+    vdeskFollower.stop();
+    vdeskProbe?.dispose();
+  }
+  refreshMenus();
+}
+
+function stopDesktopFollow() {
+  vdeskFollower?.stop();
+  vdeskProbe?.dispose();
+  vdeskFollower = null;
+  vdeskProbe = null;
+}
+
+function desktopFollowRows() {
+  if (!Desk.desktopFollow(process.platform)) return [];
+  return [
+    {
+      label: "Follow me across desktops",
+      type: "checkbox",
+      checked: followDesktops,
+      click: (item) => setDesktopFollow(item.checked),
+    },
+  ];
 }
 
 let hitRects = [];
@@ -1071,9 +1137,14 @@ ipcMain.handle("license-download", licenseIpc((input) => getLicenseSession().dow
 ipcMain.handle("license-fetch-bundle", licenseIpc((input) => getLicenseSession().fetchSigned(input || {})));
 ipcMain.handle("license-clear", licenseIpc(() => getLicenseSession().clear()));
 
+app.on("will-quit", () => {
+  stopDesktopFollow();
+});
+
 app.on("window-all-closed", () => {
   stopWindowTick();
   stopGpuTick();
+  stopDesktopFollow();
   WindowEnum.disposePump();
   app.quit();
 });
