@@ -1020,6 +1020,8 @@ export function DeskMarketPlate() {
   const [attempt, setAttempt] = useState(0);
   const [nftLive, setNftLive] = useState<NftLive | null>(null);
   const [nftUnread, setNftUnread] = useState(false);
+  /** Why the NFT floor did not load. Same Try again as the price line. */
+  const [nftProblem, setNftProblem] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [nftQuery, setNftQuery] = useState("");
   const [truth, setTruth] = useState("");
@@ -1059,6 +1061,7 @@ export function DeskMarketPlate() {
       if (!nft) {
         setNftLive(null);
         setNftUnread(false);
+        setNftProblem(null);
       }
       return;
     }
@@ -1146,9 +1149,12 @@ export function DeskMarketPlate() {
             const next = parseNftLive(json);
             if (next) setNftLive(next);
             setNftUnread(!next);
+            setNftProblem(next ? null : plateProblem("floor", null));
           })
-          .catch(() => {
-            if (!cancelled) setNftUnread(true);
+          .catch((err) => {
+            if (cancelled) return;
+            setNftUnread(true);
+            setNftProblem(plateProblem("floor", err));
           }),
       );
     }
@@ -1161,6 +1167,7 @@ export function DeskMarketPlate() {
     if (!nft) {
       setNftLive(null);
       setNftUnread(false);
+      setNftProblem(null);
     }
 
     return () => {
@@ -1358,6 +1365,14 @@ export function DeskMarketPlate() {
             <section className="rounded-sm border border-border/40 p-2" aria-label="NFTs" style={{ background: "color-mix(in srgb, var(--plate-bg, #161412) 70%, transparent)" }}>
               <h3 className="text-[10px] uppercase tracking-[0.16em] text-subtle">{NFT_LABEL}</h3>
               <p className="text-subtle">{nft ? nftLine(house, nftLive, nftUnread) : NO_NFT}</p>
+              {nft && nftUnread && nftProblem ? (
+                <p className="mt-1 text-subtle" role="status" data-plate-problem="floor">
+                  {nftProblem}{" "}
+                  <button type="button" className="underline underline-offset-2" onClick={() => setAttempt((n) => n + 1)}>
+                    {RETRY_LABEL}
+                  </button>
+                </p>
+              ) : null}
               <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">Marketplaces</p>
               <ul className="mt-1 space-y-1">
                 {house.marketplaces.map((row) => (

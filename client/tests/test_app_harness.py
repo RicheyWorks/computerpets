@@ -102,6 +102,7 @@ CROSS_DOMAIN = {
     "web.load_problems",
     "web.plain_reasons",
     "web.care_talk_plates",
+    "web.pets_admin_music",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -457,6 +458,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.load_problems",
         "web.plain_reasons",
         "web.care_talk_plates",
+        "web.pets_admin_music",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -582,6 +584,12 @@ def test_web_companion_lockstep():
     assert "feed+tend.save=plain+retry+meters_kept" in cares.trace
     assert "admin.revoke=confirmed_only" in cares.trace
     assert set(cares.extras.get("care") or {}) == {"feed", "rest", "clean", "medicine"}
+
+    pam = invoke("web.pets_admin_music")
+    assert pam.ok, (pam.error, pam.detail)
+    assert "pets.care=room_line_only" in pam.trace
+    assert "music.shared=every_guest_but_rui" in pam.trace
+    assert (pam.extras.get("heartbeat") or {}).get("intervals") == 1
 
 
 def test_blotter_pure_surfaces():

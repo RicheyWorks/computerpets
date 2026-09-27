@@ -136,7 +136,7 @@ test("desk plates: forecast, headlines, and prices say couldn't load with Try ag
   assert.match(market, /data-plate-problem="market"/);
   assert.match(market, /nft\?\.id, attempt\]\);/);
   assert.equal((market.match(/if \(json == null\) return;\n      const (coins|found) = parseSearch/g) || []).length, 0, "a look-up never leaves \"looking up…\" standing");
-  assert.equal((text.match(/setAttempt\(\(n\) => n \+ 1\)/g) || []).length, 3);
+  assert.equal((text.match(/setAttempt\(\(n\) => n \+ 1\)/g) || []).length, 4, "forecast, news, price, and NFT floor");
 });
 
 test("soundProblem: music and sleep sounds that did not play say why; a deliberate pause says nothing", () => {

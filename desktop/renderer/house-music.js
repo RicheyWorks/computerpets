@@ -514,6 +514,28 @@
     return music.stationUrl || "";
   }
 
+  /** The guest whose card carries the full music block. Same as web house-music.ts. */
+  const HOUSE_MUSIC_OWNER = "red_panda";
+  const HOUSE_MUSIC_LABEL = "House music";
+
+  /** Shared Pause/Play shows off the owner's card when there is something to play. */
+  function sharedMusicShows(guestKey, music) {
+    if (!music || guestKey === HOUSE_MUSIC_OWNER) return false;
+    if (music.plugin === "house") return true;
+    return music.plugin === "radio" && !!music.stationUrl;
+  }
+
+  /** What the shared Pause/Play shows and commits. Same rule as the owner's Play button. */
+  function houseMusicToggle(music, streamAsked) {
+    const remote = music.plugin === "radio" && !!music.stationUrl;
+    const audible = !!music.playing && music.plugin !== "off" && (!remote || streamAsked === true);
+    return {
+      audible,
+      label: audible ? "Pause music" : "Play music",
+      next: Object.assign({}, music, { playing: !audible && music.plugin !== "off" }),
+    };
+  }
+
   const api = {
     MUSIC_PLUGINS,
     RADIO_CANT_REACH,
@@ -543,6 +565,10 @@
     overlayHouseLoopSrc,
     playSrc,
     overlayPlaySrc,
+    HOUSE_MUSIC_OWNER,
+    HOUSE_MUSIC_LABEL,
+    sharedMusicShows,
+    houseMusicToggle,
     RADIO_NET,
     RADIO_FIND,
     radioHonesty,

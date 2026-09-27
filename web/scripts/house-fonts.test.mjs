@@ -36,7 +36,9 @@ test("opening the house does not request a font host", () => {
 test("the desk heartbeat URL is loopback with no config override; the overlay row probes only a server the keeper named", () => {
   assert.match(keeperSrc, /HEARTBEAT_URL = `http:\/\/127\.0\.0\.1:\$\{JAVA_PORT\}\/api\/public\/heartbeat`/);
   assert.doesNotMatch(keeperSrc, /COMPUTERPETS_BACKEND_URL|process\.env|import\.meta\.env/);
-  assert.match(cardSrc, /fetch\(HEARTBEAT_URL, \{ cache: "no-store" \}\)/);
+  assert.match(keeperSrc, /const url = opts\.url \?\? HEARTBEAT_URL;/);
+  assert.match(keeperSrc, /fetchImpl\(url, \{ cache: "no-store" \}\)/);
+  assert.match(cardSrc, /heartbeatPoll\.subscribe\(setBeat\)/);
   assert.match(overlayKeeper, /HEARTBEAT_URL = "http:\/\/127\.0\.0\.1:8081\/api\/public\/heartbeat"/);
   assert.doesNotMatch(overlayKeeper, /COMPUTERPETS_BACKEND_URL|process\.env/);
   assert.doesNotMatch(overlayPet, /fetch\(/);

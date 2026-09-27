@@ -85,6 +85,72 @@ export function parseHeartbeat(raw: unknown): Heartbeat {
   return { status, profile, uptimeSeconds, port, careDoor: "local" };
 }
 
+/** One heartbeat read every 15 seconds, however many keeper surfaces show it. */
+export const HEARTBEAT_POLL_MS = 15_000;
+
+type HeartbeatFetch = (url: string, init?: RequestInit) => Promise<{ json: () => Promise<unknown> }>;
+
+export type HeartbeatPoll = {
+  current: () => Heartbeat;
+  subscribe: (fn: (beat: Heartbeat) => void) => () => void;
+  read: () => Promise<Heartbeat>;
+};
+
+/**
+ * One shared heartbeat poll: the first subscriber starts one interval, the last one stops it, and every
+ * subscriber sees the same beat. An unreachable service reads as UNREAD_HEARTBEAT ("DOWN").
+ */
+export function createHeartbeatPoll(opts: {
+  fetchImpl?: HeartbeatFetch;
+  setIntervalImpl?: (fn: () => void, ms: number) => unknown;
+  clearIntervalImpl?: (id: unknown) => void;
+  url?: string;
+  ms?: number;
+} = {}): HeartbeatPoll {
+  const fetchImpl: HeartbeatFetch = opts.fetchImpl ?? ((url, init) => fetch(url, init));
+  const every = opts.setIntervalImpl ?? ((fn, ms) => setInterval(fn, ms));
+  const stop = opts.clearIntervalImpl ?? ((id) => clearInterval(id as ReturnType<typeof setInterval>));
+  const url = opts.url ?? HEARTBEAT_URL;
+  const ms = opts.ms ?? HEARTBEAT_POLL_MS;
+  const subs = new Set<(beat: Heartbeat) => void>();
+  let beat: Heartbeat = UNREAD_HEARTBEAT;
+  let timer: unknown = null;
+
+  async function read(): Promise<Heartbeat> {
+    try {
+      const res = await fetchImpl(url, { cache: "no-store" });
+      beat = parseHeartbeat(await res.json());
+    } catch {
+      beat = { ...UNREAD_HEARTBEAT };
+    }
+    for (const fn of subs) fn(beat);
+    return beat;
+  }
+
+  return {
+    current: () => beat,
+    read,
+    subscribe(fn) {
+      subs.add(fn);
+      fn(beat);
+      if (subs.size === 1) {
+        void read();
+        timer = every(() => void read(), ms);
+      }
+      return () => {
+        subs.delete(fn);
+        if (!subs.size && timer != null) {
+          stop(timer);
+          timer = null;
+        }
+      };
+    },
+  };
+}
+
+/** The page's one heartbeat poll. It starts on the first subscribe (in an effect), never at import. */
+export const heartbeatPoll = createHeartbeatPoll();
+
 export function formatUptime(seconds: number | null) {
   if (seconds == null) return "unread";
   if (seconds < 60) return `${seconds}s`;
