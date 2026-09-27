@@ -1,14 +1,14 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { readSource } from "./test-source.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const P = await import(join(root, "src/lib/pets/presence.ts"));
-const room = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
-const demo = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "utf8");
-const plates = readFileSync(join(root, "src/components/desk/desk-plates.tsx"), "utf8");
+const P = await import(pathToFileURL(join(root, "src/lib/pets/presence.ts")).href);
+const room = readSource(join(root, "src/components/desk/companion-room.tsx"));
+const demo = readSource(join(root, "src/components/desk/demo-stage.tsx"));
+const plates = readSource(join(root, "src/components/desk/desk-plates.tsx"));
 
 test("desk presence refuses navigation and host paths", () => {
   assert.equal(P.allowNavigation("file:///home/keeper/homework.html"), false);
@@ -148,19 +148,19 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.match(forecastEffect, /setUnread\(true\)/);
   assert.doesNotMatch(forecastEffect, /fetch\(/);
   assert.match(plates, /forecastHonesty/);
-  const areasFile = readFileSync(join(root, "src/lib/pets/weather-areas.ts"), "utf8");
+  const areasFile = readSource(join(root, "src/lib/pets/weather-areas.ts"));
   assert.match(areasFile, /WEATHER_TIMEOUT_MS/);
   assert.match(areasFile, /AbortController/);
   assert.match(areasFile, /WeatherTimeout/);
-  const newsFile = readFileSync(join(root, "src/lib/pets/news.ts"), "utf8");
+  const newsFile = readSource(join(root, "src/lib/pets/news.ts"));
   assert.match(newsFile, /NEWS_TIMEOUT_MS/);
   assert.match(newsFile, /AbortController/);
   assert.match(newsFile, /NewsTimeout/);
-  const marketFile = readFileSync(join(root, "src/lib/pets/market.ts"), "utf8");
+  const marketFile = readSource(join(root, "src/lib/pets/market.ts"));
   assert.match(marketFile, /QUOTE_TIMEOUT_MS/);
   assert.match(marketFile, /AbortController/);
   assert.match(marketFile, /QuoteTimeout/);
-  const radioFile = readFileSync(join(root, "src/lib/pets/house-music.ts"), "utf8");
+  const radioFile = readSource(join(root, "src/lib/pets/house-music.ts"));
   assert.match(radioFile, /RADIO_TIMEOUT_MS/);
   assert.match(radioFile, /AbortController/);
   assert.match(radioFile, /RadioTimeout/);
@@ -190,12 +190,12 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.doesNotMatch(plates.slice(tickAt, tickAt + 240), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition/);
   assert.doesNotMatch(plates.slice(tickAt, tickAt + 400), /forecastUrl/);
   assert.doesNotMatch(plates, /ipwho\.is|ip-api\.com|ipinfo\.io|ipapi\.co|ipPlaceUrl|parseIpPlace/);
-  const src = readFileSync(join(root, "src/lib/pets/presence.ts"), "utf8");
+  const src = readSource(join(root, "src/lib/pets/presence.ts"));
   assert.doesNotMatch(src, /watchPosition/);
   assert.doesNotMatch(src, /ipwho\.is|ip-api\.com|ipinfo\.io|ipapi\.co|fetch\(/);
-  const keeper = readFileSync(join(root, "src/components/desk/keeper-card.tsx"), "utf8");
-  const pet = readFileSync(join(root, "../desktop/renderer/pet.js"), "utf8");
-  const html = readFileSync(join(root, "../desktop/renderer/index.html"), "utf8");
+  const keeper = readSource(join(root, "src/components/desk/keeper-card.tsx"));
+  const pet = readSource(join(root, "../desktop/renderer/pet.js"));
+  const html = readSource(join(root, "../desktop/renderer/index.html"));
   const newsAt = pet.indexOf("function fetchNews");
   const marketAt = pet.indexOf("function fetchMarket");
   const newsBody = pet.slice(newsAt, marketAt);
@@ -220,6 +220,7 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   assert.ok(pet.slice(coinAt, nftAt).indexOf("quoteLookMaySend") < pet.slice(coinAt, nftAt).indexOf("readQuoteSearch"));
   assert.ok(pet.slice(nftAt, nftAt + 1500).indexOf("quoteLookMaySend") < pet.slice(nftAt, nftAt + 1500).indexOf("readQuoteSearch"));
   const refreshAt = pet.lastIndexOf("fetchNews();\n  fetchMarket();");
+  assert.ok(refreshAt > 0, "the news and market refresh is found");
   assert.doesNotMatch(pet.slice(refreshAt - 180, refreshAt + 40), /popularRssUrl|geckoManyUrl|yahooUrl|newsUrl\(/);
   assert.match(html, /id="news-net"/);
   assert.match(html, /id="market-net"/);
@@ -295,7 +296,7 @@ test("the desk does not list user folders or read a window title", () => {
   assert.equal(P.windowCaption(row), null);
   assert.equal(P.hostPathLabel(row.path, false), "");
   assert.equal(P.hostPathLabel(row.path, true), row.path);
-  const src = readFileSync(join(root, "src/lib/pets/presence.ts"), "utf8");
+  const src = readSource(join(root, "src/lib/pets/presence.ts"));
   assert.doesNotMatch(src, /readdir|showDirectoryPicker|webkitdirectory|getDirectory/);
 });
 
@@ -324,13 +325,13 @@ test("a focused field keeps the key, and a key outside it is not logged", () => 
   assert.equal(JSON.stringify(dismiss).includes("Escape"), false);
   assert.equal(P.classifyKey({ key: "Escape", target: { tagName: "TEXTAREA" } }).field, true);
   assert.match(room, /classifyKey\(e\)/);
-  const src = readFileSync(join(root, "src/lib/pets/presence.ts"), "utf8");
+  const src = readSource(join(root, "src/lib/pets/presence.ts"));
   assert.doesNotMatch(src, /SetWindowsHook|globalShortcut|keylog|uiohook|localStorage/);
 });
 
 test("the living desk and /demo install the drop guard", () => {
   assert.match(room, /installFileDropGuard/);
   assert.match(demo, /CompanionRoom/);
-  const src = readFileSync(join(root, "src/lib/pets/presence.ts"), "utf8");
+  const src = readSource(join(root, "src/lib/pets/presence.ts"));
   assert.doesNotMatch(src, /getData|getAsFile|FileReader|showOpenFilePicker|webkitdirectory/);
 });

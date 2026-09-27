@@ -32,6 +32,9 @@ function memoryFs() {
   };
 }
 
+// Sessions that may read an OS mark are pinned to the Linux path with a fake readFile,
+// so they mean the same on every machine and never query this computer's registry or ioreg.
+// The Windows MachineGuid path is covered in hwid.test.cjs with a fake exec.
 function sessionFor(backend, extraEnv = {}, hwid = "device-abc-123") {
   const disk = memoryFs();
   return createLicenseSession({
@@ -149,6 +152,7 @@ describe("license session", () => {
     const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
     const session = createLicenseSession({
       userDataDir: path.join(os.tmpdir(), "cp-license-mark"),
+      platform: "linux",
       env: { LICENSE_SECRET_KEY: SECRET, BUNDLE_SIGNING_KEY: SIGNING, COMPUTERPETS_BACKEND_URL: "http://127.0.0.1:8080" },
       fetchImpl: backend.fetchImpl,
       readFile,
@@ -205,6 +209,7 @@ describe("license session", () => {
     const posts = [];
     const session = createLicenseSession({
       userDataDir: dir,
+      platform: "linux",
       env: { LICENSE_SECRET_KEY: SECRET, COMPUTERPETS_BACKEND_URL: "http://127.0.0.1:8080" },
       readFile: (p) => {
         const key = String(p);
@@ -266,6 +271,7 @@ describe("license session", () => {
     const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
     const session = createLicenseSession({
       userDataDir: dir,
+      platform: "linux",
       env: { LICENSE_SECRET_KEY: SECRET, BUNDLE_SIGNING_KEY: SIGNING, COMPUTERPETS_BACKEND_URL: "http://127.0.0.1:8080" },
       fetchImpl: backend.fetchImpl,
       readFile,
@@ -333,6 +339,7 @@ describe("license session", () => {
     const posts = [];
     const session = createLicenseSession({
       userDataDir: dir,
+      platform: "linux",
       env: { LICENSE_SECRET_KEY: SECRET, COMPUTERPETS_BACKEND_URL: "http://127.0.0.1:8080" },
       readFile: (p) => {
         const key = String(p);
@@ -368,6 +375,7 @@ describe("license session", () => {
     const seen = [];
     const session = createLicenseSession({
       userDataDir: dir,
+      platform: "linux",
       env: {
         LICENSE_SECRET_KEY: SECRET,
         BUNDLE_SIGNING_KEY: SIGNING,
@@ -498,6 +506,7 @@ describe("license session", () => {
     const posts = [];
     const session = createLicenseSession({
       userDataDir: dir,
+      platform: "linux",
       env: { LICENSE_SECRET_KEY: SECRET, COMPUTERPETS_BACKEND_URL: "https://license.example.test" },
       readFile: (p) => {
         const key = String(p);
@@ -560,6 +569,7 @@ describe("license session", () => {
     const seen = [];
     const session = createLicenseSession({
       userDataDir: dir,
+      platform: "linux",
       env: { LICENSE_SECRET_KEY: SECRET, COMPUTERPETS_BACKEND_URL: "https://license.example.test" },
       readFile: (p) => {
         const key = String(p);
@@ -699,6 +709,7 @@ describe("license session", () => {
     const seen = [];
     const session = createLicenseSession({
       userDataDir: dir,
+      platform: "linux",
       env: { LICENSE_SECRET_KEY: SECRET, COMPUTERPETS_BACKEND_URL: "http://127.0.0.1:8080" },
       readFile: (p) => {
         if (!files.has(String(p))) {

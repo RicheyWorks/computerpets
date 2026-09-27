@@ -56,6 +56,8 @@ function shownCdnLine(input) {
  *   readFile?: typeof fs.readFileSync,
  *   writeFile?: typeof fs.writeFileSync,
  *   mkdir?: typeof fs.mkdirSync,
+ *   platform?: NodeJS.Platform | string,
+ *   exec?: typeof import("child_process").execSync,
  * }} opts
  */
 function createLicenseSession(opts) {
@@ -88,6 +90,8 @@ function createLicenseSession(opts) {
       userDataDir: opts.userDataDir,
       readFile,
       writeFile,
+      platform: opts.platform,
+      exec: opts.exec,
       allowWeakFallback: allowWeakFallback === true,
     });
   }

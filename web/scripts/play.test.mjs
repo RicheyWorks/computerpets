@@ -2,11 +2,11 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const P = await import(join(root, "src/lib/pets/play.ts"));
-const C = await import(join(root, "src/lib/pets/care.ts"));
+const P = await import(pathToFileURL(join(root, "src/lib/pets/play.ts")).href);
+const C = await import(pathToFileURL(join(root, "src/lib/pets/care.ts")).href);
 
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 const blotterSrc = readFileSync(join(root, "src/components/desk/blotter.tsx"), "utf8");

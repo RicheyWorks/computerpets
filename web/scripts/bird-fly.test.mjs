@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const F = await import(join(root, "src/lib/pets/bird-fly.ts"));
+const F = await import(pathToFileURL(join(root, "src/lib/pets/bird-fly.ts")).href);
 const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/bird-fly.js"));
 
 test("Sip is the house bird and she stays long enough to see", () => {

@@ -1,12 +1,17 @@
 const assert = require("node:assert/strict");
 const { execFileSync } = require("node:child_process");
 const { EventEmitter } = require("node:events");
-const { mkdtempSync, writeFileSync, chmodSync, rmSync, readFileSync, mkdirSync, symlinkSync } = require("node:fs");
+const { mkdtempSync, writeFileSync, chmodSync, rmSync, readFileSync, mkdirSync, symlinkSync, existsSync } = require("node:fs");
 const { tmpdir } = require("node:os");
 const { dirname, join } = require("node:path");
 const { test } = require("node:test");
 const Sense = require("./gpu-sense.cjs");
 const Gpu = require("./renderer/gpu.js");
+
+// These tests run the real Mac and Linux probe scripts under /bin/sh with fake
+// ioreg, nvidia-smi, and sysfs trees (the sysfs fakes use symlinks). Windows has
+// no /bin/sh, so they run on Linux and Mac CI; the Windows probe is checked by text below.
+const SH_ONLY = { skip: existsSync("/bin/sh") ? false : "runs the Mac or Linux probe script under /bin/sh, which this machine does not have" };
 
 const NOW = 1_700_000_000_000;
 const VALID = [
@@ -69,7 +74,7 @@ function runMacProbe(body, { code = 0, path = null } = {}) {
   }
 }
 
-test("Mac spawns the IOAccelerator probe and keeps a real reading", async () => {
+test("Mac spawns the IOAccelerator probe and keeps a real reading", SH_ONLY, async () => {
   const text = runMacProbe(APPLE_IOREG);
   assert.match(text, /^NVIDIA\n/m);
   assert.match(text, /Apple M2, \[N\/A\], 16, 542, \[N\/A\], \[N\/A\]/);
@@ -96,7 +101,7 @@ test("Mac spawns the IOAccelerator probe and keeps a real reading", async () => 
   assert.doesNotMatch(Gpu.gpuLine(sample), /0°C|0 W|0%/);
 });
 
-test("Mac without ioreg, or with no accepted field, stays unread and is not zero", async () => {
+test("Mac without ioreg, or with no accepted field, stays unread and is not zero", SH_ONLY, async () => {
   const absent = runMacProbe(null);
   assert.match(absent, /NVIDIA_ABSENT/);
   assert.doesNotMatch(absent, /[0-9]/);
@@ -165,7 +170,7 @@ test("the Mac probe names IOAccelerator and does not ask for root", () => {
   assert.doesNotMatch(text, /powermetrics|sudo|nvidia-smi|\/sys\/class\/drm/);
 });
 
-test("Mac temperature and power keys stay off the shared line", () => {
+test("Mac temperature and power keys stay off the shared line", SH_ONLY, () => {
   const only = runMacProbe([
     "+-o AGXAccelerator  <class AGXAccelerator, id 0x1, registered>",
     "{ \"PerformanceStatistics\" = {\"Temperature\"=72,\"GPU Temperature\"=68,\"die temperature\"=70,\"dieTemp\"=71,\"Power\"=18.4,\"GPU Power\"=19,\"GPU Energy\"=0,\"watts\"=12,\"Tg05\"=61.2,\"Tg0D\"=64,\"thermalPressureLevel\"=0} }",
@@ -301,6 +306,18 @@ test("the Linux probe script names nvidia-smi and amdgpu sysfs and does not inve
   assert.doesNotMatch(text, /powermetrics|ioreg |intel_gpu_top|busy_ns|rps_cur_freq|mem_busy_percent|mem_info_gtt|temp1_input|debugfs|perf_event|\/sys\/kernel\/debug/);
   assert.doesNotMatch(text, /tempC\s*=\s*0/);
   assert.doesNotMatch(text, /utilPercent\s*=\s*0/);
+});
+
+test("the Mac and Linux probe scripts stay LF on disk, so a build made on Windows does not ship CRLF", () => {
+  const attrs = readFileSync(join(__dirname, "..", ".gitattributes"), "utf8");
+  assert.match(attrs, /^\*\.sh text eol=lf\r?$/m);
+  for (const file of [Sense.PROBE_SH, Sense.PROBE_MAC]) {
+    const bytes = readFileSync(file);
+    assert.equal(bytes.includes(13), false, `${file} has CR bytes; re-check it out so .gitattributes applies`);
+  }
+});
+
+test("the Linux probe run on an empty sysfs root and on this machine does not invent a zero", SH_ONLY, () => {
   const emptyRoot = mkdtempSync(join(tmpdir(), "gpu-empty-"));
   try {
     const absent = runLinuxProbe({ GPU_SYSFS_ROOT: emptyRoot });
@@ -324,7 +341,7 @@ test("the Linux probe script names nvidia-smi and amdgpu sysfs and does not inve
   assert.doesNotMatch(live, /^MEMORY$/m);
 });
 
-test("Linux amdgpu sysfs prints the shared line and ignores Intel and decoys", async () => {
+test("Linux amdgpu sysfs prints the shared line and ignores Intel and decoys", SH_ONLY, async () => {
   const root = mkdtempSync(join(tmpdir(), "gpu-amd-"));
   const bin = mkdtempSync(join(tmpdir(), "gpu-smi-"));
   try {
@@ -512,7 +529,7 @@ test("Linux amdgpu sysfs prints the shared line and ignores Intel and decoys", a
   }
 });
 
-test("Linux amdgpu hwmon copies edge temperature and PPT power and leaves the other channels unread", async () => {
+test("Linux amdgpu hwmon copies edge temperature and PPT power and leaves the other channels unread", SH_ONLY, async () => {
   const root = mkdtempSync(join(tmpdir(), "gpu-hwmon-"));
   try {
     amdCard(root, "card0", {
@@ -710,7 +727,7 @@ test("Linux amdgpu hwmon copies edge temperature and PPT power and leaves the ot
   }
 });
 
-test("Linux i915 and xe sysfs stay unread and do not paint a percent or a memory pair", async () => {
+test("Linux i915 and xe sysfs stay unread and do not paint a percent or a memory pair", SH_ONLY, async () => {
   const root = mkdtempSync(join(tmpdir(), "gpu-intel-"));
   try {
     const i915 = join(root, "card0");
@@ -790,7 +807,7 @@ test("Linux i915 and xe sysfs stay unread and do not paint a percent or a memory
   }
 });
 
-test("Linux i915 and xe device VRAM files stay off the shared line", () => {
+test("Linux i915 and xe device VRAM files stay off the shared line", SH_ONLY, () => {
   function card(root, name, driver, pci, slot) {
     const dev = join(root, name, "device");
     mkdirSync(dev, { recursive: true });
@@ -922,7 +939,7 @@ test("Linux i915 and xe device VRAM files stay off the shared line", () => {
   }
 });
 
-test("Linux DRM fdinfo prints i915 and xe utilization from two reads and fails closed otherwise", () => {
+test("Linux DRM fdinfo prints i915 and xe utilization from two reads and fails closed otherwise", SH_ONLY, () => {
   function card(root, name, driver, pci, slot) {
     const dev = join(root, name, "device");
     mkdirSync(dev, { recursive: true });
