@@ -1,8 +1,10 @@
-/** House-hand keeper card. Same truth as the desk. Java is 8081. */
+/** House-hand keeper card. Same truth as the desk. Java is 8081 by default; the house-server row only shows when the keeper names a server. */
 (function (root) {
   const JAVA_PORT = 8081;
   const DESK_PORT = 8080;
   const HEARTBEAT_URL = "http://127.0.0.1:8081/api/public/heartbeat";
+  const HOUSE_SERVER = "House server";
+  const HOUSE_SERVER_HIDDEN = Object.freeze({ show: false });
   const ADVERTISED_CARE = { feed: "/pet/feed", play: "/pet/play", rest: "/pet/rest" };
   const CARE_DOOR_STATUS = 409;
   const KEEPER_CARE = [
@@ -47,7 +49,7 @@
   }
 
   function formatUptime(seconds) {
-    if (seconds == null) return "unread";
+    if (seconds == null) return "";
     if (seconds < 60) return `${seconds}s`;
     const minutes = Math.floor(seconds / 60);
     if (minutes < 60) return `${minutes}m`;
@@ -57,11 +59,21 @@
     return `${Math.floor(hours / 24)}d`;
   }
 
-  function heartbeatLine(beat) {
-    const profile = beat.profile || "unread";
-    const up = formatUptime(beat.uptimeSeconds);
-    const port = beat.port || JAVA_PORT;
-    return `Java ${port} · ${beat.status} · ${profile} · ${up}`;
+  /**
+   * The keeper card's server row. Empty (hidden) until the keeper names a
+   * server in Settings, the environment, or by holding a license (main
+   * process: house-server.cjs). Plain words only: reachable or unreachable.
+   */
+  function houseServerLine(state) {
+    if (!state || state.show !== true) return "";
+    if (state.reachable !== true) return `${HOUSE_SERVER} · unreachable`;
+    const up = formatUptime(state.uptimeSeconds);
+    return up ? `${HOUSE_SERVER} · reachable · up ${up}` : `${HOUSE_SERVER} · reachable`;
+  }
+
+  function houseServerTitle(state) {
+    if (!state || state.show !== true || !state.host) return "";
+    return `${HOUSE_SERVER} at ${state.host}`;
   }
 
   function careTruth() {
@@ -97,7 +109,7 @@
     };
   }
 
-  function poster(name, stage, life, beat) {
+  function poster(name, stage, life, house) {
     const m = meters(life);
     return {
       kicker: KEEPER_KICKER,
@@ -108,7 +120,7 @@
       rest: m.rest,
       bond: m.bond,
       verbs: KEEPER_CARE.map((verb) => verb.id),
-      heartbeat: heartbeatLine(beat || UNREAD),
+      heartbeat: houseServerLine(house || HOUSE_SERVER_HIDDEN),
       truth: careTruth(),
       voiceTruth: VOICE_TRUTH,
       quitTruth: QUIT_TRUTH,
@@ -119,6 +131,8 @@
     JAVA_PORT,
     DESK_PORT,
     HEARTBEAT_URL,
+    HOUSE_SERVER,
+    HOUSE_SERVER_HIDDEN,
     ADVERTISED_CARE,
     CARE_DOOR_STATUS,
     KEEPER_CARE,
@@ -130,7 +144,8 @@
     UNREAD,
     parseHeartbeat,
     formatUptime,
-    heartbeatLine,
+    houseServerLine,
+    houseServerTitle,
     careTruth,
     careDoorRefusal,
     bondTitle,

@@ -40,17 +40,20 @@ test("the overlay keeper card tells the same truth as the desk", () => {
   assert.match(meetSrc, /MeetKeeperCard/);
 });
 
-test("unread Java is DOWN, not a painted UP", () => {
+test("an unread heartbeat is DOWN, not a painted UP; the card row says it in plain words", () => {
   assert.equal(K.parseHeartbeat(null).status, "DOWN");
   assert.equal(K.parseHeartbeat({}).status, "DOWN");
   assert.equal(K.parseHeartbeat({ status: "UP", profile: "local", uptimeSeconds: 90, port: 8081 }).status, "UP");
-  assert.match(K.heartbeatLine(K.UNREAD), /Java 8081 · DOWN · unread · unread/);
+  assert.equal(K.heartbeatLine, undefined);
+  assert.equal(K.houseServerLine({ show: false }), "");
+  assert.equal(K.houseServerLine({ show: true, reachable: false }), "House server · unreachable");
+  assert.equal(K.houseServerLine({ show: true, reachable: true, uptimeSeconds: 90 }), "House server · reachable · up 1m");
   assert.equal(K.formatUptime(90), "1m");
   assert.equal(K.meters({ hunger: 40, energy: 70, bond: 50 }).bondTitle, "Friend");
 });
 
-test("the poster HUD is name, stage, bond title, meters, verbs, heartbeat", () => {
-  const face = K.poster("Rui", "grown", { hunger: 40, energy: 70, bond: 50 }, K.UNREAD);
+test("the poster HUD is name, stage, bond title, meters, verbs, house-server row", () => {
+  const face = K.poster("Rui", "grown", { hunger: 40, energy: 70, bond: 50 }, K.HOUSE_SERVER_HIDDEN);
   assert.equal(face.kicker, "Keeper card");
   assert.equal(face.name, "Rui");
   assert.equal(face.stage, "grown");
@@ -59,7 +62,8 @@ test("the poster HUD is name, stage, bond title, meters, verbs, heartbeat", () =
   assert.equal(face.rest, 70);
   assert.equal(face.bond, 50);
   assert.deepEqual(face.verbs, ["feed", "snack", "play", "rest", "talk", "hide", "call", "clean", "bath", "medicine", "praise", "special", "shed"]);
-  assert.match(face.heartbeat, /Java 8081 · DOWN/);
+  assert.equal(face.heartbeat, "");
+  assert.equal(K.poster("Rui", "grown", {}, { show: true, reachable: true }).heartbeat, "House server · reachable");
   assert.match(face.truth, /Care is local/);
   assert.equal(face.voiceTruth, K.VOICE_TRUTH);
   assert.match(face.quitTruth, /desktop\.ps1/);
@@ -82,7 +86,8 @@ test("the overlay HUD is a keeper card with full care verbs and a heartbeat", ()
   assert.match(htmlSrc, /card\.js/);
   assert.match(htmlSrc, /data-card="collapse"/);
   assert.match(petSrc, /PetKeeper/);
-  assert.match(petSrc, /HEARTBEAT_URL/);
+  assert.match(petSrc, /houseServerLine/);
+  assert.doesNotMatch(petSrc, /HEARTBEAT_URL/);
   assert.match(petSrc, /data-care/);
   assert.match(petSrc, /hudStage/);
   assert.match(petSrc, /hudBondTitle/);

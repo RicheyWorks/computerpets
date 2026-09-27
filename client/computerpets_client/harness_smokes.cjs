@@ -1,4 +1,4 @@
-﻿/** Offline smokes for Buffffff app_harness — real renderer modules, no live network. */
+/** Offline smokes for Buffffff app_harness — real renderer modules, no live network. */
 "use strict";
 
 const path = require("node:path");
@@ -199,6 +199,37 @@ function cardPaintWire() {
     "openKeeperCard",
     "paintHud",
     "persistCard",
+  ]);
+}
+
+
+/** Keeper-card house-server row: hidden with no server named, the saved URL wins, plain words only. */
+function houseServerRow() {
+  const H = require(path.join(__dirname, "..", "..", "desktop", "house-server.cjs"));
+  const K = load("keeper.js");
+  const html = fs.readFileSync(path.join(RENDERER, "index.html"), "utf8");
+  const petSrc = fs.readFileSync(path.join(RENDERER, "pet.js"), "utf8");
+  const none = H.target({ savedUrl: "", env: {}, licenseHeld: false });
+  if (none !== null) return fail("row would probe with no server named", { none });
+  if (K.houseServerLine({ show: false }) !== "") return fail("hidden row still has text");
+  const picked = H.target({ savedUrl: "https://house.example:9443/", env: { COMPUTERPETS_BACKEND_URL: "http://env.example" }, licenseHeld: true });
+  if (!picked || picked.base !== "https://house.example:9443" || picked.from !== "settings") {
+    return fail("saved Backend URL is not the probe target", { picked });
+  }
+  const lines = [
+    K.houseServerLine({ show: true, reachable: true, uptimeSeconds: 7200 }),
+    K.houseServerLine({ show: true, reachable: false }),
+  ];
+  if (lines[0] !== "House server · reachable · up 2h" || lines[1] !== "House server · unreachable") {
+    return fail("row words drifted", { lines });
+  }
+  if (lines.some((line) => /unread|Java|DOWN/.test(line))) return fail("raw token on the row", { lines });
+  if (!/<p id="hud-heartbeat"[^>]*hidden><\/p>/.test(html)) return fail("index.html row does not ship hidden");
+  if (petSrc.includes("fetch(")) return fail("pet.js still fetches the heartbeat itself");
+  return ok("hidden until named; saved URL probed; plain words", { target: picked.base, lines }, [
+    "none=hidden",
+    "saved=https://house.example:9443",
+    "reachable|unreachable",
   ]);
 }
 
@@ -1037,6 +1068,7 @@ const COMMANDS = {
   gift_place: giftPlace,
   choice_close_exit: choiceCloseExit,
   card_paint_wire: cardPaintWire,
+  house_server_row: houseServerRow,
   news_favorites: newsFavorites,
   market_favorites: marketFavorites,
   weather_favorites: weatherFavorites,

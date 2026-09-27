@@ -36,6 +36,9 @@ contextBridge.exposeInMainWorld("desk", {
   licenseDownload: (input) => ipcRenderer.invoke("license-download", input),
   licenseFetchBundle: (input) => ipcRenderer.invoke("license-fetch-bundle", input),
   licenseClear: () => ipcRenderer.invoke("license-clear"),
+  houseServer: () => ipcRenderer.invoke("house-server-get"),
+  houseServerSaved: () => ipcRenderer.invoke("house-server-saved"),
+  houseServerSet: (url) => ipcRenderer.invoke("house-server-set", typeof url === "string" ? url : ""),
   onCommand: (fn) => {
     const wrapped = (_e, cmd) => fn(cmd);
     ipcRenderer.on("command", wrapped);
