@@ -260,6 +260,85 @@ async function careTalkPlates() {
   ]);
 }
 
+/** One message per failed care act, revoke vs list refresh, shared house music, one heartbeat poll, NFT floor line. */
+async function petsAdminMusic() {
+  const P = await import(pathToFileURL(join(WEB, "src", "lib", "plain-error.ts")).href);
+  const B = await import(pathToFileURL(join(WEB, "src", "lib", "admin", "base.ts")).href);
+  const K = await import(pathToFileURL(join(WEB, "src", "lib", "pets", "keeper.ts")).href);
+  const M = await import(pathToFileURL(join(WEB, "src", "lib", "pets", "house-music.ts")).href);
+  const Overlay = require(join(RENDERER, "house-music.js"));
+  const quiet = () => {};
+  const room = {};
+  for (const act of ["play", "feed", "rest", "clean", "medicine", "shed"]) room[act] = P.roomReportsCare(act);
+  if (Object.values(room).filter(Boolean).length !== 5 || room.shed) return fail("roomReportsCare drift", { room });
+  const rows = B.markRevoked([{ jti: "a", revoked: false, deleted: false }, { jti: "b", revoked: false, deleted: false }], "b");
+  const stale = B.revokedListStale("Couldn't reach the house server.");
+  if (rows[0].revoked || !rows[1].revoked || !rows[1].deleted || !stale.startsWith("License revoked.") || /failed/i.test(stale)) {
+    return fail("revoke/list split drift", { rows, stale });
+  }
+  const music = {};
+  for (const [guest, raw] of [["red_panda", { plugin: "house", playing: true }], ["robin", { plugin: "house", playing: true }], ["robin", { plugin: "off" }], ["robin", { plugin: "radio" }]]) {
+    const web = M.sharedMusicShows(guest, M.parseMusic(raw));
+    const desk = Overlay.sharedMusicShows(guest, Overlay.parseMusic(raw));
+    if (web !== desk) return fail("sharedMusicShows web/desktop drift", { guest, raw, web, desk });
+    music[`${guest}:${raw.plugin}`] = web;
+  }
+  if (music["red_panda:house"] || !music["robin:house"] || music["robin:off"] || music["robin:radio"]) return fail("sharedMusicShows drift", { music });
+  const pause = M.houseMusicToggle(M.parseMusic({ plugin: "house", playing: true }), false);
+  if (pause.label !== "Pause music" || pause.next.playing || M.houseMusicToggle(pause.next, false).label !== "Play music") {
+    return fail("houseMusicToggle drift", { pause });
+  }
+  const timers = new Map();
+  let reads = 0;
+  const poll = K.createHeartbeatPoll({
+    url: "http://127.0.0.1:1/api/public/heartbeat",
+    fetchImpl: async () => {
+      reads += 1;
+      throw new TypeError("fetch failed");
+    },
+    setIntervalImpl: (fn, ms) => {
+      timers.set(timers.size + 1, { fn, ms });
+      return timers.size;
+    },
+    clearIntervalImpl: (id) => timers.delete(id),
+  });
+  const seen = [];
+  const offA = poll.subscribe((b) => seen.push(b));
+  const offB = poll.subscribe((b) => seen.push(b));
+  await new Promise((r) => setImmediate(r));
+  const heartbeat = { intervals: timers.size, reads, status: seen.at(-1)?.status };
+  offA();
+  offB();
+  heartbeat.after = timers.size;
+  if (heartbeat.intervals !== 1 || heartbeat.reads !== 1 || heartbeat.after !== 0 || heartbeat.status !== K.UNREAD_HEARTBEAT.status) {
+    return fail("heartbeat poll drift", { heartbeat });
+  }
+  const floor = P.plateProblem("floor", null, quiet);
+  if (floor !== `Couldn't load the floor price. ${P.PLATE_REASONS.answer}`) return fail("floor line drift", { floor });
+  const read = (...p) => readFileSync(join(ROOT, ...p), "utf8");
+  const wires = [
+    ["web/src/routes/pets.$key.tsx", ['if (!roomReportsCare(action)) toast.error(plainMessage(err, "Care failed."));']],
+    ["web/src/routes/admin.tsx", ["setRows((was) => markRevoked(was, jti));", "revokedListStale(plainMessage(err"]],
+    ["web/src/components/desk/keeper-card.tsx", ["sharedMusicShows(guestKey, music)", "heartbeatPoll.subscribe(setBeat)"]],
+    ["web/src/components/desk/desk-plates.tsx", ['data-plate-problem="floor"']],
+    ["desktop/renderer/index.html", ['id="hud-house-music"', 'id="hud-house-music-play"']],
+    ["desktop/renderer/pet.js", ["function paintHouseMusic", "function streamLineEl"]],
+  ];
+  for (const [rel, needs] of wires) {
+    const text = read(...rel.split("/")).replace(/\r\n/g, "\n");
+    for (const need of needs) if (!text.includes(need)) return fail(`${rel} missing ${need}`);
+  }
+  const card = read("web", "src", "components", "desk", "keeper-card.tsx");
+  if (/fetch\(HEARTBEAT_URL/.test(card)) return fail("keeper-card still has its own heartbeat fetch");
+  return ok("one care message, revoke vs list, shared house music, one heartbeat poll, NFT floor", { room, music, heartbeat, floor }, [
+    "pets.care=room_line_only",
+    "admin.revoke=done_even_if_list_stale",
+    "music.shared=every_guest_but_rui",
+    "heartbeat.poll=one_interval",
+    "plates.floor=couldnt_load+retry",
+  ]);
+}
+
 async function classroomLockstep(expectPath) {
   if (!expectPath) return fail("classroom_lockstep needs expect JSON path argv");
   let expect;
@@ -446,6 +525,7 @@ const COMMANDS = {
   load_problems: loadProblems,
   plain_reasons: plainReasons,
   care_talk_plates: careTalkPlates,
+  pets_admin_music: petsAdminMusic,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

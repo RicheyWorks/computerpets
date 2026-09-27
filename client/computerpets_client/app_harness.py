@@ -2460,6 +2460,20 @@ def _web_rows() -> list[Affordance]:
                 "isRevokeDone so a revoke only counts on the ledger's own confirmation for that jti."
             ),
         ),
+        Affordance(
+            "web.pets_admin_music",
+            "web",
+            "One care message, revoke vs list refresh, shared house music, one heartbeat poll",
+            "web/src/lib/plain-error.ts roomReportsCare + admin/base.ts markRevoked + pets/house-music.ts + pets/keeper.ts",
+            notes=(
+                "Real web modules: roomReportsCare so /pets/$key drops its toast for feed / play / rest / clean / "
+                "medicine (the room line with Try again says it); admin/base.ts markRevoked / revokedListStale so "
+                "a confirmed revoke reads as done when only the list refresh failed; house-music.ts and desktop "
+                "house-music.js sharedMusicShows / houseMusicToggle (a small Pause/Play on every guest but Rui, "
+                "whose block is untouched); keeper.ts createHeartbeatPoll (one interval for every subscriber, "
+                "DOWN when unreachable); plateProblem('floor') for the NFT floor line."
+            ),
+        ),
     ]
 
 
@@ -2475,6 +2489,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("plain_reasons", domain="web", action_id=aid)
     if local_id == "care_talk_plates":
         return _run_web_smoke("care_talk_plates", domain="web", action_id=aid)
+    if local_id == "pets_admin_music":
+        return _run_web_smoke("pets_admin_music", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
-import { formatLocalWhen } from "@/lib/admin/base";
+import { REVOKED_NOTE, formatLocalWhen, markRevoked, revokedListStale } from "@/lib/admin/base";
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -108,16 +108,29 @@ export function AdminPage() {
     clearNote();
     try {
       await revokeLicense(apiBase, adminKey, jti);
-      const next = await lookupLicenses(apiBase, adminKey, query);
-      setRows(next);
-      setPendingJti(null);
-      setNote("License revoked and soft-deleted. Downloads for this jti stop immediately. The row stays on the ledger.");
     } catch (err) {
+      setBusy(false);
       if (err instanceof AdminApiError && err.status === 401) {
         lock(ADMIN_KEY_REJECTED);
         return;
       }
       showError(err, "Revoke failed.");
+      return;
+    }
+    // The ledger confirmed the revoke. From here on only the list can fail, and it must not read as a failed revoke.
+    setPendingJti(null);
+    try {
+      const next = await lookupLicenses(apiBase, adminKey, query);
+      setRows(next);
+      setNote(REVOKED_NOTE);
+    } catch (err) {
+      if (err instanceof AdminApiError && err.status === 401) {
+        lock(`License revoked. ${ADMIN_KEY_REJECTED}`);
+        return;
+      }
+      setRows((was) => markRevoked(was, jti));
+      setNote(revokedListStale(plainMessage(err, "Try again in a moment.")));
+      setDetail(err instanceof AdminApiError && err.detail ? err.detail : null);
     } finally {
       setBusy(false);
     }

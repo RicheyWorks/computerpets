@@ -205,6 +205,14 @@ export const CARE_NOT_SAVED = {
 
 export type CareNotSavedAct = keyof typeof CARE_NOT_SAVED;
 
+/**
+ * True when the companion room itself says a failed save (its quiet line with Try again), so the page
+ * around it must not also toast it. Anything else (a shed, say) the page still reports.
+ */
+export function roomReportsCare(action: string): action is CareNotSavedAct {
+  return Object.prototype.hasOwnProperty.call(CARE_NOT_SAVED, action);
+}
+
 /** "The feeding wasn't saved…" plus the plain reason. Raw text goes to the log only. */
 export function careNotSaved(act: CareNotSavedAct, err: unknown, log: PlainLog = consoleLog): string {
   return `${CARE_NOT_SAVED[act]} ${plainMessage(err, "Try again in a moment.", log)}`;
@@ -324,6 +332,7 @@ export const PLATE_LINES = {
   headlines: "Couldn't load the headlines.",
   newer: "Couldn't load newer headlines; these are from earlier.",
   price: "Couldn't load the price.",
+  floor: "Couldn't load the floor price.",
 } as const;
 
 export type PlateWhat = keyof typeof PLATE_LINES;

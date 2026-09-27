@@ -20,7 +20,7 @@ import { moodWord, normalizeCare, type SanctuaryCare } from "@/lib/pets/care";
 import { livingByKey, saveActiveKindKey } from "@/lib/pets/living";
 import { departLine, originPhrase } from "@/lib/pets/nest";
 import { roomOf } from "@/lib/pets/rooms";
-import { plainMessage } from "@/lib/plain-error";
+import { plainMessage, roomReportsCare } from "@/lib/plain-error";
 
 export const Route = createFileRoute("/pets/$key")({ component: PetDetail });
 
@@ -81,7 +81,8 @@ function PetDetail() {
       if (next.note) toast.message(next.note);
       return normalizeCare(next);
     } catch (err) {
-      toast.error(plainMessage(err, "Care failed."));
+      // Feed, play, rest, clean, and medicine: the room says it plainly with Try again, so no second toast.
+      if (!roomReportsCare(action)) toast.error(plainMessage(err, "Care failed."));
       try {
         const d = await getSanctuary();
         const all = [...d.pets, ...d.departed];

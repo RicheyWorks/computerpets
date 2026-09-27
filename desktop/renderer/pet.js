@@ -109,6 +109,7 @@ const hudMutes = document.getElementById("hud-mutes");
 const hudSteps = document.getElementById("hud-steps");
 const hudMusic = document.getElementById("hud-music");
 const hudSleep = document.getElementById("hud-sleep");
+const hudHouseMusic = document.getElementById("hud-house-music");
 const hudCallBird = document.getElementById("hud-call-bird");
 const hudCallPick = document.getElementById("hud-call-pick");
 const hudCallQ = document.getElementById("hud-call-q");
@@ -761,8 +762,46 @@ function flushTalk() {
   void askMind(result);
 }
 
+/**
+ * The stream line the keeper can actually see: the owner's music block when it
+ * shows, else the shared House music control. A line inside a hidden block
+ * does not count.
+ */
+function streamLineEl() {
+  const own = document.getElementById("hud-stream-net");
+  if (own && hudMusic && !hudMusic.hidden) return own;
+  const shared = document.getElementById("hud-house-stream-net");
+  if (shared && hudHouseMusic && !hudHouseMusic.hidden) return shared;
+  return null;
+}
+
+/**
+ * Small house-wide Pause/Play for every guest whose card has no music block.
+ * Hidden where the owner's block shows, so there is never a second control.
+ */
+function paintHouseMusic() {
+  if (!hudHouseMusic) return;
+  const M = window.PetHouseMusic;
+  const music = M && card ? M.parseMusic(card.music) : null;
+  const show = !!(M && M.sharedMusicShows && music && M.sharedMusicShows(kind && kind.key, music));
+  hudHouseMusic.hidden = !show;
+  if (!show) return;
+  const toggle = M.houseMusicToggle(music, streamAsked);
+  const btn = document.getElementById("hud-house-music-play");
+  if (btn) {
+    btn.textContent = toggle.label;
+    btn.setAttribute("aria-pressed", toggle.audible ? "true" : "false");
+  }
+  const net = document.getElementById("hud-house-stream-net");
+  if (net) {
+    const line = streamAsked && M.streamHonesty ? M.streamHonesty(music) : "";
+    net.textContent = line;
+    net.hidden = !line;
+  }
+}
+
 function streamLineInView() {
-  const el = document.getElementById("hud-stream-net");
+  const el = streamLineEl();
   if (!el || el.hidden || !streamAsked) return false;
   const M = window.PetHouseMusic;
   const line = M && M.streamHonesty ? M.streamHonesty(M.parseMusic(card.music)) : "";
@@ -771,7 +810,7 @@ function streamLineInView() {
 }
 
 function streamShown() {
-  const el = document.getElementById("hud-stream-net");
+  const el = streamLineEl();
   if (!el || el.hidden || !streamAsked) return "";
   return el.textContent || "";
 }
@@ -1734,6 +1773,7 @@ function paintCard() {
   } else if (hudMusic) {
     hudMusic.hidden = true;
   }
+  paintHouseMusic();
   if (hudSleep && window.PetHouseSleep) {
     const S = window.PetHouseSleep;
     const aid = S.parseSleepAid(card.sleepAid);
@@ -3826,6 +3866,20 @@ if (hudMusicPlay) {
     if (next.plugin === "radio" && next.playing && next.stationUrl) streamAsked = true;
     card.music = next;
     persistCard();
+    sitMusic();
+  });
+}
+const hudHouseMusicPlay = document.getElementById("hud-house-music-play");
+if (hudHouseMusicPlay) {
+  hudHouseMusicPlay.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const M = window.PetHouseMusic;
+    if (!M || !M.houseMusicToggle) return;
+    const next = M.parseMusic(M.houseMusicToggle(M.parseMusic(card.music), streamAsked).next);
+    if (next.plugin === "radio" && next.playing && next.stationUrl) streamAsked = true;
+    card.music = next;
+    persistCard();
+    paintHouseMusic();
     sitMusic();
   });
 }
