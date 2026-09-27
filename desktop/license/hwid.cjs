@@ -218,6 +218,7 @@ function weakMaterial(opts) {
  *   platform?: NodeJS.Platform | string,
  *   readFile?: typeof fs.readFileSync,
  *   writeFile?: typeof fs.writeFileSync,
+ *   mkdir?: typeof fs.mkdirSync,
  *   exec?: typeof execSync,
  *   fallbackId?: string,
  *   hostname?: string,
@@ -247,8 +248,11 @@ function resolveHwidDetail(opts = {}) {
   if (userDataDir) {
     const persistFile = path.join(userDataDir, "hwid.txt");
     const writeFile = opts.writeFile || fs.writeFileSync;
+    // An injected writer owns its storage. Only make a real folder when the real
+    // disk is the writer, or when the caller hands its own mkdir too.
+    const mkdir = opts.mkdir || (opts.writeFile ? null : fs.mkdirSync);
     try {
-      fs.mkdirSync(path.dirname(persistFile), { recursive: true });
+      if (mkdir) mkdir(path.dirname(persistFile), { recursive: true });
       writeFile(persistFile, id, "utf8");
     } catch {
       /* still return the computed id this process */

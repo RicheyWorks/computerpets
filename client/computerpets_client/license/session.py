@@ -17,6 +17,16 @@ from .bundle_zip import already_current
 
 STORE_NAME = "license.json"
 DEFAULT_BACKEND = "http://127.0.0.1:8081"
+NO_LICENSE_MESSAGE = "No license on this computer yet. Unlock a pet first, then download it."
+
+
+def _has_stored_license(store: dict[str, Any] | None) -> bool:
+    """True when license.json holds an issued license (ciphertext + iv)."""
+    body = store.get("license") if isinstance(store, dict) else None
+    if not isinstance(body, dict):
+        return False
+    ciphertext, iv = body.get("ciphertext"), body.get("iv")
+    return isinstance(ciphertext, str) and bool(ciphertext) and isinstance(iv, str) and bool(iv)
 
 
 def default_backend_url(env: dict[str, str] | None = None) -> str:
@@ -89,6 +99,7 @@ def create_license_session(
             user_data_dir=user_data_dir,
             read_file=reader,
             write_file=writer,
+            mkdir=maker,
             allow_weak_fallback=allow_weak is True,
         )
 
@@ -160,6 +171,9 @@ def create_license_session(
         cdn_line: str = "",
     ) -> dict[str, Any]:
         store = store_arg if store_arg is not None else load()
+        # Never unlocked, or Lock cleared it: say so before any decrypt or POST.
+        if not _has_stored_license(store):
+            raise LicenseError("no_license", NO_LICENSE_MESSAGE)
         secret = secret_arg if secret_arg is not None else license_secret(env)
         kwargs = {"now": now_fn} if now_fn else {}
         payload = payload_arg or decrypt_license(store["license"]["ciphertext"], store["license"]["iv"], secret, **kwargs)

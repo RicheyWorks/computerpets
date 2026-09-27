@@ -267,4 +267,51 @@ describe("hwid (CLIENT-CONTRACT §5)", () => {
     assert.match(settings, /status\.hwidMark/);
     assert.equal(settings.includes("status.hwid)"), false);
   });
+
+  it("makes no real folder when the caller injects its own writer", () => {
+    const dir = path.join(os.tmpdir(), `cp-hwid-nomkdir-${process.pid}-${Date.now()}`);
+    const written = new Map();
+    const readFile = (p) => {
+      if (String(p).endsWith("hwid.txt")) {
+        const err = new Error("ENOENT");
+        err.code = "ENOENT";
+        throw err;
+      }
+      return "machine-aaa\n";
+    };
+    const detail = resolveHwidDetail({
+      userDataDir: dir,
+      platform: "linux",
+      readFile,
+      writeFile: (p, data) => written.set(String(p), String(data)),
+    });
+    assert.equal(written.get(path.join(dir, "hwid.txt")), detail.id);
+    assert.equal(fs.existsSync(dir), false);
+
+    const made = [];
+    resolveHwidDetail({
+      userDataDir: dir,
+      platform: "linux",
+      readFile,
+      writeFile: () => {},
+      mkdir: (p, opts) => made.push([String(p), opts && opts.recursive]),
+    });
+    assert.deepEqual(made, [[dir, true]]);
+    assert.equal(fs.existsSync(dir), false);
+  });
+
+  it("still makes the folder and writes hwid.txt when it writes to the real disk", () => {
+    const base = fs.mkdtempSync(path.join(os.tmpdir(), "cp-hwid-real-"));
+    const dir = path.join(base, "nested", "userData");
+    try {
+      const detail = resolveHwidDetail({
+        userDataDir: dir,
+        platform: "linux",
+        readFile: (p) => (String(p).endsWith("hwid.txt") ? fs.readFileSync(p, "utf8") : "machine-aaa\n"),
+      });
+      assert.equal(fs.readFileSync(path.join(dir, "hwid.txt"), "utf8"), detail.id);
+    } finally {
+      fs.rmSync(base, { recursive: true, force: true });
+    }
+  });
 });
