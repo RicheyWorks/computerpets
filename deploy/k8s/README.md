@@ -122,6 +122,15 @@ sandbox): `STEAM_API_KEY`, `STEAM_APP_ID`, `MICROSOFT_PRODUCT_ID`,
 Microsoft Store product id; leave `STEAM_APP_ID` and
 `MICROSOFT_PRODUCT_ID` empty until a ComputerPets door exists.
 
+## Admin ledger from the web site
+
+The web site's `/admin` page calls `/api/admin/**` from the browser, so two settings meet:
+
+- **Web build:** `VITE_LICENSE_API_URL` is the license service's public address (for example the value of `API_PUBLIC_BASE_URL`). It is read when the web site is built (Vercel project environment, or `web/.env` locally; see `web/.env.example`). Unset, the page starts from its own origin, and only a page on localhost starts from `http://localhost:8081`. The field stays editable.
+- **This service:** `ADMIN_ALLOWED_ORIGINS` (ConfigMap, optional) lists the web site origins allowed to make those browser calls, comma-separated, for example `https://<your web site>`. Unset means any origin, as before. Every admin call is still HMAC-signed with `ADMIN_API_KEY`; CORS only decides which pages the browser lets through.
+
+Neither is a secret. Do not put the admin key in either.
+
 ## Image
 
 CI publishes `ghcr.io/richeyworks/computerpets` (`main` and `sha-<git>`) and

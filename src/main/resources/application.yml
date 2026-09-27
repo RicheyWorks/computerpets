@@ -224,6 +224,9 @@ bundle:
 admin:
   api-key: "${ADMIN_API_KEY:}"
   api-key-previous: "${ADMIN_API_KEY_PREVIOUS:}"
+  # Browser origins allowed to call /api/admin/** (CORS preflight only; every call is still HMAC-signed).
+  # Comma-separated, e.g. ADMIN_ALLOWED_ORIGINS=https://<your web site>. Default "*" keeps the old behavior.
+  allowed-origins: "${ADMIN_ALLOWED_ORIGINS:*}"
 
 # -----------------------------------------------------------------------------
 # Rate limiting (Phase 3.1)

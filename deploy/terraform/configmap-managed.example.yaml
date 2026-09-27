@@ -34,6 +34,9 @@ data:
   # REDIS_AUTH_REQUIRED: "true"
   MICROSOFT_DEV_MODE: "false"
   SERVER_PORT: "8081"
+  # Optional: web sites whose /admin page may call /api/admin/** (comma-separated origins).
+  # Unset = any origin; every admin call is still HMAC-signed (ADR 0071). Do not invent a host.
+  # ADMIN_ALLOWED_ORIGINS: "https://replace-with-your-web-site.example"
   # Public listener TLS (ADR 0077). In-cluster Service leaves these unset.
   # Replace the host with the name on your ACM certificate. Do not invent one.
   API_LISTENER_TLS_REQUIRED: "true"
