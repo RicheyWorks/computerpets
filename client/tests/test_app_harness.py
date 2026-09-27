@@ -73,6 +73,9 @@ CROSS_DOMAIN = {
     "desk.tray.switch",
     "desk.quit",
     "desk.market.search",
+    "desk.settings.window",
+    "desk.license.offline",
+    "desk.tray.menu",
     "cry.decode",
     "visit.todays",
     "visit.phases",
@@ -332,6 +335,31 @@ def test_main_rows_drive_the_real_main_process_offline():
     tray = invoke("desk.tray.switch")
     assert tray.extras["companions"] == 221
     assert tray.extras["picks"][0] == "red_panda"
+
+
+def test_house_window_unlock_and_tray_rows_run_offline_with_plain_words():
+    """The House window, Unlock offline, and the whole tray menu, through the real main.cjs."""
+    window = invoke("desk.settings.window")
+    assert window.ok, window.error
+    for mark in ("plugins=14", "pets=221", "unlock_opens=unlock", "base_url_refused=4", "save=sealed",
+                 "disk_plain_key=0", "unwritable=not_saved", "no_store=not_written", "details=folded_toggles",
+                 "mark=stored", "unlock_refused=plain"):
+        assert mark in window.trace, (mark, window.trace)
+    lic = invoke("desk.license.offline")
+    assert lic.ok, lic.error
+    for mark in ("valid=unlocked", "token_plain=0", "token=sealed", "no_store_token=memory", "no_token=plain",
+                 "expired=plain", "wrong_machine=plain", "server_binding=plain", "local_binding=plain",
+                 "net_down=plain", "http_500=plain", "denied=plain", "status_expired=plain",
+                 "missing_secret=plain", "fields_missing=plain", "secret_on_disk=0"):
+        assert mark in lic.trace, (mark, lic.trace)
+    tray = invoke("desk.tray.menu")
+    assert tray.ok, tray.error
+    for mark in ("care_commands=13", "vitals=status+tooltip", "house_window=one", "unlock_section=unlock",
+                 "hide_show=ok", "quit=1", "software=require_hardware", "refused=allow_software", "blocked=quit_only"):
+        assert mark in tray.trace, (mark, tray.trace)
+    labels = tray.extras["labels"]
+    assert labels[labels.index("Unlock…") + 1] == "Minds…"
+    assert labels[-1] == "Quit"
 
 
 def test_replay_fixtures_are_small_and_hold_no_secrets():

@@ -30,7 +30,7 @@
   </head>
   <body>
     <main>
-      <h1>Minds</h1>
+      <h1 id="mindsSection">Minds</h1>
       <p class="lead">Plug any AI into the overlay. A plugin key is not written in plain text in mind.json. When this computer has a secret store, the key is sealed there.</p>
       <label>Plugin</label>
       <select id="plugin"></select>
@@ -43,8 +43,9 @@
       <p class="ok" id="keyStore"></p>
       <button id="save" type="button">Save house default</button>
       <p class="ok" id="ok"></p>
+      <p class="err" id="mindErr"></p>
       <hr />
-      <h2>Unlock</h2>
+      <h2 id="unlockSection">Unlock</h2>
       <p class="lead" id="unlockIntro">Pets work without unlocking. Unlocking is optional.</p>
       <details class="fold" id="unlockDetails">
         <summary>Details</summary>
@@ -116,13 +117,29 @@
         model.value = p.model || "";
         base.value = p.base || "";
       });
+      const okLine = document.getElementById("ok");
+      const mindErr = document.getElementById("mindErr");
       document.getElementById("save").addEventListener("click", async () => {
+        okLine.textContent = "";
+        mindErr.textContent = "";
+        // A Base URL talk would refuse is named here; nothing is saved until it is fixed.
+        const problem = window.PetMind.baseUrlProblem ? window.PetMind.baseUrlProblem(base.value, plugin.value) : "";
+        if (problem) {
+          mindErr.textContent = problem;
+          return;
+        }
         s.default = { plugin: plugin.value, model: model.value, baseUrl: base.value, apiKey: key.value };
         const result = await window.PetMind.save(s);
         const kept = result && result.kept ? result.kept : "none";
+        if (result && result.saved === false) {
+          // The key line keeps what it said, unless an old plain key is still sitting in mind.json.
+          if (kept === "plain") paintKey("plain");
+          mindErr.textContent = "Not saved. mind.json could not be written, so the pets keep the mind they had. Close other copies of the app and try again.";
+          return;
+        }
         s.keyKept = kept;
         paintKey(kept);
-        document.getElementById("ok").textContent = kept === "none" || kept === "plain" ? "Saved the mind. The key was not written to disk." : "Saved. Talk to them again.";
+        okLine.textContent = kept === "none" || kept === "plain" ? "Saved the mind. The key was not written to disk." : "Saved. Talk to them again.";
       });
 
       const backend = document.getElementById("backend");
@@ -446,6 +463,14 @@
         if (window.desk?.licenseStatus) showLicense(await window.desk.licenseStatus());
         else showLicense(status);
       });
+
+      // Tray Unlock… opens this window at Unlock, Minds… at Minds; a second click scrolls the open window.
+      function showSection(section) {
+        const node = document.getElementById(section === "unlock" ? "unlockSection" : "mindsSection");
+        if (node && typeof node.scrollIntoView === "function") node.scrollIntoView({ block: "start" });
+      }
+      showSection(String(window.location && window.location.hash || "").replace(/^#/, ""));
+      if (window.desk?.onSettingsSection) window.desk.onSettingsSection(showSection);
     </script>
   </body>
 </html>

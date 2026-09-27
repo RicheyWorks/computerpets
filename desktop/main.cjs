@@ -45,6 +45,8 @@ function getLicenseSession() {
     licenseSession = createLicenseSession({
       userDataDir: app.getPath("userData"),
       env: process.env,
+      // The download sign-in is sealed in the OS secret store like a plugin key; with no store it stays in memory only.
+      codec: () => mindCodec(),
     });
   }
   return licenseSession;
@@ -67,6 +69,12 @@ function plainLicenseResult(result) {
     const host = PlainError.hostOf(result.downloadUrl || "");
     console.warn(`[license] bundle: ${result.error}`);
     return { ...result, error: PlainError.plainBundleError(result.error, { host }) };
+  }
+  if (result && result.error && typeof result.error === "object" && typeof result.error.code === "string") {
+    // license-status carries a stored license's own refusal (expired, cannot open); it gets the same plain words.
+    const host = PlainError.hostOf(result.backendUrl || "");
+    console.warn(`[license] status: ${PlainError.rawLogLine(result.error)}`);
+    return { ...result, error: PlainError.plainLicenseError(result.error, { host }) };
   }
   return result;
 }
@@ -173,7 +181,7 @@ function readMind() {
 
 function writeMind(data) {
   const file = mindFile();
-  if (!file || !data || typeof data !== "object") return { kept: "none" };
+  if (!file || !data || typeof data !== "object") return { kept: "none", saved: false };
   let previous = null;
   try {
     previous = JSON.parse(fs.readFileSync(file, "utf8"));
@@ -184,9 +192,10 @@ function writeMind(data) {
   try {
     fs.writeFileSync(file, JSON.stringify(result.file));
   } catch {
-    return { kept: MindSecret.fileHasPlainKey(previous) ? "plain" : "none" };
+    // saved:false lets Minds say "Not saved" instead of "Saved" when mind.json could not be written.
+    return { kept: MindSecret.fileHasPlainKey(previous) ? "plain" : "none", saved: false };
   }
-  return { kept: result.kept };
+  return { kept: result.kept, saved: true };
 }
 
 const sealedContents = new WeakSet();
@@ -333,8 +342,8 @@ function trayTemplate() {
     { type: "separator" },
     ...careMenu(),
     { type: "separator" },
-    { label: "Unlock…", click: () => openSettings() },
-    { label: "Minds…", click: () => openSettings() },
+    { label: "Unlock…", click: () => openSettings("unlock") },
+    { label: "Minds…", click: () => openSettings("minds") },
     {
       label: "Show",
       click: () => {
@@ -410,10 +419,13 @@ function fitWorkArea() {
   }
 }
 
-function openSettings() {
+/** Unlock… opens the House window at Unlock; Minds… at Minds (the top). An open window scrolls there. */
+function openSettings(section) {
+  const at = section === "unlock" ? "unlock" : "minds";
   if (settingsWin) {
     settingsWin.show();
     settingsWin.focus();
+    settingsWin.webContents.send("settings-section", at);
     return;
   }
   settingsWin = new BrowserWindow({
@@ -429,7 +441,7 @@ function openSettings() {
     },
   });
   sealDeskContents(settingsWin.webContents);
-  settingsWin.loadFile(path.join(__dirname, "renderer", "settings.html"));
+  settingsWin.loadFile(path.join(__dirname, "renderer", "settings.html"), { hash: at });
   settingsWin.on("closed", () => {
     settingsWin = null;
   });
@@ -527,8 +539,8 @@ function popupPetMenu(x, y) {
     { type: "separator" },
     ...careMenu(),
     { type: "separator" },
-    { label: "Unlock…", click: () => openSettings() },
-    { label: "Minds…", click: () => openSettings() },
+    { label: "Unlock…", click: () => openSettings("unlock") },
+    { label: "Minds…", click: () => openSettings("minds") },
     { type: "separator" },
     { label: "Hide the window", click: () => win?.hide() },
     { label: "Quit", click: () => app.quit() },

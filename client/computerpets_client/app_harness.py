@@ -1389,6 +1389,50 @@ def _desk_rows() -> list[Affordance]:
             ),
         ),
         Affordance(
+            "desk.settings.window",
+            "desk",
+            "The House window (Minds + Unlock) itself: fields, save, Base URL checks, Details, plain errors",
+            "settings.html + mind.js + license-net.js + presence.js through the real preload.cjs and main.cjs",
+            notes=(
+                "Tray Minds... opens settings.html sandboxed and isolated with the preload, at Minds; Unlock... reuses "
+                "the window and scrolls it to Unlock. The page's own scripts run against a stand-in DOM (harness_windows.cjs) "
+                "and the real preload.cjs, which may require only electron. 14 plugins with local first, the whole roster "
+                "under Pet, Locked on open. Four bad Base URLs are named and not saved; a good save seals the key "
+                "(mind.json has no plain key); an unwritable mind.json says Not saved; no secret store says the key was not "
+                "written to disk. Details is folded, the summary toggles it, and the mark line follows hwid.txt. Unlock with "
+                "an empty Steam ID or a refused connection shows only plain words; the raw error is logged. No network."
+            ),
+        ),
+        Affordance(
+            "desk.license.offline",
+            "desk",
+            "Unlock / Signed download offline: valid, expired, wrong machine, network down, 500, 403, no store",
+            "main.cjs license-* IPC + desktop/license session / client / decrypt / plain-error",
+            notes=(
+                "The real license code answers fake house-server replies (contract double and hand-made answers). "
+                "The license key and signing key are test-only values; hwid.txt is pre-written, so the OS machine id "
+                "is never read. A valid unlock keeps the download sign-in sealed (never plain) in license.json; with no "
+                "secret store it stays in memory and a later download says so. Expired, wrong machine (issued and "
+                "server-side), refused connection, HTTP 500, 403, an expired stored license on license-status, a missing "
+                "license key, and empty Steam fields each give one exact plain sentence; the raw text is only in the log. "
+                "No file under userData holds the key or a sign-in."
+            ),
+        ),
+        Affordance(
+            "desk.tray.menu",
+            "desk",
+            "The whole tray menu: rows, enabled state, every click, GPU gate menus",
+            "main.cjs trayTemplate / careMenu / refusedTrayTemplate / gpuPathRows / refreshMenus",
+            notes=(
+                "Loads the real desktop/main.cjs under a stand-in Electron. The tray rows come in order with only the GPU "
+                "line and the status line disabled; every care row sends its one command; vitals rename the special row "
+                "and fill the status line and tooltip; Minds... opens one House window and Unlock... reuses it at Unlock; "
+                "Hide the window / Show, Follow me across desktops (Windows), and Quit (counted). The software, refused, "
+                "and no-adapter GPU gates are booted in their own node processes: Require hardware / Allow software "
+                "restart only when the choice was saved."
+            ),
+        ),
+        Affordance(
             "desk.links.open",
             "desk",
             "Painted news links open in the keeper's browser, never in the overlay",
@@ -1716,6 +1760,12 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("quit_desk", domain="desk", action_id=aid)
     if local_id == "market.search":
         return _run_node_smoke("market_search", domain="desk", action_id=aid)
+    if local_id == "settings.window":
+        return _run_node_smoke("settings_window", domain="desk", action_id=aid)
+    if local_id == "license.offline":
+        return _run_node_smoke("license_offline", domain="desk", action_id=aid)
+    if local_id == "tray.menu":
+        return _run_node_smoke("tray_menu", domain="desk", action_id=aid)
     if local_id == "favorites.news":
         return _run_node_smoke("news_favorites", domain="desk", action_id=aid)
     if local_id == "favorites.market":
