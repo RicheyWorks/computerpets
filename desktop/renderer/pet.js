@@ -1580,7 +1580,7 @@ function paintHud() {
     hudHeartbeat.hidden = !serverLine;
     hudHeartbeat.textContent = serverLine;
     hudHeartbeat.title = K.houseServerTitle(houseServer);
-    hudHeartbeat.setAttribute("data-heartbeat", houseServer.reachable === true ? "UP" : seen ? "DOWN" : "OFF");
+    hudHeartbeat.setAttribute("data-heartbeat", K.houseServerTone({ ...houseServer, seen }));
   }
   if (hudGpu && window.PetGpu) {
     const now = Date.now();

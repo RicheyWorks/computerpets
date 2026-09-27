@@ -4,32 +4,42 @@
  * News RSS, market quotes, and Radio Find name the host in the plate before
  * the renderer calls main. Main fetches only when that same painted line is
  * on the IPC payload. A loopback URL stays on this computer.
- * The sentence is weather-areas `clientNetLine`. The path, the query, and
- * the fragment stay off the line.
+ * News and quotes use the kid-plain weather-areas `plainNetLine` ("This
+ * computer's internet address also goes to Google News, like visiting any
+ * website."). Radio Find is in Rui's music block and keeps `clientNetLine`.
+ * The path, the query, and the fragment stay off the line.
  */
-const { clientNetLine } = require("../renderer/weather-areas.js");
+const { clientNetLine, plainNetLine, PLAIN_NET_HEAD, PLAIN_NET_TAIL } = require("../renderer/weather-areas.js");
 
-const NEWS_HOST = "the news host";
+const NEWS_HOST = "Google News";
 const RADIO_HOST = "the radio host";
-const QUOTE_HOST = "the quote host";
-const TERMINAL_HOST = "the terminal host";
-const STOCK_HOST = "the stock host";
+const QUOTE_HOST = "CoinGecko";
+const TERMINAL_HOST = "GeckoTerminal";
+const STOCK_HOST = "Yahoo Finance";
 
-const NEWS_LEAD = "this news send reads the rss feed.";
+const NEWS_LEAD = "This asks Google News, a news website, for headlines. It sends the topic you picked, if there is one.";
 const RADIO_LEAD = "this find sends the station look-up.";
-const QUOTE_LEAD = "this quote sends the saved list.";
-const LOOK_LEAD = "this look-up sends the typed name.";
+const QUOTE_LEAD = "This asks price websites for the prices on your saved list. It sends the names on that list.";
+const LOOK_LEAD = "This asks CoinGecko, a price website, to find the name you typed. It sends what you typed.";
 const LOCAL_STAYS = "this read stays on this computer.";
 
 const LOOPBACK = new Set(["127.0.0.1", "localhost", "::1"]);
 
+/** The two network-address sentence shapes. Same gate, different words. */
+const PLAIN = { line: plainNetLine, head: PLAIN_NET_HEAD, tail: PLAIN_NET_TAIL };
+const CLIENT = {
+  line: clientNetLine,
+  head: "this computer's network address goes with the https request to ",
+  tail: ", as any client.",
+};
+
 const GATES = {
-  news: { lead: NEWS_LEAD, host: NEWS_HOST },
-  radio: { lead: RADIO_LEAD, host: RADIO_HOST },
-  quote: { lead: QUOTE_LEAD, host: QUOTE_HOST },
-  terminal: { lead: QUOTE_LEAD, host: TERMINAL_HOST },
-  stock: { lead: QUOTE_LEAD, host: STOCK_HOST },
-  look: { lead: LOOK_LEAD, host: QUOTE_HOST },
+  news: { lead: NEWS_LEAD, host: NEWS_HOST, form: PLAIN },
+  radio: { lead: RADIO_LEAD, host: RADIO_HOST, form: CLIENT },
+  quote: { lead: QUOTE_LEAD, host: QUOTE_HOST, form: PLAIN },
+  terminal: { lead: QUOTE_LEAD, host: TERMINAL_HOST, form: PLAIN },
+  stock: { lead: QUOTE_LEAD, host: STOCK_HOST, form: PLAIN },
+  look: { lead: LOOK_LEAD, host: QUOTE_HOST, form: PLAIN },
 };
 
 function hostOf(raw) {
@@ -48,14 +58,16 @@ function isLoopbackUrl(raw) {
 /**
  * The painted line names this host when it carries the shared sentence
  * for that host alone, or for that host inside a combined plate phrase.
+ * `form` is the sentence shape (kid-plain by default; radio passes the older one).
  * @param {unknown} shown
  * @param {string} hostLabel
+ * @param {{ line: (host: string) => string, head: string, tail: string }} [form]
  */
-function phraseNames(shown, hostLabel) {
+function phraseNames(shown, hostLabel, form = PLAIN) {
   if (typeof shown !== "string" || !hostLabel) return false;
-  if (shown.indexOf(clientNetLine(hostLabel)) !== -1) return true;
-  const head = "this computer's network address goes with the https request to ";
-  const tail = ", as any client.";
+  if (shown.indexOf(form.line(hostLabel)) !== -1) return true;
+  const head = form.head;
+  const tail = form.tail;
   let from = 0;
   while (from < shown.length) {
     const start = shown.indexOf(head, from);
@@ -70,9 +82,9 @@ function phraseNames(shown, hostLabel) {
   return false;
 }
 
-function lineAllows(shown, hostLabel, lead) {
+function lineAllows(shown, hostLabel, lead, form = PLAIN) {
   if (typeof shown !== "string" || !lead || shown.indexOf(lead) === -1) return false;
-  return phraseNames(shown, hostLabel);
+  return phraseNames(shown, hostLabel, form);
 }
 
 /**
@@ -89,7 +101,7 @@ function mayFetch(kind, shown, urls) {
   if (!list.length) return true;
   const remote = list.filter((url) => !isLoopbackUrl(url));
   if (!remote.length) return true;
-  return lineAllows(shown, gate.host, gate.lead);
+  return lineAllows(shown, gate.host, gate.lead, gate.form);
 }
 
 module.exports = {
@@ -104,6 +116,7 @@ module.exports = {
   LOOK_LEAD,
   LOCAL_STAYS,
   clientNetLine,
+  plainNetLine,
   isLoopbackUrl,
   phraseNames,
   lineAllows,

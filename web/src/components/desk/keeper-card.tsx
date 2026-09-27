@@ -6,12 +6,12 @@ import {
   VOICE_TRUTH,
   careTruth,
   heartbeatDetail,
+  heartbeatTone,
   heartbeatLine,
   heartbeatPoll,
   keeperMeters,
   type Heartbeat,
 } from "@/lib/pets/keeper";
-import { SPARK_H, SPARK_W, UNREAD_GPU, gpuLine, sparkline } from "@/lib/pets/gpu";
 import { UNREAD_LISTENER, presentListener, type ListenerName } from "@/lib/ai/listener";
 import { listenerReadBody } from "@/lib/ai/listener-post";
 import { readMindListener } from "@/lib/ai/listener-read";
@@ -105,7 +105,6 @@ export function KeeperCard({
   className?: string;
 }) {
   const meters = keeperMeters(stats);
-  const gpuSpark = sparkline([], UNREAD_GPU, 0);
   const beat = useHeartbeat();
   const [listener, setListener] = useState<ListenerName>(UNREAD_LISTENER);
   const asked = useMindBinding(guestKey);
@@ -886,19 +885,10 @@ export function KeeperCard({
             </button>
             <p className="keeper-truth">{QUIT_TRUTH}</p>
           </div>
-          <p className="keeper-heartbeat" data-heartbeat={beat.status} title={heartbeatDetail(beat)}>
+          <p className="keeper-heartbeat" data-heartbeat={heartbeatTone(beat, heartbeatPoll.answered())} title={heartbeatDetail(beat)}>
             {heartbeatLine(beat, heartbeatPoll.answered())}
           </p>
-          <p className="keeper-gpu" data-gpu={UNREAD_GPU.status}>
-            {gpuLine(UNREAD_GPU)}
-            <span className="gpu-spark" data-spark={gpuSpark.empty ? "empty" : "trail"} style={{ color: gpuSpark.ink }} aria-hidden="true">
-              {gpuSpark.path ? (
-                <svg viewBox={`0 0 ${SPARK_W} ${SPARK_H}`} width={SPARK_W} height={SPARK_H} aria-hidden="true">
-                  <path d={gpuSpark.path} fill="none" stroke={gpuSpark.ink} strokeWidth={1} />
-                </svg>
-              ) : null}
-            </span>
-          </p>
+          {/* No GPU line on the web page: a browser cannot read the GPU, so it would always say "no reading". The desktop app and the blotter show it. */}
           <p className="keeper-listener" data-listener={listener.id}>
             {listener.line}
           </p>
@@ -997,7 +987,7 @@ export function KeeperHeartbeat({ className }: { className?: string }) {
   const beat = useHeartbeat();
 
   return (
-    <p className={cn("keeper-heartbeat", className)} data-heartbeat={beat.status} title={heartbeatDetail(beat)}>
+    <p className={cn("keeper-heartbeat", className)} data-heartbeat={heartbeatTone(beat, heartbeatPoll.answered())} title={heartbeatDetail(beat)}>
       {heartbeatLine(beat, heartbeatPoll.answered())} · {careTruth()}
     </p>
   );

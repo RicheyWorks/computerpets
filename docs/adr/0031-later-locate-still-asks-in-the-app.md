@@ -34,3 +34,4 @@ This slice spends the in-app yes on one locate. It does not revoke a Chromium gr
 - Rounding is about 11 km. It is not anonymity.
 - License `hwid` still reads a named machine id only when a bind needs it. A missing OS id still waits for its own yes. [0030](0030-missing-os-id-waits-for-a-yes.md). This slice does not change that door.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.
+- Later wording (2026-09): the locate question now reads "Send where this computer is? If you said yes to your browser or computer before, it may not ask again, but this app still asks you first. This app can't take back a yes you gave your browser or computer. You can change that in its settings." Same gate. See ROADMAP (network consent lines in plain words).

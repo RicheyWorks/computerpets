@@ -972,6 +972,120 @@ async function plainWords() {
   ]);
 }
 
+async function consentPlain() {
+  const lib = (rel) => import(pathToFileURL(join(WEB, "src", "lib", ...rel.split("/"))).href);
+  const WA = await lib("pets/weather-areas.ts");
+  const N = await lib("pets/news.ts");
+  const M = await lib("pets/market.ts");
+  const K = await lib("pets/keeper.ts");
+  const B = await lib("admin/base.ts");
+  const HM = await lib("pets/house-music.ts");
+  const OWA = require(join(RENDERER, "weather-areas.js"));
+  const ON = require(join(RENDERER, "news.js"));
+  const OM = require(join(RENDERER, "market.js"));
+  const OK = require(join(RENDERER, "keeper.js"));
+  const PlateNet = require(join(ROOT, "desktop", "presence", "plate-net.cjs"));
+  const JARGON = /https request|as any client|geocode host|forecast host|news host|quote host|terminal host|stock host|wikipedia host|rss feed|os or browser prompt|revoke that grant|\bjti\b|soft-delet|pump mint|mint or contract|honest offline|needs a key/i;
+  const bad = [];
+
+  const mixedPrefs = { marketTickers: [
+    { symbol: "ETH", kind: "crypto", geckoId: "ethereum", name: "Ethereum" },
+    { symbol: "PUMP", kind: "crypto", name: "Pump", platform: "solana", address: "So11111111111111111111111111111111111111112" },
+  ], nftCollections: [], nftCustomized: true };
+  const lines = {
+    forecast: WA.TYPED_FORECAST,
+    savedForecast: WA.SAVED_FORECAST_CONTINUE,
+    savedAsk: WA.SAVED_HERE_ASK,
+    look: WA.GEOCODE_LOOK,
+    reverse: WA.GEOCODE_REVERSE,
+    hereAsk: WA.HERE_ASK,
+    hereSend: WA.HERE_SEND,
+    news: N.NEWS_RSS_HONESTY,
+    wiki: N.NEWS_WIKI_HONESTY,
+    quote: M.quoteHonesty(M.parseMarket(mixedPrefs)),
+    quoteLook: M.QUOTE_LOOK,
+  };
+  const overlay = {
+    forecast: OWA.TYPED_FORECAST,
+    savedForecast: OWA.SAVED_FORECAST_CONTINUE,
+    savedAsk: OWA.SAVED_HERE_ASK,
+    look: OWA.GEOCODE_LOOK,
+    reverse: OWA.GEOCODE_REVERSE,
+    hereAsk: OWA.HERE_ASK,
+    hereSend: OWA.HERE_SEND,
+    news: ON.NEWS_RSS_HONESTY,
+    wiki: ON.NEWS_WIKI_HONESTY,
+    quote: OM.quoteHonesty(OM.parseMarket(mixedPrefs)),
+    quoteLook: OM.QUOTE_LOOK,
+  };
+  if (JSON.stringify(lines) !== JSON.stringify(overlay)) bad.push(`web and overlay consent lines drifted ${JSON.stringify([lines, overlay])}`);
+  const names = { forecast: "Open-Meteo", savedForecast: "Open-Meteo", savedAsk: "Open-Meteo", look: "Open-Meteo", reverse: "Open-Meteo", hereSend: "Open-Meteo", news: "Google News", wiki: "Wikipedia", quote: "CoinGecko and GeckoTerminal", quoteLook: "CoinGecko" };
+  for (const [k, site] of Object.entries(names)) if (!lines[k].includes(site)) bad.push(`${k} does not name ${site}`);
+  for (const k of ["forecast", "savedForecast", "savedAsk", "look", "reverse", "news", "wiki", "quote", "quoteLook"]) {
+    if (!/This computer's internet address also goes to .+, like visiting any website\./.test(lines[k])) bad.push(`${k} does not say the internet address goes along`);
+    if (!/It sends |This sends /.test(lines[k])) bad.push(`${k} does not say what it sends`);
+  }
+  const leaks = Object.entries(lines).filter(([, v]) => JARGON.test(v)).map(([k]) => k);
+  if (leaks.length) bad.push(`developer words in consent lines: ${leaks.join(", ")}`);
+
+  const gate = {
+    forecast: WA.forecastMayLeave(lines.forecast) && WA.forecastMayLeave(lines.savedForecast) && !WA.forecastMayLeave(lines.look) && !WA.forecastMayLeave(WA.FORECAST_NET) && !WA.forecastMayLeave(lines.savedAsk),
+    look: WA.geocodeLookMayLeave(lines.look) && !WA.geocodeLookMayLeave(lines.reverse),
+    reverse: WA.geocodeReverseMayLeave(lines.reverse) && !WA.geocodeReverseMayLeave(lines.look),
+    news: N.rssMayLeave(lines.news) && !N.rssMayLeave(lines.wiki) && N.featuredMayLeave(lines.wiki) && !N.featuredMayLeave(lines.news),
+    quote: M.quoteHostMayLeave(lines.quote, M.TERMINAL_HOST_NAME) && M.quoteHostMayLeave(lines.quote, M.QUOTE_HOST_NAME) && !M.quoteHostMayLeave(lines.quote, M.STOCK_HOST_NAME) && M.lookMayLeave(lines.quoteLook) && !M.lookMayLeave(lines.quote),
+    main: PlateNet.mayFetch("news", lines.news, ["https://news.google.com/rss"]) && PlateNet.mayFetch("quote", lines.quote, ["https://api.coingecko.com/api/v3/simple/price"])
+      && PlateNet.mayFetch("terminal", lines.quote, ["https://api.geckoterminal.com/x"]) && !PlateNet.mayFetch("stock", lines.quote, ["https://query1.finance.yahoo.com/x"])
+      && PlateNet.mayFetch("look", lines.quoteLook, ["https://api.coingecko.com/api/v3/search"]) && !PlateNet.mayFetch("news", lines.wiki, ["https://news.google.com/rss"])
+      && !PlateNet.mayFetch("news", "this news send reads the rss feed. " + WA.clientNetLine("the news host"), ["https://news.google.com/rss"]),
+    radioKept: HM.RADIO_NET === WA.clientNetLine("the radio host") && PlateNet.mayFetch("radio", `${PlateNet.RADIO_LEAD} ${HM.RADIO_NET}`, ["https://de1.api.radio-browser.info/json"]),
+  };
+  const shut = Object.entries(gate).filter(([, v]) => !v).map(([k]) => k);
+  if (shut.length) bad.push(`gates drifted: ${shut.join(", ")}`);
+
+  const html = readFileSync(join(RENDERER, "index.html"), "utf8");
+  const shipped = ["savedAsk", "look", "reverse", "hereAsk", "hereSend", "quoteLook"].filter((k) => !html.includes(lines[k]));
+  if (shipped.length) bad.push(`overlay index.html ships old consent words: ${shipped.join(", ")}`);
+
+  const card = readFileSync(join(WEB, "src", "components", "desk", "keeper-card.tsx"), "utf8");
+  if (/keeper-gpu|gpuLine\(/.test(card)) bad.push("the web card still paints a GPU line");
+  const tones = {
+    webNever: K.heartbeatTone(K.UNREAD_HEARTBEAT, false),
+    webStopped: K.heartbeatTone(K.UNREAD_HEARTBEAT, true),
+    webUp: K.heartbeatTone(K.parseHeartbeat({ status: "UP" }), true),
+    overlayNever: OK.houseServerTone({ show: true, reachable: false, seen: false }),
+    overlayStopped: OK.houseServerTone({ show: true, reachable: false, seen: true }),
+    overlayUp: OK.houseServerTone({ show: true, reachable: true, seen: true }),
+  };
+  if (JSON.stringify(tones) !== JSON.stringify({ webNever: "OFF", webStopped: "DOWN", webUp: "UP", overlayNever: "OFF", overlayStopped: "DOWN", overlayUp: "UP" })) bad.push(`heartbeat tones ${JSON.stringify(tones)}`);
+  const webCss = readFileSync(join(WEB, "src", "styles.css"), "utf8");
+  const deskCss = readFileSync(join(RENDERER, "styles.css"), "utf8");
+  if (!/\.keeper-heartbeat\[data-heartbeat="DOWN"\]/.test(webCss) || !/#hud-heartbeat\[data-heartbeat="DOWN"\]/.test(deskCss) || /data-heartbeat="OFF"\]/.test(webCss + deskCss)) {
+    bad.push("only a stopped server should be styled as a warning");
+  }
+  if (!/data-heartbeat=\{heartbeatTone\(beat, heartbeatPoll\.answered\(\)\)\}/.test(card)) bad.push("the web card does not paint the heartbeat tone");
+
+  const quotes = { placeholder: M.MARKET_PLACEHOLDER, truth: M.MARKET_TRUTH, nft: M.NFT_TRUTH, venue: M.parseMarket({}).marketplaces[0].note };
+  const overlayQuotes = { placeholder: OM.MARKET_PLACEHOLDER, truth: OM.MARKET_TRUTH, nft: OM.NFT_TRUTH, venue: OM.parseMarket({}).marketplaces[0].note };
+  if (JSON.stringify(quotes) !== JSON.stringify(overlayQuotes)) bad.push("quotes plate words drifted between web and overlay");
+  const admin = readFileSync(join(WEB, "src", "routes", "admin.tsx"), "utf8");
+  const adminSaid = [B.REVOKED_NOTE, B.revokedListStale("Try again in a moment."), ...Object.values(quotes)];
+  if (adminSaid.some((s) => JARGON.test(s)) || /jti or owner|Soft-deleted|" · hwid"|Same gate as the API/.test(admin)) bad.push("admin or quotes words still carry developer words");
+
+  if (bad.length) return fail(bad.join("; "), { lines, gate, tones, quotes });
+  return ok("network consent lines name the website in plain words on web and overlay; same gates; web GPU hidden; calm server tone", { lines, gate, tones, quotes }, [
+    "consent=names_site+what_is_sent",
+    "consent=no_https_jargon",
+    "gate=same_painted_lines",
+    "main=plain_lines+radio_kept",
+    "overlay.html=same_words",
+    "gpu.web=hidden",
+    "heartbeat=off_neutral+down_warns",
+    "quotes+admin=plain",
+    "lockstep=web+overlay",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -984,6 +1098,7 @@ const COMMANDS = {
   menu_keys_escape: menuKeysEscape,
   first_run: firstRun,
   plain_words: plainWords,
+  consent_plain: consentPlain,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

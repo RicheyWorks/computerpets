@@ -109,6 +109,7 @@ CROSS_DOMAIN = {
     "web.pet_keys_plates",
     "web.menu_keys_escape",
     "web.plain_words",
+    "web.consent_plain",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -470,6 +471,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.pet_keys_plates",
         "web.menu_keys_escape",
         "web.plain_words",
+        "web.consent_plain",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -636,6 +638,23 @@ def test_plain_words_row_keeps_developer_words_off_the_card_and_plates():
     assert pw.extras["lines"]["weatherClosed"] == "open to add a place"
     assert pw.extras["lines"]["newsClosed"] == "open to see headlines"
     assert pw.extras["gpu"][0] == "GPU · no reading"
+
+
+def test_consent_plain_row_names_the_website_and_keeps_the_gates():
+    """Consent lines in plain words on web and overlay, same painted-line gates, web GPU hidden, calm server tone."""
+    cp = invoke("web.consent_plain")
+    assert cp.ok, (cp.error, cp.detail)
+    for mark in ("consent=names_site+what_is_sent", "consent=no_https_jargon", "gate=same_painted_lines",
+                 "main=plain_lines+radio_kept", "overlay.html=same_words", "gpu.web=hidden",
+                 "heartbeat=off_neutral+down_warns", "quotes+admin=plain", "lockstep=web+overlay"):
+        assert mark in cp.trace, (mark, cp.trace)
+    assert cp.extras["lines"]["forecast"] == (
+        "This asks Open-Meteo, a weather website, for your forecast. It sends the place you picked. "
+        "This computer's internet address also goes to Open-Meteo, like visiting any website."
+    )
+    assert cp.extras["lines"]["quote"].endswith("goes to CoinGecko and GeckoTerminal, like visiting any website.")
+    assert all(cp.extras["gate"].values()), cp.extras["gate"]
+    assert cp.extras["tones"]["webNever"] == "OFF" and cp.extras["tones"]["webStopped"] == "DOWN"
 
 
 def test_first_run_rows_start_clean_and_show_the_hello_once():

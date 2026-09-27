@@ -28,3 +28,4 @@ This slice shows the same network-address sentence, with the host named, before 
 - A later forecast still waits until the weather panel is open. [0032](0032-later-forecast-names-the-network-address.md). A geocode look-up still waits for its own line. [0033](0033-geocode-names-the-network-address.md). This slice does not change those gates.
 - License `hwid` still reads a named machine id only when a bind needs it. A missing OS id still waits for its own yes. [0030](0030-missing-os-id-waits-for-a-yes.md). This slice does not change that door.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.
+- Later wording (2026-09): news and quotes now name Google News, Wikipedia, CoinGecko, GeckoTerminal, and Yahoo Finance in plain words (`plainNetLine`); Radio Find is in Rui's music block and keeps the sentence above. See ROADMAP (network consent lines in plain words).

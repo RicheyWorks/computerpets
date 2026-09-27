@@ -1125,6 +1125,12 @@ select {
   color: #8fa08a;
 }
 
+/* Only a server that answered and then stopped is a warning. "OFF" (optional, never seen) stays muted. */
+#hud-heartbeat[data-heartbeat="DOWN"],
+.keeper-heartbeat[data-heartbeat="DOWN"] {
+  color: #c79a5a;
+}
+
 #hud-gpu,
 .keeper-gpu {
   margin: 4px 0 0;

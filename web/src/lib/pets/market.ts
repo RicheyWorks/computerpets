@@ -1,13 +1,13 @@
-/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. A quote waits until the open quotes plate shows this computer's network address on that https request. CoinGecko, GeckoTerminal, Yahoo, and a typed look-up also refuse inside the read wrappers when that painted line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. Same map as desktop market.js. No invented key. */
-import { clientNetLine } from "./weather-areas.ts";
+/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. A quote waits until the open quotes plate shows the line that names the website (Google News, Wikipedia, CoinGecko, GeckoTerminal, Yahoo Finance) and says this computer's internet address goes there too. CoinGecko, GeckoTerminal, Yahoo, and a typed look-up also refuse inside the read wrappers when that painted line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. Same map as desktop market.js. No invented key. */
+import { PLAIN_NET_HEAD, PLAIN_NET_TAIL, plainNetLine } from "./weather-areas.ts";
 
 export const MARKET_LABEL = "Quotes";
 export const COIN_LABEL = "Coins";
 export const NFT_LABEL = "NFTs";
-export const MARKET_PLACEHOLDER = "Coin, ticker, or contract — ETH, BTC, pump mint";
+export const MARKET_PLACEHOLDER = "A coin or stock — ETH, BTC, AAPL, or a coin's address";
 export const NFT_PLACEHOLDER = "NFT collection — pudgy, punks";
-export const MARKET_TRUTH = "Majors and search use CoinGecko. Small/meme coins (pump.fun and kin) use GeckoTerminal by mint or contract. Stocks are Yahoo chart. No paid key.";
-export const NFT_TRUTH = "Collections use CoinGecko floors when reachable. Marketplaces are your list — OpenSea, Blur, Magic Eden, Rarible, Robinhood NFT — with honest offline when a venue needs a key.";
+export const MARKET_TRUTH = "Big coins and search come from CoinGecko. A small coin you add by its address comes from GeckoTerminal. Stocks come from Yahoo Finance. All free, no paid account.";
+export const NFT_TRUTH = "Collection floor prices come from CoinGecko when it answers. Your marketplaces (OpenSea, Blur, Magic Eden, Rarible, Robinhood NFT) are links; one that needs a paid account says so instead of showing a price.";
 export const YAHOO_HOST = "query1.finance.yahoo.com";
 export const COINGECKO_HOST = "api.coingecko.com";
 export const GECKO_TERMINAL_HOST = "api.geckoterminal.com";
@@ -45,11 +45,11 @@ export const DEFAULT_NFTS = [
 ] as const;
 
 export const NFT_MARKETPLACES = [
-  { id: "opensea", name: "OpenSea", url: "https://opensea.io", note: "needs a key for live floors" },
-  { id: "blur", name: "Blur", url: "https://blur.io", note: "needs a key for live floors" },
-  { id: "magiceden", name: "Magic Eden", url: "https://magiceden.io", note: "needs a key for live floors" },
-  { id: "rarible", name: "Rarible", url: "https://rarible.com", note: "needs a key for live floors" },
-  { id: "robinhood-nft", name: "Robinhood NFT", url: "https://robinhood.com/us/en/support/articles/robinhood-nft/", note: "no public floor feed" },
+  { id: "opensea", name: "OpenSea", url: "https://opensea.io", note: "needs a paid account for live prices" },
+  { id: "blur", name: "Blur", url: "https://blur.io", note: "needs a paid account for live prices" },
+  { id: "magiceden", name: "Magic Eden", url: "https://magiceden.io", note: "needs a paid account for live prices" },
+  { id: "rarible", name: "Rarible", url: "https://rarible.com", note: "needs a paid account for live prices" },
+  { id: "robinhood-nft", name: "Robinhood NFT", url: "https://robinhood.com/us/en/support/articles/robinhood-nft/", note: "does not share prices publicly" },
 ] as const;
 
 export const DEFAULT_MARKETPLACES = ["opensea", "blur", "magiceden", "rarible", "robinhood-nft"] as const;
@@ -89,7 +89,7 @@ export function marketplaceOf(idOrRow: unknown): NftMarketplace | null {
     const known = NFT_MARKETPLACES.find((m) => m.id === idOrRow);
     return known
       ? { id: known.id, name: known.name, url: known.url, note: known.note }
-      : { id: clip(idOrRow, 32).toLowerCase(), name: clip(idOrRow, 32), url: "", note: "custom venue" };
+      : { id: clip(idOrRow, 32).toLowerCase(), name: clip(idOrRow, 32), url: "", note: "your own market" };
   }
   if (typeof idOrRow !== "object") return null;
   const o = idOrRow as Record<string, unknown>;
@@ -100,7 +100,7 @@ export function marketplaceOf(idOrRow: unknown): NftMarketplace | null {
     id,
     name: clip(o.name, 32) || known?.name || id,
     url: clip(o.url, 120) || known?.url || "",
-    note: clip(o.note, 64) || known?.note || "custom venue",
+    note: clip(o.note, 64) || known?.note || "your own market",
   };
 }
 export function detectContract(raw: unknown): { platform: string; address: string } | null {
@@ -240,9 +240,12 @@ export function currentNft(market: MarketPrefs | undefined | null): NftCollectio
   return house.nfts.find((n) => n.id === house.currentNftId) || house.nfts[0] || null;
 }
 
-export const QUOTE_HOST_NAME = "the quote host";
-export const TERMINAL_HOST_NAME = "the terminal host";
-export const STOCK_HOST_NAME = "the stock host";
+/** Plain names for api.coingecko.com, api.geckoterminal.com, and query1.finance.yahoo.com. */
+export const QUOTE_HOST_NAME = "CoinGecko";
+export const TERMINAL_HOST_NAME = "GeckoTerminal";
+export const STOCK_HOST_NAME = "Yahoo Finance";
+export const QUOTE_LEAD = "This asks price websites for the prices on your saved list. It sends the names on that list.";
+export const LOOK_LEAD = "This asks CoinGecko, a price website, to find the name you typed. It sends what you typed.";
 
 /** A parsed plate already lists tickers. Parsing it again would refill a cleared list. */
 function asMarket(market: unknown): MarketPrefs {
@@ -272,7 +275,7 @@ export function quoteHostPhrase(market: unknown): string {
 export function quoteHonesty(market: unknown): string {
   const host = quoteHostPhrase(market);
   if (!host) return "";
-  return `this quote sends the saved list. ${clientNetLine(host)}`;
+  return `${QUOTE_LEAD} ${plainNetLine(host)}`;
 }
 
 /**
@@ -283,15 +286,14 @@ export function quoteMaySend(market: unknown, lineInView: boolean): boolean {
   const host = quoteHostPhrase(market);
   const line = quoteHonesty(market);
   if (!host || !line || lineInView !== true) return false;
-  return line.includes(clientNetLine(host));
+  return line.includes(plainNetLine(host));
 }
 
-export const QUOTE_LOOK = `this look-up sends the typed name. ${clientNetLine(QUOTE_HOST_NAME)}`;
-export const QUOTE_LEAD = "this quote sends the saved list.";
+export const QUOTE_LOOK = `${LOOK_LEAD} ${plainNetLine(QUOTE_HOST_NAME)}`;
 
 /** A typed coin or collection look-up uses the quote host. It waits for that line. */
 export function quoteLookMaySend(lineInView: boolean): boolean {
-  return lineInView === true && QUOTE_LOOK.includes(clientNetLine(QUOTE_HOST_NAME));
+  return lineInView === true && QUOTE_LOOK.includes(plainNetLine(QUOTE_HOST_NAME));
 }
 
 /**
@@ -300,9 +302,9 @@ export function quoteLookMaySend(lineInView: boolean): boolean {
  */
 export function phraseNames(shown: unknown, hostLabel: string): boolean {
   if (typeof shown !== "string" || !hostLabel) return false;
-  if (shown.includes(clientNetLine(hostLabel))) return true;
-  const head = "this computer's network address goes with the https request to ";
-  const tail = ", as any client.";
+  if (shown.includes(plainNetLine(hostLabel))) return true;
+  const head = PLAIN_NET_HEAD;
+  const tail = PLAIN_NET_TAIL;
   let from = 0;
   while (from < shown.length) {
     const start = shown.indexOf(head, from);
