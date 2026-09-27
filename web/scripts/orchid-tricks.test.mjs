@@ -190,7 +190,7 @@ test("Moth tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
   assert.deepEqual([...Overlay.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
-  assert.deepEqual([...Overlay.HAPPY], ["pollen", "perfume", "pearl"]);
+  assert.deepEqual([...Overlay.HAPPY], ["pollen", "perfume", "amabilis"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
   assert.equal(T.TRICKS.includes("gape"), false);
@@ -345,8 +345,8 @@ test("labellum/velamen/column/spike/bark/keiki/pollinia are house-orchid-true, n
   assert.equal(Hedgehog.TRICKS.includes("curl"), true);
 });
 
-test("Moth feed-happy is its own sit: pollen/perfume/pearl, and two feeds are not the same", () => {
-  assert.deepEqual([...T.HAPPY], ["pollen", "perfume", "pearl"]);
+test("Moth feed-happy is its own sit: pollen/perfume/amabilis, and two feeds are not the same", () => {
+  assert.deepEqual([...T.HAPPY], ["pollen", "perfume", "amabilis"]);
   assert.equal(T.HAPPY.includes("halo"), false);
   assert.equal(T.HAPPY.includes("lumen"), false);
   assert.equal(T.HAPPY.includes("gel"), false);
@@ -385,7 +385,7 @@ test("Moth feed-happy is its own sit: pollen/perfume/pearl, and two feeds are no
   assert.equal(tanninH.anim, "play");
   const tanninMid = T.stepHappy(tanninH, 0.3, { cmd: "idle" });
   assert.ok(tanninMid.lift > 0.15 || Math.abs(tanninMid.rot) > 0.5);
-  const groveH = T.beginHappy("pearl", 80, 1);
+  const groveH = T.beginHappy("amabilis", 80, 1);
   assert.equal(groveH.anim, "talk");
   const done = T.stepHappy(cupuleH, T.HAPPY_DUR.pollen + 0.1, { cmd: "idle" });
   assert.equal(done.phase, "done");
@@ -664,7 +664,7 @@ test("notes: Moth ultra-polish done; ethogram dens claim true (bark sit_hold + s
   assert.equal(T.TRICKS.length, 7);
   assert.ok(T.HAPPY_DUR.pollen >= 1.7 && T.HAPPY_DUR.pollen <= 2.4);
   assert.ok(T.HAPPY_DUR.perfume >= 1.7 && T.HAPPY_DUR.perfume <= 2.4);
-  assert.ok(T.HAPPY_DUR.pearl >= 1.7 && T.HAPPY_DUR.pearl <= 2.4);
+  assert.ok(T.HAPPY_DUR.amabilis >= 1.7 && T.HAPPY_DUR.amabilis <= 2.4);
   assert.equal(Overlay.BARK_HOLD, 11.2);
   assert.equal(Overlay.RELEASE_S, 1.18);
   assert.equal(T.TRICK_KEY, "orchid");
@@ -756,7 +756,7 @@ test("notes: Moth ultra-polish done; ethogram dens claim true (bark sit_hold + s
   assert.deepEqual([...OverlayOak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...T.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
   assert.deepEqual([...Overlay.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
-  assert.deepEqual([...T.HAPPY], ["pollen", "perfume", "pearl"]);
+  assert.deepEqual([...T.HAPPY], ["pollen", "perfume", "amabilis"]);
   assert.equal(T.TRICKS.includes("pad"), false);
   assert.equal(T.TRICKS.includes("mount"), false);
   assert.equal(T.TRICKS.includes("sprout"), false);

@@ -370,8 +370,8 @@ test("Banner tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["wingbanner", "puddlesip", "flutterhop", "tailglidesettle", "eyespot", "tigerband", "papiliohush"]);
-  assert.equal(T.TRICKS.includes("eyespot"), true);
+  assert.deepEqual([...T.TRICKS], ["wingbanner", "puddlesip", "flutterhop", "tailglidesettle", "tornusflash", "tigerband", "papiliohush"]);
+  assert.equal(T.TRICKS.includes("tornusflash"), true);
   assert.equal(T.TRICKS.includes("tigerband"), true);
   assert.equal(T.TRICKS.includes("swallowtail"), false);
   assert.equal(T.TRICKS.includes("banner"), false);
@@ -1060,7 +1060,7 @@ test("Banner tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("lucent"), false);
   assert.deepEqual([...Photovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
   assert.deepEqual([...OverlayPhotovore.TRICKS], ["photon", "wavelength", "lumen", "glass", "photovore", "opsin", "iridophore"]);
-  assert.deepEqual([...Photovore.HAPPY], ["actinic", "lux", "candela"]);
+  assert.deepEqual([...Photovore.HAPPY], ["actinic", "lux", "lambert"]);
   assert.equal(T.TRICKS.includes("photon"), false);
   assert.equal(T.TRICKS.includes("wavelength"), false);
   assert.equal(T.TRICKS.includes("lumen"), false);
@@ -1076,8 +1076,8 @@ test("Banner tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("drone"), false);
   assert.equal(T.HAPPY.includes("chord"), false);
   assert.equal(T.HAPPY.includes("choir"), false);
-  assert.deepEqual([...ChickenOfWoods.TRICKS], ["sulfur", "rosette", "oak", "soft", "laetiporus", "poroid", "cluster"]);
-  assert.deepEqual([...OverlayChickenOfWoods.TRICKS], ["sulfur", "rosette", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...ChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...OverlayChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
   assert.deepEqual([...ChickenOfWoods.HAPPY], ["sulphureus", "cincinnatus", "gilbertsonii"]);
   assert.equal(T.TRICKS.includes("sulfur"), false);
   assert.equal(T.TRICKS.includes("rosette"), false);
@@ -1182,8 +1182,8 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.equal(T.TRICKS.includes("beard"), false);
   assert.equal(T.TRICKS.includes("frost"), false);
   assert.equal(T.TRICKS.includes("actinic"), false);
-  assert.deepEqual([...TurkeyTail.TRICKS], ["pore", "bracket", "band", "leathery", "trametes", "concentric", "tomentum"]);
-  assert.deepEqual([...OverlayTurkeyTail.TRICKS], ["pore", "bracket", "band", "leathery", "trametes", "concentric", "tomentum"]);
+  assert.deepEqual([...TurkeyTail.TRICKS], ["pore", "bracket", "zonate", "leathery", "trametes", "concentric", "tomentum"]);
+  assert.deepEqual([...OverlayTurkeyTail.TRICKS], ["pore", "bracket", "zonate", "leathery", "trametes", "concentric", "tomentum"]);
   assert.deepEqual([...TurkeyTail.HAPPY], ["versicolor", "ochracea", "pubescens"]);
   assert.deepEqual([...LionsMane.TRICKS], ["spine", "icicle", "cascade", "wound", "hericium", "pompon", "hydnoid"]);
   assert.deepEqual([...OverlayLionsMane.TRICKS], ["spine", "icicle", "cascade", "wound", "hericium", "pompon", "hydnoid"]);
@@ -1311,7 +1311,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["wingbanner", "puddlesip", "flutterhop", "tailglidesettle", "eyespot", "tigerband", "papiliohush"]);
+  assert.deepEqual([...Overlay.TRICKS], ["wingbanner", "puddlesip", "flutterhop", "tailglidesettle", "tornusflash", "tigerband", "papiliohush"]);
   assert.deepEqual([...Overlay.HAPPY], ["densbanner", "inkbanner", "denspapilio"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
@@ -1383,7 +1383,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax", "obelisk", "ommatidia"]);
 });
 
-test("wingbanner/puddlesip/flutterhop/tailglidesettle/eyespot/tigerband/papiliohush are Papilio-swallowtail-true, not copies of prior guests", () => {
+test("wingbanner/puddlesip/flutterhop/tailglidesettle/tornusflash/tigerband/papiliohush are Papilio-swallowtail-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("papiliohush", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -1414,7 +1414,7 @@ test("wingbanner/puddlesip/flutterhop/tailglidesettle/eyespot/tigerband/papilioh
   assert.equal(taproot.anim, "play");
   const taprootMid = T.stepTrick(taproot, 0.5, ground);
   assert.ok(Math.abs(taprootMid.lift) > 0.0015 || Math.abs(taprootMid.rot) > 0.15 || Math.abs(taprootMid.x - 80) > 0.0002);
-  const home = T.beginTrick("eyespot", 80, 1);
+  const home = T.beginTrick("tornusflash", 80, 1);
   assert.equal(home.anim, "walk");
   const homeMid = T.stepTrick(home, 0.5, ground);
   assert.ok(Math.abs(homeMid.lift) > 0.002 || Math.abs(homeMid.rot) > 0.15 || Math.abs(homeMid.x - 80) > 0.0003);
@@ -1427,7 +1427,7 @@ test("wingbanner/puddlesip/flutterhop/tailglidesettle/eyespot/tigerband/papilioh
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
 
-  assert.equal(T.TRICKS.includes("eyespot"), true);
+  assert.equal(T.TRICKS.includes("tornusflash"), true);
   assert.equal(T.TRICKS.includes("tigerband"), true);
   assert.equal(T.TRICKS.includes("swallowtail"), false);
   assert.equal(T.TRICKS.includes("banner"), false);
@@ -1449,7 +1449,7 @@ for (const mod of [Rui, Cat, Dog, Rabbit, Hamster, GuineaPig, Turtle, Goldfish, 
     assert.equal(mod.TRICKS.includes("wingbanner"), false);
     assert.equal(mod.TRICKS.includes("puddlesip"), false);
     assert.equal(mod.TRICKS.includes("flutterhop"), false);
-    assert.equal(mod.TRICKS.includes("eyespot"), false);
+    assert.equal(mod.TRICKS.includes("tornusflash"), false);
     assert.equal(mod.TRICKS.includes("tailglidesettle"), false);
     assert.equal(mod.TRICKS.includes("tigerband"), false);
     assert.equal(mod.TRICKS.includes("papiliohush"), false);
@@ -1784,7 +1784,7 @@ test("ground registry keeps prior guests gated; Banner selectable; prior guests 
   assert.equal(T.TRICKS.includes("saltatory"), false);
   assert.equal(Grasshopper.TRICKS.includes("wingbanner"), false);
   assert.equal(Grasshopper.TRICKS.includes("papiliohush"), false);
-  assert.equal(Grasshopper.TRICKS.includes("eyespot"), false);
+  assert.equal(Grasshopper.TRICKS.includes("tornusflash"), false);
   assert.equal(Grasshopper.TRICKS.includes("tigerband"), false);
   assert.equal(Grasshopper.TRICKS.includes("flutterhop"), false);
   assert.equal(Grasshopper.HAPPY.includes("densbanner"), false);
@@ -1856,7 +1856,7 @@ test("ground registry keeps prior guests gated; Banner selectable; prior guests 
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...T.TRICKS], ["wingbanner", "puddlesip", "flutterhop", "tailglidesettle", "eyespot", "tigerband", "papiliohush"]);
+  assert.deepEqual([...T.TRICKS], ["wingbanner", "puddlesip", "flutterhop", "tailglidesettle", "tornusflash", "tigerband", "papiliohush"]);
   assert.deepEqual([...Periwinkle.TRICKS], ["spiralcrawl", "filmgraze", "opercshut", "tidehuddle", "tipup", "littorine", "littorinahush"]);
   assert.deepEqual([...Periwinkle.HAPPY], ["densspire", "inkspire", "denslittorina"]);
   assert.equal(Periwinkle.TRICK_KEY, "periwinkle");
@@ -2442,7 +2442,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["wingbanner", "puddlesip", "flutterhop", "tailglidesettle", "eyespot", "tigerband", "papiliohush"]);
+  assert.deepEqual([...Overlay.TRICKS], ["wingbanner", "puddlesip", "flutterhop", "tailglidesettle", "tornusflash", "tigerband", "papiliohush"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -2534,7 +2534,7 @@ test("notes: Banner idle-life done; next house-order guest still lacking tricks 
   assert.deepEqual([...Stickleback.TRICKS], ["spiggin", "zigzag", "spinous", "fanning", "gasterosteid", "nuptial", "pelvic"]);
   assert.equal(T.TRICKS.includes("spiggin"), false);
   assert.equal(T.TRICK_KEY, "swallowtail");
-  assert.deepEqual([...T.TRICKS], ["wingbanner", "puddlesip", "flutterhop", "tailglidesettle", "eyespot", "tigerband", "papiliohush"]);
+  assert.deepEqual([...T.TRICKS], ["wingbanner", "puddlesip", "flutterhop", "tailglidesettle", "tornusflash", "tigerband", "papiliohush"]);
   assert.deepEqual([...Periwinkle.TRICKS], ["spiralcrawl", "filmgraze", "opercshut", "tidehuddle", "tipup", "littorine", "littorinahush"]);
   assert.deepEqual([...Periwinkle.HAPPY], ["densspire", "inkspire", "denslittorina"]);
   assert.equal(Periwinkle.TRICK_KEY, "periwinkle");

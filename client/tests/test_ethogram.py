@@ -1239,7 +1239,7 @@ def test_only_scratching_mammals_scratch():
     assert "puddlesip_soft" in [a["name"] for a in acts_for("swallowtail")]
     assert "flutterhop_soft" in [a["name"] for a in acts_for("swallowtail")]
     assert "tailglidesettle_soft" in [a["name"] for a in acts_for("swallowtail")]
-    assert "eyespot_soft" in [a["name"] for a in acts_for("swallowtail")]
+    assert "tornusflash_soft" in [a["name"] for a in acts_for("swallowtail")]
     assert "tigerband_soft" in [a["name"] for a in acts_for("swallowtail")]
     assert "freeze" in [a["name"] for a in acts_for("swallowtail")]
     assert "hunt" not in [a["name"] for a in acts_for("swallowtail")]

@@ -1,7 +1,7 @@
-/** Cap ground tricks while idle — ultra-polish pass. House fly-agaric Amanita desk life — annulus / volva / veil / symbiont / amanita / pileus / bulb personality (annulus skirt-ring settle under the lamp as partial-veil remnant — never named warts (window-play WARTS) / cap as trick kind / lean / flush (ethogram-old) / dig (Thimble) / nest (Clip+Column) / bank (Lula+Bank) / buzz (Relay) / dance (Rui) / hover (Sepia) / festoon/capped/midrib/stores/tessera/alveoli/foundation (Wax) / lamella/imbricate/lasso/margin/pleurotus/sporulate/hypha (Frill), volva basal cup press into the blotter — never named shelf (Frill window) / tuft (Felt) / frond (Vein) / curl (Burr) / brood as trick kind / hold as trick kind / cell (mason) / cerumen/batumen (Pot) / circle/liner (Disc), veil universal-veil flake settle on the pileus (Amanita remnant flakes — not window WARTS) — never named pipe/retinue/duel/royal (Keep) / hex (Comb) / partition (Auger) / plug (Mortar) / fossor (Thrum) / shaft (Bank), symbiont mycorrhizal hush with the moss cup — never named frill as trick kind / fan (Fan) / sheen (Sheen+Disk) / glint (Coin) / gleam (Ground) / shine (Ember) / wax as trick kind / honey/mead (Comb happy) / nectar (Disk) / pollen (Moth) / vessel/spout (Pot) / mass (Bank), amanita long hold desk life as Amanita muscaria with muscaria / regalis / frostiana thank-yous — never named mellifera (Hum) / regina (Keep) / andrena (Bank) / langstroth/topbar/warre (Wax) / ostreatus/pulmonarius/eryngii (Frill) / hive/hex (Comb), pileus red pileus tip toward the lamp (species-true Amanita muscaria tell — never named cap as trick kind / warts / spot (Seven) / flush (Sepia) / sheen/glint/gleam/shine), bulb basal bulb settle under the volva (species-true Amanita basal bulb — never named shaft (Bank) / dig (Thimble) / hypha (Frill) / rhizoid (Felt) / stipe (Vein) / thread); not Wax/Comb/Hum/Keep/Frill/Felt/Vein/Fan peer copies. Pileus is iconic Amanita red-cap tip (not window WARTS, not guest name Cap as a trick kind). Stipe is iconic Amanita stem settle (not Frill hypha tip, not Bank shaft). Window-play WARTS unchanged — never names warts. Ethogram keeps amanita sit_hold; adds annulus/volva/veil/symbiont/pileus/bulb softs + freeze (replaces thin lean/flush/still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via fly_agaric.wav. Thank-yous muscaria / regalis / frostiana. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web fly_agaric-tricks.ts. True house fly-agaric desk life — not Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/honey_drone/Hum/honey_queen/Keep/honeycomb/Wax/oyster/Frill/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold/cicada/Brood or *Dragon electrical clone. Puff owns the next leftover. Amplitudes raised toward Rui richness; denser waits/weights (AMANITA_HOLD=11.2 RELEASE_S=1.18). Ethogram softs + freeze — never names fly_agaric/cap/warts as bare ethogram-only trick kinds. Window-play WARTS unchanged. Next leftover Puff / puffball. Mycorrhizal Amanita muscaria warning-mushroom desk life only — skirt + volva, not a bee, not a plant, not Wax honeycomb place, not Frill oyster shelf. No cry inventing — thank-yous are silent desk motion only. */
+/** Cap ground tricks while idle — ultra-polish pass. House fly-agaric Amanita desk life — annulus / volva / flake / symbiont / amanita / pileus / bulb personality (annulus skirt-ring settle under the lamp as partial-veil remnant — never named warts (window-play WARTS) / cap as trick kind / lean / flush (ethogram-old) / dig (Thimble) / nest (Clip+Column) / bank (Lula+Bank) / buzz (Relay) / dance (Rui) / hover (Sepia) / festoon/capped/midrib/stores/tessera/alveoli/foundation (Wax) / lamella/imbricate/lasso/margin/pleurotus/sporulate/hypha (Frill), volva basal cup press into the blotter — never named shelf (Frill window) / tuft (Felt) / frond (Vein) / curl (Burr) / brood as trick kind / hold as trick kind / cell (mason) / cerumen/batumen (Pot) / circle/liner (Disc), flake universal-veil flake settle on the pileus (Amanita remnant flakes — not window WARTS) — never named pipe/retinue/duel/royal (Keep) / hex (Comb) / partition (Auger) / plug (Mortar) / fossor (Thrum) / shaft (Bank), symbiont mycorrhizal hush with the moss cup — never named frill as trick kind / fan (Fan) / sheen (Sheen+Disk) / glint (Coin) / gleam (Ground) / shine (Ember) / wax as trick kind / honey/mead (Comb happy) / nectar (Disk) / pollen (Moth) / vessel/spout (Pot) / mass (Bank), amanita long hold desk life as Amanita muscaria with muscaria / regalis / frostiana thank-yous — never named mellifera (Hum) / regina (Keep) / andrena (Bank) / langstroth/topbar/warre (Wax) / ostreatus/pulmonarius/eryngii (Frill) / hive/hex (Comb), pileus red pileus tip toward the lamp (species-true Amanita muscaria tell — never named cap as trick kind / warts / spot (Seven) / flush (Sepia) / sheen/glint/gleam/shine), bulb basal bulb settle under the volva (species-true Amanita basal bulb — never named shaft (Bank) / dig (Thimble) / hypha (Frill) / rhizoid (Felt) / stipe (Vein) / thread); not Wax/Comb/Hum/Keep/Frill/Felt/Vein/Fan peer copies. Pileus is iconic Amanita red-cap tip (not window WARTS, not guest name Cap as a trick kind). Stipe is iconic Amanita stem settle (not Frill hypha tip, not Bank shaft). Window-play WARTS unchanged — never names warts. Ethogram keeps amanita sit_hold; adds annulus/volva/flake/symbiont/pileus/bulb softs + freeze (replaces thin lean/flush/still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via fly_agaric.wav. Thank-yous muscaria / regalis / frostiana. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web fly_agaric-tricks.ts. True house fly-agaric desk life — not Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/honey_drone/Hum/honey_queen/Keep/honeycomb/Wax/oyster/Frill/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold/cicada/Brood or *Dragon electrical clone. Puff owns the next leftover. Amplitudes raised toward Rui richness; denser waits/weights (AMANITA_HOLD=11.2 RELEASE_S=1.18). Ethogram softs + freeze — never names fly_agaric/cap/warts as bare ethogram-only trick kinds. Window-play WARTS unchanged. Next leftover Puff / puffball. Mycorrhizal Amanita muscaria warning-mushroom desk life only — skirt + volva, not a bee, not a plant, not Wax honeycomb place, not Frill oyster shelf. No cry inventing — thank-yous are silent desk motion only. */
 (function (root) {
 const TRICK_KEY = "fly_agaric";
-const TRICKS = ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"];
+const TRICKS = ["annulus", "volva", "flake", "symbiont", "amanita", "pileus", "bulb"];
 const HAPPY = ["muscaria", "regalis", "frostiana"];
 
 
@@ -13,7 +13,7 @@ const HAPPY_DUR = { muscaria: 1.28, regalis: 1.16, frostiana: 1.22 };
 const AMANITA_HOLD = 11.2;
 const RELEASE_S = 1.18;
 
-const DUR = { amanita: AMANITA_HOLD + RELEASE_S, annulus: 1.58, volva: 1.64, veil: 1.48, symbiont: 1.56, pileus: 1.68, bulb: 1.72 };
+const DUR = { amanita: AMANITA_HOLD + RELEASE_S, annulus: 1.58, volva: 1.64, flake: 1.48, symbiont: 1.56, pileus: 1.68, bulb: 1.72 };
 
 function canStart(state) {
   if (!state) return false;
@@ -44,7 +44,7 @@ function shouldAbort(state) {
 function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
     if (kind === "amanita") return 40 + roll * 26;
-    if (kind === "annulus" || kind === "volva" || kind === "veil" || kind === "symbiont" || kind === "pileus" || kind === "bulb") return 12.8 + roll * 9.4;
+    if (kind === "annulus" || kind === "volva" || kind === "flake" || kind === "symbiont" || kind === "pileus" || kind === "bulb") return 12.8 + roll * 9.4;
     return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
 function pickTrick(rand, musicOn, lastKind) {
@@ -210,7 +210,7 @@ function beginTrick(kind, x, facing) {
           ? "play"
           : kind === "volva"
             ? "talk"
-            : kind === "veil"
+            : kind === "flake"
               ? "talk"
               : kind === "symbiont"
                 ? "sit"
@@ -314,8 +314,8 @@ function volvaPose(t, fromX, facing) {
 }
 
 /** Rhizome — quiet settle under the pad. Never named root/dig/taproot. */
-function veilPose(t, fromX, facing) {
-  const u = Math.max(0, Math.min(1, t / DUR.veil));
+function flakePose(t, fromX, facing) {
+  const u = Math.max(0, Math.min(1, t / DUR.flake));
   if (u < 0.18) {
     const s = smoothstep(u / 0.18);
     return { x: fromX, lift: s * 2.88, rot: s * 16.8 * facing, anim: "play" };
@@ -463,7 +463,7 @@ function stepTrick(trick, dt, flags) {
     shouldAbort(flags) &&
     trick.kind !== "annulus" &&
     trick.kind !== "volva" &&
-    trick.kind !== "veil" &&
+    trick.kind !== "flake" &&
     trick.kind !== "symbiont" &&
     trick.kind !== "pileus" &&
     trick.kind !== "bulb"
@@ -496,7 +496,7 @@ function stepTrick(trick, dt, flags) {
   let pose;
   if (next.kind === "annulus") pose = annulusPose(next.t, fromX, trick.facing);
   else if (next.kind === "volva") pose = volvaPose(next.t, fromX, trick.facing);
-  else if (next.kind === "veil") pose = veilPose(next.t, fromX, trick.facing);
+  else if (next.kind === "flake") pose = flakePose(next.t, fromX, trick.facing);
   else if (next.kind === "symbiont") pose = symbiontPose(next.t, fromX, trick.facing);
   else if (next.kind === "pileus") pose = pileusPose(next.t, fromX, trick.facing);
   else pose = bulbPose(next.t, fromX, trick.facing);
@@ -526,7 +526,7 @@ function stepTrick(trick, dt, flags) {
     releasePose,
     annulusPose,
     volvaPose,
-    veilPose,
+    flakePose,
     symbiontPose,
     pileusPose,
     bulbPose,
