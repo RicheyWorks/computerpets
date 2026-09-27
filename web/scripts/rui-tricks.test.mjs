@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const T = await import(join(root, "src/lib/pets/rui-tricks.ts"));
+const T = await import(pathToFileURL(join(root, "src/lib/pets/rui-tricks.ts")).href);
 const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/rui-tricks.js"));
 
 test("Rui tricks start only on idle ground", () => {

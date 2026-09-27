@@ -2,12 +2,12 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const repo = join(root, "..");
-const N = await import(join(root, "src/lib/pets/talk-net.ts"));
-const W = await import(join(root, "src/lib/pets/weather-areas.ts"));
+const N = await import(pathToFileURL(join(root, "src/lib/pets/talk-net.ts")).href);
+const W = await import(pathToFileURL(join(root, "src/lib/pets/weather-areas.ts")).href);
 const voiceSrc = readFileSync(join(root, "src/lib/ai/voice.ts"), "utf8");
 const talkSrc = readFileSync(join(root, "src/lib/pets/talk.ts"), "utf8");
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");

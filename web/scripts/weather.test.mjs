@@ -3,10 +3,10 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const W = await import(join(root, "src/lib/pets/weather.ts"));
+const W = await import(pathToFileURL(join(root, "src/lib/pets/weather.ts")).href);
 const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/weather.js"));
 
 const catalogSrc = readFileSync(join(root, "src/lib/pets/catalog.ts"), "utf8");

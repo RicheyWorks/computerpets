@@ -128,7 +128,7 @@ process.stdout.write(JSON.stringify({ reply, dirty, openai, seen, PASTED, PASTED
     );
     const res = spawnSync(
       process.execPath,
-      ["--experimental-strip-types", "--import", join(dir, "register.mjs"), join(dir, "run.mjs")],
+      ["--experimental-strip-types", "--import", pathToFileURL(join(dir, "register.mjs")).href, join(dir, "run.mjs")],
       { cwd: root, encoding: "utf8" },
     );
     assert.equal(res.status, 0, res.stderr || res.stdout);

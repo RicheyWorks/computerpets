@@ -2,13 +2,13 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const C = await import(join(root, "src/lib/pets/care.ts"));
-const Hours = await import(join(root, "src/lib/pets/hours.ts"));
-const Treats = await import(join(root, "src/lib/pets/treats.ts"));
-const G = await import(join(root, "src/lib/pets/genetics.ts"));
+const C = await import(pathToFileURL(join(root, "src/lib/pets/care.ts")).href);
+const Hours = await import(pathToFileURL(join(root, "src/lib/pets/hours.ts")).href);
+const Treats = await import(pathToFileURL(join(root, "src/lib/pets/treats.ts")).href);
+const G = await import(pathToFileURL(join(root, "src/lib/pets/genetics.ts")).href);
 
 const actionsSrc = readFileSync(join(root, "src/lib/pets/actions.ts"), "utf8");
 const nestSrc = readFileSync(join(root, "src/routes/nest.tsx"), "utf8");

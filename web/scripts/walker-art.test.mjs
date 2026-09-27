@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
+import { python3 } from "./test-python.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cssSrc = readFileSync(join(root, "src/styles.css"), "utf8");
@@ -41,8 +42,9 @@ test("the walker paint is a clear plate; the tap pad is empty wood", () => {
 });
 
 test("every idle walker has no plate and is not a thin stamp", () => {
-  const out = execFileSync("python3", [join(root, "scripts/assert-walker-art.py")], {
+  const py = python3();
+  const out = execFileSync(py.cmd, [...py.args, join(root, "scripts/assert-walker-art.py")], {
     encoding: "utf8",
   });
-  assert.match(out, /ok 220 walkers/);
+  assert.match(out, /ok 221 walkers/);
 });
