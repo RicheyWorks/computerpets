@@ -1,0 +1,11 @@
+key: horned_lizard
+guest: Spike (Texas Horned Lizard)
+source: Freesound sound 825860 "Desert sand - Dune atmosphere" by Vrymaa
+URL: https://freesound.org/people/Vrymaa/sounds/825860/
+direct: https://cdn.freesound.org/previews/825/825860_13973196-hq.mp3
+author: Vrymaa
+license: Creative Commons Zero (CC0 1.0)
+Species: Phrynosoma cornutum — effectively silent (no legal PD/CC0/CC BY Phrynosoma hiss tape; iNat sounds none). Wind-blown sand grains flowing over a dune: the loose sand it buries into. No voice. No music. No narrator. No synth.
+Notes: House cut 3.5s mono 16-bit 44.1kHz from 86.5s of the HQ preview; highpass 80 Hz + dynaudnorm=p=0.95:m=8 + afade in 0.05s/out 0.4s, peak-normalized to 0.5. Real field recording, no synthesis.
+sat: 2026-09-27 Buffffff
+House path: build our own from field tape — not Grok Imagine

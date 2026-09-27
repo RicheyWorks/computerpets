@@ -62,7 +62,7 @@ Operators new to the backend? Follow this recommended path:
 | Document | Description |
 |----------|-------------|
 | **[How to get your first pet](START-HERE.md)** | Kid-facing Windows 10/11 path: copy the house from GitHub, put Rui on the real desktop overlay, then the browser `/demo`. No Store download. |
-| **[Cry credits](CRIES.md)** | Full field-tape Call credits for the 215 guests with real cries. Root README stays short. |
+| **[Cry credits](CRIES.md)** | Full field-tape Call credits for all 221 guests. Root README stays short. |
 | **[Architecture](ARCHITECTURE.md)** | Comprehensive system architecture document. Covers high-level design, component breakdown, data flows, deployment architecture, technology stack, security considerations, and recommendations. **§11** is the house polish north-star (the X ads). **Start here** for a complete understanding. |
 | **[Architecture Decision Records](adr/README.md)** | Numbered records of decisions already true on `main` (SPI, license crypto, Redis/Postgres, empty NFT allowlist, Electron + PyQt contract clients, profiles + k8s). Not a wishlist. |
 | **[Client contract](CLIENT-CONTRACT.md)** | What a native client implements: verify → AES-256-GCM license decrypt, hwid, JWT, signed download URL. Matches the code. |

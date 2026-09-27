@@ -58,14 +58,17 @@ test("any catalog species cry path; unknown keys stay silent", () => {
   assert.equal(S.isVoiceKey("toString"), false);
   assert.equal(Overlay.isVoiceKey("crow"), true);
   assert.equal(Overlay.isVoiceKey("not_a_pet"), false);
-  // A catalog kind with no cry on disk yet still gets a path (capybara got its cry in #1281).
-  assert.equal(existsSync(join(root, "public/sounds", "iguana.wav")), false);
-  assert.equal(existsSync(join(root, "../desktop/renderer/sounds", "iguana.wav")), false);
+  // A made-up key is not a catalog kind and has no cry on disk.
+  assert.equal(existsSync(join(root, "public/sounds", "not_a_pet.wav")), false);
+  assert.equal(existsSync(join(root, "../desktop/renderer/sounds", "not_a_pet.wav")), false);
   for (const row of SPECIES) {
     assert.equal(S.isVoiceKey(row.key), true, row.key);
     assert.equal(Overlay.isVoiceKey(row.key), true, row.key);
     assert.equal(S.voiceSrc(row.key), `/sounds/${row.key}.wav`, row.key);
     assert.equal(Overlay.overlayVoiceSrc(row.key), `sounds/${row.key}.wav`, row.key);
+    // Every catalog guest has a cry on disk, on web and desktop.
+    assert.equal(existsSync(join(root, "public/sounds", `${row.key}.wav`)), true, row.key);
+    assert.equal(existsSync(join(root, "../desktop/renderer/sounds", `${row.key}.wav`)), true, row.key);
   }
   assert.match(S.SOUND_LICENSE, /Grok Imagine/);
   assert.match(Overlay.SOUND_LICENSE, /Grok Imagine/);

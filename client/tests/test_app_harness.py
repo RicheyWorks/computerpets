@@ -316,7 +316,17 @@ def test_cry_decode_reads_every_house_cry_without_speakers():
     assert result.extras["decoded"] == result.extras["n"] == len(_prefers_house_cry_keys())
     # Silent files are named, never hidden. Each one listed must still be silent.
     assert set(result.extras["known_silent"]) == set(KNOWN_SILENT_CRIES)
-    assert "known_silent=garter" in result.trace
+    # garter.wav was the one hole (all zeros); it is re-exported, so nothing is silent now.
+    assert KNOWN_SILENT_CRIES == {}
+    assert result.extras["known_silent"] == []
+    assert "known_silent=none" in result.trace
+    assert "garter" not in result.extras["quiet"]
+    # Every one of the 221 guests has a house cry, and all 221 decode.
+    assert result.extras["n"] == 221
+    assert result.extras["decoded"] == 221
+    assert "prefersHouseCry=221" in result.trace
+    assert "decoded=221" in result.trace
+    assert "crocodile" in _prefers_house_cry_keys()
     assert "live.cry_playback" in {row.id for row in gaps()}
 
 

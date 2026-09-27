@@ -206,6 +206,15 @@ assert.equal(C.prefersHouseCry("gecko"), true);
 assert.equal(C.prefersHouseCry("anole"), true);
 assert.equal(C.prefersHouseCry("skink"), true);
 assert.equal(C.prefersHouseCry("alligator"), true);
+  assert.equal(C.prefersHouseCry("capybara"), true);
+  assert.equal(C.prefersHouseCry("iguana"), true);
+  assert.equal(C.prefersHouseCry("chameleon"), true);
+  assert.equal(C.prefersHouseCry("horned_lizard"), true);
+  assert.equal(C.prefersHouseCry("snapper"), true);
+  assert.equal(C.prefersHouseCry("box_turtle"), true);
+  // Jaw plays a Nile crocodile juvenile call (a genus relative; see docs/CRIES.md).
+  assert.equal(C.prefersHouseCry("crocodile"), true);
+  assert.equal(C.prefersHouseCry("not_a_pet"), false);
   assert.equal(C.prefersHouseCry("tuatara"), true);
   assert.equal(C.prefersHouseCry("bass"), true);
   assert.equal(C.prefersHouseCry("brook_trout"), true);

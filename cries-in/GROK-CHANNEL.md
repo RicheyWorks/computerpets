@@ -8,9 +8,9 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-Catalog 221 field-tape pass closed for sit-able guests (Soak/capybara sat 2026-09-15).
+Catalog 221 field-tape pass: 221 of 221 have a cry (2026-09-27: garter re-sat; Beak and Jaw got real animal voices from CC BY 4.0 papers; Sol/Shift/Spike/Lid sat from CC0 habitat rustle tape).
 
-Only permanent SKIPs remain (no legal PD/CC0/CC BY tape): **Sol** iguana, **Shift** chameleon, **Spike** horned_lizard, **Jaw** crocodile, **Beak** snapper, **Lid** box_turtle. Do not invent beeps.
+The four habitat stand-ins (**Sol** iguana, **Shift** chameleon, **Spike** horned_lizard, **Lid** box_turtle) stay until open-licensed species tape exists. Do not invent beeps.
 
 ## Seen
 
@@ -19,6 +19,14 @@ Only permanent SKIPs remain (no legal PD/CC0/CC BY tape): **Sol** iguana, **Shif
 - Path lock: build our own from internet field tape
 
 ## Log
+
+### 2026-09-27 06:20 PDT — Buffffff
+
+Beak snapper now plays its own species: an underwater hydrophone grunt from Jorgewich-Cohen et al. 2022 (Nat Commun 13:6089, CC BY 4.0, Supplementary Data 2 `Chelydra serpentina 4.mp4`, hosted on the authors' Drive); it replaces the river stand-in. Sat Jaw crocodile from Chabert et al. 2015 (Sci Rep 5:15547, CC BY 4.0, Supplementary Audio 1): two Nile crocodile juvenile calls, a genus relative, not an American crocodile. Sounds 3–5 of that file are synthetic and are cut out. 221 of 221 now have a cry.
+
+### 2026-09-27 05:05 PDT — Buffffff
+
+Re-sat Sash garter from Freesound CC0 #666175 (felix.blume, close dry tall-grass rustle, Arivaca AZ); the BigSoundBank #908 export was 4 s of zeros. Sat Sol iguana (bruno.auzet #714265 gusts in a tree), Shift chameleon (klinkenstecker #850004 bamboo leaves), Spike horned_lizard (Vrymaa #825860 blown dune sand), Beak snapper (ceich93 #318064 river lapping), Lid box_turtle (Mjeno #405140 forest-floor leaves) — all Freesound CC0 field tape of the habitat, since no legal hiss tape exists and none of the five has a voice worth faking. Web prefersHouseCry gains Soak capybara (the cry was sat 2026-09-15 but web missed it). Jaw crocodile stays cryless: no legal American crocodile tape.
 
 ### 2026-09-15 16:25 PDT — Buffffff
 
