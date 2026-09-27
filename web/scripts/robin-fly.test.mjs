@@ -29,7 +29,8 @@ test("/demo robin dest is one real frame and flies like the overlay", () => {
   assert.deepEqual(OverlayCall.walkersOf(["hummingbird", "robin", "cat"], "red_panda"), ["cat"]);
   assert.equal(G.shouldRobinFly(["robin"], "red_panda"), true);
   assert.match(flySrc, /destSrc/);
-  assert.match(flySrc, /setAttribute\("src"/);
+  assert.match(flySrc, /paintBrickFrame/);
+  assert.doesNotMatch(flySrc, /setAttribute\(\s*"src"/);
   assert.match(visitSrc, /ROBIN_KEY/);
   assert.match(roomSrc, /RobinFlyer/);
 });
