@@ -92,6 +92,8 @@ type HeartbeatFetch = (url: string, init?: RequestInit) => Promise<{ json: () =>
 
 export type HeartbeatPoll = {
   current: () => Heartbeat;
+  /** True once the house server has answered in this session (any parsed reply, UP or DOWN). */
+  answered: () => boolean;
   subscribe: (fn: (beat: Heartbeat) => void) => () => void;
   read: () => Promise<Heartbeat>;
 };
@@ -159,6 +161,8 @@ export function everyVisible(fn: () => void, ms: number, opts: EveryVisibleOpts 
 /**
  * One shared heartbeat poll: the first subscriber starts one interval, the last one stops it, and every
  * subscriber sees the same beat. An unreachable service reads as UNREAD_HEARTBEAT ("DOWN").
+ * `answered()` remembers whether the server ever replied this session, so a keeper who never ran one
+ * reads "House server not running (optional)" and DOWN is kept for a server that answered, then stopped.
  * A hidden page pauses the interval; showing it again reads once right away and resumes.
  */
 export function createHeartbeatPoll(opts: {
@@ -177,12 +181,14 @@ export function createHeartbeatPoll(opts: {
   const ms = opts.ms ?? HEARTBEAT_POLL_MS;
   const subs = new Set<(beat: Heartbeat) => void>();
   let beat: Heartbeat = UNREAD_HEARTBEAT;
+  let seen = false;
   let stopPoll: (() => void) | null = null;
 
   async function read(): Promise<Heartbeat> {
     try {
       const res = await fetchImpl(url, { cache: "no-store" });
       beat = parseHeartbeat(await res.json());
+      seen = true;
     } catch {
       beat = { ...UNREAD_HEARTBEAT };
     }
@@ -192,6 +198,7 @@ export function createHeartbeatPoll(opts: {
 
   return {
     current: () => beat,
+    answered: () => seen,
     read,
     subscribe(fn) {
       subs.add(fn);
@@ -352,7 +359,15 @@ export function formatUptime(seconds: number | null) {
   return `${days}d`;
 }
 
-export function heartbeatLine(beat: Heartbeat) {
+/** The heartbeat line before the house server has ever answered this session. Plain and calm: it is optional. */
+export const NO_HOUSE_SERVER = "House server not running (optional)";
+
+/**
+ * The keeper card's heartbeat line. `answered` is whether the server replied this session: until it has,
+ * a DOWN beat reads NO_HOUSE_SERVER; DOWN is kept for a server that answered and then stopped.
+ */
+export function heartbeatLine(beat: Heartbeat, answered = true) {
+  if (!answered && beat.status !== "UP") return NO_HOUSE_SERVER;
   const profile = beat.profile ?? "unread";
   const up = formatUptime(beat.uptimeSeconds);
   const port = beat.port ?? JAVA_PORT;

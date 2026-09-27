@@ -56,7 +56,7 @@ npm install
 npm start
 ```
 
-The first time can take a few minutes. `npm install` means "get the pieces." Leave the window open. A pet should walk on your real desktop.
+The first time can take a few minutes. `npm install` means "get the pieces." Leave the window open. A pet should walk on your real desktop. The keeper card starts with a short hello, just once: press **Got it** and it goes away for good.
 
 Git and Node are the two helpers that make that start work. Install [Git](https://git-scm.com) (or [GitHub Desktop](https://desktop.github.com) if you like pictures more than typing) and [Node](https://nodejs.org) (the big **LTS** button, version 22 or newer) once, before you type the start. The start-here page shows those buttons.
 

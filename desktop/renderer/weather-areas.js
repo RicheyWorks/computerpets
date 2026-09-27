@@ -1,6 +1,8 @@
 /** Keeper-chosen weather areas. The house does not guess a city and does not ask an IP place service. A live fix is rounded before it leaves. A saved typed area is kept. A live locate waits for an in-app yes. A later locate in the session waits for a fresh yes. A stored live pin is rounded on load. A saved live pin does not forecast until the keeper says to use that place. A later forecast of that pin, or of a typed city, waits until the weather panel is open on the current place and the line says this computer's network address goes with the https request. readForecast refuses that fetch when the painted forecast line is missing. Look up and the reverse lookup after Send the place wait until that same panel shows the line for the geocode host. readGeocode and readReverse refuse those fetches when that painted line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. */
 (function (root) {
   const NO_AREA = "no area set";
+  /** The open panel's next step on a clean profile (the header keeps the short NO_AREA). */
+  const NO_AREA_NEXT = "No place yet. Type a city below and press Look up.";
   const AREA_LABEL = "Weather area";
   const AREA_PLACEHOLDER = "A city or place — weather, not radio";
   const AREA_TRUTH = "Weather area. Named places you add. Not the radio station.";
@@ -603,6 +605,7 @@
 
   const api = {
     NO_AREA,
+    NO_AREA_NEXT,
     AREA_LABEL,
     AREA_PLACEHOLDER,
     AREA_TRUTH,

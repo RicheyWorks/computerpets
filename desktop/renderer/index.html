@@ -21,9 +21,10 @@
         </button>
         <div id="weather-body" hidden>
           <div class="desk-plate-tabs" id="weather-tabs" role="tablist" aria-label="Weather sections">
-            <button type="button" data-hit data-weather-tab="current" role="tab" aria-selected="true" tabindex="0">Current</button>
-            <button type="button" data-hit data-weather-tab="favorites" role="tab" aria-selected="false" tabindex="-1">Favorites</button>
+            <button type="button" data-hit data-weather-tab="current" id="weather-tab-current" role="tab" aria-selected="true" aria-controls="weather-panel" tabindex="0">Current</button>
+            <button type="button" data-hit data-weather-tab="favorites" id="weather-tab-favorites" role="tab" aria-selected="false" aria-controls="weather-panel" tabindex="-1">Favorites</button>
           </div>
+          <div id="weather-panel" role="tabpanel" aria-labelledby="weather-tab-current">
           <div id="weather-live"></div>
           <div id="weather-current-panel">
             <div id="weather-saved-ask" hidden>
@@ -52,6 +53,7 @@
             <p id="weather-here-truth" class="keeper-truth"></p>
             <ul id="weather-hits"></ul>
           </div>
+          </div>
           <div class="desk-plate-colors" data-plate-colors="weather">
             <label>Plate color
               <input data-hit type="color" data-plate-color="bg" data-plate-key="weather" aria-label="Plate color" />
@@ -75,11 +77,12 @@
         <div id="news-body" hidden>
           <p id="news-net" class="keeper-truth"></p>
           <div class="desk-plate-tabs" id="news-tabs" role="tablist" aria-label="News sections">
-            <button type="button" data-hit data-news-tab="popular" role="tab" aria-selected="true" tabindex="0">Popular</button>
-            <button type="button" data-hit data-news-tab="topics" role="tab" aria-selected="false" tabindex="-1">Topics</button>
-            <button type="button" data-hit data-news-tab="x" role="tab" aria-selected="false" tabindex="-1">X</button>
-            <button type="button" data-hit data-news-tab="favorites" role="tab" aria-selected="false" tabindex="-1">Favorites</button>
+            <button type="button" data-hit data-news-tab="popular" id="news-tab-popular" role="tab" aria-selected="true" aria-controls="news-panel" tabindex="0">Popular</button>
+            <button type="button" data-hit data-news-tab="topics" id="news-tab-topics" role="tab" aria-selected="false" aria-controls="news-panel" tabindex="-1">Topics</button>
+            <button type="button" data-hit data-news-tab="x" id="news-tab-x" role="tab" aria-selected="false" aria-controls="news-panel" tabindex="-1">X</button>
+            <button type="button" data-hit data-news-tab="favorites" id="news-tab-favorites" role="tab" aria-selected="false" aria-controls="news-panel" tabindex="-1">Favorites</button>
           </div>
+          <div id="news-panel" role="tabpanel" aria-labelledby="news-tab-popular">
           <div id="news-live"></div>
           <p class="keeper-truth" id="news-truth">Popular is Google News top stories. World is Wikipedia In the news. A named topic is Google News RSS. X uses Google News with site:x.com when reachable — else Open on X. No invented headlines.</p>
           <div id="news-topics-panel">
@@ -91,6 +94,7 @@
             </form>
             <div id="news-chips" class="desk-plate-chips" aria-label="Suggested topics"></div>
             <ul id="news-topics"></ul>
+          </div>
           </div>
           <div class="desk-plate-colors" data-plate-colors="news">
             <label>Plate color
@@ -189,6 +193,11 @@
           <p id="hud-kicker" class="keeper-kicker">Keeper card</p>
           <h2 id="hud-name" class="keeper-name">—</h2>
         </button>
+        <section id="first-hint" class="first-hint" data-hit data-first-hint aria-labelledby="first-hint-title" hidden>
+          <h3 id="first-hint-title" class="first-hint-title"></h3>
+          <ul id="first-hint-lines" class="first-hint-lines"></ul>
+          <button type="button" id="first-hint-ok" data-hit>Got it</button>
+        </section>
         <div id="hud-body" class="keeper-body">
           <p id="hud-stage" class="keeper-stage">—</p>
           <p id="hud-bond-title" class="keeper-bond-title">New</p>
@@ -301,7 +310,7 @@
           <p id="hud-truth" class="keeper-truth">Care is local. /pet/feed is not a door.</p>
         </div>
       </article>
-      <div id="choice" data-hit></div>
+      <div id="choice" data-hit role="menu" aria-label="A sit" aria-orientation="vertical"></div>
       <div id="plant-choice" data-hit></div>
     </div>
     <script src="traits.js"></script>

@@ -859,8 +859,41 @@ select {
 }
 
 #hud[data-collapsed="1"] .keeper-body,
-#hud[data-collapsed="1"] .keeper-collapse {
+#hud[data-collapsed="1"] .keeper-collapse,
+#hud[data-collapsed="1"] .first-hint {
   display: none;
+}
+
+/* The one-time hello at the top of the keeper card. Calm paper, readable words, one plain button. */
+.first-hint {
+  margin: 8px 0 4px;
+  padding: 8px 10px;
+  border: 1px solid rgba(154, 146, 136, 0.45);
+  border-radius: 8px;
+  background: rgba(255, 250, 240, 0.08);
+  font-family: "Segoe UI", system-ui, sans-serif;
+  pointer-events: auto;
+}
+
+.first-hint[hidden] {
+  display: none;
+}
+
+.first-hint-title {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.first-hint-lines {
+  margin: 0 0 6px;
+  padding-left: 16px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.first-hint-lines li + li {
+  margin-top: 3px;
 }
 
 #hud-kicker,
