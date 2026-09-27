@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
+import { formatLocalWhen } from "@/lib/admin/base";
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,7 +8,6 @@ import {
   AdminApiError,
   clearAdminSession,
   defaultApiBase,
-  listLicenses,
   loadAdminSession,
   lookupLicenses,
   revokeLicense,
@@ -63,8 +63,7 @@ export function AdminPage() {
     setBusy(true);
     clearNote();
     try {
-      await unlockAdmin(base, key);
-      const recent = await listLicenses(base, key);
+      const recent = await unlockAdmin(base, key);
       setApiBase(base.trim().replace(/\/+$/, ""));
       setAdminKey(key);
       setRows(recent);
@@ -152,7 +151,10 @@ export function AdminPage() {
           className="max-w-xl space-y-5 rounded-[var(--radius-xl)] border border-border bg-surface p-6"
         >
           <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Unlock</p>
-          <Field label="License service">
+          <Field
+            label="License service"
+            hint="The address of your ComputerPets license service. It starts from this site's settings; change it if yours runs somewhere else."
+          >
             <input
               value={apiBase}
               onChange={(e) => setApiBase(e.target.value)}
@@ -276,11 +278,12 @@ function Note({ note, detail }: { note: string | null; detail: string | null }) 
   );
 }
 
-function Field({ label, children }: { label: string; children: ReactNode }) {
+function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
     <label className="block space-y-1.5">
       <span className="text-[11px] uppercase tracking-[0.16em] text-subtle">{label}</span>
       {children}
+      {hint ? <span className="block text-xs text-subtle">{hint}</span> : null}
     </label>
   );
 }
@@ -289,7 +292,7 @@ function Stamp({ label, value }: { label: string; value: string | null }) {
   return (
     <div>
       <dt className="text-[11px] uppercase tracking-[0.16em] text-subtle">{label}</dt>
-      <dd className="mt-1 font-mono text-xs text-muted">{value ? formatWhen(value) : "—"}</dd>
+      <dd className="mt-1 font-mono text-xs text-muted">{value ? <When value={value} /> : "—"}</dd>
     </div>
   );
 }
@@ -300,8 +303,12 @@ function StatusBadge({ row }: { row: LicenseAudit }) {
   return <Badge>Active</Badge>;
 }
 
-function formatWhen(value: string): string {
-  const ms = Date.parse(value);
-  if (Number.isNaN(ms)) return value;
-  return new Date(ms).toISOString().replace(".000Z", "Z");
+/** The viewer's local time; the exact ISO instant stays in the tooltip and the time element. */
+function When({ value }: { value: string }) {
+  const when = formatLocalWhen(value);
+  return (
+    <time dateTime={when.iso} title={when.iso}>
+      {when.text}
+    </time>
+  );
 }

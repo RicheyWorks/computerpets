@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast, Toaster } from "sonner";
 import { CompanionRoom } from "@/components/desk/companion-room";
+import { LoadProblem } from "@/components/load-problem";
 import { PetCard } from "@/components/pet-card";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
@@ -9,6 +10,7 @@ import { careForPet, getSanctuary, type CompanionView } from "@/lib/pets/actions
 import { normalizeCare, type SanctuaryCare } from "@/lib/pets/care";
 import { livingByKey, RED_PANDA_KIND } from "@/lib/pets/living";
 import { departLine, extinctLines, fairHouse } from "@/lib/pets/nest";
+import { loadProblem } from "@/lib/plain-error";
 
 export const Route = createFileRoute("/collection")({
   component: Collection,
@@ -29,11 +31,14 @@ function Collection() {
   const [gone, setGone] = useState<string[]>([]);
   const [left, setLeft] = useState<string[]>([]);
   const [ribbons, setRibbons] = useState<string[]>([]);
+  const [problem, setProblem] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     if (!user) return;
     void getSanctuary()
       .then((d) => {
+        setProblem(null);
         setPets(d.pets);
         setLeft(d.departed.map((p) => p.farewell ?? departLine(p.name, p.species_key)));
         const once = new Set([...d.pets, ...d.departed].map((p) => p.species_key));
@@ -62,11 +67,26 @@ function Collection() {
           ).flatMap((row) => row.ribbons.map((r) => r.line)),
         );
       })
-      .catch(() => setPets([]));
-  }, [user]);
+      // A failed load is not an empty kennel: say it did not load, and offer a retry.
+      .catch((err) => setProblem(loadProblem("kennel", err)));
+  }, [user, attempt]);
+
+  function retry() {
+    setProblem(null);
+    setPets(null);
+    setAttempt((n) => n + 1);
+  }
 
   if (isPending) return <div className="h-dvh animate-pulse bg-surface" />;
   if (!user) return <RedirectToSignIn />;
+  if (problem) {
+    return (
+      <main className="mx-auto max-w-lg space-y-3 px-6 py-20">
+        <h1 className="font-display text-3xl">The kennel did not open.</h1>
+        <LoadProblem line={problem} onRetry={retry} />
+      </main>
+    );
+  }
   if (pets === null) return <div className="h-dvh animate-pulse bg-surface" />;
 
   const walker = pets.find((p) => p.is_active) ?? pets[0] ?? null;

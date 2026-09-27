@@ -92,6 +92,59 @@ function demoRoom() {
   ]);
 }
 
+/** Failed loads say so (kennel, ember, desk, sign-in) and the admin ledger checks its address. */
+async function loadProblems() {
+  const P = await import(pathToFileURL(join(WEB, "src", "lib", "plain-error.ts")).href);
+  const B = await import(pathToFileURL(join(WEB, "src", "lib", "admin", "base.ts")).href);
+  const quiet = () => {};
+  const refused = Object.assign(new TypeError("fetch failed"), { cause: { code: "ECONNREFUSED" } });
+  const lines = {};
+  for (const what of ["kennel", "ember", "desk", "signin"]) {
+    const line = P.loadProblem(what, refused, quiet);
+    if (!line.startsWith(P.LOAD_LINES[what]) || !line.endsWith(P.PLAIN_LINES.unreachable) || /ECONNREFUSED|fetch failed/.test(line)) {
+      return fail(`loadProblem ${what} drift: ${line}`);
+    }
+    lines[what] = line;
+  }
+  const bases = {
+    env: B.pickApiBase("https://license.example.com/", "https://pets.example.com"),
+    site: B.pickApiBase("", "https://pets.example.com"),
+    local: B.pickApiBase("", "http://localhost:3000"),
+  };
+  if (bases.env !== "https://license.example.com" || bases.site !== "https://pets.example.com" || bases.local !== B.DEV_API_BASE) {
+    return fail("admin pickApiBase drift", { bases });
+  }
+  if (B.isLicenseList({ error: "license not found" }) || B.isLicenseList("<html>") || !B.isLicenseList([{ jti: "a" }])) {
+    return fail("admin isLicenseList drift");
+  }
+  const when = B.formatLocalWhen("2026-09-27T18:29:45Z", { locale: "en-US", timeZone: "America/Los_Angeles" });
+  if (when.text.replace(/\s/g, " ") !== "Sep 27, 2026, 11:29 AM" || when.iso !== "2026-09-27T18:29:45Z") {
+    return fail(`admin formatLocalWhen drift: ${when.text} / ${when.iso}`);
+  }
+  const read = (...p) => readFileSync(join(WEB, "src", ...p), "utf8");
+  const wires = [
+    ["routes/collection.tsx", 'loadProblem("kennel", err)', ".catch(() => setPets([]))"],
+    ["routes/hatch.tsx", 'loadProblem("ember", err)', "setEmber(0)"],
+    ["routes/index.tsx", 'loadProblem("desk", err)', ".catch(() => undefined)"],
+    ["routes/login.tsx", 'loadProblem("signin", err)', "onClick={() => signIn("],
+    ["lib/admin/api.ts", "NOT_LICENSE_SERVICE", "__unlock-check__"],
+  ];
+  for (const [rel, need, gone] of wires) {
+    const text = read(...rel.split("/"));
+    if (!text.includes(need)) return fail(`${rel} missing ${need}`);
+    if (text.includes(gone)) return fail(`${rel} still has ${gone}`);
+  }
+  return ok("load problems plain + admin address checked", { lines, bases, when }, [
+    "kennel=plain+retry",
+    "ember=plain+retry",
+    "desk=plain+retry",
+    "signin=plain",
+    "admin.404=not_license_service",
+    "admin.base=env>site>localhost",
+    "admin.time=local+iso_title",
+  ]);
+}
+
 async function classroomLockstep(expectPath) {
   if (!expectPath) return fail("classroom_lockstep needs expect JSON path argv");
   let expect;
@@ -275,6 +328,7 @@ async function volumeMutes() {
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
+  load_problems: loadProblems,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,
