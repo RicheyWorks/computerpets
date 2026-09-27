@@ -1679,7 +1679,7 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
                 and "nameListener" in pet
                 and "hasKey: key.length > 0" in pet
                 and "keeper-listener" in card
-                and "readMindListener({ data: { plugin: askedPlugin, baseUrl: askedBase } })" in card
+                and "readMindListener({ data: listenerReadBody({ plugin: askedPlugin, baseUrl: askedBase }) })" in card
                 and "apiKey" not in read_src.split("return nameListener", 1)[-1]
                 and 'door": "blotter"' in blotter_src
                 and "listener_label" in blotter_src

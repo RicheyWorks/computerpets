@@ -2,7 +2,7 @@ from computerpets_client.license.errors import LicenseError
 from computerpets_client.license.hwid import MAX_HWID_LENGTH, assert_hwid, resolve_hwid
 
 
-def test_hwid_is_at_most_128_and_stable_when_persisted():
+def test_hwid_is_at_most_128_and_stable_when_persisted(tmp_path):
     files: dict[str, str] = {}
 
     def read(path: str) -> str:
@@ -15,14 +15,14 @@ def test_hwid_is_at_most_128_and_stable_when_persisted():
     def write(path: str, data: str) -> None:
         files[path] = data
 
-    a = resolve_hwid(user_data_dir="/tmp/cp-hwid", plat="linux", read_file=read, write_file=write, fallback_id="unused")
+    a = resolve_hwid(user_data_dir=str(tmp_path / "cp-hwid"), plat="linux", read_file=read, write_file=write, fallback_id="unused")
 
     def read_persist(path: str) -> str:
         if path.endswith("hwid.txt"):
             return files[path]
         return "machine-bbb\n"
 
-    b = resolve_hwid(user_data_dir="/tmp/cp-hwid", plat="linux", read_file=read_persist, write_file=write)
+    b = resolve_hwid(user_data_dir=str(tmp_path / "cp-hwid"), plat="linux", read_file=read_persist, write_file=write)
     assert len(a) <= MAX_HWID_LENGTH
     assert a == b
     assert len(a) == 64
@@ -42,7 +42,7 @@ def test_does_not_normalize_case():
     assert assert_hwid("Device-ABC") != "device-abc"
 
 
-def test_hashes_linux_machine_id_and_hides_the_raw_value():
+def test_hashes_linux_machine_id_and_hides_the_raw_value(tmp_path):
     seen: list[str] = []
 
     def read(path: str) -> str:
@@ -60,7 +60,7 @@ def test_hashes_linux_machine_id_and_hides_the_raw_value():
     from computerpets_client.license.hwid import resolve_hwid_detail
 
     detail = resolve_hwid_detail(
-        user_data_dir="/tmp/cp-hwid-mark",
+        user_data_dir=str(tmp_path / "cp-hwid-mark"),
         plat="linux",
         read_file=read,
         write_file=write,
@@ -73,10 +73,10 @@ def test_hashes_linux_machine_id_and_hides_the_raw_value():
     assert "machine-aaa" not in str(detail)
     os_reads = [item for item in seen if not item.endswith("hwid.txt")]
     assert os_reads[0].endswith("/etc/machine-id")
-    assert written["/tmp/cp-hwid-mark/hwid.txt"] == detail["id"]
+    assert written[str(tmp_path / "cp-hwid-mark" / "hwid.txt")] == detail["id"]
 
 
-def test_reuses_a_stored_mark_without_reading_the_os():
+def test_reuses_a_stored_mark_without_reading_the_os(tmp_path):
     def read(path: str) -> str:
         if not path.endswith("hwid.txt"):
             raise AssertionError(path)
@@ -87,18 +87,18 @@ def test_reuses_a_stored_mark_without_reading_the_os():
 
     from computerpets_client.license.hwid import peek_hwid, resolve_hwid_detail
 
-    detail = resolve_hwid_detail(user_data_dir="/tmp/cp-hwid-mark", plat="linux", read_file=read, write_file=write)
+    detail = resolve_hwid_detail(user_data_dir=str(tmp_path / "cp-hwid-mark"), plat="linux", read_file=read, write_file=write)
     assert detail["id"] == "legacy-device"
     assert detail["read"] == "stored"
     peeked = peek_hwid(
-        user_data_dir="/tmp/cp-hwid-empty",
+        user_data_dir=str(tmp_path / "cp-hwid-empty"),
         read_file=lambda path: (_ for _ in ()).throw(FileNotFoundError(path)) if path.endswith("hwid.txt") else "no",
     )
     assert peeked["read"] == "unread"
     assert peeked["id"] == ""
 
 
-def test_windows_hostname_fallback_waits_for_a_yes():
+def test_windows_hostname_fallback_waits_for_a_yes(tmp_path):
     from computerpets_client.license.hwid import WEAK_FALLBACK_MESSAGE, describe_machine_marks, resolve_hwid_detail
 
     def fail_reg(_cmd: str) -> str:
@@ -111,7 +111,7 @@ def test_windows_hostname_fallback_waits_for_a_yes():
 
     try:
         resolve_hwid_detail(
-            user_data_dir="/tmp/cp-hwid-host",
+            user_data_dir=str(tmp_path / "cp-hwid-host"),
             plat="windows",
             read_file=miss,
             write_file=lambda path, data: written.__setitem__(path, data),
@@ -126,7 +126,7 @@ def test_windows_hostname_fallback_waits_for_a_yes():
     assert written == {}
 
     detail = resolve_hwid_detail(
-        user_data_dir="/tmp/cp-hwid-host",
+        user_data_dir=str(tmp_path / "cp-hwid-host"),
         plat="windows",
         read_file=miss,
         write_file=lambda path, data: written.__setitem__(path, data),
@@ -141,7 +141,7 @@ def test_windows_hostname_fallback_waits_for_a_yes():
     assert len(str(detail["id"])) == 64
 
     overlay = resolve_hwid_detail(
-        user_data_dir="/tmp/cp-hwid-host-win32",
+        user_data_dir=str(tmp_path / "cp-hwid-host-win32"),
         plat="win32",
         read_file=miss,
         write_file=lambda path, data: None,
@@ -153,7 +153,7 @@ def test_windows_hostname_fallback_waits_for_a_yes():
     assert overlay["id"] != detail["id"]
 
     stored = resolve_hwid_detail(
-        user_data_dir="/tmp/cp-hwid-host",
+        user_data_dir=str(tmp_path / "cp-hwid-host"),
         plat="windows",
         read_file=lambda path: written[path] if path.endswith("hwid.txt") else miss(path),
         write_file=lambda path, data: (_ for _ in ()).throw(AssertionError((path, data))),
@@ -164,7 +164,7 @@ def test_windows_hostname_fallback_waits_for_a_yes():
     assert stored["id"] == detail["id"]
 
     random = resolve_hwid_detail(
-        user_data_dir="/tmp/cp-hwid-random",
+        user_data_dir=str(tmp_path / "cp-hwid-random"),
         plat="linux",
         read_file=miss,
         write_file=lambda path, data: written.__setitem__(path, data),

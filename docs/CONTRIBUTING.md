@@ -145,6 +145,21 @@ When making architectural changes, remember to update the **"Last Updated"** dat
   - A web test imports a `.ts` module with `pathToFileURL(join(root, ...)).href`, not a bare path.
   - A web test that runs a repo Python script gets the command from `python3()` in `web/scripts/test-python.mjs` (python3, then python, then `py -3`).
   - A test that needs `/bin/sh` or Xvfb is skipped with a reason on Windows and runs on Linux CI.
+- Run the PyQt blotter tests with pytest in `client/`. CI runs them on Linux with Python 3.12 (`client/pyproject.toml` asks for 3.11 or newer). On Windows, keep the test tools in a venv inside `client/`, which git ignores. In PowerShell:
+
+  ```powershell
+  cd client
+  py -3.12 -m venv .venv
+  .\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+  $env:QT_QPA_PLATFORM = "offscreen"
+  .\.venv\Scripts\python.exe -m pytest -q -rs
+  .\.venv\Scripts\python.exe -m computerpets_client --check
+  ```
+
+  - `py -0p` lists the Pythons you have. If you only have 3.10, the editable install refuses (`requires-python >=3.11`). Make the venv with `py -3` and install just the tools: `.\.venv\Scripts\python.exe -m pip install "PyQt6>=6.6" "cryptography>=42" "pytest>=8"`. `pythonpath = ["."]` in `pyproject.toml` lets pytest import the package without installing it.
+  - `-rs` prints the reason for each skip. The one Windows skip is the half of `tests/test_gpu.py` that runs the POSIX `desktop/gpu-probe*.sh` scripts through `/bin/sh`.
+  - A test that needs a license folder uses pytest's `tmp_path`, not a hard-coded `/tmp/...` path. When an in-memory fake disk is keyed by path, build the key with `Path(...) / name` so it matches on Windows.
+  - A test that fakes `/etc/machine-id` pins the host to Linux, so a Windows run never reads the real registry GUID.
 - Shell scripts are LF on every checkout (`*.sh text eol=lf` in `.gitattributes`). On a Windows clone made before that line, re-check them out once in PowerShell: `$sh = git ls-files "*.sh"; Remove-Item $sh; git checkout -- $sh`
 
 ### 5. Open a Pull Request
