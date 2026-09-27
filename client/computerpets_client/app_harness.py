@@ -3211,6 +3211,20 @@ def _blotter_rows() -> list[Affordance]:
             ),
         ),
         Affordance(
+            "blotter.unlock_offline",
+            "blotter",
+            "Unlock keeps the download sign-in sealed and speaks plain words",
+            "license.session codec / token_store / plain_error (no Qt)",
+            notes=(
+                "The real Python license session against the contract double, an in-memory disk, and a "
+                "fake codec (test-only keys, no network). Unlock seals auth.token (never plain in "
+                "license.json); with no secret store the token is memory-only and a later run's Signed "
+                "download says no_token before any POST; an old plain token is sealed on first read; "
+                "refused / HTTP 500 / 403 / blank Steam fields each give one plain sentence ending "
+                "'Pets still work without it.' Peer of desk.license.offline."
+            ),
+        ),
+        Affordance(
             "blotter.rail",
             "blotter",
             "Species rail group coverage",
@@ -3805,7 +3819,141 @@ def _invoke_blotter(local_id: str, **opts: Any) -> InvokeResult:
             ],
         )
 
+    if local_id == "unlock_offline":
+        return _blotter_unlock_offline(aid)
+
     return InvokeResult(aid, "blotter", False, error=f"unknown blotter id {local_id!r}")
+
+
+def _blotter_unlock_offline(aid: str) -> InvokeResult:
+    """Drive the real license session offline: sealed token, memory-only, migration, plain words."""
+    import base64
+    import json as _json
+
+    from .license.contract_double import create_contract_test_double
+    from .license.errors import LicenseError
+    from .license.http_client import HttpResponse, create_license_client
+    from .license.license_net import bundle_honesty
+    from .license.plain_error import PETS_STILL, plain_license_error
+    from .license.session import create_license_session
+
+    secret = base64.b64encode(bytes([7] * 32)).decode("ascii")  # test-only key
+    signing = "test-bundle-signing-key-not-a-placeholder"
+    unlock = {
+        "steamId": "76561198000000000",
+        "appId": "123456",
+        "petType": "cat",
+        "provider": "steam",
+        "cdnLine": bundle_honesty("https://cdn.enterprisepet.example/bundles/cat.zip"),
+    }
+
+    class Disk:
+        def __init__(self) -> None:
+            self.files: dict[str, str] = {}
+
+        def read(self, path: str) -> str:
+            if path not in self.files:
+                raise FileNotFoundError(path)
+            return self.files[path]
+
+        def write(self, path: str, data: str) -> None:
+            self.files[path] = data
+
+    class Codec:
+        def encrypt(self, text: str) -> str:
+            return "fake:" + base64.b64encode(text[::-1].encode()).decode()
+
+        def decrypt(self, sealed: str) -> str:
+            return base64.b64decode(sealed[5:]).decode()[::-1]
+
+    def session(backend: dict[str, Any], disk: Disk, codec: Any) -> dict[str, Any]:
+        return create_license_session(
+            user_data_dir="/harness/license",
+            env={"LICENSE_SECRET_KEY": secret, "BUNDLE_SIGNING_KEY": signing,
+                 "COMPUTERPETS_BACKEND_URL": "http://127.0.0.1:8080"},
+            fetch_impl=backend["fetch_impl"], hwid="harness-device", read_file=disk.read,
+            write_file=disk.write, mkdir=lambda _p: None, codec=codec,
+        )
+
+    def bearer(backend: dict[str, Any]) -> str:
+        posts = [c for c in backend["calls"] if c["path"].startswith("/api/download/")]
+        return posts[0]["headers"]["Authorization"][len("Bearer "):] if posts else ""
+
+    trace: list[str] = []
+    # 1) With a store: sealed, never plain.
+    backend, disk = create_contract_test_double(license_secret=secret, signing_key=signing), Disk()
+    status = session(backend, disk, Codec())["unlock"](unlock)
+    token = bearer(backend)
+    stored = _json.loads(next(iter(disk.files.values())))
+    if not token or token in "".join(disk.files.values()) or "token" in stored.get("auth", {}):
+        return InvokeResult(aid, "blotter", False, error="download sign-in written in plain text")
+    if status.get("tokenKept") != "sealed":
+        return InvokeResult(aid, "blotter", False, error=f"tokenKept {status.get('tokenKept')!r} != sealed")
+    trace.append("sealed=ok")
+    # 2) No store: memory only, and a later run says unlock again before any POST.
+    backend, disk = create_contract_test_double(license_secret=secret, signing_key=signing), Disk()
+    status = session(backend, disk, None)["unlock"](unlock)
+    if status.get("tokenKept") != "memory" or bearer(backend) in "".join(disk.files.values()):
+        return InvokeResult(aid, "blotter", False, error="no-store unlock was not memory-only")
+    backend["calls"].clear()
+    try:
+        session(backend, disk, None)["download"]({"cdnLine": unlock["cdnLine"]})
+        return InvokeResult(aid, "blotter", False, error="later run downloaded with no sign-in")
+    except LicenseError as err:
+        if err.code != "no_token" or not str(err).endswith(PETS_STILL) or bearer(backend):
+            return InvokeResult(aid, "blotter", False, error=f"later run: {err.code} {err}")
+    trace.append("memory_only=ok")
+    # 3) An older plain license.json is sealed on first read.
+    path = next(iter(disk.files))
+    old = _json.loads(disk.files[path])
+    old["auth"] = {"token": "test.old-plain", "expiresAt": old["auth"].get("expiresAt")}
+    disk.files[path] = _json.dumps(old)
+    kept = session(backend, disk, Codec())["status"]().get("tokenKept")
+    if kept != "sealed" or "old-plain" in disk.files[path]:
+        return InvokeResult(aid, "blotter", False, error="old plain token was not sealed")
+    trace.append("migrated=ok")
+    # 4) Plain words: refused, HTTP 500, 403 server words, blank fields.
+    def verify_with(fetch: Callable[..., Any]) -> str:
+        try:
+            create_license_client(fetch_impl=fetch)["verify"](
+                backend_url="https://house.example", provider="steam", license_secret=secret,
+                fields={"steamId": "1", "appId": "2", "hwid": "dev"},
+            )
+        except LicenseError as err:
+            return plain_license_error(err)["message"]
+        return ""
+
+    def refused(url: str, **_: Any) -> Any:
+        raise ConnectionRefusedError(111, "Connection refused")
+
+    words = {
+        "refused": verify_with(refused),
+        "server": verify_with(lambda url, **_: HttpResponse(500, b'{"error":"db down"}')),
+        "denied": plain_license_error(
+            LicenseError("denied", "ops runbook 7"), "house.example")["message"],
+    }
+    try:
+        session(backend, Disk(), Codec())["unlock"]({**unlock, "appId": ""})
+        words["fields"] = ""
+    except LicenseError as err:
+        words["fields"] = plain_license_error(err)["message"]
+    expect = {
+        "refused": "Couldn't reach the house server at house.example.",
+        "server": "The house server at house.example had a problem (error 500).",
+        "denied": "The house server at house.example did not confirm that you own the game.",
+        "fields": "Fill in the Steam ID and the App ID first.",
+    }
+    for key, start in expect.items():
+        got = words[key]
+        if not got.startswith(start) or not got.endswith(PETS_STILL) or "runbook" in got or "db down" in got:
+            return InvokeResult(aid, "blotter", False, error=f"{key} words drift {got!r}")
+        trace.append(f"{key}=plain")
+    return InvokeResult(
+        aid, "blotter", True,
+        detail="sealed, memory-only, migrated, plain words",
+        extras={"tokenKept": ["sealed", "memory", "sealed"], "words": words},
+        trace=trace,
+    )
 
 
 def _assert_blotter(local_id: str, result: InvokeResult) -> list[str]:

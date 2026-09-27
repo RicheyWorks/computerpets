@@ -107,6 +107,7 @@ CROSS_DOMAIN = {
     "blotter.gait",
     "blotter.play",
     "blotter.weather",
+    "blotter.unlock_offline",
     "blotter.rail",
     "blotter.frames",
 }
@@ -572,6 +573,7 @@ def test_blotter_pure_surfaces():
         "blotter.gait",
         "blotter.play",
         "blotter.weather",
+        "blotter.unlock_offline",
         "blotter.rail",
         "blotter.frames",
     }
@@ -588,7 +590,7 @@ def test_blotter_pure_surfaces():
     failed = [r for r in results if not r.passed]
     assert not failed, failed
     driven_ok = [r for r in results if r.fate == "driven" and r.passed]
-    assert len(driven_ok) == 10
+    assert len(driven_ok) == 11
     skipped = {r.action_id for r in results if r.fate == "excluded"}
     assert skipped == {"blotter.plaque", "blotter.frames_paint", "blotter.scene"}
 
@@ -616,6 +618,10 @@ def test_blotter_pure_surfaces():
     assert ret.extras.get("desktop_return") is False
     frames = invoke("blotter.frames")
     assert frames.extras.get("anims") == ["idle", "walk", "sit", "eat", "sleep", "play"]
+    unlock = invoke("blotter.unlock_offline")
+    assert unlock.ok, (unlock.error, unlock.detail)
+    assert unlock.trace[:3] == ["sealed=ok", "memory_only=ok", "migrated=ok"]
+    assert all(w.endswith("Pets still work without it.") for w in unlock.extras["words"].values())
 
 
 def test_blotter_qt_slices_under_gui_optin():

@@ -52,7 +52,11 @@ test("signed-out guest is a door, not a stuck pulse", () => {
   assert.match(petSrc, /CompanionRoom/);
   assert.match(petSrc, /persistLocal=\{false\}/);
   assert.match(petSrc, /onCare=\{persistCare\}/);
-  assert.match(petSrc, /Token not in this kennel/);
+  assert.match(petSrc, /This pet is not in your kennel\./);
+  assert.doesNotMatch(petSrc, /Token not in this kennel/);
+  // A failed load says the kennel did not open instead of claiming the pet is missing.
+  assert.match(petSrc, /Couldn't open your kennel\./);
+  assert.match(petSrc, /setLoadProblem\(plainMessage\(err, /);
   assert.match(petSrc, /if \(gone\)/);
 });
 

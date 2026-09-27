@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { GROK_PROVIDERS, authEnabled, signIn } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
 
@@ -30,7 +30,15 @@ function Login() {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-muted">Sign-in is disabled.</p>
+          <div className="space-y-3">
+            <p className="text-sm text-muted">
+              Sign-in is off on this site, so there is no account to open. The desk, the catalog, and the
+              demo rooms work without one.
+            </p>
+            <Link to="/" className="text-sm text-primary">
+              Go to the desk
+            </Link>
+          </div>
         )}
       </div>
     </main>

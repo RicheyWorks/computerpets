@@ -16,6 +16,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
+# Optional: seal the Unlock download sign-in in the macOS/Linux keychain. Windows uses DPAPI with no extra package.
+secrets = ["keyring>=24"]
 
 [project.scripts]
 computerpets-client = "computerpets_client.app:main"

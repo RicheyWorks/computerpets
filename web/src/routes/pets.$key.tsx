@@ -31,6 +31,7 @@ function PetDetail() {
   const [house, setHouse] = useState<CompanionView[]>([]);
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
+  const [loadProblem, setLoadProblem] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -39,10 +40,15 @@ function PetDetail() {
         const all = [...d.pets, ...d.departed];
         const found = all.find((p) => p.id === key) ?? null;
         setHouse(all);
+        setLoadProblem(null);
         setPet(found);
         setName(found?.name ?? "");
       })
-      .catch(() => setPet(null));
+      .catch((err) => {
+        // A failed load is not "missing": say the kennel did not open, in plain words.
+        setLoadProblem(plainMessage(err, "Couldn't open your kennel just now. Try again in a moment."));
+        setPet(null);
+      });
   }, [user, key]);
 
   if (isPending) return <div className="h-dvh animate-pulse bg-surface" />;
@@ -51,7 +57,10 @@ function PetDetail() {
   if (!pet) {
     return (
       <main className="mx-auto max-w-lg space-y-3 px-6 py-20">
-        <h1 className="font-display text-3xl">Token not in this kennel.</h1>
+        <h1 className="font-display text-3xl">
+          {loadProblem ? "Couldn't open your kennel." : "This pet is not in your kennel."}
+        </h1>
+        {loadProblem ? <p className="text-sm text-muted">{loadProblem}</p> : null}
         <Link to="/collection" className="text-sm text-primary">
           Back to kennel
         </Link>

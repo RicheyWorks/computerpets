@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Any, Callable
 
 from PyQt6.QtCore import QObject, QThread, Qt, pyqtSignal
@@ -20,6 +21,8 @@ from PyQt6.QtWidgets import (
 )
 
 from .license.errors import LicenseError
+from .license.plain_error import host_of, plain_license_error, raw_log_line
+from .license.session import TOKEN_GONE_NOTE, TOKEN_MEMORY_NOTE
 from .license.hwid import WEAK_FALLBACK_MESSAGE
 from .license.license_net import (
     BUNDLE_IDLE,
@@ -79,14 +82,16 @@ MARK_STORED_TEXT = " ".join(
 )
 
 
-def license_error_text(err: object) -> str:
-    """What the dialog shows for a failed license call. Never a traceback.
+_LOG = logging.getLogger("computerpets.license")
 
-    no_license is a plain sentence on its own; other codes keep the code prefix.
+
+def license_error_text(err: object, host: str = "") -> str:
+    """What the dialog shows for a failed license call: one plain sentence, never a traceback,
+    a code, or the server's own words. The raw error goes to the log only (license/plain_error.py).
     """
-    if isinstance(err, LicenseError):
-        return str(err) if err.code == "no_license" else f"{err.code}: {err}"
-    return f"denied: {err or type(err).__name__}"
+    plain = plain_license_error(err, host)
+    _LOG.warning("[license] %s: %s", plain["code"], raw_log_line(err))
+    return plain["message"]
 
 
 def _license_is_unbound(status: dict[str, Any]) -> bool:
@@ -108,8 +113,10 @@ class UnlockWorker(QObject):
             self.finished.emit(self._session["unlock"](self._fields))
         except LicenseError as err:
             self.failed.emit(err)
-        except Exception as err:
-            self.failed.emit(LicenseError("unreachable", str(err)))
+        except Exception as err:  # noqa: BLE001 — a worker must not raise; the dialog shows plain words
+            failure = LicenseError("failed", "unlock failed", raw_log_line(err))
+            failure.__cause__ = err
+            self.failed.emit(failure)
 
 
 class UnlockDialog(QDialog):
@@ -305,7 +312,7 @@ class UnlockDialog(QDialog):
         except LicenseError as err:
             if self._named_hold(err):
                 return
-            self.err.setText(license_error_text(err))
+            self.err.setText(license_error_text(err, host_of(url)))
 
     def _paint_status(self, status: dict[str, Any]) -> None:
         self._license_unbound = _license_is_unbound(status)
@@ -324,11 +331,14 @@ class UnlockDialog(QDialog):
             if last.get("downloadUrl"):
                 text += ". Bundle fetched." if (last.get("bundle") or {}).get("ok") else ". Signed URL issued."
             self.ok.setText(text)
-            self.err.setText("")
+            # No secret store: say plainly the sign-in lasts this run only, and to unlock again later.
+            kept = status.get("tokenKept")
+            self.err.setText(TOKEN_MEMORY_NOTE if kept == "memory" else TOKEN_GONE_NOTE if kept == "none" else "")
         else:
             self.ok.setText("Locked. The pet on the blotter still works.")
             err = status.get("error")
-            self.err.setText(err["message"] if err else "")
+            # A stored license's own refusal (expired, cannot open) gets the same plain words.
+            self.err.setText(license_error_text(err, host_of(status.get("backendUrl"))) if err else "")
 
     def _pet_key(self) -> str:
         data = self.pet_type.currentData()
@@ -390,17 +400,17 @@ class UnlockDialog(QDialog):
             self.accept()
 
     def _on_fail(self, err: object) -> None:
-        message = str(err)
-        code = getattr(err, "code", "denied")
+        code = getattr(err, "code", "failed")
         if isinstance(err, LicenseError) and self._named_hold(err):
             return
+        text = license_error_text(err, host_of(self._unlock_target()))
         self.ok.setText("Locked. The pet on the blotter still works.")
-        self.err.setText(f"{code}: {message}")
+        self.err.setText(text)
         if code == "hwid_needs_fallback_yes" and not self._unlock_allowed_weak:
-            if self._ask_weak(message):
+            if self._ask_weak(text):
                 self._unlock(allow_weak=True)
             return
-        QMessageBox.warning(self, "Unlock failed", f"{code}: {message}")
+        QMessageBox.warning(self, "Unlock failed", text)
 
     def _download(self, allow_weak: bool = False) -> None:
         self._paint_net()
@@ -422,15 +432,15 @@ class UnlockDialog(QDialog):
         except LicenseError as err:
             if self._named_hold(err):
                 return
-            text = license_error_text(err)
+            text = license_error_text(err, host_of(url))
             self.err.setText(text)
             if err.code == "hwid_needs_fallback_yes" and not allow_weak and self._ask_weak(str(err)):
                 self._download(allow_weak=True)
                 return
             QMessageBox.warning(self, "Download failed", text)
             return
-        except Exception as err:  # noqa: BLE001 — a Qt slot must not raise; same "denied" as the overlay IPC
-            text = license_error_text(err)
+        except Exception as err:  # noqa: BLE001 — a Qt slot must not raise; plain words, raw text to the log
+            text = license_error_text(err, host_of(url))
             self.err.setText(text)
             QMessageBox.warning(self, "Download failed", text)
             return
