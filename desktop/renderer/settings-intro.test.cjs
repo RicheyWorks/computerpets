@@ -5,7 +5,7 @@ const { test } = require("node:test");
 
 const html = readFileSync(join(__dirname, "settings.html"), "utf8").replace(/\r\n/g, "\n");
 
-const unlockStart = html.indexOf("<h2>Unlock</h2>");
+const unlockStart = html.indexOf('<h2 id="unlockSection">Unlock</h2>');
 const fieldsetStart = html.indexOf('<fieldset class="optional" id="unlockOptional">');
 const fieldsetEnd = html.indexOf("</fieldset>", fieldsetStart);
 const detailsStart = html.indexOf('<details class="fold" id="unlockDetails">');
@@ -52,7 +52,7 @@ test("settings: the sections are where the Unlock layout expects them", () => {
 });
 
 test("settings: the first visible Unlock text is one short plain line", () => {
-  const before = html.slice(unlockStart + "<h2>Unlock</h2>".length, detailsStart);
+  const before = html.slice(unlockStart + '<h2 id="unlockSection">Unlock</h2>'.length, detailsStart);
   const visible = textOf(before);
   assert.equal(visible, "Pets work without unlocking. Unlocking is optional.");
   assert.ok(words(visible).length <= 12, "short enough to read at a glance");

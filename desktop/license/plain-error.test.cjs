@@ -5,7 +5,7 @@ const { test } = require("node:test");
 const P = require("./plain-error.cjs");
 const { LicenseError } = require("./errors.cjs");
 const { createLicenseClient } = require("./client.cjs");
-const { NO_LICENSE_MESSAGE } = require("./session.cjs");
+const { NO_LICENSE_MESSAGE, NO_TOKEN_MESSAGE, FIELDS_MISSING_MESSAGE } = require("./session.cjs");
 
 const mainSrc = readFileSync(join(__dirname, "..", "main.cjs"), "utf8");
 const settingsSrc = readFileSync(join(__dirname, "..", "renderer", "settings.html"), "utf8");
@@ -88,12 +88,50 @@ test("a fetch that throws inside the real client names the host it aimed at", as
   assertPlain(P.plainLicenseError(err), "unreachable", /^Couldn't reach the house server at 127\.0\.0\.1:8081\. Pets still work without it\.$/);
 });
 
-test("the house's own license codes keep their clear sentences", () => {
+test("house codes written for people keep their sentences", () => {
   assert.deepEqual(P.plainLicenseError(new LicenseError("no_license", NO_LICENSE_MESSAGE)), { code: "no_license", message: NO_LICENSE_MESSAGE });
-  assert.deepEqual(P.plainLicenseError(new LicenseError("hwid_mismatch", "hardware binding mismatch")), { code: "hwid_mismatch", message: "hardware binding mismatch" });
-  assert.deepEqual(P.plainLicenseError(new LicenseError("denied", "ownership not verified")), { code: "denied", message: "ownership not verified" });
+  assert.deepEqual(P.plainLicenseError(new LicenseError("no_token", NO_TOKEN_MESSAGE)), { code: "no_token", message: NO_TOKEN_MESSAGE });
+  assert.deepEqual(P.plainLicenseError(new LicenseError("fields_missing", FIELDS_MISSING_MESSAGE)), { code: "fields_missing", message: FIELDS_MISSING_MESSAGE });
   const unnamed = new LicenseError("cdn_net_unnamed", "the signed bundle was not fetched from cdn.example. name that host before it leaves.");
   assert.equal(P.plainLicenseError(unnamed).message, unnamed.message);
+});
+
+test("house codes that carry developer or server text get one plain sentence each", () => {
+  const DEV = /license expired|hardware binding|hwid does|hwid too|ownership not verified|LICENSE_SECRET_KEY|ciphertext|issuance|base64|GCM|MAC|provider key|NullPointer|java\./;
+  const cases = [
+    ["expired", "license expired", /^This license has expired\. Unlock again to get a new one\. Pets still work without it\.$/],
+    ["hwid_mismatch", "hardware binding mismatch", /^This license belongs to a different computer, so it does not work here\. Unlock again on this computer\./],
+    ["hwid_mismatch", "issued license hwid does not match this device", /^This license belongs to a different computer/],
+    ["denied", "ownership not verified", /^The house server at house\.example did not confirm that you own the game\. Check the Steam ID and the App ID/],
+    ["revoked", "license missing, expired, or tampered", /^The house server at house\.example no longer accepts this license\./],
+    ["decrypt_failed", "license ciphertext failed authentication", /^The license on this computer could not be opened/],
+    ["missing_secret", "LICENSE_SECRET_KEY is missing; cannot decrypt the issued license", /^This copy of the app has no license key set up/],
+    ["missing_backend", "backend base URL is not a URL", /^The Backend URL is not a web address\./],
+    ["bad_response", "verify response is not a license issuance", /^The house server at house\.example sent an answer this app does not understand\./],
+    ["download_failed", "java.lang.NullPointerException", /^The house server at house\.example did not hand over the download\./],
+    ["unknown_provider", "provider key is invalid", /^The house server at house\.example does not know this store\./],
+    ["signed_url_invalid", "signed URL MAC mismatch", /^The download link did not check out/],
+    ["hwid_too_long", "hwid too long", /^This computer's license mark is too long\./],
+    ["bundle_zip_invalid", "manifest.json missing at zip root", new RegExp(`^${P.BUNDLE_DEFAULT.replace(/[.()]/g, "\\$&")}$`)],
+  ];
+  for (const [code, raw, want] of cases) {
+    const plain = P.plainLicenseError(new LicenseError(code, raw), { host: "house.example" });
+    assert.equal(plain.code, code);
+    assert.match(plain.message, want, `${code}: ${plain.message}`);
+    assert.doesNotMatch(plain.message, DEV, `${code} leaked: ${plain.message}`);
+    assert.doesNotMatch(plain.message, RAW, plain.message);
+  }
+  // Every house code either passes a people-written sentence or has its own sentence.
+  for (const code of P.HOUSE_CODES) assert.ok(P.PASSTHROUGH_CODES.has(code) || P.houseSentence(code, "") !== "", code);
+});
+
+test("a server's own 403 words never reach the window", async () => {
+  const client = createLicenseClient({ fetchImpl: async () => ({ ok: false, status: 403, text: async () => JSON.stringify({ error: "Steam API key rejected (403) by com.house.SteamVerifier" }) }) });
+  const err = await client.verify({ backendUrl: "https://house.example", provider: "steam", fields: { steamId: "1", appId: "2" }, licenseSecret: Buffer.alloc(32, 1).toString("base64") }).then(() => null, (e) => e);
+  assert.equal(err.code, "denied");
+  const plain = P.plainLicenseError(err);
+  assert.doesNotMatch(plain.message, /Steam API key|com\.house/);
+  assert.match(plain.message, /did not confirm that you own the game/);
 });
 
 test("an unknown throw never shows its raw text", () => {
@@ -119,6 +157,8 @@ test("main.cjs sends only the plain sentence to Settings and logs the raw error"
   assert.match(mainSrc, /return \{ ok: false, unlocked: false, error: plain \}/);
   assert.doesNotMatch(mainSrc, /message: err\.message \|\| String\(err\)/);
   assert.match(mainSrc, /PlainError\.plainBundleError\(result\.error/);
+  // license-status's stored-license refusal goes through the same plain words.
+  assert.match(mainSrc, /typeof result\.error\.code === "string"[\s\S]{0,300}PlainError\.plainLicenseError\(result\.error/);
 });
 
 test("Settings shows error text only through errorText, which refuses bare strings", () => {
