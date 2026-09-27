@@ -151,6 +151,7 @@
       tabs.querySelectorAll("[data-weather-tab]").forEach((btn) => {
         const on = btn.getAttribute("data-weather-tab") === tab;
         btn.setAttribute("aria-selected", on ? "true" : "false");
+        btn.tabIndex = on ? 0 : -1;
         btn.dataset.on = on ? "1" : "0";
       });
     }
@@ -230,6 +231,7 @@
       tabs.querySelectorAll("[data-news-tab]").forEach((btn) => {
         const on = btn.getAttribute("data-news-tab") === tab;
         btn.setAttribute("aria-selected", on ? "true" : "false");
+        btn.tabIndex = on ? 0 : -1;
         btn.dataset.on = on ? "1" : "0";
       });
     }

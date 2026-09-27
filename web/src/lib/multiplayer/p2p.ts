@@ -60,6 +60,8 @@ export interface P2PRoomOptions {
   onMessage?: (from: string, data: unknown, channel: "state" | "reliable") => void;
   /** Fires once, on the first successful signaling poll (registration). */
   onConnected?: () => void;
+  /** Defaults to the page's document; null means "always showing" (tests, node). */
+  doc?: { hidden: boolean; addEventListener: (type: "visibilitychange", fn: () => void) => void; removeEventListener: (type: "visibilitychange", fn: () => void) => void } | null;
 }
 
 interface PeerSlot {
@@ -84,6 +86,8 @@ interface PeerSlot {
 
 const FAST_POLL_MS = 400;
 const IDLE_POLL_MS = 2000;
+/** A hidden tab with every pair settled polls the relay this slowly (still inside any sane roster expiry). */
+const HIDDEN_POLL_MS = 10_000;
 const PING_INTERVAL_MS = 2000;
 const STALL_MS = 10_000;
 const MAX_RECOVERY_ATTEMPTS = 3;
@@ -139,6 +143,16 @@ export function iceServersForRoom(
   return kept;
 }
 
+/**
+ * The next relay poll: fast while any pair is still connecting (a hidden tab too, so a handshake is not
+ * stranded), idle when all are settled, and slower again while the page is hidden. Pings ride the peer
+ * data channels, not the relay, so they are left alone.
+ */
+export function pollDelay(connecting: boolean, hidden: boolean): number {
+  if (connecting) return FAST_POLL_MS;
+  return hidden ? HIDDEN_POLL_MS : IDLE_POLL_MS;
+}
+
 export class P2PRoom {
   private readonly opts: P2PRoomOptions;
   private readonly peers = new Map<string, PeerSlot>();
@@ -150,9 +164,20 @@ export class P2PRoom {
   private closed = false;
   private everPolled = false;
   private lastPeersFingerprint = "";
+  private readonly doc: NonNullable<P2PRoomOptions["doc"]> | null;
+  /** Showing the page again polls right away instead of waiting out the slow hidden delay. */
+  private readonly onVisible = () => {
+    if (!this.doc || this.doc.hidden || this.closed) return;
+    this.schedulePoll(0);
+  };
 
   constructor(opts: P2PRoomOptions) {
     this.opts = opts;
+    this.doc = opts.doc === undefined ? (typeof document !== "undefined" ? (document as unknown as NonNullable<P2PRoomOptions["doc"]>) : null) : opts.doc;
+  }
+
+  private nextDelay(): number {
+    return pollDelay(this.anyPairConnecting(), !!this.doc?.hidden);
   }
 
   /**
@@ -167,7 +192,8 @@ export class P2PRoom {
       // First poll can fail transiently; the scheduled loop below retries.
     }
     if (this.closed) return;
-    this.schedulePoll(this.anyPairConnecting() ? FAST_POLL_MS : IDLE_POLL_MS);
+    this.schedulePoll(this.nextDelay());
+    this.doc?.addEventListener("visibilitychange", this.onVisible);
     this.pingTimer = setInterval(() => {
       this.pingAll();
       this.watchdog();
@@ -176,6 +202,7 @@ export class P2PRoom {
 
   close(): void {
     this.closed = true;
+    this.doc?.removeEventListener("visibilitychange", this.onVisible);
     if (this.pollTimer) clearTimeout(this.pollTimer);
     if (this.pingTimer) clearInterval(this.pingTimer);
     for (const slot of this.peers.values()) slot.pc.close();
@@ -261,7 +288,7 @@ export class P2PRoom {
     } catch {
       // Transient poll failures are expected (tab sleep, deploy roll); retry.
     }
-    this.schedulePoll(this.anyPairConnecting() ? FAST_POLL_MS : IDLE_POLL_MS);
+    this.schedulePoll(this.nextDelay());
   }
 
   private reconcileRoster(peers: { id: string; name: string }[]): void {

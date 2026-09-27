@@ -36,7 +36,7 @@ test("living pet: with onTap and a tapLabel the hit area is a focusable button; 
   const pet = src("src/components/desk/living-pet.tsx");
   assert.match(pet, /onTap\?: \(how\?: \{ keys\?: boolean \}\) => void;/);
   assert.match(pet, /role=\{onTap && tapLabel \? "button" : undefined\}/);
-  assert.match(pet, /tabIndex=\{onTap && tapLabel \? 0 : undefined\}/);
+  assert.match(pet, /tabIndex=\{onTap && tapLabel \? \(tabStop \? 0 : -1\) : undefined\}/);
   assert.match(pet, /aria-label=\{onTap && tapLabel \? tapLabel : undefined\}/);
   assert.match(pet, /if \(e\.target !== e\.currentTarget \|\| !isTapKey\(e\.key, e\.repeat\)\) return;\n\s+e\.preventDefault\(\);\n\s+tapRef\.current\?\.\(\{ keys: true \}\);/);
   const css = src("src/styles.css");
@@ -141,7 +141,7 @@ test("admin: Details is a real toggle, the list has a name, focus follows lock a
   assert.match(page, /useEffect\(\(\) => setOpen\(false\), \[detail\]\);/);
   assert.match(page, /<div className="space-y-1" role="status">/);
   assert.match(page, /<h2 id=\{ledgerId\} className="sr-only">\n\s+\{ledgerCaption\(rows\.length\)\}/);
-  assert.match(page, /<ul className="space-y-3" aria-labelledby=\{ledgerId\}>/);
+  assert.match(page, /<ul className="space-y-3" aria-labelledby=\{ledgerId\} ref=\{ledgerList\}>/);
   assert.match(page, /\(focusAfterGate\(unlocked\) === "search" \? searchInput : keyInput\)\.current\?\.focus\(\);/);
   assert.match(page, /showError\(err, "Unlock failed\."\);\n\s+keyInput\.current\?\.focus\(\);/);
   assert.match(page, /ref=\{keyInput\}\n\s+type="password"/);

@@ -189,6 +189,8 @@ export function CompanionRoom({
   const roomRef = useRef<HTMLElement>(null);
   /** The sit choice was opened with Enter or Space on the pet: focus goes into it, then back to the pet. */
   const choiceByKeys = useRef(false);
+  /** After a keyboard open or Escape on the keeper card: where focus goes once the card has (un)rendered. */
+  const cardFocus = useRef<"card" | "open" | null>(null);
   const [autoTablet, setAutoTablet] = useState(false);
   const [autoPhone, setAutoPhone] = useState(false);
   const [orient, setOrient] = useState<TabletOrient>("blotter");
@@ -771,6 +773,30 @@ export function CompanionRoom({
   }, [choiceOpen]);
 
   useEffect(() => {
+    const want = cardFocus.current;
+    if (!want) return;
+    cardFocus.current = null;
+    const pick = want === "card" ? '[data-keeper-poster] [data-card="collapse"]' : '[data-card="open"]';
+    // The card renders a beat after the room (its openTick effect), so look for it over a few frames.
+    let tries = 0;
+    let frame = 0;
+    const find = () => {
+      const el = roomRef.current?.querySelector<HTMLElement>(pick);
+      if (el) el.focus();
+      else if (tries++ < 6) frame = window.requestAnimationFrame(find);
+    };
+    find();
+    return () => window.cancelAnimationFrame(frame);
+  }, [cardOpen]);
+
+  function openCardByKeys() {
+    saveCard({ ...loadCard(), collapsed: false });
+    cardFocus.current = "card";
+    setCardOpen(true);
+    setCardOpenTick((n) => n + 1);
+  }
+
+  useEffect(() => {
     function onKey(e: KeyboardEvent) {
       const note = classifyKey(e);
       if (note.record || note.field || note.toggle !== "dismiss") return;
@@ -1010,9 +1036,14 @@ export function CompanionRoom({
             treatVerb: treatFor(kind.key).verb,
             specialVerb: trait.verb,
           })}
-          onPick={(id) => {
+          onPick={(id, how) => {
+            if (how?.keys) choiceByKeys.current = true;
             const picked = guestPick(id);
             if (picked) pickGuest(picked);
+          }}
+          onClose={() => {
+            choiceByKeys.current = true;
+            setChoiceOpen(false);
           }}
           phone={hand}
           tablet={pad}
@@ -1106,6 +1137,17 @@ export function CompanionRoom({
         ) : null}
         {latestNote ? <p className="mt-2 max-w-sm text-xs text-subtle">{latestNote}</p> : null}
         <SpeciesPlaque speciesKey={kind.key} compact paper className="mt-5 max-w-sm" showDemoLink={false} />
+        {cardOpen ? null : (
+          <button
+            type="button"
+            data-card="open"
+            aria-expanded="false"
+            className="sr-only mt-4 text-[11px] uppercase tracking-[0.14em] text-muted focus:not-sr-only focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            onClick={openCardByKeys}
+          >
+            Open {displayName}&apos;s keeper card
+          </button>
+        )}
         <KeeperCard
           className="mt-4 max-w-sm"
           name={displayName}
@@ -1148,7 +1190,10 @@ export function CompanionRoom({
             if (shouldRobinFly(keys, kind.key)) setRobinCall((n) => n + 1);
           }}
           openTick={cardOpenTick}
-          onCollapse={() => setCardOpen(false)}
+          onCollapse={(how) => {
+            if (how?.keys) cardFocus.current = "open";
+            setCardOpen(false);
+          }}
           onMusicChange={(on) => setMusicOn(on)}
         />
         {deskOff ? (

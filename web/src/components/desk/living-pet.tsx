@@ -114,6 +114,8 @@ type LivingPetProps = {
   label?: string;
   /** With onTap: the hit area is a keyboard button with this name (lib/pets/keeper.ts petTapLabel). */
   tapLabel?: string;
+  /** False keeps the button out of Tab order (a roving group moves focus to it with the arrow keys). */
+  tabStop?: boolean;
 };
 
 type Dust = { x: number; y: number; vx: number; vy: number; life: number; size: number };
@@ -202,6 +204,7 @@ export function LivingPet({
   onLieHold,
   label = "",
   tapLabel = "",
+  tabStop = true,
 }: LivingPetProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const hitRef = useRef<HTMLDivElement>(null);
@@ -1099,7 +1102,7 @@ export function LivingPet({
         data-pet
         data-pet-hit
         role={onTap && tapLabel ? "button" : undefined}
-        tabIndex={onTap && tapLabel ? 0 : undefined}
+        tabIndex={onTap && tapLabel ? (tabStop ? 0 : -1) : undefined}
         aria-label={onTap && tapLabel ? tapLabel : undefined}
         onKeyDown={
           onTap && tapLabel
