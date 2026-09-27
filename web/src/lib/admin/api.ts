@@ -5,6 +5,7 @@ import {
   isLicenseList,
   isLicenseMissing,
   isLicenseRow,
+  isRevokeDone,
   isRevokeMiss,
   pickApiBase,
 } from "@/lib/admin/base";
@@ -238,4 +239,6 @@ export async function revokeLicense(apiBase: string, adminKey: string, jti: stri
     throw new AdminApiError(404, "Not found or already revoked.", typeof reason === "string" ? reason : "");
   }
   if (!res.ok) throw await failure(res, "Revoke failed.");
+  // Only the ledger's own {"revoked":true, "jti":<this jti>} counts as revoked.
+  if (!isRevokeDone(await readJsonBody(res), jti)) throw notTheService(res.status, "the ledger's revoke confirmation");
 }

@@ -59,6 +59,7 @@ import { FLY_BIRD_NAME } from "@/lib/pets/bird-fly";
 import { CALL_EMPTY, callKeys, groups as callGroups } from "@/lib/pets/call-guests";
 import { LIVING_KINDS } from "@/lib/pets/living";
 import { cn } from "@/lib/utils";
+import { RETRY_LABEL, soundInterrupted, soundProblem, type SoundWhat } from "@/lib/plain-error";
 
 export function KeeperCard({
   name,
@@ -114,6 +115,9 @@ export function KeeperCard({
   const [radioEmpty, setRadioEmpty] = useState(false);
   const [radioQ, setRadioQ] = useState("");
   const [streamAsked, setStreamAsked] = useState(false);
+  /** Music or sleep sounds the keeper turned on that did not play, and why. Try again bumps soundTry. */
+  const [soundLine, setSoundLine] = useState<{ what: SoundWhat; line: string } | null>(null);
+  const [soundTry, setSoundTry] = useState(0);
   const [callQ, setCallQ] = useState("");
   const [callPick, setCallPick] = useState("");
   const [callGroup, setCallGroup] = useState("");
@@ -182,9 +186,14 @@ export function KeeperCard({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openTick]);
 
+  function soundOk(what: SoundWhat) {
+    setSoundLine((was) => (was?.what === what ? null : was));
+  }
+
   useEffect(() => {
     const src = playSrc(music);
     if (!src || card.mutes.music) {
+      soundOk("music");
       onMusicChange?.(false);
       return;
     }
@@ -194,6 +203,7 @@ export function KeeperCard({
       const line = streamHonesty(music);
       const el = document.getElementById("hud-stream-net");
       const shown = streamAsked === true && !!el && !el.hidden ? el.textContent || "" : "";
+      // Not sent until the stream line is shown: a held stream is the honesty gate, not a failure (quiet).
       if (!streamMaySend(music, !!line && shown.includes(line))) {
         onMusicChange?.(false);
         return;
@@ -209,29 +219,59 @@ export function KeeperCard({
     }
     audio.loop = music.plugin === "house";
     audio.volume = Math.max(0, Math.min(1, guest.volume / 100));
-    void audio.play().then(() => onMusicChange?.(true)).catch(() => onMusicChange?.(false));
+    let cancelled = false;
+    void audio
+      .play()
+      .then(() => {
+        if (cancelled) return;
+        soundOk("music");
+        onMusicChange?.(true);
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        onMusicChange?.(false);
+        // A pause or switch cuts play() short on purpose; anything else is said plainly.
+        if (!soundInterrupted(err)) setSoundLine({ what: "music", line: soundProblem("music", err) });
+      });
     return () => {
+      cancelled = true;
       audio.pause();
       audio.src = "";
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [music.plugin, music.playing, music.stationUrl, card.mutes.music, guest.volume, streamAsked]);
+  }, [music.plugin, music.playing, music.stationUrl, card.mutes.music, guest.volume, streamAsked, soundTry]);
 
   useEffect(() => {
     const src = sleepPlaySrc(sleepAid);
-    if (!src || card.mutes.music) return;
+    if (!src || card.mutes.music) {
+      soundOk("sleep");
+      return;
+    }
     const audio = new Audio(src);
     audio.loop = true;
     audio.volume = Math.max(0, Math.min(1, guest.volume / 100));
-    void audio.play().catch(() => {});
+    let cancelled = false;
+    void audio
+      .play()
+      .then(() => {
+        if (!cancelled) soundOk("sleep");
+      })
+      .catch((err) => {
+        if (cancelled || soundInterrupted(err)) return;
+        setSoundLine({ what: "sleep", line: soundProblem("sleep", err) });
+      });
     return () => {
+      cancelled = true;
       audio.pause();
       audio.src = "";
     };
-  }, [sleepAid.plugin, sleepAid.playing, card.mutes.music, guest.volume]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sleepAid.plugin, sleepAid.playing, card.mutes.music, guest.volume, soundTry]);
 
   useEffect(() => {
     let cancelled = false;
+    // Quiet by design: an unreachable Java service reads "DOWN" in the heartbeat line itself, and the
+    // read repeats every 15 seconds, so no separate problem line or retry button.
     async function read() {
       try {
         const res = await fetch(HEARTBEAT_URL, { cache: "no-store" });
@@ -252,6 +292,7 @@ export function KeeperCard({
   useEffect(() => {
     let cancelled = false;
     setListener(UNREAD_LISTENER);
+    // Quiet by design: a failed read shows "Listening · unread" in its own line, which is the truth.
     void readMindListener({ data: listenerReadBody({ plugin: askedPlugin, baseUrl: askedBase }) })
       .then((row) => {
         if (!cancelled) setListener(presentListener(row));
@@ -589,6 +630,21 @@ export function KeeperCard({
             {sleepAid.plugin === "rain" ? <p className="keeper-truth">{SLEEP_AID_LICENSE}</p> : null}
             <p className="keeper-truth">{SLEEP_AID_MUTE_TRUTH}</p>
           </div>
+          {soundLine ? (
+            <p className="keeper-truth" role="status" aria-live="polite" data-sound-problem={soundLine.what}>
+              {soundLine.line}{" "}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSoundLine(null);
+                  setSoundTry((n) => n + 1);
+                }}
+              >
+                {RETRY_LABEL}
+              </button>
+            </p>
+          ) : null}
           {guestKey === "red_panda" ? (
             <div className="keeper-music" data-hit>
               <p>Music · Rui</p>

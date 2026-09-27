@@ -101,6 +101,7 @@ CROSS_DOMAIN = {
     "web.demo_room",
     "web.load_problems",
     "web.plain_reasons",
+    "web.care_talk_plates",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -455,6 +456,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.demo_room",
         "web.load_problems",
         "web.plain_reasons",
+        "web.care_talk_plates",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -574,6 +576,12 @@ def test_web_companion_lockstep():
     assert "play.save=plain+retry+meters_kept" in reasons.trace
     assert "mind.test=plain_reason" in reasons.trace
     assert (reasons.extras.get("minds") or {}).get("key") == "key"
+
+    cares = invoke("web.care_talk_plates")
+    assert cares.ok, (cares.error, cares.detail)
+    assert "feed+tend.save=plain+retry+meters_kept" in cares.trace
+    assert "admin.revoke=confirmed_only" in cares.trace
+    assert set(cares.extras.get("care") or {}) == {"feed", "rest", "clean", "medicine"}
 
 
 def test_blotter_pure_surfaces():

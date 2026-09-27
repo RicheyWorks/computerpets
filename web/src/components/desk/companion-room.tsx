@@ -33,7 +33,7 @@ import {
 } from "@/lib/pets/care";
 import { saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
-import { talkBody } from "@/lib/pets/talk-post";
+import { talkBody, talkUsesPlugin } from "@/lib/pets/talk-post";
 import { talkHonesty, voiceHonesty } from "@/lib/pets/talk-net";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { playDeskSound, unlockDeskAudio } from "@/lib/pets/desk-audio";
@@ -70,7 +70,7 @@ import { isPhone, isTablet, readSit, tabletOrient, type TabletOrient } from "@/l
 import { phoneOrient, type PhoneOrient } from "@/lib/pets/phone-desk";
 import { guestMarks, guestPick, guestTap, type GuestChoiceId } from "@/lib/pets/guest-choice";
 import { classifyKey, installFileDropGuard } from "@/lib/pets/presence";
-import { careNotSaved, RETRY_LABEL } from "@/lib/plain-error";
+import { careNotSaved, RETRY_LABEL, talkProblem as talkProblemLine, type CareNotSavedAct } from "@/lib/plain-error";
 
 type DeskCare = "rest" | "clean" | "medicine" | "bath" | "praise";
 
@@ -165,7 +165,10 @@ export function CompanionRoom({
   const [draft, setDraft] = useState("");
   const [latestNote, setLatestNote] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [playProblem, setPlayProblem] = useState<string | null>(null);
+  /** A care act (play, feed, rest, clean, medicine) the house could not save; the meters stayed put. */
+  const [careProblem, setCareProblem] = useState<{ act: CareNotSavedAct; line: string } | null>(null);
+  /** A talk turn that fell back to a house line, and why. `message` is re-sent by Try again. */
+  const [talkProblem, setTalkProblem] = useState<{ line: string; message?: string } | null>(null);
   const [mark, setMark] = useState<BlotterMark | null>(null);
   const [leaving, setLeaving] = useState(false);
   const [order, setOrder] = useState<{ cmd: PetCommand; id: number }>({ cmd: "wander", id: 1 });
@@ -469,19 +472,33 @@ export function CompanionRoom({
   }
 
   /**
-   * A play the house could not save: the meters stay where they were (persist only sets stats on
-   * success), the claim and the mark are released, and one quiet line says why with a retry.
+   * A care act the house could not save: the meters stay where they were (persist only sets stats on
+   * success) and one quiet line says why, with Try again.
    */
+  function careFailed(act: CareNotSavedAct, err: unknown) {
+    setCareProblem({ act, line: careNotSaved(act, err) });
+  }
+
+  /** A play the house could not save: as careFailed, and the claim and the mark are released. */
   function playNotSaved(err: unknown) {
     takenRef.current = false;
     markRef.current = null;
     setMark(null);
-    setPlayProblem(careNotSaved("play", err));
+    careFailed("play", err);
+  }
+
+  /** Try again: re-send the act that was not saved. */
+  function retryCare() {
+    const act = careProblem?.act;
+    if (!act || busy) return;
+    if (act === "play") void retryPlay();
+    else if (act === "feed") void feed();
+    else void tend(act);
   }
 
   async function retryPlay() {
     if (busy) return;
-    setPlayProblem(null);
+    setCareProblem(null);
     const prev = statsRef.current;
     let next: CareStats;
     try {
@@ -530,10 +547,13 @@ export function CompanionRoom({
           ...(voiceLine ? { voiceLine } : {}),
         }),
       });
+      setTalkProblem(null);
       say(res.text, Math.min(9000, 2200 + res.text.length * 55));
       await playVoice(res.audio, res.text);
-    } catch {
+    } catch (err) {
+      // The pet still answers with a house line; a quiet line says why. Raw text goes to the console only.
       say(message ? kind.listenLine() : kind.ambientLine(stats));
+      setTalkProblem({ line: talkProblemLine(err, talkUsesPlugin(mind, mindSettings.voice)), message });
     } finally {
       setBusy(false);
     }
@@ -610,7 +630,7 @@ export function CompanionRoom({
         playNotSaved(err);
         return;
       }
-      setPlayProblem(null);
+      setCareProblem(null);
     } else {
       setStats(applyPlay(prev));
     }
@@ -654,9 +674,11 @@ export function CompanionRoom({
     if (onCare) {
       try {
         await persist("feed");
-      } catch {
+      } catch (err) {
+        careFailed("feed", err);
         return;
       }
+      setCareProblem(null);
     } else {
       setStats((s) => applyFeedFor(kind.key, s));
     }
@@ -669,13 +691,15 @@ export function CompanionRoom({
     if (busy) return;
     acted.current = true;
     unlockDeskAudio();
-    const persistable = action === "rest" || action === "clean" || action === "medicine";
-    if (onCare && persistable) {
+    const saved = action === "rest" || action === "clean" || action === "medicine" ? action : null;
+    if (onCare && saved) {
       try {
-        await persist(action);
-      } catch {
+        await persist(saved);
+      } catch (err) {
+        careFailed(saved, err);
         return;
       }
+      setCareProblem(null);
     } else {
       setStats(
         action === "rest"
@@ -882,7 +906,7 @@ export function CompanionRoom({
             takenRef.current = true;
             const prev = statsRef.current;
             const finishPlay = (next: CareStats) => {
-              setPlayProblem(null);
+              setCareProblem(null);
               setStats(next);
               if (trait.special === "ribbon" && markRef.current?.kind === "lure") {
                 const stolen = { ...stealRibbon(markRef.current, poseRef.current.x), kind: "lure" as const };
@@ -1034,13 +1058,26 @@ export function CompanionRoom({
         </h1>
         <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>
         {line}
-        {playProblem ? (
-          <p role="status" aria-live="polite" data-play-problem className="mt-2 max-w-sm text-sm text-muted">
-            {playProblem}{" "}
+        {careProblem ? (
+          <p role="status" aria-live="polite" data-care-problem={careProblem.act} className="mt-2 max-w-sm text-sm text-muted">
+            {careProblem.line}{" "}
             <button
               type="button"
               disabled={busy}
-              onClick={() => void retryPlay()}
+              onClick={retryCare}
+              className="text-fg underline underline-offset-2 hover:text-primary disabled:opacity-40"
+            >
+              {RETRY_LABEL}
+            </button>
+          </p>
+        ) : null}
+        {talkProblem ? (
+          <p role="status" aria-live="polite" data-talk-problem className="mt-2 max-w-sm text-sm text-muted">
+            {talkProblem.line}{" "}
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => void talk(talkProblem.message)}
               className="text-fg underline underline-offset-2 hover:text-primary disabled:opacity-40"
             >
               {RETRY_LABEL}

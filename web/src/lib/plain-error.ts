@@ -197,11 +197,15 @@ export function loadProblem(what: LoadWhat, err: unknown, log: PlainLog = consol
 /** A care act the house could not save: said plainly, and the meters stay where they were. */
 export const CARE_NOT_SAVED = {
   play: "The play wasn't saved, so the meters didn't change.",
+  feed: "The feeding wasn't saved, so the meters didn't change.",
+  rest: "The rest wasn't saved, so the meters didn't change.",
+  clean: "The cleaning wasn't saved, so the meters didn't change.",
+  medicine: "The medicine wasn't saved, so the meters didn't change.",
 } as const;
 
 export type CareNotSavedAct = keyof typeof CARE_NOT_SAVED;
 
-/** "The play wasn't saved…" plus the plain reason. Raw text goes to the log only. */
+/** "The feeding wasn't saved…" plus the plain reason. Raw text goes to the log only. */
 export function careNotSaved(act: CareNotSavedAct, err: unknown, log: PlainLog = consoleLog): string {
   return `${CARE_NOT_SAVED[act]} ${plainMessage(err, "Try again in a moment.", log)}`;
 }
@@ -253,6 +257,100 @@ export function mindProblemKind(err: unknown): MindProblemKind {
 export function mindProblem(err: unknown, log: PlainLog = consoleLog): string {
   log("[mind] test did not answer:", err);
   return `The mind did not answer. ${MIND_LINES[mindProblemKind(err)]} House lines will.`;
+}
+
+/** A talk turn that failed: the pet still says a house line, and this quiet line says why. */
+export const TALK_LINES = {
+  mind: "The mind did not answer, so that was a house line.",
+  house: "The talk didn't reach the house, so that was a house line.",
+} as const;
+
+/**
+ * Why a companion-room talk turn fell back to a house line. When a plugin was involved (a mind other
+ * than the house, or a server voice) the Minds reasons apply (key, rate limit, address, timeout…);
+ * otherwise the plain house reason. The raw error goes to the log only.
+ */
+export function talkProblem(err: unknown, viaPlugin: boolean, log: PlainLog = consoleLog): string {
+  if (viaPlugin) {
+    log("[talk] the mind did not answer:", err);
+    return `${TALK_LINES.mind} ${MIND_LINES[mindProblemKind(err)]}`;
+  }
+  return `${TALK_LINES.house} ${plainMessage(err, "Try again in a moment.", log)}`;
+}
+
+/** Sound the keeper turned on that did not play. */
+export const SOUND_LINES = {
+  music: "Couldn't play the music.",
+  sleep: "Couldn't play the sleep sounds.",
+} as const;
+
+export type SoundWhat = keyof typeof SOUND_LINES;
+
+export const SOUND_REASONS = {
+  blocked: "The browser is holding sound until you click or tap the page.",
+  unsupported: "This browser can't play that sound or station.",
+  unreachable: "Couldn't reach the station. Check your connection.",
+  unknown: "Try again in a moment.",
+} as const;
+
+const quietLog: PlainLog = () => {};
+
+/**
+ * True when play() was cut short on purpose (the sound was paused, switched, or the card closed).
+ * That is not a failure and says nothing.
+ */
+export function soundInterrupted(err: unknown): boolean {
+  const name = err && typeof err === "object" ? (err as Loose).name : undefined;
+  return name === "AbortError";
+}
+
+/** "Couldn't play the music." plus why (browser holding sound, format, network). Raw error to the log only. */
+export function soundProblem(what: SoundWhat, err: unknown, log: PlainLog = consoleLog): string {
+  log(`[sound] ${what} did not play:`, err);
+  const name = err && typeof err === "object" ? (err as Loose).name : undefined;
+  if (name === "NotAllowedError") return `${SOUND_LINES[what]} ${SOUND_REASONS.blocked}`;
+  if (name === "NotSupportedError") return `${SOUND_LINES[what]} ${SOUND_REASONS.unsupported}`;
+  const kind = classify(err);
+  if (kind === "unreachable" || kind === "not_found" || kind === "timeout" || kind === "tls") {
+    return `${SOUND_LINES[what]} ${SOUND_REASONS.unreachable}`;
+  }
+  if (kind === "house") return `${SOUND_LINES[what]} ${plainMessage(err, SOUND_REASONS.unknown, quietLog)}`;
+  return `${SOUND_LINES[what]} ${SOUND_REASONS.unknown}`;
+}
+
+/** A desk plate (forecast, headlines, price) that could not load. */
+export const PLATE_LINES = {
+  forecast: "Couldn't load the forecast.",
+  headlines: "Couldn't load the headlines.",
+  newer: "Couldn't load newer headlines; these are from earlier.",
+  price: "Couldn't load the price.",
+} as const;
+
+export type PlateWhat = keyof typeof PLATE_LINES;
+
+/** Plates read outside services (Open-Meteo, Wikipedia, RSS, CoinGecko, Yahoo), so no "house server" words. */
+export const PLATE_REASONS = {
+  timeout: "The service took too long to answer.",
+  unreachable: "Couldn't reach the service. Check your connection.",
+  answer: "The service answered with something the plate couldn't read.",
+  unknown: "Try again in a moment.",
+} as const;
+
+/**
+ * "Couldn't load the forecast." plus a plain reason. `err` null means the service answered but the plate
+ * could not read it (an error page, a rate-limit body, an empty feed). Raw error to the log only.
+ */
+export function plateProblem(what: PlateWhat, err: unknown, log: PlainLog = consoleLog): string {
+  if (err == null) return `${PLATE_LINES[what]} ${PLATE_REASONS.answer}`;
+  log(`[plate] ${what} did not load:`, err);
+  const kind = classify(err);
+  const reason =
+    kind === "timeout"
+      ? PLATE_REASONS.timeout
+      : kind === "unreachable" || kind === "not_found" || kind === "tls"
+        ? PLATE_REASONS.unreachable
+        : PLATE_REASONS.unknown;
+  return `${PLATE_LINES[what]} ${reason}`;
 }
 
 /**

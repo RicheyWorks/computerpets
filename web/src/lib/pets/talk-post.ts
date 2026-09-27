@@ -92,6 +92,15 @@ export type TalkPostInput = {
  * A pasted secret query on the base URL is dropped before the post.
  * A pasted secret in the model field is dropped too. A normal model id stays. The rest of the body stays.
  */
+/**
+ * True when a talk turn goes through a plugin: a mind other than the house ("local"), or a server
+ * voice (xAI, OpenAI). Browser speech and no voice stay on this computer. A failed turn then gets
+ * the Minds reasons (key, rate limit, address…) instead of the house ones.
+ */
+export function talkUsesPlugin(binding: MindBinding | null | undefined, voice?: VoiceKind | string | null): boolean {
+  return mindForHouse(binding).plugin !== "local" || voice === "xai" || voice === "openai";
+}
+
 export function talkBody(input: TalkPostInput) {
   return {
     ...(input.message !== undefined ? { message: input.message } : {}),
