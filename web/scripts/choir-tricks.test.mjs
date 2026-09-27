@@ -186,8 +186,8 @@ test("Choir tricks start only on idle ground", () => {
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...T.TRICKS], ["polyphony", "partial", "timbre", "resonance", "harmonia", "formant", "dyad"]);
-  assert.deepEqual([...ChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
-  assert.deepEqual([...OverlayChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "soft", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...ChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
+  assert.deepEqual([...OverlayChickenOfWoods.TRICKS], ["sulfur", "tier", "oak", "tender", "laetiporus", "poroid", "cluster"]);
   assert.deepEqual([...ChickenOfWoods.HAPPY], ["sulphureus", "cincinnatus", "gilbertsonii"]);
   assert.equal(T.TRICKS.includes("sulfur"), false);
   assert.equal(T.TRICKS.includes("rosette"), false);
@@ -525,8 +525,8 @@ test("polyphony/partial/timbre/resonance/harmonia/formant/dyad are house-place-t
     assert.equal(mod.TRICKS.includes("dyad"), false);
     assert.equal(mod.HAPPY.includes("diapason"), false);
     assert.equal(mod.HAPPY.includes("motet"), false);
-    // Spark already owns canticle as a firefly thank-you; Choir shares the epithet on purpose for lamp units
-    if (mod !== Firefly) assert.equal(mod.HAPPY.includes("canticle"), false);
+    // canticle is Choir's own thank-you; no earlier guest, Spark included, uses it
+    assert.equal(mod.HAPPY.includes("canticle"), false);
   }
 
   assert.deepEqual([...MiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "floccus", "dufourline", "andrena"]);
@@ -558,8 +558,8 @@ test("polyphony/partial/timbre/resonance/harmonia/formant/dyad are house-place-t
   assert.equal(T.TRICKS.includes("hover"), false);
   assert.equal(T.TRICKS.includes("drone"), false);
 
-  assert.deepEqual([...HoneyQueen.TRICKS], ["pipe", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
-  assert.deepEqual([...OverlayHoneyQueen.TRICKS], ["pipe", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
+  assert.deepEqual([...HoneyQueen.TRICKS], ["tooting", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
+  assert.deepEqual([...OverlayHoneyQueen.TRICKS], ["tooting", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
   assert.deepEqual([...HoneyQueen.HAPPY], ["caucasica", "iberiensis", "apini"]);
   assert.equal(T.TRICKS.includes("pipe"), false);
   assert.equal(T.TRICKS.includes("retinue"), false);
@@ -1325,8 +1325,8 @@ test("notes: Choir Rui-dense ultra (HARMONIA_HOLD=11.2); next leftover Drift / n
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("snap"), OverlayVenusFlytrap);
   assert.equal(OverlayGround.wantsThankYou("snap"), true); // Snap still gated via VenusFlytrap
-  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
-  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
+  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "epiphyte", "keiki", "pollinia"]);
+  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "epiphyte", "keiki", "pollinia"]);
   assert.deepEqual([...Saguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
   assert.deepEqual([...OverlaySaguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
   assert.equal(OverlayGround.tricksFor("saguaro"), OverlaySaguaro);

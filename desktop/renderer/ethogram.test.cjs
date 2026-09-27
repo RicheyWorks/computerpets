@@ -88,7 +88,7 @@ test("maidenhair ethogram is Vein ultra (saucer + softs + freeze, not lean/nod/u
   const names = E.actsFor("maidenhair").map((a) => a.name);
   assert.ok(names.includes("saucer"));
   assert.ok(names.includes("sori_soft"));
-  assert.ok(names.includes("bulb_soft"));
+  assert.ok(names.includes("stipe_soft"));
   assert.ok(names.includes("freeze"));
   assert.equal(names.includes("lean"), false);
   assert.equal(names.includes("nod"), false);
@@ -128,9 +128,9 @@ test("water_lily ethogram is Disk ultra (sheen + softs + freeze, not open/nod/le
   assert.equal(names.includes("lean"), false);
 });
 
-test("orchid ethogram is Moth ultra (bark + softs + freeze, not unfurl/nod/lean)", () => {
+test("orchid ethogram is Moth ultra (epiphyte + softs + freeze, not unfurl/nod/lean)", () => {
   const names = E.actsFor("orchid").map((a) => a.name);
-  assert.ok(names.includes("bark"));
+  assert.ok(names.includes("epiphyte"));
   assert.ok(names.includes("keiki_soft"));
   assert.ok(names.includes("pollinia_soft"));
   assert.ok(names.includes("freeze"));
@@ -434,7 +434,7 @@ test("chicken_of_woods ethogram is Flame ultra (laetiporus + softs + freeze, not
   assert.ok(names.includes("sulfur_soft"));
   assert.ok(names.includes("tier_soft"));
   assert.ok(names.includes("oak_soft"));
-  assert.ok(names.includes("soft_soft"));
+  assert.ok(names.includes("tender_soft"));
   assert.ok(names.includes("poroid_soft"));
   assert.ok(names.includes("cluster_soft"));
   assert.ok(names.includes("freeze"));
@@ -480,7 +480,7 @@ test("photovore ethogram is Gleam ultra (photovore + softs + freeze, not drink-l
   assert.ok(names.includes("photovore"));
   assert.ok(names.includes("photon_soft"));
   assert.ok(names.includes("wavelength_soft"));
-  assert.ok(names.includes("lumen_soft"));
+  assert.ok(names.includes("fluence_soft"));
   assert.ok(names.includes("glass_soft"));
   assert.ok(names.includes("opsin_soft"));
   assert.ok(names.includes("iridophore_soft"));

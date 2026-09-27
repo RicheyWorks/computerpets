@@ -222,7 +222,7 @@ test("Seven tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
   assert.deepEqual([...Overlay.TRICKS], ["spots", "aphid", "reflex", "climb", "coccinella", "pronotum", "alar"]);
-  assert.deepEqual([...Overlay.HAPPY], ["septempunctata", "bead", "coccinellid"]);
+  assert.deepEqual([...Overlay.HAPPY], ["septempunctata", "hemolymph", "coccinellid"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
   assert.equal(T.TRICKS.includes("gape"), false);
@@ -411,8 +411,8 @@ test("spots/aphid/reflex/climb/coccinella/pronotum/alar are house-ladybird-true,
   assert.equal(Hedgehog.TRICKS.includes("curl"), true);
 });
 
-test("Seven feed-happy is its own sit: septempunctata/bead/coccinellid, and two feeds are not the same", () => {
-  assert.deepEqual([...T.HAPPY], ["septempunctata", "bead", "coccinellid"]);
+test("Seven feed-happy is its own sit: septempunctata/hemolymph/coccinellid, and two feeds are not the same", () => {
+  assert.deepEqual([...T.HAPPY], ["septempunctata", "hemolymph", "coccinellid"]);
   assert.equal(T.HAPPY.includes("halo"), false);
   assert.equal(T.HAPPY.includes("lumen"), false);
   assert.equal(T.HAPPY.includes("gel"), false);
@@ -433,9 +433,9 @@ test("Seven feed-happy is its own sit: septempunctata/bead/coccinellid, and two 
   assert.equal(T.HAPPY.includes("pulse"), false);
   assert.equal(T.HAPPY.includes("glow"), false);
   assert.equal(T.HAPPY.includes("tribute"), false);
-  assert.equal(T.pickHappy("septempunctata", 0), "bead");
+  assert.equal(T.pickHappy("septempunctata", 0), "hemolymph");
   assert.notEqual(T.pickHappy("septempunctata", 0.9), "ceil");
-  assert.equal(Overlay.pickHappy("bead", 0) !== "peat", true);
+  assert.equal(Overlay.pickHappy("hemolymph", 0) !== "peat", true);
   assert.equal(T.happyCanStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.happyCanStart({ asleep: false, hidden: false, leaving: false, cmd: "idle", card: true }), true);
   assert.equal(T.happyCanStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
@@ -447,7 +447,7 @@ test("Seven feed-happy is its own sit: septempunctata/bead/coccinellid, and two 
   const cupuleMid = T.stepHappy(cupuleH, 0.4, { cmd: "idle" });
   assert.ok(cupuleMid.lift !== 0 || Math.abs(cupuleMid.rot) > 0.5);
   assert.notEqual(cupuleMid.phase, "done");
-  const tanninH = T.beginHappy("bead", 80, 1);
+  const tanninH = T.beginHappy("hemolymph", 80, 1);
   assert.equal(tanninH.anim, "talk");
   const tanninMid = T.stepHappy(tanninH, 0.3, { cmd: "idle" });
   assert.ok(tanninMid.lift !== 0 || Math.abs(tanninMid.rot) > 0.5);
@@ -737,7 +737,7 @@ globalThis.PetStickTricks = OverlayStick;
   assert.equal(Garter.TRICKS.includes("moss"), true);
   assert.equal(T.TRICKS.includes("moss"), false);
   assert.equal(T.TRICKS.includes("tuft"), false);
-  assert.equal(T.TRICKS.includes("bead"), false);
+  assert.equal(T.TRICKS.includes("hemolymph"), false);
   assert.equal(T.TRICKS.includes("spore"), false);
   assert.equal(T.TRICKS.includes("cushion"), false);
   assert.equal(T.TRICKS.includes("thatch"), false);
@@ -857,7 +857,7 @@ test("notes: Seven ultra-polish done; Fold ultra-polish done; next house-order u
   assert.deepEqual([...OverlayOak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...T.TRICKS], ["spots", "aphid", "reflex", "climb", "coccinella", "pronotum", "alar"]);
   assert.deepEqual([...Overlay.TRICKS], ["spots", "aphid", "reflex", "climb", "coccinella", "pronotum", "alar"]);
-  assert.deepEqual([...T.HAPPY], ["septempunctata", "bead", "coccinellid"]);
+  assert.deepEqual([...T.HAPPY], ["septempunctata", "hemolymph", "coccinellid"]);
   assert.equal(T.TRICKS.includes("pad"), false);
   assert.equal(T.TRICKS.includes("mount"), false);
   assert.equal(T.TRICKS.includes("labellum"), false);
@@ -884,8 +884,8 @@ test("notes: Seven ultra-polish done; Fold ultra-polish done; next house-order u
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("snap"), OverlayVenusFlytrap);
   assert.equal(OverlayGround.wantsThankYou("snap"), true); // Snap still gated via VenusFlytrap
-  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
-  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
+  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "epiphyte", "keiki", "pollinia"]);
+  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "epiphyte", "keiki", "pollinia"]);
   assert.deepEqual([...Saguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
   assert.deepEqual([...OverlaySaguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
   assert.equal(OverlayGround.tricksFor("saguaro"), OverlaySaguaro);
