@@ -114,7 +114,7 @@ test("the overlay row ships hidden and is painted from the main-process probe", 
   assert.doesNotMatch(petSrc, /fetch\(/);
   assert.match(petSrc, /window\.desk\s*\.houseServer\(\)/);
   assert.match(petSrc, /hudHeartbeat\.hidden = !serverLine/);
-  assert.match(petSrc, /setInterval\(readHouseServer, 15_000\)/);
+  assert.match(petSrc, /setInterval\(\(\) => \{\r?\n  if \(!document\.hidden\) readHouseServer\(\);\r?\n\}, 15_000\);/);
   assert.match(preloadSrc, /houseServer: \(\) => ipcRenderer\.invoke\("house-server-get"\)/);
   assert.match(preloadSrc, /houseServerSet:/);
   assert.match(mainSrc, /ipcMain\.handle\("house-server-get"/);

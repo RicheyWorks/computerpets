@@ -647,7 +647,7 @@ async function trayMenu() {
     const want = [
       gpu, "---", status, "---", "On the desk", "Companions", "---",
       ...CARE.map((c) => (c ? c[0] : "---")), "---",
-      "Unlock…", "Minds…", "Show", "Hide the window", ...follow, "---", "Quit",
+      "Keeper card", "Unlock…", "Minds…", "Show", "Hide the window", ...follow, "---", "Quit",
     ];
     if (JSON.stringify(shape(t0)) !== JSON.stringify(want)) fails.push(`tray rows are ${shape(t0).slice(3).join(" | ")}`);
     else trace.push(`rows=${t0.length}`);
@@ -672,6 +672,15 @@ async function trayMenu() {
       else sentCare += 1;
     }
     trace.push(`care_commands=${sentCare}`);
+
+    // Keeper card shows the overlay and asks it to open the card with the keyboard on it.
+    {
+      const n = ctx.sent.length;
+      ctx.tray().find((r) => r.label === "Keeper card").click();
+      const got = ctx.sent.slice(n);
+      if (JSON.stringify(got) !== JSON.stringify([["command", { type: "open-card" }]])) fails.push(`Keeper card sent ${JSON.stringify(got)}`);
+      else trace.push("keeper_card=open-card");
+    }
 
     // Vitals rename the special row and fill the status line and tooltip.
     ctx.send("vitals", { verb: "Pounce", vital: "Hungry", stage: "kit", mess: 2, bond: 5 });

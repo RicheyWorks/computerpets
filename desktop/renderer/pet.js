@@ -231,6 +231,8 @@ let houseBooted = false;
 let autoMeetWait = 4.5;
 let musicNode = null;
 let streamAsked = false;
+/** The keeper card holds keyboard focus (Tab reaches its controls) while it is open. */
+let cardKeysOn = false;
 let talkAsked = false;
 let pendingTalk = null;
 let sleepNode = null;
@@ -783,7 +785,13 @@ function paintHouseMusic() {
   if (!hudHouseMusic) return;
   const M = window.PetHouseMusic;
   const music = M && card ? M.parseMusic(card.music) : null;
-  const show = !!(M && M.sharedMusicShows && music && M.sharedMusicShows(kind && kind.key, music));
+  const hint = document.getElementById("hud-house-music-hint");
+  if (hint) {
+    const line = kind && M && M.sharedMusicHint && music ? M.sharedMusicHint(kind.key, music) : "";
+    hint.textContent = line;
+    hint.hidden = !line;
+  }
+  const show = !!(kind && M && M.sharedMusicShows && music && M.sharedMusicShows(kind.key, music));
   hudHouseMusic.hidden = !show;
   if (!show) return;
   const toggle = M.houseMusicToggle(music, streamAsked);
@@ -1429,8 +1437,14 @@ if ("speechSynthesis" in window) {
   refreshVoices();
   window.speechSynthesis.addEventListener("voiceschanged", refreshVoices);
 }
-setInterval(readHouseServer, 15_000);
+// A hidden overlay skips the house-server read; showing it again reads at once.
+setInterval(() => {
+  if (!document.hidden) readHouseServer();
+}, 15_000);
 readHouseServer();
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) readHouseServer();
+});
 if (window.desk && window.desk.onGpu && window.PetGpu) {
   window.desk.onGpu((raw) => {
     const now = Date.now();
@@ -1440,7 +1454,7 @@ if (window.desk && window.desk.onGpu && window.PetGpu) {
   });
 }
 setInterval(() => {
-  if (!window.PetGpu || !hudGpu) return;
+  if (document.hidden || !window.PetGpu || !hudGpu) return;
   const now = Date.now();
   const next = window.PetGpu.present(gpuSample, now);
   const history = window.PetGpu.remember(gpuHistory, next, now);
@@ -1628,6 +1642,8 @@ function paintCard() {
   hud.dataset.expanded = card.collapsed ? "0" : "1";
   if (card.collapsed) hud.removeAttribute("data-hit");
   else hud.dataset.hit = "1";
+  if (card.collapsed) cardKeys(false);
+  paintHouseMusic();
   if (hudCollapse) hudCollapse.setAttribute("aria-expanded", card.collapsed ? "false" : "true");
   if (hudVolume) hudVolume.value = String(guest.volume);
   if (hudVoiceTruth) hudVoiceTruth.textContent = (K && K.VOICE_TRUTH) || C.VOICE_TRUTH;
@@ -1652,6 +1668,7 @@ function paintCard() {
       btn.dataset.hit = "1";
       btn.dataset.color = color.id;
       btn.dataset.on = card.color === color.id ? "1" : "0";
+      btn.setAttribute("aria-pressed", card.color === color.id ? "true" : "false");
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
         card.color = color.id;
@@ -1669,6 +1686,7 @@ function paintCard() {
       btn.dataset.hit = "1";
       btn.dataset.voice = style.id;
       btn.dataset.on = card.voiceStyle === style.id ? "1" : "0";
+      btn.setAttribute("aria-pressed", card.voiceStyle === style.id ? "true" : "false");
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
         card.voiceStyle = style.id;
@@ -1707,6 +1725,7 @@ function paintCard() {
       btn.dataset.hit = "1";
       btn.dataset.step = step;
       btn.dataset.on = card.stepKind === step ? "1" : "0";
+      btn.setAttribute("aria-pressed", card.stepKind === step ? "true" : "false");
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
         card.stepKind = step;
@@ -1788,6 +1807,7 @@ function paintCard() {
       btn.dataset.hit = "1";
       btn.dataset.sleep = plugin.id;
       btn.dataset.on = aid.plugin === plugin.id ? "1" : "0";
+      btn.setAttribute("aria-pressed", aid.plugin === plugin.id ? "true" : "false");
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
         card.sleepAid = S.parseSleepAid({ plugin: plugin.id, playing: plugin.id !== "off" });
@@ -3849,9 +3869,68 @@ document.addEventListener("focusin", (e) => {
 });
 document.addEventListener("focusout", () => {
   window.setTimeout(() => {
-    if (fieldOf(document.activeElement)) return;
+    if (fieldOf(document.activeElement) || cardKeysOn) return;
     window.desk?.setFocusable?.(false);
   }, 0);
+});
+
+/** Controls in the open keeper card that Tab can reach, in page order. Hidden and disabled ones are skipped. */
+function hudFocusables() {
+  if (!hud || card.collapsed) return [];
+  return [...hud.querySelectorAll("button, input, select, textarea, a[href], [tabindex]")].filter((el) => {
+    if (el.disabled || el.getAttribute("tabindex") === "-1") return false;
+    if (el.closest("[hidden]")) return false;
+    return el.getClientRects().length > 0;
+  });
+}
+
+/**
+ * Keyboard for the keeper card. On: the overlay window may take focus (Tab walks the card's controls),
+ * optionally landing on the first one. Off (the card closed): focus leaves the card and the overlay
+ * goes back to not taking focus. Click-through is untouched either way (that is setClickable / hits).
+ */
+function cardKeys(on, opts) {
+  if (on) {
+    if (card.collapsed) return;
+    cardKeysOn = true;
+    window.desk?.setFocusable?.(true);
+    if (opts && opts.focusFirst) {
+      const first = hudFocusables()[0];
+      if (first) first.focus();
+    }
+    return;
+  }
+  if (!cardKeysOn) return;
+  cardKeysOn = false;
+  const active = document.activeElement;
+  if (active && hud && hud.contains(active) && typeof active.blur === "function") active.blur();
+  if (!fieldOf(document.activeElement)) window.desk?.setFocusable?.(false);
+}
+
+if (hud) {
+  // A click inside the open card hands it the keyboard too, so Tab and Escape work from there.
+  hud.addEventListener("pointerdown", () => {
+    if (!card.collapsed) cardKeys(true);
+  }, true);
+}
+
+// Escape closes the open keeper card (after a choice menu, which closes first); Tab wraps inside it.
+document.addEventListener("keydown", (e) => {
+  const K = window.PetKeeper;
+  if (e.defaultPrevented || !K || !K.cardKey) return;
+  const act = K.cardKey({ key: e.key, cardOpen: !card.collapsed, menuOpen: !!(choiceOpen || plantChoiceKey) });
+  if (act === "close") {
+    e.preventDefault();
+    collapseKeeperCard();
+    return;
+  }
+  if (act !== "tab" || !cardKeysOn) return;
+  const list = hudFocusables();
+  const next = K.tabWrap(list.length, list.indexOf(document.activeElement), e.shiftKey);
+  if (next >= 0) {
+    e.preventDefault();
+    list[next].focus();
+  }
 });
 const hudMusicPlay = document.getElementById("hud-music-play");
 if (hudMusicPlay) {
@@ -4608,6 +4687,13 @@ window.desk?.onCommand((cmd) => {
   }
   if (cmd && typeof cmd === "object" && cmd.type === "clock-note") {
     showClockNote(cmd);
+    return;
+  }
+  if (cmd && typeof cmd === "object" && cmd.type === "open-card") {
+    // Tray or pet menu "Keeper card": open it and hand it the keyboard, focus on its first control.
+    openKeeperCard();
+    paintHud();
+    cardKeys(true, { focusFirst: true });
     return;
   }
   handle(cmd);

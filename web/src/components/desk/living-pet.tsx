@@ -108,6 +108,8 @@ type LivingPetProps = {
   onPose?: (x: number, facing: 1 | -1) => void;
   /** Rui's closed-eye lie hold (not the stretch / backflip). */
   onLieHold?: (on: boolean) => void;
+  /** The art's accessible name (lib/pets/keeper.ts petArtLabel). Empty keeps it decorative. */
+  label?: string;
 };
 
 type Dust = { x: number; y: number; vx: number; vy: number; life: number; size: number };
@@ -194,6 +196,7 @@ export function LivingPet({
   cardOpen = false,
   onPose,
   onLieHold,
+  label = "",
 }: LivingPetProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const hitRef = useRef<HTMLDivElement>(null);
@@ -1102,7 +1105,8 @@ export function LivingPet({
           ref={bindCanvas}
           data-pet-art
           role="img"
-          aria-label=""
+          aria-label={label}
+          aria-hidden={label ? undefined : true}
           className="pointer-events-none block h-44 w-44 bg-transparent"
           style={{
             background: "transparent",

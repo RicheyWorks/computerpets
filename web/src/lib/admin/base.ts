@@ -88,7 +88,48 @@ export const REVOKED_NOTE =
  * list is stale. `reason` is the plain reason for the refresh (never raw text).
  */
 export function revokedListStale(reason: string): string {
-  return `License revoked. Downloads for this jti stop immediately. The list couldn't refresh: ${reason} This row is marked revoked here; search again for the ledger's times.`;
+  return `License revoked. Downloads for this jti stop immediately. The list couldn't refresh: ${reason} This row is marked revoked here, and the list reads again in a few seconds.`;
+}
+
+/** How long after a stale list the ledger page reads the list once more (or sooner, on focus). */
+export const STALE_REREAD_MS = 5_000;
+
+type FocusTarget = {
+  addEventListener: (type: "focus", fn: () => void) => void;
+  removeEventListener: (type: "focus", fn: () => void) => void;
+};
+
+/**
+ * Run `run` once: after `ms`, or when the window next gets focus, whichever comes first. Returns
+ * cancel (a new search, a lock, or leaving the page cancels it). Never runs twice.
+ */
+export function rereadOnce(
+  run: () => void,
+  opts: {
+    ms?: number;
+    target?: FocusTarget | null;
+    setTimeoutImpl?: (fn: () => void, ms: number) => unknown;
+    clearTimeoutImpl?: (id: unknown) => void;
+  } = {},
+): () => void {
+  const target = opts.target === undefined ? (typeof window !== "undefined" ? (window as unknown as FocusTarget) : null) : opts.target;
+  const later = opts.setTimeoutImpl ?? ((fn, ms) => setTimeout(fn, ms));
+  const clear = opts.clearTimeoutImpl ?? ((id) => clearTimeout(id as ReturnType<typeof setTimeout>));
+  let done = false;
+  const fire = () => {
+    if (done) return;
+    cancel();
+    run();
+  };
+  const id = later(fire, opts.ms ?? STALE_REREAD_MS);
+  target?.addEventListener("focus", fire);
+  function cancel() {
+    if (done) return;
+    done = true;
+    clear(id);
+    target?.removeEventListener("focus", fire);
+  }
+  return cancel;
 }
 
 /** The rows with `jti` marked revoked locally, for when the ledger confirmed it but the list did not refresh. */

@@ -5,6 +5,7 @@ import { LIVING_KINDS } from "@/lib/pets/living";
 import { plaqueFor } from "@/lib/pets/plaques";
 import { traitFor } from "@/lib/pets/traits";
 import { cn } from "@/lib/utils";
+import { everyVisible } from "@/lib/pets/keeper";
 
 const ON_BLOTTER = 5;
 const STARTS = [28, 150, 280, 420, 560];
@@ -32,7 +33,7 @@ export function BlotterGuest({
 
   useEffect(() => {
     kind.preload();
-    const id = window.setInterval(() => {
+    const stop = everyVisible(() => {
       const roll = Math.random();
       if (roll < 0.58) setOrder((o) => ({ cmd: "wander", id: o.id + 1 }));
       else if (roll < 0.8) setOrder((o) => ({ cmd: trait.wander < 0.2 ? "sit" : "idle", id: o.id + 1 }));
@@ -42,7 +43,7 @@ export function BlotterGuest({
         window.setTimeout(() => setSpeech(null), 3200);
       }
     }, 3600 + Math.random() * 2200);
-    return () => window.clearInterval(id);
+    return stop;
   }, [kind, trait.wander, guide?.lesson]);
 
   return (
@@ -95,7 +96,7 @@ export function LivingBlotter({
   }, [selectedKey]);
 
   useEffect(() => {
-    const id = window.setInterval(() => {
+    const stop = everyVisible(() => {
       setOnBlotter((current) => {
         const waiting = nextWaiting(keys, current, selectedKey);
         if (!waiting) return current;
@@ -104,7 +105,7 @@ export function LivingBlotter({
         return current.map((key) => (key === leave ? waiting : key));
       });
     }, 14000);
-    return () => window.clearInterval(id);
+    return stop;
   }, [keys, selectedKey]);
 
   return (

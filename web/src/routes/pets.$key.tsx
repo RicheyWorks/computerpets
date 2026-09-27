@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast, Toaster } from "sonner";
 import { CompanionRoom } from "@/components/desk/companion-room";
@@ -20,7 +20,7 @@ import { moodWord, normalizeCare, type SanctuaryCare } from "@/lib/pets/care";
 import { livingByKey, saveActiveKindKey } from "@/lib/pets/living";
 import { departLine, originPhrase } from "@/lib/pets/nest";
 import { roomOf } from "@/lib/pets/rooms";
-import { plainMessage, roomReportsCare } from "@/lib/plain-error";
+import { RETRY_LABEL, petNotSaved, plainMessage, roomReportsCare, type PetNotSavedAct } from "@/lib/plain-error";
 
 export const Route = createFileRoute("/pets/$key")({ component: PetDetail });
 
@@ -32,6 +32,9 @@ function PetDetail() {
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
   const [loadProblem, setLoadProblem] = useState<string | null>(null);
+  /** A rename or let-go the house could not save: one plain line with Try again, never a silent no-op. */
+  const [petProblem, setPetProblem] = useState<{ act: PetNotSavedAct; line: string } | null>(null);
+  const problemId = useId();
 
   useEffect(() => {
     if (!user) return;
@@ -73,6 +76,52 @@ function PetDetail() {
   const kind = livingByKey(pet.species_key);
   const phrase = originPhrase(pet, house);
   const species = findSpecies(pet.species_key);
+
+  function rename(petId: string, next: string) {
+    setPetProblem(null);
+    setBusy(true);
+    void renamePet({ data: { petId, name: next } })
+      .then(() => {
+        setPet((was) => (was ? { ...was, name: next } : was));
+        toast.success("Name sealed");
+      })
+      .catch((err) => setPetProblem({ act: "rename", line: petNotSaved("rename", err) }))
+      .finally(() => setBusy(false));
+  }
+
+  function release(petId: string) {
+    if (!window.confirm("Let this one go? The line may end here.")) return;
+    setPetProblem(null);
+    setBusy(true);
+    void releasePet({ data: { petId } })
+      .then(() => {
+        toast.success("Gone from this house.");
+        setPet(null);
+      })
+      .catch((err) => setPetProblem({ act: "release", line: petNotSaved("release", err) }))
+      .finally(() => setBusy(false));
+  }
+
+  /** The plain line plus Try again; `inline` renders a block span for use inside another paragraph. */
+  function problemLine(act: PetNotSavedAct, retry: () => void, inline = false) {
+    if (petProblem?.act !== act) return null;
+    const id = `${problemId}-${act}`;
+    const Line = inline ? "span" : "p";
+    return (
+      <Line role="status" aria-live="polite" data-pet-problem={act} className={`${inline ? "mt-2 block normal-case tracking-normal " : ""}text-sm text-muted`}>
+        <span id={id}>{petProblem.line}</span>{" "}
+        <button
+          type="button"
+          disabled={busy}
+          aria-describedby={id}
+          onClick={retry}
+          className="text-fg underline underline-offset-2 hover:text-primary disabled:opacity-40"
+        >
+          {RETRY_LABEL}
+        </button>
+      </Line>
+    );
+  }
 
   async function persistCare(action: SanctuaryCare) {
     try {
@@ -152,10 +201,7 @@ function PetDetail() {
               className="flex gap-2"
               onSubmit={(e) => {
                 e.preventDefault();
-                void renamePet({ data: { petId: pet.id, name } }).then(() => {
-                  setPet({ ...pet, name });
-                  toast.success("Name sealed");
-                });
+                rename(pet.id, name);
               }}
             >
               <input
@@ -167,11 +213,13 @@ function PetDetail() {
               />
               <button
                 type="submit"
+                disabled={busy}
                 className="blotter-ink text-[11px] uppercase tracking-[0.16em]"
               >
                 Rename
               </button>
             </form>
+            {problemLine("rename", () => rename(pet.id, name))}
             <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">
               {species?.displayName ?? pet.species_key}
               {pet.is_active ? " · On desk" : ""}
@@ -193,7 +241,8 @@ function PetDetail() {
               search={{ pet: kind.key }}
               onClick={() => {
                 saveActiveKindKey(kind.key);
-                if (!pet.is_active) void setActivePet({ data: { petId: pet.id } });
+                // The desk reads the local pick either way; a failed server save is logged, not thrown.
+                if (!pet.is_active) void setActivePet({ data: { petId: pet.id } }).catch((err) => plainMessage(err));
               }}
               className="text-muted no-underline hover:text-fg"
             >
@@ -208,19 +257,11 @@ function PetDetail() {
               type="button"
               disabled={busy}
               className="text-muted uppercase tracking-[0.16em] hover:text-fg"
-              onClick={() => {
-                if (!window.confirm("Let this one go? The line may end here.")) return;
-                setBusy(true);
-                void releasePet({ data: { petId } })
-                  .then(() => {
-                    toast.success("Gone from this house.");
-                    setPet(null);
-                  })
-                  .finally(() => setBusy(false));
-              }}
+              onClick={() => release(petId)}
             >
               Let go
             </button>
+            {problemLine("release", () => release(petId), true)}
           </p>
         }
       />

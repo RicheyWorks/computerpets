@@ -103,6 +103,7 @@ CROSS_DOMAIN = {
     "web.plain_reasons",
     "web.care_talk_plates",
     "web.pets_admin_music",
+    "web.pets_keys_idle",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -359,10 +360,11 @@ def test_house_window_unlock_and_tray_rows_run_offline_with_plain_words():
         assert mark in lic.trace, (mark, lic.trace)
     tray = invoke("desk.tray.menu")
     assert tray.ok, tray.error
-    for mark in ("care_commands=13", "vitals=status+tooltip", "house_window=one", "unlock_section=unlock",
+    for mark in ("care_commands=13", "keeper_card=open-card", "vitals=status+tooltip", "house_window=one", "unlock_section=unlock",
                  "hide_show=ok", "quit=1", "software=require_hardware", "refused=allow_software", "blocked=quit_only"):
         assert mark in tray.trace, (mark, tray.trace)
     labels = tray.extras["labels"]
+    assert labels[labels.index("Keeper card") + 1] == "Unlock…"
     assert labels[labels.index("Unlock…") + 1] == "Minds…"
     assert labels[-1] == "Quit"
 
@@ -459,6 +461,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.plain_reasons",
         "web.care_talk_plates",
         "web.pets_admin_music",
+        "web.pets_keys_idle",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -590,6 +593,12 @@ def test_web_companion_lockstep():
     assert "pets.care=room_line_only" in pam.trace
     assert "music.shared=every_guest_but_rui" in pam.trace
     assert (pam.extras.get("heartbeat") or {}).get("intervals") == 1
+
+    pki = invoke("web.pets_keys_idle")
+    assert pki.ok, (pki.error, pki.detail)
+    assert "overlay.keys=tab_wrap+escape" in pki.trace
+    assert "idle=pause_while_hidden" in pki.trace
+    assert (pki.extras.get("hint") or {}).get("off") == "Pick music on Rui's card."
 
 
 def test_blotter_pure_surfaces():
