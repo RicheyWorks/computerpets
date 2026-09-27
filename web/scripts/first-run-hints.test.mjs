@@ -59,13 +59,13 @@ test("heartbeat: never answered reads 'not running (optional)'; DOWN only after 
   up = true;
   await poll.read();
   assert.equal(poll.answered(), true);
-  assert.equal(K.heartbeatLine(poll.current(), poll.answered()), "Java 8081 · UP · local · 1m");
+  assert.equal(K.heartbeatLine(poll.current(), poll.answered()), "House server running · up 1m");
   up = false;
   await poll.read();
   assert.equal(poll.answered(), true, "it answered once this session");
-  assert.equal(K.heartbeatLine(poll.current(), poll.answered()), "Java 8081 · DOWN · unread · unread");
-  // The default (answered) keeps the old line for callers that pass one beat.
-  assert.equal(K.heartbeatLine(K.UNREAD_HEARTBEAT), "Java 8081 · DOWN · unread · unread");
+  assert.equal(K.heartbeatLine(poll.current(), poll.answered()), "House server stopped answering (optional). Pets still work.");
+  // The default (answered) is the stopped line for callers that pass one beat.
+  assert.equal(K.heartbeatLine(K.UNREAD_HEARTBEAT), K.HOUSE_SERVER_STOPPED);
   const card = src("src/components/desk/keeper-card.tsx");
   assert.equal(card.match(/heartbeatLine\(beat, heartbeatPoll\.answered\(\)\)/g)?.length, 2);
   assert.doesNotMatch(card, /heartbeatLine\(beat\)/);
@@ -75,8 +75,8 @@ test("overlay house server row: 'not running (optional)' until it answered; 'unr
   assert.equal(OK.NO_HOUSE_SERVER, K.NO_HOUSE_SERVER);
   assert.equal(OK.houseServerLine({ show: false, seen: false }), "", "no server named: the row stays hidden");
   assert.equal(OK.houseServerLine({ show: true, reachable: false, seen: false }), "House server not running (optional)");
-  assert.equal(OK.houseServerLine({ show: true, reachable: true, seen: true, uptimeSeconds: 90 }), "House server · reachable · up 1m");
-  assert.equal(OK.houseServerLine({ show: true, reachable: false, seen: true }), "House server · unreachable");
+  assert.equal(OK.houseServerLine({ show: true, reachable: true, seen: true, uptimeSeconds: 90 }), "House server running · up 1m");
+  assert.equal(OK.houseServerLine({ show: true, reachable: false, seen: true }), "House server stopped answering (optional). Pets still work.");
   assert.doesNotMatch(OK.houseServerLine({ show: true, reachable: false, seen: false }), /DOWN|Java|unread/);
   const pet = desk("renderer/pet.js");
   assert.match(pet, /if \(houseServer\.show && houseServer\.reachable === true\) houseServerSeenHost = houseServer\.host \|\| "";/);
@@ -157,7 +157,7 @@ test("overlay first hint: same words as the web lockstep, card.json firstHintSee
 test("clean-profile plates: a weather next step, and a closed Quotes plate says how to see prices", () => {
   assert.equal(WA.NO_AREA_NEXT, "No place yet. Type a city below and press Look up.");
   assert.equal(DeskAreas.NO_AREA_NEXT, WA.NO_AREA_NEXT);
-  assert.equal(WA.NO_AREA, "no area set", "the header chip stays short");
+  assert.equal(WA.NO_AREA, "no place yet", "the open header chip stays short");
   assert.equal(M.QUOTE_WAITS, "open to see the price");
   assert.equal(DeskMarket.QUOTE_WAITS, M.QUOTE_WAITS);
   const house = M.parseMarket(undefined);
@@ -168,6 +168,7 @@ test("clean-profile plates: a weather next step, and a closed Quotes plate says 
   assert.equal(M.plateLine(house, null, true, true), `${symbol} · can't reach`, "a failed read still says so");
   const plates = src("src/components/desk/desk-plates.tsx");
   assert.match(plates, /\{!area \? <p className="text-subtle">\{NO_AREA_NEXT\}<\/p> : null\}/);
+  assert.match(plates, /plateLine\(areas, live, unread, shownGate\.act === "hold", forecastWaiting, !open\)/);
   assert.match(plates, /marketLine\(house, live, unread, !open\)/);
   const house2 = desk("renderer/desk-house.js");
   assert.match(house2, /liveBits\.push\(para\(A\.NO_AREA_NEXT \|\| A\.NO_AREA\)\)/);

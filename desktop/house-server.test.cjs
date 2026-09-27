@@ -52,7 +52,7 @@ test("a Backend URL saved in Settings is the one probed, not 127.0.0.1:8081", as
   assert.equal(state.host, "house.example:9443");
   assert.equal(state.from, "settings");
   assert.equal(state.reachable, true);
-  assert.equal(K.houseServerLine(state), "House server · reachable · up 2h");
+  assert.equal(K.houseServerLine(state), "House server running · up 2h");
   assert.equal(K.houseServerTitle(state), "House server at house.example:9443");
 });
 
@@ -74,17 +74,17 @@ test("an unreachable server says unreachable in plain words; the raw error goes 
   assert.equal(state.show, true);
   assert.equal(state.reachable, false);
   const line = K.houseServerLine(state);
-  assert.equal(line, "House server · unreachable");
+  assert.equal(line, "House server stopped answering (optional). Pets still work.");
   assert.doesNotMatch(line, RAW_TOKENS);
   assert.match(logged.join("\n"), /ECONNREFUSED/);
 
   const http = await H.houseServerState({ savedUrl: "http://10.0.0.9:8081", fetchImpl: fakeFetch(jsonRes(503, {})).fetchImpl, log: () => {} });
-  assert.equal(K.houseServerLine(http), "House server · unreachable");
+  assert.equal(K.houseServerLine(http), K.HOUSE_SERVER_STOPPED);
 });
 
 test("a reachable server with no uptime still reads plainly, never 'unread'", async () => {
   const state = await H.houseServerState({ savedUrl: "http://127.0.0.1:8081", fetchImpl: fakeFetch(jsonRes(200, {})).fetchImpl });
-  assert.equal(K.houseServerLine(state), "House server · reachable");
+  assert.equal(K.houseServerLine(state), "House server running");
   assert.equal(K.formatUptime(null), "");
   for (const s of [state, { show: true, reachable: false }, { show: true }]) {
     assert.doesNotMatch(K.houseServerLine(s), /unread|Java|DOWN/);

@@ -1,12 +1,11 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import {
-  ADVERTISED_CARE,
-  DESK_PORT,
   KEEPER_CARE,
   KEEPER_KICKER,
   QUIT_TRUTH,
   VOICE_TRUTH,
   careTruth,
+  heartbeatDetail,
   heartbeatLine,
   heartbeatPoll,
   keeperMeters,
@@ -291,7 +290,7 @@ export function KeeperCard({
   useEffect(() => {
     let cancelled = false;
     setListener(UNREAD_LISTENER);
-    // Quiet by design: a failed read shows "Listening · unread" in its own line, which is the truth.
+    // Quiet by design: a failed read shows "Listening · not sure" in its own line, which is the truth.
     void readMindListener({ data: listenerReadBody({ plugin: askedPlugin, baseUrl: askedBase }) })
       .then((row) => {
         if (!cancelled) setListener(presentListener(row));
@@ -887,7 +886,7 @@ export function KeeperCard({
             </button>
             <p className="keeper-truth">{QUIT_TRUTH}</p>
           </div>
-          <p className="keeper-heartbeat" data-heartbeat={beat.status}>
+          <p className="keeper-heartbeat" data-heartbeat={beat.status} title={heartbeatDetail(beat)}>
             {heartbeatLine(beat, heartbeatPoll.answered())}
           </p>
           <p className="keeper-gpu" data-gpu={UNREAD_GPU.status}>
@@ -903,9 +902,7 @@ export function KeeperCard({
           <p className="keeper-listener" data-listener={listener.id}>
             {listener.line}
           </p>
-          <p className="keeper-truth">
-            {careTruth()} Desk {DESK_PORT}. Not {ADVERTISED_CARE.feed}.
-          </p>
+          <p className="keeper-truth">{careTruth()}</p>
         </div>
       )}
     </article>
@@ -984,9 +981,10 @@ export function MeetKeeperCard({ className }: { className?: string }) {
 /**
  * The heartbeat every keeper surface shows, from the one shared poll (lib/pets/keeper.ts heartbeatPoll):
  * one fetch every 15 seconds however many cards and lines are on the page.
- * Quiet by design: an unreachable Java service reads "DOWN" in the heartbeat line itself, and the read
- * repeats, so no separate problem line or retry button. DOWN is only for a server that answered this
- * session and then stopped; one that never answered reads "House server not running (optional)".
+ * Quiet by design: an unreachable house server says so in the heartbeat line itself, and the read
+ * repeats, so no separate problem line or retry button. "House server stopped answering (optional).
+ * Pets still work." is only for a server that answered this session and then stopped; one that never
+ * answered reads "House server not running (optional)". Port and profile sit in the line's tooltip.
  * The line re-renders on each beat, so `heartbeatPoll.answered()` is read fresh.
  */
 function useHeartbeat(): Heartbeat {
@@ -999,7 +997,7 @@ export function KeeperHeartbeat({ className }: { className?: string }) {
   const beat = useHeartbeat();
 
   return (
-    <p className={cn("keeper-heartbeat", className)} data-heartbeat={beat.status}>
+    <p className={cn("keeper-heartbeat", className)} data-heartbeat={beat.status} title={heartbeatDetail(beat)}>
       {heartbeatLine(beat, heartbeatPoll.answered())} · {careTruth()}
     </p>
   );

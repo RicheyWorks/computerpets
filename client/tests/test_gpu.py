@@ -78,8 +78,8 @@ def test_missing_stays_unread():
     )
     assert sample["status"] == "unread"
     assert sample["utilPercent"] is None
-    assert gpu_line(sample) == "GPU unread"
-    assert gpu_line(UNREAD) == "GPU unread"
+    assert gpu_line(sample) == "GPU · no reading"
+    assert gpu_line(UNREAD) == "GPU · no reading"
     assert "0%" not in gpu_line(sample)
 
     partial = sample_from_probe(
@@ -90,14 +90,14 @@ def test_missing_stays_unread():
     assert partial["tempC"] is None
     assert partial["powerWatts"] is None
     assert partial["utilPercent"] == 7
-    assert gpu_line(partial) == "GPU NVIDIA GeForce RTX 4070 · unread · 7% · 100 MiB/8 GiB · unread"
+    assert gpu_line(partial) == "GPU NVIDIA GeForce RTX 4070 · — · 7% · 100 MiB/8 GiB · —"
 
 
 def test_malformed_is_dark():
     bad = parse_sample(0)
     assert bad["status"] == "malformed"
     assert bad["utilPercent"] is None
-    assert gpu_line(bad) == "GPU unread · malformed"
+    assert gpu_line(bad) == "GPU · reading looked wrong"
     assert "0%" not in gpu_line(bad)
     typed = parse_sample({"status": "read", "platform": "win32", "utilPercent": "0", "readAtMs": NOW})
     assert typed["status"] == "malformed"
@@ -120,7 +120,7 @@ def test_stale_drops_the_old_numbers():
     stale = present(fresh, NOW + STALE_MS + 1)
     assert stale["status"] == "stale"
     assert stale["tempC"] is None
-    assert gpu_line(stale) == "GPU unread · stale"
+    assert gpu_line(stale) == "GPU · reading is old"
     assert "62" not in gpu_line(stale)
 
 
@@ -156,7 +156,7 @@ def test_linux_reads_nvidia_and_mac_reads_ioaccelerator(monkeypatch, tmp_path):
     assert mac["tempC"] is None
     assert mac["powerWatts"] is None
     assert mac["memoryTotalBytes"] is None
-    assert gpu_line(mac) == "GPU Apple M2 · unread · 16% · 542 MiB/unread · unread"
+    assert gpu_line(mac) == "GPU Apple M2 · — · 16% · 542 MiB/— · —"
     other = sample_from_probe(
         {"nvidiaCsv": "NVIDIA GeForce RTX 4070, 62, 14, 3200, 12288, 48.5"},
         platform="freebsd",
@@ -164,7 +164,7 @@ def test_linux_reads_nvidia_and_mac_reads_ioaccelerator(monkeypatch, tmp_path):
     )
     assert other["status"] == "unsupported"
     assert other["tempC"] is None
-    assert gpu_line(other) == "GPU unread · unsupported"
+    assert gpu_line(other) == "GPU · not read on this computer"
     live = read_local(platform="linux", now_ms=NOW)
     assert live["status"] in {"read", "unread", "malformed"}
     if live["status"] != "read":
@@ -441,7 +441,7 @@ def test_posix_probe_scripts_read_ioreg_and_sysfs_fixtures(monkeypatch, tmp_path
     assert fd_sample["tempC"] is None
     assert fd_sample["powerWatts"] is None
     assert fd_sample["memoryUsedBytes"] is None
-    assert gpu_line(fd_sample) == "GPU i915 8086:9A49 · unread · 50% · unread · unread"
+    assert gpu_line(fd_sample) == "GPU i915 8086:9A49 · — · 50% · — · —"
     rewind = subprocess.run(
         ["/bin/sh", str(linux_probe_script())],
         check=False,
@@ -667,10 +667,10 @@ def test_saved_windows_counters_read_the_busiest_engine():
     sample = sample_from_probe(parse_probe_text(saved.read_text(encoding="utf-8")), platform="win32", now_ms=NOW)
     # Video decode carries 4.2%. The old reading took one process's 3D share (0.5%).
     assert sample["utilPercent"] == 4.2
-    assert gpu_line(sample) == "GPU unread · unread · 4.2% · 1.5 GiB/unread · unread"
+    assert gpu_line(sample) == "GPU · — · 4.2% · 1.5 GiB/— · —"
 
 # Hand-built: two adapters that both report phys_0 (see fixtures/replay/README.md).
-TWO_ADAPTER_LINE = "GPU unread · unread · 12.5% · 2 GiB/8 GiB · unread"
+TWO_ADAPTER_LINE = "GPU · — · 12.5% · 2 GiB/8 GiB · —"
 TWO_NO_LIMIT = "\n".join(
     [
         "NVIDIA_ABSENT",
@@ -743,7 +743,7 @@ def test_no_vram_limit_shows_the_adapter_holding_the_most_memory():
 
     sample = sample_from_probe(parse_probe_text(TWO_NO_LIMIT), platform="win32", now_ms=NOW)
     assert sample["utilPercent"] == 9
-    assert gpu_line(sample) == "GPU unread · unread · 9% · 3 GiB/unread · unread"
+    assert gpu_line(sample) == "GPU · — · 9% · 3 GiB/— · —"
 
 
 def test_nvidia_blanks_are_not_filled_when_two_counter_adapters_share_an_index():

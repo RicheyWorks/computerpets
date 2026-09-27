@@ -16,7 +16,7 @@
       <article id="weather-plate" class="desk-plate" data-hit data-desk-plate="weather">
         <button type="button" id="weather-toggle" class="desk-plate-toggle" data-hit title="Weather — click to open, drag to move" aria-label="Weather — click to open, drag to move" aria-expanded="false" aria-controls="weather-body">
           <span class="desk-plate-chip"><span class="desk-plate-icon" aria-hidden="true">☁</span> Weather</span>
-          <span id="weather-line">no area set</span>
+          <span id="weather-line">open to add a place</span>
           <span class="desk-plate-grip" aria-hidden="true" title="Drag to move">⋮⋮</span>
         </button>
         <div id="weather-body" hidden>
@@ -71,7 +71,7 @@
       <article id="news-plate" class="desk-plate" data-hit data-desk-plate="news">
         <button type="button" id="news-toggle" class="desk-plate-toggle" data-hit title="News — click to open, drag to move" aria-label="News — click to open, drag to move" aria-expanded="false" aria-controls="news-body">
           <span class="desk-plate-chip"><span class="desk-plate-icon" aria-hidden="true">📰</span> News</span>
-          <span id="news-line">no headlines yet</span>
+          <span id="news-line">open to see headlines</span>
           <span class="desk-plate-grip" aria-hidden="true" title="Drag to move">⋮⋮</span>
         </button>
         <div id="news-body" hidden>
@@ -84,7 +84,7 @@
           </div>
           <div id="news-panel" role="tabpanel" aria-labelledby="news-tab-popular">
           <div id="news-live"></div>
-          <p class="keeper-truth" id="news-truth">Popular is Google News top stories. World is Wikipedia In the news. A named topic is Google News RSS. X uses Google News with site:x.com when reachable — else Open on X. No invented headlines.</p>
+          <p class="keeper-truth" id="news-truth">Popular is Google News top stories. World is Wikipedia In the news. A topic you name is looked up on Google News. X shows Google News stories from x.com when it can — or press Open on X. No made-up headlines.</p>
           <div id="news-topics-panel">
             <form id="news-add" data-hit>
               <label>News topic
@@ -302,12 +302,12 @@
           </div>
           <div class="keeper-off" data-hit>
             <button type="button" id="hud-off" data-hit data-card="off">Turn off</button>
-            <p id="hud-off-truth" class="keeper-truth">Turns the overlay off. Start again with .\\desktop.ps1.</p>
+            <p id="hud-off-truth" class="keeper-truth">Turns the pets off. To bring them back, type .\desktop.ps1 again, just like the first time.</p>
           </div>
           <p id="hud-heartbeat" class="keeper-heartbeat" data-heartbeat="DOWN" hidden></p>
-          <p id="hud-gpu" class="keeper-gpu" data-gpu="unread"><span id="hud-gpu-line">GPU unread</span><span id="hud-gpu-spark" class="gpu-spark" data-spark="empty" aria-hidden="true"></span></p>
+          <p id="hud-gpu" class="keeper-gpu" data-gpu="unread"><span id="hud-gpu-line">GPU · no reading</span><span id="hud-gpu-spark" class="gpu-spark" data-spark="empty" aria-hidden="true"></span></p>
           <p id="hud-listener" class="keeper-listener" data-listener="local">Listening · House lines</p>
-          <p id="hud-truth" class="keeper-truth">Care is local. /pet/feed is not a door.</p>
+          <p id="hud-truth" class="keeper-truth">Your pet's care stays on this computer.</p>
         </div>
       </article>
       <div id="choice" data-hit role="menu" aria-label="A sit" aria-orientation="vertical"></div>

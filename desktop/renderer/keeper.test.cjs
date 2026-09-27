@@ -27,7 +27,7 @@ test("the overlay keeper card tells the same truth as the desk", () => {
   assert.equal(K.careDoorRefusal("feed").detail, "Care is local. /pet/feed is not a door.");
   assert.equal(K.careDoorRefusal("play").performed, false);
   assert.equal(K.careDoorRefusal("rest").status, 409);
-  assert.equal(K.careTruth(), "Care is local. /pet/feed is not a door.");
+  assert.equal(K.careTruth(), "Your pet's care stays on this computer.");
   assert.match(webKeeper, /CARE_DOOR_STATUS = 409/);
   assert.deepEqual(K.KEEPER_CARE.map((m) => m.id), ["feed", "snack", "play", "rest", "talk", "hide", "call", "clean", "bath", "medicine", "praise", "special", "shed"]);
   assert.match(webKeeper, /JAVA_PORT = 8081/);
@@ -46,8 +46,8 @@ test("an unread heartbeat is DOWN, not a painted UP; the card row says it in pla
   assert.equal(K.parseHeartbeat({ status: "UP", profile: "local", uptimeSeconds: 90, port: 8081 }).status, "UP");
   assert.equal(K.heartbeatLine, undefined);
   assert.equal(K.houseServerLine({ show: false }), "");
-  assert.equal(K.houseServerLine({ show: true, reachable: false }), "House server · unreachable");
-  assert.equal(K.houseServerLine({ show: true, reachable: true, uptimeSeconds: 90 }), "House server · reachable · up 1m");
+  assert.equal(K.houseServerLine({ show: true, reachable: false }), "House server stopped answering (optional). Pets still work.");
+  assert.equal(K.houseServerLine({ show: true, reachable: true, uptimeSeconds: 90 }), "House server running · up 1m");
   assert.equal(K.formatUptime(90), "1m");
   assert.equal(K.meters({ hunger: 40, energy: 70, bond: 50 }).bondTitle, "Friend");
 });
@@ -63,8 +63,8 @@ test("the poster HUD is name, stage, bond title, meters, verbs, house-server row
   assert.equal(face.bond, 50);
   assert.deepEqual(face.verbs, ["feed", "snack", "play", "rest", "talk", "hide", "call", "clean", "bath", "medicine", "praise", "special", "shed"]);
   assert.equal(face.heartbeat, "");
-  assert.equal(K.poster("Rui", "grown", {}, { show: true, reachable: true }).heartbeat, "House server · reachable");
-  assert.match(face.truth, /Care is local/);
+  assert.equal(K.poster("Rui", "grown", {}, { show: true, reachable: true }).heartbeat, "House server running");
+  assert.equal(face.truth, "Your pet's care stays on this computer.");
   assert.equal(face.voiceTruth, K.VOICE_TRUTH);
   assert.match(face.quitTruth, /desktop\.ps1/);
 });
