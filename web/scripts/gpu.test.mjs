@@ -269,3 +269,34 @@ test("demo and overlay keeper surfaces share the unread GPU row", () => {
   assert.match(blotterGpu, /def sparkline/);
   assert.doesNotMatch(card, /\/metrics\/gpu/);
 });
+
+const PDH_SAME_ENGINE = [
+  "NVIDIA_ABSENT",
+  "ENGINE",
+  // Three processes on one 3D engine: Task Manager adds them.
+  "pid_1_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t20.25",
+  "pid_2_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t30.5",
+  "pid_3_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t0.04",
+  // A busier video engine wins over the 3D engine; engines are never added together.
+  "pid_1_luid_0x1_0x2_phys_0_eng_2_engtype_VideoDecode\t40",
+  "pid_2_luid_0x1_0x2_phys_0_eng_2_engtype_VideoDecode\t15",
+  "pid_1_luid_0x1_0x2_phys_0_eng_4_engtype_Copy\t5",
+  "ENDENGINE",
+  "END",
+].join("\n");
+const PDH_OVER = [
+  "NVIDIA_ABSENT",
+  "ENGINE",
+  "pid_1_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t70",
+  "pid_2_luid_0x1_0x2_phys_0_eng_0_engtype_3D\t60",
+  "ENDENGINE",
+  "END",
+].join("\n");
+
+test("the browser port reduces counters like Task Manager, same as the overlay", () => {
+  const sample = sampleFromProbe(parseProbeText(PDH_SAME_ENGINE), { platform: "win32", nowMs: NOW });
+  assert.equal(sample.utilPercent, 55);
+  assert.equal(sampleFromProbe(parseProbeText(PDH_OVER), { platform: "win32", nowMs: NOW }).utilPercent, 100);
+  const saved = readFileSync(join(root, "desktop", "renderer", "fixtures", "replay", "gpu-win-pdh.txt"), "utf8");
+  assert.equal(sampleFromProbe(parseProbeText(saved), { platform: "win32", nowMs: NOW }).utilPercent, 4.2);
+});

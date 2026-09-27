@@ -30,6 +30,7 @@ import {
   HERE_SEND,
   HERE_SENT,
   HERE_YES,
+  dayLabel,
   isFavorite,
   locateGate,
   NO_AREA,
@@ -636,7 +637,7 @@ export function DeskWeatherPlate({
                 <ul className="mt-2 space-y-1 text-subtle">
                   {live.daily.map((d) => (
                     <li key={d.day}>
-                      {d.day} · {d.sky}
+                      {d.day} · {dayLabel(d)}
                       {d.maxC != null ? ` · ${Math.round(d.maxC)}°` : ""}
                     </li>
                   ))}
@@ -885,9 +886,13 @@ export function DeskNewsPlate() {
               <ul className="mt-2 space-y-2">
                 {items.map((item) => (
                   <li key={item.url || item.title} className="flex items-start gap-2">
-                    <a href={item.url} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
-                      {item.title}
-                    </a>
+                    {item.url ? (
+                      <a href={item.url} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
+                        {item.title}
+                      </a>
+                    ) : (
+                      <span>{item.title}</span>
+                    )}
                     {item.summary ? <p className="text-subtle">{item.summary}</p> : null}
                     <button
                       type="button"

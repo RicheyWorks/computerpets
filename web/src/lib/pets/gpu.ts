@@ -410,14 +410,42 @@ function physOf(instance: unknown) {
   return match ? Number(match[1]) : null;
 }
 
+/**
+ * The engine counter is a rate over its own sample window, and on a busy engine it can
+ * read a little over 100 (111 was seen on an RTX 4090 under NVENC). That is overshoot,
+ * not a broken reading: it is kept and the engine is capped at 100, as Task Manager does.
+ * A reading past ENGINE_OVERSHOOT is still refused as broken.
+ */
+const ENGINE_OVERSHOOT = 200;
+
+/**
+ * One engine is one adapter's engine index and type, whatever process used it.
+ * The counter prints one instance per process, so the process part is dropped.
+ */
+function engineOf(instance: unknown) {
+  return String(instance || "").replace(/^pid_\d+_/i, "").toLowerCase();
+}
+
+/**
+ * Task Manager's GPU number: add every process on each engine, then take the busiest
+ * engine of any type (3D, Copy, Video Decode, Compute). Engines are never added together.
+ */
+function busiestEngine(engines: Map<string, number>) {
+  let top: number | null = null;
+  engines.forEach((sum) => {
+    if (top == null || sum > top) top = sum;
+  });
+  return top == null ? null : Math.min(100, round1(top));
+}
+
 export function reducePdh(engines: unknown, adapterMemory: unknown) {
   if (engines == null && adapterMemory == null) return { rows: [] as NvidiaRow[], malformed: false, rejected: false };
   if ((engines != null && !Array.isArray(engines)) || (adapterMemory != null && !Array.isArray(adapterMemory))) {
     return { rows: [] as NvidiaRow[], malformed: true, rejected: false };
   }
-  const byPhys = new Map<number, { index: number; utils3d: number[]; utils: number[]; used: number[]; limit: number[]; rejected: boolean }>();
+  const byPhys = new Map<number, { index: number; engines: Map<string, number>; used: number[]; limit: number[]; rejected: boolean }>();
   function bucket(phys: number) {
-    if (!byPhys.has(phys)) byPhys.set(phys, { index: phys, utils3d: [], utils: [], used: [], limit: [], rejected: false });
+    if (!byPhys.has(phys)) byPhys.set(phys, { index: phys, engines: new Map(), used: [], limit: [], rejected: false });
     return byPhys.get(phys)!;
   }
   let badShape = false;
@@ -433,14 +461,16 @@ export function reducePdh(engines: unknown, adapterMemory: unknown) {
       return;
     }
     if (rec.util == null) return;
-    const util = ranged(metricToken(String(rec.util)), 0, 100, "1");
+    const token = metricToken(String(rec.util));
+    const util = ranged(token, 0, ENGINE_OVERSHOOT, "1");
     const slot = bucket(phys);
     if (util === "bad" || util == null) {
       slot.rejected = true;
       return;
     }
-    if (/engtype_3D/i.test(String(rec.instance))) slot.utils3d.push(util);
-    else slot.utils.push(util);
+    // Add the raw share. Rounding each process first would lose small ones.
+    const key = engineOf(rec.instance);
+    slot.engines.set(key, (slot.engines.get(key) || 0) + Number(token.value));
   });
   (adapterMemory || []).forEach((row) => {
     if (!row || typeof row !== "object") {
@@ -467,7 +497,7 @@ export function reducePdh(engines: unknown, adapterMemory: unknown) {
   });
   const rows: Array<NvidiaRow & { rejected: boolean }> = [];
   byPhys.forEach((slot) => {
-    const utilPercent = slot.utils3d.length ? Math.max(...slot.utils3d) : (slot.utils.length ? Math.max(...slot.utils) : null);
+    const utilPercent = busiestEngine(slot.engines);
     let memoryUsedBytes = slot.used.length ? slot.used.reduce((sum, n) => sum + n, 0) : null;
     let memoryTotalBytes = slot.limit.length ? Math.max(...slot.limit) : null;
     if (memoryUsedBytes != null && memoryTotalBytes != null && memoryUsedBytes > memoryTotalBytes) {
