@@ -31,4 +31,4 @@ This slice does not reopen presence/CSP, Hikari, bundle zip, cosign, CDN, secret
 - OffscreenCanvas is the preferred surface. It is not a shader and not a texture API this tree owns. WebGL is not opened.
 - The living desk room pet, and desk Sip, Brick, called guests, and plants, draw on this same canvas ([0129](0129-chromium-living-desk-sprites.md)).
 - Catalog stays 221. No Rui sprites. `_*.py` stay untracked.
-- **Next gap:** the unused `img` helper in `web/src/lib/pets/call-guests.ts` ([0130](0130-chromium-visitor-floor-hive-den-sprites.md)). Do not start DirectX 12, Vulkan, Solana, or Pane. Catalog stays 221.
+- **Next gap:** none left in this canvas arc. The desk's dead `img` helpers are gone ([0130](0130-chromium-visitor-floor-hive-den-sprites.md)). The PyQt blotter stays Qt OpenGL. Do not start DirectX 12, Vulkan, Solana, or Pane. Catalog stays 221.
