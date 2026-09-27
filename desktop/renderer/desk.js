@@ -65,9 +65,14 @@
     return isMac(platform) || isLinux(platform) || isWindows(platform) ? "accept" : "focus";
   }
 
-  /** They walk every Space. They walk every workspace. Windows virtual desktops stay a later door. */
+  /** They walk every Space. They walk every workspace. Electron pins the overlay there. */
   function spacesWalk(platform) {
     return isMac(platform) || isLinux(platform);
+  }
+
+  /** Windows virtual desktops have no Electron pin. The overlay follows you instead (vdesk-win.cjs, ADR 0131). */
+  function desktopFollow(platform) {
+    return isWindows(platform);
   }
 
   function extraIconTemplate(platform) {
@@ -193,6 +198,7 @@
     tapPx,
     firstClick,
     spacesWalk,
+    desktopFollow,
     extraIconTemplate,
     appMenu,
     followCursorDisplay,
