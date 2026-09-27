@@ -1,15 +1,15 @@
-/** Seven ground tricks while idle — ultra-polish pass. House seven-spot ladybird — spots / aphid / reflex / climb / coccinella / pronotum / alar personality (spots elytra-spot polish and count-display on the blotter — never named elytra (Spark firefly owns elytra) / count (ethogram-old + window SPOT) / stripe (Bandit) / flash (Quill) / warning (Milk) / semaphore (Spark), aphid aphid-hunt stalk and bead-pounce — never named hunt (ethogram-old + Haste window) / forage (bumblebee window) / mouser (Rue) / stalk (Rue) / pounce (Miso) / clamp (Snap) / seize (robber fly window), reflex reflex-bleed hush (thanatosis bead) — never named feign (Bluff) / curl (Burr) / tuck (Ink) / freeze (Twig window FREEZE) / hush / bleed / hemolymph / still (ethogram-old), climb leaf-dish ascent — never named lift (Ember) / tread (Twig) / crawl (Cling) / scurry (Clip) / scuttle (Tenant) / amble (Bloom) / vault (Kite) / rise / soar, coccinella desk life as a Coccinella septempunctata Seven-spot Ladybird week, pronotum white pronotal-disc rock (species-true Coccinella white pronotum spectacles — never named stripe / flash / warning / semaphore / elytra / count / spot-as-window / spots-as-duplicate), alar under-elytra wing whir settle (species-true brief ladybird flight — never named elytra (Spark) / soar / rise / hover (Sepia) / buzz (Relay) / flash (Quill) / lantern (Spark) / jstroke (Spark) / wing (Kite) / breach (Kite)); not Column gallery/pheromone/crumb/bustle/camponotus/trophallaxis/frass, Twig rocking/catalepsy/browse/tread/diapheromera/oviposit/filiform, Dart hawking/tandem/nymph/whir/anax/obelisk/ommatidia, Spark lantern/jstroke/semaphore/elytra/photinus/photocyte/sternite, Ghost plumose/lunule/silk/stream/actias/aphagy/cauda, Milk asclepias/oyamel/warning/chrysalis/danaus/cremaster/tarsus, Comb figure/corbicula/hex/proboscis/hive/ocelli/nasonov, Dew mucilage/tentacle/digest/gland/rosette/lamina/circinate, Well peristome/cistern/brine/operculum/urn/ala/baffle, Snap clamp/trichome/stew/unseal/poise/cage/scape, Arm rib/branch/nocturne/areole/sentinel/pleat/boot, Moth labellum/velamen/column/spike/bark/keiki/pollinia, Disk pad/corolla/rhizome/calyx/sheen/peltate/hydropote, Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Echo preen/bobble, Ember cinder/blaze, Quill fan/flash, Relay buzz/click, Rui dance, Sepia hover, Pulse medusa/trail, Clip nest/scurry, Tenant antenna/scuttle, Dragon glow, or Jade sway/Sol nod copies). Pronotum is the iconic Coccinella white-disc rock (not window SPOT, not ethogram-old count). Alar is the iconic under-elytra whir settle (not Spark elytra, not Quill flash). Window-play SPOT unchanged — never names count. Ethogram keeps coccinella sit_hold; adds spots/aphid/reflex/climb/pronotum/alar softs + freeze (replaces thin count/hunt/still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via ladybird.wav. Thank-yous septempunctata / bead / coccinellid. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web ladybird-tricks.ts. True house-ladybird desk life — not Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column or *Dragon electrical clone. Next guest ultra is Shard / silica. Coccinellidae Coccinella desk life only. No cry inventing — thank-yous are silent desk motion only. */
+/** Seven ground tricks while idle — ultra-polish pass. House seven-spot ladybird — spots / aphid / reflex / climb / coccinella / pronotum / alar personality (spots elytra-spot polish and count-display on the blotter — never named elytra (Spark firefly owns elytra) / count (ethogram-old + window SPOT) / stripe (Bandit) / flash (Quill) / warning (Milk) / semaphore (Spark), aphid aphid-hunt stalk and bead-pounce — never named hunt (ethogram-old + Haste window) / forage (bumblebee window) / mouser (Rue) / stalk (Rue) / pounce (Miso) / clamp (Snap) / seize (robber fly window), reflex reflex-bleed hush (thanatosis bead) — never named feign (Bluff) / curl (Burr) / tuck (Ink) / freeze (Twig window FREEZE) / hush / bleed / hemolymph / still (ethogram-old), climb leaf-dish ascent — never named lift (Ember) / tread (Twig) / crawl (Cling) / scurry (Clip) / scuttle (Tenant) / amble (Bloom) / vault (Kite) / rise / soar, coccinella desk life as a Coccinella septempunctata Seven-spot Ladybird week, pronotum white pronotal-disc rock (species-true Coccinella white pronotum spectacles — never named stripe / flash / warning / semaphore / elytra / count / spot-as-window / spots-as-duplicate), alar under-elytra wing whir settle (species-true brief ladybird flight — never named elytra (Spark) / soar / rise / hover (Sepia) / buzz (Relay) / flash (Quill) / lantern (Spark) / jstroke (Spark) / wing (Kite) / breach (Kite)); not Column gallery/pheromone/crumb/bustle/camponotus/trophallaxis/frass, Twig rocking/catalepsy/browse/tread/diapheromera/oviposit/filiform, Dart hawking/tandem/nymph/whir/anax/obelisk/ommatidia, Spark lantern/jstroke/semaphore/elytra/photinus/photocyte/sternite, Ghost plumose/lunule/silk/stream/actias/aphagy/cauda, Milk asclepias/oyamel/warning/chrysalis/danaus/cremaster/tarsus, Comb figure/corbicula/hex/proboscis/hive/ocelli/nasonov, Dew mucilage/tentacle/digest/gland/rosette/lamina/circinate, Well peristome/cistern/brine/operculum/urn/ala/baffle, Snap clamp/trichome/stew/unseal/poise/cage/scape, Arm rib/branch/nocturne/areole/sentinel/pleat/boot, Moth labellum/velamen/column/spike/epiphyte/keiki/pollinia, Disk pad/corolla/rhizome/calyx/sheen/peltate/hydropote, Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Echo preen/bobble, Ember cinder/blaze, Quill fan/flash, Relay buzz/click, Rui dance, Sepia hover, Pulse medusa/trail, Clip nest/scurry, Tenant antenna/scuttle, Dragon glow, or Jade sway/Sol nod copies). Pronotum is the iconic Coccinella white-disc rock (not window SPOT, not ethogram-old count). Alar is the iconic under-elytra whir settle (not Spark elytra, not Quill flash). Window-play SPOT unchanged — never names count. Ethogram keeps coccinella sit_hold; adds spots/aphid/reflex/climb/pronotum/alar softs + freeze (replaces thin count/hunt/still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via ladybird.wav. Thank-yous septempunctata / hemolymph / coccinellid. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web ladybird-tricks.ts. True house-ladybird desk life — not Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column or *Dragon electrical clone. Next guest ultra is Shard / silica. Coccinellidae Coccinella desk life only. No cry inventing — thank-yous are silent desk motion only. */
 (function (root) {
   const TRICK_KEY = "ladybird";
   const TRICKS = ["spots", "aphid", "reflex", "climb", "coccinella", "pronotum", "alar"];
-  const HAPPY = ["septempunctata", "bead", "coccinellid"];
+  const HAPPY = ["septempunctata", "hemolymph", "coccinellid"];
 
 
 
 
   const HAPPY_DUR = {
     septempunctata: 1.70,
-    bead: 1.84,
+    hemolymph: 1.84,
     coccinellid: 1.76,
   };
   const COCCINELLA_HOLD = 11.2;
@@ -155,7 +155,7 @@
       x: x,
       lift: 0,
       rot: 0,
-      anim: name === "septempunctata" ? "play" : name === "bead" ? "talk" : "sit",
+      anim: name === "septempunctata" ? "play" : name === "hemolymph" ? "talk" : "sit",
       facing: facing == null ? 1 : facing,
       fromX: x,
     };
@@ -179,8 +179,8 @@
     const s = (u - 0.72) / 0.28;
     return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
-  function beadPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.bead));
+  function hemolymphPose(t) {
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.hemolymph));
     if (u < 0.2) {
       const s = u / 0.2;
       return { lift: s * 3.2, rot: s * -9.5, dx: s * 0.2, anim: "talk" };
@@ -217,8 +217,8 @@
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "bead") {
-      const pose = beadPose(next.t);
+    } else if (next.kind === "hemolymph") {
+      const pose = hemolymphPose(next.t);
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
@@ -544,7 +544,7 @@
     pickHappy,
     beginHappy,
     septempunctataPose,
-    beadPose,
+    hemolymphPose,
     coccinellidPose,
     stepHappy,
     sleepHoldFrame,

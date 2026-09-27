@@ -2254,7 +2254,7 @@ test("moss ethogram is Felt ultra (thatch + softs + freeze, not lean/nod/still)"
 test("maidenhair ethogram is Vein ultra (saucer + softs + freeze, not lean/nod/unfurl)", () => {
   assert.ok(names("maidenhair").includes("saucer"));
   assert.ok(names("maidenhair").includes("sori_soft"));
-  assert.ok(names("maidenhair").includes("bulb_soft"));
+  assert.ok(names("maidenhair").includes("stipe_soft"));
   assert.ok(names("maidenhair").includes("freeze"));
   assert.equal(names("maidenhair").includes("lean"), false);
   assert.equal(names("maidenhair").includes("nod"), false);
@@ -2291,8 +2291,8 @@ test("water_lily ethogram is Disk ultra (sheen + softs + freeze, not open/nod/le
   assert.equal(names("water_lily").includes("lean"), false);
 });
 
-test("orchid ethogram is Moth ultra (bark sit_hold + softs + freeze, not unfurl/lean/nod)", () => {
-  assert.ok(names("orchid").includes("bark"));
+test("orchid ethogram is Moth ultra (epiphyte sit_hold + softs + freeze, not unfurl/lean/nod)", () => {
+  assert.ok(names("orchid").includes("epiphyte"));
   assert.ok(names("orchid").includes("labellum_soft"));
   assert.ok(names("orchid").includes("velamen_soft"));
   assert.ok(names("orchid").includes("column_soft"));

@@ -1,7 +1,7 @@
-/** Ochre ground tricks while idle — ultra-polish pass. House sea star — podia / righting / crawl / evert / penta / madre / papula personality (tube-feet ampulla waves, overturn righting twist, arm-lead crawl, stomach-eversion curiosity, pentaradial desk life, madreporite water-vascular sieve plate, dermal papulae skin-gill shimmer; not Pulse bell/oral/lucent/trail/medusa/rhopalium/horseshoe, Cup mantle dens, Sepia chromatophores, Chamber spiral, Coin bowl-drift, Ink soak/tuck, or Bloom gill/amble). Podia rides soft ampulla waves; righting twists upright; crawl leads an arm; evert probes with stomach curiosity; penta turns the five-ray compass; madre pumps the madreporite sieve (species-true asteroid water-vascular intake — not podia ampulla waves, not evert stomach, not window-play REEF); papula shimmers dermal papulae / skin gills (species-true asteroid respiration — not Bloom gill, not Pulse lucent, not Cup papilla). Window-play REEF unchanged — never names `reef`. Special cling unchanged — never names cling as a trick. Ethogram keeps cling sit_hold; adds righting/crawl/evert/penta/madre/papula softs + freeze (replaces thin still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via sea_star.wav. Thank-yous damp / press / tide. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `sea_star-tricks.js`. True house-sea-star desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids reef/cling/rise/chime/flush/lid/mantle/sucker/jet/veil/tinker/papilla/ooze/drift/gulp/flare/dart/soak/tuck/paddle/gill/amble/plume/legend/fan/flash/latch/puff/unfurl/chart/climb/probe/canyon/siphon/pulse/slink/den/cork/nest/savor/settle/survey/snatch/band/funnel/tentacle/loom/wave/buoy/bone/pupil/chroma/hover/blot/strike/zebra/spiral/siphuncle/nacre/pinhole/fringe/hyponome/aperture/bell/oral/lucent/trail/medusa/rhopalium/horseshoe name collisions with prior guests and sea_star window-play. Bird ultra (Soot→Ember) + Miso→Pulse done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Tenant / hermit_crab ultra done; Ledger / horseshoe_crab ultra done; Anchor / seahorse ultra done; next guest ultra is Kite / manta. Amplitudes raised toward Rui richness; denser waits/weights (PODIA_HOLD=11.2 RELEASE_S=1.18). Tenant densified. Ledger densified. Anchor densified. Kite densified. Door densified. Felt densified. Vein densified. Fan densified. Mast densified. Disk densified. Next leftover Wax / honeycomb. No cry inventing beyond house sea_star.wav prefer. Never retouch Rui sprites. */
+/** Ochre ground tricks while idle — ultra-polish pass. House sea star — podia / righting / crawl / evert / penta / madre / papula personality (tube-feet ampulla waves, overturn righting twist, arm-lead crawl, stomach-eversion curiosity, pentaradial desk life, madreporite water-vascular sieve plate, dermal papulae skin-gill shimmer; not Pulse bell/oral/lucent/trail/medusa/rhopalium/horseshoe, Cup mantle dens, Sepia chromatophores, Chamber spiral, Coin bowl-drift, Ink soak/tuck, or Bloom gill/amble). Podia rides soft ampulla waves; righting twists upright; crawl leads an arm; evert probes with stomach curiosity; penta turns the five-ray compass; madre pumps the madreporite sieve (species-true asteroid water-vascular intake — not podia ampulla waves, not evert stomach, not window-play REEF); papula shimmers dermal papulae / skin gills (species-true asteroid respiration — not Bloom gill, not Pulse lucent, not Cup papilla). Window-play REEF unchanged — never names `reef`. Special cling unchanged — never names cling as a trick. Ethogram keeps cling sit_hold; adds righting/crawl/evert/penta/madre/papula softs + freeze (replaces thin still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via sea_star.wav. Thank-yous damp / adhere / tide. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `sea_star-tricks.js`. True house-sea-star desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids reef/cling/rise/chime/flush/lid/mantle/sucker/jet/veil/tinker/papilla/ooze/drift/gulp/flare/dart/soak/tuck/paddle/gill/amble/plume/legend/fan/flash/latch/puff/unfurl/chart/climb/probe/canyon/siphon/pulse/slink/den/cork/nest/savor/settle/survey/snatch/band/funnel/tentacle/loom/wave/buoy/bone/pupil/chroma/hover/blot/strike/zebra/spiral/siphuncle/nacre/pinhole/fringe/hyponome/aperture/bell/oral/lucent/trail/medusa/rhopalium/horseshoe name collisions with prior guests and sea_star window-play. Bird ultra (Soot→Ember) + Miso→Pulse done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Tenant / hermit_crab ultra done; Ledger / horseshoe_crab ultra done; Anchor / seahorse ultra done; next guest ultra is Kite / manta. Amplitudes raised toward Rui richness; denser waits/weights (PODIA_HOLD=11.2 RELEASE_S=1.18). Tenant densified. Ledger densified. Anchor densified. Kite densified. Door densified. Felt densified. Vein densified. Fan densified. Mast densified. Disk densified. Next leftover Wax / honeycomb. No cry inventing beyond house sea_star.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "sea_star";
 export const TRICKS = ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"] as const;
-export const HAPPY = ["damp", "press", "tide"] as const;
+export const HAPPY = ["damp", "adhere", "tide"] as const;
 export type SeaStarTrickKind = (typeof TRICKS)[number];
 export type SeaStarHappyKind = (typeof HAPPY)[number];
 export type TrickAnim = "idle" | "walk" | "sit" | "sleep" | "talk" | "play";
@@ -46,7 +46,7 @@ export type SeaStarHappy = {
 
 export const HAPPY_DUR: Record<SeaStarHappyKind, number> = {
   damp: 1.28,
-  press: 1.16,
+  adhere: 1.16,
   tide: 1.2,
 };
 
@@ -167,7 +167,7 @@ export function beginHappy(kind: SeaStarHappyKind | string, x: number, facing: 1
     x: x,
     lift: 0,
     rot: 0,
-    anim: name === "damp" ? "sit" : name === "press" ? "talk" : "sit",
+    anim: name === "damp" ? "sit" : name === "adhere" ? "talk" : "sit",
     facing: facing == null ? 1 : facing,
     fromX: x,
   };
@@ -192,8 +192,8 @@ export function dampPose(t: number) {
   return { lift: 2.88 * (1 - s), rot: 9.6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
 
-export function pressPose(t: number) {
-  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.press));
+export function adherePose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.adhere));
   if (u < 0.12) {
     const s = u / 0.12;
     return { lift: s * 3.12, rot: s * -21.6, dx: 0, anim: "talk" as TrickAnim };
@@ -232,8 +232,8 @@ export function stepHappy(happy: SeaStarHappy, dt: number, flags?: TrickFlags): 
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
-  } else if (next.kind === "press") {
-    const pose = pressPose(next.t);
+  } else if (next.kind === "adhere") {
+    const pose = adherePose(next.t);
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;

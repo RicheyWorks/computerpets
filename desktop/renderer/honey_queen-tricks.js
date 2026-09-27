@@ -1,7 +1,7 @@
-/** Keep ground tricks while idle — ultra-polish pass. House neighborly Western honey bee queen — pipe / retinue / duel / royal / spermatheca / queenmark / regina personality (pipe queen piping/tooting thorax vibration on the blotter — never named figure (Comb) / waggle (Comb window) / holoptic (Hum) / buzz (Relay) / dance (Rui) / hum (Hum ethogram/guest) / sonicate (Thrum), retinue settle as if a worker court attends — never named congregation (Hum) / commune (Sheen) / gallery (Column) / nest (Clip + Column window) / hive (Comb) / circle (Disc) / bank (Lula + Bank guest) / pheromone (Column), duel rival-queen clash posture — never named brood (guest Brood/cicada) / sortie (Hum) / emerge (Cicada) / egress (Cicada + Thrum) / cast (Cicada) / harden (Cicada) / spring (Cat + Mortar) / hover (Sepia + ethogram), royal royal-jelly receive/thank motion — never named ocellus (Hum) / salt (Sheen) / lustre (Sheen) / shine (Ember) / sheen (Disk) / glint (Coin) / gleam (Ground happy) / fovea (Bank) / nectar (Disk) / pollen (Moth happy), spermatheca iconic Apis mellifera queen lifelong sperm-store settle on the blotter (not royal jelly thank / pipe toot / Hum sortie mating-flight / Comb hive / nuptial taken elsewhere), queenmark iconic queen mandibular pheromone (QMP) blotter mark that keeps the colony queenright (not Column pheromone trail / Comb nasonov / Hum congregation / Sheen salt / Bank fovea / Disk sheen), regina long hold desk life as Apis mellifera queen with caucasica / iberiensis cousins in the thank-yous — never named mellifera (Hum drone hold) / hive (Comb) / andrena (Bank) / keep as a trick kind; guest slug Keep only for isKey matching). Spermatheca is the iconic lifelong sperm receptacle settle (not royal). Queenmark is the iconic QMP desk mark (not Column pheromone). Window-play LAY unchanged — never names lay as a trick. Ethogram keeps regina sit_hold; adds pipe/retinue/duel/royal/spermatheca/queenmark softs + freeze (replaces thin lay/walk/still — window LAY owns lay; walk retired). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via honey_queen.wav. Thank-yous caucasica / iberiensis / apini. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web `honey_queen-tricks.ts`. True house-queen desk life — not Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/honey_drone/Hum/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold/cicada/Brood/bumblebee/Thrum/carpenter_bee/Auger/mason_bee/Mortar/leafcutter/Disc/stingless/Pot/sweat_bee/Sheen/mining_bee/Bank or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids lay/walk/still/hive/mellifera/holoptic/congregation/ocellus/figure/corbicula/nasonov/dronepatrol/eyemeet/floccus/dufourline/metallictilt/nestmound name collisions. Bird ultra + denser guests done; skip Rui + birds. Sheen/Hum already dens; skip them. Bank now owns floccus/dufourline dens; Comb owns ocelli/nasonov dens; Hum owns dronepatrol/eyemeet dens. REGINA_HOLD=11.2 RELEASE_S=1.18 (house ultra norm). Next: none — house-wide ultra after bees complete (Wax already dens; skip Rui). Catalog 221. No cry inventing beyond house honey_queen.wav prefer. Never retouch Rui sprites. No lay, not window LAY. No walk, not retired ethogram. No still, not retired ethogram. */
+/** Keep ground tricks while idle — ultra-polish pass. House neighborly Western honey bee queen — tooting / retinue / duel / royal / spermatheca / queenmark / regina personality (tooting queen piping thorax vibration on the blotter — never named figure (Comb) / waggle (Comb window) / holoptic (Hum) / buzz (Relay) / dance (Rui) / hum (Hum ethogram/guest) / sonicate (Thrum), retinue settle as if a worker court attends — never named congregation (Hum) / commune (Sheen) / gallery (Column) / nest (Clip + Column window) / hive (Comb) / circle (Disc) / bank (Lula + Bank guest) / pheromone (Column), duel rival-queen clash posture — never named brood (guest Brood/cicada) / sortie (Hum) / emerge (Cicada) / egress (Cicada + Thrum) / cast (Cicada) / harden (Cicada) / spring (Cat + Mortar) / hover (Sepia + ethogram), royal royal-jelly receive/thank motion — never named ocellus (Hum) / salt (Sheen) / lustre (Sheen) / shine (Ember) / sheen (Disk) / glint (Coin) / gleam (Ground happy) / fovea (Bank) / nectar (Disk) / pollen (Moth happy), spermatheca iconic Apis mellifera queen lifelong sperm-store settle on the blotter (not royal jelly thank / tooting / Hum sortie mating-flight / Comb hive / nuptial taken elsewhere), queenmark iconic queen mandibular pheromone (QMP) blotter mark that keeps the colony queenright (not Column pheromone trail / Comb nasonov / Hum congregation / Sheen salt / Bank fovea / Disk sheen), regina long hold desk life as Apis mellifera queen with caucasica / iberiensis cousins in the thank-yous — never named mellifera (Hum drone hold) / hive (Comb) / andrena (Bank) / keep as a trick kind; guest slug Keep only for isKey matching). Spermatheca is the iconic lifelong sperm receptacle settle (not royal). Queenmark is the iconic QMP desk mark (not Column pheromone). Window-play LAY unchanged — never names lay as a trick. Ethogram keeps regina sit_hold; adds tooting/retinue/duel/royal/spermatheca/queenmark softs + freeze (replaces thin lay/walk/still — window LAY owns lay; walk retired). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via honey_queen.wav. Thank-yous caucasica / iberiensis / apini. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web `honey_queen-tricks.ts`. True house-queen desk life — not Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/honey_drone/Hum/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold/cicada/Brood/bumblebee/Thrum/carpenter_bee/Auger/mason_bee/Mortar/leafcutter/Disc/stingless/Pot/sweat_bee/Sheen/mining_bee/Bank or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids lay/walk/still/hive/mellifera/holoptic/congregation/ocellus/figure/corbicula/nasonov/dronepatrol/eyemeet/floccus/dufourline/metallictilt/nestmound name collisions. Bird ultra + denser guests done; skip Rui + birds. Sheen/Hum already dens; skip them. Bank now owns floccus/dufourline dens; Comb owns ocelli/nasonov dens; Hum owns dronepatrol/eyemeet dens. REGINA_HOLD=11.2 RELEASE_S=1.18 (house ultra norm). Next: none — house-wide ultra after bees complete (Wax already dens; skip Rui). Catalog 221. No cry inventing beyond house honey_queen.wav prefer. Never retouch Rui sprites. No lay, not window LAY. No walk, not retired ethogram. No still, not retired ethogram. */
 (function (root) {
   const TRICK_KEY = "honey_queen";
-  const TRICKS = ["pipe", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"];
+  const TRICKS = ["tooting", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"];
   const HAPPY = ["caucasica", "iberiensis", "apini"];
 
   const HAPPY_DUR = {
@@ -16,7 +16,7 @@
 
   const DUR = {
     regina: REGINA_HOLD + RELEASE_S,
-    pipe: 2.46,
+    tooting: 2.46,
     retinue: 2.48,
     duel: 2.42,
     royal: 2.44,
@@ -53,7 +53,7 @@
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
     if (kind === "regina") return 38 + roll * 24;
-    if (kind === "spermatheca" || kind === "queenmark" || kind === "pipe") return 12 + roll * 9;
+    if (kind === "spermatheca" || kind === "queenmark" || kind === "tooting") return 12 + roll * 9;
     if (kind === "retinue" || kind === "duel" || kind === "royal") return 11 + roll * 8;
     return justFinished ? 8 + roll * 8 : 4 + roll * 7;
   }
@@ -62,14 +62,14 @@
     if (musicOn) return "regina";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "regina") {
-      if (roll < 0.18) return "pipe";
+      if (roll < 0.18) return "tooting";
       if (roll < 0.34) return "retinue";
       if (roll < 0.5) return "duel";
       if (roll < 0.66) return "royal";
       if (roll < 0.83) return "spermatheca";
       return "queenmark";
     }
-    if (lastKind === "pipe") {
+    if (lastKind === "tooting") {
       if (roll < 0.16) return "regina";
       if (roll < 0.32) return "retinue";
       if (roll < 0.48) return "duel";
@@ -79,14 +79,14 @@
     }
     if (lastKind === "retinue") {
       if (roll < 0.16) return "regina";
-      if (roll < 0.32) return "pipe";
+      if (roll < 0.32) return "tooting";
       if (roll < 0.48) return "duel";
       if (roll < 0.64) return "royal";
       if (roll < 0.82) return "spermatheca";
       return "queenmark";
     }
     if (roll < 0.14) return "regina";
-    if (roll < 0.28) return "pipe";
+    if (roll < 0.28) return "tooting";
     if (roll < 0.42) return "retinue";
     if (roll < 0.56) return "duel";
     if (roll < 0.7) return "royal";
@@ -235,7 +235,7 @@
     const anim =
       kind === "regina"
         ? "sit"
-        : kind === "pipe"
+        : kind === "tooting"
           ? "play"
           : kind === "retinue"
             ? "talk"
@@ -280,8 +280,8 @@
     return { lift: 1.15 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -1.6 * (1 - u) };
   }
 
-  function pipePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.pipe));
+  function tootingPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.tooting));
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
       return { x: fromX, lift: s * 2.8, rot: s * 8 * facing, anim: "sit" };
@@ -470,7 +470,7 @@
     if (!trick || trick.phase === "done") return trick;
     if (
       shouldAbort(flags) &&
-      trick.kind !== "pipe" &&
+      trick.kind !== "tooting" &&
       trick.kind !== "retinue" &&
       trick.kind !== "duel" &&
       trick.kind !== "royal" &&
@@ -502,8 +502,8 @@
     const hold = DUR[next.kind];
     const u = next.t / hold;
     const fromX = trick.fromX != null ? trick.fromX : trick.x;
-    if (next.kind === "pipe") {
-      const pose = pipePose(next.t, fromX, trick.facing);
+    if (next.kind === "tooting") {
+      const pose = tootingPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
@@ -569,7 +569,7 @@
     beginTrick,
     reginaPose,
     releasePose,
-    pipePose,
+    tootingPose,
     retinuePose,
     duelPose,
     royalPose,

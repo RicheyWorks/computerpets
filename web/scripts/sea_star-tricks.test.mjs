@@ -141,7 +141,7 @@ test("Cling tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
   assert.deepEqual([...Overlay.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
-  assert.deepEqual([...Overlay.HAPPY], ["damp", "press", "tide"]);
+  assert.deepEqual([...Overlay.HAPPY], ["damp", "adhere", "tide"]);
 });
 
 test("podia/righting/crawl/evert/penta/madre/papula are house-sea-star-true, not copies of prior guests", () => {
@@ -225,8 +225,8 @@ test("podia/righting/crawl/evert/penta/madre/papula are house-sea-star-true, not
   assert.equal(Fuse.HAPPY.includes("densfuse"), true);
 });
 
-test("Cling feed-happy is its own sit: damp/press/tide, and two feeds are not the same", () => {
-  assert.deepEqual([...T.HAPPY], ["damp", "press", "tide"]);
+test("Cling feed-happy is its own sit: damp/adhere/tide, and two feeds are not the same", () => {
+  assert.deepEqual([...T.HAPPY], ["damp", "adhere", "tide"]);
   assert.equal(T.HAPPY.includes("halo"), false);
   assert.equal(T.HAPPY.includes("lumen"), false);
   assert.equal(T.HAPPY.includes("gel"), false);
@@ -245,9 +245,9 @@ test("Cling feed-happy is its own sit: damp/press/tide, and two feeds are not th
   assert.equal(T.HAPPY.includes("pulse"), false);
   assert.equal(T.HAPPY.includes("glow"), false);
   assert.equal(T.HAPPY.includes("tribute"), false);
-  assert.equal(T.pickHappy("damp", 0), "press");
+  assert.equal(T.pickHappy("damp", 0), "adhere");
   assert.notEqual(T.pickHappy("damp", 0.9), "damp");
-  assert.equal(Overlay.pickHappy("press", 0) !== "press", true);
+  assert.equal(Overlay.pickHappy("adhere", 0) !== "adhere", true);
   assert.equal(T.happyCanStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.happyCanStart({ asleep: false, hidden: false, leaving: false, cmd: "idle", card: true }), true);
   assert.equal(T.happyCanStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
@@ -259,7 +259,7 @@ test("Cling feed-happy is its own sit: damp/press/tide, and two feeds are not th
   const dampMid = T.stepHappy(dampH, 0.4, { cmd: "idle" });
   assert.ok(dampMid.lift !== 0 || Math.abs(dampMid.rot) > 0.5);
   assert.notEqual(dampMid.phase, "done");
-  const pressH = T.beginHappy("press", 80, 1);
+  const pressH = T.beginHappy("adhere", 80, 1);
   assert.equal(pressH.anim, "talk");
   const pressMid = T.stepHappy(pressH, 0.3, { cmd: "idle" });
   assert.ok(pressMid.lift > 0.2 || Math.abs(pressMid.rot) > 0.5);
