@@ -226,3 +226,25 @@ def test_real_disk_still_makes_the_folder_and_writes_the_mark(tmp_path):
 
     detail = resolve_hwid_detail(user_data_dir=str(home), plat="linux", read_file=read)
     assert (home / "hwid.txt").read_text(encoding="utf-8") == detail["id"]
+
+def test_weak_yes_reads_the_computer_name_where_os_has_no_uname(monkeypatch):
+    """Windows Python has no os.uname. The yes still hashes the computer name, as the dialog says."""
+    import hashlib
+
+    from computerpets_client.license import hwid
+
+    monkeypatch.delattr(hwid.os, "uname", raising=False)
+    monkeypatch.setattr(hwid.platform, "node", lambda: "DESK-PC")
+
+    def miss(path: str) -> str:
+        raise OSError(path)
+
+    def no_reg(cmd: str) -> str:
+        raise OSError(cmd)
+
+    got = hwid.resolve_hwid_detail(plat="windows", read_file=miss, exec_cmd=no_reg, allow_weak_fallback=True)
+    assert got["source"] == "hostname"
+    assert got["id"] == hashlib.sha256(b"computerpets:windows:DESK-PC").hexdigest()
+    monkeypatch.setattr(hwid.platform, "node", lambda: "")
+    nameless = hwid.resolve_hwid_detail(plat="windows", read_file=miss, exec_cmd=no_reg, allow_weak_fallback=True)
+    assert nameless["source"] == "random"

@@ -1,10 +1,11 @@
-/** Offline smokes for Buffffff app_harness — real renderer modules, no live network. */
+/** Offline smokes for Buffffff app_harness — real renderer modules, no live network. Recorded-feed replays live in harness_replay.cjs. */
 "use strict";
 
 const path = require("node:path");
 const fs = require("node:fs");
 
 const RENDERER = path.join(__dirname, "..", "..", "desktop", "renderer");
+const Replay = require("./harness_replay.cjs");
 
 function load(name) {
   return require(path.join(RENDERER, name));
@@ -1091,6 +1092,11 @@ const COMMANDS = {
   blotter_gait: blotterGait,
   blotter_play: blotterPlay,
   blotter_weather: blotterWeather,
+  weather_replay: Replay.weather_replay,
+  news_replay: Replay.news_replay,
+  market_replay: Replay.market_replay,
+  nft_replay: Replay.nft_replay,
+  gpu_replay: Replay.gpu_replay,
 };
 
 function main(argv) {
@@ -1106,12 +1112,33 @@ function main(argv) {
   }
   try {
     const result = fn();
-    process.stdout.write(JSON.stringify(result) + "\n");
-    return result.ok ? 0 : 1;
+    // Replays read through a fake fetch, so they return a promise.
+    if (result && typeof result.then === "function") {
+      result.then(
+        (res) => {
+          process.exitCode = emit(res);
+        },
+        (err) => {
+          process.exitCode = crash(err);
+        },
+      );
+      return undefined;
+    }
+    return emit(result);
   } catch (err) {
-    process.stdout.write(JSON.stringify(fail(`${err && err.name}: ${err && err.message}`)) + "\n");
-    return 1;
+    return crash(err);
   }
 }
 
-process.exitCode = main(process.argv);
+function emit(result) {
+  process.stdout.write(JSON.stringify(result) + "\n");
+  return result && result.ok ? 0 : 1;
+}
+
+function crash(err) {
+  process.stdout.write(JSON.stringify(fail(`${err && err.name}: ${err && err.message}`)) + "\n");
+  return 1;
+}
+
+const code = main(process.argv);
+if (code !== undefined) process.exitCode = code;

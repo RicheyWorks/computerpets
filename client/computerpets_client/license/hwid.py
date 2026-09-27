@@ -117,9 +117,10 @@ def _host_name(hostname: str | None) -> str | None:
     if isinstance(hostname, str) and hostname:
         return hostname
     try:
-        return os.uname().nodename
+        return os.uname().nodename or None
     except AttributeError:
-        return None
+        # Windows has no os.uname. platform.node() reads the same computer name there.
+        return platform.node() or None
 
 
 def peek_hwid(
