@@ -142,6 +142,8 @@ function createLicenseSession(opts) {
 
     return {
       unlocked: Boolean(payload),
+      // An issued license sits in license.json (even when this run cannot decrypt it).
+      held: hasStoredLicense(store),
       backendUrl,
       provider: store.provider || "steam",
       fields: store.fields && typeof store.fields === "object" ? store.fields : {},

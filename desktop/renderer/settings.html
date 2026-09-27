@@ -122,6 +122,11 @@
       let licenseBackend = "";
       let licenseUnbound = false;
 
+      // Only the plain sentence the main process wrote reaches the window (plain-error.cjs); a bare string never does.
+      function errorText(error, fallback) {
+        return error && typeof error === "object" && typeof error.message === "string" && error.message ? error.message : fallback;
+      }
+
       function unlockTarget() {
         return (backend.value || "").trim() || licenseBackend;
       }
@@ -198,7 +203,7 @@
         }
         if (!fetched) return status;
         if (fetched.ok === false) {
-          licenseErr.textContent = fetched.error ? fetched.error.message : "the signed bundle was not fetched.";
+          licenseErr.textContent = errorText(fetched.error, "the signed bundle was not fetched.");
         }
         return fetched || status;
       }
@@ -326,7 +331,7 @@
           if (status.fields.appId) appId.value = status.fields.appId;
           if (status.fields.petType) petType.value = status.fields.petType;
         }
-        licenseErr.textContent = status.ok === false && status.error ? status.error.message : status.error ? status.error.message : "";
+        licenseErr.textContent = errorText(status.error, "");
         if (status.unlocked && status.license) {
           const bits = [status.license.pet, status.license.jti, "until " + status.license.validUntil];
           licenseOk.textContent = "Unlocked — " + bits.join(" · ");
@@ -355,6 +360,20 @@
       }
 
       backend.addEventListener("input", paintLicenseNet);
+      // The keeper card's house-server row probes the Backend URL you save here; clearing the field stops probing it (the row then hides unless a license or COMPUTERPETS_BACKEND_URL names a server).
+      if (window.desk?.houseServerSaved) {
+        window.desk.houseServerSaved().then((saved) => {
+          if (saved && saved.url) {
+            backend.value = saved.url;
+            paintLicenseNet();
+          }
+        });
+      }
+      backend.addEventListener("change", async () => {
+        if (!window.desk?.houseServerSet) return;
+        const saved = await window.desk.houseServerSet(backend.value);
+        if (saved && saved.ok === false) licenseErr.textContent = errorText(saved.error, "");
+      });
       paintLicenseNet();
       paintBundleNet("");
 
@@ -377,7 +396,7 @@
         const status = await sendLicense("download");
         if (!status) return;
         if (status.ok === false) {
-          licenseErr.textContent = status.error ? status.error.message : "Download failed.";
+          licenseErr.textContent = errorText(status.error, "Download failed.");
           if (status.error && status.error.code === "hwid_needs_fallback_yes") showWeakYes("download");
           return;
         }
@@ -398,7 +417,7 @@
           const status = await sendLicense("download", { allowWeakFallback: true });
           if (!status) return;
           if (status.ok === false) {
-            licenseErr.textContent = status.error ? status.error.message : "Download failed.";
+            licenseErr.textContent = errorText(status.error, "Download failed.");
             if (status.error && status.error.code === "hwid_needs_fallback_yes") showWeakYes("download");
             return;
           }
