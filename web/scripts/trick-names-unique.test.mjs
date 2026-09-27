@@ -37,6 +37,7 @@ function readNames() {
 function readSofts() {
   const src = readFileSync(join(petsDir, "ethogram.ts"), "utf8");
   const softs = new Map();
+  const holds = new Map();
   let rows = 0;
   for (const line of src.split(/\r?\n/)) {
     const row = line.match(/^\s*"?([a-z_]+)"?: \[(A\(.*)\],?\s*$/);
@@ -47,8 +48,13 @@ function readSofts() {
       if (!owners.includes(row[1])) owners.push(row[1]);
       softs.set(a[1], owners);
     }
+    for (const h of row[2].matchAll(/A\("([a-z_]+)", "sit_hold"/g)) {
+      const owners = holds.get(h[1]) ?? [];
+      if (!owners.includes(row[1])) owners.push(row[1]);
+      holds.set(h[1], owners);
+    }
   }
-  return { softs, rows };
+  return { softs, holds, rows };
 }
 
 function shared(map) {
@@ -100,4 +106,10 @@ test("earliest owners keep the formerly shared names; later guests carry the ren
   for (const [soft, guest] of Object.entries({ fluence_soft: "photovore", tooting_soft: "honey_queen", tender_soft: "chicken_of_woods" })) {
     assert.deepEqual(softs.get(soft), [guest], soft);
   }
+});
+
+test("no ethogram long-hold (sit_hold) name sits in two guests' rows", () => {
+  const { holds } = readSofts();
+  assert.ok(holds.size >= 200);
+  assert.deepEqual(shared(holds), []);
 });
