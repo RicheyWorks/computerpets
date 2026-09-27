@@ -3,10 +3,10 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const C = await import(join(root, "src/lib/pets/guest-choice.ts"));
+const C = await import(pathToFileURL(join(root, "src/lib/pets/guest-choice.ts")).href);
 const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/choice.js"));
 
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");

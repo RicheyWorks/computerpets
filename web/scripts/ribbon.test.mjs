@@ -3,10 +3,10 @@ import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const R = await import(join(root, "src/lib/pets/ribbon.ts"));
+const R = await import(pathToFileURL(join(root, "src/lib/pets/ribbon.ts")).href);
 const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/ribbon.js"));
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 const petSrc = readFileSync(join(root, "../desktop/renderer/pet.js"), "utf8");

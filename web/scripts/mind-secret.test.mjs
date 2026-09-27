@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const S = await import(join(root, "src/lib/ai/settings.ts"));
+const S = await import(pathToFileURL(join(root, "src/lib/ai/settings.ts")).href);
 
 const SECRET = "sk-live-desk-key";
 const PET_SECRET = "sk-pet-desk-key";

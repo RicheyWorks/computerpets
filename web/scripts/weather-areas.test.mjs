@@ -3,11 +3,11 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const A = await import(join(root, "src/lib/pets/weather-areas.ts"));
-const Card = await import(join(root, "src/lib/pets/card.ts"));
+const A = await import(pathToFileURL(join(root, "src/lib/pets/weather-areas.ts")).href);
+const Card = await import(pathToFileURL(join(root, "src/lib/pets/card.ts")).href);
 const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/weather-areas.js"));
 
 test("the house does not guess a city", () => {

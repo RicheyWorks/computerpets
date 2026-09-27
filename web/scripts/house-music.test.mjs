@@ -3,10 +3,10 @@ import { existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const M = await import(join(root, "src/lib/pets/house-music.ts"));
+const M = await import(pathToFileURL(join(root, "src/lib/pets/house-music.ts")).href);
 const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/house-music.js"));
 
 test("Rui music is house loop or free radio, no paid key", () => {

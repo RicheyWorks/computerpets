@@ -2,18 +2,18 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const L = await import(join(root, "src/lib/ai/listener.ts"));
-const spend = await import(join(root, "src/lib/pets/talk-spend.ts"));
+const L = await import(pathToFileURL(join(root, "src/lib/ai/listener.ts")).href);
+const spend = await import(pathToFileURL(join(root, "src/lib/pets/talk-spend.ts")).href);
 
 const card = readFileSync(join(root, "src/components/desk/keeper-card.tsx"), "utf8");
 const readSrc = readFileSync(join(root, "src/lib/ai/listener-read.ts"), "utf8");
 const postSrc = readFileSync(join(root, "src/lib/ai/listener-post.ts"), "utf8");
 const catalog = readFileSync(join(root, "src/lib/ai/catalog.ts"), "utf8");
 const deskListener = readFileSync(join(root, "..", "desktop/renderer/listener.js"), "utf8");
-const post = await import(join(root, "src/lib/ai/listener-post.ts"));
+const post = await import(pathToFileURL(join(root, "src/lib/ai/listener-post.ts")).href);
 
 const SECRET = "sk-live-DO-NOT-PAINT";
 const PASTED = "pasted-key-VALUE-should-not-ride";

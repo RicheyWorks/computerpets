@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const K = await import(join(root, "src/lib/pets/keeper.ts"));
+const K = await import(pathToFileURL(join(root, "src/lib/pets/keeper.ts")).href);
 
 const cardSrc = readFileSync(join(root, "src/components/desk/keeper-card.tsx"), "utf8");
 const styleSrc = readFileSync(join(root, "src/styles.css"), "utf8");

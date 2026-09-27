@@ -2,13 +2,13 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const H = await import(join(root, "src/lib/pets/hive.ts"));
-const C = await import(join(root, "src/lib/pets/care.ts"));
-const Clutch = await import(join(root, "src/lib/pets/clutch.ts"));
-const G = await import(join(root, "src/lib/pets/genetics.ts"));
+const H = await import(pathToFileURL(join(root, "src/lib/pets/hive.ts")).href);
+const C = await import(pathToFileURL(join(root, "src/lib/pets/care.ts")).href);
+const Clutch = await import(pathToFileURL(join(root, "src/lib/pets/clutch.ts")).href);
+const G = await import(pathToFileURL(join(root, "src/lib/pets/genetics.ts")).href);
 
 const hiveSrc = readFileSync(join(root, "src/lib/pets/hive.ts"), "utf8");
 const denSrc = readFileSync(join(root, "src/components/desk/hive-den.tsx"), "utf8");
