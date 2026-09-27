@@ -220,35 +220,46 @@ def _fmt_bytes(n: float) -> str:
     return f"{round_int(n / (1024 * 1024))} MiB"
 
 
+# A number the GPU did not give: a dash, not the word "unread". Same as desktop gpu.js and web gpu.ts.
+GPU_NO_VALUE = "\u2014"
+# The GPU line when there is no fresh reading, in plain words (the status stays in the sample).
+GPU_WORDS = {
+    "unread": "GPU · no reading",
+    "unsupported": "GPU · not read on this computer",
+    "stale": "GPU · reading is old",
+    "malformed": "GPU · reading looked wrong",
+}
+
+
 def _fmt_mem(used, total) -> str:
     if used is None and total is None:
-        return "unread"
+        return GPU_NO_VALUE
     if used is None:
-        return f"unread/{_fmt_bytes(total)}"
+        return f"{GPU_NO_VALUE}/{_fmt_bytes(total)}"
     if total is None:
-        return f"{_fmt_bytes(used)}/unread"
+        return f"{_fmt_bytes(used)}/{GPU_NO_VALUE}"
     return f"{_fmt_bytes(used)}/{_fmt_bytes(total)}"
 
 
 def _fmt_measure(n, suffix: str) -> str:
     if isinstance(n, bool) or not isinstance(n, (int, float)) or not math.isfinite(n):
-        return "unread"
+        return GPU_NO_VALUE
     return f"{_fmt_rounded(n)}{suffix}"
 
 
 def gpu_line(sample) -> str:
     clean = parse_sample(sample)
     if clean["status"] == "unsupported":
-        return f"GPU unread · {LATER_DOOR}"
+        return GPU_WORDS["unsupported"]
     if clean["status"] == "stale":
-        return "GPU unread · stale"
+        return GPU_WORDS["stale"]
     if clean["status"] == "malformed":
-        return "GPU unread · malformed"
+        return GPU_WORDS["malformed"]
     if clean["status"] != "read":
-        return "GPU unread"
-    name = clean["name"] or "unread"
+        return GPU_WORDS["unread"]
+    head = f"GPU {clean['name']}" if clean["name"] else "GPU"
     return (
-        f"GPU {name} · {_fmt_measure(clean['tempC'], '°C')} · {_fmt_measure(clean['utilPercent'], '%')} · "
+        f"{head} · {_fmt_measure(clean['tempC'], '°C')} · {_fmt_measure(clean['utilPercent'], '%')} · "
         f"{_fmt_mem(clean['memoryUsedBytes'], clean['memoryTotalBytes'])} · {_fmt_measure(clean['powerWatts'], ' W')}"
     )
 

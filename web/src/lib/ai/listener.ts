@@ -39,10 +39,11 @@ export const HOUSE_LISTENER: ListenerName = {
   line: "Listening · House lines",
 };
 
+/** Until the listener read returns (or when it fails): plain words, not "unread". The id stays "unread". */
 export const UNREAD_LISTENER: ListenerName = {
   id: "unread",
-  name: "unread",
-  line: "Listening · unread",
+  name: "not sure",
+  line: "Listening · not sure",
 };
 
 export type ListenerFacts = {

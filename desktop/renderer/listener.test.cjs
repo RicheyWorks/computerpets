@@ -88,7 +88,7 @@ test("presentListener drops extra fields and refuses a forged line", () => {
   assert.equal(leaked.id, "unread");
   assert.equal(JSON.stringify(leaked).includes(SECRET), false);
   const forged = L.presentListener({ id: "xai", name: "xAI Grok", line: "Listening · " + SECRET });
-  assert.equal(forged.line, "Listening · unread");
+  assert.equal(forged.line, "Listening · not sure");
 });
 
 test("the overlay card paints the listener and does not write the key into the DOM", () => {

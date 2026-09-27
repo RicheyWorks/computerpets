@@ -53,7 +53,8 @@ export const HUD_WIDTH_COLLAPSED = 168;
 
 export const KEEPER_KICKER = "Keeper card";
 export const VOICE_TRUTH = "Rui, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Echo, Peck, Quill, Keel, Ember, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Rue, Wick, Burr, Floss, Bloom, Vesper, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Ochre, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Well, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Wax, Frill, Cap, Lattice, Horn, Ring, Mane, Puff, Flame, Starter, Pact, Gleam, Choir, Drift, Shard, Dusk, Knot, Brine, Beacon, Hush, Arca, Reed, Pebble, Eft, Dapple, Slip, Pinch, Whorl, Hinge, Latch, Prickle, Boot, Reach, Spot, Orb, Pane, Hold, Loom, and Leap talk with house cry first; system speech is the backup.";
-export const QUIT_TRUTH = "Turns the overlay off. Start again with .\\desktop.ps1.";
+/** Web Turn off hides the pet on this page; Sit again brings them back (the overlay's own line names desktop.ps1). */
+export const QUIT_TRUTH = "Turns the pet off on this page. Press Sit again to bring them back.";
 
 export type HeartbeatStatus = "UP" | "DOWN";
 
@@ -279,6 +280,16 @@ export function rovingIndex(key: string, at: number, count: number): number {
   }
 }
 
+/**
+ * Arrow keys on a plate's tabs (a horizontal tablist), the same as the overlay's keeper.js rovingIndex:
+ * Right and Left step (wrapping), Home and End jump; Up and Down are left to the page. Returns the tab
+ * index to focus, or -1 when the key is not a move. The tab is picked with Enter or Space (a click).
+ */
+export function tabKey(key: string, at: number, count: number): number {
+  if (key !== "ArrowRight" && key !== "ArrowLeft" && key !== "Home" && key !== "End") return -1;
+  return rovingIndex(key, at, count);
+}
+
 /** A key inside the sit menu: "close" for Escape, the index to focus for a move, or null for anything else. */
 export function menuKey(key: string, at: number, count: number): number | "close" | null {
   if (key === "Escape" || key === "Esc") return "close";
@@ -348,7 +359,7 @@ export function visibleTimeline(
 export const heartbeatPoll = createHeartbeatPoll();
 
 export function formatUptime(seconds: number | null) {
-  if (seconds == null) return "unread";
+  if (seconds == null) return "";
   if (seconds < 60) return `${seconds}s`;
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) return `${minutes}m`;
@@ -361,21 +372,37 @@ export function formatUptime(seconds: number | null) {
 
 /** The heartbeat line before the house server has ever answered this session. Plain and calm: it is optional. */
 export const NO_HOUSE_SERVER = "House server not running (optional)";
+/** The house server answered this session, then stopped (or said it is down). Same words on the overlay. */
+export const HOUSE_SERVER_STOPPED = "House server stopped answering (optional). Pets still work.";
+/** The house server is answering; "· up 2h" follows when it says how long. Same words on the overlay. */
+export const HOUSE_SERVER_UP = "House server running";
+/** The keeper card's care line: plain words for "care never goes to the house server". */
+export const CARE_TRUTH = "Your pet's care stays on this computer.";
 
 /**
- * The keeper card's heartbeat line. `answered` is whether the server replied this session: until it has,
- * a DOWN beat reads NO_HOUSE_SERVER; DOWN is kept for a server that answered and then stopped.
+ * The keeper card's heartbeat line, in plain words. `answered` is whether the server replied this session:
+ * until it has, a DOWN beat reads NO_HOUSE_SERVER; HOUSE_SERVER_STOPPED is kept for a server that answered
+ * and then stopped. Ports, the profile, and raw UP/DOWN live in heartbeatDetail (the line's tooltip).
  */
 export function heartbeatLine(beat: Heartbeat, answered = true) {
   if (!answered && beat.status !== "UP") return NO_HOUSE_SERVER;
-  const profile = beat.profile ?? "unread";
+  if (beat.status !== "UP") return HOUSE_SERVER_STOPPED;
   const up = formatUptime(beat.uptimeSeconds);
+  return up ? `${HOUSE_SERVER_UP} · up ${up}` : HOUSE_SERVER_UP;
+}
+
+/** The technical detail behind the heartbeat line, for its tooltip only: "Java 8081 · UP · local · 2m". */
+export function heartbeatDetail(beat: Heartbeat) {
   const port = beat.port ?? JAVA_PORT;
-  return `Java ${port} · ${beat.status} · ${profile} · ${up}`;
+  const bits = [`Java ${port}`, beat.status];
+  if (beat.profile) bits.push(beat.profile);
+  const up = formatUptime(beat.uptimeSeconds);
+  if (up) bits.push(up);
+  return bits.join(" · ");
 }
 
 export function careTruth() {
-  return "Care is local. /pet/feed is not a door.";
+  return CARE_TRUTH;
 }
 
 export type KeeperMeters = {

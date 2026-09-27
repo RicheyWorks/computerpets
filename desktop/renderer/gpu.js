@@ -153,26 +153,36 @@
     return `${roundInt(n / (1024 * 1024))} MiB`;
   }
 
+  /** A number the GPU did not give: a dash, not the word "unread". Same on the web card and the blotter. */
+  const GPU_NO_VALUE = "\u2014";
+  /** The GPU line when there is no fresh reading, in plain words (the status stays in data-gpu). */
+  const GPU_WORDS = Object.freeze({
+    unread: "GPU · no reading",
+    unsupported: "GPU · not read on this computer",
+    stale: "GPU · reading is old",
+    malformed: "GPU · reading looked wrong",
+  });
+
   function fmtMem(used, total) {
-    if (used == null && total == null) return "unread";
-    if (used == null) return `unread/${fmtBytes(total)}`;
-    if (total == null) return `${fmtBytes(used)}/unread`;
+    if (used == null && total == null) return GPU_NO_VALUE;
+    if (used == null) return `${GPU_NO_VALUE}/${fmtBytes(total)}`;
+    if (total == null) return `${fmtBytes(used)}/${GPU_NO_VALUE}`;
     return `${fmtBytes(used)}/${fmtBytes(total)}`;
   }
 
   function fmtMeasure(n, suffix) {
-    if (typeof n !== "number" || !Number.isFinite(n)) return "unread";
+    if (typeof n !== "number" || !Number.isFinite(n)) return GPU_NO_VALUE;
     return `${fmtRounded(n)}${suffix}`;
   }
 
   function gpuLine(sample) {
     const clean = parseSample(sample);
-    if (clean.status === "unsupported") return `GPU unread · ${LATER_DOOR}`;
-    if (clean.status === "stale") return "GPU unread · stale";
-    if (clean.status === "malformed") return "GPU unread · malformed";
-    if (clean.status !== "read") return "GPU unread";
-    const name = clean.name || "unread";
-    return `GPU ${name} · ${fmtMeasure(clean.tempC, "°C")} · ${fmtMeasure(clean.utilPercent, "%")} · ${fmtMem(clean.memoryUsedBytes, clean.memoryTotalBytes)} · ${fmtMeasure(clean.powerWatts, " W")}`;
+    if (clean.status === "unsupported") return GPU_WORDS.unsupported;
+    if (clean.status === "stale") return GPU_WORDS.stale;
+    if (clean.status === "malformed") return GPU_WORDS.malformed;
+    if (clean.status !== "read") return GPU_WORDS.unread;
+    const head = clean.name ? `GPU ${clean.name}` : "GPU";
+    return `${head} · ${fmtMeasure(clean.tempC, "°C")} · ${fmtMeasure(clean.utilPercent, "%")} · ${fmtMem(clean.memoryUsedBytes, clean.memoryTotalBytes)} · ${fmtMeasure(clean.powerWatts, " W")}`;
   }
 
   function metricToken(token) {
@@ -726,6 +736,8 @@
   const api = {
     STALE_MS,
     LATER_DOOR,
+    GPU_NO_VALUE,
+    GPU_WORDS,
     UNREAD,
     READ_INK,
     UNREAD_INK,

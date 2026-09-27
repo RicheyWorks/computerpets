@@ -131,7 +131,8 @@
     const panelOpen = Boolean(body && !body.hidden);
     const lineInView = panelOpen && tab === "current";
     const waiting = !live && gate.act === "send" && !lineInView;
-    line.textContent = A.plateLine(areas, live, unread, held, waiting);
+    // A closed plate with no place says to open it, like Quotes; the open panel says what to type.
+    line.textContent = A.plateLine(areas, live, unread, held, waiting, !panelOpen);
     const net = $("weather-forecast-net");
     if (net && A.forecastHonesty) {
       net.textContent = A.forecastHonesty(gate);
@@ -187,7 +188,7 @@
     const liveBits = [];
     if (!area) liveBits.push(para(A.NO_AREA_NEXT || A.NO_AREA));
     else if (held) liveBits.push(para(`${area.name} · ${A.SAVED_HERE_WAIT}`));
-    else if (unread) liveBits.push(para(`${area.name} · unread`));
+    else if (unread) liveBits.push(para(`${area.name} · ${A.CANT_REACH || "can't reach"}`));
     else if (live) liveBits.push(para(`${area.name}. ${live.label}. Open-Meteo.`));
     if (live && live.daily && !held) {
       const dayWord = (d) => (A.dayLabel ? A.dayLabel(d) : d.sky);
@@ -222,7 +223,9 @@
     const N = root.PetNews;
     const line = $("news-line");
     if (!N || !line) return;
-    line.textContent = N.newsLine(items, unread);
+    // Headlines are read only while the plate is open, so a closed empty plate says to open it.
+    const newsBody = $("news-body");
+    line.textContent = N.newsLine(items, unread, !newsBody || newsBody.hidden);
     const liveBox = $("news-live");
     if (!liveBox) return;
     const prefs = N.parseNewsPrefs(card || {});

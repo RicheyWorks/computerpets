@@ -52,7 +52,7 @@ test("Windows, Linux, and Mac sense; another platform stays unsupported", () => 
   assert.equal(mac.tempC, null);
   assert.equal(mac.powerWatts, null);
   assert.equal(mac.memoryTotalBytes, null);
-  assert.equal(G.gpuLine(mac), "GPU Apple M2 · unread · 16% · 542 MiB/unread · unread");
+  assert.equal(G.gpuLine(mac), "GPU Apple M2 · — · 16% · 542 MiB/— · —");
   assert.equal(linux.status, "read");
   assert.equal(linux.source, "nvidia-smi");
   assert.equal(linux.tempC, 62);
@@ -68,7 +68,7 @@ test("Windows, Linux, and Mac sense; another platform stays unsupported", () => 
   assert.equal(amd.tempC, null);
   assert.equal(amd.powerWatts, null);
   assert.equal(amd.memoryUsedBytes, 2048 * 1024 * 1024);
-  assert.equal(G.gpuLine(amd), "GPU amdgpu 1002:73BF · unread · 37% · 2 GiB/8 GiB · unread");
+  assert.equal(G.gpuLine(amd), "GPU amdgpu 1002:73BF · — · 37% · 2 GiB/8 GiB · —");
   const amdHot = G.sampleFromProbe(
     { amdgpuCsv: "amdgpu 1002:73BF, 45.5, 37, 2048, 8192, 33" },
     { platform: "linux", nowMs: NOW },
@@ -105,7 +105,7 @@ test("Windows, Linux, and Mac sense; another platform stays unsupported", () => 
   assert.equal(intel.powerWatts, null);
   assert.equal(intel.memoryUsedBytes, null);
   assert.equal(intel.memoryTotalBytes, null);
-  assert.equal(G.gpuLine(intel), "GPU i915 8086:9A49 · unread · 50% · unread · unread");
+  assert.equal(G.gpuLine(intel), "GPU i915 8086:9A49 · — · 50% · — · —");
   const preferAmd = G.sampleFromProbe(
     {
       amdgpuCsv: "amdgpu 1002:73BF, [N/A], 37, 2048, 8192, [N/A]",
@@ -133,7 +133,7 @@ test("Windows, Linux, and Mac sense; another platform stays unsupported", () => 
   assert.equal(preferNvidia.utilPercent, 14);
   assert.equal(other.status, "unsupported");
   assert.equal(other.tempC, null);
-  assert.equal(G.gpuLine(other), "GPU unread · unsupported");
+  assert.equal(G.gpuLine(other), "GPU · not read on this computer");
   assert.doesNotMatch(G.gpuLine(other), /62|14%|0%/);
   const second = G.sampleFromProbe(
     { nvidiaCsv: "Apple M2, [N/A], 40, 542, [N/A], [N/A]" },
@@ -197,7 +197,7 @@ test("missing fields stay unread and are not painted as zero", () => {
   assert.equal(sample.tempC, null);
   assert.equal(sample.powerWatts, null);
   assert.equal(sample.utilPercent, 7);
-  assert.equal(G.gpuLine(sample), "GPU NVIDIA GeForce RTX 4070 · unread · 7% · 100 MiB/8 GiB · unread");
+  assert.equal(G.gpuLine(sample), "GPU NVIDIA GeForce RTX 4070 · — · 7% · 100 MiB/8 GiB · —");
   assert.doesNotMatch(G.gpuLine(sample), /0°C|0 W|0%/);
 
   const absent = G.sampleFromProbe(
@@ -205,10 +205,10 @@ test("missing fields stay unread and are not painted as zero", () => {
     { platform: "win32", nowMs: NOW },
   );
   assert.equal(absent.status, "unread");
-  assert.equal(G.gpuLine(absent), "GPU unread");
+  assert.equal(G.gpuLine(absent), "GPU · no reading");
   assert.equal(G.ink(absent), "#5c564e");
   assert.equal(absent.utilPercent, null);
-  assert.equal(G.gpuLine(G.UNREAD), "GPU unread");
+  assert.equal(G.gpuLine(G.UNREAD), "GPU · no reading");
   assert.equal(G.parseSample(null).status, "unread");
 });
 
@@ -216,7 +216,7 @@ test("malformed payloads go dark and never become a healthy zero", () => {
   assert.equal(G.parseSample(0).status, "malformed");
   assert.equal(G.parseSample(false).status, "malformed");
   assert.equal(G.parseSample("0").status, "malformed");
-  assert.equal(G.gpuLine(G.parseSample(0)), "GPU unread · malformed");
+  assert.equal(G.gpuLine(G.parseSample(0)), "GPU · reading looked wrong");
   assert.doesNotMatch(G.gpuLine(G.parseSample(0)), /0%/);
   const badNumber = G.parseSample({
     status: "read",
@@ -238,7 +238,7 @@ test("malformed payloads go dark and never become a healthy zero", () => {
   );
   assert.equal(hot.status, "malformed");
   assert.equal(hot.tempC, null);
-  assert.equal(G.gpuLine(hot), "GPU unread · malformed");
+  assert.equal(G.gpuLine(hot), "GPU · reading looked wrong");
 });
 
 test("a stale reading is dark even when the old numbers were real", () => {
@@ -251,7 +251,7 @@ test("a stale reading is dark even when the old numbers were real", () => {
   assert.equal(stale.status, "stale");
   assert.equal(stale.tempC, null);
   assert.equal(stale.utilPercent, null);
-  assert.equal(G.gpuLine(stale), "GPU unread · stale");
+  assert.equal(G.gpuLine(stale), "GPU · reading is old");
   assert.doesNotMatch(G.gpuLine(stale), /62|14%/);
   const future = G.present(fresh, NOW - 6000);
   assert.equal(future.status, "malformed");
@@ -280,7 +280,7 @@ test("performance counters use the busiest 3D engine, not a sum", () => {
   assert.equal(sample.memoryTotalBytes, 8589934592);
   assert.equal(sample.tempC, null);
   assert.equal(sample.powerWatts, null);
-  assert.equal(G.gpuLine(sample), "GPU unread · unread · 60% · 1 GiB/8 GiB · unread");
+  assert.equal(G.gpuLine(sample), "GPU · — · 60% · 1 GiB/8 GiB · —");
   assert.doesNotMatch(G.gpuLine(sample), /120|125|10%/);
 });
 
@@ -422,7 +422,7 @@ test("the probe script never plants a zero, and the HUD stays lockstep", () => {
   assert.match(htmlSrc, /data-gpu="unread"/);
   assert.match(htmlSrc, /id="hud-gpu-spark"/);
   assert.match(htmlSrc, /data-spark="empty"/);
-  assert.match(htmlSrc, /GPU unread/);
+  assert.match(htmlSrc, /GPU · no reading/);
   assert.match(petSrc, /PetGpu/);
   assert.match(petSrc, /hudGpu/);
   assert.match(petSrc, /remember/);
@@ -531,11 +531,11 @@ test("the saved Windows counter reading shows the busiest engine, not one proces
   const sample = G.sampleFromProbe(probe(text), { platform: "win32", nowMs: NOW });
   // The video decode engine carries 4.2%. The old reading took one process's 3D share (0.5%).
   assert.equal(sample.utilPercent, 4.2);
-  assert.equal(G.gpuLine(sample), "GPU unread · unread · 4.2% · 1.5 GiB/unread · unread");
+  assert.equal(G.gpuLine(sample), "GPU · — · 4.2% · 1.5 GiB/— · —");
 });
 
 // Hand-built: two adapters that both report phys_0 (see fixtures/replay/README.md).
-const TWO_ADAPTER_LINE = "GPU unread · unread · 12.5% · 2 GiB/8 GiB · unread";
+const TWO_ADAPTER_LINE = "GPU · — · 12.5% · 2 GiB/8 GiB · —";
 const TWO_NO_LIMIT = [
   "NVIDIA_ABSENT",
   "ENGINE",
@@ -597,7 +597,7 @@ test("with no VRAM limit printed, the adapter holding the most dedicated memory 
   const sample = G.sampleFromProbe(probe(TWO_NO_LIMIT), { platform: "win32", nowMs: NOW });
   // 0xb2 holds 3 GiB (its LUID case differs between blocks and still matches), 0xa1 holds 100 MiB.
   assert.equal(sample.utilPercent, 9);
-  assert.equal(G.gpuLine(sample), "GPU unread · unread · 9% · 3 GiB/unread · unread");
+  assert.equal(G.gpuLine(sample), "GPU · — · 9% · 3 GiB/— · —");
 });
 
 test("NVIDIA blanks are not filled from counters when two counter adapters share an index", () => {

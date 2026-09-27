@@ -108,6 +108,7 @@ CROSS_DOMAIN = {
     "web.pets_keys_idle",
     "web.pet_keys_plates",
     "web.menu_keys_escape",
+    "web.plain_words",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -275,7 +276,7 @@ def test_recorded_feed_replays_drive_read_parse_and_paint():
     assert weather.extras["wmo"] == [
         "0=Clear", "1=Mostly clear", "2=Partly cloudy", "3=Overcast", "45=Fog", "61=Rain", "71=Snow", "95=Thunderstorm",
     ]
-    assert "Seattle · unread" in " ".join(weather.trace)
+    assert "Seattle · can't reach" in " ".join(weather.trace)
     # Every plate paints feed words as text: no innerHTML write, no element from a hostile title.
     for aid in ("desk.weather.replay", "desk.news.replay", "desk.market.replay", "desk.nft.replay"):
         assert invoke(aid).extras["sinks"] == 0, aid
@@ -468,6 +469,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.pets_keys_idle",
         "web.pet_keys_plates",
         "web.menu_keys_escape",
+        "web.plain_words",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -620,6 +622,20 @@ def test_web_companion_lockstep():
         assert mark in mke.trace, (mark, mke.trace)
     assert (mke.extras.get("visit") or {}).get("whileHidden") == 1
 
+
+
+def test_plain_words_row_keeps_developer_words_off_the_card_and_plates():
+    """Kid-plain keeper card and plates on web and overlay, closed headers, and roving web plate tabs."""
+    pw = invoke("web.plain_words")
+    assert pw.ok, (pw.error, pw.detail)
+    for mark in ("heartbeat=optional+running+stopped", "tooltip=port_profile", "care=plain", "gpu=no_unread",
+                 "listener=not_sure", "plates.closed=open_to", "tabs.web=roving+no_pressed", "lockstep=web+overlay"):
+        assert mark in pw.trace, (mark, pw.trace)
+    assert pw.extras["heartbeat"]["stopped"] == "House server stopped answering (optional). Pets still work."
+    assert pw.extras["lines"]["care"] == "Your pet's care stays on this computer."
+    assert pw.extras["lines"]["weatherClosed"] == "open to add a place"
+    assert pw.extras["lines"]["newsClosed"] == "open to see headlines"
+    assert pw.extras["gpu"][0] == "GPU · no reading"
 
 
 def test_first_run_rows_start_clean_and_show_the_hello_once():
