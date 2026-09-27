@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
+import { readSource } from "./test-source.mjs";
 import { isSecretModel, scrubSecretModel, scrubSecretQueryString } from "../src/lib/ai/secret-query.mjs";
 import { assertSafeMindUrl, pluginRequestUrl, sanitizeModel } from "../src/lib/ai/safe-url.ts";
 
@@ -148,9 +148,9 @@ test("a pasted secret in the model field is dropped and a normal model id stays"
 });
 
 test("overlay and disk scrub stay in lockstep with the shared helper", () => {
-  const shared = readFileSync(join(root, "src/lib/ai/secret-query.mjs"), "utf8");
-  const disk = readFileSync(join(repo, "desktop/mind-secret.cjs"), "utf8");
-  const overlay = readFileSync(join(repo, "desktop/renderer/mind.js"), "utf8");
+  const shared = readSource(join(root, "src/lib/ai/secret-query.mjs"));
+  const disk = readSource(join(repo, "desktop/mind-secret.cjs"));
+  const overlay = readSource(join(repo, "desktop/renderer/mind.js"));
   const helper = (src) => {
     let start = src.indexOf("function secretNameSource");
     start = src.lastIndexOf("\n", start) + 1;

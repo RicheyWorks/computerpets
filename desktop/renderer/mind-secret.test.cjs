@@ -6,6 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const vm = require("node:vm");
 const Secret = require("../mind-secret.cjs");
+const { readSource } = require("../test-source.cjs");
 
 const SECRET = "sk-live-overlay-key";
 const PET_SECRET = "sk-pet-overlay-key";
@@ -287,9 +288,9 @@ describe("mind.json base URL", () => {
   });
 
   it("keeps the secret-query names in lockstep with the web module and the overlay", () => {
-    const secretQuerySrc = fs.readFileSync(path.join(__dirname, "..", "..", "web/src/lib/ai/secret-query.mjs"), "utf8");
-    const overlay = fs.readFileSync(path.join(__dirname, "mind.js"), "utf8");
-    const disk = fs.readFileSync(path.join(__dirname, "..", "mind-secret.cjs"), "utf8");
+    const secretQuerySrc = readSource(path.join(__dirname, "..", "..", "web/src/lib/ai/secret-query.mjs"));
+    const overlay = readSource(path.join(__dirname, "mind.js"));
+    const disk = readSource(path.join(__dirname, "..", "mind-secret.cjs"));
     const namesOf = (src) => {
       const block = src.slice(src.indexOf("SECRET_QUERY_NAMES"), src.indexOf("function isSecretQueryName"));
       return [...block.matchAll(/"([a-z_]+)"/g)].map((m) => m[1]);
