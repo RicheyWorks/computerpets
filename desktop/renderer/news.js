@@ -28,6 +28,34 @@
       .slice(0, n == null ? 180 : n);
   }
 
+  /** Room for a whole Google News article link. A cut link opens a broken page. */
+  const LINK_CHARS = 2048;
+
+  /**
+   * The featured story is Wikipedia markup. The plate shows its words, not its tags.
+   * A stray angle bracket is dropped so the words cannot become markup again.
+   */
+  function plainText(text) {
+    return String(text || "")
+      .replace(/<!--[\s\S]*?-->/g, "")
+      .replace(/<[^>]*>/g, "")
+      .replace(/&nbsp;/g, " ")
+      .replace(/&#(\d+);/g, function (_m, d) {
+        const n = Number(d);
+        return n > 0 && n <= 0x10ffff ? String.fromCodePoint(n) : "";
+      })
+      .replace(/&#x([0-9a-f]+);/gi, function (_m, h) {
+        const n = parseInt(h, 16);
+        return n > 0 && n <= 0x10ffff ? String.fromCodePoint(n) : "";
+      })
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;|&apos;/g, "'")
+      .replace(/&lt;|&gt;/g, "")
+      .replace(/&amp;/g, "&")
+      .replace(/[<>]/g, "")
+      .replace(/\s+([,.;:!?])/g, "$1");
+  }
+
   function hash(text) {
     let n = 0;
     for (let i = 0; i < text.length; i++) n = (n * 31 + text.charCodeAt(i)) | 0;
@@ -74,7 +102,7 @@
       };
     }
     const title = clip(raw.title, 90);
-    const url = clip(raw.url, 240);
+    const url = clip(raw.url, LINK_CHARS);
     if (!title) return null;
     const id = typeof raw.id === "string" && raw.id ? raw.id : `fav-${hash(title + "|" + url)}`;
     return {
@@ -253,7 +281,7 @@
     while ((m = re.exec(xml)) && out.length < 8) {
       const block = m[1];
       const title = clip(decodeXml((block.match(/<title>([\s\S]*?)<\/title>/i) || [])[1]), 90);
-      const link = clip(decodeXml((block.match(/<link>([\s\S]*?)<\/link>/i) || [])[1]), 240);
+      const link = clip(decodeXml((block.match(/<link>([\s\S]*?)<\/link>/i) || [])[1]), LINK_CHARS);
       const source = clip(decodeXml((block.match(/<source[^>]*>([\s\S]*?)<\/source>/i) || [])[1]), 40);
       if (!title) continue;
       out.push({ title, url: link, summary: source });
@@ -272,7 +300,7 @@
       const title = clip(first && (first.normalizedtitle || titles || first.title), 90);
       const pages = first && first.content_urls && typeof first.content_urls === "object" ? first.content_urls : null;
       const url = pages && pages.desktop && pages.desktop.page ? String(pages.desktop.page) : "";
-      const summary = clip(row.story || (first && (first.extract || first.description)), 200);
+      const summary = clip(plainText(row.story || (first && (first.extract || first.description))), 200);
       if (!title) continue;
       out.push({
         title,
@@ -477,6 +505,8 @@
     xSearchUrl,
     parseRss,
     parseNews,
+    plainText,
+    LINK_CHARS,
     newsLine,
     sourceLine,
     NEWS_RSS_NET,

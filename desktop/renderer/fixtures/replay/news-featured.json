@@ -1,0 +1,42 @@
+{
+  "news": [
+    {
+      "story": "<!--Sep 17-->The <b id=\"mwCg\"><a rel=\"mw:WikiLink\" href=\"./Tilcayo\" title=\"Tilcayo\" id=\"mwCw\">tilcayo</a></b> <i id=\"mwDA\"></i>, a new species of tiger cat, is formally identified.",
+      "links": [
+        {
+          "title": "Tilcayo",
+          "normalizedtitle": "Tilcayo",
+          "titles": {
+            "normalized": "Tilcayo"
+          },
+          "description": "Species of small cat",
+          "extract": "The tilcayo is a species of small wild cat in the genus Leopardus native to Bolivia.",
+          "content_urls": {
+            "desktop": {
+              "page": "https://en.wikipedia.org/wiki/Tilcayo"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "story": "<!--Sep 14-->At <b id=\"mwFA\"><a rel=\"mw:WikiLink\" href=\"./78th_Primetime_Emmy_Awards\" title=\"78th Primetime Emmy Awards\" id=\"mwFQ\">the Primetime Emmy Awards</a></b>, <i id=\"mwFg\"><a rel=\"mw:WikiLink\" href=\"./Widow's_Bay\" title=\"Widow's Bay\" id=\"mwFw\">Widow's Bay</a></i> wins <a rel=\"mw:WikiLink\" href=\"./Primetime_Emmy_Award_for_Outstanding_Comedy_Series\" title=\"Primetime Emmy Award for Outstanding Comedy Series\" id=\"mwGA\">Outstanding Comedy Series</a>, and <i id=\"mwGQ\"><a rel=\"mw:WikiLink\" href=\"./The_Pitt\" title=\"The Pitt\" id=\"mwGg\">The Pitt</a></i> wins <a rel=\"mw:WikiLink\" href=\"./Primetime_Emmy_Award_for_Outstanding_Drama_Series\" title=\"Primetime Emmy Award for Outstanding Drama Series\" id=\"mwGw\">Outstanding Drama Series</a>.",
+      "links": [
+        {
+          "title": "78th_Primetime_Emmy_Awards",
+          "normalizedtitle": "78th Primetime Emmy Awards",
+          "titles": {
+            "normalized": "78th Primetime Emmy Awards"
+          },
+          "description": "2026 American television awards",
+          "extract": "The 78th Primetime Emmy Awards honored the best in American prime time television programming from June 1, 2025, until May 31, 2026, as chosen by the Academy of Television Arts & Sciences.",
+          "content_urls": {
+            "desktop": {
+              "page": "https://en.wikipedia.org/wiki/78th_Primetime_Emmy_Awards"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

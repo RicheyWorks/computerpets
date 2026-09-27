@@ -1,0 +1,11 @@
+{
+  "id": "cryptopunks",
+  "name": "CryptoPunks",
+  "symbol": "PUNK",
+  "native_currency": "ethereum",
+  "native_currency_symbol": "ETH",
+  "floor_price": {
+    "native_currency": 33.69,
+    "usd": 91246
+  }
+}

@@ -229,3 +229,35 @@ test("news RSS refuses a fetch until the news-host line is present", async () =>
   assert.match(await Overlay.readRss(rss, url, fake), /<rss>/);
   assert.equal(calls, 2);
 });
+
+test("a featured story shows its words, not Wikipedia markup, on both surfaces", () => {
+  const story =
+    '<!--Sep 17-->The <b id="mwCg"><a rel="mw:WikiLink" href="./Tilcayo" title="Tilcayo" id="mwCw">tilcayo</a></b> <i id="mwDA"></i>, a new species of tiger cat, is formally identified.';
+  const json = {
+    news: [{ story, links: [{ normalizedtitle: "Tilcayo", content_urls: { desktop: { page: "https://en.wikipedia.org/wiki/Tilcayo" } } }] }],
+  };
+  for (const side of [N, Overlay]) {
+    const [item] = side.parseNews(json);
+    assert.equal(item.summary, "The tilcayo, a new species of tiger cat, is formally identified.");
+    assert.doesNotMatch(item.summary, /[<>]|mw:|<!--/);
+  }
+  // An escaped bracket in the text cannot turn back into markup.
+  assert.equal(N.plainText("a &lt;script&gt; b &amp; c &#233;"), "a script b & c é");
+  assert.equal(Overlay.plainText("a &lt;script&gt; b &amp; c &#233;"), "a script b & c é");
+  // A long story is cut after the tags are gone, so the cut never lands inside a tag.
+  const long = { news: [{ story: `<b>${"word ".repeat(80)}</b>`, links: [{ normalizedtitle: "Long" }] }] };
+  assert.equal(N.parseNews(long)[0].summary.length, 200);
+  assert.doesNotMatch(Overlay.parseNews(long)[0].summary, /</);
+});
+
+test("a long Google News link is kept whole on both surfaces", () => {
+  const link = `https://news.google.com/rss/articles/${"C".repeat(500)}?oc=5`;
+  const xml = `<rss><channel><item><title>A long link</title><link>${link}</link><source>Wire</source></item></channel></rss>`;
+  assert.equal(N.LINK_CHARS, Overlay.LINK_CHARS);
+  assert.equal(N.parseRss(xml)[0].url, link);
+  assert.equal(Overlay.parseRss(xml)[0].url, link);
+  const fav = N.toggleFavorite(N.blankNewsPrefs(), { kind: "headline", title: "A long link", url: link, summary: "Wire" });
+  assert.equal(N.parseNewsPrefs(N.toCardPatch(fav)).favorites[0].url, link);
+  const favOverlay = Overlay.toggleFavorite(Overlay.blankNewsPrefs(), { kind: "headline", title: "A long link", url: link, summary: "Wire" });
+  assert.equal(Overlay.parseNewsPrefs(Overlay.toCardPatch(favOverlay)).favorites[0].url, link);
+});
