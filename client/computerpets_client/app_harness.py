@@ -2422,6 +2422,18 @@ def _web_rows() -> list[Affordance]:
                 "(TanStack/nitro has no pure offline export check)."
             ),
         ),
+        Affordance(
+            "web.load_problems",
+            "web",
+            "Failed loads say so; admin checks its address",
+            "web/src/lib/plain-error.ts loadProblem + web/src/lib/admin/base.ts",
+            notes=(
+                "Real plain-error.ts loadProblem for kennel / ember / desk / sign-in (plain reason, raw text "
+                "only in the log) and the routes that use it with a retry; admin/base.ts pickApiBase "
+                "(env, then this site, then localhost only for a local page), isLicenseList (a 404 or a "
+                "non-list is not the license service), and formatLocalWhen (local time, ISO in the tooltip)."
+            ),
+        ),
     ]
 
 
@@ -2431,6 +2443,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("guest_choice", domain="web", action_id=aid)
     if local_id == "demo_room":
         return _run_web_smoke("demo_room", domain="web", action_id=aid)
+    if local_id == "load_problems":
+        return _run_web_smoke("load_problems", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

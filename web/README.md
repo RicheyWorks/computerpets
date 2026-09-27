@@ -33,6 +33,8 @@ web/
 
 Ownership, licenses, and NFT verify stay in the Java service at the repo root (`mvn spring-boot:run`). That door is **http://localhost:8081**. This folder is the living client; the desk keeps 8080.
 
+The admin ledger (`/admin`) starts its License service field from `VITE_LICENSE_API_URL` when that is set at build time, otherwise from this site's own address. Only a page running on this computer (localhost) starts from `http://localhost:8081`. The field stays editable. An address that answers but is not the license service (a 404, or anything that is not a license list) is refused in plain words and nothing is saved.
+
 Operators open `/admin` (not in the house nav) and paste `ADMIN_API_KEY`. The page signs each lookup and revoke. It does not send the key.
 
 ## Advertising demos

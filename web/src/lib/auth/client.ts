@@ -1,5 +1,6 @@
 import { genericOAuthClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
+import { HouseError } from "@/lib/plain-error";
 import { GROK_PROVIDERS } from "./providers";
 
 /**
@@ -115,9 +116,10 @@ export async function signIn(
   setBearerToken(null);
 
   if (inLivePreview()) {
-    if (!popup) throw new Error("Pop-up blocked — allow pop-ups for sign-in");
+    // Deliberate, plain lines (HouseError): the sign-in page shows them as they are.
+    if (!popup) throw new HouseError("Your browser blocked the sign-in window. Allow pop-ups for this site, then try again.");
     const token = await waitForPopupToken(popup);
-    if (!token) throw new Error("Sign-in was cancelled or failed");
+    if (!token) throw new HouseError("The sign-in window closed before sign-in finished. Try again.");
     setBearerToken(token);
     // Refresh the client session store with the bearer attached (onRequest).
     // Avoid a full iframe reload when we're already on the destination — that

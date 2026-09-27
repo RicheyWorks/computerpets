@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { Toaster } from "sonner";
 import { DeskStage } from "@/components/desk/desk-stage";
+import { LoadProblem } from "@/components/load-problem";
 import { SignedIn, SignedOut } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { careForPet, getSanctuary } from "@/lib/pets/actions";
@@ -14,6 +15,7 @@ import {
   loadActiveKindKey,
   saveActiveKindKey,
 } from "@/lib/pets/living";
+import { loadProblem } from "@/lib/plain-error";
 
 const searchSchema = z.object({
   pet: z.string().optional(),
@@ -84,10 +86,13 @@ function KeeperDesk({
   const kind = livingByKey(kindKey);
   const [name, setName] = useState(kind.name);
   const [petId, setPetId] = useState<string | null>(null);
+  const [problem, setProblem] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     setName(kind.name);
     setPetId(null);
+    setProblem(null);
     void getSanctuary()
       .then((data) => {
         const mine = sitDeskGuest(data.pets, kind.key);
@@ -96,8 +101,18 @@ function KeeperDesk({
           setPetId(mine.id);
         }
       })
-      .catch(() => undefined);
-  }, [kind]);
+      // Not silently the default guest: say the desk could not load yours, with a retry.
+      .catch((err) => setProblem(loadProblem("desk", err)));
+  }, [kind, attempt]);
+
+  if (problem) {
+    return (
+      <main className="mx-auto max-w-lg space-y-3 px-6 py-20">
+        <h1 className="font-display text-3xl">The desk did not open.</h1>
+        <LoadProblem line={problem} onRetry={() => setAttempt((n) => n + 1)} />
+      </main>
+    );
+  }
 
   return (
     <DeskStage

@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast, Toaster } from "sonner";
 import { CompanionRoom } from "@/components/desk/companion-room";
+import { LoadProblem } from "@/components/load-problem";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { getSanctuary, hatchPet } from "@/lib/pets/actions";
-import { plainMessage } from "@/lib/plain-error";
+import { loadProblem, plainMessage } from "@/lib/plain-error";
 import { RED_PANDA_KIND } from "@/lib/pets/living";
 
 export const Route = createFileRoute("/hatch")({
@@ -26,13 +27,25 @@ function Hatchery() {
   const navigate = useNavigate();
   const [ember, setEmber] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
+  const [emberProblem, setEmberProblem] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     if (!user) return;
     void getSanctuary()
-      .then((d) => setEmber(d.ember))
-      .catch(() => setEmber(0));
-  }, [user]);
+      .then((d) => {
+        setEmberProblem(null);
+        setEmber(d.ember);
+      })
+      // A failed load is not zero ember: say it did not load; the draw stays off until it does.
+      .catch((err) => setEmberProblem(loadProblem("ember", err)));
+  }, [user, attempt]);
+
+  function retryEmber() {
+    setEmberProblem(null);
+    setEmber(null);
+    setAttempt((n) => n + 1);
+  }
 
   if (isPending) return <div className="h-dvh animate-pulse bg-surface" />;
   if (!user) return <RedirectToSignIn />;
@@ -78,6 +91,7 @@ function Hatchery() {
           <article className="paper-card mt-5 max-w-sm rounded-[var(--radius-lg)] border p-4">
             <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Ember on hand</p>
             <p className="mt-2 font-display text-4xl tabular-nums">{ember ?? "—"}</p>
+            {emberProblem ? <LoadProblem className="mt-3" line={emberProblem} onRetry={retryEmber} /> : null}
             <p className="mt-3 text-sm text-muted">
               Twelve ember to start. Commons cost four. Cost is taken after the draw.
             </p>
