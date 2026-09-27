@@ -262,7 +262,12 @@ describe("hwid (CLIENT-CONTRACT §5)", () => {
       assert.match(src, /hwid_needs_fallback_yes/);
       assert.match(src, /Use the computer name, or a random id if there is no name/);
     }
-    assert.equal(settings.includes(WEAK_FALLBACK_MESSAGE), true);
+    // The desktop window folds this detail under "Details" in whole sentences; the
+    // main process still sends WEAK_FALLBACK_MESSAGE as the error when the read fails.
+    assert.match(settings, /If that named read fails, Unlock stops and asks you first\./);
+    assert.match(settings, /hashes the result with SHA-256/);
+    assert.match(settings, /Renaming the computer changes a computer-name hash\./);
+    assert.match(settings, /Deleting hwid\.txt turns a random id into a different mark\./);
     assert.match(dialog, /WEAK_FALLBACK_MESSAGE/);
     assert.match(settings, /status\.hwidMark/);
     assert.equal(settings.includes("status.hwid)"), false);
