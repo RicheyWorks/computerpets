@@ -1,7 +1,8 @@
-"""Unlock and a bound download name the backend host before the license hash leaves.
+"""Unlock and a bound download say the license website's name before the code made from
+this computer's ID is sent there.
 
-An unbound download names that host before the POST leaves. That POST has no hash.
-A signed bundle GET names the CDN host before that request leaves.
+An unbound download says that name before it asks; it sends no such code.
+Downloading your pet's files says the download website's name before it asks for them.
 Each line names the website in plain words, with the address sentence of
 ``plainNetLine`` in ``desktop/renderer/weather-areas.js``.
 A loopback host stays on this computer. The path, the query, the fragment,
@@ -129,7 +130,7 @@ def post_license_hash(shown: object, backend_url: object, request: Callable[[], 
         host = license_host_name(backend_url) or LICENSE_HOST_NAME
         raise LicenseError(
             "license_net_unnamed",
-            f"the license hash was not sent to {host}. name that host before it leaves.",
+            f"Nothing was sent to {host}. This page has to name the license website first.",
         )
     return request()
 
@@ -175,7 +176,7 @@ def post_unbound_download(shown: object, backend_url: object, request: Callable[
         host = license_host_name(backend_url) or LICENSE_HOST_NAME
         raise LicenseError(
             "download_net_unnamed",
-            f"this download was not sent to {host}. name that host before it leaves.",
+            f"Nothing was sent to {host}. This page has to name the license website first.",
         )
     return request()
 
@@ -193,7 +194,7 @@ def get_signed_bundle(
             host = bundle_host_name(download_url) or BUNDLE_HOST_NAME
             raise LicenseError(
                 "cdn_net_unnamed",
-                f"the signed bundle was not fetched from {host}. name that host before it leaves.",
+                f"Your pet's files were not downloaded from {host}. This page has to name the download website first.",
             )
         return {"ok": False, "status": 0, "bytes": 0, "held": True}
     return request()

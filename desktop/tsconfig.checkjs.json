@@ -1,0 +1,18 @@
+{
+  "//": "Type-checks the overlay JavaScript (renderer, main, presence, license) with tsc checkJs. Run by scripts/checkjs-baseline.mjs; the count may not rise above checkjs-baseline.txt.",
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "target": "es2022",
+    "module": "commonjs",
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "types": ["node"],
+    "typeRoots": ["../web/node_modules/@types"],
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": { "electron": ["./types/electron.d.ts"] }
+  },
+  "include": ["types/renderer-globals.d.ts", "renderer/*.js", "*.cjs", "license/*.cjs", "presence/*.cjs"],
+  "exclude": ["**/*.test.cjs", "node_modules"]
+}

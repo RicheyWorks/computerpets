@@ -247,12 +247,9 @@ function isFocusedField(event) {
 }
 
 /**
- * A key outside a focused field is not a presence log.
- * A focused field keeps the character. This does not read it.
- * Escape outside a field may dismiss a menu. The key text is not returned.
- * There is no global hook and no keystroke buffer.
- * @param {{ key?: string, focused?: boolean, field?: boolean, target?: object } | null | undefined} event
- * @returns {{ record: false, field: boolean, toggle: false | "dismiss" }}
+ * The key name on an event, or "" when there is none. Only compared with "Escape"; never stored.
+ * @param {{ key?: unknown } | null | undefined} event
+ * @returns {string}
  */
 function keyText(event) {
   if (!event || typeof event !== "object" || !("key" in event)) return "";
@@ -260,6 +257,14 @@ function keyText(event) {
   return typeof value === "string" ? value : "";
 }
 
+/**
+ * A key outside a focused field is not a presence log.
+ * A focused field keeps the character. This does not read it.
+ * Escape outside a field may dismiss a menu. The key text is not returned.
+ * There is no global hook and no keystroke buffer.
+ * @param {{ key?: string, focused?: boolean, field?: boolean, target?: object } | null | undefined} event
+ * @returns {{ record: false, field: boolean, toggle: false | "dismiss" }}
+ */
 function classifyKey(event) {
   if (isFocusedField(event)) return { record: false, field: true, toggle: false };
   if (keyText(event) === "Escape") return { record: false, field: false, toggle: "dismiss" };

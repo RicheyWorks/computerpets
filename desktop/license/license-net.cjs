@@ -1,9 +1,9 @@
 "use strict";
 
 /**
- * Unlock and a bound download name the backend host before the license hash leaves.
- * An unbound download names that host before the POST leaves. That POST has no hash.
- * A signed bundle GET names the CDN host before that request leaves.
+ * Unlock and a bound download say the license website's name before the code made from this
+ * computer's ID is sent there. An unbound download says that name before it asks; it sends no such code.
+ * Downloading your pet's files says the download website's name before it asks for them.
  * Each line names the website in plain words and says what goes to it, with the weather-areas
  * `plainNetLine` address sentence. A loopback host stays on this computer.
  * The path, the query, the fragment, and any userinfo stay off the line.
@@ -70,9 +70,11 @@ function licenseMaySend(backendUrl, shown) {
  * A miss rejects and does not call `request`, so the caller does not read an OS id
  * or write `hwid.txt` inside that request. A loopback backend still calls `request`.
  * That post stays on this computer.
+ * @template T
  * @param {unknown} shown
  * @param {string} backendUrl
- * @param {() => unknown} request
+ * @param {() => T | Promise<T>} request
+ * @returns {Promise<T>}
  */
 function postLicenseHash(shown, backendUrl, request) {
   if (!licenseMaySend(backendUrl, shown)) {
@@ -80,7 +82,7 @@ function postLicenseHash(shown, backendUrl, request) {
     return Promise.reject(
       new LicenseError(
         "license_net_unnamed",
-        `the license hash was not sent to ${host}. name that host before it leaves.`
+        `Nothing was sent to ${host}. This page has to name the license website first.`
       )
     );
   }
@@ -117,9 +119,11 @@ function downloadMayPost(backendUrl, shown) {
 /**
  * The only unbound download POST. A miss rejects and does not call `request`.
  * That POST has no hash and does not read an OS id. A loopback backend still calls `request`.
+ * @template T
  * @param {unknown} shown
  * @param {string} backendUrl
- * @param {() => unknown} request
+ * @param {() => T | Promise<T>} request
+ * @returns {Promise<T>}
  */
 function postUnboundDownload(shown, backendUrl, request) {
   if (!downloadMayPost(backendUrl, shown)) {
@@ -127,7 +131,7 @@ function postUnboundDownload(shown, backendUrl, request) {
     return Promise.reject(
       new LicenseError(
         "download_net_unnamed",
-        `this download was not sent to ${host}. name that host before it leaves.`
+        `Nothing was sent to ${host}. This page has to name the license website first.`
       )
     );
   }
@@ -189,10 +193,12 @@ function bundleMayFetch(downloadUrl, shown) {
  * The only signed-bundle GET. A miss does not call `request` and does not scrub the signed query.
  * `strict` rejects with the session gate. Otherwise the miss is a held read.
  * A loopback CDN or a file URL still calls `request`. That read stays on this computer.
+ * @template T
  * @param {unknown} shown
  * @param {string} downloadUrl
- * @param {() => unknown} request
+ * @param {() => T | Promise<T>} request
  * @param {boolean} [strict]
+ * @returns {Promise<T | { ok: false, status: 0, bytes: 0, held: true }>}
  */
 function getSignedBundle(shown, downloadUrl, request, strict) {
   if (!bundleMayFetch(downloadUrl, shown)) {
@@ -201,7 +207,7 @@ function getSignedBundle(shown, downloadUrl, request, strict) {
       return Promise.reject(
         new LicenseError(
           "cdn_net_unnamed",
-          `the signed bundle was not fetched from ${host}. name that host before it leaves.`
+          `Your pet's files were not downloaded from ${host}. This page has to name the download website first.`
         )
       );
     }

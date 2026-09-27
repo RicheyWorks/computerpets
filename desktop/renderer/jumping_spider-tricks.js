@@ -129,7 +129,7 @@
   ) {
     if (!wantsThankYou(key)) return null;
     if (!happyCanStart(flags || { cmd: "idle" })) return null;
-    const pick = pickHappy(lastKind | null | undefined);
+    const pick = pickHappy(lastKind);
     return { happy: beginHappy(pick, x, facing), kind: pick };
   }
 

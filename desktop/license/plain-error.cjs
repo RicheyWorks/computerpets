@@ -171,7 +171,7 @@ function statusOf(err) {
 }
 
 /**
- * @param {unknown} err
+ * @param {any} err anything thrown; each field is checked before it is read
  * @param {{ host?: string }} [opts] host to name when the error does not carry one
  * @returns {{ code: string, message: string }}
  */
@@ -214,7 +214,7 @@ function plainBundleError(error, opts = {}) {
   }
   const kind = networkClass(text);
   if (kind) return { code: KIND_CODES[kind], message: sentence(kind, opts.host || "") };
-  return { code: "bundle_failed", message: `The signed bundle was not fetched from ${where(opts.host || "")}.` };
+  return { code: "bundle_failed", message: `Your pet's files were not downloaded from ${where(opts.host || "")}.` };
 }
 
 /** Log line for the raw error: console / log only, never the window. */

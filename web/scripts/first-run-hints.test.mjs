@@ -150,7 +150,7 @@ test("overlay first hint: same words as the web lockstep, card.json firstHintSee
   const pet = desk("renderer/pet.js");
   assert.match(pet, /card\.firstHintSeen = true;\n\s+persistCard\(\);/);
   assert.match(pet, /if \(hadFocus && hudCollapse\) hudCollapse\.focus\(\);/);
-  assert.match(pet, /closest\("\[data-care\], \[data-card\], \[data-first-hint\], input, button, label"\)/);
+  assert.match(pet, /closestTarget\(e, "\[data-care\], \[data-card\], \[data-first-hint\], input, button, label"\)/);
   const css = desk("renderer/styles.css");
   assert.match(css, /#hud\[data-collapsed="1"\] \.first-hint \{\n\s+display: none;/);
   // main's card.json default for a new keeper opens the card, so the hello is seen on the first start.

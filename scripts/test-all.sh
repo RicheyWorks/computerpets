@@ -17,7 +17,7 @@ LOG_DIR="${TMPDIR:-/tmp}/computerpets-test-all"
 mkdir -p "$LOG_DIR"
 rm -f "$LOG_DIR"/*.log
 
-SUITES="desktop web tsc python check harness cdn java deploy-sh tftest"
+SUITES="desktop web tsc checkjs python check harness cdn java deploy-sh tftest"
 SLOW=" web tsc java deploy-sh tftest "
 ONLY=""
 SKIP=""
@@ -86,6 +86,18 @@ run_tsc() {
     [ "$n" -lt "$b" ] && NOTE="fewer than baseline: node scripts/tsc-baseline.mjs --update"
   fi
   finish; [ "$STATUS" = FAIL ] && NOTE="new tsc output"
+}
+run_checkjs() {
+  have node || { STATUS=SKIP; NOTE="node not installed"; return; }
+  [ -d "$ROOT/web/node_modules/typescript" ] || { STATUS=SKIP; NOTE="no web/node_modules: run npm ci in web/ (desktop uses web's TypeScript)"; return; }
+  run_logged checkjs "$ROOT" node scripts/checkjs-baseline.mjs
+  local m; m="$(printf '%s\n' "$OUT" | grep -Eo 'checkjs: [0-9]+ errors in [0-9]+ files, baseline [0-9]+' | tail -1)"
+  if [ -n "$m" ]; then
+    local n b; n="$(echo "$m" | awk '{print $2}')"; b="$(echo "$m" | awk '{print $NF}')"
+    COUNTS="$n errors / baseline $b"
+    [ "$n" -lt "$b" ] && NOTE="fewer than baseline: node scripts/checkjs-baseline.mjs --update"
+  fi
+  finish; [ "$STATUS" = FAIL ] && NOTE="new checkJs errors"
 }
 run_python() {
   [ -x "$VENV_PY" ] || { STATUS=SKIP; NOTE='no client/.venv. Create it: cd client && python3 -m venv .venv && .venv/bin/pip install -e ".[dev]"'; return; }

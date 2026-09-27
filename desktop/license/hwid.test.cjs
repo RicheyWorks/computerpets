@@ -254,10 +254,10 @@ describe("hwid (CLIENT-CONTRACT §5)", () => {
     for (const src of [settings, dialog]) {
       assert.match(src, /MachineGuid/);
       assert.match(src, /machine-id/);
-      assert.match(src, /did not read/);
-      assert.match(src, /raw id is not sent/);
-      assert.match(src, /device fingerprint/);
-      assert.match(src, /If that named read fails/);
+      assert.match(src, /did not look at this computer's ID/);
+      assert.match(src, /The ID itself is never sent/);
+      assert.match(src, /like a fingerprint for this computer/);
+      assert.match(src, /If the app cannot read that ID/);
       assert.match(src, /allowWeakFallback/);
       assert.match(src, /hwid_needs_fallback_yes/);
       assert.match(src, /Use the computer name, or a random id if there is no name/);
@@ -265,17 +265,17 @@ describe("hwid (CLIENT-CONTRACT §5)", () => {
     // Both windows fold this detail under "Details" in whole sentences; the main
     // process and the blotter session still send WEAK_FALLBACK_MESSAGE as the error.
     for (const src of [settings, dialog]) {
-      assert.match(src, /If that named read fails, Unlock stops and asks you first\./);
+      assert.match(src, /If the app cannot read that ID, Unlock stops and asks you first\./);
       assert.equal(src.includes("If that named read fails. "), false);
-      assert.match(src, /hashes the result with SHA-256/);
-      assert.match(src, /Renaming the computer changes a computer-name hash\./);
-      assert.match(src, /Deleting hwid\.txt turns a random id into a different mark\./);
+      assert.match(src, /SHA-256 into a code/);
+      assert.match(src, /Renaming the computer changes a code made from its name\./);
+      assert.match(src, /deleting hwid\.txt gives this computer a different code\./);
       assert.match(src, /Pets work without unlocking\. Unlocking is optional\./);
     }
-    assert.match(settings, /If that named read fails, Unlock stops and asks you first\./);
-    assert.match(settings, /hashes the result with SHA-256/);
-    assert.match(settings, /Renaming the computer changes a computer-name hash\./);
-    assert.match(settings, /Deleting hwid\.txt turns a random id into a different mark\./);
+    assert.match(settings, /If the app cannot read that ID, Unlock stops and asks you first\./);
+    assert.match(settings, /scrambles the result with SHA-256 into a code/);
+    assert.match(settings, /Renaming the computer changes a code made from its name\./);
+    assert.match(settings, /If the code came from a random ID, deleting hwid\.txt gives this computer a different code\./);
     assert.match(dialog, /WEAK_FALLBACK_MESSAGE/);
     assert.match(settings, /status\.hwidMark/);
     assert.equal(settings.includes("status.hwid)"), false);
