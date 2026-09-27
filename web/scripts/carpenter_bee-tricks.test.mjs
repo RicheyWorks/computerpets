@@ -1025,8 +1025,8 @@ test("notes: Auger ultra-polish done; ethogram dens claim true; next Mortar / ma
   assert.equal(OverlayGround.wantsThankYou("mason_bee"), true);
   assert.equal(OverlayGround.tricksFor("mortar"), OverlayMasonBee);
   assert.equal(OverlayGround.wantsThankYou("mortar"), true);
-  assert.deepEqual([...MasonBee.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
-  assert.deepEqual([...OverlayMasonBee.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
+  assert.deepEqual([...MasonBee.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"]);
+  assert.deepEqual([...OverlayMasonBee.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudseptum", "tubeprovision", "osmia"]);
   assert.equal(T.TRICKS.includes("column"), false);
   assert.equal(T.TRICKS.includes("nest"), false);
   assert.equal(T.TRICKS.includes("trail"), false);
