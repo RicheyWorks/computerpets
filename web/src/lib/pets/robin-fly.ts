@@ -45,7 +45,7 @@ export type RobinFly = {
   frame?: number;
 };
 
-export type RobinSprites = { play?: string[] | null; sit?: string[] | null; idle?: string[] | null; walk?: string[] | null };
+export type RobinSprites = { play?: readonly string[] | null; sit?: readonly string[] | null; idle?: readonly string[] | null; walk?: readonly string[] | null };
 
 function clamp(n: number, a: number, b: number) {
   return Math.max(a, Math.min(b, n));

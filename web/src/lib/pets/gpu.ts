@@ -1,5 +1,14 @@
 /** Desktop-local GPU sense. The browser has no sensor, so this page stays unread and the sparkline stays empty. Windows and Linux nvidia-smi share the line. Linux amdgpu sysfs uses that line when nvidia-smi does not, including hwmon temperature labeled edge and power labeled PPT. i915 and xe utilization comes from two DRM fdinfo reads when that percent is honest; otherwise INTEL_EMPTY. Device VRAM used and total on that line stay unread. Mac reads IOAccelerator into that same line. Mac temperature and power stay unread. */
 
+/**
+ * Why this file stays although no web component imports it: the web keeper card hides the GPU row
+ * (a browser cannot read the GPU, so it would always say "no reading"). This module is the typed
+ * reference twin of the overlay `desktop/renderer/gpu.js` and the blotter `client/computerpets_client/gpu.py`.
+ * The parity tests (web/scripts/gpu.test.mjs, desktop/renderer/gpu.test.cjs, client/tests/test_gpu.py),
+ * the plain-words check, and the app harness GPU row load it to prove the three read, age, and draw the
+ * sparkline the same way. Trimming it would drop that cross-check, so it is kept, not shipped to a page.
+ */
+
 export const STALE_MS = 20000;
 export const LATER_DOOR = "unsupported";
 
@@ -568,7 +577,7 @@ export function reducePdh(engines: unknown, adapterMemory: unknown) {
   return { rows, malformed: false, rejected };
 }
 
-function pickBest<T extends NvidiaRow>(rows: T[]) {
+function pickBest<T extends NvidiaRow>(rows: T[]): T | null {
   let best: T | null = null;
   let bestCount = 0;
   rows.forEach((row) => {

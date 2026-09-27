@@ -116,13 +116,13 @@
   function beginHappy(kind,x, facing) {
     const name = HAPPY.indexOf(kind) >= 0 ? (kind) : "reinhardtii";
     return {
-      kind: name,happy,
+      kind: name,happy: true,
       phase: "go",
       t: 0,x,
       lift: 0,
       rot: 0,
       anim: name === "reinhardtii" ? "sit" : name === "moewusii" ? "play" : "sit",
-      facing: facing == null ? 1 : facing,fromX,
+      facing: facing == null ? 1 : facing,fromX: x,
     };
   }
 
@@ -226,7 +226,7 @@
       t: 0,x,
       lift: 0,
       rot: 0,anim,
-      facing: facing == null ? 1 : facing,fromX,
+      facing: facing == null ? 1 : facing,fromX: x,
     };
   }
 

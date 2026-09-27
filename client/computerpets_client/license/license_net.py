@@ -2,7 +2,8 @@
 
 An unbound download names that host before the POST leaves. That POST has no hash.
 A signed bundle GET names the CDN host before that request leaves.
-The sentence matches ``clientNetLine`` in ``desktop/renderer/weather-areas.js``.
+Each line names the website in plain words, with the address sentence of
+``plainNetLine`` in ``desktop/renderer/weather-areas.js``.
 A loopback host stays on this computer. The path, the query, the fragment,
 and any userinfo stay off the line.
 """
@@ -15,17 +16,27 @@ from urllib.parse import urlparse
 from .errors import LicenseError
 
 LICENSE_HOST_NAME = "the license host"
-LOCAL_STAYS = "this unlock stays on this computer. the license hash does not leave."
-DOWNLOAD_LOCAL = "this download stays on this computer. it talks to this computer. the license hash is not on that request."
+LOCAL_STAYS = "Unlocking stays on this computer. The code made from this computer's ID does not leave."
+DOWNLOAD_LOCAL = "This download stays on this computer. It talks to this computer. It does not send the code made from this computer's ID."
 BUNDLE_HOST_NAME = "the bundle host"
-BUNDLE_IDLE = "a signed bundle is not fetched until this line names the host."
-BUNDLE_LOCAL = "this download stays on this computer. the signed bundle does not leave."
+BUNDLE_IDLE = "Your pet's files are not downloaded until this line names the website."
+BUNDLE_LOCAL = "This download stays on this computer. Your pet's files come from this computer."
 _LOOPBACK = frozenset({"127.0.0.1", "localhost", "::1"})
 
 
 def client_net_line(host: str = "") -> str:
+    """The older sentence (weather-areas ``clientNetLine``). License lines now use ``plain_net_line``."""
     where = f" to {host}" if host else ""
     return f"this computer's network address goes with the https request{where}, as any client."
+
+
+PLAIN_NET_HEAD = "This computer's internet address also goes to "
+PLAIN_NET_TAIL = ", like visiting any website."
+
+
+def plain_net_line(names: str = "") -> str:
+    """Same kid-plain sentence as weather-areas ``plainNetLine``. An empty name is no sentence."""
+    return f"{PLAIN_NET_HEAD}{names}{PLAIN_NET_TAIL}" if names else ""
 
 
 def license_host_name(raw: object) -> str:
@@ -51,10 +62,10 @@ def license_honesty(backend_url: object) -> str:
     target = license_target(backend_url)
     if not target or target["local"]:
         return ""
-    net = client_net_line(str(target["label"]))
+    net = plain_net_line(str(target["label"]))
     if not net:
         return ""
-    return f"this unlock sends the license hash. {net} a bound download sends that same hash."
+    return f"This asks {target['label']}, the license website, to check your license. It sends what you typed for your license and a scrambled code made from this computer's ID. The ID itself stays here. {net} A download tied to this computer sends that same code."
 
 
 def _bundle_url(raw: object):
@@ -91,10 +102,10 @@ def bundle_honesty(download_url: object) -> str:
     target = bundle_target(download_url)
     if not target or target["local"]:
         return ""
-    net = client_net_line(str(target["label"]))
+    net = plain_net_line(str(target["label"]))
     if not net:
         return ""
-    return f"this download gets the signed bundle. {net} the license hash is not on that request."
+    return f"This gets your pet's files from {target['label']}, the download website, with the link the license website gave. {net} It does not send the code made from this computer's ID."
 
 
 def bundle_may_fetch(download_url: object, shown: object) -> bool:
@@ -102,7 +113,7 @@ def bundle_may_fetch(download_url: object, shown: object) -> bool:
     if not target or target["local"]:
         return True
     line = bundle_honesty(download_url)
-    net = client_net_line(str(target["label"]))
+    net = plain_net_line(str(target["label"]))
     if not line or not net or not isinstance(shown, str):
         return False
     return line in shown and net in shown
@@ -127,10 +138,10 @@ def download_talk_honesty(backend_url: object) -> str:
     target = license_target(backend_url)
     if not target or target["local"]:
         return ""
-    net = client_net_line(str(target["label"]))
+    net = plain_net_line(str(target["label"]))
     if not net:
         return ""
-    return f"this download talks to {target['label']}. {net} the license hash is not on that request."
+    return f"This asks {target['label']}, the license website, for your pet. It sends your saved license and the pass from unlocking. {net} It does not send the code made from this computer's ID."
 
 
 def download_may_post(backend_url: object, shown: object) -> bool:
@@ -138,7 +149,7 @@ def download_may_post(backend_url: object, shown: object) -> bool:
     if not target or target["local"]:
         return True
     line = download_talk_honesty(backend_url)
-    net = client_net_line(str(target["label"]))
+    net = plain_net_line(str(target["label"]))
     if not line or not net or not isinstance(shown, str):
         return False
     return line in shown and net in shown
@@ -149,7 +160,7 @@ def license_may_send(backend_url: object, shown: object) -> bool:
     if not target or target["local"]:
         return True
     line = license_honesty(backend_url)
-    net = client_net_line(str(target["label"]))
+    net = plain_net_line(str(target["label"]))
     if not line or not net or not isinstance(shown, str):
         return False
     return line in shown and net in shown

@@ -230,7 +230,7 @@ export function stepHappy(happy: PenguinHappy | null | undefined, dt: number, fl
   return next;
 }
 
-export function sleepHoldFrame(_key: string, _frameCount: number) {
+export function sleepHoldFrame(_key: string, _frameCount?: number) {
   return null;
 }
 

@@ -29,3 +29,4 @@ This slice shows the same network-address sentence, with the backend host named,
 - An unbound download names that backend host before the POST leaves. [0039](0039-unbound-download-names-the-backend-host.md).
 - News, quotes, a later forecast, a geocode look-up, a station stream, cloud talk, and cloud voice keep their gates.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.
+- Later wording (2026-09): the unlock line now says "This asks license.example, the license website, to check your license. It sends what you typed for your license and a scrambled code made from this computer's ID. The ID itself stays here." plus the `plainNetLine` address sentence and "A download tied to this computer sends that same code." The license hash is that scrambled code. The gate still needs the line and the address sentence.

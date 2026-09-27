@@ -77,7 +77,7 @@ test("Popular and X URL builders + honest source labels", () => {
 });
 
 test("Favorites persist and empty honestly", () => {
-  assert.equal(N.FAVORITES_EMPTY.includes("No favorites yet"), true);
+  assert.equal(N.FAVORITES_EMPTY, "Nothing saved yet. Tap ☆ next to a headline or topic to keep it here.");
   let prefs = N.addTopic(N.blankNewsPrefs(), { name: "baseball", query: "baseball" });
   prefs = N.toggleFavorite(prefs, { kind: "topic", name: "baseball", query: "baseball", id: prefs.currentId });
   assert.equal(prefs.favorites.length, 1);

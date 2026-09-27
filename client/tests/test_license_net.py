@@ -13,7 +13,7 @@ from computerpets_client.license.license_net import (
     bundle_honesty,
     bundle_host_name,
     bundle_may_fetch,
-    client_net_line,
+    plain_net_line,
     download_may_post,
     download_talk_honesty,
     get_signed_bundle,
@@ -30,9 +30,10 @@ def test_license_line_names_the_host_and_drops_the_path():
     line = license_honesty(dirty)
     assert license_host_name(dirty) == "license.example.test"
     assert line == (
-        "this unlock sends the license hash. "
-        + client_net_line("license.example.test")
-        + " a bound download sends that same hash."
+        "This asks license.example.test, the license website, to check your license. It sends what you typed"
+        " for your license and a scrambled code made from this computer's ID. The ID itself stays here. "
+        + plain_net_line("license.example.test")
+        + " A download tied to this computer sends that same code."
     )
     assert "secret" not in line
     assert "raw-id" not in line
@@ -41,7 +42,7 @@ def test_license_line_names_the_host_and_drops_the_path():
     assert "frag" not in line
     assert license_may_send(dirty, line) is True
     assert license_may_send(dirty, "") is False
-    assert license_may_send(dirty, client_net_line("other.example.test")) is False
+    assert license_may_send(dirty, plain_net_line("other.example.test")) is False
     assert license_honesty("http://127.0.0.1:8081") == ""
     assert license_honesty("http://localhost:8081") == ""
     assert license_honesty("http://[::1]:8081") == ""
@@ -71,14 +72,15 @@ def test_unbound_download_line_names_the_host_and_does_not_say_a_hash_is_sent():
     line = download_talk_honesty(dirty)
     hash_line = license_honesty(dirty)
     assert hash_line == (
-        "this unlock sends the license hash. "
-        + client_net_line("license.example.test")
-        + " a bound download sends that same hash."
+        "This asks license.example.test, the license website, to check your license. It sends what you typed"
+        " for your license and a scrambled code made from this computer's ID. The ID itself stays here. "
+        + plain_net_line("license.example.test")
+        + " A download tied to this computer sends that same code."
     )
     assert line == (
-        "this download talks to license.example.test. "
-        + client_net_line("license.example.test")
-        + " the license hash is not on that request."
+        "This asks license.example.test, the license website, for your pet. It sends your saved license and the pass from unlocking. "
+        + plain_net_line("license.example.test")
+        + " It does not send the code made from this computer's ID."
     )
     assert "sends the license hash" not in line
     assert "secret" not in line
@@ -89,13 +91,13 @@ def test_unbound_download_line_names_the_host_and_does_not_say_a_hash_is_sent():
     assert download_may_post(dirty, line) is True
     assert download_may_post(dirty, "") is False
     assert download_may_post(dirty, hash_line) is False
-    assert download_may_post(dirty, client_net_line("license.example.test")) is False
+    assert download_may_post(dirty, plain_net_line("license.example.test")) is False
     assert download_talk_honesty("http://127.0.0.1:8081") == ""
     assert download_talk_honesty("http://localhost:8081") == ""
     assert download_talk_honesty("http://[::1]:8081") == ""
     assert download_may_post("http://127.0.0.1:8081", "") is True
     assert "talks to this computer" in DOWNLOAD_LOCAL
-    assert "not on that request" in DOWNLOAD_LOCAL
+    assert "does not send the code made from this computer's ID" in DOWNLOAD_LOCAL
     assert "https request" not in DOWNLOAD_LOCAL
     assert "sends the license hash" not in DOWNLOAD_LOCAL
 
@@ -116,9 +118,9 @@ def test_bundle_line_names_the_cdn_host_and_drops_the_path():
     line = bundle_honesty(dirty)
     assert bundle_host_name(dirty) == "cdn.example.test"
     assert line == (
-        "this download gets the signed bundle. "
-        + client_net_line("cdn.example.test")
-        + " the license hash is not on that request."
+        "This gets your pet's files from cdn.example.test, the download website, with the link the license website gave. "
+        + plain_net_line("cdn.example.test")
+        + " It does not send the code made from this computer's ID."
     )
     assert "secret" not in line
     assert "raw-id" not in line
@@ -128,14 +130,14 @@ def test_bundle_line_names_the_cdn_host_and_drops_the_path():
     assert "hwid" not in line
     assert bundle_may_fetch(dirty, line) is True
     assert bundle_may_fetch(dirty, "") is False
-    assert bundle_may_fetch(dirty, client_net_line("other.example.test")) is False
+    assert bundle_may_fetch(dirty, plain_net_line("other.example.test")) is False
     assert bundle_honesty("http://127.0.0.1:9/bundles/pet.zip") == ""
     assert bundle_honesty("http://localhost/pet.zip") == ""
     assert bundle_honesty("http://[::1]/pet.zip") == ""
     assert bundle_honesty("file:///tmp/red_panda.zip") == ""
     assert bundle_may_fetch("http://127.0.0.1:9/pet.zip", "") is True
     assert bundle_may_fetch("file:///tmp/red_panda.zip", "") is True
-    assert "does not leave" in BUNDLE_LOCAL
+    assert "come from this computer" in BUNDLE_LOCAL
     assert "https request" not in BUNDLE_LOCAL
     assert "https request" not in BUNDLE_IDLE
     assert "signed bundle" not in license_honesty(dirty)
@@ -170,7 +172,7 @@ def test_wrappers_are_the_only_request_and_a_miss_does_not_call_it():
     assert "can't reach" not in str(missing.value)
     assert "unreachable" not in str(missing.value)
     with pytest.raises(LicenseError) as other:
-        post_license_hash(client_net_line("other.example.test"), remote, request)
+        post_license_hash(plain_net_line("other.example.test"), remote, request)
     assert other.value.code == "license_net_unnamed"
     assert calls["n"] == 0
     assert post_license_hash(license_honesty(remote), remote, request) == "sent"

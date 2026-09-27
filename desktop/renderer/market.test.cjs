@@ -302,5 +302,7 @@ test("market favorites star coins and nfts", () => {
   assert.deepEqual(patch.favoriteTickerIds, [coin.id]);
   const again = M.parseMarket(patch);
   assert.equal(M.isFavoriteTicker(again, coin.id), true);
-  assert.match(M.FAVORITES_EMPTY, /No favorites yet/);
+  assert.equal(M.FAVORITES_EMPTY, "Nothing saved yet. Tap ☆ next to a coin or NFT to keep it here.");
+  assert.equal(M.PRICE_LOOKING, "getting the price…");
+  assert.equal(M.SEARCHING, "searching…");
 });

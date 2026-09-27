@@ -42,7 +42,7 @@ import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { traitFor } from "@/lib/pets/traits";
 import { SNACK_LINE, callLine, dayPartLabel, dayPart, hideLine, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
 import { weatherIdle, weatherLabel, weatherLine, weatherOf, type Weather } from "@/lib/pets/weather";
-import { currentArea } from "@/lib/pets/weather-areas";
+import { blankAreas, currentArea } from "@/lib/pets/weather-areas";
 import { DeskMarketPlate, DeskNewsPlate, DeskWeatherPlate, WEATHER_ID } from "@/components/desk/desk-plates";
 import { BirdFlyer } from "@/components/desk/bird-fly";
 import { RobinFlyer } from "@/components/desk/robin-fly";
@@ -212,7 +212,7 @@ export function CompanionRoom({
   const [cardOpen, setCardOpen] = useState(() => !loadCard().collapsed);
   const [musicOn, setMusicOn] = useState(() => !!loadCard().music?.playing);
   const poseRef = useRef<{ x: number; facing: 1 | -1 }>({ x: 120, facing: 1 });
-  const skyNow = (): Weather => weatherOf(new Date(), currentArea({ areas: loadCard().weatherAreas || [], currentId: loadCard().currentAreaId ?? null }) ? liveSky?.sky ?? null : null);
+  const skyNow = (): Weather => weatherOf(new Date(), currentArea({ ...blankAreas(), areas: loadCard().weatherAreas || [], currentId: loadCard().currentAreaId ?? null }) ? liveSky?.sky ?? null : null);
   const pad = tablet || (!phone && autoTablet);
   const hand = phone || (!pad && autoPhone);
 

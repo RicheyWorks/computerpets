@@ -444,6 +444,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (Stentor && (key === Stentor.TRICK_KEY || key === "stentor" || key === "bell")) return Stentor;
     if (Coli && (key === Coli.TRICK_KEY || key === "coli" || key === "rod")) return Coli;
     if (Haloarchaea && (key === Haloarchaea.TRICK_KEY || key === "haloarchaea" || key === "rose")) return Haloarchaea;
+    return null;
   }
 
   function wantsThankYou(key) {

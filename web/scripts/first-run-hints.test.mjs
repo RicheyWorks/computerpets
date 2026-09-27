@@ -166,7 +166,7 @@ test("clean-profile plates: a weather next step, and a closed Quotes plate says 
   const house = M.parseMarket(undefined);
   const symbol = M.currentTicker(house).symbol;
   assert.equal(M.plateLine(house, null, false, true), `${symbol} · open to see the price`);
-  assert.equal(M.plateLine(house, null, false, false), `${symbol} · looking up`);
+  assert.equal(M.plateLine(house, null, false, false), `${symbol} · getting the price…`);
   assert.equal(DeskMarket.plateLine(DeskMarket.parseMarket(undefined), null, false, true), `${DeskMarket.currentTicker(DeskMarket.parseMarket(undefined)).symbol} · open to see the price`);
   assert.equal(M.plateLine(house, null, true, true), `${symbol} · can't reach`, "a failed read still says so");
   const plates = src("src/components/desk/desk-plates.tsx");

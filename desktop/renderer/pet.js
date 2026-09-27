@@ -4732,7 +4732,7 @@ if (marketPlate) {
         if (truth) truth.textContent = "type a coin, ticker, or contract";
         return;
       }
-      if (truth) truth.textContent = "looking up…";
+      if (truth) truth.textContent = window.PetMarket.SEARCHING || "searching…";
       const door = window.desk && window.desk.marketSearch;
       const work = door
         ? door(String(typed || ""), lookLine).then((res) => {
@@ -4798,7 +4798,7 @@ if (marketPlate) {
         if (truth) truth.textContent = "type a collection name";
         return;
       }
-      if (truth) truth.textContent = "looking up…";
+      if (truth) truth.textContent = window.PetMarket.SEARCHING || "searching…";
       const door = window.desk && window.desk.marketSearch;
       const work = door
         ? door(String(typed || ""), lookLine).then((res) => {

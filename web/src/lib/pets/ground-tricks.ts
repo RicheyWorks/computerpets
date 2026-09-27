@@ -224,6 +224,13 @@ import * as Haloarchaea from "./haloarchaea-tricks";
 
 export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret | typeof Hedgehog | typeof Chinchilla | typeof Axolotl | typeof Toucan | typeof Iguana | typeof Dragon | typeof Phoenix | typeof BallPython | typeof CornSnake | typeof Kingsnake | typeof GreenTreePython | typeof Hognose | typeof Garter | typeof Boa | typeof MilkSnake | typeof RosyBoa | typeof CarpetPython | typeof Octopus | typeof Cuttlefish | typeof Nautilus | typeof MoonJelly | typeof SeaStar | typeof HermitCrab | typeof HorseshoeCrab | typeof Seahorse | typeof Manta | typeof Moray | typeof Moss | typeof Maidenhair | typeof Ginkgo | typeof Oak | typeof WaterLily | typeof Orchid | typeof Saguaro | typeof VenusFlytrap | typeof Pitcher | typeof Sundew | typeof Honeybee | typeof Monarch | typeof Luna | typeof Firefly | typeof Darner | typeof Stick | typeof CarpenterAnt | typeof Ladybird | typeof Mantis | typeof Cicada | typeof Bumblebee | typeof CarpenterBee | typeof MasonBee | typeof Leafcutter | typeof Stingless | typeof SweatBee | typeof MiningBee | typeof HoneyDrone | typeof HoneyQueen | typeof Honeycomb | typeof Oyster | typeof FlyAgaric | typeof Morel | typeof Chanterelle | typeof TurkeyTail | typeof LionsMane | typeof Puffball | typeof ChickenOfWoods | typeof Yeast | typeof Lichen | typeof Photovore | typeof Choir | typeof Nimbus | typeof Silica | typeof Terminator | typeof Nexus | typeof Halovore | typeof Magneton | typeof Umbral | typeof Cyst | typeof Frog | typeof Toad | typeof Newt | typeof Salamander | typeof Caecilian | typeof Crayfish | typeof PondSnail | typeof Mussel | typeof Leech | typeof Stickleback | typeof Crow | typeof Raven | typeof BarnOwl | typeof RedTail | typeof Chickadee | typeof Robin | typeof Mallard | typeof CanadaGoose | typeof Pileated | typeof Hummingbird | typeof OrbWeaver | typeof JumpingSpider | typeof WolfSpider | typeof Tarantula | typeof Widow | typeof Harvestman | typeof Scorpion | typeof Vinegaroon | typeof Tick | typeof Solifuge | typeof Deer | typeof Bat | typeof Squirrel | typeof Otter | typeof Raccoon | typeof Skunk | typeof Opossum | typeof Beaver | typeof Porcupine | typeof BlackBear | typeof Capybara | typeof Gecko | typeof Anole | typeof Skink | typeof Chameleon | typeof HornedLizard | typeof Alligator | typeof Crocodile | typeof Snapper | typeof BoxTurtle | typeof Tuatara | typeof Bass | typeof BrookTrout | typeof Catfish | typeof Bluegill | typeof Perch | typeof Pike | typeof Walleye | typeof Paddlefish | typeof Lamprey | typeof AmericanEel | typeof HouseCentipede | typeof Millipede | typeof Pillbug | typeof Earthworm | typeof VelvetWorm | typeof Springtail | typeof Tardigrade | typeof Planarian | typeof Nematode | typeof Amphipod | typeof FiddlerCrab | typeof GhostCrab | typeof Limpet | typeof Barnacle | typeof Chiton | typeof Periwinkle | typeof SandDollar | typeof SeaUrchin | typeof KnobbedWhelk | typeof Lugworm | typeof FieldCricket | typeof Katydid | typeof Grasshopper | typeof Swallowtail | typeof Jewelwing | typeof Lacewing | typeof Earwig | typeof AcornWeevil | typeof ClickBeetle | typeof RobberFly | typeof Sloth | typeof Lemur | typeof Gibbon | typeof Kinkajou | typeof Colugo | typeof FlyingSquirrel | typeof Howler | typeof Tarsier | typeof Potto | typeof Koala | typeof BrainCoral | typeof Anemone | typeof Clownfish | typeof Parrotfish | typeof CleanerShrimp | typeof SeaCucumber | typeof Lionfish | typeof GiantClam | typeof EagleRay | typeof Grouper | typeof CyberDragon | typeof VoltDragon | typeof TraceDragon | typeof FluxDragon | typeof SparkDragon | typeof IonDragon | typeof GaussDragon | typeof Paramecium | typeof Amoeba | typeof Euglena | typeof Volvox | typeof Diatom | typeof Kelp | typeof Chlamydomonas | typeof Stentor | typeof Coli | typeof Haloarchaea;
 
+/** One guest's trick, thank-you, and their kind names, across every guest in `GroundTricks`. */
+export type GroundTrick = ReturnType<GroundTricks["beginTrick"]>;
+export type GroundTrickKind = GroundTrick["kind"];
+export type GroundThankYou = NonNullable<ReturnType<GroundTricks["startThankYou"]>>;
+export type GroundHappy = GroundThankYou["happy"];
+export type GroundHappyKind = GroundThankYou["kind"];
+
 export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (!key) return null;
   if (key === Rui.TRICK_KEY || key === "rui") return Rui;
@@ -447,6 +454,7 @@ if (key === Gibbon.TRICK_KEY || key === "gibbon" || key === "swing") return Gibb
   if (key === Stentor.TRICK_KEY || key === "stentor" || key === "bell") return Stentor;
   if (key === Coli.TRICK_KEY || key === "coli" || key === "rod") return Coli;
   if (key === Haloarchaea.TRICK_KEY || key === "haloarchaea" || key === "rose") return Haloarchaea;
+  return null;
 }
 
 export function wantsThankYou(key: string | undefined | null) {
@@ -466,10 +474,22 @@ export function startThankYou(
   return T.startThankYou(key ?? undefined, lastKind as never, x, facing, flags);
 }
 
+/** What every guest's trick module offers: its own pick feeds its own begin. */
+type TrickPicker = {
+  pickTrick(rand?: number, musicOn?: boolean, lastKind?: string | null): string;
+  beginTrick(kind: string, x: number, facing: 1 | -1): GroundTrick;
+};
+
+/** Pick a trick and begin it with the same guest's module (what the desk did inline before). */
+export function beginPickedTrick(T: GroundTricks, musicOn: boolean, lastKind: string | null, x: number, facing: 1 | -1): GroundTrick {
+  const mod: TrickPicker = T;
+  return mod.beginTrick(mod.pickTrick(undefined, musicOn, lastKind), x, facing);
+}
+
 export function sleepHoldFrame(key: string | undefined | null, frameCount?: number) {
   const T = tricksFor(key ?? undefined);
-  if (!T) return null;
-  return T.sleepHoldFrame(key ?? undefined, frameCount);
+  if (!T || !key) return null;
+  return T.sleepHoldFrame(key, frameCount);
 }
 
 

@@ -402,8 +402,10 @@ describe("overlay cloud talk names the host before the fetch", () => {
   it("names api.x.ai and does not fetch until that line is in view", async () => {
     const { window, calls } = loadMind();
     const line = window.PetMind.talkHonesty({ plugin: "xai" });
-    assert.match(line, /this talk sends the keeper line\. /);
-    assert.match(line, /api\.x\.ai/);
+    assert.equal(
+      line,
+      "This sends what you typed, your pet's name, and how hungry, happy, and rested it is to xAI, an AI website, so your pet can answer. It also sends your key for xAI, if you saved one. This computer's internet address also goes to xAI, like visiting any website.",
+    );
     assert.equal(line.includes("/v1"), false);
     assert.equal(line.includes("?"), false);
     assert.equal(window.PetMind.talkMaySend({ plugin: "xai" }, false), false);
@@ -495,7 +497,8 @@ describe("overlay cloud talk names the host before the fetch", () => {
       plugin: "custom",
       baseUrl: "https://mind.example.test/hook?alt=sse#room",
     });
-    assert.match(line, /to mind\.example\.test, as any client\./);
+    assert.match(line, /to mind\.example\.test, the AI website you set up, so your pet can answer\./);
+    assert.match(line, /also goes to mind\.example\.test, like visiting any website\./);
     assert.equal(line.includes("/hook"), false);
     assert.equal(line.includes("alt="), false);
     assert.equal(line.includes("#room"), false);

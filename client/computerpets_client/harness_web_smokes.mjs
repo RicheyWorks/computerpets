@@ -1086,6 +1086,148 @@ async function consentPlain() {
   ]);
 }
 
+async function consentTypesPlain() {
+  const lib = (rel) => import(pathToFileURL(join(WEB, "src", "lib", ...rel.split("/"))).href);
+  const T = await lib("pets/talk-net.ts");
+  const P = await lib("multiplayer/p2p.ts");
+  const WA = await lib("pets/weather-areas.ts");
+  const N = await lib("pets/news.ts");
+  const M = await lib("pets/market.ts");
+  const vm = await import("node:vm");
+  const fs = await import("node:fs");
+  const OWA = require(join(RENDERER, "weather-areas.js"));
+  const ON = require(join(RENDERER, "news.js"));
+  const OM = require(join(RENDERER, "market.js"));
+  const page = require(join(RENDERER, "license-net.js"));
+  const main = require(join(ROOT, "desktop", "license", "license-net.cjs"));
+  const py = readFileSync(join(ROOT, "client", "computerpets_client", "license", "license_net.py"), "utf8");
+  const JARGON = /https request|as any client|network address|license hash|signed bundle|the talk host|the voice host|STUN host|name the host/i;
+  const PLAIN = /This computer's internet address (also )?goes to .+, like visiting any website\./;
+  const bad = [];
+
+  const win = {
+    PetWeatherAreas: OWA,
+    localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} },
+    sessionStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} },
+    URL, URLSearchParams, AbortController, setTimeout, clearTimeout,
+    fetch: async () => ({ ok: true, json: async () => ({}) }),
+  };
+  win.window = win;
+  vm.runInContext(readFileSync(join(RENDERER, "mind.js"), "utf8"), vm.createContext(win));
+  const backend = "https://license.example.test/api/verify";
+  const cdn = "https://cdn.example.test/pet.zip?sig=abc";
+  const lines = {
+    talk: T.talkHonesty({ plugin: "xai" }),
+    voice: T.voiceHonesty("xai"),
+    stun: P.stunNetLine("stun.example.test"),
+    unlock: main.licenseHonesty(backend),
+    download: main.downloadTalkHonesty(backend),
+    bundle: main.bundleHonesty(cdn),
+  };
+  if (!lines.talk.startsWith("This sends what you typed, your pet's name, and how hungry, happy, and rested it is to xAI, an AI website, so your pet can answer.")) bad.push(`talk line ${lines.talk}`);
+  if (!lines.voice.startsWith("This sends the words your pet will say to xAI, an AI website,")) bad.push(`voice line ${lines.voice}`);
+  if (!lines.stun.startsWith("This asks stun.example.test, a website that helps computers find each other")) bad.push(`stun line ${lines.stun}`);
+  if (!lines.unlock.startsWith("This asks license.example.test, the license website, to check your license.")) bad.push(`unlock line ${lines.unlock}`);
+  if (!lines.download.startsWith("This asks license.example.test, the license website, for your pet.")) bad.push(`download line ${lines.download}`);
+  if (!lines.bundle.startsWith("This gets your pet's files from cdn.example.test, the download website")) bad.push(`bundle line ${lines.bundle}`);
+  for (const [k, v] of Object.entries(lines)) {
+    if (JARGON.test(v)) bad.push(`${k} still has developer words`);
+    if (!PLAIN.test(v)) bad.push(`${k} does not say the internet address goes along`);
+  }
+  const overlay = {
+    talk: ["xai", "openai", "anthropic", "google"].every((plugin) => win.PetMind.talkHonesty({ plugin }) === T.talkHonesty({ plugin })),
+    unlock: page.licenseHonesty(backend) === lines.unlock,
+    download: page.downloadTalkHonesty(backend) === lines.download,
+    bundle: page.bundleHonesty(cdn) === lines.bundle,
+    idle: ["LOCAL_STAYS", "DOWNLOAD_LOCAL", "BUNDLE_LOCAL", "BUNDLE_IDLE"].every((k) => page[k] === main[k] && py.includes(`${k} = ${JSON.stringify(main[k])}`)),
+    python: ["unlock", "download", "bundle"].every((k) => py.includes(lines[k].slice(0, lines[k].indexOf(" This computer's")).replace(/license\.example\.test|cdn\.example\.test/g, "{target['label']}"))),
+  };
+  const drift = Object.entries(overlay).filter(([, v]) => !v).map(([k]) => k);
+  if (drift.length) bad.push(`web, overlay, main, and blotter lines drifted: ${drift.join(", ")}`);
+  const gate = {
+    talk: T.talkMaySend({ plugin: "xai" }, true) && !T.talkMaySend({ plugin: "xai" }, false) && win.PetMind.talkMaySend({ plugin: "xai" }, true) && !T.talkMayLeave(WA.plainNetLine("xAI"), { plugin: "xai" }),
+    voice: T.voiceMayLeave(lines.voice, "xai") && !T.voiceMayLeave(lines.talk, "xai"),
+    unlock: main.licenseMaySend(backend, lines.unlock) && !main.licenseMaySend(backend, lines.download),
+    download: main.downloadMayPost(backend, lines.download) && !main.downloadMayPost(backend, lines.unlock),
+    bundle: main.bundleMayFetch(cdn, lines.bundle) && !main.bundleMayFetch(cdn, main.plainNetLine("cdn.example.test")),
+  };
+  const shut = Object.entries(gate).filter(([, v]) => !v).map(([k]) => k);
+  if (shut.length) bad.push(`gates drifted: ${shut.join(", ")}`);
+
+  const lum = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)).reduce((s, c, i) => s + c * [0.2126, 0.7152, 0.0722][i], 0);
+  const lumRgb = (rgb) => lum("#" + rgb.map((c) => Math.round(c).toString(16).padStart(2, "0")).join(""));
+  const ratio = (a, b) => { const [x, y] = [a, b].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+  const webCss = readFileSync(join(WEB, "src", "styles.css"), "utf8");
+  const deskCss = readFileSync(join(RENDERER, "styles.css"), "utf8");
+  const warnDark = (webCss.match(/@theme \{[\s\S]*?--color-warn: (#[0-9a-f]{6});/i) || [])[1];
+  const warnPaper = (webCss.match(/\.paper-card \{[\s\S]*?--color-warn: (#[0-9a-f]{6});/i) || [])[1];
+  const warnDesk = (deskCss.match(/:root \{\s*--color-warn: (#[0-9a-f]{6});/i) || [])[1];
+  const cards = [[12, 11, 10, 0.92], [58, 48, 38, 0.94], [24, 36, 28, 0.94], [48, 28, 22, 0.94], [28, 26, 42, 0.94], [28, 34, 40, 0.94]];
+  let worst = Infinity;
+  if (warnDark) for (const [r, g, b, a] of cards) for (const u of [0, 255]) worst = Math.min(worst, ratio(lum(warnDark), lumRgb([r, g, b].map((c) => a * c + (1 - a) * u))));
+  const paperRatio = warnPaper ? ratio(lum(warnPaper), lum("#e8dfd0")) : 0;
+  const contrast = { dark: warnDark, paper: warnPaper, overlay: warnDesk, worstDark: Math.round(worst * 100) / 100, paperRatio: Math.round(paperRatio * 100) / 100 };
+  if (!warnDark || warnDesk !== warnDark || worst < 4.5 || paperRatio < 4.5 || /#c79a5a/i.test(webCss + deskCss)
+    || !/data-heartbeat="DOWN"\] \{\s*color: var\(--color-warn\);/.test(webCss) || !/data-heartbeat="DOWN"\] \{\s*color: var\(--color-warn\);/.test(deskCss)) {
+    bad.push(`warning colour ${JSON.stringify(contrast)}`);
+  }
+
+  const words = {
+    favorites: [WA.FAVORITES_EMPTY, N.FAVORITES_EMPTY, M.FAVORITES_EMPTY].every((s) => s.startsWith("Nothing saved yet. Tap ☆ next to"))
+      && OWA.FAVORITES_EMPTY === WA.FAVORITES_EMPTY && ON.FAVORITES_EMPTY === N.FAVORITES_EMPTY && OM.FAVORITES_EMPTY === M.FAVORITES_EMPTY,
+    waits: WA.FORECAST_WAITS === "open to see the weather" && OWA.FORECAST_WAITS === WA.FORECAST_WAITS && OWA.FORECAST_LOOKING === WA.FORECAST_LOOKING,
+    price: OM.PRICE_LOOKING === M.PRICE_LOOKING && OM.SEARCHING === M.SEARCHING,
+    gone: ![join(WEB, "src", "components", "desk", "desk-plates.tsx"), join(RENDERER, "pet.js"), join(RENDERER, "desk-house.js"), join(RENDERER, "market.js")]
+      .some((f) => /looking up|forecast waits|No favorites yet/.test(readFileSync(f, "utf8"))),
+  };
+  const stale = Object.entries(words).filter(([, v]) => !v).map(([k]) => k);
+  if (stale.length) bad.push(`old plate words: ${stale.join(", ")}`);
+
+  const Morel = await lib("pets/morel-tricks.ts");
+  const OMorel = require(join(RENDERER, "morel-tricks.js"));
+  const ends = (Mod) => { let tr = Mod.beginTrick("costa", 100, 1); let n = 0; while (tr.phase !== "done" && n < 200) { tr = Mod.stepTrick(tr, 0.05, {}); n++; } return tr.phase === "done"; };
+  const poseOk = [["choir-tricks", "motetPose", "motet"], ["nimbus-tricks", "fogbowPose", "fogbow"], ["gecko-tricks", "denspadPose", "denspad"], ["gecko-tricks", "inkpadPose", "inkpad"]];
+  const thankYous = [];
+  for (const [mod, pose, key] of poseOk) {
+    const W = await lib(`pets/${mod}.ts`);
+    const O = require(join(RENDERER, `${mod}.js`));
+    const mid = W.HAPPY_DUR[key] / 2;
+    thankYous.push(Number.isFinite(W[pose](mid).lift) && Number.isFinite(O[pose](mid).lift));
+  }
+  const STOPS = [{ asleep: true }, { hidden: true }, { cmd: "talk" }, { card: true }];
+  const throwers = [];
+  for (const f of fs.readdirSync(RENDERER).filter((n) => n.endsWith("-tricks.js") && n !== "ground-tricks.js")) {
+    const Mod = require(join(RENDERER, f));
+    try {
+      for (const k of Mod.TRICKS || []) for (const s of STOPS) Mod.stepTrick(Mod.beginTrick(k, 100, 1), 0.05, s);
+      for (const k of Mod.HAPPY || []) for (const s of STOPS) Mod.stepHappy(Mod.beginHappy(k, 100, 1), 0.05, s);
+      if (Mod.startThankYou) Mod.startThankYou(Mod.TRICK_KEY, null, 100, 1, { cmd: "idle" });
+    } catch (err) {
+      throwers.push(`${f}: ${err.message}`);
+    }
+  }
+  const baseline = readFileSync(join(WEB, "tsc-baseline.txt"), "utf8").trim();
+  const bugs = { morelCosta: ends(Morel) && ends(OMorel) && Morel.DUR.costa === 1.68, thankYous: thankYous.every(Boolean), overlayThrows: throwers.length, tscBaseline: baseline };
+  if (!bugs.morelCosta) bad.push("Morel costa still never ends");
+  if (!bugs.thankYous) bad.push("a thank-you pose is still not a number");
+  if (throwers.length) bad.push(`overlay tricks throw: ${throwers.slice(0, 5).join("; ")}`);
+  if (baseline !== "0") bad.push(`web tsc baseline is ${baseline}, not 0`);
+  const gpu = readFileSync(join(WEB, "src", "lib", "pets", "gpu.ts"), "utf8");
+  if (!/Why this file stays although no web component imports it/.test(gpu)) bad.push("web gpu.ts does not say why it stays");
+
+  if (bad.length) return fail(bad.join("; "), { lines, gate, contrast, words, bugs });
+  return ok("cloud talk, voice, license, and STUN lines name the website in plain words on web, overlay, main, and blotter; same gates; warning colour passes AA; plain plate words; type-found bugs stay fixed", { lines, gate, contrast, words, bugs }, [
+    "consent=talk+voice+license+stun_plain",
+    "lockstep=web+overlay+main+blotter",
+    "gate=same_painted_lines",
+    "warn=css_var+wcag_aa",
+    "words=favorites+waits+price_plain",
+    "bugs=morel_costa+thank_you_nan+overlay_shorthand",
+    "tsc=0",
+    "gpu.ts=kept_for_parity",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -1099,6 +1241,7 @@ const COMMANDS = {
   first_run: firstRun,
   plain_words: plainWords,
   consent_plain: consentPlain,
+  consent_types_plain: consentTypesPlain,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

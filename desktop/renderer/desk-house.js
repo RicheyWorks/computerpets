@@ -166,7 +166,7 @@
     if (tab === "favorites") {
       const favs = A.favoriteAreas ? A.favoriteAreas(areas) : [];
       if (!favs.length) {
-        liveBox.replaceChildren(para(A.FAVORITES_EMPTY || "No favorites yet — star a place."));
+        liveBox.replaceChildren(para(A.FAVORITES_EMPTY || "Nothing saved yet. Tap ☆ next to a place to keep it here."));
       } else {
         liveBox.replaceChildren(
           el(
@@ -356,7 +356,7 @@
     const coinLives = (extras && extras.coinLives) || {};
     const nftLive = extras && extras.nftLive;
     const nftUnread = !!(extras && extras.nftUnread);
-    // A closed plate never reads prices, so it says how to see them instead of "looking up" forever.
+    // A closed plate never reads prices, so it says how to see them instead of "getting the price…" forever.
     const marketBody = $("market-body");
     const closed = !marketBody || marketBody.hidden;
     line.textContent = M.plateLine(house, live, unread, closed);
@@ -426,7 +426,7 @@
       const nft = M.currentNft(house);
       if (!nft) nftBox.replaceChildren(para(M.NO_NFT));
       else if (nftUnread && !nftLive) nftBox.replaceChildren(para(`${nft.symbol || nft.name} · ${M.CANT_REACH}`));
-      else if (!nftLive) nftBox.replaceChildren(para(`${nft.symbol || nft.name} · looking up`));
+      else if (!nftLive) nftBox.replaceChildren(para(`${nft.symbol || nft.name} · ${M.PRICE_LOOKING}`));
       else {
         const floor =
           nftLive.floorUsd != null
@@ -530,7 +530,7 @@
     if (favBox && M.favoriteRows) {
       const fav = M.favoriteRows(house);
       if (!fav.tickers.length && !fav.nfts.length) {
-        favBox.replaceChildren(para(M.FAVORITES_EMPTY || "No favorites yet — star a coin or NFT."));
+        favBox.replaceChildren(para(M.FAVORITES_EMPTY || "Nothing saved yet. Tap ☆ next to a coin or NFT to keep it here."));
       } else {
         const coinRows = fav.tickers.map((row) =>
           el("li", null, [

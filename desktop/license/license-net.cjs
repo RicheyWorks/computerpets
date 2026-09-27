@@ -4,18 +4,19 @@
  * Unlock and a bound download name the backend host before the license hash leaves.
  * An unbound download names that host before the POST leaves. That POST has no hash.
  * A signed bundle GET names the CDN host before that request leaves.
- * The sentence is weather-areas `clientNetLine`. A loopback host stays on this computer.
+ * Each line names the website in plain words and says what goes to it, with the weather-areas
+ * `plainNetLine` address sentence. A loopback host stays on this computer.
  * The path, the query, the fragment, and any userinfo stay off the line.
  */
-const { clientNetLine } = require("../renderer/weather-areas.js");
+const { plainNetLine } = require("../renderer/weather-areas.js");
 const { LicenseError } = require("./errors.cjs");
 
 const LICENSE_HOST_NAME = "the license host";
-const LOCAL_STAYS = "this unlock stays on this computer. the license hash does not leave.";
-const DOWNLOAD_LOCAL = "this download stays on this computer. it talks to this computer. the license hash is not on that request.";
+const LOCAL_STAYS = "Unlocking stays on this computer. The code made from this computer's ID does not leave.";
+const DOWNLOAD_LOCAL = "This download stays on this computer. It talks to this computer. It does not send the code made from this computer's ID.";
 const BUNDLE_HOST_NAME = "the bundle host";
-const BUNDLE_IDLE = "a signed bundle is not fetched until this line names the host.";
-const BUNDLE_LOCAL = "this download stays on this computer. the signed bundle does not leave.";
+const BUNDLE_IDLE = "Your pet's files are not downloaded until this line names the website.";
+const BUNDLE_LOCAL = "This download stays on this computer. Your pet's files come from this computer.";
 
 const LOOPBACK = new Set(["127.0.0.1", "localhost", "::1"]);
 
@@ -44,9 +45,9 @@ function licenseTarget(backendUrl) {
 function licenseHonesty(backendUrl) {
   const target = licenseTarget(backendUrl);
   if (!target || target.local) return "";
-  const net = clientNetLine(target.label);
+  const net = plainNetLine(target.label);
   if (!net) return "";
-  return `this unlock sends the license hash. ${net} a bound download sends that same hash.`;
+  return `This asks ${target.label}, the license website, to check your license. It sends what you typed for your license and a scrambled code made from this computer's ID. The ID itself stays here. ${net} A download tied to this computer sends that same code.`;
 }
 
 /**
@@ -59,7 +60,7 @@ function licenseMaySend(backendUrl, shown) {
   const target = licenseTarget(backendUrl);
   if (!target || target.local) return true;
   const line = licenseHonesty(backendUrl);
-  const net = clientNetLine(target.label);
+  const net = plainNetLine(target.label);
   if (!line || !net || typeof shown !== "string") return false;
   return shown.indexOf(line) !== -1 && shown.indexOf(net) !== -1;
 }
@@ -93,9 +94,9 @@ function postLicenseHash(shown, backendUrl, request) {
 function downloadTalkHonesty(backendUrl) {
   const target = licenseTarget(backendUrl);
   if (!target || target.local) return "";
-  const net = clientNetLine(target.label);
+  const net = plainNetLine(target.label);
   if (!net) return "";
-  return `this download talks to ${target.label}. ${net} the license hash is not on that request.`;
+  return `This asks ${target.label}, the license website, for your pet. It sends your saved license and the pass from unlocking. ${net} It does not send the code made from this computer's ID.`;
 }
 
 /**
@@ -108,7 +109,7 @@ function downloadMayPost(backendUrl, shown) {
   const target = licenseTarget(backendUrl);
   if (!target || target.local) return true;
   const line = downloadTalkHonesty(backendUrl);
-  const net = clientNetLine(target.label);
+  const net = plainNetLine(target.label);
   if (!line || !net || typeof shown !== "string") return false;
   return shown.indexOf(line) !== -1 && shown.indexOf(net) !== -1;
 }
@@ -164,9 +165,9 @@ function bundleTarget(downloadUrl) {
 function bundleHonesty(downloadUrl) {
   const target = bundleTarget(downloadUrl);
   if (!target || target.local) return "";
-  const net = clientNetLine(target.label);
+  const net = plainNetLine(target.label);
   if (!net) return "";
-  return `this download gets the signed bundle. ${net} the license hash is not on that request.`;
+  return `This gets your pet's files from ${target.label}, the download website, with the link the license website gave. ${net} It does not send the code made from this computer's ID.`;
 }
 
 /**
@@ -179,7 +180,7 @@ function bundleMayFetch(downloadUrl, shown) {
   const target = bundleTarget(downloadUrl);
   if (!target || target.local) return true;
   const line = bundleHonesty(downloadUrl);
-  const net = clientNetLine(target.label);
+  const net = plainNetLine(target.label);
   if (!line || !net || typeof shown !== "string") return false;
   return shown.indexOf(line) !== -1 && shown.indexOf(net) !== -1;
 }
@@ -229,5 +230,5 @@ module.exports = {
   bundleHonesty,
   bundleMayFetch,
   getSignedBundle,
-  clientNetLine,
+  plainNetLine,
 };

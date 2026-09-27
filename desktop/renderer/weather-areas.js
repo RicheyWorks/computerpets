@@ -18,15 +18,15 @@
   const HERE_KEPT = "keeping the saved place";
   const HERE_SENT = "a place was sent to Open-Meteo";
   // Any HTTPS client shows its network address to the host. This is not a city lookup.
-  // An empty host is the bare sentence. Weather, news, and quotes now paint plainNetLine below;
-  // radio (Rui's music block), cloud talk, license, and STUN still paint this one.
+  // An empty host is the bare sentence. Every consent line now paints plainNetLine below;
+  // only radio (Rui's music block, left as it is) still paints this one.
   function clientNetLine(host) {
     const where = host ? ` to ${host}` : "";
     return `this computer's network address goes with the https request${where}, as any client.`;
   }
   // The weather website the forecast and the place finder ask. Same kid-plain sentence as web `plainNetLine`:
-  // it names the website in plain words; an empty name is no sentence. clientNetLine stays for radio (Rui's
-  // music block), cloud talk, license, and STUN.
+  // it names the website in plain words; an empty name is no sentence. Weather, news, quotes, cloud talk and
+  // voice, and license paint it. clientNetLine stays only for radio (Rui's music block).
   const WEATHER_SITE = "Open-Meteo";
   const PLAIN_NET_HEAD = "This computer's internet address also goes to ";
   const PLAIN_NET_TAIL = ", like visiting any website.";
@@ -45,11 +45,13 @@
   const SAVED_HERE_WAIT = "saved place not sent";
   const TYPED_FORECAST = `This asks Open-Meteo, a weather website, for your forecast. It sends the place you picked. ${FORECAST_NET}`;
   const SAVED_FORECAST_CONTINUE = `This asks Open-Meteo, a weather website, for the forecast at the saved place you already said yes to. It sends that saved place. ${FORECAST_NET} It does not find where you are again.`;
-  const FORECAST_WAITS = "forecast waits";
+  // The header while the forecast line is out of view; FORECAST_LOOKING while a shown, allowed forecast is on its way.
+  const FORECAST_WAITS = "open to see the weather";
+  const FORECAST_LOOKING = "getting the weather…";
   // A tenth of a degree is about 11 km. Rounding is not anonymity.
   const PLACE_STEP = 0.1;
   const CANT_REACH = "can't reach";
-  const FAVORITES_EMPTY = "No favorites yet — star a place.";
+  const FAVORITES_EMPTY = "Nothing saved yet. Tap ☆ next to a place to keep it here.";
   const GEOCODE_HOST = "geocoding-api.open-meteo.com";
   const FORECAST_HOST = "api.open-meteo.com";
   const MAX_AREAS = 8;
@@ -612,7 +614,7 @@
     if (!area) return closed ? NO_AREA_WAITS : NO_AREA;
     if (held) return `${area.name} · ${SAVED_HERE_WAIT}`;
     if (unread) return `${area.name} · ${CANT_REACH}`;
-    if (!live) return waiting ? `${area.name} · ${FORECAST_WAITS}` : `${area.name} · looking up`;
+    if (!live) return waiting ? `${area.name} · ${FORECAST_WAITS}` : `${area.name} · ${FORECAST_LOOKING}`;
     return `${area.name} · ${live.label}`;
   }
 
@@ -650,6 +652,7 @@
     TYPED_FORECAST,
     SAVED_FORECAST_CONTINUE,
     FORECAST_WAITS,
+    FORECAST_LOOKING,
     PLACE_STEP,
     CANT_REACH,
     FAVORITES_EMPTY,
