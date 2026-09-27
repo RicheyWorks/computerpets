@@ -1,0 +1,11 @@
+key: crocodile
+guest: Jaw (American Crocodile)
+source: Chabert T, Colin A, Aubin T, Shacks V, Bourquin SL, Elsey RM, Acosta JG, Mathevon N (2015). "Size does matter: crocodile mothers react more to the voice of smaller offspring." Scientific Reports 5:15547. doi:10.1038/srep15547. Supplementary Audio 1.
+URL: https://doi.org/10.1038/srep15547
+direct: https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fsrep15547/MediaObjects/41598_2015_BFsrep15547_MOESM2_ESM.wav
+author: T. Chabert et al. (authors of the paper above)
+license: Creative Commons Attribution 4.0 (CC BY 4.0)
+Species: Crocodylus niloticus (Nile crocodile), a relative in the same genus, NOT Crocodylus acutus (American crocodile). No open-licensed American crocodile tape exists. Two real juvenile calls: sound 1 is a 35.5 cm juvenile, sound 2 a 64.5 cm juvenile (per the Supplementary Audio legend). No music. No narrator.
+Notes: Sounds 3-5 of Supplementary Audio 1 (from ~2.95s) are SYNTHETIC playback signals (SYNTsmall, SYNTlarge, NOFM) and are NOT used. House cut takes source 0.40-2.70s only (ends before 2.9s), afade in 0.05s/out 0.2s, pads with digital silence to 3.5s mono 16-bit 44.1kHz, peak-normalized to 0.5 (RMS -30.4 dB). The source itself has digital silence between calls.
+sat: 2026-09-27 Buffffff
+House path: build our own from field tape — not Grok Imagine
