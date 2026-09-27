@@ -123,17 +123,17 @@ class PostgresJdbcSslTest {
     @Test
     @DisplayName("a CA path with only sslmode=require is half-configured")
     void requireWithCaPathFails() throws Exception {
-        Path pem = writePem("ca.pem");
+        String pem = certPath(writePem("ca.pem"));
 
         assertThatThrownBy(() -> PostgresJdbcSsl.rejectHalfConfigured(
                 "jdbc:postgresql://db:5432/computerpets?sslmode=require",
                 "",
                 true,
-                pem.toString()))
+                pem))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("root-cert=set")
                 .hasMessageContaining("sslmode=require")
-                .hasMessageNotContaining(pem.toString());
+                .hasMessageNotContaining(pem);
     }
 
     @Test
@@ -151,10 +151,10 @@ class PostgresJdbcSslTest {
     @Test
     @DisplayName("verify-full accepts a readable PEM and refuses a missing file")
     void verifyFullChecksPem() throws Exception {
-        Path pem = writePem("rds-ca.pem");
+        String pem = certPath(writePem("rds-ca.pem"));
         String url = "jdbc:postgresql://db:5432/computerpets?sslmode=verify-full&sslrootcert=" + pem;
 
-        assertThatCode(() -> PostgresJdbcSsl.rejectHalfConfigured(url, "", true, pem.toString()))
+        assertThatCode(() -> PostgresJdbcSsl.rejectHalfConfigured(url, "", true, pem))
                 .doesNotThrowAnyException();
 
         assertThatThrownBy(() -> PostgresJdbcSsl.rejectHalfConfigured(
@@ -170,11 +170,12 @@ class PostgresJdbcSslTest {
     @Test
     @DisplayName("verify-full refuses a file that is not a PEM")
     void verifyFullRejectsNonPem() throws Exception {
-        Path text = tempDir.resolve("notes.txt");
-        Files.writeString(text, "not a certificate");
+        Path notes = tempDir.resolve("notes.txt");
+        Files.writeString(notes, "not a certificate");
+        String text = certPath(notes);
         String url = "jdbc:postgresql://db:5432/computerpets?sslmode=verify-full&sslrootcert=" + text;
 
-        assertThatThrownBy(() -> PostgresJdbcSsl.rejectHalfConfigured(url, "", true, text.toString()))
+        assertThatThrownBy(() -> PostgresJdbcSsl.rejectHalfConfigured(url, "", true, text))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("BEGIN CERTIFICATE")
                 .hasMessageNotContaining("not a certificate");
@@ -249,6 +250,27 @@ class PostgresJdbcSslTest {
         assertThat(Files.readString(Path.of("docker-compose.yml"))).doesNotContain("sslmode=");
         assertThat(Files.readString(Path.of("deploy/terraform/terraform.tfvars.example")))
                 .doesNotContain("postgres_ssl_root_cert =");
+    }
+
+    /**
+     * The CA path as an operator writes it. The gate refuses a backslash (the
+     * bundle is a path in the Linux container), so a Windows temp path uses
+     * forward slashes, which Windows file APIs accept. Unchanged on Linux and Mac.
+     */
+    static String certPath(Path path) {
+        return path.toAbsolutePath().toString().replace('\\', '/');
+    }
+
+    @Test
+    @DisplayName("a backslash CA path is refused")
+    void backslashCaPathIsRefused() {
+        assertThatThrownBy(() -> PostgresJdbcSsl.rejectHalfConfigured(
+                "jdbc:postgresql://db:5432/computerpets?sslmode=verify-full",
+                "",
+                true,
+                "C:\\certs\\rds-ca.pem"))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("local CA bundle path");
     }
 
     private Path writePem(String name) throws Exception {

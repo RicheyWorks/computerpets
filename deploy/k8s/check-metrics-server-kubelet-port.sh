@@ -128,7 +128,8 @@ need_grep "$ADR" 'Catalog stays 221' "catalog stays 221"
 need_grep "$ADR" 'No Rui sprites' "no Rui sprites"
 need_grep "$ADR" 'kubectl top' "ADR names kubectl top"
 need_grep "$ADR" '0113' "ADR points at the SAN gate"
-need_grep "$ADR" 'mac-linux-window-play' "ADR names the next product gap"
+need_grep "$ADR" 'mac-window-play' "ADR names the next product gap"
+need_grep "$ADR" '0115-linux-x11-window-play' "ADR points at Linux window play"
 need_grep "$ADR113" '0114' "SAN ADR points at the port gate"
 
 python3 - "$SCRIPT" <<'PY'
