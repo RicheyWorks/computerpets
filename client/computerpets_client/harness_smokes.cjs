@@ -6,6 +6,7 @@ const fs = require("node:fs");
 
 const RENDERER = path.join(__dirname, "..", "..", "desktop", "renderer");
 const Replay = require("./harness_replay.cjs");
+const MainHarness = require("./harness_main.cjs");
 
 function load(name) {
   return require(path.join(RENDERER, name));
@@ -1098,6 +1099,14 @@ const COMMANDS = {
   nft_replay: Replay.nft_replay,
   gpu_replay: Replay.gpu_replay,
   links_open: Replay.links_open,
+  tray_on_the_desk: MainHarness.tray_on_the_desk,
+  quit_desk: MainHarness.quit_desk,
+  market_search: MainHarness.market_search,
+  mind_get_set: MainHarness.mind_get_set,
+  saved_lines: MainHarness.saved_lines,
+  alarm_clock: MainHarness.alarm_clock,
+  timer_clock: MainHarness.timer_clock,
+  music_radio: MainHarness.music_radio,
 };
 
 function main(argv) {
@@ -1113,7 +1122,7 @@ function main(argv) {
   }
   try {
     const result = fn();
-    // Replays read through a fake fetch, so they return a promise.
+    // Replays and the main.cjs rows read through a fake fetch, so they return a promise.
     if (result && typeof result.then === "function") {
       result.then(
         (res) => {

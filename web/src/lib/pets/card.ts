@@ -303,12 +303,31 @@ export function dayKey(now = Date.now()) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-export function alarmDue(alarm: unknown, now = Date.now()) {
+/** The latest alarm moment at or before now: today's, or yesterday's while today's is still ahead. */
+export function alarmMoment(alarm: unknown, now = Date.now()) {
   const a = parseAlarm(alarm);
-  if (!a.on) return false;
   const d = new Date(now);
-  if (dayKey(now) === a.lastRingDay) return false;
-  return d.getHours() === a.hour && d.getMinutes() === a.minute;
+  const today = new Date(d.getFullYear(), d.getMonth(), d.getDate(), a.hour, a.minute, 0, 0).getTime();
+  if (today <= now) return today;
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate() - 1, a.hour, a.minute, 0, 0).getTime();
+}
+
+/**
+ * The alarm moment to ring now, or 0. It rings in its own minute, and a moment that passed
+ * since the last look (a background tab, a slow tick, a sleeping computer) rings once, late.
+ * Once a day: the day of the moment is kept as lastRingDay.
+ */
+export function alarmCatch(alarm: unknown, now = Date.now(), since = now) {
+  const a = parseAlarm(alarm);
+  if (!a.on) return 0;
+  const moment = alarmMoment(a, now);
+  if (dayKey(moment) === a.lastRingDay) return 0;
+  if (now - moment < 60_000 || moment > since) return moment;
+  return 0;
+}
+
+export function alarmDue(alarm: unknown, now = Date.now(), since = now) {
+  return alarmCatch(alarm, now, since) > 0;
 }
 
 export function markAlarmRang(alarm: unknown, now = Date.now()): CardAlarm {
@@ -347,6 +366,34 @@ export function timerTick(timer: unknown, now = Date.now()) {
     return { timer: t, rang: true };
   }
   return { timer: t, rang: false };
+}
+
+export type ClockTick = {
+  alarm: CardAlarm;
+  timer: CardTimer;
+  rang: "alarm" | "timer" | "";
+  lineId: string;
+  lateMs: number;
+  changed: boolean;
+};
+
+/**
+ * One look at the keeper clock. since is the last look, so an alarm minute that passed between
+ * looks still rings once, and a timer rings when it ends. lateMs is how long after its moment it rang.
+ */
+export function clockTick(guest: unknown, now = Date.now(), since = now): ClockTick {
+  const g = guest && typeof guest === "object" ? (guest as { alarm?: unknown; timer?: unknown }) : {};
+  const alarm = parseAlarm(g.alarm);
+  const timer = parseTimer(g.timer);
+  const moment = alarmCatch(alarm, now, since);
+  if (moment) {
+    return { alarm: markAlarmRang(alarm, moment), timer, rang: "alarm", lineId: alarm.lineId, lateMs: Math.max(0, now - moment), changed: true };
+  }
+  if (!timer.running) return { alarm, timer, rang: "", lineId: "", lateMs: 0, changed: false };
+  const endsAt = timer.endsAt;
+  const tick = timerTick(timer, now);
+  if (!tick.rang) return { alarm, timer: tick.timer, rang: "", lineId: "", lateMs: 0, changed: true };
+  return { alarm, timer: tick.timer, rang: "timer", lineId: timer.lineId, lateMs: Math.max(0, now - endsAt), changed: true };
 }
 
 export function formatRemain(ms: number) {

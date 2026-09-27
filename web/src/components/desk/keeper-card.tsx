@@ -35,12 +35,11 @@ import {
   MUTE_BUSES,
   VOICE_STYLES,
   addLine,
-  alarmDue,
+  clockTick,
   formatRemain,
   guestOf,
   lineById,
   loadCard,
-  markAlarmRang,
   pickSystemVoice,
   removeLine,
   saveCard,
@@ -48,7 +47,6 @@ import {
   speakOpts,
   startTimer,
   stopTimer,
-  timerTick,
   type CardPrefs,
   type SavedKind,
 } from "@/lib/pets/card";
@@ -267,27 +265,19 @@ export function KeeperCard({
   }, [askedPlugin, askedBase]);
 
   useEffect(() => {
+    // since is the last look: a background tab ticks slowly, so a passed alarm minute still rings once.
+    let since = Date.now();
     const id = window.setInterval(() => {
+      const now = Date.now();
       const live = loadCard();
-      const g = guestOf(live, guestKey);
-      if (alarmDue(g.alarm)) {
-        g.alarm = markAlarmRang(g.alarm);
-        const next = setGuest(live, guestKey, g);
-        write(next);
-        const line = lineById(next, guestKey, g.alarm.lineId);
-        playHouse(line?.kind ?? "say", line?.text ?? "The clock asked.");
-        return;
-      }
-      if (g.timer.running) {
-        const tick = timerTick(g.timer);
-        g.timer = tick.timer;
-        const next = setGuest(live, guestKey, g);
-        write(next);
-        if (tick.rang) {
-          const line = lineById(next, guestKey, g.timer.lineId);
-          playHouse(line?.kind ?? "say", line?.text ?? "The timer is done.");
-        }
-      }
+      const tick = clockTick(guestOf(live, guestKey), now, since);
+      since = now;
+      if (!tick.changed) return;
+      const next = setGuest(live, guestKey, { alarm: tick.alarm, timer: tick.timer });
+      write(next);
+      if (!tick.rang) return;
+      const line = lineById(next, guestKey, tick.lineId);
+      playHouse(line?.kind ?? "say", line?.text ?? (tick.rang === "alarm" ? "The clock asked." : "The timer is done."));
     }, 1000);
     return () => window.clearInterval(id);
     // playHouse is stable enough for the desk tick
