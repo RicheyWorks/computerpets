@@ -1,6 +1,9 @@
 """Honest GPU sense: valid, missing, malformed, stale, unsupported."""
 
+import sys
 from pathlib import Path
+
+import pytest
 
 from computerpets_client.gpu import (
     LATER_DOOR,
@@ -173,6 +176,16 @@ def test_linux_reads_nvidia_and_mac_reads_ioaccelerator(monkeypatch, tmp_path):
     assert "0%" not in gpu_line(initial)
     assert initial_sample(platform="darwin", now_ms=NOW)["status"] == "unread"
 
+
+# The probe scripts are POSIX sh. These fixtures put a fake `ioreg` shell script on PATH
+# and build sysfs trees with symlinks, then run desktop/gpu-probe-mac.sh and
+# desktop/gpu-probe.sh through /bin/sh. Windows has no /bin/sh and reads the GPU via
+# desktop/gpu-probe.ps1 instead, so this half only runs where the scripts run (CI is Linux).
+@pytest.mark.skipif(
+    sys.platform == "win32" or not Path("/bin/sh").exists(),
+    reason="runs the POSIX sh GPU probe scripts via /bin/sh with a shell-script ioreg shim and sysfs symlinks; not available on Windows",
+)
+def test_posix_probe_scripts_read_ioreg_and_sysfs_fixtures(monkeypatch, tmp_path):
     fixture = "\n".join(
         [
             "+-o AGXAccelerator  <class AGXAccelerator, id 0x1, registered>",
@@ -184,7 +197,7 @@ def test_linux_reads_nvidia_and_mac_reads_ioaccelerator(monkeypatch, tmp_path):
     fake = tmp_path / "ioreg"
     fake.write_text("#!/bin/sh\ncat <<'FIXTURE'\n" + fixture + "FIXTURE\n")
     fake.chmod(0o755)
-    monkeypatch.setenv("PATH", f"{tmp_path}:{__import__('os').environ['PATH']}")
+    monkeypatch.setenv("PATH", f"{tmp_path}{__import__('os').pathsep}{__import__('os').environ['PATH']}")
     probed = read_local(platform="darwin", now_ms=NOW)
     assert probed["status"] == "read"
     assert probed["source"] == "ioaccelerator"
