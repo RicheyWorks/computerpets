@@ -498,8 +498,9 @@ class ProductionProfileGuardTest {
                 """);
         MockEnvironment env = new MockEnvironment();
         env.setProperty("POSTGRES_SSL_REQUIRED", "true");
-        env.setProperty("POSTGRES_SSL_ROOT_CERT", pem.toString());
-        String url = "jdbc:postgresql://db:5432/computerpets?sslmode=verify-full&sslrootcert=" + pem;
+        String cert = PostgresJdbcSslTest.certPath(pem);
+        env.setProperty("POSTGRES_SSL_ROOT_CERT", cert);
+        String url = "jdbc:postgresql://db:5432/computerpets?sslmode=verify-full&sslrootcert=" + cert;
         ProductionProfileGuard g = guard(
                 false,
                 "redis",
