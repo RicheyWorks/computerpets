@@ -26,3 +26,4 @@ This slice shows the same network-address sentence, with the CDN host named, bef
 - An unbound download POST names the backend host before it leaves. [0039](0039-unbound-download-names-the-backend-host.md).
 - News, quotes, a later forecast, a geocode look-up, a station stream, cloud talk, and cloud voice keep their gates.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.
+- Later wording (2026-09): the bundle line now says "This gets your pet's files from cdn.example, the download website, with the link the license website gave." plus the `plainNetLine` address sentence and "It does not send the code made from this computer's ID." The gate is unchanged.

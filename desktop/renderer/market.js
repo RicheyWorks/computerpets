@@ -75,7 +75,10 @@
     return Math.abs(n).toString(36);
   }
 
-  const FAVORITES_EMPTY = "No favorites yet — star a coin or NFT.";
+  const FAVORITES_EMPTY = "Nothing saved yet. Tap ☆ next to a coin or NFT to keep it here.";
+  // PRICE_LOOKING: a price the open plate asked for is on its way. SEARCHING: a coin or collection search is.
+  const PRICE_LOOKING = "getting the price…";
+  const SEARCHING = "searching…";
   const MAX_FAVORITES = 24;
 
   function blankMarket() {
@@ -770,7 +773,7 @@
     }
     if (unread && !live) return ticker.symbol + " · " + CANT_REACH;
     if (!live && waiting) return ticker.symbol + " · " + QUOTE_WAITS;
-    if (!live) return ticker.symbol + " · looking up";
+    if (!live) return ticker.symbol + " · " + PRICE_LOOKING;
     return ticker.symbol + " · " + formatPrice(live.price);
   }
 
@@ -778,7 +781,7 @@
     const nft = currentNft(market);
     if (!nft) return NO_NFT;
     if (unread && !live) return (nft.symbol || nft.name) + " · " + CANT_REACH;
-    if (!live) return (nft.symbol || nft.name) + " · looking up";
+    if (!live) return (nft.symbol || nft.name) + " · " + PRICE_LOOKING;
     if (live.floorUsd != null) return (nft.symbol || nft.name) + " · $" + formatPrice(live.floorUsd);
     if (live.floorNative != null) return (nft.symbol || nft.name) + " · " + formatPrice(live.floorNative) + " " + (live.nativeSymbol || "");
     return nft.symbol || nft.name;
@@ -919,6 +922,8 @@
     readNft,
     readQuoteSearch,
     FAVORITES_EMPTY,
+    PRICE_LOOKING,
+    SEARCHING,
     MAX_FAVORITES,
     toggleFavoriteTicker,
     toggleFavoriteNft,

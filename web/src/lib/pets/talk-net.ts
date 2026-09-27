@@ -1,11 +1,48 @@
-/** Cloud talk and cloud voice name the host before the request leaves. `readTalk` and `readVoice` refuse a remote request when that painted host line is missing. A remote leave gives up after twelve seconds. A loopback mind and on-device speech stay local. Same sentence as News and Radio (`clientNetLine`). Overlay connect-src names these hosts. ADR 0048. ADR 0052. */
+/** Cloud talk and cloud voice name the host before the request leaves. `readTalk` and `readVoice` refuse a remote request when that painted host line is missing. A remote leave gives up after twelve seconds. A loopback mind and on-device speech stay local. Each line names the AI website in plain words and says what goes to it, with the same address sentence as the weather, news, and quote plates (`plainNetLine`). Overlay connect-src names these hosts. ADR 0048. ADR 0052. */
 import { mindPreset } from "../ai/catalog.ts";
 import { assertSafeMindUrl } from "../ai/safe-url.ts";
 import type { MindBinding, VoiceKind } from "../ai/types.ts";
-import { clientNetLine } from "./weather-areas.ts";
+import { plainNetLine } from "./weather-areas.ts";
 
 export const TALK_HOST_NAME = "the talk host";
 export const VOICE_HOST_NAME = "the voice host";
+
+/** Plain names for the AI websites the mind page offers. Any other host is named as it was typed. */
+export const AI_SITES: ReadonlyMap<string, string> = new Map([
+  ["api.x.ai", "xAI"],
+  ["api.openai.com", "OpenAI"],
+  ["api.anthropic.com", "Anthropic"],
+  ["generativelanguage.googleapis.com", "Google Gemini"],
+  ["api.groq.com", "Groq"],
+  ["openrouter.ai", "OpenRouter"],
+  ["api.together.xyz", "Together AI"],
+  ["api.fireworks.ai", "Fireworks AI"],
+  ["api.deepseek.com", "DeepSeek"],
+  ["api.mistral.ai", "Mistral"],
+]);
+export const AI_SITE_KIND = "an AI website";
+export const AI_SITE_OWN = "the AI website you set up";
+
+/** `name` goes in the address sentence; `who` is the name with what kind of website it is. */
+export function aiSite(host: string | null | undefined): { name: string; who: string } {
+  const h = String(host || "").toLowerCase();
+  const known = AI_SITES.get(h);
+  if (known) return { name: known, who: `${known}, ${AI_SITE_KIND}` };
+  if (h && h !== TALK_HOST_NAME && h !== VOICE_HOST_NAME) return { name: h, who: `${h}, ${AI_SITE_OWN}` };
+  return { name: AI_SITE_OWN, who: AI_SITE_OWN };
+}
+
+/** What cloud talk sends: the words typed, the pet's name, and its hunger, mood, and energy (plus the saved key). */
+export function talkLine(host: string | null | undefined): string {
+  const site = aiSite(host);
+  return `This sends what you typed, your pet's name, and how hungry, happy, and rested it is to ${site.who}, so your pet can answer. It also sends your key for ${site.name}, if you saved one. ${plainNetLine(site.name)}`;
+}
+
+/** What cloud voice sends: the words the pet will say (plus the saved key). */
+export function voiceLine(host: string | null | undefined): string {
+  const site = aiSite(host);
+  return `This sends the words your pet will say to ${site.who}, so it can turn them into a voice. It also sends your key for ${site.name}, if you saved one. ${plainNetLine(site.name)}`;
+}
 
 /** Hosts the cloud voice calls. Path stays off the line. */
 export const VOICE_URLS: Record<"xai" | "openai", string> = {
@@ -57,7 +94,7 @@ export function talkTarget(
 export function talkHonesty(binding: Pick<MindBinding, "plugin" | "baseUrl"> | null | undefined): string {
   const target = talkTarget(binding);
   if (!target || target.local) return "";
-  return `this talk sends the keeper line. ${clientNetLine(target.label)}`;
+  return talkLine(target.label);
 }
 
 /**
@@ -72,14 +109,14 @@ export function talkMaySend(
   if (!target || target.local) return true;
   const line = talkHonesty(binding);
   if (!line || lineInView !== true) return false;
-  return line.includes(clientNetLine(target.label));
+  return line.includes(plainNetLine(aiSite(target.label).name));
 }
 
 /** Empty for browser speech, silence, and anything that is not a cloud voice. */
 export function voiceHonesty(voice: VoiceKind | string | null | undefined): string {
   if (voice !== "xai" && voice !== "openai") return "";
   const host = talkHostName(VOICE_URLS[voice]) || VOICE_HOST_NAME;
-  return `this voice sends the spoken line. ${clientNetLine(host)}`;
+  return voiceLine(host);
 }
 
 export function voiceMaySend(voice: VoiceKind | string | null | undefined, lineInView: boolean): boolean {
@@ -88,7 +125,7 @@ export function voiceMaySend(voice: VoiceKind | string | null | undefined, lineI
   if (lineInView !== true) return false;
   const host =
     voice === "xai" || voice === "openai" ? talkHostName(VOICE_URLS[voice]) || VOICE_HOST_NAME : VOICE_HOST_NAME;
-  return line.includes(clientNetLine(host));
+  return line.includes(plainNetLine(aiSite(host).name));
 }
 
 /**

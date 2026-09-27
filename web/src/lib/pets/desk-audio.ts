@@ -71,14 +71,8 @@ export function playDeskSound(kind: Kind, guestKey = "red_panda") {
 
     const jitter = 0.92 + Math.random() * 0.16;
     let end = now + 0.1;
-    if (kind === "step") {
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(140 * jitter, now);
-      filter.frequency.setValueAtTime(420, now);
-      gain.gain.setValueAtTime(0.03 * volume, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
-      end = now + 0.08;
-    } else if (kind === "hop") {
+    // A step never gets here: it returned above to play the house step clip (playStep).
+    if (kind === "hop") {
       osc.type = "sine";
       osc.frequency.setValueAtTime(320 * jitter, now);
       osc.frequency.exponentialRampToValueAtTime(180, now + 0.16);

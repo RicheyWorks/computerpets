@@ -101,11 +101,12 @@ const MAX_RECOVERY_ATTEMPTS = 3;
 const SIGNAL_RETRY_DELAYS_MS = [250, 750];
 
 /**
- * Names the STUN or TURN host before ICE asks it. Not an https fetch.
+ * Names the STUN or TURN host in plain words before ICE asks it. Not an https fetch.
+ * A STUN host answers with the address it sees, so the line says the address goes there.
  * The port, the query, and any userinfo stay off the line.
  */
 export function stunNetLine(host: string): string {
-  return `this computer's network address goes with the stun request to ${host}, as any client.`;
+  return `This asks ${host}, a website that helps computers find each other, so you can play together. This computer's internet address goes to ${host}, like visiting any website.`;
 }
 
 /** No public STUN. Host candidates stay on this computer. */

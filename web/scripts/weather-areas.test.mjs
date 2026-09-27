@@ -134,7 +134,8 @@ test("Open-Meteo maps are honest and lockstep", () => {
   );
   assert.equal(Overlay.TYPED_FORECAST, A.TYPED_FORECAST);
   assert.equal(Overlay.SAVED_FORECAST_CONTINUE, A.SAVED_FORECAST_CONTINUE);
-  assert.equal(A.FORECAST_WAITS, "forecast waits");
+  assert.equal(A.FORECAST_WAITS, "open to see the weather");
+  assert.equal(A.FORECAST_LOOKING, "getting the weather…");
   assert.equal(A.SAVED_HERE_YES, "Use this saved place");
   assert.equal(A.SAVED_HERE_NO, "Don't send");
   assert.equal(A.SAVED_HERE_HELD, "the saved place was not sent");
@@ -182,9 +183,10 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.equal(Overlay.forecastMaySend(A.forecastGate(typed, null), false), false);
   assert.equal(Overlay.forecastHonesty(Overlay.forecastGate(savedHere, savedAck)), A.SAVED_FORECAST_CONTINUE);
   assert.equal(A.plateLine(savedHere, null, false, true), "This computer · saved place not sent");
-  assert.equal(A.plateLine(typed, null, false, false), "Portland · looking up");
-  assert.equal(A.plateLine(typed, null, false, false, true), "Portland · forecast waits");
-  assert.equal(Overlay.plateLine(typed, null, false, false, true), "Portland · forecast waits");
+  assert.equal(A.plateLine(typed, null, false, false), "Portland · getting the weather…");
+  assert.equal(A.plateLine(typed, null, false, false, true), "Portland · open to see the weather");
+  assert.equal(Overlay.plateLine(typed, null, false, false, true), "Portland · open to see the weather");
+  assert.equal(Overlay.plateLine(typed, null, false, false), "Portland · getting the weather…");
   assert.equal(Overlay.plateLine(savedHere, null, false, true), A.plateLine(savedHere, null, false, true));
   const preciseHere = {
     weatherAreas: [{ id: "here", name: "This computer", query: "this computer", lat: 47.60621, lon: -122.33207 }],
@@ -266,7 +268,7 @@ test("favorites star places and persist", () => {
   house = A.pickTab(house, "favorites");
   assert.equal(house.tab, "favorites");
   assert.equal(A.favoriteAreas(house).map((a) => a.name).join(","), "Portland");
-  assert.equal(A.FAVORITES_EMPTY, "No favorites yet — star a place.");
+  assert.equal(A.FAVORITES_EMPTY, "Nothing saved yet. Tap ☆ next to a place to keep it here.");
   assert.deepEqual(A.WEATHER_TABS, ["current", "favorites"]);
   const patch = A.toCardPatch(house);
   assert.equal(patch.weatherTab, "favorites");

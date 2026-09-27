@@ -12,7 +12,7 @@ export const CANT_REACH = "can't reach";
 export const NO_HEADLINES = "no headlines yet";
 /** The closed plate's header before the first headline: headlines are read only while the plate is open. */
 export const NEWS_WAITS = "open to see headlines";
-export const FAVORITES_EMPTY = "No favorites yet — star a headline or topic.";
+export const FAVORITES_EMPTY = "Nothing saved yet. Tap ☆ next to a headline or topic to keep it here.";
 export const TOPIC_LABEL = "News topic";
 export const TOPIC_PLACEHOLDER = "A topic — esports, Halo, baseball, football";
 export const TOPIC_TRUTH =

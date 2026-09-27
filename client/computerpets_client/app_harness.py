@@ -2590,6 +2590,22 @@ def _web_rows() -> list[Affordance]:
                 "soft-delete, mint, or key jargon."
             ),
         ),
+        Affordance(
+            "web.consent_types_plain",
+            "web",
+            "Cloud talk, voice, license, and STUN lines in plain words (name the website), same gates; warning colour passes AA; type-found bugs stay fixed",
+            "web talk-net.ts + multiplayer/p2p.ts + weather-areas.ts / news.ts / market.ts, overlay mind.js / license-net.js / *-tricks.js, main license-net.cjs, blotter license_net.py",
+            notes=(
+                "Real modules on every surface: cloud talk and voice name xAI, OpenAI, Anthropic, Google Gemini (or "
+                "'the AI website you set up') and say what is sent; the license lines name 'the license website' and "
+                "'the download website' and say a scrambled code made from this computer's ID goes, never the ID; STUN "
+                "is 'a website that helps computers find each other'; each says this computer's internet address goes "
+                "there too; web, overlay, main, and blotter agree and the gates still open only on those exact lines; "
+                "--color-warn passes WCAG AA on every dark card (even over a white window) and on light paper; the "
+                "favorites, 'looking up', and 'forecast waits' words are plain; Morel's costa ends, the motet / fogbow / "
+                "denspad / inkpad thank-yous are numbers, no overlay trick throws when stopped early, and web tsc is 0."
+            ),
+        ),
     ]
 
 
@@ -2617,6 +2633,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("plain_words", domain="web", action_id=aid)
     if local_id == "consent_plain":
         return _run_web_smoke("consent_plain", domain="web", action_id=aid)
+    if local_id == "consent_types_plain":
+        return _run_web_smoke("consent_types_plain", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

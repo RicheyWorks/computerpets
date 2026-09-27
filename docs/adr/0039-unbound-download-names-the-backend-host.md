@@ -28,3 +28,4 @@ This slice shows a download sentence, with the backend host named, before that u
 - The hash sentence is unchanged. The signed query on the bundle GET is unchanged.
 - News, quotes, a later forecast, a geocode look-up, a station stream, cloud talk, and cloud voice keep their gates.
 - DirectX 12 / Vulkan is still open. This slice is not that engine. Catalog stays 221.
+- Later wording (2026-09): the unbound download line now says "This asks license.example, the license website, for your pet. It sends your saved license and the pass from unlocking." plus the `plainNetLine` address sentence and "It does not send the code made from this computer's ID." The unlock line still does not open this POST, and this line still does not open the unlock POST.

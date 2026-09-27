@@ -418,7 +418,8 @@ function voiceScore(voice: { name?: string; lang?: string }) {
   return score;
 }
 
-export function pickSystemVoice(voices: Array<{ name?: string; voiceURI?: string; lang?: string }> | null | undefined) {
+// The style is taken like the overlay `card.js` twin; it shapes rate and pitch in `speakOpts`, not which voice is picked.
+export function pickSystemVoice(voices: Array<{ name?: string; voiceURI?: string; lang?: string }> | null | undefined, _styleId?: unknown) {
   const list = Array.isArray(voices) ? voices.filter((v) => v && (v.name || v.voiceURI)) : [];
   if (!list.length) return null;
   const ranked = list

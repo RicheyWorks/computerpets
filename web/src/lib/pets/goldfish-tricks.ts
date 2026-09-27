@@ -5,7 +5,8 @@ export const TRICKS = ["drift", "gulp", "flare", "glint", "dart", "yawn", "forag
 export const HAPPY = ["bubble", "lip", "swish"] as const;
 export type GoldfishTrickKind = (typeof TRICKS)[number];
 export type GoldfishHappyKind = (typeof HAPPY)[number];
-export type TrickAnim = "idle" | "walk" | "sit" | "sleep" | "talk" | "play";
+// "eat" is a real desk frame set; the forage trick uses it.
+export type TrickAnim = "idle" | "walk" | "sit" | "sleep" | "talk" | "play" | "eat";
 export type TrickPhase = "go" | "hold" | "release" | "done";
 export type HappyPhase = "go" | "done";
 

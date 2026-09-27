@@ -2,20 +2,17 @@ import { useCallback, useEffect, useRef } from "react";
 import { ANIM_FPS, ONCE_ANIMS, RED_PANDA_SPRITES, type PetAnim } from "@/lib/pets/red-panda";
 import type { SpritePack } from "@/lib/pets/living";
 import { playDeskSound, playStep } from "@/lib/pets/desk-audio";
-import type { RuiHappy, RuiHappyKind, RuiTrick, RuiTrickKind } from "@/lib/pets/rui-tricks";
-import type { RelayHappy, RelayHappyKind, RelayTrick, RelayTrickKind } from "@/lib/pets/relay-tricks";
-import type { FuseHappy, FuseHappyKind, FuseTrick, FuseTrickKind } from "@/lib/pets/fuse-tricks";
-import type { EarthHappy, EarthHappyKind, EarthTrick, EarthTrickKind } from "@/lib/pets/earth-tricks";
-import type { CatHappy, CatHappyKind, CatTrick, CatTrickKind } from "@/lib/pets/cat-tricks";
-import type { DogHappy, DogHappyKind, DogTrick, DogTrickKind } from "@/lib/pets/dog-tricks";
-import type { RabbitHappy, RabbitHappyKind, RabbitTrick, RabbitTrickKind } from "@/lib/pets/rabbit-tricks";
-import { sleepHoldFrame, startThankYou, tricksFor } from "@/lib/pets/ground-tricks";
+import {
+  beginPickedTrick,
+  sleepHoldFrame,
+  startThankYou,
+  tricksFor,
+  type GroundHappy,
+  type GroundHappyKind,
+  type GroundTrick,
+  type GroundTrickKind,
+} from "@/lib/pets/ground-tricks";
 import { paintDemoFrame } from "@/lib/pets/desk-sprite-surface";
-
-type GroundTrick = RuiTrick | RelayTrick | FuseTrick | EarthTrick | CatTrick | DogTrick | RabbitTrick;
-type GroundHappy = RuiHappy | RelayHappy | FuseHappy | EarthHappy | CatHappy | DogHappy | RabbitHappy;
-type GroundTrickKind = RuiTrickKind | RelayTrickKind | FuseTrickKind | EarthTrickKind | CatTrickKind | DogTrickKind | RabbitTrickKind;
-type GroundHappyKind = RuiHappyKind | RelayHappyKind | FuseHappyKind | EarthHappyKind | CatHappyKind | DogHappyKind | RabbitHappyKind;
 import {
   actPose,
   afterSettleWait,
@@ -680,7 +677,7 @@ export function LivingPet({
           s.trickWait -= dt;
           const musicWantsDance = musicRef.current && !s.trick && !s.happy;
           if (s.trickWait <= 0 || musicWantsDance) {
-            s.trick = GT.beginTrick(GT.pickTrick(undefined, musicRef.current, s.lastTrick as never), s.x, s.facing) as GroundTrick;
+            s.trick = beginPickedTrick(GT, musicRef.current, s.lastTrick, s.x, s.facing);
             if (s.trick) {
               clearAct();
               s.target = null;

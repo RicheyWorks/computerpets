@@ -15,20 +15,27 @@ const mindPage = readFileSync(join(root, "src/routes/mind.tsx"), "utf8");
 const petSrc = readFileSync(join(repo, "desktop/renderer/pet.js"), "utf8");
 const mindSrc = readFileSync(join(repo, "desktop/renderer/mind.js"), "utf8");
 
-test("cloud talk names the host with the shared sentence", () => {
+test("cloud talk names the AI website in plain words and says what it sends", () => {
   const xai = N.talkHonesty({ plugin: "xai" });
-  assert.equal(xai, `this talk sends the keeper line. ${W.clientNetLine("api.x.ai")}`);
-  assert.equal(N.talkHonesty({ plugin: "openai" }).includes("api.openai.com"), true);
-  assert.equal(N.talkHonesty({ plugin: "anthropic" }).includes("api.anthropic.com"), true);
   assert.equal(
-    N.talkHonesty({ plugin: "google" }).includes("generativelanguage.googleapis.com"),
-    true,
+    xai,
+    "This sends what you typed, your pet's name, and how hungry, happy, and rested it is to xAI, an AI website, so your pet can answer. It also sends your key for xAI, if you saved one. This computer's internet address also goes to xAI, like visiting any website.",
   );
+  assert.equal(xai.includes(W.plainNetLine("xAI")), true);
+  assert.doesNotMatch(xai, /https request|as any client|keeper line|talk host/);
+  assert.equal(N.talkHonesty({ plugin: "openai" }).includes("to OpenAI, an AI website,"), true);
+  assert.equal(N.talkHonesty({ plugin: "anthropic" }).includes("to Anthropic, an AI website,"), true);
+  assert.equal(N.talkHonesty({ plugin: "google" }).includes("to Google Gemini, an AI website,"), true);
+  assert.equal(N.talkHonesty({ plugin: "mistral" }).includes(W.plainNetLine("Mistral")), true);
   const custom = N.talkHonesty({
     plugin: "custom",
     baseUrl: "https://mind.example.test/hook?key=secret#room",
   });
-  assert.equal(custom, `this talk sends the keeper line. ${W.clientNetLine("mind.example.test")}`);
+  assert.equal(custom, N.talkLine("mind.example.test"));
+  assert.equal(custom.includes("to mind.example.test, the AI website you set up, so your pet can answer."), true);
+  assert.equal(custom.includes(W.plainNetLine("mind.example.test")), true);
+  assert.deepEqual(N.aiSite("constructor"), { name: "constructor", who: "constructor, the AI website you set up" });
+  assert.deepEqual(N.aiSite(""), { name: "the AI website you set up", who: "the AI website you set up" });
   assert.equal(custom.includes("secret"), false);
   assert.equal(custom.includes("/hook"), false);
   assert.equal(N.talkHonesty({ plugin: "local" }), "");
@@ -40,14 +47,15 @@ test("cloud talk names the host with the shared sentence", () => {
   assert.equal(N.talkMaySend({ plugin: "local" }, false), true);
 });
 
-test("cloud voice names api.x.ai and api.openai.com and leaves speechSynthesis local", () => {
+test("cloud voice names xAI and OpenAI in plain words and leaves speechSynthesis local", () => {
   assert.equal(N.voiceHonesty("browser"), "");
   assert.equal(N.voiceHonesty("none"), "");
-  assert.equal(N.voiceHonesty("xai"), `this voice sends the spoken line. ${W.clientNetLine("api.x.ai")}`);
   assert.equal(
-    N.voiceHonesty("openai"),
-    `this voice sends the spoken line. ${W.clientNetLine("api.openai.com")}`,
+    N.voiceHonesty("xai"),
+    "This sends the words your pet will say to xAI, an AI website, so it can turn them into a voice. It also sends your key for xAI, if you saved one. This computer's internet address also goes to xAI, like visiting any website.",
   );
+  assert.equal(N.voiceHonesty("openai"), N.voiceLine("api.openai.com"));
+  assert.equal(N.voiceHonesty("openai").includes("to OpenAI, an AI website,"), true);
   assert.equal(N.voiceMaySend("xai", false), false);
   assert.equal(N.voiceMaySend("openai", true), true);
   assert.equal(N.voiceMaySend("browser", false), true);
