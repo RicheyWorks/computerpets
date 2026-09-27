@@ -127,3 +127,82 @@ test("START-HERE tells the honest house count without owning house-count", () =>
   assert.match(readmeSrc, /There are \*\*221\*\* animals/);
   assert.match(readmeSrc, /Two hundred twenty-one living kinds/);
 });
+
+const clientReadmeSrc = readFileSync(join(repo, "client/README.md"), "utf8").replace(/\r\n/g, "\n");
+const clientPyproject = readFileSync(join(repo, "client/pyproject.toml"), "utf8");
+const clientMain = readFileSync(join(repo, "client/computerpets_client/__main__.py"), "utf8");
+const clientApp = readFileSync(join(repo, "client/computerpets_client/app.py"), "utf8");
+const clientSession = readFileSync(join(repo, "client/computerpets_client/license/session.py"), "utf8");
+
+function fences(src, lang) {
+  const out = [];
+  const re = new RegExp("```" + lang + "\\n([\\s\\S]*?)```", "g");
+  for (let m = re.exec(src); m; m = re.exec(src)) out.push(m[1].trimEnd().split("\n"));
+  return out;
+}
+
+function sectionOf(src, heading) {
+  const start = src.indexOf(`\n## ${heading}\n`);
+  assert.ok(start >= 0, `missing ## ${heading}`);
+  const next = src.indexOf("\n## ", start + 4);
+  return src.slice(start, next < 0 ? src.length : next);
+}
+
+test("START-HERE teaches the blotter as an optional side door in PowerShell", () => {
+  const start = startSrc.replace(/\r\n/g, "\n");
+  const blotter = sectionOf(start, "Blotter (optional)");
+  const browser = firstIndex(start, /## Another way to visit them \(browser\)/);
+  const blotterAt = firstIndex(start, /## Blotter \(optional\)/);
+  const done = firstIndex(start, /## You did it/);
+  assert.ok(browser < blotterAt && blotterAt < done, "the blotter comes after the desktop walk and the browser");
+  assert.match(blotter, /This is \*\*not\*\* the main quest/);
+  assert.match(blotter, /You do not need a backend\. You do not need a license key\./);
+  assert.match(blotter, /Python 3\.11 or newer/);
+  const boxes = fences(blotter, "powershell");
+  assert.ok(boxes.length >= 3);
+  for (const lines of boxes) assert.match(lines[0], /^cd client$/, "each box starts with cd");
+  const all = boxes.flat().join("\n");
+  assert.match(all, /^py -3 -m venv \.venv$/m);
+  assert.match(all, /^\.\\\.venv\\Scripts\\Activate\.ps1$/m);
+  assert.match(all, /^python -m pip install -e \.$/m);
+  assert.match(all, /^python -m computerpets_client$/m);
+  assert.match(all, /^\.\\\.venv\\Scripts\\python\.exe -m computerpets_client$/m);
+  assert.doesNotMatch(blotter, /```bash|source \.venv|export /);
+  assert.match(blotter, /ComputerPets — blotter/);
+  assert.match(clientApp, /setWindowTitle\("ComputerPets — blotter"\)/);
+});
+
+test("client README runs in bash and PowerShell, and says backend and key are optional", () => {
+  const run = sectionOf(clientReadmeSrc, "Run");
+  assert.match(run, /The backend URL and the license key are optional\./);
+  assert.match(run, /The blotter pets walk\s+without\s+them\./);
+  const bash = fences(run, "bash").flat().join("\n");
+  const ps = fences(run, "powershell").flat().join("\n");
+  for (const [shell, src] of [["bash", bash], ["powershell", ps]]) {
+    assert.match(src, /^cd client$/m, `${shell} starts in client`);
+    assert.match(src, /-m venv \.venv/, `${shell} makes the venv`);
+    assert.match(src, /pip install -e "\.\[dev\]"/, `${shell} installs from pyproject`);
+    assert.match(src, /^python -m computerpets_client$/m, `${shell} runs the package`);
+    assert.match(src, /COMPUTERPETS_BACKEND_URL/, `${shell} shows the optional backend`);
+    assert.match(src, /LICENSE_SECRET_KEY/, `${shell} shows the optional key`);
+    assert.match(src, /computerpets_client --check/, `${shell} has the headless smoke`);
+  }
+  assert.match(bash, /^source \.venv\/bin\/activate$/m);
+  assert.match(ps, /^py -3 -m venv \.venv$/m);
+  assert.match(ps, /^\.\\\.venv\\Scripts\\Activate\.ps1$/m);
+  assert.match(ps, /^\$env:COMPUTERPETS_BACKEND_URL = "http:\/\/127\.0\.0\.1:8081"$/m);
+  assert.match(ps, /^\$env:LICENSE_SECRET_KEY = /m);
+  assert.doesNotMatch(ps, /\bexport\b|\bsource\b|QT_QPA_PLATFORM=/, "no bash syntax in the PowerShell boxes");
+  // The commands match the real client: package entry, script name, python floor, env names, default backend, --check offscreen.
+  assert.match(clientMain, /from \.app import main/);
+  assert.match(clientPyproject, /computerpets-client = "computerpets_client\.app:main"/);
+  assert.match(run, /`computerpets-client` is the same entry/);
+  assert.match(clientPyproject, /requires-python = ">=3\.11"/);
+  assert.match(run, /Python 3\.11\+/);
+  assert.match(clientPyproject, /dev = \["pytest>=8"\]/);
+  assert.match(clientSession, /env\.get\("COMPUTERPETS_BACKEND_URL"\)/);
+  assert.match(clientSession, /env\.get\("LICENSE_SECRET_KEY"\)/);
+  assert.match(clientSession, /DEFAULT_BACKEND = "http:\/\/127\.0\.0\.1:8081"/);
+  assert.match(run, /Without `COMPUTERPETS_BACKEND_URL`, Unlock uses `http:\/\/127\.0\.0\.1:8081`\./);
+  assert.match(clientApp, /if args\.offscreen or args\.check:\r?\n\s+os\.environ\.setdefault\("QT_QPA_PLATFORM", "offscreen"\)/);
+});
