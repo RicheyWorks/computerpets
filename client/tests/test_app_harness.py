@@ -63,6 +63,12 @@ CROSS_DOMAIN = {
     "desk.presence",
     "desk.market.tickers",
     "desk.news.x",
+    "desk.weather.replay",
+    "desk.news.replay",
+    "desk.market.replay",
+    "desk.nft.replay",
+    "desk.gpu.replay",
+    "cry.decode",
     "visit.todays",
     "visit.phases",
     "visit.call",
@@ -226,6 +232,65 @@ def test_gaps_are_honest_and_accounted():
     # Default run_all does not promote --live HTTP rows.
     live_skipped = [r for r in results if r.action_id.startswith("live.") and r.fate == "excluded"]
     assert len(live_skipped) >= 4
+
+
+def test_recorded_feed_replays_drive_read_parse_and_paint():
+    from computerpets_client.app_harness import GPU_REPLAYS
+
+    hole_ids = {row.id for row in gaps()}
+    for aid in ("desk.weather.replay", "desk.news.replay", "desk.market.replay", "desk.nft.replay", "desk.gpu.replay"):
+        assert aid not in hole_ids
+        result = invoke(aid)
+        assert result.ok, (aid, result.error)
+        assert result.trace, aid
+    weather = invoke("desk.weather.replay")
+    assert weather.extras["plate"] == "Seattle · Clear · 8°"
+    assert "2026-09-29 · rain · 15°" in weather.extras["body"]
+    assert "Seattle · unread" in " ".join(weather.trace)
+    market = invoke("desk.market.replay")
+    assert market.extras["plate"] == "ETH · 2708.39"
+    assert market.extras["stockPlate"] == "AAPL · 341.07"
+    assert invoke("desk.nft.replay").extras["shown"] == "CryptoPunks. Floor $91246.00. CoinGecko."
+    gpu = invoke("desk.gpu.replay")
+    for name, _platform, line in GPU_REPLAYS:
+        assert gpu.extras["py"][name] == line
+        assert gpu.extras["desk"][name] == line
+    # The live rows stay excluded; replay is not a live call.
+    for aid in ("live.weather_forecast", "live.news_rss", "live.market_quote", "live.nft_floor", "live.gpu_sense"):
+        assert aid in hole_ids
+
+
+def test_replay_fixtures_are_small_and_hold_no_secrets():
+    from computerpets_client.app_harness import _replay_dir
+
+    folder = _replay_dir()
+    files = sorted(p for p in folder.iterdir() if p.is_file())
+    names = {p.name for p in files}
+    assert "README.md" in names
+    assert {"forecast-seattle.json", "news-popular.rss", "news-topic-red-pandas.rss", "news-featured.json",
+            "gecko-simple-price.json", "yahoo-aapl.json", "nft-cryptopunks.json", "gpu-win-nvidia.txt"} <= names
+    secret = ("api_key", "apikey", "x-cg-", "x_cg_", "authorization", "bearer ", "cookie", "secret", "password")
+    for path in files:
+        assert path.stat().st_size < 8 * 1024, path.name
+        if path.name == "README.md":
+            continue
+        low = path.read_text(encoding="utf-8").lower()
+        for word in secret:
+            assert word not in low, (path.name, word)
+    # The no-Solana rule: the saved price list has no Solana entry, and the replay shows … for it.
+    assert "solana" not in (folder / "gecko-simple-price.json").read_text(encoding="utf-8")
+
+
+def test_cry_decode_reads_every_house_cry_without_speakers():
+    from computerpets_client.app_harness import KNOWN_SILENT_CRIES, _prefers_house_cry_keys
+
+    result = invoke("cry.decode")
+    assert result.ok, result.error
+    assert result.extras["decoded"] == result.extras["n"] == len(_prefers_house_cry_keys())
+    # Silent files are named, never hidden. Each one listed must still be silent.
+    assert set(result.extras["known_silent"]) == set(KNOWN_SILENT_CRIES)
+    assert "known_silent=garter" in result.trace
+    assert "live.cry_playback" in {row.id for row in gaps()}
 
 
 def test_bare_care_id_still_resolves():

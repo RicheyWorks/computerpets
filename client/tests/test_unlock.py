@@ -803,3 +803,104 @@ def test_session_hands_its_mkdir_to_the_hwid_mark(tmp_path, monkeypatch):
     assert str(home / "hwid.txt") in disk.files
     assert str(home) in made
     assert not home.exists()
+
+def _sentences(text: str) -> list[str]:
+    import re
+
+    return [s for s in re.split(r"(?<=[.!?])\s+(?=[A-Z])", text.strip()) if s]
+
+
+def test_unlock_dialog_privacy_detail_is_whole_sentences_and_checked_against_hwid():
+    import hashlib
+
+    from computerpets_client import unlock_dialog as dialog
+    from computerpets_client.license import hwid
+
+    assert dialog.UNLOCK_INTRO == "Pets work without unlocking. Unlocking is optional."
+    assert dialog.DETAILS_LABEL == "Details"
+    assert _sentences(dialog.MARK_UNREAD_TEXT) == [
+        "Opening this window did not read the operating-system machine id.",
+        "Unlock, or a download for a license bound to this computer, reads one machine id only when no hash is "
+        "stored yet: the machine-id file on Linux, MachineGuid on Windows, or the platform UUID on a Mac.",
+        "The blotter mixes that id with the app's name and the platform, hashes the result with SHA-256, and "
+        "saves only the hash in hwid.txt in its data folder.",
+        "Later unlocks reuse the stored hash, so an existing license stays bound to this computer.",
+        "The raw id is not sent.",
+        "The house receives only the hash, never the id itself, and only for an unlock or a bound download.",
+        "The hash is still a device fingerprint, because this computer keeps giving the same hash.",
+        "The line under Backend URL names the host before the hash leaves.",
+        "A backend on this computer keeps the hash on this computer.",
+        "If that named read fails, Unlock stops and asks you first.",
+        "It hashes the computer name only after you say yes, and it uses a random id instead if this computer "
+        "has no name.",
+        "Renaming the computer changes a computer-name hash.",
+        "Deleting hwid.txt turns a random id into a different mark.",
+    ]
+    for text in (dialog.MARK_UNREAD_TEXT, dialog.MARK_STORED_TEXT):
+        for sentence in _sentences(text):
+            assert sentence[0].isupper() and sentence.endswith("."), sentence
+            assert len(sentence.split()) >= 5, sentence
+    # The old run-on fragment is gone from the text and from the source.
+    source = Path(dialog.__file__).read_text(encoding="utf-8")
+    assert "If that named read fails." not in dialog.MARK_UNREAD_TEXT
+    assert "If that named read fails. " not in source
+    assert "If that named read fails, Unlock stops and asks you first." in dialog.MARK_UNREAD_TEXT
+
+    # Each claim matches the Python mark code.
+    wheres = {mark["source"]: mark["where"] for mark in hwid.MACHINE_MARKS}
+    assert wheres["etc-machine-id"] == "/etc/machine-id"
+    assert wheres["io-platform-uuid"].endswith("IOPlatformUUID")
+    assert next(m for m in hwid.MACHINE_MARKS if m["source"] == "machine-guid")["value"] == "MachineGuid"
+    assert hwid._hash_mark("raw", "windows") == hashlib.sha256(b"computerpets:windows:raw").hexdigest()
+    written: dict[str, str] = {}
+
+    def no_file(path: str) -> str:
+        raise OSError(path)
+
+    with pytest.raises(LicenseError) as caught:
+        hwid.resolve_hwid_detail(user_data_dir="/data", plat="linux", read_file=no_file, write_file=written.__setitem__)
+    assert caught.value.code == "hwid_needs_fallback_yes"
+    assert written == {}
+    got = hwid.resolve_hwid_detail(
+        user_data_dir="/data",
+        plat="linux",
+        read_file=lambda p: "machine-abc\n" if p == "/etc/machine-id" else no_file(p),
+        write_file=written.__setitem__,
+    )
+    assert got["id"] == hashlib.sha256(b"computerpets:linux:machine-abc").hexdigest()
+    assert list(written.values()) == [got["id"]]
+    assert list(written)[0].replace("\\", "/").endswith("/data/hwid.txt")
+    assert "machine-abc" not in json.dumps(got)
+    stored = hwid.resolve_hwid_detail(user_data_dir="/data", read_file=lambda p: written[p], write_file=written.__setitem__)
+    assert stored["read"] == "stored" and stored["id"] == got["id"]
+    named = hwid.resolve_hwid_detail(plat="linux", read_file=no_file, hostname="DESK", allow_weak_fallback=True)
+    assert named["source"] == "hostname"
+    assert named["id"] == hashlib.sha256(b"computerpets:linux:DESK").hexdigest()
+    nameless = hwid.resolve_hwid_detail(plat="linux", read_file=no_file, hostname="", allow_weak_fallback=True)
+    assert nameless["source"] == "random"
+
+
+def test_unlock_dialog_folds_the_privacy_detail_under_details():
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PyQt6.QtWidgets import QApplication
+
+    from computerpets_client import unlock_dialog as dialog
+
+    app = QApplication.instance() or QApplication([])
+    status = {"backendUrl": "", "fields": {}, "hwidMark": {"read": "unread"}, "unlocked": False}
+    window = dialog.UnlockDialog({"status": lambda: status})
+    try:
+        assert window.mark.text() == dialog.MARK_UNREAD_TEXT
+        assert window.mark.isHidden()
+        assert window.details.text() == "Details"
+        window.details.click()
+        assert not window.mark.isHidden()
+        window.details.click()
+        assert window.mark.isHidden()
+        window._paint_status({**status, "hwidMark": {"read": "stored"}})
+        assert window.mark.text() == dialog.MARK_STORED_TEXT
+    finally:
+        window.deleteLater()
+        app.processEvents()

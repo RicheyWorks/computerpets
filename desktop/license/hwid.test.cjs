@@ -262,8 +262,16 @@ describe("hwid (CLIENT-CONTRACT §5)", () => {
       assert.match(src, /hwid_needs_fallback_yes/);
       assert.match(src, /Use the computer name, or a random id if there is no name/);
     }
-    // The desktop window folds this detail under "Details" in whole sentences; the
-    // main process still sends WEAK_FALLBACK_MESSAGE as the error when the read fails.
+    // Both windows fold this detail under "Details" in whole sentences; the main
+    // process and the blotter session still send WEAK_FALLBACK_MESSAGE as the error.
+    for (const src of [settings, dialog]) {
+      assert.match(src, /If that named read fails, Unlock stops and asks you first\./);
+      assert.equal(src.includes("If that named read fails. "), false);
+      assert.match(src, /hashes the result with SHA-256/);
+      assert.match(src, /Renaming the computer changes a computer-name hash\./);
+      assert.match(src, /Deleting hwid\.txt turns a random id into a different mark\./);
+      assert.match(src, /Pets work without unlocking\. Unlocking is optional\./);
+    }
     assert.match(settings, /If that named read fails, Unlock stops and asks you first\./);
     assert.match(settings, /hashes the result with SHA-256/);
     assert.match(settings, /Renaming the computer changes a computer-name hash\./);
