@@ -1,11 +1,12 @@
 key: snapper
 guest: Beak (Common Snapping Turtle)
-source: Freesound sound 318064 "Water_Lapping_River.wav" by ceich93
-URL: https://freesound.org/people/ceich93/sounds/318064/
-direct: https://cdn.freesound.org/previews/318/318064_4457609-hq.mp3
-author: ceich93
-license: Creative Commons Zero (CC0 1.0)
-Species: Chelydra serpentina — effectively silent (no legal PD/CC0/CC BY Chelydra air-hiss tape; iNat BY-NC/ARR). River water lapping a pebbly shore at night (Hudson River): the shallows a snapper lies in. No voice. No music. No narrator. No synth.
-Notes: House cut 3.5s mono 16-bit 44.1kHz from 10.0s of the HQ preview; highpass 80 Hz + dynaudnorm=p=0.95:m=8 + afade in 0.05s/out 0.4s, peak-normalized to 0.5. Real field recording, no synthesis.
+source: Jorgewich-Cohen G, Townsend SW, Padovese LR, Klein N, Praschag P, Ferrara CR, Ettmar S, Menezes S, Varani AP, Serano J, Sánchez-Villagra MR (2022). "Common evolutionary origin of acoustic communication in choanate vertebrates." Nature Communications 13:6089. doi:10.1038/s41467-022-33505-8. Supplementary Data 2, video "Chelydra serpentina 4.mp4".
+URL: https://doi.org/10.1038/s41467-022-33505-8
+direct: https://drive.usercontent.google.com/download?id=1CQ76wbSlYsYDwALRWpFNhT4pGYxyPnFv&export=download&confirm=t
+hosted: the video sits on the authors' Google Drive (https://docs.google.com/file/d/1CQ76wbSlYsYDwALRWpFNhT4pGYxyPnFv/preview), linked from Supplementary Data 2 (the article's supplement PDF), not on the journal server.
+author: Gabriel Jorgewich-Cohen et al. (authors of the paper above)
+license: Creative Commons Attribution 4.0 (CC BY 4.0), the article's license, which covers its supplementary material
+Species: Chelydra serpentina (common snapping turtle) — the species itself. Harmonic grunt recorded underwater with a hydrophone from captive adults. No music. No narrator. No synth.
+Notes: Audio track only (video dropped). House cut 3.5s mono 16-bit 44.1kHz from 13.9s of the 22s video audio (one ~1.6s grunt at 0.5–2.1s of the cut, tank background after); highpass 200 Hz (two passes, trims tank rumble) + afade in 0.05s/out 0.4s, level set to -30.0 dB RMS (peak 0.27). Replaces the 2026-09-27 habitat stand-in (Freesound CC0 #318064 river lapping, ceich93).
 sat: 2026-09-27 Buffffff
 House path: build our own from field tape — not Grok Imagine

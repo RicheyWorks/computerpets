@@ -321,10 +321,12 @@ def test_cry_decode_reads_every_house_cry_without_speakers():
     assert result.extras["known_silent"] == []
     assert "known_silent=none" in result.trace
     assert "garter" not in result.extras["quiet"]
-    # 220 of 221 guests have a house cry; only crocodile (Jaw) has no legal field tape.
-    assert result.extras["n"] == 220
-    assert "prefersHouseCry=220" in result.trace
-    assert "crocodile" not in _prefers_house_cry_keys()
+    # Every one of the 221 guests has a house cry, and all 221 decode.
+    assert result.extras["n"] == 221
+    assert result.extras["decoded"] == 221
+    assert "prefersHouseCry=221" in result.trace
+    assert "decoded=221" in result.trace
+    assert "crocodile" in _prefers_house_cry_keys()
     assert "live.cry_playback" in {row.id for row in gaps()}
 
 
