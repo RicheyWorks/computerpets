@@ -11,8 +11,8 @@
 | Route | Caller | What the wire carried |
 |-------|--------|------------------------|
 | `POST /api/admin/revoke` | House `/admin` ledger, operator curl | `X-Admin-Key` only. A captured header worked until the key rotated |
-| `GET /api/admin/licenses` | Same ledger | Same static header. Optional `owner` query was unsigned |
-| `GET /api/admin/licenses/{jti}` | Same ledger (also the unlock probe `__unlock-check__`) | Same static header |
+| `GET /api/admin/licenses` | Same ledger (also the admin page's unlock probe: only a license list counts) | Same static header. Optional `owner` query was unsigned |
+| `GET /api/admin/licenses/{jti}` | Same ledger | Same static header |
 | `POST /api/verify/**` | Overlay and blotter | Already HMAC (ADR 0070). Different key, different canonical version |
 | Download, redeem, pets, catalog, heartbeat, care | Unchanged | Not this gate |
 

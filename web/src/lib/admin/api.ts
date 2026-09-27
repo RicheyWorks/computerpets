@@ -1,5 +1,6 @@
 import { signAdminRequest, NONCE_HEADER, SIGNATURE_HEADER, TIMESTAMP_HEADER } from "@/lib/admin/sign";
 import { HouseError, PLAIN_LINES } from "@/lib/plain-error";
+import { NOT_LICENSE_SERVICE, isLicenseList, pickApiBase } from "@/lib/admin/base";
 
 const KEY_STORAGE = "cp.admin.key";
 const BASE_STORAGE = "cp.admin.apiBase";
@@ -64,9 +65,13 @@ export function clearAdminSession() {
   sessionStorage.removeItem(KEY_STORAGE);
 }
 
+/**
+ * Where the License service field starts: VITE_LICENSE_API_URL when set, else this site's own origin,
+ * else (only when the page itself is local) the Java service on this computer. See pickApiBase.
+ */
 export function defaultApiBase(): string {
-  // Java house door. The desk keeps 8080.
-  return "http://localhost:8081";
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
+  return pickApiBase(import.meta.env.VITE_LICENSE_API_URL, origin);
 }
 
 function splitTarget(path: string): { path: string; query: string } {
@@ -141,12 +146,27 @@ async function adminFetch(apiBase: string, adminKey: string, path: string, init?
   return res;
 }
 
-export async function unlockAdmin(apiBase: string, adminKey: string): Promise<void> {
-  const res = await adminFetch(apiBase, adminKey, "/api/admin/licenses/__unlock-check__");
-  if (res.status !== 404 && !res.ok) {
-    throw await failure(res, "Unlock failed.");
+/**
+ * Open the ledger: a signed read of the newest licenses. Only a real license list counts. A 404, or an
+ * answer that is not a license list (a web page, another service), means the address is not the
+ * ComputerPets license service, and nothing is saved. Returns the rows so the page shows them at once.
+ */
+export async function unlockAdmin(apiBase: string, adminKey: string): Promise<LicenseAudit[]> {
+  const res = await adminFetch(apiBase, adminKey, "/api/admin/licenses");
+  if (res.status === 404) throw await failure(res, NOT_LICENSE_SERVICE);
+  if (!res.ok) throw await failure(res, "Unlock failed.");
+  let body: unknown = null;
+  try {
+    body = await res.json();
+  } catch {
+    body = null;
+  }
+  if (!isLicenseList(body)) {
+    console.error("[admin] the address answered with something that is not a license list");
+    throw new AdminApiError(res.status, NOT_LICENSE_SERVICE);
   }
   saveAdminSession(apiBase, adminKey);
+  return body as LicenseAudit[];
 }
 
 export async function getLicense(apiBase: string, adminKey: string, jti: string): Promise<LicenseAudit | null> {
