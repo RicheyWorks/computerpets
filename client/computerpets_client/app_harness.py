@@ -2488,6 +2488,20 @@ def _web_rows() -> list[Affordance]:
                 "keeper.ts everyVisible (a hidden page pauses, showing it resumes)."
             ),
         ),
+        Affordance(
+            "web.pet_keys_plates",
+            "web",
+            "The pet is a keyboard button, overlay plates join the Tab cycle, idle pauses, a cheaper clock, admin names",
+            "web/src/lib/pets/keeper.ts petTapLabel / isTapKey / isStale + card.ts createCardTickReader + admin/base.ts",
+            notes=(
+                "Real modules: keeper.ts petTapLabel / isTapKey (the pet's hit area is a button; Enter or Space taps, "
+                "the room's opens the sit choice with focus in it) and isStale (the news plate reads once on return "
+                "only when 20 minutes old); card.ts createCardTickReader (the keeper clock parses the saved card only "
+                "when its text changed); admin/base.ts ledgerCaption / focusAfterGate. Also checks the living pet, "
+                "room, floor, news plate, keeper card, admin page, overlay pet.js (plates in the Tab cycle, focus "
+                "kept across a repaint, alarm and mutes pressed), and desktop/README (the Keeper card item) use them."
+            ),
+        ),
     ]
 
 
@@ -2507,6 +2521,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("pets_admin_music", domain="web", action_id=aid)
     if local_id == "pets_keys_idle":
         return _run_web_smoke("pets_keys_idle", domain="web", action_id=aid)
+    if local_id == "pet_keys_plates":
+        return _run_web_smoke("pet_keys_plates", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

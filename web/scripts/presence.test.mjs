@@ -185,7 +185,8 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   const askAt = plates.indexOf('id="weather-saved-ask"');
   assert.ok(openAt > 0 && askAt > openAt);
   assert.doesNotMatch(plates, /getCurrentPosition|watchPosition|maximumAge:\s*600/);
-  const tickAt = plates.indexOf("setInterval");
+  // The news plate's periodic tick (paused while hidden) never locates or asks the forecast host.
+  const tickAt = plates.indexOf("everyVisible(");
   assert.ok(tickAt > 0);
   assert.doesNotMatch(plates.slice(tickAt, tickAt + 240), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition/);
   assert.doesNotMatch(plates.slice(tickAt, tickAt + 400), /forecastUrl/);

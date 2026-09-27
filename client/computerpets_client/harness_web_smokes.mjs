@@ -422,6 +422,70 @@ async function petsKeysIdle() {
   ]);
 }
 
+/** The pet as a keyboard button, plates in the overlay's Tab cycle, idle pauses, a cheaper clock, alarm and mutes pressed, admin names. */
+async function petKeysPlates() {
+  const K = await import(pathToFileURL(join(WEB, "src", "lib", "pets", "keeper.ts")).href);
+  const Card = await import(pathToFileURL(join(WEB, "src", "lib", "pets", "card.ts")).href);
+  const B = await import(pathToFileURL(join(WEB, "src", "lib", "admin", "base.ts")).href);
+  const tap = {
+    room: K.petTapLabel("Rui", "choice", "Rui, asleep"),
+    pick: K.petTapLabel("Chirp", "pick", "chosen"),
+    hello: K.petTapLabel("Wave", "hello"),
+    keys: ["Enter", " ", "Escape", "a"].map((k) => K.isTapKey(k)),
+    repeat: K.isTapKey("Enter", true),
+  };
+  if (tap.room !== "Choose what Rui does (Rui, asleep)" || tap.pick !== "Pick Chirp (chosen)" || tap.hello !== "Say hello to Wave")
+    return fail("pet tap names drift", { tap });
+  if (JSON.stringify(tap.keys) !== JSON.stringify([true, true, false, false]) || tap.repeat) return fail("tap keys drift", { tap });
+  const stale = [K.isStale(null, 10, 5), K.isStale(0, 4, 5), K.isStale(0, 5, 5)];
+  if (JSON.stringify(stale) !== JSON.stringify([true, false, true])) return fail("isStale drift", { stale });
+  let raw = '{"color":"ink"}';
+  let loads = 0;
+  const read = Card.createCardTickReader({ getRaw: () => raw, load: () => ({ n: ++loads }) });
+  const a = read();
+  const b = read();
+  raw = '{"color":"moss"}';
+  const c = read();
+  const clock = { loads, same: a === b, changed: c !== b };
+  if (clock.loads !== 2 || !clock.same || !clock.changed) return fail("clock reader parsed a still card", { clock });
+  const admin = {
+    none: B.ledgerCaption(0),
+    one: B.ledgerCaption(1),
+    many: B.ledgerCaption(3),
+    open: B.focusAfterGate(true),
+    locked: B.focusAfterGate(false),
+  };
+  if (admin.many !== "Licenses: 3 shown" || admin.one !== "Licenses: 1 shown" || admin.open !== "search" || admin.locked !== "key")
+    return fail("admin names drift", { admin });
+  const text = (...p) => readFileSync(join(ROOT, ...p), "utf8").replace(/\r\n/g, "\n");
+  const wires = [
+    ["web/src/components/desk/living-pet.tsx", ['role={onTap && tapLabel ? "button" : undefined}', "tabIndex={onTap && tapLabel ? 0 : undefined}", "isTapKey(e.key, e.repeat)", "tapRef.current?.({ keys: true })"]],
+    ["web/src/components/desk/companion-room.tsx", ['petTapLabel(displayName, "choice"', "choiceByKeys.current = !!how?.keys;", "everyVisible(age, 20_000, { onResume: true })"]],
+    ["web/src/components/desk/house-floor.tsx", ["everyVisible(", 'petTapLabel(kind.name, "hello")']],
+    ["web/src/components/desk/desk-plates.tsx", ["isStale(newsReadAt.current, Date.now(), NEWS_STALE_MS)", "{ onResume: true }"]],
+    ["web/src/components/desk/keeper-card.tsx", ["readCardForTick()", "aria-pressed={guest.alarm.on}", "aria-pressed={!!card.mutes[bus]}"]],
+    ["web/src/routes/admin.tsx", ["aria-expanded={open}", "aria-controls={detailId}", "aria-labelledby={ledgerId}", "focusAfterGate(unlocked)"]],
+    ["web/src/styles.css", ["[data-pet-hit]:focus-visible"]],
+    ["desktop/renderer/pet.js", ["const list = cardFocusables();", "refocusRebuilt(refocus);", 'btn.setAttribute("aria-pressed", card.mutes[bus] ? "true" : "false");', 'hudAlarmOn.setAttribute("aria-pressed"']],
+    ["desktop/renderer/index.html", ['id="hud-alarm-on" data-hit data-card="alarm" aria-label="Alarm off" aria-pressed="false"']],
+    ["desktop/README.md", ["The tray and the pet menu have **Keeper card**"]],
+  ];
+  for (const [rel, needs] of wires) {
+    const body = text(...rel.split("/"));
+    for (const need of needs) if (!body.includes(need)) return fail(`${rel} missing ${need}`);
+  }
+  // ADR 0012: main registers no global shortcut or keyboard hook.
+  if (/globalShortcut/.test(text("desktop", "main.cjs"))) return fail("main.cjs registers a global shortcut (ADR 0012)");
+  return ok("pet keyboard button, overlay plates in the Tab cycle, idle pauses, cheaper clock, alarm and mutes pressed, admin names", { tap, clock, admin }, [
+    "pet.keys=button+enter_space",
+    "overlay.plates=tab_cycle",
+    "idle=floor+news+room",
+    "clock=parse_on_change",
+    "admin=expanded+caption+focus",
+    "alarm_mute=pressed",
+  ]);
+}
+
 async function classroomLockstep(expectPath) {
   if (!expectPath) return fail("classroom_lockstep needs expect JSON path argv");
   let expect;
@@ -610,6 +674,7 @@ const COMMANDS = {
   care_talk_plates: careTalkPlates,
   pets_admin_music: petsAdminMusic,
   pets_keys_idle: petsKeysIdle,
+  pet_keys_plates: petKeysPlates,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

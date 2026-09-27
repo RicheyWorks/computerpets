@@ -1360,7 +1360,11 @@ select {
 #hud input:focus-visible,
 #hud select:focus-visible,
 #hud textarea:focus-visible,
-#hud a:focus-visible {
+#hud a:focus-visible,
+.desk-plate button:focus-visible,
+.desk-plate input:focus-visible,
+.desk-plate select:focus-visible,
+.desk-plate a:focus-visible {
   outline: 2px solid #d8cfc0;
   outline-offset: 2px;
 }

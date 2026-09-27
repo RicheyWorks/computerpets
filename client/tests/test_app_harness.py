@@ -104,6 +104,7 @@ CROSS_DOMAIN = {
     "web.care_talk_plates",
     "web.pets_admin_music",
     "web.pets_keys_idle",
+    "web.pet_keys_plates",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -462,6 +463,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.care_talk_plates",
         "web.pets_admin_music",
         "web.pets_keys_idle",
+        "web.pet_keys_plates",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -599,6 +601,13 @@ def test_web_companion_lockstep():
     assert "overlay.keys=tab_wrap+escape" in pki.trace
     assert "idle=pause_while_hidden" in pki.trace
     assert (pki.extras.get("hint") or {}).get("off") == "Pick music on Rui's card."
+
+    pkp = invoke("web.pet_keys_plates")
+    assert pkp.ok, (pkp.error, pkp.detail)
+    for mark in ("pet.keys=button+enter_space", "overlay.plates=tab_cycle", "idle=floor+news+room",
+                 "clock=parse_on_change", "admin=expanded+caption+focus", "alarm_mute=pressed"):
+        assert mark in pkp.trace, (mark, pkp.trace)
+    assert (pkp.extras.get("clock") or {}).get("loads") == 2
 
 
 def test_blotter_pure_surfaces():
