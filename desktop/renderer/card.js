@@ -7,6 +7,13 @@
       /* the overlay script tag loads weather-areas.js first */
     }
   }
+  if (!root.PetDeskSpots && typeof require === "function") {
+    try {
+      root.PetDeskSpots = require("./desk-spots.js");
+    } catch {
+      /* the overlay script tag loads desk-spots.js first */
+    }
+  }
   const STORE = "computerpets.card.v1";
   const MAX_LINES = 12;
   const LINE_CHARS = 140;
@@ -98,6 +105,7 @@
       stepKind: "species",
       music: { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false },
       sleepAid: { plugin: "off", playing: false },
+      deskSpots: {},
     };
   }
 
@@ -205,6 +213,7 @@
     next.stepKind = root.PetHouseSounds ? root.PetHouseSounds.parseStep(raw.stepKind) : "species";
     next.music = root.PetHouseMusic ? root.PetHouseMusic.parseMusic(raw.music) : { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false };
     next.sleepAid = root.PetHouseSleep ? root.PetHouseSleep.parseSleepAid(raw.sleepAid) : { plugin: "off", playing: false };
+    next.deskSpots = root.PetDeskSpots ? root.PetDeskSpots.parseSpots(raw.deskSpots, Date.now()) : {};
     return next;
   }
 

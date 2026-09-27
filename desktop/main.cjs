@@ -725,6 +725,10 @@ function startDesktopFollow() {
         fitWorkArea();
       },
     },
+    // ADR 0132: two desktop ids of the overlay's own window. The renderer keeps the pet's spot.
+    onArrive: (move) => {
+      if (win && !win.isDestroyed()) win.webContents.send("vdesk-arrive", move);
+    },
   });
   if (followDesktops) vdeskFollower.start();
   refreshMenus();

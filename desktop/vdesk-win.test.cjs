@@ -8,6 +8,7 @@ const Desk = require("./renderer/desk.js");
 
 const moduleSrc = readFileSync(join(__dirname, "vdesk-win.cjs"), "utf8");
 const mainSrc = readFileSync(join(__dirname, "main.cjs"), "utf8");
+const preloadSrc = readFileSync(join(__dirname, "preload.cjs"), "utf8");
 const pkg = JSON.parse(readFileSync(join(__dirname, "package.json"), "utf8"));
 
 const OWN = "4242";
@@ -89,9 +90,9 @@ function rig(opts) {
 }
 
 test("the probe answer: manager first, shell cloak only when the manager could not say", () => {
-  assert.deepEqual(V.parseProbeText("1 0\r\n"), { gone: false, on: true, cloaked: 0 });
-  assert.deepEqual(V.parseProbeText("0 2\r\n"), { gone: false, on: false, cloaked: 2 });
-  assert.deepEqual(V.parseProbeText("gone"), { gone: true, on: null, cloaked: 0 });
+  assert.deepEqual(V.parseProbeText("1 0\r\n"), { gone: false, on: true, cloaked: 0, desk: "" });
+  assert.deepEqual(V.parseProbeText("0 2\r\n"), { gone: false, on: false, cloaked: 2, desk: "" });
+  assert.deepEqual(V.parseProbeText("gone"), { gone: true, on: null, cloaked: 0, desk: "" });
   assert.equal(V.parseProbeText("bad"), null);
   assert.equal(V.parseProbeText(""), null);
   assert.equal(V.offDesktop(V.parseProbeText("0 0")), true);
@@ -309,8 +310,8 @@ test("the helper pipe carries the overlay's own HWND and nothing else", async ()
   const probe = V.createProbe({ spawn: spawnFn, timeoutMs: 500 });
   assert.equal(await probe.ask("not-a-window"), null);
   assert.equal(calls.length, 0, "a bad id never spawns the helper");
-  assert.deepEqual(await probe.ask(OWN), { gone: false, on: false, cloaked: 2 });
-  assert.deepEqual(await probe.ask(OWN), { gone: false, on: false, cloaked: 2 });
+  assert.deepEqual(await probe.ask(OWN), { gone: false, on: false, cloaked: 2, desk: "" });
+  assert.deepEqual(await probe.ask(OWN), { gone: false, on: false, cloaked: 2, desk: "" });
   assert.equal(calls.length, 1, "one helper for every ask");
   const [{ cmd, args, options, child }] = calls;
   assert.equal(cmd, "powershell.exe");
@@ -359,7 +360,9 @@ test("privacy: the helper asks about one HWND and never reads other windows", ()
   assert.match(script, /DwmGetWindowAttribute\(h, DWMWA_CLOAKED/);
   assert.match(script, /if \(!IsWindow\(h\)\) return "gone"/);
   assert.equal(script.includes(".MoveWindowToDesktop("), false, "no cross-process move is attempted");
-  assert.equal(script.includes(".GetWindowDesktopId("), false);
+  // ADR 0132: the desktop id is read for the same one HWND, and only that one.
+  assert.match(script, /mgr\.GetWindowDesktopId\(h, out g\)/);
+  assert.equal(script.split("GetWindowDesktopId(").length - 1, 2, "declared once, called once");
   assert.doesNotMatch(moduleSrc, /require\("\.\/windows-enum\.cjs"\)/);
   assert.doesNotMatch(moduleSrc, /listRaw/);
 });
@@ -410,4 +413,102 @@ test("the overlay follows on Windows only; Spaces and workspaces keep Electron's
   assert.match(mainSrc, /stopDesktopFollow\(\);/);
   assert.ok(pkg.build.files.includes("vdesk-win.cjs"));
   assert.match(pkg.scripts.test, /vdesk-win\.test\.cjs/);
+});
+
+const DESK_A = "8f3c1a52-0d4e-4b7a-9c61-2e5d7f90ab01";
+const DESK_B = "1b2c3d4e-5f60-4172-8394-a5b6c7d8e9f0";
+
+/** Two desktops: the keeper's current one and the one the overlay's own window is on. */
+function deskRig(opts) {
+  const o = opts || {};
+  const state = { t: 0, current: DESK_A, overlay: DESK_A, visible: true, enabled: true, arrivals: [], reshows: 0 };
+  const timers = fakeTimers();
+  const probe = {
+    ask() {
+      return Promise.resolve({ gone: false, on: state.overlay === state.current, cloaked: state.overlay === state.current ? 0 : 2, desk: state.overlay });
+    },
+  };
+  const follower = V.createFollower({
+    probe,
+    timers,
+    now: () => state.t,
+    enabled: () => state.enabled,
+    win: {
+      hwnd: () => OWN,
+      visible: () => state.visible,
+      reshow: () => {
+        state.reshows += 1;
+        state.overlay = state.current;
+      },
+    },
+    onArrive: o.noArrive ? undefined : (move) => state.arrivals.push(move),
+  });
+  return { state, timers, follower };
+}
+
+test("the probe answer carries the overlay's own desktop id, and GUID_NULL is no id", () => {
+  assert.deepEqual(V.parseProbeText(`1 0 ${DESK_A.toUpperCase()}\r\n`), { gone: false, on: true, cloaked: 0, desk: DESK_A });
+  assert.deepEqual(V.parseProbeText(`0 2 {${DESK_B}}`), { gone: false, on: false, cloaked: 2, desk: DESK_B });
+  assert.equal(V.parseProbeText("1 0 -").desk, "");
+  assert.equal(V.parseProbeText("1 0 00000000-0000-0000-0000-000000000000").desk, "");
+  assert.equal(V.parseProbeText("1 0 not-a-guid").desk, "");
+});
+
+test("a desktop switch tells the renderer which desktop the pet left and which it is on", async () => {
+  const { state, timers, follower } = deskRig();
+  follower.start();
+  await settle();
+  assert.equal(follower.desk(), DESK_A);
+  assert.deepEqual(state.arrivals, [], "the first desktop after start only records");
+  state.current = DESK_B;
+  state.t = 1000;
+  await follower.tick("poll");
+  state.t = 1300;
+  timers.fireTimeouts();
+  await settle();
+  assert.equal(state.reshows, 1);
+  assert.deepEqual(state.arrivals, [], "no arrival until the manager says the overlay is here");
+  state.t = 2000;
+  await follower.tick("poll");
+  assert.deepEqual(state.arrivals, [{ from: DESK_A, to: DESK_B }]);
+  state.t = 2750;
+  await follower.tick("poll");
+  assert.equal(state.arrivals.length, 1, "staying on a desktop is not another arrival");
+  assert.equal(follower.stats.arrivals, 1);
+});
+
+test("follow off: no probe, no arrival; turning it back on starts a fresh record", async () => {
+  const { state, follower } = deskRig();
+  state.enabled = false;
+  follower.start();
+  await settle();
+  state.current = DESK_B;
+  state.t = 5000;
+  await follower.tick("poll");
+  assert.deepEqual(state.arrivals, []);
+  assert.equal(follower.desk(), "");
+  follower.stop();
+  assert.equal(follower.desk(), "");
+});
+
+test("a follower without onArrive behaves exactly as before", async () => {
+  const { state, timers, follower } = deskRig({ noArrive: true });
+  follower.start();
+  await settle();
+  state.current = DESK_B;
+  state.t = 1000;
+  await follower.tick("poll");
+  state.t = 1300;
+  timers.fireTimeouts();
+  await settle();
+  state.t = 2000;
+  await follower.tick("poll");
+  assert.equal(state.reshows, 1);
+  assert.equal(follower.stats.arrivals, 1);
+});
+
+test("main forwards the two desktop ids to the renderer and nothing else", () => {
+  assert.match(mainSrc, /onArrive: \(move\) => \{\s*if \(win && !win\.isDestroyed\(\)\) win\.webContents\.send\("vdesk-arrive", move\);/);
+  assert.match(preloadSrc, /onDeskArrive: \(fn\) =>/);
+  assert.match(preloadSrc, /ipcRenderer\.on\("vdesk-arrive", wrapped\)/);
 });

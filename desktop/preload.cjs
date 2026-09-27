@@ -56,4 +56,9 @@ contextBridge.exposeInMainWorld("desk", {
     ipcRenderer.on("gpu", wrapped);
     return () => ipcRenderer.removeListener("gpu", wrapped);
   },
+  onDeskArrive: (fn) => {
+    const wrapped = (_e, move) => fn(move);
+    ipcRenderer.on("vdesk-arrive", wrapped);
+    return () => ipcRenderer.removeListener("vdesk-arrive", wrapped);
+  },
 });
