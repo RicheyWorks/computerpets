@@ -811,6 +811,9 @@ GPU_REPLAYS = (
     # Counters only: the busiest engine after adding every process on it (Task Manager's
     # number). Here the video decode engine at 4.2%, not one process's 3D share (0.5%).
     ("gpu-win-pdh.txt", "win32", "GPU unread · unread · 4.2% · 1.5 GiB/unread · unread"),
+    # Hand-built: two adapters that both report phys_0. They are read apart by LUID, and the
+    # one with the most VRAM (8 GiB, 12.5%) is shown, not the integrated one's 61.5%.
+    ("gpu-win-two-adapters.txt", "win32", "GPU unread · unread · 12.5% · 2 GiB/8 GiB · unread"),
     ("gpu-linux-amdgpu.txt", "linux", "GPU AMD Radeon RX 7800 XT · 51°C · 23% · 2.2 GiB/16 GiB · 38.5 W"),
     ("gpu-mac-ioaccelerator.txt", "darwin", "GPU Apple M2 Pro · unread · 18% · 3 GiB/unread · unread"),
     ("gpu-linux-absent.txt", "linux", "GPU unread"),
@@ -1333,9 +1336,24 @@ def _desk_rows() -> list[Affordance]:
             "Saved GPU probe output through both readers",
             "gpu-sense.cjs read + gpu.js gpuLine / gpu.py read_local + gpu_line",
             notes=(
-                "A recorded Windows probe plus built Windows-counter, Linux amdgpu, Mac, and no-GPU outputs. "
-                "Desktop and blotter must print the same line. A missing reading stays unread. Counters "
-                "read like Task Manager: add processes per engine, then the busiest engine."
+                "A recorded Windows probe plus built Windows-counter, two-adapter, Linux amdgpu, Mac, and "
+                "no-GPU outputs. Desktop and blotter must print the same line. A missing reading stays "
+                "unread. Counters read like Task Manager: add processes per engine, then the busiest "
+                "engine. Counters are grouped per adapter LUID, and the adapter with the most VRAM is shown."
+            ),
+        ),
+        Affordance(
+            "desk.links.open",
+            "desk",
+            "Painted news links open in the keeper's browser, never in the overlay",
+            "desk-house.js link + presence/open-link.cjs sealContents / openLink",
+            notes=(
+                "Paints the saved Popular RSS, the saved Wikipedia featured feed, and a hostile item, then "
+                "clicks every painted link through the same seal main.cjs puts on the overlay. Each "
+                "http(s) link reaches shell.openExternal once and carries its Opens <host> line. "
+                "javascript:, data:, file:, blob:, about:, chrome:, mailto:, ftp:, relative, and "
+                "credential links are refused and logged by scheme only. Every window-open answer is deny "
+                "and every navigation is prevented. A real browser opening stays unchecked."
             ),
         ),
         Affordance(
@@ -1573,6 +1591,8 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("nft_replay", domain="desk", action_id=aid)
     if local_id == "gpu.replay":
         return _gpu_replay(aid)
+    if local_id == "links.open":
+        return _run_node_smoke("links_open", domain="desk", action_id=aid)
     if local_id == "favorites.news":
         return _run_node_smoke("news_favorites", domain="desk", action_id=aid)
     if local_id == "favorites.market":
