@@ -1,7 +1,50 @@
 #!/bin/sh
+# Mac and Linux start. Same checks as desktop.ps1: Node first, then the pieces, then the overlay.
 set -eu
 cd "$(dirname "$0")/desktop"
-if [ ! -d node_modules ]; then
-  npm install
+
+stop_start() {
+  printf '%s\n' "$1"
+  exit 1
+}
+
+# 1. Node runs the overlay. Check it is here and new enough before anything else.
+command -v node >/dev/null 2>&1 || stop_start "Node is not installed yet. Install the LTS from https://nodejs.org (version 22 or newer), open a new Terminal in the computerpets folder, and run sh desktop.sh again."
+command -v npm >/dev/null 2>&1 || stop_start "npm is missing. It comes with Node. Install the LTS from https://nodejs.org again, open a new Terminal in the computerpets folder, and run sh desktop.sh again."
+version=$(node -v 2>/dev/null || true)
+major=$(printf '%s' "$version" | sed -n 's/^v\([0-9][0-9]*\)\..*/\1/p')
+if [ -z "$major" ] || [ "$major" -lt 22 ]; then
+  stop_start "This Node is ${version:-unknown}. The pets need version 22 or newer. Install the LTS from https://nodejs.org, open a new Terminal in the computerpets folder, and run sh desktop.sh again."
 fi
-npm start
+
+# 2. The pieces. node_modules alone is not enough: a get-the-pieces run that was closed halfway
+#    leaves the folder without Electron. The stamp is written only after npm install finishes,
+#    and a newer package.json (after a pull) asks for the pieces again.
+electron=node_modules/electron/path.txt
+stamp=node_modules/.computerpets-installed
+pieces() {
+  if [ ! -f "$electron" ]; then echo missing
+  elif [ ! -f "$stamp" ]; then echo unfinished
+  elif [ package.json -nt "$stamp" ]; then echo changed
+  else echo ready
+  fi
+}
+state=$(pieces)
+
+# --check says what the start sees and changes nothing: no install, no overlay.
+if [ "${1:-}" = "--check" ]; then
+  echo "ok: node $version"
+  echo "pieces: $state"
+  exit 0
+fi
+
+if [ "$state" != ready ]; then
+  echo "Getting the pieces (npm install). The first time can take a few minutes. Leave this window open."
+  npm install || stop_start "npm install did not finish. Check the internet, then run sh desktop.sh again. It gets the pieces again."
+  [ -f "$electron" ] || npm rebuild electron || true
+  [ -f "$electron" ] || stop_start "The overlay piece (Electron) did not download. Check the internet, delete the desktop/node_modules folder, and run sh desktop.sh again."
+  date > "$stamp"
+fi
+
+# 3. Turn the pets on. npm start is electron .
+exec npm start
