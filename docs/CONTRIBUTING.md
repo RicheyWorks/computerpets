@@ -185,6 +185,13 @@ When making architectural changes, remember to update the **"Last Updated"** dat
   | `tftest` | `terraform test` in `deploy/terraform` | terraform and a prior `terraform init`, else skipped |
 
   `-Quick` leaves out `web`, `tsc`, `java`, `deploy-sh`, and `tftest`. Logs go to `%TEMP%\computerpets-test-all` (or `$TMPDIR/computerpets-test-all`). On Windows, Git Bash is not on PATH by default, so `deploy-sh` is skipped; pass `-Bash "C:\Program Files\Git\bin\bash.exe"` to try it (it still needs a real `python3`, not the Store alias).
+
+  **deploy-sh on Windows.** The deploy meta-tests run under bash and call `python3` with PyYAML. Git Bash uses the Windows `PATH`, and on many Windows computers `python3` there is the Microsoft Store alias (it prints "Python was not found"), so `test-all` skips the suite with "python3 with PyYAML is not available to bash". To run it, once:
+  1. Install PyYAML into your real Python: `py -3 -m pip install --user pyyaml`.
+  2. Let bash find that Python as `python3`: turn off the `python3.exe` alias in Settings > Apps > Advanced app settings > App execution aliases, then put a `python3.exe` on `PATH`. The python.org installer only ships `python.exe`, so copy it to `python3.exe` in the same folder (for example `C:\Users\<you>\AppData\Local\Programs\Python\Python310`), or use the Microsoft Store Python, which has `python3`.
+  3. Check it: `& "C:\Program Files\Git\bin\bash.exe" -c "python3 -c 'import yaml; print(yaml.__version__)'"` prints a version.
+
+  Then `-Bash "C:\Program Files\Git\bin\bash.exe"` runs `deploy-sh`. `test-all` itself never installs these.
 - `web` has about 1,500 known TypeScript errors. `web/tsc-baseline.txt` holds the line count of `tsc --noEmit`. `node scripts/tsc-baseline.mjs` in `web/` fails when the count goes up and passes with a note when it goes down. After you fix some, lock in the lower number with `node scripts/tsc-baseline.mjs --update` and commit `web/tsc-baseline.txt`. CI runs the web tests and this check in the `web-desk` job.
 - Shell scripts are LF on every checkout (`*.sh text eol=lf` in `.gitattributes`). On a Windows clone made before that line, re-check them out once in PowerShell: `$sh = git ls-files "*.sh"; Remove-Item $sh; git checkout -- $sh`
 
