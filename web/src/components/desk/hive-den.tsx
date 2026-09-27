@@ -22,7 +22,7 @@ import { INSECT_KEYS } from "@/lib/pets/insects";
 import { livingByKey } from "@/lib/pets/living";
 import { plaqueFor } from "@/lib/pets/plaques";
 import { traitFor } from "@/lib/pets/traits";
-import { everyVisible } from "@/lib/pets/keeper";
+import { everyVisible, petTapLabel } from "@/lib/pets/keeper";
 
 const HIVE_KEYS = [...INSECT_KEYS, ...BEE_KEYS];
 const WALKER_KEYS = hiveWalkers(HIVE_KEYS);
@@ -101,6 +101,7 @@ function HiveGuest({
           setOrder((o) => ({ cmd: "idle", id: o.id + 1 }));
         }
       }}
+      tapLabel={petTapLabel(kind.name, "pick", selected ? "chosen" : "")}
       onTap={() => {
         onSelect();
         setSpeech(guide?.lesson ?? kind.greetLine());

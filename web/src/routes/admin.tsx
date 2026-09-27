@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
-import { REVOKED_NOTE, formatLocalWhen, markRevoked, rereadOnce, revokedListStale } from "@/lib/admin/base";
+import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { REVOKED_NOTE, focusAfterGate, formatLocalWhen, ledgerCaption, markRevoked, rereadOnce, revokedListStale } from "@/lib/admin/base";
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -43,6 +43,19 @@ export function AdminPage() {
   /** After a stale-list revoke: cancel for the one scheduled re-read, and a generation so a late answer is dropped. */
   const reread = useRef<(() => void) | null>(null);
   const rereadGen = useRef(0);
+  /** Focus after the gate changes: the search once unlocked, the admin key after a lock or a refused unlock. */
+  const keyInput = useRef<HTMLInputElement>(null);
+  const searchInput = useRef<HTMLInputElement>(null);
+  const gateSeen = useRef(false);
+  const ledgerId = useId();
+
+  useEffect(() => {
+    if (!gateSeen.current) {
+      gateSeen.current = true;
+      return;
+    }
+    (focusAfterGate(unlocked) === "search" ? searchInput : keyInput).current?.focus();
+  }, [unlocked]);
 
   function cancelReread() {
     rereadGen.current += 1;
@@ -86,6 +99,7 @@ export function AdminPage() {
       // A rejected key must not stay in this tab, or every reload retries it and shows the same refusal.
       if (err instanceof AdminApiError && err.status === 401) clearAdminSession();
       showError(err, "Unlock failed.");
+      keyInput.current?.focus();
     } finally {
       setBusy(false);
     }
@@ -217,6 +231,7 @@ export function AdminPage() {
           </Field>
           <Field label="Admin key">
             <input
+              ref={keyInput}
               type="password"
               value={adminKey}
               onChange={(e) => setAdminKey(e.target.value)}
@@ -246,9 +261,11 @@ export function AdminPage() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <input
+                ref={searchInput}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="jti or owner"
+                aria-label="jti or owner"
                 autoComplete="off"
                 spellCheck={false}
                 className="h-11 min-w-0 flex-1 rounded-[var(--radius-sm)] border border-border bg-elevated px-3 font-mono text-sm"
@@ -261,7 +278,10 @@ export function AdminPage() {
 
           <Note note={note} detail={detail} />
 
-          <ul className="space-y-3">
+          <h2 id={ledgerId} className="sr-only">
+            {ledgerCaption(rows.length)}
+          </h2>
+          <ul className="space-y-3" aria-labelledby={ledgerId}>
             {rows.map((row) => (
               <li
                 key={row.jti}
@@ -314,17 +334,33 @@ export function AdminPage() {
   );
 }
 
-/** The page note. Raw service text stays folded under "Details" and is never the default view. */
+/**
+ * The page note, read out as a status. Raw service text stays folded behind the "Details" toggle
+ * (aria-expanded / aria-controls) and is never the default view; a new detail folds it again.
+ */
 function Note({ note, detail }: { note: string | null; detail: string | null }) {
+  const detailId = useId();
+  const [open, setOpen] = useState(false);
+  useEffect(() => setOpen(false), [detail]);
   if (!note) return null;
   return (
-    <div className="space-y-1">
+    <div className="space-y-1" role="status">
       <p className="text-sm text-muted">{note}</p>
       {detail ? (
-        <details className="text-xs text-subtle">
-          <summary className="cursor-pointer select-none">Details</summary>
-          <p className="mt-1 break-all font-mono">{detail}</p>
-        </details>
+        <div className="text-xs text-subtle">
+          <button
+            type="button"
+            className="cursor-pointer select-none underline-offset-2 hover:underline"
+            aria-expanded={open}
+            aria-controls={detailId}
+            onClick={() => setOpen((was) => !was)}
+          >
+            Details
+          </button>
+          <p id={detailId} hidden={!open} className="mt-1 break-all font-mono">
+            {detail}
+          </p>
+        </div>
       ) : null}
     </div>
   );

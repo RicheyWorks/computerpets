@@ -133,6 +133,17 @@ export function rereadOnce(
 }
 
 /** The rows with `jti` marked revoked locally, for when the ledger confirmed it but the list did not refresh. */
+/** The ledger list's accessible name (a screen reader's caption for the rows below the search). */
+export function ledgerCaption(count: number): string {
+  if (count === 0) return "Licenses: none shown";
+  return count === 1 ? "Licenses: 1 shown" : `Licenses: ${count} shown`;
+}
+
+/** Where focus lands when the page opens or locks: the search when unlocked, the admin key when locked. */
+export function focusAfterGate(unlocked: boolean): "search" | "key" {
+  return unlocked ? "search" : "key";
+}
+
 export function markRevoked<T extends { jti: string; revoked: boolean; deleted: boolean }>(rows: T[], jti: string): T[] {
   return rows.map((row) => (row.jti === jti ? { ...row, revoked: true, deleted: true } : row));
 }
