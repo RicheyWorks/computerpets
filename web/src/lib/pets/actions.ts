@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
 import { getSql } from "@/lib/db";
+import { HouseError } from "@/lib/plain-error";
 import { HATCH_COST, SPECIES, findSpecies, mintTokenId, pickSpecies, pickWeightedRarity } from "./catalog";
 import {
   applySanctuaryCare,
@@ -396,7 +397,7 @@ export const hatchPet = createServerFn({ method: "POST" })
     const rarity = pickWeightedRarity();
     const cost = HATCH_COST[rarity];
     if (ember < cost) {
-      throw new Error(`Need ${cost} ember to hatch a ${rarity.toLowerCase()} companion.`);
+      throw new HouseError(`Need ${cost} ember to hatch a ${rarity.toLowerCase()} companion.`);
     }
     const species = pickSpecies(rarity);
     const genotype = rollCatalogGenotype(species.key);
@@ -439,38 +440,38 @@ export const pairNest = createServerFn({ method: "POST" })
       where id = ${data.parentA} and user_id = ${context.userId} and departed_at is null
     `;
     const parentA = aRows[0];
-    if (!parentA) throw new Error("The first guest is not in this house.");
+    if (!parentA) throw new HouseError("The first guest is not in this house.");
     const now = Date.now();
     const tickA = tickSanctuary(parentA.species_key, careSeed(parentA, now), asMs(parentA.last_tick, now), floorSinceMs(parentA), now);
     await persistTick(context.userId, parentA.id, tickA, now);
-    if (tickA.departedAt) throw new Error("The first guest has left this house.");
+    if (tickA.departedAt) throw new HouseError("The first guest has left this house.");
     let parentB: CompanionRow | null = null;
     let stageB: LifeStage | undefined;
     if (data.parentB) {
-      if (data.parentB === data.parentA) throw new Error("Pair two, or let a starter split. Not one guest twice.");
+      if (data.parentB === data.parentA) throw new HouseError("Pair two, or let a starter split. Not one guest twice.");
       const bRows = await sql<CompanionRow>`
         select * from companion_pets
         where id = ${data.parentB} and user_id = ${context.userId} and departed_at is null
       `;
       parentB = bRows[0] ?? null;
-      if (!parentB) throw new Error("The second guest is not in this house.");
+      if (!parentB) throw new HouseError("The second guest is not in this house.");
       const tickB = tickSanctuary(parentB.species_key, careSeed(parentB, now), asMs(parentB.last_tick, now), floorSinceMs(parentB), now);
       await persistTick(context.userId, parentB.id, tickB, now);
-      if (tickB.departedAt) throw new Error("The second guest has left this house.");
+      if (tickB.departedAt) throw new HouseError("The second guest has left this house.");
       stageB = stageOf(tickB.stats, now);
     }
     const verdict = canPair(parentA.species_key, parentB?.species_key ?? null, {
       a: { stage: stageOf(tickA.stats, now) },
       b: stageB ? { stage: stageB } : undefined,
     });
-    if (!verdict.ok) throw new Error(verdict.reason);
+    if (!verdict.ok) throw new HouseError(verdict.reason);
     const path = verdict.path;
     const keepers = await sql<{ ember: number }>`
       select ember from pet_keepers where user_id = ${context.userId}
     `;
     const ember = Number(keepers[0]?.ember ?? 0);
     if (ember < path.cost) {
-      throw new Error(`Need ${path.cost} ember for ${path.word}.`);
+      throw new HouseError(`Need ${path.cost} ember for ${path.word}.`);
     }
     const mother = genesOf(parentA);
     const father = parentB ? genesOf(parentB) : null;
@@ -566,14 +567,14 @@ export const careForPet = createServerFn({ method: "POST" })
       select * from companion_pets where id = ${data.petId} and user_id = ${context.userId} and departed_at is null
     `;
     const row = rows[0];
-    if (!row) throw new Error("Companion not found.");
+    if (!row) throw new HouseError("Companion not found.");
 
     const now = Date.now();
     const last = asMs(row.last_tick, now);
     const tick = tickSanctuary(row.species_key, careSeed(row, now), last, floorSinceMs(row), now);
     if (tick.departedAt) {
       await persistTick(context.userId, row.id, tick, now);
-      throw new Error(departLine(row.name, row.species_key));
+      throw new HouseError(departLine(row.name, row.species_key));
     }
 
     const cared = applySanctuaryCare(data.action as SanctuaryCare, row.species_key, tick.stats, now);
@@ -646,6 +647,6 @@ export const catalogSnapshot = createServerFn({ method: "GET" }).handler(async (
 
 export function speciesOrThrow(key: string) {
   const s = findSpecies(key);
-  if (!s) throw new Error(`Unknown species: ${key}`);
+  if (!s) throw new HouseError(`Unknown species: ${key}`);
   return s;
 }
