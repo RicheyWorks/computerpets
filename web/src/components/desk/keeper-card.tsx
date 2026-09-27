@@ -34,6 +34,7 @@ import {
   VOICE_STYLES,
   addLine,
   clockTick,
+  createCardTickReader,
   formatRemain,
   guestOf,
   lineById,
@@ -58,6 +59,9 @@ import { CALL_EMPTY, callKeys, groups as callGroups } from "@/lib/pets/call-gues
 import { LIVING_KINDS } from "@/lib/pets/living";
 import { cn } from "@/lib/utils";
 import { RETRY_LABEL, soundInterrupted, soundProblem, type SoundWhat } from "@/lib/plain-error";
+
+/** The clock's read: parses the saved card only when its stored text changed. */
+const readCardForTick = createCardTickReader();
 
 export function KeeperCard({
   name,
@@ -289,7 +293,7 @@ export function KeeperCard({
     let since = Date.now();
     const id = window.setInterval(() => {
       const now = Date.now();
-      const live = loadCard();
+      const live = readCardForTick();
       const tick = clockTick(guestOf(live, guestKey), now, since);
       since = now;
       if (!tick.changed) return;
@@ -521,6 +525,8 @@ export function KeeperCard({
             <button
               type="button"
               data-on={guest.alarm.on ? "1" : "0"}
+              aria-label={guest.alarm.on ? "Alarm on" : "Alarm off"}
+              aria-pressed={guest.alarm.on}
               onClick={(e) => {
                 e.stopPropagation();
                 write(setGuest(card, guestKey, { alarm: { ...guest.alarm, on: !guest.alarm.on } }));
@@ -563,6 +569,7 @@ export function KeeperCard({
                 key={bus}
                 type="button"
                 data-on={card.mutes[bus] ? "1" : "0"}
+                aria-pressed={!!card.mutes[bus]}
                 onClick={(e) => {
                   e.stopPropagation();
                   write({ ...card, mutes: { ...card.mutes, [bus]: !card.mutes[bus] } });

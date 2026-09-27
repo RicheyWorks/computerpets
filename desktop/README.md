@@ -31,6 +31,8 @@ A tap on the guest is a choice. They pick Rest, Walk or Sit, Talk, Treat, Play, 
 - Call back if they hide
 - Special — the same species trick the desk already keeps (Ridge sits, Chirp sings, Wave waves…)
 
+**Keeper card from the keyboard.** The tray and the pet menu have **Keeper card**: it shows the overlay and opens the card with the keyboard on it (a click inside the open card does too). There is no global shortcut: main registers no system-wide keys ([ADR 0012](../docs/adr/0012-presence-does-not-log-keys.md)). While the card is open, Tab and Shift+Tab walk its buttons and then the weather, news, and market plates on the glass, with a visible ring; Escape closes the card. With the card closed the glass stays click-through, as before.
+
 They grow: hatchling → grown (day 1) → elder (day 7). Neglect them and they vanish until you call. Phoenix can burn out and come back kinder. Comb keeps brood and stores. Neglect can go cool.
 
 ## Run

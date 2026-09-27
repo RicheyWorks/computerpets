@@ -176,7 +176,10 @@ for (const [rel, call] of SURFACES) {
 
 test("plain-error: admin raw detail sits behind a Details toggle, never the default", () => {
   const text = src("src/routes/admin.tsx");
-  assert.match(text, /<details[^>]*>\s*<summary[^>]*>Details<\/summary>/);
+  // A real toggle: aria-expanded / aria-controls on the Details button; the raw text stays hidden until it is pressed.
+  assert.match(text, /aria-expanded=\{open\}\s*aria-controls=\{detailId\}[\s\S]{0,120}>\s*Details\s*<\/button>/);
+  assert.match(text, /<p id=\{detailId\} hidden=\{!open\}/);
+  assert.match(text, /const \[open, setOpen\] = useState\(false\);/);
   assert.match(text, /err instanceof AdminApiError && err\.detail/);
   assert.equal((text.match(/<Note note=\{note\} detail=\{detail\} \/>/g) ?? []).length, 2);
   assert.doesNotMatch(text, /\{note\}\s*<\/p>\s*:\s*null/);

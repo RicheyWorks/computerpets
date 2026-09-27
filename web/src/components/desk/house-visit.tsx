@@ -10,6 +10,7 @@ import {
   visitLine,
 } from "@/lib/pets/visitor";
 import { traitFor } from "@/lib/pets/traits";
+import { petTapLabel } from "@/lib/pets/keeper";
 import { ROBIN_KEY } from "@/lib/pets/robin-fly";
 
 export function HouseVisit({ hostKey, hidden }: { hostKey: string; hidden?: boolean }) {
@@ -74,6 +75,7 @@ export function HouseVisit({ hostKey, hidden }: { hostKey: string; hidden?: bool
         if (order.cmd === "enter" || order.cmd === "wander") setOrder((o) => ({ cmd: "idle", id: o.id + 1 }));
         if (order.cmd === "leave") setPhase("gone");
       }}
+      tapLabel={petTapLabel(guest.name, "hello")}
       onTap={() => {
         setSpeech(visitLine(guest.key));
         setOrder((o) => ({ cmd: "talk", id: o.id + 1 }));

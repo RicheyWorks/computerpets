@@ -228,6 +228,27 @@ export function roomLabel(name: string): string {
   return `${name}'s room`;
 }
 
+/**
+ * The pet's hit area as a button: its accessible name. The room's tap opens the keeper card and the
+ * sit choice; a blotter or hive guest's tap picks them; a visitor or floor walker's tap says hello.
+ * `state` (the art label, or "chosen") rides along in brackets.
+ */
+export function petTapLabel(name: string, act: "choice" | "pick" | "hello", state = ""): string {
+  const base = act === "choice" ? `Choose what ${name} does` : act === "pick" ? `Pick ${name}` : `Say hello to ${name}`;
+  return state && state !== name ? `${base} (${state})` : base;
+}
+
+/** Enter or Space on the pet's hit area is a tap (held-key repeats are not). */
+export function isTapKey(key: string, repeat = false): boolean {
+  if (repeat) return false;
+  return key === "Enter" || key === " " || key === "Spacebar";
+}
+
+/** True when a read at `at` is older than `ms` (or never happened): the news plate reads once on return only then. */
+export function isStale(at: number | null, now: number, ms: number): boolean {
+  return at == null || now - at >= ms;
+}
+
 /** The page's one heartbeat poll. It starts on the first subscribe (in an effect), never at import. */
 export const heartbeatPoll = createHeartbeatPoll();
 

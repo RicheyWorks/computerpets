@@ -5,7 +5,7 @@ import { LIVING_KINDS } from "@/lib/pets/living";
 import { plaqueFor } from "@/lib/pets/plaques";
 import { traitFor } from "@/lib/pets/traits";
 import { cn } from "@/lib/utils";
-import { everyVisible } from "@/lib/pets/keeper";
+import { everyVisible, petTapLabel } from "@/lib/pets/keeper";
 
 const ON_BLOTTER = 5;
 const STARTS = [28, 150, 280, 420, 560];
@@ -62,6 +62,7 @@ export function BlotterGuest({
           setOrder((o) => ({ cmd: "idle", id: o.id + 1 }));
         }
       }}
+      tapLabel={petTapLabel(kind.name, "pick", selected ? "chosen" : "")}
       onTap={() => {
         onSelect();
         setSpeech(guide?.lesson ?? kind.greetLine());

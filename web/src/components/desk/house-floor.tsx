@@ -3,6 +3,7 @@ import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
 import { DayWash } from "@/components/desk/blotter";
 import { LIVING_KINDS } from "@/lib/pets/living";
 import { traitFor } from "@/lib/pets/traits";
+import { everyVisible, petTapLabel } from "@/lib/pets/keeper";
 import { cn } from "@/lib/utils";
 
 const KEYS = ["red_panda", "ball_python", "corn_snake", "green_tree_python"] as const;
@@ -16,7 +17,8 @@ function Guest({ species, startX, scale }: { species: string; startX: number; sc
 
   useEffect(() => {
     kind.preload();
-    const id = window.setInterval(() => {
+    // A hidden tab pauses the walker; it picks up again when the page shows.
+    const stop = everyVisible(() => {
       const roll = Math.random();
       if (roll < 0.55) setOrder((o) => ({ cmd: "wander", id: o.id + 1 }));
       else if (roll < 0.78) setOrder((o) => ({ cmd: trait.wander < 0.2 ? "sit" : "idle", id: o.id + 1 }));
@@ -26,7 +28,7 @@ function Guest({ species, startX, scale }: { species: string; startX: number; sc
         window.setTimeout(() => setSpeech(null), 2800);
       }
     }, 3800 + Math.random() * 2400);
-    return () => window.clearInterval(id);
+    return stop;
   }, [kind, trait.wander]);
 
   return (
@@ -43,6 +45,7 @@ function Guest({ species, startX, scale }: { species: string; startX: number; sc
       onArrived={() => {
         if (order.cmd === "wander") setOrder((o) => ({ cmd: "idle", id: o.id + 1 }));
       }}
+      tapLabel={petTapLabel(kind.name, "hello")}
       onTap={() => {
         setSpeech(kind.greetLine());
         setOrder((o) => ({ cmd: "talk", id: o.id + 1 }));

@@ -153,6 +153,7 @@ import {
   CANT_REACH as MARKET_CANT_REACH,
 } from "@/lib/pets/market";
 import { loadCard, saveCard, type CardPrefs } from "@/lib/pets/card";
+import { everyVisible, isStale } from "@/lib/pets/keeper";
 import type { DeskWindow } from "@/lib/pets/windows";
 import {
   SWATCHES,
@@ -281,6 +282,10 @@ function usePlateChrome(key: PlateKey) {
 
 const WEATHER_ID = "desk-weather";
 const NEWS_ID = "desk-news";
+/** Headlines refresh every 20 minutes while the page shows. */
+const NEWS_REFRESH_MS = 20 * 60 * 1000;
+/** Stale a little before the next tick, so a timer that lands a hair early still reads. */
+const NEWS_STALE_MS = NEWS_REFRESH_MS - 30_000;
 
 function writeCard(patch: Partial<CardPrefs>) {
   return saveCard({ ...loadCard(), ...patch });
@@ -761,6 +766,8 @@ export function DeskNewsPlate() {
   /** Ties each Try again to its problem line for screen readers. */
   const problemId = useId();
   const itemsRef = useRef<NewsItem[]>(items);
+  /** When the headlines were last asked for; a hidden tab returning reads again only if that is 20 minutes old. */
+  const newsReadAt = useRef<number | null>(null);
   itemsRef.current = items;
   const [query, setQuery] = useState("");
   const prefs = useMemo(() => parseNewsPrefs(card), [card]);
@@ -794,6 +801,7 @@ export function DeskNewsPlate() {
       const el = document.getElementById("news-net");
       const shown = !!el && (el.textContent || "").includes(line);
       if (!newsMaySend(prefs, shown)) return;
+      newsReadAt.current = Date.now();
       try {
         if (tab === "favorites") {
           if (!cancelled) {
@@ -831,10 +839,17 @@ export function DeskNewsPlate() {
       }
     }
     void load();
-    const id = window.setInterval(() => void load(), 20 * 60 * 1000);
+    // Every 20 minutes while the page shows. A hidden tab stops it; coming back reads once only if stale.
+    const stop = everyVisible(
+      () => {
+        if (isStale(newsReadAt.current, Date.now(), NEWS_STALE_MS)) void load();
+      },
+      NEWS_REFRESH_MS,
+      { onResume: true },
+    );
     return () => {
       cancelled = true;
-      window.clearInterval(id);
+      stop();
     };
   }, [open, prefs, tab, topic.id, topic.query, attempt]);
 

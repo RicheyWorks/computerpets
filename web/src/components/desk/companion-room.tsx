@@ -71,7 +71,7 @@ import { phoneOrient, type PhoneOrient } from "@/lib/pets/phone-desk";
 import { guestMarks, guestPick, guestTap, type GuestChoiceId } from "@/lib/pets/guest-choice";
 import { classifyKey, installFileDropGuard } from "@/lib/pets/presence";
 import { careNotSaved, RETRY_LABEL, talkProblem as talkProblemLine, type CareNotSavedAct } from "@/lib/plain-error";
-import { everyVisible, petArtLabel, roomLabel } from "@/lib/pets/keeper";
+import { everyVisible, petArtLabel, petTapLabel, roomLabel } from "@/lib/pets/keeper";
 
 type DeskCare = "rest" | "clean" | "medicine" | "bath" | "praise";
 
@@ -186,6 +186,9 @@ export function CompanionRoom({
   const resetKey = guestKey ?? kind.key;
   const sittingRef = useRef(kind.localKey);
   const careRef = useRef<HTMLDivElement>(null);
+  const roomRef = useRef<HTMLElement>(null);
+  /** The sit choice was opened with Enter or Space on the pet: focus goes into it, then back to the pet. */
+  const choiceByKeys = useRef(false);
   const [autoTablet, setAutoTablet] = useState(false);
   const [autoPhone, setAutoPhone] = useState(false);
   const [orient, setOrient] = useState<TabletOrient>("blotter");
@@ -286,18 +289,8 @@ export function CompanionRoom({
         return live;
       });
     }
-    const id = window.setInterval(() => {
-      if (document.hidden) return;
-      age();
-    }, 20_000);
-    function onVis() {
-      if (!document.hidden) age();
-    }
-    document.addEventListener("visibilitychange", onVis);
-    return () => {
-      window.clearInterval(id);
-      document.removeEventListener("visibilitychange", onVis);
-    };
+    // A hidden tab stops the 20s care tick; showing the room ages them once and starts it again.
+    return everyVisible(age, 20_000, { onResume: true });
   }, [kind.key, persistLocal, liveTick]);
 
   useEffect(() => {
@@ -381,8 +374,9 @@ export function CompanionRoom({
   }, [speech, order.cmd, issue]);
 
   useEffect(() => {
-    const id = window.setInterval(() => {
-      if (document.hidden || busy || statsRef.current.hidden || deskOff) return;
+    // Stopped while the tab is hidden; resumes when the room shows.
+    return everyVisible(() => {
+      if (busy || statsRef.current.hidden || deskOff) return;
       if (performance.now() < speechUntil.current) return;
       const held = wanderWhileAsleep(statsRef.current.asleep);
       if (held) {
@@ -421,16 +415,15 @@ export function CompanionRoom({
         issue("talk");
       }
     }, 5200);
-    return () => window.clearInterval(id);
   }, [busy, deskOff, issue, say, kind, trait.wander, cardOpen]);
 
   useEffect(() => {
-    const id = window.setInterval(() => {
-      if (document.hidden || deskOff) return;
+    if (deskOff) return;
+    // Rain and wind taps stop while the tab is hidden and start again when it shows.
+    return everyVisible(() => {
       const sky = skyNow();
       if ((sky === "rain" || sky === "wind") && Math.random() < 0.55) playDeskSound(sky, kind.key);
     }, 1000);
-    return () => window.clearInterval(id);
   }, [deskOff, kind.key]);
 
   async function playVoice(src?: string, text?: string) {
@@ -767,6 +760,17 @@ export function CompanionRoom({
   }
 
   useEffect(() => {
+    if (!choiceByKeys.current) return;
+    const room = roomRef.current;
+    if (choiceOpen) {
+      room?.querySelector<HTMLElement>("[data-guest-choice] button")?.focus();
+      return;
+    }
+    choiceByKeys.current = false;
+    room?.querySelector<HTMLElement>("[data-pet-hit]")?.focus();
+  }, [choiceOpen]);
+
+  useEffect(() => {
     function onKey(e: KeyboardEvent) {
       const note = classifyKey(e);
       if (note.record || note.field || note.toggle !== "dismiss") return;
@@ -812,6 +816,7 @@ export function CompanionRoom({
 
   return (
     <section
+      ref={roomRef}
       className="relative isolate h-dvh min-h-[520px] w-full overflow-hidden bg-elevated"
       aria-label={roomLabel(displayName)}
       data-tablet-floor={pad ? "" : undefined}
@@ -890,6 +895,7 @@ export function CompanionRoom({
         musicOn={kind.key === "red_panda" && musicOn}
         label={petArtLabel(displayName, { hidden: stats.hidden || deskOff, asleep: !!stats.asleep, unwell: stats.sick })}
         cardOpen={cardOpen}
+        tapLabel={petTapLabel(displayName, "choice", petArtLabel(displayName, { hidden: stats.hidden || deskOff, asleep: !!stats.asleep, unwell: stats.sick }))}
         onArrived={() => {
           const act = playClaim("arrive", {
             taken: takenRef.current,
@@ -948,11 +954,12 @@ export function CompanionRoom({
             issue("idle");
           }
         }}
-        onTap={() => {
+        onTap={(how) => {
           saveCard({ ...loadCard(), collapsed: false });
           setCardOpen(true);
           setCardOpenTick((n) => n + 1);
           if (guestTap() !== "choice") return;
+          choiceByKeys.current = !!how?.keys;
           setChoiceOpen((open) => !open);
         }}
         onTend={() => {
