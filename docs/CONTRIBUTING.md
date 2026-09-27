@@ -192,7 +192,7 @@ When making architectural changes, remember to update the **"Last Updated"** dat
   3. Check it: `& "C:\Program Files\Git\bin\bash.exe" -c "python3 -c 'import yaml; print(yaml.__version__)'"` prints a version.
 
   Then `-Bash "C:\Program Files\Git\bin\bash.exe"` runs `deploy-sh`. `test-all` itself never installs these.
-- `web` has about 1,500 known TypeScript errors. `web/tsc-baseline.txt` holds the line count of `tsc --noEmit`. `node scripts/tsc-baseline.mjs` in `web/` fails when the count goes up and passes with a note when it goes down. After you fix some, lock in the lower number with `node scripts/tsc-baseline.mjs --update` and commit `web/tsc-baseline.txt`. CI runs the web tests and this check in the `web-desk` job.
+- `web` has 1,593 known TypeScript errors at last count; `web/tsc-baseline.txt` always holds the current number (the line count of `tsc --noEmit`). `node scripts/tsc-baseline.mjs` in `web/` fails when the count goes up and passes with a note when it goes down. After you fix some, lock in the lower number with `node scripts/tsc-baseline.mjs --update` and commit `web/tsc-baseline.txt`. CI runs the web tests and this check in the `web-desk` job.
 - Shell scripts are LF on every checkout (`*.sh text eol=lf` in `.gitattributes`). On a Windows clone made before that line, re-check them out once in PowerShell: `$sh = git ls-files "*.sh"; Remove-Item $sh; git checkout -- $sh`
 
 ### 5. Open a Pull Request

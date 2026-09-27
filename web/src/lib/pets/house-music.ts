@@ -570,3 +570,30 @@ export function overlayPlaySrc(music: MusicPrefs) {
   if (music.plugin === "house") return overlayHouseLoopSrc();
   return music.stationUrl || "";
 }
+
+/** The guest whose keeper card carries the full music block (plugins, radio find). */
+export const HOUSE_MUSIC_OWNER = "red_panda";
+/** The small shared Pause/Play on every other guest's card. */
+export const HOUSE_MUSIC_LABEL = "House music";
+
+/**
+ * Show the shared Pause/Play when the owner's block is not on screen and there
+ * is something to play: the house loop or a picked station. Radio with no
+ * station yet stays hidden (only the owner's block can find one).
+ */
+export function sharedMusicShows(guestKey: string | null | undefined, music: MusicPrefs | null | undefined): boolean {
+  if (!music || guestKey === HOUSE_MUSIC_OWNER) return false;
+  if (music.plugin === "house") return true;
+  return music.plugin === "radio" && !!music.stationUrl;
+}
+
+/** What the shared Pause/Play shows and commits. Same rule as the owner's Play button. */
+export function houseMusicToggle(music: MusicPrefs, streamAsked: boolean) {
+  const remote = music.plugin === "radio" && !!music.stationUrl;
+  const audible = !!music.playing && music.plugin !== "off" && (!remote || streamAsked);
+  return {
+    audible,
+    label: audible ? "Pause music" : "Play music",
+    next: { ...music, playing: !audible && music.plugin !== "off" } as MusicPrefs,
+  };
+}

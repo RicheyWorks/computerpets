@@ -2,16 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ADVERTISED_CARE,
   DESK_PORT,
-  HEARTBEAT_URL,
   KEEPER_CARE,
   KEEPER_KICKER,
   QUIT_TRUTH,
-  UNREAD_HEARTBEAT,
   VOICE_TRUTH,
   careTruth,
   heartbeatLine,
+  heartbeatPoll,
   keeperMeters,
-  parseHeartbeat,
   type Heartbeat,
 } from "@/lib/pets/keeper";
 import { SPARK_H, SPARK_W, UNREAD_GPU, gpuLine, sparkline } from "@/lib/pets/gpu";
@@ -52,7 +50,7 @@ import {
 } from "@/lib/pets/card";
 import { playDeskSound, playStep, playVoice } from "@/lib/pets/desk-audio";
 import { STEP_KINDS, STEP_LABELS, parseStep, stepOf } from "@/lib/pets/house-sounds";
-import { HOUSE_LOOP_LICENSE, MUSIC_PLUGINS, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_FIND, RADIO_LABEL, RADIO_LOCAL, RADIO_PLACEHOLDER, openStationStream, parseMusic, playSrc, radioHonesty, radioMaySend, readRadioSearch, streamHonesty, streamMaySend, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
+import { HOUSE_LOOP_LICENSE, HOUSE_MUSIC_LABEL, MUSIC_PLUGINS, houseMusicToggle, sharedMusicShows, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_FIND, RADIO_LABEL, RADIO_LOCAL, RADIO_PLACEHOLDER, openStationStream, parseMusic, playSrc, radioHonesty, radioMaySend, readRadioSearch, streamHonesty, streamMaySend, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
 import { SLEEP_AID_LABEL, SLEEP_AID_LICENSE, SLEEP_AID_MUTE_TRUTH, SLEEP_AID_PLUGINS, parseSleepAid, playSrc as sleepPlaySrc, type SleepAidPrefs } from "@/lib/pets/house-sleep";
 import { currentArea, parseAreas } from "@/lib/pets/weather-areas";
 import { FLY_BIRD_NAME } from "@/lib/pets/bird-fly";
@@ -102,7 +100,7 @@ export function KeeperCard({
 }) {
   const meters = keeperMeters(stats);
   const gpuSpark = sparkline([], UNREAD_GPU, 0);
-  const [beat, setBeat] = useState<Heartbeat>(UNREAD_HEARTBEAT);
+  const beat = useHeartbeat();
   const [listener, setListener] = useState<ListenerName>(UNREAD_LISTENER);
   const asked = useMindBinding(guestKey);
   const askedPlugin = asked.plugin;
@@ -268,26 +266,6 @@ export function KeeperCard({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sleepAid.plugin, sleepAid.playing, card.mutes.music, guest.volume, soundTry]);
 
-  useEffect(() => {
-    let cancelled = false;
-    // Quiet by design: an unreachable Java service reads "DOWN" in the heartbeat line itself, and the
-    // read repeats every 15 seconds, so no separate problem line or retry button.
-    async function read() {
-      try {
-        const res = await fetch(HEARTBEAT_URL, { cache: "no-store" });
-        const raw = await res.json();
-        if (!cancelled) setBeat(parseHeartbeat(raw));
-      } catch {
-        if (!cancelled) setBeat({ ...UNREAD_HEARTBEAT });
-      }
-    }
-    void read();
-    const id = window.setInterval(() => void read(), 15_000);
-    return () => {
-      cancelled = true;
-      window.clearInterval(id);
-    };
-  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -630,6 +608,28 @@ export function KeeperCard({
             {sleepAid.plugin === "rain" ? <p className="keeper-truth">{SLEEP_AID_LICENSE}</p> : null}
             <p className="keeper-truth">{SLEEP_AID_MUTE_TRUTH}</p>
           </div>
+          {sharedMusicShows(guestKey, music) ? (
+            // House music plays for every guest, but only one guest's card has the full music block.
+            // This small control lets any other card pause or play it; it is hidden where that block shows.
+            <div className="keeper-music keeper-house-music" data-hit data-house-music role="group" aria-label={HOUSE_MUSIC_LABEL}>
+              <p>{HOUSE_MUSIC_LABEL}</p>
+              <button
+                type="button"
+                aria-pressed={houseMusicToggle(music, streamAsked).audible}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  commitMusic(houseMusicToggle(music, streamAsked).next);
+                }}
+              >
+                {houseMusicToggle(music, streamAsked).label}
+              </button>
+              {music.plugin === "radio" ? (
+                <p id="hud-stream-net" className="keeper-truth" hidden={!streamAsked || !streamHonesty(music)}>
+                  {streamAsked ? streamHonesty(music) : ""}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
           {soundLine ? (
             <p className="keeper-truth" role="status" aria-live="polite" data-sound-problem={soundLine.what}>
               {soundLine.line}{" "}
@@ -924,27 +924,20 @@ export function MeetKeeperCard({ className }: { className?: string }) {
   );
 }
 
-export function KeeperHeartbeat({ className }: { className?: string }) {
-  const [beat, setBeat] = useState<Heartbeat>(UNREAD_HEARTBEAT);
+/**
+ * The heartbeat every keeper surface shows, from the one shared poll (lib/pets/keeper.ts heartbeatPoll):
+ * one fetch every 15 seconds however many cards and lines are on the page.
+ * Quiet by design: an unreachable Java service reads "DOWN" in the heartbeat line itself, and the read
+ * repeats, so no separate problem line or retry button.
+ */
+function useHeartbeat(): Heartbeat {
+  const [beat, setBeat] = useState<Heartbeat>(() => heartbeatPoll.current());
+  useEffect(() => heartbeatPoll.subscribe(setBeat), []);
+  return beat;
+}
 
-  useEffect(() => {
-    let cancelled = false;
-    async function read() {
-      try {
-        const res = await fetch(HEARTBEAT_URL, { cache: "no-store" });
-        const raw = await res.json();
-        if (!cancelled) setBeat(parseHeartbeat(raw));
-      } catch {
-        if (!cancelled) setBeat({ ...UNREAD_HEARTBEAT });
-      }
-    }
-    void read();
-    const id = window.setInterval(() => void read(), 20_000);
-    return () => {
-      cancelled = true;
-      window.clearInterval(id);
-    };
-  }, []);
+export function KeeperHeartbeat({ className }: { className?: string }) {
+  const beat = useHeartbeat();
 
   return (
     <p className={cn("keeper-heartbeat", className)} data-heartbeat={beat.status}>

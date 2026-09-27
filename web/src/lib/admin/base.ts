@@ -79,6 +79,23 @@ export function isRevokeDone(body: unknown, jti: string): boolean {
   return row.revoked === true && typeof row.jti === "string" && row.jti === jti;
 }
 
+/** Said after the ledger confirmed a revoke and the list came back. */
+export const REVOKED_NOTE =
+  "License revoked and soft-deleted. Downloads for this jti stop immediately. The row stays on the ledger.";
+
+/**
+ * Said after the ledger confirmed a revoke but the list refresh failed: the revoke stands, only the
+ * list is stale. `reason` is the plain reason for the refresh (never raw text).
+ */
+export function revokedListStale(reason: string): string {
+  return `License revoked. Downloads for this jti stop immediately. The list couldn't refresh: ${reason} This row is marked revoked here; search again for the ledger's times.`;
+}
+
+/** The rows with `jti` marked revoked locally, for when the ledger confirmed it but the list did not refresh. */
+export function markRevoked<T extends { jti: string; revoked: boolean; deleted: boolean }>(rows: T[], jti: string): T[] {
+  return rows.map((row) => (row.jti === jti ? { ...row, revoked: true, deleted: true } : row));
+}
+
 /**
  * A ledger timestamp in the viewer's local time (text), with the exact ISO instant kept for a tooltip.
  * `locale` / `timeZone` default to the viewer's; tests pin them.
