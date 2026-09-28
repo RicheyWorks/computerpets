@@ -25,15 +25,25 @@ const Pictures = require("./renderer/pictures.js");
 /** Buffffff opt-in: COMPUTERPETS_GUI_HARNESS=1 runs Electron smokes then quits. */
 const GUI_HARNESS = process.env.COMPUTERPETS_GUI_HARNESS === "1";
 const GUI_HARNESS_OUT = process.env.COMPUTERPETS_GUI_HARNESS_OUT || "";
+/** This run's throwaway userData folder (GUI harness only); the result names it so the runner can clean up too. */
+const GUI_HARNESS_DATA = GUI_HARNESS ? require("./gui-harness-data.cjs").harnessDir(require("os").tmpdir(), process.pid, path.join) : "";
 if (GUI_HARNESS) {
   const os = require("os");
   const HarnessData = require("./gui-harness-data.cjs");
   // Earlier runs left their temp userData behind (Chromium holds it until exit); clear the ones whose process is gone.
   HarnessData.pruneStale(fs, path, os.tmpdir(), process.pid);
-  const harnessData = HarnessData.harnessDir(os.tmpdir(), process.pid, path.join);
+  const harnessData = GUI_HARNESS_DATA;
   fs.mkdirSync(harnessData, { recursive: true });
   app.setPath("userData", harnessData);
   app.commandLine.appendSwitch("disable-gpu-sandbox");
+  // End of the run: a passing run removes its own folder; a failing (or unfinished) run keeps it for debugging.
+  // Chromium holds the folder until the process exits (on Windows the removal fails with EBUSY), so a passing run
+  // that cannot remove it at quit starts a small detached helper that removes it right after the app has exited.
+  app.on("quit", () => {
+    const done = HarnessData.finishRun(fs, harnessData, guiHarnessOk);
+    const after = !done.removed && !done.kept && HarnessData.removeAfterExit(require("child_process").spawn, process.execPath, harnessData, process.pid);
+    process.stderr.write(`${HarnessData.finishWords({ ...done, afterExit: after })}\n`);
+  });
 }
 
 app.setAppUserModelId("works.richey.computerpets.desk");
@@ -641,9 +651,13 @@ function popupPetMenu(x, y) {
 }
 
 let guiHarnessDone = false;
+/** The last harness result passed (the quit handler removes the temp userData only then). */
+let guiHarnessOk = false;
 
 function writeGuiHarnessResult(payload) {
   guiHarnessDone = true;
+  guiHarnessOk = !!(payload && payload.ok);
+  if (payload && GUI_HARNESS_DATA) payload.userData = GUI_HARNESS_DATA;
   const body = `${JSON.stringify(payload)}\n`;
   if (GUI_HARNESS_OUT) {
     try {
@@ -762,6 +776,12 @@ async function runGuiHarnessSmokes(target) {
       payload.ok = false;
       payload.error = payload.error || "bubble click failed";
     }
+    const through = lastClickThrough || { ok: false, detail: "click-through check did not run" };
+    payload.results["gui.clickthrough_hits"] = through;
+    if (!through.ok) {
+      payload.ok = false;
+      payload.error = payload.error || "click-through hits failed";
+    }
   } catch (err) {
     payload.ok = false;
     payload.error = payload.error || `bubble click: ${err && err.message}`;
@@ -773,12 +793,17 @@ async function runGuiHarnessSmokes(target) {
 /**
  * A real click on the talk bubble in the real overlay window: a House lines answer opens it, then Chromium gets a
  * mouse down and up at the bubble's middle (webContents.sendInputEvent, so its own hit test picks the element), and
- * the bubble must close. The OS click-through layer (setIgnoreMouseEvents) is not part of this path.
+ * the bubble must close. The OS click-through layer (setIgnoreMouseEvents) is not part of this path; the
+ * click-through decision is checked beside it (guiClickThrough) from the hit rects the renderer really sent.
  */
 async function guiBubbleClick(target) {
   const wc = target.webContents;
   const before = await wc.executeJavaScript("window.PetGuiHarness && window.PetGuiHarness.talkForClick ? window.PetGuiHarness.talkForClick() : null", true);
   if (!before || before.skipped) return { ok: false, detail: (before && before.skipped) || "talkForClick missing", extras: before };
+  // Let the renderer's frame loop send its hit rects (reportHits, every 80 ms) with the bubble open.
+  await new Promise((r) => setTimeout(r, 300));
+  const hitsOpen = hitRects.slice();
+  const bare = await wc.executeJavaScript("window.PetGuiHarness.barePoint()", true);
   const x = before.cx;
   const y = before.cy;
   wc.sendInputEvent({ type: "mouseMove", x, y });
@@ -786,6 +811,8 @@ async function guiBubbleClick(target) {
   wc.sendInputEvent({ type: "mouseUp", x, y, button: "left", clickCount: 1 });
   await new Promise((r) => setTimeout(r, 300));
   const after = await wc.executeJavaScript("window.PetGuiHarness.bubbleState()", true);
+  const hitsClosed = hitRects.slice();
+  lastClickThrough = guiClickThrough(before, bare, hitsOpen, hitsClosed);
   const opened = !!(before.open && before.text && before.pointer === "auto" && before.hit && before.topInBubble);
   const longEnough = before.holdMs >= 3500;
   const closed = !after.open && after.pointer === "none";
@@ -800,6 +827,33 @@ async function guiBubbleClick(target) {
       "closed=" + closed,
     ],
     extras: { before, after },
+  };
+}
+
+let lastClickThrough = null;
+
+/**
+ * The click-through layer's own decision, from the hit rects the renderer really sent (set-hits). On Windows and
+ * Linux the tray polls the cursor and calls setIgnoreMouseEvents(!(wantClickable || Desk.cursorHits(cursor, hitRects)));
+ * this runs that same test at the open bubble's middle (the window must take the click), at a spot Chromium says has
+ * nothing clickable (the click must fall through), and after the bubble closed (its rect must be gone). What it cannot
+ * do is move the real OS cursor: Electron has no API for that.
+ */
+function guiClickThrough(bubble, bare, hitsOpen, hitsClosed) {
+  if (!Desk.hitForward(process.platform)) {
+    return { ok: true, detail: `skipped: ${process.platform} forwards the hover itself (set-clickable path)`, trace: ["skipped=" + process.platform] };
+  }
+  const same = (r) => Math.abs(r.x - bubble.x) <= 2 && Math.abs(r.y - bubble.y) <= 2 && Math.abs(r.width - bubble.w) <= 2 && Math.abs(r.height - bubble.h) <= 2;
+  const inHits = hitsOpen.some(same);
+  const takesClick = Desk.cursorHits({ x: bubble.cx, y: bubble.cy }, hitsOpen);
+  const fallsThrough = !!bare && !Desk.cursorHits(bare, hitsOpen);
+  const goneAfter = !hitsClosed.some(same);
+  const ok = inHits && takesClick && fallsThrough && goneAfter;
+  return {
+    ok,
+    detail: `bubble_in_hits=${inHits} takes_click=${takesClick} bare_falls_through=${fallsThrough} closed_rect_gone=${goneAfter}`,
+    trace: ["hits_open=" + hitsOpen.length, "bubble_in_hits=" + inHits, "takes_click=" + takesClick, "bare=" + (bare ? `${bare.x},${bare.y}` : "none"), "falls_through=" + fallsThrough, "closed_rect_gone=" + goneAfter],
+    extras: { bare, hitsOpen: hitsOpen.length, hitsClosed: hitsClosed.length },
   };
 }
 

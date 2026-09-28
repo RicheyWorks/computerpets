@@ -69,7 +69,7 @@ import { roomOf } from "@/lib/pets/rooms";
 import { playClaim } from "@/lib/pets/play";
 import { colonyOf, colonyWord, isHivePlace, stampColony } from "@/lib/pets/hive";
 import { isPhone, isTablet, readSit, tabletOrient, type TabletOrient } from "@/lib/pets/tablet-desk";
-import { phoneOrient, type PhoneOrient } from "@/lib/pets/phone-desk";
+import { phoneFit, phoneOrient, plaqueNeedsLine, samePhoneFit, type PhoneFit, type PhoneOrient } from "@/lib/pets/phone-desk";
 import { guestMarks, guestPick, guestTap, type GuestChoiceId } from "@/lib/pets/guest-choice";
 import { classifyKey, installFileDropGuard } from "@/lib/pets/presence";
 import { careNotSaved, RETRY_LABEL, talkProblem as talkProblemLine, type CareNotSavedAct } from "@/lib/plain-error";
@@ -223,6 +223,12 @@ export function CompanionRoom({
   const skyNow = (): Weather => weatherOf(new Date(), currentArea({ ...blankAreas(), areas: loadCard().weatherAreas || [], currentId: loadCard().currentAreaId ?? null }) ? liveSky?.sky ?? null : null);
   const pad = tablet || (!phone && autoTablet);
   const hand = phone || (!pad && autoPhone);
+  const asideRef = useRef<HTMLElement>(null);
+  const railRef = useRef<HTMLDivElement>(null);
+  /** Phone: the left panel and the room rail end above the care buttons (phone-desk.ts phoneFit) and scroll inside. */
+  const [fit, setFit] = useState<PhoneFit | null>(null);
+  /** Phone: even folded, the plaque would not fit above the care buttons, so it shows as one line. */
+  const [plaqueLine, setPlaqueLine] = useState(false);
 
   useEffect(() => installFileDropGuard(window), []);
 
@@ -244,6 +250,56 @@ export function CompanionRoom({
       window.removeEventListener("orientationchange", measure);
     };
   }, [phone, tablet]);
+
+  useEffect(() => {
+    if (!hand) {
+      setFit(null);
+      setPlaqueLine(false);
+      return;
+    }
+    const room = roomRef.current;
+    const care = careRef.current;
+    const aside = asideRef.current;
+    const rail = railRef.current;
+    if (!room || !care || !aside || !rail) return;
+    let frame = 0;
+    const measure = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const top = room.getBoundingClientRect().top;
+        const next = phoneFit({
+          asideTop: aside.getBoundingClientRect().top - top,
+          railTop: rail.getBoundingClientRect().top - top,
+          careTop: care.getBoundingClientRect().top - top,
+        });
+        setFit((prev) => (samePhoneFit(prev, next) ? prev : next));
+      });
+    };
+    const resized = () => {
+      // A bigger screen may fit the folded plaque again; measure afresh.
+      setPlaqueLine(false);
+      measure();
+    };
+    measure();
+    const watch = typeof ResizeObserver === "function" ? new ResizeObserver(measure) : null;
+    watch?.observe(care);
+    watch?.observe(room);
+    window.addEventListener("resize", resized);
+    window.addEventListener("orientationchange", resized);
+    return () => {
+      cancelAnimationFrame(frame);
+      watch?.disconnect();
+      window.removeEventListener("resize", resized);
+      window.removeEventListener("orientationchange", resized);
+    };
+  }, [hand, handOrient]);
+
+  useEffect(() => {
+    // The folded plaque runs past the room above the care buttons: fold it to one line (never while the hello is up).
+    const aside = asideRef.current;
+    if (!hand || !fit || hintUp || plaqueLine || !aside) return;
+    if (plaqueNeedsLine(aside.scrollHeight, aside.clientHeight)) setPlaqueLine(true);
+  }, [hand, fit, hintUp, plaqueLine]);
 
   useEffect(() => {
     // Only write the guest who is sitting. A kind change must not pour this body onto the next slot.
@@ -1130,11 +1186,14 @@ export function CompanionRoom({
       ))}
 
       <aside
+        ref={asideRef}
+        data-desk-aside
+        style={hand && fit ? { maxHeight: fit.asideMax } : undefined}
         className={
           hand
             ? handOrient === "sit"
-              ? "absolute left-[max(0.75rem,env(safe-area-inset-left))] right-24 top-[calc(3.25rem+env(safe-area-inset-top))] z-20 max-w-[min(100%-7rem,16rem)]"
-              : "absolute left-4 right-16 top-[calc(4.25rem+env(safe-area-inset-top))] z-20 max-w-[min(100%-5rem,18rem)]"
+              ? "absolute left-[max(0.75rem,env(safe-area-inset-left))] right-[max(6.75rem,calc(6rem+env(safe-area-inset-right)))] top-[calc(3.25rem+env(safe-area-inset-top))] z-20 max-w-[16rem] overflow-y-auto overscroll-contain"
+              : "absolute left-4 right-[max(6.75rem,calc(6rem+env(safe-area-inset-right)))] top-[calc(4.25rem+env(safe-area-inset-top))] z-20 max-w-[18rem] overflow-y-auto overscroll-contain"
             : pad
               ? orient === "sit"
                 ? "absolute left-4 right-16 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[min(100%-2rem,22rem)]"
@@ -1183,7 +1242,7 @@ export function CompanionRoom({
         {latestNote ? <p className="mt-2 max-w-sm text-xs text-subtle">{latestNote}</p> : null}
         {/* On a phone the hello comes first; the plaque waits for Got it and then sits folded above the care buttons. */}
         {hand && hintUp ? null : (
-          <SpeciesPlaque speciesKey={kind.key} compact paper folded={hand} className="mt-5 max-w-sm" showDemoLink={false} />
+          <SpeciesPlaque speciesKey={kind.key} compact paper folded={hand} line={hand && plaqueLine} className="mt-5 max-w-sm" showDemoLink={false} />
         )}
         <FirstHint
           name={displayName}
@@ -1268,9 +1327,12 @@ export function CompanionRoom({
       </aside>
 
       <div
+        ref={railRef}
+        data-desk-rail
+        style={hand && fit ? { maxHeight: fit.railMax } : undefined}
         className={
           hand
-            ? "absolute right-[max(0.75rem,env(safe-area-inset-right))] top-[calc(4.25rem+env(safe-area-inset-top))] z-20 max-w-[9rem] text-right"
+            ? "absolute right-[max(0.75rem,env(safe-area-inset-right))] top-[calc(4.25rem+env(safe-area-inset-top))] z-20 w-[5.5rem] overflow-y-auto overscroll-contain text-right"
             : pad
               ? "absolute right-[max(1rem,env(safe-area-inset-right))] top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[11rem] text-right"
               : "absolute right-4 top-20 z-20 max-w-[11rem] text-right sm:right-8 sm:top-24"
@@ -1290,7 +1352,7 @@ export function CompanionRoom({
               : "pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-3 px-4 pb-5 pt-16 sm:px-8"
         }
       >
-        <div className="pointer-events-auto" ref={careRef}>
+        <div className="pointer-events-auto" ref={careRef} data-desk-care>
           <p id="hud-talk-net" className="keeper-truth" hidden={!talkAsked || !talkLine}>
             {talkAsked ? talkLine : ""}
           </p>

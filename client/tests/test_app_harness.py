@@ -128,6 +128,7 @@ CROSS_DOMAIN = {
     "web.portraits_tray_minds",
     "web.house_lines_talk",
     "web.no_repeat_signed_in",
+    "web.phone_layout_told_once",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -225,6 +226,7 @@ def test_gaps_are_honest_and_accounted():
     assert "gui.gift_drag_place" in hole_ids
     assert "gui.host_place" in hole_ids
     assert "gui.bubble_click" in hole_ids
+    assert "gui.clickthrough_hits" in hole_ids
     assert "gui.blotter_qt" in hole_ids
     assert "ethogram.tricks.red_panda" in hole_ids
     assert "blotter.plaque" in hole_ids
@@ -548,6 +550,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.portraits_tray_minds",
         "web.house_lines_talk",
         "web.no_repeat_signed_in",
+        "web.phone_layout_told_once",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -572,6 +575,7 @@ def test_gui_mode_rows_stay_excluded_by_default_and_document_gui_flag():
         "gui.gift_drag_place",
         "gui.host_place",
         "gui.bubble_click",
+        "gui.clickthrough_hits",
         "gui.blotter_qt",
         "blotter.plaque",
         "blotter.frames_paint",
@@ -960,6 +964,19 @@ def test_no_repeat_signed_in_row_same_picks_everywhere_signed_in_path_bubble_cli
     assert run(["a", "b", "c", "d", "e"], 4000, 12) == nr.extras["seq"]["web5"]
     assert run(["x", "y"], 1000, 6) == nr.extras["seq"]["web2"]
     assert nr.extras["offers"] == ["Dee-dee.", "", "", "Dee-dee."]
+
+
+def test_phone_layout_told_once_row_no_overlap_one_tell_temp_cleanup_click_through_route_tree():
+    """Phone panels fit above the care buttons; a guest tells once a visit; harness temp cleanup; click-through; route tree."""
+    pl = invoke("web.phone_layout_told_once")
+    assert pl.ok, (pl.error, pl.detail)
+    for mark in ("phone=no_overlap_sweep", "plaque=folded_or_line", "bubble=on_top", "guest_tell=once_per_visit",
+                 "gui_temp=removed_or_kept_on_failure", "gui=clickthrough_hits", "dev=route_tree_clean"):
+        assert mark in pl.trace, (mark, pl.trace)
+    for group in ("phone", "told", "harness"):
+        assert all(pl.extras[group].values()), (group, pl.extras[group])
+    assert pl.extras["widths"] == [320, 360, 375, 390, 414]
+    assert pl.extras["routeTree"] is True
 
 
 def test_pictures_gate_row_boots_real_main_with_pointers_and_opens_no_glass():

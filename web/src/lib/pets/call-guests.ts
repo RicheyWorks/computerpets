@@ -162,6 +162,7 @@ export type CalledWalker = {
   frame?: number;
   meetKind?: "rui" | "peer" | "bound";
   boundKind?: string;
+  /** Said its line this visit. Set once by markTold; a new approach does not clear it (one line per visit). */
   told?: boolean;
 };
 
@@ -511,7 +512,6 @@ function goCalledMeet(guest: CalledWalker, flags: CalledFlags | undefined, kind:
     toX: hold.x,
     toLift: hold.lift,
     facing: hold.x >= guest.x ? 1 : -1,
-    told: false,
   };
 }
 
@@ -528,7 +528,6 @@ function goCalledBound(guest: CalledWalker, flags?: CalledFlags): CalledWalker {
     toX: hold.x,
     toLift: hold.lift,
     facing: hold.x >= guest.x ? 1 : -1,
-    told: false,
     boundKind: hold.kind,
   };
 }
