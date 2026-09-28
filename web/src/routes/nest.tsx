@@ -244,7 +244,7 @@ function NestPage() {
           </p>
         }
         aside={
-          <div className="mt-5 max-h-[calc(100dvh-16rem)] max-w-sm space-y-3 overflow-y-auto pr-1">
+          <div data-aside-list className="mt-5 max-h-[calc(100dvh-16rem)] max-w-sm space-y-3 overflow-y-auto pr-1">
             <article className="paper-card rounded-[var(--radius-lg)] border p-4">
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Ember on hand</p>
               <p className="mt-2 font-display text-4xl tabular-nums">{ember ?? "—"}</p>

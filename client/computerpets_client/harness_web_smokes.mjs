@@ -2681,7 +2681,7 @@ async function signinReturnQuiet() {
   const pet = read("web", "src", "components", "desk", "living-pet.tsx");
   const bubble = {
     room: P.bubbleRoom(101, 62) === 33 && P.bubbleLift(120, 33) === 33 && P.bubbleLift(18, 33) === 18 && P.bubbleRoom(101, null) === Infinity,
-    wired: pet.includes("${-bubbleLift(drawY + 18, bubbleRoomRef.current)}px") && shell.includes("data-site-header"),
+    wired: pet.includes("let lift = bubbleLift(drawY + 18, bubbleRoomRef.current);") && shell.includes("data-site-header"),
     sweep: sweep.includes("sits over the site header") && sweep.includes("rose over the site header"),
   };
   if (!Object.values(bubble).every(Boolean)) bad.push(`bubble: ${JSON.stringify(bubble)}`);
@@ -3047,6 +3047,82 @@ async function kennelTargets() {
   ]);
 }
 
+async function kennelScroll() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8").replace(/\r\n/g, "\n");
+  const sweep = read("web", "scripts", "phone-desk-layout.test.mjs");
+  const room = read("web", "src", "components", "desk", "companion-room.tsx");
+  const Desk = await import(pathToFileURL(join(WEB, "src", "lib", "pets", "phone-desk.ts")).href);
+
+  // 1) The rail scrolls the current guest into view (a phone's on whole rows).
+  const phoneRow = Desk.railScrollFor({ scrollTop: 0, viewH: 176, scrollH: 1760, rowTop: 880, rowH: 44, snap: 44 });
+  const rail = {
+    math: Desk.railScrollFor({ scrollTop: 0, viewH: 400, scrollH: 1200, rowTop: 120, rowH: 32 }) === 0 && Desk.railScrollFor({ scrollTop: 0, viewH: 400, scrollH: 1200, rowTop: 800, rowH: 32 }) === 616 && phoneRow % 44 === 0 && phoneRow <= 880 && phoneRow + 176 >= 924,
+    wired: room.includes("const railRoom = roomOf(kind.key).id;") && room.includes('rail.querySelector<HTMLElement>(".den-cabinet-guest.is-here")') && room.includes("}, [railRoom, kind.key, hand, pad, fit, deskFit]);"),
+    sweep: sweep.includes("export const RAIL_DEEP_GUESTS =") && sweep.includes("the current guest is not in the rail's view on arrival"),
+  };
+  if (!Object.values(rail).every(Boolean)) bad.push(`rail: ${JSON.stringify(rail)}`);
+
+  // 2) The drawn second window starts right of the panel.
+  const Win = await import(pathToFileURL(join(WEB, "src", "lib", "pets", "demo-windows.ts")).href);
+  const b = Win.secondWindowSpot(1024, 768, 352);
+  const a = Win.firstWindowSpot(1024, 768);
+  const windows = {
+    spot: b.left >= 352 + Win.DEMO_WINDOW_GAP && (b.top >= a.top + a.height || b.left >= a.left + a.width),
+    wired: read("web", "src", "components", "desk", "demo-window-plate.tsx").includes('import { secondWindowSpot, type DemoWindowBox } from "@/lib/pets/demo-windows";'),
+    sweep: sweep.includes("the second window sits behind the panel"),
+  };
+  if (!Object.values(windows).every(Boolean)) bad.push(`windows: ${JSON.stringify(windows)}`);
+
+  // 3) Signed in, the panel is the one scroller (the rules sit in the utilities layer, where they win).
+  const css = read("web", "src", "styles.css");
+  const utilities = css.slice(css.lastIndexOf("@layer utilities {"));
+  const scroller = {
+    css: utilities.includes("[data-phone-floor] [data-aside-list],\n  [data-aside-fit] [data-aside-list] {") && !css.slice(0, css.lastIndexOf("@layer utilities {")).includes("[data-aside-list]"),
+    lists: ["collection.tsx", "catalog.tsx", "nest.tsx"].every((f) => read("web", "src", "routes", f).includes("data-aside-list")),
+    fit: room.includes('data-aside-fit={!hand && !pad && deskFit ? "" : undefined}'),
+    sweep: sweep.includes("scrolls inside the panel"),
+  };
+  if (!Object.values(scroller).every(Boolean)) bad.push(`scroller: ${JSON.stringify(scroller)}`);
+
+  // 4) The speech bubble steps around the plates. 5) A landscape phone's jump sits beside the name.
+  const plates = [{ left: 900, top: 120, right: 1188, bottom: 158 }];
+  const moved = Desk.bubbleDodge({ x: 950, top: 110, w: 220, h: 56, plates, width: 1280, minTop: 72, maxTop: 600 });
+  const crosses = Math.min(moved.x + 220, 1188) - Math.max(moved.x, 900) > 0 && Math.min(moved.top + 56, 158) - Math.max(moved.top, 120) > 0;
+  const bubble = {
+    math: !crosses && JSON.stringify(Desk.bubbleDodge({ x: 300, top: 200, w: 220, h: 56, plates, width: 1280 })) === JSON.stringify({ x: 300, top: 200 }),
+    wired: read("web", "src", "components", "desk", "living-pet.tsx").includes("bubbleDodge("),
+    sweep: sweep.includes("function bubbleOverPlates()"),
+  };
+  if (!Object.values(bubble).every(Boolean)) bad.push(`bubble: ${JSON.stringify(bubble)}`);
+  const jump = {
+    wired: room.includes('const landJump = demoWindow && hand && handOrient === "sit";') && room.includes("<div data-name-row className=") && room.includes("{landJump ? null : platesJump}"),
+    sweep: sweep.includes("the plates jump takes a scroll to reach"),
+  };
+  if (!Object.values(jump).every(Boolean)) bad.push(`jump: ${JSON.stringify(jump)}`);
+
+  // 6) No care bar shows two buttons with the same word.
+  const Labels = await import(pathToFileURL(join(WEB, "src", "lib", "pets", "care-labels.ts")).href);
+  const words = {
+    label: Labels.distinctLabel("Ember", ["Feed", "Ember"]) === "Ember trick" && Labels.distinctLabel("Climb", ["Feed"]) === "Climb",
+    wired: room.includes("specialVerb: trickWord,") && room.includes("label: trickWord,"),
+  };
+  if (!Object.values(words).every(Boolean)) bad.push(`words: ${JSON.stringify(words)}`);
+
+  const roadmap = read("docs", "ROADMAP.md");
+  if (!roadmap.includes("- [x] The kennel scroll pass")) bad.push("ROADMAP entry missing");
+  const extras = { rail, windows, scroller, bubble, jump, words };
+  if (bad.length) return fail(bad.join("; "), extras);
+  return ok("the rail shows the current guest; /demo's second window is clear of the panel; signed in the panel is the one scroller; the speech bubble steps around the plates; a landscape phone's jump sits beside the name; no two care buttons share a word", extras, [
+    "rail=current_guest_in_view",
+    "window=clear_of_panel",
+    "scroll=one_scroller",
+    "bubble=clear_of_plates",
+    "jump=beside_name_landscape",
+    "words=distinct_care_words",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -3079,6 +3155,7 @@ const COMMANDS = {
   kennel_first_notes: kennelFirstNotes,
   kennel_drawers: kennelDrawers,
   kennel_targets: kennelTargets,
+  kennel_scroll: kennelScroll,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

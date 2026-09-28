@@ -3023,6 +3023,20 @@ def _web_rows() -> list[Affordance]:
                 "weather plate sat on the small label above the guest's name at every desktop size. /hive had two searches."
             ),
         ),
+        Affordance(
+            "web.kennel_scroll",
+            "web",
+            "the rail shows the current guest; /demo's second window is clear of the panel; signed in the panel is the one scroller; the speech bubble steps around the plates; a landscape phone's jump sits beside the name; no two care buttons share a word",
+            "web lib/pets/phone-desk.ts railScrollFor + bubbleDodge + components/desk/companion-room.tsx + lib/pets/demo-windows.ts + components/desk/demo-window-plate.tsx + styles.css + routes/collection.tsx + routes/catalog.tsx + routes/nest.tsx + components/desk/living-pet.tsx + lib/pets/care-labels.ts + scripts/phone-desk-layout.test.mjs + scripts/kennel-scroll.test.mjs",
+            notes=(
+                "/demo/ember (the 20th guest in the house) opened with its row below the rail's end. /demo's drawn second "
+                "window sat behind the panel's plaque and hello (82 to 430 by 246 to 522 at 1024x768). Signed in, the "
+                "kennel scrolled inside a panel that scrolled too (1353 px in a 512 px box at 1280x800), and the catalog's "
+                "list did the same on a phone; the one-scroller rules sat in the CSS components layer, where the list's own "
+                "classes won. The speech bubble crossed the Quotes plate. A landscape phone's plates jump started at the "
+                "panel's end. Five guests had two care buttons with one word (Ember, Gum, Count, Hide)."
+            ),
+        ),
     ]
 
 
@@ -3088,6 +3102,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("kennel_drawers", domain="web", action_id=aid)
     if local_id == "kennel_targets":
         return _run_web_smoke("kennel_targets", domain="web", action_id=aid)
+    if local_id == "kennel_scroll":
+        return _run_web_smoke("kennel_scroll", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

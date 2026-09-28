@@ -219,3 +219,98 @@ export function deskFit(input: DeskFitInput): DeskFit {
 export function plaqueNeedsLine(scrollHeight: number, clientHeight: number): boolean {
   return scrollHeight > clientHeight + 1;
 }
+
+export type RailScrollInput = {
+  /** The rail's scroll position now, and the height it shows. */
+  scrollTop: number;
+  viewH: number;
+  /** The whole scroll height of the rail. */
+  scrollH: number;
+  /** The current guest's row: its top within the rail's content (scroll position 0) and its height. */
+  rowTop: number;
+  rowH: number;
+  /** A phone rail snaps to whole rows of this height (railRows); the answer lands on a row too. */
+  snap?: number;
+};
+
+/**
+ * Where the room rail scrolls so the current guest's row shows: unchanged when the row already shows whole, else
+ * the row in the middle of the rail (on a phone, on a whole row, so the snap does not move it again). A guest far
+ * down a long room (the 20th of the reef, the 16th of the snakes) sat below the rail's end on arrival.
+ */
+export function railScrollFor(input: RailScrollInput): number {
+  const { scrollTop, viewH, scrollH, rowTop, rowH } = input;
+  const max = Math.max(0, scrollH - viewH);
+  if (rowTop >= scrollTop - 0.5 && rowTop + rowH <= scrollTop + viewH + 0.5) return scrollTop;
+  let next = rowTop - (viewH - rowH) / 2;
+  const snap = input.snap;
+  if (snap && snap > 0 && Number.isFinite(snap)) {
+    next = Math.round(next / snap) * snap;
+    // A whole-row rail: the row itself must still show after the rounding.
+    if (rowTop < next) next = Math.floor(rowTop / snap) * snap;
+    if (rowTop + rowH > next + viewH) next = Math.ceil((rowTop + rowH - viewH) / snap) * snap;
+  }
+  return Math.round(Math.min(max, Math.max(0, next)) * 100) / 100;
+}
+
+/** A box in one frame of reference (the room's), in CSS px. */
+export type BubbleBox = { left: number; top: number; right: number; bottom: number };
+
+export type BubbleDodgeInput = {
+  /** Where the bubble would go (its left and top) and its size. */
+  x: number;
+  top: number;
+  w: number;
+  h: number;
+  /** The plates it may not cross, in the same frame. */
+  plates: readonly BubbleBox[];
+  /** The room's width (the bubble stays 10 px inside it) and the highest the bubble may go (under the header). */
+  width: number;
+  minTop?: number;
+  /** The lowest the bubble's top may go (it stays above the floor). */
+  maxTop?: number;
+  gap?: number;
+};
+
+/** Space kept between a speech bubble and a plate it steps around, in CSS px. */
+export const BUBBLE_PLATE_GAP = 8;
+
+/**
+ * Where a speech bubble goes so it does not cross a weather, news or market plate: where the pet puts it when that
+ * is clear, else the nearest spot beside, above or below the plates it would cross (clear of every plate), else
+ * below the lowest of them. A pet walking under a plate put its line across the plate's words.
+ */
+export function bubbleDodge(input: BubbleDodgeInput): { x: number; top: number } {
+  const gap = input.gap ?? BUBBLE_PLATE_GAP;
+  const { w, h, plates } = input;
+  const minX = 10;
+  const maxX = Math.max(minX, input.width - w - 10);
+  const minTop = Number.isFinite(input.minTop) ? (input.minTop as number) : Number.NEGATIVE_INFINITY;
+  const maxTop = Number.isFinite(input.maxTop) ? (input.maxTop as number) : Number.POSITIVE_INFINITY;
+  const hits = (x: number, top: number) =>
+    plates.some((p) => Math.min(x + w, p.right) - Math.max(x, p.left) > 0 && Math.min(top + h, p.bottom) - Math.max(top, p.top) > 0);
+  if (!hits(input.x, input.top)) return { x: input.x, top: input.top };
+  const crossed = plates.filter((p) => Math.min(input.x + w, p.right) - Math.max(input.x, p.left) > 0 && Math.min(input.top + h, p.bottom) - Math.max(input.top, p.top) > 0);
+  const tries: { x: number; top: number }[] = [];
+  const clampX = (x: number) => Math.min(maxX, Math.max(minX, x));
+  const clampTop = (t: number) => Math.min(maxTop, Math.max(minTop, t));
+  for (const p of plates) {
+    tries.push({ x: clampX(p.left - w - gap), top: input.top });
+    tries.push({ x: clampX(p.right + gap), top: input.top });
+    tries.push({ x: input.x, top: clampTop(p.top - h - gap) });
+    tries.push({ x: input.x, top: clampTop(p.bottom + gap) });
+  }
+  let best: { x: number; top: number } | null = null;
+  let bestD = Number.POSITIVE_INFINITY;
+  for (const t of tries) {
+    if (hits(t.x, t.top)) continue;
+    const d = Math.hypot(t.x - input.x, t.top - input.top);
+    if (d < bestD) {
+      best = t;
+      bestD = d;
+    }
+  }
+  if (best) return best;
+  const low = Math.max(...crossed.map((p) => p.bottom));
+  return { x: input.x, top: clampTop(low + gap) };
+}
