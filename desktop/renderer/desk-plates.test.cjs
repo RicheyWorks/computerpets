@@ -119,3 +119,29 @@ test("Quotes expansion carries crypto list customize and shared plate styles", (
   const again = P.loadPlates(800, 480, mem);
   assert.equal(again[2].bg, "#1a1828");
 });
+
+test("the overlay's plates start where they always did; keepOff (the web /demo room's panel, rail, header) is opt-in", () => {
+  // The overlay (pet.js) passes no keepOff, so a bare screen's spots are unchanged.
+  for (const [w, h] of [[800, 480], [1280, 800], [1920, 1080]]) {
+    const spots = P.PLATE_KEYS.map((k) => P.defaultSpot(k, w, h));
+    assert.deepEqual(spots.map((s) => [s.x, s.y]), [
+      [Math.min(Math.max(w * 0.04, 8), w - 296), Math.min(Math.max(h * 0.08, 8), h - 52)],
+      [Math.min(Math.max(w - 288 - w * 0.08, 8), w - 296), Math.min(Math.max(h * 0.08, 8), h - 52)],
+      [Math.min(Math.max(w * 0.04, 8), w - 296), Math.min(Math.max(h * 0.38, 8), h - 52)],
+    ]);
+    assert.deepEqual(P.loadPlates(w, h, store()).map((s) => [s.x, s.y]), spots.map((s) => [s.x, s.y]));
+  }
+  assert.doesNotMatch(petSrc, /loadPlates\([^)]*,[^)]*,[^)]*,/);
+  // With keepOff: clear of the left panel, the right rail and the header, news under weather when there is no room.
+  const keep = { left: 352, right: 208, top: 57 };
+  const [weather, news, market] = P.PLATE_KEYS.map((k) => P.defaultSpot(k, 1024, 768, keep));
+  assert.equal(weather.x, 352 + P.KEEP_GAP);
+  assert.equal(market.x, 352 + P.KEEP_GAP);
+  assert.ok(news.x + 288 <= 1024 - 208 - P.KEEP_GAP);
+  assert.equal(news.y, weather.y + 44 + 8);
+  for (const p of [weather, news, market]) assert.ok(p.y >= 57 + 8);
+  // A moved plate keeps its spot either way.
+  const mem = store();
+  mem.setItem(P.STORE, JSON.stringify([{ key: "news", x: 30, y: 40 }]));
+  assert.deepEqual([P.loadPlates(1024, 768, mem, keep)[1].x, P.loadPlates(1024, 768, mem, keep)[1].y], [30, 40]);
+});

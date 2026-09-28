@@ -54,7 +54,19 @@ export function normalizeHex(v: unknown, fallback: string) {
   return v.trim().toLowerCase();
 }
 
-export function defaultSpot(key: PlateKey, width: number, height: number): DeskPlate {
+/** Room chrome a first-time plate keeps clear of, in px from each edge (the web room's panel, rail and header). */
+export type KeepOff = { left?: number; right?: number; top?: number };
+
+/** The gap between a plate and the room chrome it keeps off, and between two stacked plates. */
+export const KEEP_GAP = 16;
+
+/**
+ * Where a plate sits before anyone moves it. With keepOff (the web /demo room: its panel on the left, its rail on
+ * the right, the site header on top) the plates start in the free middle of the room: the weather plate sat on the
+ * panel's small label and the guest's name at 1024 to 1920 px wide, and Quotes behind the species plaque. Without
+ * keepOff (the desktop overlay, a bare screen) the spots are the same as ever.
+ */
+export function defaultSpot(key: PlateKey, width: number, height: number, keepOff?: KeepOff | null): DeskPlate {
   const w = Math.max(320, width || 800);
   const h = Math.max(240, height || 480);
   const spots: Record<PlateKey, { x: number; y: number }> = {
@@ -62,6 +74,18 @@ export function defaultSpot(key: PlateKey, width: number, height: number): DeskP
     news: { x: clamp(w - PLATE_W - w * 0.08, 8, w - PLATE_W - 8), y: clamp(h * 0.08, 8, h - PLATE_H - 8) },
     market: { x: clamp(w * 0.04, 8, w - PLATE_W - 8), y: clamp(h * 0.38, 8, h - PLATE_H - 8) },
   };
+  if (keepOff) {
+    const left = Math.max(0, Number(keepOff.left) || 0);
+    const right = Math.max(0, Number(keepOff.right) || 0);
+    const top = Math.max(0, Number(keepOff.top) || 0);
+    const xMax = w - PLATE_W - 8;
+    const yMax = h - PLATE_H - 8;
+    for (const k of ["weather", "market"] as const) spots[k].x = clamp(Math.max(spots[k].x, left + KEEP_GAP), 8, xMax);
+    spots.news.x = clamp(Math.min(spots.news.x, w - right - PLATE_W - KEEP_GAP), 8, xMax);
+    for (const k of PLATE_KEYS) spots[k].y = clamp(Math.max(spots[k].y, top + KEEP_GAP / 2), 8, yMax);
+    // A narrow room: news under the weather plate instead of on top of it.
+    if (spots.news.x < spots.weather.x + PLATE_W + KEEP_GAP) spots.news.y = clamp(spots.weather.y + PLATE_H + KEEP_GAP / 2, 8, yMax);
+  }
   const spot = spots[key] || spots.weather;
   return {
     key,
@@ -80,9 +104,10 @@ export function parsePlate(
   width: number,
   height: number,
   keyHint?: string,
+  keepOff?: KeepOff | null,
 ): DeskPlate {
   const key = raw && isPlateKey(raw.key) ? raw.key : isPlateKey(keyHint) ? keyHint : PLATE_KEYS[0];
-  const spot = defaultSpot(key, width, height);
+  const spot = defaultSpot(key, width, height, keepOff);
   if (!raw || typeof raw !== "object") return spot;
   if (Number.isFinite(Number(raw.x))) spot.x = clamp(Number(raw.x), 8, Math.max(8, (width || 800) - 40));
   if (Number.isFinite(Number(raw.y))) spot.y = clamp(Number(raw.y), 8, Math.max(8, (height || 480) - 40));
@@ -92,7 +117,12 @@ export function parsePlate(
   return spot;
 }
 
-export function loadPlates(width: number, height: number, storage?: { getItem: (k: string) => string | null } | null) {
+export function loadPlates(
+  width: number,
+  height: number,
+  storage?: { getItem: (k: string) => string | null } | null,
+  keepOff?: KeepOff | null,
+) {
   const store = storage || (typeof localStorage !== "undefined" ? localStorage : null);
   let raw: unknown = null;
   try {
@@ -101,7 +131,7 @@ export function loadPlates(width: number, height: number, storage?: { getItem: (
     raw = null;
   }
   const list = Array.isArray(raw) ? raw : [];
-  return PLATE_KEYS.map((key) => parsePlate(list.find((p: { key?: string }) => p && p.key === key) || { key }, width, height, key));
+  return PLATE_KEYS.map((key) => parsePlate(list.find((p: { key?: string }) => p && p.key === key) || { key }, width, height, key, keepOff));
 }
 
 export function savePlates(plates: DeskPlate[], storage?: { setItem: (k: string, v: string) => void } | null) {

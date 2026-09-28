@@ -70,7 +70,7 @@ import { roomOf } from "@/lib/pets/rooms";
 import { playClaim } from "@/lib/pets/play";
 import { colonyOf, colonyWord, isHivePlace, stampColony } from "@/lib/pets/hive";
 import { isPhone, isTablet, readSit, tabletOrient, type TabletOrient } from "@/lib/pets/tablet-desk";
-import { phoneFit, phoneOrient, plaqueNeedsLine, samePhoneFit, type PhoneFit, type PhoneOrient } from "@/lib/pets/phone-desk";
+import { deskFit as fitDesk, phoneFit, phoneOrient, plaqueNeedsLine, samePhoneFit, type DeskFit, type PhoneFit, type PhoneOrient } from "@/lib/pets/phone-desk";
 import { guestMarks, guestPick, guestTap, type GuestChoiceId } from "@/lib/pets/guest-choice";
 import { classifyKey, installFileDropGuard } from "@/lib/pets/presence";
 import { careNotSaved, RETRY_LABEL, talkProblem as talkProblemLine, type CareNotSavedAct } from "@/lib/plain-error";
@@ -244,6 +244,10 @@ export function CompanionRoom({
   const [fit, setFit] = useState<PhoneFit | null>(null);
   /** Phone: even folded, the plaque would not fit above the care buttons, so it shows as one line. */
   const [plaqueLine, setPlaqueLine] = useState(false);
+  /** Desktop: the left panel and the rail end above the care buttons or the screen's bottom (deskFit), scroll inside. */
+  const [deskFit, setDeskFit] = useState<DeskFit | null>(null);
+  /** Desktop: the whole plaque would push the panel past that, so it starts folded (one click opens it). */
+  const [deskFold, setDeskFold] = useState(false);
 
   useEffect(() => installFileDropGuard(window), []);
 
@@ -309,6 +313,58 @@ export function CompanionRoom({
       window.removeEventListener("orientationchange", resized);
     };
   }, [hand, handOrient]);
+
+  useEffect(() => {
+    if (hand || pad) {
+      setDeskFit(null);
+      setDeskFold(false);
+      return;
+    }
+    const care = careRef.current;
+    const aside = asideRef.current;
+    const rail = railRef.current;
+    if (!care || !aside || !rail) return;
+    let frame = 0;
+    const measure = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const bottom = [care, care.parentElement?.querySelector("form"), care.parentElement?.querySelector("[data-room-links]")];
+        const next = fitDesk({
+          aside: aside.getBoundingClientRect(),
+          rail: rail.getBoundingClientRect(),
+          below: bottom.flatMap((e) => {
+            const b = e?.getBoundingClientRect();
+            return b && b.width > 0 && b.height > 0 ? [b] : [];
+          }),
+          viewH: window.innerHeight,
+        });
+        setDeskFit((prev) => (prev && prev.asideMax === next.asideMax && prev.railMax === next.railMax ? prev : next));
+      });
+    };
+    const resized = () => {
+      // A taller screen may hold the whole plaque again.
+      setDeskFold(false);
+      measure();
+    };
+    measure();
+    const watch = typeof ResizeObserver === "function" ? new ResizeObserver(measure) : null;
+    watch?.observe(care);
+    // The talk line comes and goes under the care buttons and lifts them: watch the whole bottom bar.
+    if (care.parentElement) watch?.observe(care.parentElement);
+    window.addEventListener("resize", resized);
+    return () => {
+      cancelAnimationFrame(frame);
+      watch?.disconnect();
+      window.removeEventListener("resize", resized);
+    };
+  }, [hand, pad]);
+
+  useEffect(() => {
+    // Desktop: the panel runs past its room: fold the plaque first (the hello and its Got it stay on the screen).
+    const aside = asideRef.current;
+    if (hand || pad || !deskFit || deskFold || !aside) return;
+    if (plaqueNeedsLine(aside.scrollHeight, aside.clientHeight)) setDeskFold(true);
+  }, [hand, pad, deskFit, deskFold, hintUp]);
 
   useEffect(() => {
     // The folded plaque runs past the room above the care buttons: fold it to one line (never while the hello is up).
@@ -1210,7 +1266,7 @@ export function CompanionRoom({
       <aside
         ref={asideRef}
         data-desk-aside
-        style={hand && fit ? { maxHeight: fit.asideMax } : undefined}
+        style={hand && fit ? { maxHeight: fit.asideMax } : !hand && !pad && deskFit ? { maxHeight: deskFit.asideMax } : undefined}
         className={
           hand
             ? handOrient === "sit"
@@ -1220,7 +1276,7 @@ export function CompanionRoom({
               ? orient === "sit"
                 ? "absolute left-4 right-16 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[min(100%-2rem,22rem)]"
                 : "absolute left-[max(1.5rem,env(safe-area-inset-left))] top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[min(100%-2rem,22rem)]"
-              : "absolute left-4 top-20 z-20 max-w-[min(100%-2rem,20rem)] sm:left-8 sm:top-24"
+              : "absolute left-4 top-20 z-20 max-w-[min(100%-2rem,20rem)] overflow-y-auto overflow-x-hidden overscroll-contain sm:left-8 sm:top-24"
         }
       >
         {hand && asideFirst ? null : kicker}
@@ -1235,6 +1291,21 @@ export function CompanionRoom({
           </>
         ) : null}
         <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>
+        {demoWindow && hand ? (
+          // The docked plates sit at the end of the panel; this jump takes a phone there without a long scroll.
+          <button
+            type="button"
+            data-plates-jump
+            onClick={() => {
+              const plates = roomRef.current?.querySelector<HTMLElement>("[data-demo-plates]");
+              plates?.scrollIntoView({ block: "start" });
+              plates?.querySelector<HTMLElement>("button")?.focus({ preventScroll: true });
+            }}
+            className="mt-1 inline-flex min-h-11 items-center text-sm text-primary"
+          >
+            Weather, news, market
+          </button>
+        ) : null}
         {line}
         {careProblem ? (
           <p role="status" aria-live="polite" data-care-problem={careProblem.act} className="mt-2 max-w-sm text-sm text-muted">
@@ -1265,9 +1336,10 @@ export function CompanionRoom({
           </p>
         ) : null}
         {latestNote ? <p className="mt-2 max-w-sm text-xs text-subtle">{latestNote}</p> : null}
-        {/* On a phone the hello comes first; the plaque waits for Got it and then sits folded above the care buttons. */}
-        {hand && hintUp ? null : (
-          <SpeciesPlaque speciesKey={kind.key} compact paper folded={hand} line={hand && plaqueLine} className="mt-5 max-w-sm" showDemoLink={false} />
+        {/* On a phone the hello comes first; the plaque waits for Got it and then sits folded above the care buttons.
+            A short desktop screen does the same (deskFold): the hello and its Got it stay above Feed and Play. */}
+        {(hand || deskFold) && hintUp ? null : (
+          <SpeciesPlaque speciesKey={kind.key} compact paper folded={hand || deskFold} line={hand && plaqueLine} className="mt-5 max-w-sm" showDemoLink={false} />
         )}
         <FirstHint
           name={displayName}
@@ -1350,7 +1422,7 @@ export function CompanionRoom({
         ) : null}
         {hand && asideFirst ? null : aside}
         {demoWindow && hand ? (
-          <div data-demo-plates className="mt-5 max-w-sm space-y-2">
+          <div data-demo-plates role="group" aria-label="Weather, news, market" className="mt-5 max-w-sm scroll-mt-2 space-y-2">
             <DeskWeatherPlate docked onSky={setLiveSky} />
             <DeskNewsPlate docked />
             <DeskMarketPlate docked />
@@ -1361,13 +1433,14 @@ export function CompanionRoom({
       <div
         ref={railRef}
         data-desk-rail
-        style={hand && fit ? { maxHeight: fit.railMax } : undefined}
+        data-rail-fit={!hand && !pad && deskFit ? "" : undefined}
+        style={hand && fit ? { maxHeight: fit.railMax } : !hand && !pad && deskFit ? { maxHeight: deskFit.railMax } : undefined}
         className={
           hand
             ? "absolute right-[max(0.75rem,env(safe-area-inset-right))] top-[calc(4.25rem+env(safe-area-inset-top))] z-20 w-[5.5rem] overflow-y-auto overscroll-contain text-right"
             : pad
               ? "absolute right-[max(1rem,env(safe-area-inset-right))] top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[11rem] text-right"
-              : "absolute right-4 top-20 z-20 max-w-[11rem] text-right sm:right-8 sm:top-24"
+              : "absolute right-4 top-20 z-20 max-w-[11rem] overflow-y-auto overflow-x-hidden overscroll-contain text-right sm:right-8 sm:top-24"
         }
       >
         <DenCabinet currentRoom={room.id} currentKey={kind.key} drawers onSelectKind={onSelectKind} />

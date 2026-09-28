@@ -169,11 +169,33 @@ import {
   savePlates,
   setColors,
   type DeskPlate,
+  type KeepOff,
   type PlateKey,
 } from "@/lib/pets/desk-plates";
 import { cn } from "@/lib/utils";
 import { PLATE_LINES, RETRY_LABEL, plateProblem } from "@/lib/plain-error";
 
+
+/**
+ * The room chrome a first-time plate keeps clear of (defaultSpot keepOff): the panel on the left (the small label,
+ * the guest's name, the species plaque), the rail on the right and the site header on top, measured as drawn.
+ */
+function roomKeepOff(): KeepOff | null {
+  if (typeof document === "undefined") return null;
+  const box = (sel: string) => {
+    const b = document.querySelector(sel)?.getBoundingClientRect();
+    return b && b.width > 0 && b.height > 0 ? b : null;
+  };
+  const aside = box("[data-desk-aside]");
+  const rail = box("[data-desk-rail]");
+  const header = box("header");
+  if (!aside && !rail && !header) return null;
+  return {
+    left: aside ? aside.right : 0,
+    right: rail ? window.innerWidth - rail.left : 0,
+    top: header ? header.bottom : 0,
+  };
+}
 
 /**
  * A plate's place, drag and colors. Docked (the /demo room on a phone): the plate sits in the room's panel, in the
@@ -187,12 +209,12 @@ function usePlateChrome(key: PlateKey, docked = false) {
   plateRef.current = plate;
 
   useEffect(() => {
-    const row = plateOf(loadPlates(window.innerWidth, window.innerHeight), key);
+    const row = plateOf(loadPlates(window.innerWidth, window.innerHeight, undefined, roomKeepOff()), key);
     setPlate(row);
   }, [key]);
 
   function persist(next: DeskPlate) {
-    const all = loadPlates(window.innerWidth, window.innerHeight).map((p) => (p.key === key ? next : p));
+    const all = loadPlates(window.innerWidth, window.innerHeight, undefined, roomKeepOff()).map((p) => (p.key === key ? next : p));
     savePlates(all);
     setPlate(endDrag(next));
   }
