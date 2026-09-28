@@ -31,7 +31,7 @@ import { traitFor } from "@/lib/pets/traits";
 import { afterPlace, arriveFinish, pointerUp, walkLand } from "@/lib/pets/arrive";
 import { carePointer } from "@/lib/pets/mac-desk";
 import { HOLD_MS, isPhone, isTablet, readSit, tabletLift } from "@/lib/pets/tablet-desk";
-import { bubbleLift, bubbleRoom, followHover, tapPxFor } from "@/lib/pets/phone-desk";
+import { bubbleDodge, bubbleLift, bubbleRoom, followHover, tapPxFor, type BubbleBox } from "@/lib/pets/phone-desk";
 import {
   beginPlay,
   canStart,
@@ -224,6 +224,9 @@ export function LivingPet({
   const bubbleRef = useRef<HTMLDivElement>(null);
   /* How far the bubble may rise and still end below the site header (bubbleRoom); read on open and on resize, not per frame. */
   const bubbleRoomRef = useRef(Number.POSITIVE_INFINITY);
+  /* While a line shows: the bubble's resting top and size and the plates it steps around (bubbleDodge), in the
+     bubble's own frame; read when the line opens, on resize and every 400 ms (a plate can be dragged or opened). */
+  const bubblePlatesRef = useRef<{ restTop: number; w: number; h: number; floor: number; plates: BubbleBox[] } | null>(null);
   const shadowRef = useRef<HTMLDivElement>(null);
   const dustRef = useRef<HTMLDivElement>(null);
   const tongueRef = useRef<SVGSVGElement>(null);
@@ -328,13 +331,46 @@ export function LivingPet({
       const restTop = parent.getBoundingClientRect().top + parent.clientTop + el.offsetTop;
       bubbleRoomRef.current = bubbleRoom(restTop, head.getBoundingClientRect().bottom);
     };
-    read();
-    window.addEventListener("resize", read);
+    // The weather, news and market plates (floating on a desktop, docked in the panel on a phone): the part of each
+    // that shows, in the bubble's frame. The bubble never crosses one (bubbleDodge in the frame loop).
+    const readPlates = () => {
+      const parent = el.offsetParent as HTMLElement | null;
+      if (!parent || !speech) {
+        bubblePlatesRef.current = null;
+        return;
+      }
+      const pb = parent.getBoundingClientRect();
+      const plates: BubbleBox[] = [];
+      for (const plate of document.querySelectorAll<HTMLElement>("[data-desk-plate]")) {
+        const r = plate.getBoundingClientRect();
+        let b = { left: r.left, top: r.top, right: r.right, bottom: r.bottom };
+        for (let up = plate.parentElement; up && up !== document.body; up = up.parentElement) {
+          const cs = getComputedStyle(up);
+          if (/(auto|scroll|hidden|clip)/.test(cs.overflowY) || /(auto|scroll|hidden|clip)/.test(cs.overflowX)) {
+            const u = up.getBoundingClientRect();
+            b = { left: Math.max(b.left, u.left), top: Math.max(b.top, u.top), right: Math.min(b.right, u.right), bottom: Math.min(b.bottom, u.bottom) };
+          }
+        }
+        if (b.right - b.left < 1 || b.bottom - b.top < 1) continue;
+        const dx = pb.left + parent.clientLeft;
+        const dy = pb.top + parent.clientTop;
+        plates.push({ left: b.left - dx, top: b.top - dy, right: b.right - dx, bottom: b.bottom - dy });
+      }
+      bubblePlatesRef.current = { restTop: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight, floor: parent.clientHeight, plates };
+    };
+    const both = () => {
+      read();
+      readPlates();
+    };
+    both();
+    window.addEventListener("resize", both);
+    const every = speech ? window.setInterval(readPlates, 400) : 0;
     // A longer line (or a late web font) makes the bubble taller, and its resting top higher.
-    const grow = typeof ResizeObserver === "function" ? new ResizeObserver(read) : null;
+    const grow = typeof ResizeObserver === "function" ? new ResizeObserver(both) : null;
     grow?.observe(el);
     return () => {
-      window.removeEventListener("resize", read);
+      window.removeEventListener("resize", both);
+      if (every) window.clearInterval(every);
       grow?.disconnect();
     };
   }, [speech]);
@@ -960,8 +996,26 @@ export function LivingPet({
         shadowRef.current.style.opacity = String(0.32 - hopPx / 90);
       }
       if (bubbleRef.current) {
-        const bx = clamp(drawX + SPRITE * 0.5 - BUBBLE_W * 0.5, 10, Math.max(10, width - BUBBLE_W - 10));
-        bubbleRef.current.style.transform = `translate3d(${bx}px, ${-bubbleLift(drawY + 18, bubbleRoomRef.current)}px, 0)`;
+        let bx = clamp(drawX + SPRITE * 0.5 - BUBBLE_W * 0.5, 10, Math.max(10, width - BUBBLE_W - 10));
+        let lift = bubbleLift(drawY + 18, bubbleRoomRef.current);
+        // A line never crosses a plate: beside, above or below the plates instead (bubbleDodge).
+        const dodge = bubblePlatesRef.current;
+        if (dodge && dodge.plates.length) {
+          const room = bubbleRoomRef.current;
+          const at = bubbleDodge({
+            x: bx,
+            top: dodge.restTop - lift,
+            w: dodge.w,
+            h: dodge.h,
+            plates: dodge.plates,
+            width,
+            minTop: Number.isFinite(room) ? dodge.restTop - room : undefined,
+            maxTop: dodge.floor - dodge.h - 8,
+          });
+          bx = at.x;
+          lift = dodge.restTop - at.top;
+        }
+        bubbleRef.current.style.transform = `translate3d(${bx}px, ${-lift}px, 0)`;
       }
       if (tongueRef.current) {
         const flick = p.crawl && s.actMotion === "tongue" && !reduced ? tongueFlick(s.actT, s.actHold) : 0;

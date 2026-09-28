@@ -135,6 +135,7 @@ CROSS_DOMAIN = {
     "web.kennel_first_notes",
     "web.kennel_drawers",
     "web.kennel_targets",
+    "web.kennel_scroll",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -629,6 +630,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.kennel_first_notes",
         "web.kennel_drawers",
         "web.kennel_targets",
+        "web.kennel_scroll",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -1122,6 +1124,17 @@ def test_kennel_targets_row_404_desktop_targets_fit_plates_hive_jump():
         assert mark in kt.trace, (mark, kt.trace)
     for group in ("missing", "targets", "plates", "more"):
         assert all(kt.extras[group].values()), (group, kt.extras[group])
+
+
+def test_kennel_scroll_row_rail_window_one_scroller_bubble_jump_words():
+    """The rail shows the current guest; the second window clear; one scroller; bubble off plates; jump; care words."""
+    ks = invoke("web.kennel_scroll")
+    assert ks.ok, (ks.error, ks.detail)
+    for mark in ("rail=current_guest_in_view", "window=clear_of_panel", "scroll=one_scroller", "bubble=clear_of_plates",
+                 "jump=beside_name_landscape", "words=distinct_care_words"):
+        assert mark in ks.trace, (mark, ks.trace)
+    for group in ("rail", "windows", "scroller", "bubble", "jump", "words"):
+        assert all(ks.extras[group].values()), (group, ks.extras[group])
 
 
 def test_pictures_gate_row_boots_real_main_with_pointers_and_opens_no_glass():

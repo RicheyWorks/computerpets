@@ -191,7 +191,9 @@ test("the speech bubble's room under the site header", () => {
   assert.equal(D.bubbleRoom(101, null), Infinity, "no header: no cap");
   assert.equal(D.bubbleLift(40, D.bubbleRoom(101, undefined)), 40);
   const pet = src("src/components/desk/living-pet.tsx");
-  assert.match(pet, /translate3d\(\$\{bx\}px, \$\{-bubbleLift\(drawY \+ 18, bubbleRoomRef\.current\)\}px, 0\)/);
+  // The lift, then bubbleDodge may move it off a plate (kennel-scroll.test.mjs).
+  assert.match(pet, /let lift = bubbleLift\(drawY \+ 18, bubbleRoomRef\.current\);/);
+  assert.match(pet, /translate3d\(\$\{bx\}px, \$\{-lift\}px, 0\)/);
   assert.match(pet, /bubbleRoomRef\.current = bubbleRoom\(restTop, head\.getBoundingClientRect\(\)\.bottom\);/);
   assert.match(src("src/components/app-shell.tsx"), /<header\n\s+data-site-header/);
 });

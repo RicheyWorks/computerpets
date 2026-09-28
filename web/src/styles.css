@@ -624,20 +624,9 @@
     vertical-align: middle;
   }
 
-  /* The kennel on a phone sits right under the name (asideFirst) and scrolls with the panel: no box inside a box. */
-  [data-phone-floor] [data-kennel] {
-    max-height: none;
-    overflow: visible;
-    margin-top: 0.75rem;
-    padding-right: 0;
-  }
-
   /* A phone card is the pet, its kind, its stage and its bond; the long lines wait on the pet's own page. The
-     "The guests you keep." heading stays for screen readers; the Kennel label above the cards stays on screen. */
-  [data-phone-floor] [data-kennel] > .paper-card {
-    padding: 0.75rem;
-  }
-
+     "The guests you keep." heading stays for screen readers; the Kennel label above the cards stays on screen. (The
+     kennel's box, padding and spacing on a phone are in the utilities layer at the end: they change utility classes.) */
   [data-phone-floor] [data-kennel] > .paper-card > h2 {
     position: absolute;
     width: 1px;
@@ -645,10 +634,6 @@
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
-  }
-
-  [data-phone-floor] [data-kennel] > .paper-card > ul {
-    margin-top: 0.5rem;
   }
 
   [data-phone-floor] [data-kennel] [data-card-more] {
@@ -1128,5 +1113,30 @@
 @layer utilities {
   [data-demo-stage]:has([data-phone-floor]) :is([data-mac-extra], [data-linux-mark], [data-windows-sit], [data-tablet-sit]) {
     display: none;
+  }
+
+  /* A room's list in the panel (the kennel, the catalog's rooms, the nest's pairs) has a scroll box of its own
+     (max-h, overflow-y-auto) for a panel that does not scroll. A panel that scrolls (a phone's, or a desktop's fitted
+     to the screen) is the one scroller. These sat in the components layer, where the list's own utility classes won:
+     signed in, the kennel scrolled inside a panel that scrolled too at 1024 to 1440 px wide and on a phone, and the
+     catalog's 221 guests scrolled in a 411 px box inside a 158 px panel at 375×667. */
+  [data-phone-floor] [data-aside-list],
+  [data-aside-fit] [data-aside-list] {
+    max-height: none;
+    overflow: visible;
+  }
+
+  /* The kennel on a phone sits right under the name (asideFirst), a smaller card with its words close. */
+  [data-phone-floor] [data-kennel] {
+    margin-top: 0.75rem;
+    padding-right: 0;
+  }
+
+  [data-phone-floor] [data-kennel] > .paper-card {
+    padding: 0.75rem;
+  }
+
+  [data-phone-floor] [data-kennel] > .paper-card > ul {
+    margin-top: 0.5rem;
   }
 }
