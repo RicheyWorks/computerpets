@@ -27,7 +27,11 @@
 // tab title, a 404 and a 44 px "See who is awake"; /pets/<not-a-pet>'s "Back to kennel" is 44 px. A phone's /demo has a
 // 44 px "Weather, news, market" jump near the top of the panel. At desktop sizes (1024×768, 1280×800, 1440×900) every
 // target on /, /catalog and /demo is at least 24×24 (WCAG 2.2) with none crowding another, the rail and the panel end
-// on the screen (1366×768 and 1280×720 too, the hello's Got it with them) and /demo's plates sit clear of the panel.
+// on the screen (1366×768 and 1280×720 too, the hello's Got it with them) and /demo's plates sit clear of the panel,
+// as does its drawn second window. The rail shows the current guest (a guest deep in its room, on arrival and on a
+// room change without a page load), the speech bubble never crosses a plate while a line shows, a landscape phone's
+// plates jump is on the screen as the page opens, and signed in the panel is the one scroller on /collection, /nest
+// and /catalog (desktop and phone).
 // Starts the Vite dev server in-process and drives the system Chrome or Edge (playwright-core, no downloaded
 // browser). Skips, and says why, when no browser is found.
 // PHONE_LAYOUT_URL=http://127.0.0.1:8097/ uses an already running dev server instead.
@@ -1157,14 +1161,16 @@ test("the eighteen room pages' field notes on a phone: closed drawers, every not
       const jump = await page.evaluate(() => {
         const j = document.querySelector("[data-plates-jump]")?.getBoundingClientRect();
         const a = document.querySelector("[data-desk-aside]")?.getBoundingClientRect();
-        return j && a ? { t: Math.round(j.top), b: Math.round(j.bottom), h: Math.round(j.height), top: Math.round(a.top), fold: Math.round(Math.min(a.bottom, innerHeight)) } : null;
+        const scrolled = document.querySelector("[data-desk-aside]")?.scrollTop || 0;
+        return j && a ? { t: Math.round(j.top), b: Math.round(j.bottom), h: Math.round(j.height), top: Math.round(a.top), fold: Math.round(Math.min(a.bottom, innerHeight)), scrolled } : null;
       });
       if (!jump) problems.push(`${label}: no "Weather, news, market" jump ([data-plates-jump])`);
       else {
         if (jump.h < TAP_MIN) problems.push(`${label}: the plates jump is ${jump.h}px tall`);
-        // Upright it is on the screen as the page opens; on its side the panel is only 85 to 155 px tall, so the jump
-        // is the first thing under the name and the tagline (a short scroll, where the plates are a long one).
-        if (w < h ? jump.b > jump.fold + 1 : jump.b - jump.top > 170) problems.push(`${label}: the plates jump is not near the top of the panel ${JSON.stringify(jump)}`);
+        // On the screen as the page opens, upright and on its side. On its side the panel is only 85 to 155 px tall;
+        // under the tagline the jump started at the panel's end (185 to 229 in a 68 to 208 panel at 667×375), so it
+        // sits beside the name there.
+        if (jump.b > jump.fold + 1 || jump.scrolled > 0) problems.push(`${label}: the plates jump is not on the screen as the page opens ${JSON.stringify(jump)}`);
         await page.locator("[data-plates-jump]").tap();
         await page.waitForTimeout(300);
         const landed = await page.evaluate(() => {
@@ -1328,6 +1334,17 @@ test("desktop sizes: every target at least 24×24 with no two crowding, the rail
                 for (const [n, b] of Object.entries(parts)) if (hit(p.b, b)) over.push(`${p.k} sits over the ${n}`);
               }
               for (let i = 0; i < list.length; i += 1) for (let j = i + 1; j < list.length; j += 1) if (hit(list[i].b, list[j].b)) over.push(`${list[i].k} and ${list[j].k} overlap`);
+              // The drawn second window ("A second window") sat behind the panel's plaque and hello (82 to 430 by 246
+              // to 522 at 1024×768); it starts right of the panel now, clear of the first window and the plates.
+              const b = box('[data-demo-window="b"]');
+              const panel = aside?.getBoundingClientRect();
+              if (!b) over.push("the second window is missing");
+              else {
+                if (panel && hit(b, { t: panel.top, b: panel.bottom, l: panel.left, r: panel.right })) over.push(`the second window sits behind the panel ${JSON.stringify(b)}`);
+                if (hit(b, box('[data-demo-window="a"]'))) over.push("the two windows overlap");
+                for (const [n, p] of Object.entries({ ...parts, ...Object.fromEntries(list.map((x) => [x.k, x.b])) })) if (hit(b, p)) over.push(`the second window sits under the ${n}`);
+                if (b.r > innerWidth || b.b > innerHeight) over.push(`the second window runs off the screen ${JSON.stringify(b)}`);
+              }
               return over;
             });
             problems.push(...plates.map((p) => `${label}: ${p}`));
@@ -1576,6 +1593,233 @@ test("signed-in rooms (kennel, hatchery, nest) and a kennel pet's page on phones
   }
   assert.equal(visited, SIGNED_IN_PAGES.length * SIGNED_IN_SIZES.length, problems.join("\n"));
   assert.equal(petVisits, SIGNED_IN_SIZES.length, `a kennel pet's page was checked at ${petVisits} sizes\n${problems.join("\n")}`);
+  assert.deepEqual(problems, [], problems.join("\n"));
+});
+
+/** Guests deep in their room's list (the 20th in the house, the last on the reef and in the jungle): the rail has to scroll to them. */
+export const RAIL_DEEP_GUESTS = ["ember", "door", "atlas"];
+export const RAIL_SIZES = [
+  { w: 375, h: 667, phone: true },
+  { w: 667, h: 375, phone: true },
+  { w: 1024, h: 768, phone: false },
+  { w: 1280, h: 800, phone: false },
+];
+
+/** Runs in the page: the rail's current guest and whether it shows whole inside the rail and on the screen. */
+function railHere() {
+  const rail = document.querySelector("[data-desk-rail]");
+  const here = rail?.querySelector(".den-cabinet-guest.is-here");
+  if (!rail || !here) return null;
+  const a = rail.getBoundingClientRect();
+  const b = here.getBoundingClientRect();
+  return {
+    guest: (here.textContent || "").trim().slice(0, 24),
+    shows: b.top >= a.top - 1 && b.bottom <= Math.min(a.bottom, innerHeight) + 1,
+    row: [Math.round(b.top), Math.round(b.bottom)],
+    rail: [Math.round(a.top), Math.round(a.bottom)],
+    scrolled: Math.round(rail.scrollTop),
+  };
+}
+
+/** Runs in the page: the plates the open speech bubble crosses (each plate clipped by the boxes that scroll it). */
+function bubbleOverPlates() {
+  const bub = document.querySelector('[data-speech="open"]');
+  if (!bub) return null;
+  const bb = (bub.firstElementChild || bub).getBoundingClientRect();
+  const over = [];
+  for (const plate of document.querySelectorAll("[data-desk-plate]")) {
+    const r = plate.getBoundingClientRect();
+    let [l, t, rr, b] = [r.left, r.top, r.right, r.bottom];
+    for (let p = plate.parentElement; p; p = p.parentElement) {
+      if (!/(auto|scroll|hidden|clip)/.test(getComputedStyle(p).overflowY)) continue;
+      const c = p.getBoundingClientRect();
+      [l, t, rr, b] = [Math.max(l, c.left), Math.max(t, c.top), Math.min(rr, c.right), Math.min(b, c.bottom)];
+    }
+    [t, b] = [Math.max(t, 0), Math.min(b, innerHeight)];
+    if (rr - l < 2 || b - t < 2) continue;
+    if (Math.min(bb.right, rr) - Math.max(bb.left, l) > 1 && Math.min(bb.bottom, b) - Math.max(bb.top, t) > 1) {
+      over.push(`${plate.getAttribute("data-desk-plate")} ${JSON.stringify({ bubble: [bb.left, bb.top, bb.right, bb.bottom].map(Math.round), plate: [l, t, rr, b].map(Math.round) })}`);
+    }
+  }
+  return over;
+}
+
+/** Runs in the page: boxes inside the panel that scroll on their own (a scroller inside a scroller). */
+function panelScrollers() {
+  const aside = document.querySelector("[data-desk-aside]");
+  if (!aside) return null;
+  const inner = [...aside.querySelectorAll("*")]
+    .filter((e) => /(auto|scroll)/.test(getComputedStyle(e).overflowY) && e.scrollHeight > e.clientHeight + 1)
+    .map((e) => `${e.tagName.toLowerCase()}${[...e.attributes].filter((x) => x.name.startsWith("data-")).map((x) => `[${x.name}]`).join("")} ${e.scrollHeight}/${e.clientHeight}`);
+  const a = aside.getBoundingClientRect();
+  return { inner, scrolls: aside.scrollHeight > aside.clientHeight + 1, bottom: Math.round(a.bottom), vh: innerHeight };
+}
+
+test("the rail shows the current guest on arrival and on a room change; the speech bubble never crosses a plate; a landscape phone's plates jump shows without a scroll; signed in, the panel is the one scroller", { skip, timeout: 600_000 }, async () => {
+  const { url, browser } = await site();
+  const problems = [];
+  const context = (s) => browser.newContext(s.phone ? { viewport: { width: s.w, height: s.h }, isMobile: true, hasTouch: true, userAgent: IPHONE } : { viewport: { width: s.w, height: s.h } });
+  // The rail: arriving on a guest deep in its room, and moving to another room without a page load.
+  for (const size of RAIL_SIZES) {
+    const ctx = await context(size);
+    try {
+      for (const slug of RAIL_DEEP_GUESTS) {
+        const label = `/demo/${slug} ${size.w}×${size.h}`;
+        const page = await ctx.newPage();
+        try {
+          await page.goto(`${url}/demo/${slug}`, { waitUntil: "load", timeout: 120_000 });
+          await page.waitForSelector("[data-desk-rail] .den-cabinet-guest.is-here", { state: "attached", timeout: 60_000 });
+          await page.waitForTimeout(1_500);
+          const here = await page.evaluate(railHere);
+          if (!here?.shows) problems.push(`${label}: the current guest is not in the rail's view on arrival ${JSON.stringify(here)}`);
+          if (size.phone) {
+            const cut = await page.evaluate(railCuts);
+            if (cut.length) problems.push(`${label}: the rail rests with ${cut.join(", ")} cut in half`);
+          }
+          if (slug === RAIL_DEEP_GUESTS[0]) {
+            for (const next of RAIL_DEEP_GUESTS.slice(1)) {
+              await page.evaluate((s) => {
+                history.pushState(history.state, "", `/demo/${s}`);
+                dispatchEvent(new PopStateEvent("popstate", { state: history.state }));
+              }, next);
+              await page.waitForFunction((s) => location.pathname === `/demo/${s}`, next);
+              await page.waitForTimeout(1_200);
+              const moved = await page.evaluate(railHere);
+              if (!moved?.shows) problems.push(`${label} then /demo/${next}: the new guest is not in the rail's view ${JSON.stringify(moved)}`);
+              if (size.phone) {
+                const cut = await page.evaluate(railCuts);
+                if (cut.length) problems.push(`${label} then /demo/${next}: the rail rests with ${cut.join(", ")} cut in half`);
+              }
+            }
+          }
+        } catch (err) {
+          problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
+        } finally {
+          await page.close();
+        }
+      }
+    } finally {
+      await ctx.close();
+    }
+  }
+  // The speech bubble: it crossed the Quotes plate and the hello at 1280×800. Sampled while a line shows (the pet
+  // walks), then with the news plate dragged over the bubble on a desktop: the bubble moves off it.
+  for (const size of [{ w: 1024, h: 768 }, { w: 1280, h: 800 }, { w: 1440, h: 900 }, { w: 375, h: 667, phone: true }, { w: 667, h: 375, phone: true }]) {
+    const label = `/demo/rui ${size.w}×${size.h} (a line showing)`;
+    const ctx = await context(size);
+    const page = await ctx.newPage();
+    try {
+      await page.goto(`${url}/demo/rui`, { waitUntil: "load", timeout: 120_000 });
+      await page.waitForSelector("[data-desk-care] button", { timeout: 60_000 });
+      await page.waitForTimeout(1_200);
+      const seen = new Set();
+      for (let round = 0; round < 2; round += 1) {
+        await page.evaluate(() => [...document.querySelectorAll("[data-desk-care] button")].find((b) => (b.textContent || "").trim() === "Talk")?.click());
+        await page.waitForSelector('[data-speech="open"]', { timeout: 15_000 });
+        await page.waitForTimeout(600);
+        for (let i = 0; i < 8; i += 1) {
+          for (const o of (await page.evaluate(bubbleOverPlates)) || []) seen.add(o);
+          await page.waitForTimeout(150);
+        }
+      }
+      for (const o of [...seen].slice(0, 3)) problems.push(`${label}: the speech bubble crosses the ${o}`);
+      if (!size.phone) {
+        const open = await page.evaluate(() => !!document.querySelector('[data-speech="open"]'));
+        if (!open) {
+          await page.evaluate(() => [...document.querySelectorAll("[data-desk-care] button")].find((b) => (b.textContent || "").trim() === "Talk")?.click());
+          await page.waitForSelector('[data-speech="open"]', { timeout: 15_000 });
+        }
+        await page.evaluate(() => {
+          const bub = document.querySelector('[data-speech="open"]');
+          const bb = (bub.firstElementChild || bub).getBoundingClientRect();
+          const plate = document.querySelector('[data-desk-plate="news"]');
+          const host = plate.offsetParent.getBoundingClientRect();
+          plate.style.left = `${Math.round(bb.left + bb.width / 2 - plate.offsetWidth / 2 - host.left)}px`;
+          plate.style.top = `${Math.round(bb.top + 6 - host.top)}px`;
+          plate.style.right = "auto";
+        });
+        await page.waitForTimeout(700);
+        const moved = new Set();
+        for (let i = 0; i < 6; i += 1) {
+          if (!(await page.evaluate(() => !!document.querySelector('[data-speech="open"]')))) break;
+          for (const o of (await page.evaluate(bubbleOverPlates)) || []) moved.add(o);
+          await page.waitForTimeout(150);
+        }
+        for (const o of [...moved].slice(0, 2)) problems.push(`${label}, a plate moved onto it: the speech bubble stays over the ${o}`);
+      }
+    } catch (err) {
+      problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
+    } finally {
+      await ctx.close();
+    }
+  }
+  // A landscape phone: the "Weather, news, market" jump sits beside the name, on the screen as the page opens.
+  for (const [w, h] of [[568, 320], [667, 375], [844, 390]]) {
+    const label = `/demo/rui ${w}×${h}`;
+    const ctx = await context({ w, h, phone: true });
+    const page = await ctx.newPage();
+    try {
+      await page.goto(`${url}/demo/rui`, { waitUntil: "load", timeout: 120_000 });
+      await page.waitForSelector("[data-phone-floor] [data-plates-jump]", { timeout: 60_000 });
+      await page.waitForTimeout(1_000);
+      const jump = await page.evaluate(() => {
+        const j = document.querySelector("[data-plates-jump]").getBoundingClientRect();
+        const aside = document.querySelector("[data-desk-aside]");
+        const a = aside.getBoundingClientRect();
+        return { t: Math.round(j.top), b: Math.round(j.bottom), h: Math.round(j.height), top: Math.round(a.top), fold: Math.round(Math.min(a.bottom, innerHeight)), scrolled: aside.scrollTop };
+      });
+      if (jump.t < jump.top - 1 || jump.b > jump.fold + 1 || jump.scrolled > 0) problems.push(`${label}: the plates jump takes a scroll to reach ${JSON.stringify(jump)}`);
+      if (jump.h < TAP_MIN) problems.push(`${label}: the plates jump is ${jump.h}px tall`);
+    } catch (err) {
+      problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
+    } finally {
+      await ctx.close();
+    }
+  }
+  // Signed in (the stand-in kennel): the panel is the one scroller. The kennel (1353 px in a 512 px box) scrolled
+  // inside a panel that scrolled too at 1024 to 1440 px wide, and the catalog's list did the same, on a phone too.
+  const { url: signedIn } = await standInSite();
+  for (const size of [{ w: 1024, h: 768 }, { w: 1280, h: 800 }, { w: 1440, h: 900 }, { w: 375, h: 667, phone: true }, { w: 667, h: 375, phone: true }]) {
+    const ctx = await context(size);
+    try {
+      for (const path of ["/collection", "/nest", "/catalog"]) {
+        const label = `${path} ${size.w}×${size.h} (signed in)`;
+        const page = await ctx.newPage();
+        const thrown = [];
+        page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
+        try {
+          await page.goto(`${signedIn}${path}`, { waitUntil: "load", timeout: 120_000 });
+          await page.waitForSelector("[data-desk-care] button", { timeout: 120_000 });
+          if (new URL(page.url()).pathname !== path) throw new Error(`sent to ${page.url()} (the stand-in session is not signed in)`);
+          await page.waitForTimeout(1_500);
+          const s = await page.evaluate(panelScrollers);
+          if (!s) problems.push(`${label}: no panel`);
+          else {
+            for (const e of s.inner) problems.push(`${label}: ${e} scrolls inside the panel`);
+            if (!s.scrolls && s.bottom > s.vh + 1) problems.push(`${label}: the panel runs off the screen (to ${s.bottom} of ${s.vh}) and does not scroll`);
+          }
+          if (path === "/collection") {
+            const card = await page.evaluate(() => {
+              const c = document.querySelector('[data-kennel] a[href^="/pets/"]');
+              if (!c) return null;
+              c.scrollIntoView({ block: "nearest" });
+              const b = c.getBoundingClientRect();
+              const a = document.querySelector("[data-desk-aside]").getBoundingClientRect();
+              return { shows: b.top >= Math.max(0, a.top) - 1 && b.top < Math.min(a.bottom, innerHeight) - 16, card: [Math.round(b.top), Math.round(b.bottom)] };
+            });
+            if (!card?.shows) problems.push(`${label}: the first kennel card cannot be scrolled into the panel ${JSON.stringify(card)}`);
+          }
+          for (const t of thrown) problems.push(`${label}: the page threw: ${t}`);
+        } catch (err) {
+          problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
+        } finally {
+          await page.close();
+        }
+      }
+    } finally {
+      await ctx.close();
+    }
+  }
   assert.deepEqual(problems, [], problems.join("\n"));
 });
 

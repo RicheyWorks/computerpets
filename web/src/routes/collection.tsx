@@ -132,8 +132,9 @@ function Collection() {
           </p>
         }
         aside={
-          // data-kennel: on a phone this comes first in the panel (asideFirst) and scrolls with it, not in a box of its own.
-          <div data-kennel className="mt-5 max-h-[calc(100dvh-16rem)] max-w-sm space-y-3 overflow-y-auto pr-1">
+          // data-kennel: on a phone this comes first in the panel (asideFirst) and scrolls with it, not in a box of its own;
+          // data-aside-list: on a fitted desktop panel too (one scroller, the panel).
+          <div data-kennel data-aside-list className="mt-5 max-h-[calc(100dvh-16rem)] max-w-sm space-y-3 overflow-y-auto pr-1">
             <aside className="paper-card rounded-[var(--radius-lg)] border p-4">
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Kennel</p>
               <h2 className="mt-1 font-display text-2xl">The guests you keep.</h2>

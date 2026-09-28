@@ -148,8 +148,10 @@ test("/hive: one search covers the insects and bees and comb", () => {
 
 test("a phone's /demo has a 44 px jump to its weather, news and market plates near the top of the panel", () => {
   const room = src("src/components/desk/companion-room.tsx");
-  assert.match(room, /\{demoWindow && hand \? \([\s\S]{0,200}?<button\s+type="button"\s+data-plates-jump/);
-  assert.match(room, /data-plates-jump[\s\S]{0,700}?scrollIntoView\(\{ block: "start" \}\)[\s\S]{0,400}?focus\(\{ preventScroll: true \}\)[\s\S]{0,300}?min-h-11[\s\S]{0,120}?Weather, news, market/);
+  assert.match(room, /const platesJump =\s*demoWindow && hand \? \(\s*<button\s+type="button"\s+data-plates-jump/);
+  assert.match(room, /data-plates-jump[\s\S]{0,700}?scrollIntoView\(\{ block: "start" \}\)[\s\S]{0,400}?focus\(\{ preventScroll: true \}\)[\s\S]{0,300}?min-h-11[\s\S]{0,300}?Weather, news, market/);
+  // Upright it follows the tagline; on a landscape phone it sits beside the name (kennel-scroll.test.mjs).
+  assert.match(room, /<p className="mt-3 max-w-sm text-sm text-muted">\{kind\.tagline\}<\/p>\n\s+\{landJump \? null : platesJump\}/);
   assert.match(room, /<div data-demo-plates role="group" aria-label="Weather, news, market" className="mt-5 max-w-sm scroll-mt-2 space-y-2">/);
   // The jump sits before the plaque and the plates, right after the tagline.
   assert.ok(room.indexOf("data-plates-jump") < room.indexOf("<SpeciesPlaque speciesKey={kind.key} compact paper folded"));
