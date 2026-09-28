@@ -1,4 +1,4 @@
-# 0036. Cloud talk and cloud voice name the network address
+# 0036. Cloud talk and cloud voice say this computer's internet address goes to that website
 
 - **Status:** Accepted (the request itself waits in [0044](0044-station-stream-and-cloud-talk-wait-for-the-painted-line.md))
 - **Date:** 2026-09-22

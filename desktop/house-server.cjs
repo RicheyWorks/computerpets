@@ -2,7 +2,7 @@
 
 /**
  * The keeper card's house-server row (main process). Pets need no server, so
- * the row is hidden until the keeper names one: a Backend URL saved in
+ * the row is hidden until the keeper names one: a house server address saved in
  * Settings, COMPUTERPETS_BACKEND_URL, or the backend a held license came from.
  * Only then does this probe `/api/public/heartbeat` on that host. The raw
  * failure goes to the log; the card only says reachable or unreachable.
@@ -17,7 +17,7 @@ const HEARTBEAT_PATH = "/api/public/heartbeat";
 const DEFAULT_BASE = "http://127.0.0.1:8081";
 const PROBE_TIMEOUT_MS = 4000;
 const HIDDEN = Object.freeze({ show: false });
-const BAD_URL = "That Backend URL is not an http or https address, so it was not saved.";
+const BAD_URL = "That house server address does not start with http or https, so it was not saved.";
 
 function normalizeBase(raw) {
   if (typeof raw !== "string" || !raw.trim()) return null;
@@ -75,7 +75,7 @@ function readSaved(userDataDir, readFile = fs.readFileSync) {
   }
 }
 
-/** Save (or clear, with "") the Settings Backend URL the row should probe. */
+/** Save (or clear, with "") the Settings house server address the row should probe. */
 function writeSaved(userDataDir, raw, io = {}) {
   const writeFile = io.writeFile || fs.writeFileSync;
   const mkdir = io.mkdir || fs.mkdirSync;

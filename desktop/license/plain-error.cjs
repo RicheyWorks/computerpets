@@ -75,7 +75,7 @@ function houseSentence(code, host) {
     case "missing_secret":
       return `This copy of the app has no license key set up, so it cannot open a license. ${PETS_STILL}`;
     case "missing_backend":
-      return `The Backend URL is not a web address. It should look like http://127.0.0.1:8081 or https://house.example. ${PETS_STILL}`;
+      return `The house server address needs to be a web address, like http://127.0.0.1:8081 or https://house.example. ${PETS_STILL}`;
     case "bad_response":
       return `${capital(at)} sent an answer this app does not understand. Try again later. ${PETS_STILL}`;
     case "download_failed":
@@ -147,7 +147,7 @@ function sentence(kind, host, status) {
   const at = where(host);
   switch (kind) {
     case "notfound":
-      return `Couldn't find ${at}. Check the Backend URL. ${PETS_STILL}`;
+      return `Couldn't find ${at}. Check the house server address. ${PETS_STILL}`;
     case "timeout":
       return `${capital(at)} took too long to answer. ${PETS_STILL}`;
     case "tls":

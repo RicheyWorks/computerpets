@@ -11,10 +11,10 @@
 const { plainNetLine } = require("../renderer/weather-areas.js");
 const { LicenseError } = require("./errors.cjs");
 
-const LICENSE_HOST_NAME = "the license host";
+const LICENSE_HOST_NAME = "the license website";
 const LOCAL_STAYS = "Unlocking stays on this computer. The code made from this computer's ID does not leave.";
 const DOWNLOAD_LOCAL = "This download stays on this computer. It talks to this computer. It does not send the code made from this computer's ID.";
-const BUNDLE_HOST_NAME = "the bundle host";
+const BUNDLE_HOST_NAME = "the download website";
 const BUNDLE_IDLE = "Your pet's files are not downloaded until this line names the website.";
 const BUNDLE_LOCAL = "This download stays on this computer. Your pet's files come from this computer.";
 

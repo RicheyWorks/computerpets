@@ -1,4 +1,4 @@
-# 0037. Unlock names the host before the license hash leaves
+# 0037. Unlock names the license website before the code made from this computer's ID is sent
 
 - **Status:** Accepted (the POST itself waits in [0045](0045-license-requests-wait-for-the-painted-line.md))
 - **Date:** 2026-09-22

@@ -3,6 +3,7 @@
 - **Status:** Accepted (the silent computer-name and random fallback is superseded by [0030](0030-missing-os-id-waits-for-a-yes.md))
 - **Date:** 2026-09-22
 - **Code:** `desktop/license/hwid.cjs`, `desktop/license/session.cjs`, `desktop/renderer/settings.html`, `client/computerpets_client/license/hwid.py`, `client/computerpets_client/license/session.py`, `client/computerpets_client/unlock_dialog.py`
+- **Plain words (2026-09-27):** "device fingerprint" below means a code that stays the same for this computer, so a website that gets it twice can tell it is the same computer. The app now says the code "works like a fingerprint for this computer". The decision is unchanged.
 
 ## Context
 
