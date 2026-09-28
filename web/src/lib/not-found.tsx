@@ -6,6 +6,11 @@ export const NOT_FOUND_TITLE = pageTitle("No room here");
 export const NOT_FOUND_HEADING = "No room by that name.";
 export const NOT_FOUND_LINE = "The link may be old or mistyped. The house is still here:";
 
+/** No page matched: the root route is the only match (every page, "/" included, adds its own). */
+export function notFoundHere(matches: readonly { routeId: string }[] | undefined): boolean {
+  return !!matches && matches.length > 0 && matches.every((m) => m.routeId === "__root__");
+}
+
 /**
  * A page the house does not have. Before this the router drew a bare "Not Found" (TanStack's generic default,
  * with a warning on every such request) and the tab said only "ComputerPets": no word on what happened and no way

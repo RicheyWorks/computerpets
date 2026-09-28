@@ -238,7 +238,7 @@ function NestPage() {
         line={
           <p className="mt-3 max-w-sm text-sm text-muted">
             The nest is a room. Two of a kind. Grown and elder may sit. A hatchling waits. Neglect can close a line.{" "}
-            <Link to="/hatch" className="text-fg no-underline hover:text-primary">
+            <Link to="/hatch" data-line-link className="text-fg no-underline hover:text-primary">
               Or draw at the hatchery.
             </Link>
           </p>

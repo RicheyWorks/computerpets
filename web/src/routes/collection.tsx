@@ -113,6 +113,7 @@ function Collection() {
         seed={walker ? normalizeCare(walker) : undefined}
         onCare={walker ? persistCare : undefined}
         detail="Kennel"
+        asideFirst
         extraCare={
           walker
             ? [
@@ -125,13 +126,14 @@ function Collection() {
         line={
           <p className="mt-3 max-w-sm text-sm text-muted">
             The kennel is a room. The cards stay paper. Neglect can close a line.{" "}
-            <Link to="/hatch" className="text-fg no-underline hover:text-primary">
+            <Link to="/hatch" data-line-link className="text-fg no-underline hover:text-primary">
               The hatchery is open.
             </Link>
           </p>
         }
         aside={
-          <div className="mt-5 max-h-[calc(100dvh-16rem)] max-w-sm space-y-3 overflow-y-auto pr-1">
+          // data-kennel: on a phone this comes first in the panel (asideFirst) and scrolls with it, not in a box of its own.
+          <div data-kennel className="mt-5 max-h-[calc(100dvh-16rem)] max-w-sm space-y-3 overflow-y-auto pr-1">
             <aside className="paper-card rounded-[var(--radius-lg)] border p-4">
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Kennel</p>
               <h2 className="mt-1 font-display text-2xl">The guests you keep.</h2>
