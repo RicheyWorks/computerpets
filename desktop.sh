@@ -41,6 +41,13 @@ pictures() {
   fi
 }
 seen=$(pictures)
+# Git LFS may be here already (installed after the clone, or a pull that stopped): then the words do not say to
+# install it, only to fetch the pictures. Asked only when the pictures are not ready.
+lfs_here() {
+  if git lfs version >/dev/null 2>&1; then echo yes; else echo no; fi
+}
+lfs=no
+[ "$seen" = ready ] || lfs=$(lfs_here)
 
 # 4. A screen to put the pets on (Linux). Started over SSH or from a text console there is none, and Electron
 #    stopped with "Missing X server or $DISPLAY" and a crash (SIGSEGV) instead of words. A Mac always has one.
@@ -61,7 +68,9 @@ if [ "${1:-}" = "--check" ]; then
   echo "pieces: $state"
   echo "pictures: $seen"
   echo "display: $display"
-  if [ "$seen" != ready ]; then
+  if [ "$seen" != ready ] && [ "$lfs" = yes ]; then
+    echo "next: The pet pictures are not here yet. Git LFS is installed but has not fetched them. In the computerpets folder type git lfs install and then git lfs pull. Then type sh desktop.sh and press Enter."
+  elif [ "$seen" != ready ]; then
     echo "next: The pet pictures are not here yet. Install Git LFS from https://git-lfs.com, then in the computerpets folder type git lfs install and then git lfs pull. Then type sh desktop.sh and press Enter."
   elif [ "$display" = none ]; then
     echo "next: $no_screen"
@@ -76,6 +85,7 @@ if [ "${1:-}" = "--check" ]; then
   exit 0
 fi
 
+[ "$seen" = ready ] || [ "$lfs" = no ] || stop_start "The pet pictures did not download. Git LFS is installed here, but it has not fetched them yet. In the computerpets folder run git lfs install and then git lfs pull, and run sh desktop.sh again."
 [ "$seen" = ready ] || stop_start "The pet pictures did not download. They come through Git LFS, which this Git does not have yet. Install Git LFS from https://git-lfs.com, then in the computerpets folder run git lfs install and then git lfs pull, and run sh desktop.sh again."
 
 [ "$display" != none ] || stop_start "$no_screen"

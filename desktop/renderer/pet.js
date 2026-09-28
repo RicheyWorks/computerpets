@@ -145,6 +145,18 @@ let houseServer = { show: false };
 let houseServerSeenHost = null;
 /** What the first-run hello last painted (title and lines), so a repaint does not rebuild it. */
 let firstHintPainted = "";
+/** Whether the tray icon can be seen (main.cjs readTrayHost): "no" points the hello at the pet's menu instead. */
+let trayHost = (() => {
+  try {
+    return String(window.desk?.trayHost?.() || "unknown");
+  } catch {
+    return "unknown";
+  }
+})();
+window.desk?.onTrayHost?.((state) => {
+  trayHost = String(state || "unknown");
+  paintFirstHint();
+});
 let gpuSample = window.PetGpu ? window.PetGpu.UNREAD : { status: "unread" };
 let gpuHistory = window.PetGpu ? window.PetGpu.emptyHistory() : [];
 for (let i = 0; i < 12; i++) dustRoot.appendChild(document.createElement("span"));
@@ -1817,7 +1829,7 @@ function paintFirstHint() {
     firstHintPainted = "";
     return;
   }
-  const hint = K.firstHint(kind ? kind.name : "");
+  const hint = K.firstHint(kind ? kind.name : "", { tray: trayHost });
   const sig = [hint.title, ...hint.lines].join("|");
   if (sig === firstHintPainted) return;
   firstHintPainted = sig;
@@ -1863,7 +1875,7 @@ function paintCard() {
   if (hudSpecial) hudSpecial.textContent = (kind && window.PetSpecial?.trickLabel(kind.key)) || "Special";
   if (hudVolume) hudVolume.value = String(guest.volume);
   if (hudVoiceTruth) hudVoiceTruth.textContent = (K && K.VOICE_TRUTH) || C.VOICE_TRUTH;
-  if (hudOffTruth) hudOffTruth.textContent = (K && K.QUIT_TRUTH) || C.QUIT_TRUTH;
+  if (hudOffTruth) hudOffTruth.textContent = (K && K.quitTruth ? K.quitTruth(window.desk?.platform) : K && K.QUIT_TRUTH) || C.QUIT_TRUTH;
   if (hudOff) hudOff.textContent = offArmed ? "Off" : "Turn off";
   if (hudAlarmTime) {
     hudAlarmTime.value = `${String(guest.alarm.hour).padStart(2, "0")}:${String(guest.alarm.minute).padStart(2, "0")}`;

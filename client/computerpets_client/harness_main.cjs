@@ -123,14 +123,18 @@ function makeElectron(ctx) {
       quit: () => {
         ctx.quits += 1;
       },
-      relaunch: () => {
+      relaunch: (o) => {
         ctx.relaunches += 1;
+        ctx.relaunchArgs = o && Array.isArray(o.args) ? o.args.slice() : null;
       },
       setAppUserModelId() {},
       setPath() {},
       getPath: () => ctx.userData,
       requestSingleInstanceLock: () => true,
-      commandLine: { appendSwitch() {} },
+      commandLine: {
+        appendSwitch: (k, v) => ctx.switches.push([k, v]),
+        getSwitchValue: () => "",
+      },
       dock: { hide() {} },
     },
     BrowserWindow: FakeWindow,
@@ -188,6 +192,11 @@ const RealPictures = require(path.join(RENDERER, "pictures.js"));
  * server never decides them; desk.overlay_gate boots with "no". The words are the real overlay-gate.cjs.
  */
 const COMPOSITOR = { state: null, asked: 0 };
+/**
+ * Whether the tray can be seen (bootMain opts.tray): rows boot with "yes" so the host's own session bus never decides
+ * them; desk.no_tray boots with "no". A native Wayland start (opts.wayland) likewise; the host is never asked.
+ */
+const TRAY = { state: null, asked: 0, wayland: false };
 const RealGate = require(path.join(DESKTOP, "overlay-gate.cjs"));
 const Roster = require(path.join(RENDERER, "roster-load.js"));
 
@@ -209,6 +218,12 @@ const STUBS = {
       COMPOSITOR.asked += 1;
       return COMPOSITOR.state || "yes";
     },
+    readTrayHost: async () => {
+      TRAY.asked += 1;
+      return TRAY.state || "yes";
+    },
+    nativeWayland: () => TRAY.wayland,
+    secretServiceRunning: () => false,
   },
   "./windows-enum.cjs": { listRaw: () => new Promise(() => {}), disposePump() {} },
   "./vdesk-win.cjs": {
@@ -248,6 +263,8 @@ async function bootMain(opts = {}) {
     fetchImpl: null,
     quits: 0,
     relaunches: 0,
+    relaunchArgs: null,
+    switches: [],
     dialogs: [],
     dialogAnswer: typeof opts.dialogAnswer === "number" ? opts.dialogAnswer : 1,
   };
@@ -255,6 +272,9 @@ async function bootMain(opts = {}) {
   PICTURES.state = opts.pictures || null;
   COMPOSITOR.state = opts.compositor || null;
   COMPOSITOR.asked = 0;
+  TRAY.state = opts.tray || null;
+  TRAY.asked = 0;
+  TRAY.wayland = !!opts.wayland;
   GPU.ctx = ctx;
   const electron = makeElectron(ctx);
   const realLoad = Module._load;
@@ -581,6 +601,120 @@ async function overlayGate() {
         "check_again=opens_when_composited",
         "second_start=words_again",
         "composited=glass_opens",
+      ]);
+}
+
+/**
+ * Linux with no tray to see (GNOME without AppIndicator, a bare X server): every tray row is in the pet's own menu
+ * but Show, Hide the window asks first and a second start brings the pets back with the keeper card open, the
+ * overlay is told (its hello points at the pet's menu), and a gate's OK quits too. A native Wayland start goes again
+ * on XWayland once, or stays closed and says why.
+ */
+async function noTray() {
+  const seen = {};
+  const fails = [];
+  let ctx = await bootMain({ tray: "no", dialogAnswer: 1 });
+  try {
+    for (let i = 0; i < 5; i += 1) await new Promise((r) => setImmediate(r));
+    const win = ctx.windows[0];
+    const told = ctx.sent.filter((m) => m[0] === "tray-host").map((m) => m[1]);
+    const asked = ctx.send("tray-host-get");
+    const trayRows = ctx.tray().filter((r) => r.type !== "separator" && r.enabled !== false).map((r) => r.label);
+    ctx.send("pet-menu", { x: 10, y: 10 });
+    const pet = (ctx.popups[ctx.popups.length - 1] || []).map((r) => r.label);
+    const missing = trayRows.filter((l) => l !== "Show" && !pet.includes(l));
+    // Hide the window: asks; Cancel (1) keeps the pets, Hide (0) hides them. (The stand-in window shows on ready.)
+    if (win) win.visible = true;
+    item(ctx.popups[ctx.popups.length - 1], "Hide the window").click();
+    await new Promise((r) => setImmediate(r));
+    const box = ctx.dialogs[ctx.dialogs.length - 1] || {};
+    const keptUp = !!win && win.visible === true;
+    ctx.dialogAnswer = 0;
+    ctx.send("pet-menu", { x: 10, y: 10 });
+    item(ctx.popups[ctx.popups.length - 1], "Hide the window").click();
+    await new Promise((r) => setImmediate(r));
+    const hidden = !!win && win.visible === false;
+    const before = ctx.sent.length;
+    for (const fn of ctx.appEvents["second-instance"] || []) fn();
+    const back = !!win && win.visible === true;
+    const opened = ctx.sent.slice(before).some((m) => m[0] === "command" && m[1] && m[1].type === "open-card");
+    const w = RealGate.hideWords(process.platform);
+    seen.overlay = { asked: TRAY.asked, told: told.join("|"), trayHostGet: asked, trayRows: trayRows.length, petRows: pet.length, missing: missing.join("|"), box: box.message, buttons: (box.buttons || []).join("|"), keptUp, hidden, back, opened };
+    if (TRAY.asked !== 1 || told.join() !== "no" || asked !== "no") fails.push(`tray host: asked ${TRAY.asked}, told ${told.join()}, get ${asked}`);
+    if (missing.length) fails.push(`pet menu lacks ${missing.join(", ")}`);
+    if (box.message !== w.message || seen.overlay.buttons !== "Hide|Cancel" || !keptUp) fails.push(`Hide the window: "${box.message}" [${seen.overlay.buttons}], kept up after Cancel ${keptUp}`);
+    if (!hidden) fails.push("Hide did not hide the pets");
+    if (!back || !opened) fails.push(`second start: window back ${back}, keeper card opened ${opened}`);
+  } finally {
+    ctx.cleanup();
+  }
+  delete require.cache[MAIN];
+  // With a tray to see, Hide the window hides at once, as before.
+  ctx = await bootMain({ tray: "yes" });
+  try {
+    for (let i = 0; i < 5; i += 1) await new Promise((r) => setImmediate(r));
+    if (ctx.windows[0]) ctx.windows[0].visible = true;
+    ctx.send("pet-menu", { x: 10, y: 10 });
+    item(ctx.popups[ctx.popups.length - 1], "Hide the window").click();
+    seen.withTray = { dialogs: ctx.dialogs.length, hidden: ctx.windows[0] && ctx.windows[0].visible === false };
+    if (ctx.dialogs.length !== 0 || !seen.withTray.hidden) fails.push(`with a tray: ${JSON.stringify(seen.withTray)}`);
+  } finally {
+    ctx.cleanup();
+  }
+  delete require.cache[MAIN];
+  // A gate with no tray: OK (the last button) quits too, and the message says so.
+  ctx = await bootMain({ compositor: "no", tray: "no", dialogAnswer: 2 });
+  try {
+    for (let i = 0; i < 5; i += 1) await new Promise((r) => setImmediate(r));
+    const box = ctx.dialogs[0] || {};
+    seen.gate = { dialogs: ctx.dialogs.length, detailSaysSo: String(box.detail || "").endsWith(RealGate.NO_TRAY_GATE), quits: ctx.quits };
+    if (ctx.dialogs.length !== 1 || !seen.gate.detailSaysSo || ctx.quits !== 1) fails.push(`gate with no tray: ${JSON.stringify(seen.gate)}`);
+  } finally {
+    ctx.cleanup();
+  }
+  delete require.cache[MAIN];
+  // A native Wayland start: again on XWayland (DISPLAY set) once; with none, closed with the words.
+  const display = process.env.DISPLAY;
+  const tried = process.env.COMPUTERPETS_X11_TRIED;
+  try {
+    process.env.DISPLAY = ":0";
+    delete process.env.COMPUTERPETS_X11_TRIED;
+    ctx = await bootMain({ wayland: true });
+    try {
+      for (let i = 0; i < 5; i += 1) await new Promise((r) => setImmediate(r));
+      seen.waylandX = { relaunches: ctx.relaunches, args: (ctx.relaunchArgs || []).filter((a) => /ozone/.test(a)).join("|"), quits: ctx.quits, windows: ctx.windows.length, tried: process.env.COMPUTERPETS_X11_TRIED };
+      if (ctx.relaunches !== 1 || seen.waylandX.args !== "--ozone-platform=x11" || ctx.quits !== 1 || ctx.windows.length !== 0 || seen.waylandX.tried !== "1") fails.push(`wayland with XWayland: ${JSON.stringify(seen.waylandX)}`);
+    } finally {
+      ctx.cleanup();
+    }
+    delete require.cache[MAIN];
+    delete process.env.DISPLAY;
+    delete process.env.COMPUTERPETS_X11_TRIED;
+    ctx = await bootMain({ wayland: true, dialogAnswer: 0 });
+    try {
+      for (let i = 0; i < 5; i += 1) await new Promise((r) => setImmediate(r));
+      const box = ctx.dialogs[0] || {};
+      seen.waylandClosed = { relaunches: ctx.relaunches, windows: ctx.windows.length, message: box.message, buttons: (box.buttons || []).join("|"), quits: ctx.quits };
+      if (ctx.relaunches !== 0 || ctx.windows.length !== 0 || box.message !== RealGate.closedWords("wayland-native").message || ctx.quits !== 1) fails.push(`wayland with no XWayland: ${JSON.stringify(seen.waylandClosed)}`);
+    } finally {
+      ctx.cleanup();
+    }
+    delete require.cache[MAIN];
+  } finally {
+    if (display === undefined) delete process.env.DISPLAY;
+    else process.env.DISPLAY = display;
+    if (tried === undefined) delete process.env.COMPUTERPETS_X11_TRIED;
+    else process.env.COMPUTERPETS_X11_TRIED = tried;
+  }
+  return fails.length
+    ? fail(fails.join("; "), seen)
+    : ok("With no tray to see, the real main.cjs puts every tray row in the pet's menu, asks before Hide the window, brings the pets back with the card open on a second start, tells the overlay, and lets a gate's OK quit; a native Wayland start goes again on XWayland or says why", seen, [
+        "pet_menu=every_tray_row_but_show",
+        "hide=asks_when_no_tray",
+        "second_start=window_back+card_open",
+        "overlay=told_tray_host",
+        "gate_ok=quits_when_no_tray",
+        "wayland=relaunch_x11_or_says_why",
       ]);
 }
 
@@ -1019,6 +1153,7 @@ module.exports = {
   quit_desk: quitDesk,
   pictures_gate: picturesGate,
   overlay_gate: overlayGate,
+  no_tray: noTray,
   mind_get_set: mindGetSet,
   saved_lines: savedLines,
   alarm_clock: alarmClock,
