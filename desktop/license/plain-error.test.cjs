@@ -40,7 +40,7 @@ test("refused, reset, and bare 'fetch failed' say the house server could not be 
 
 test("no such host says the house server could not be found", () => {
   for (const err of [undici("ENOTFOUND", "getaddrinfo ENOTFOUND nope.example"), sys("EAI_AGAIN", "getaddrinfo EAI_AGAIN nope.example")]) {
-    assertPlain(P.plainLicenseError(err, { host: "nope.example" }), "not_found", /^Couldn't find the house server at nope\.example\. Check the Backend URL\. Pets still work without it\.$/);
+    assertPlain(P.plainLicenseError(err, { host: "nope.example" }), "not_found", /^Couldn't find the house server at nope\.example\. Check the house server address\. Pets still work without it\.$/);
   }
 });
 
@@ -106,7 +106,7 @@ test("house codes that carry developer or server text get one plain sentence eac
     ["revoked", "license missing, expired, or tampered", /^The house server at house\.example no longer accepts this license\./],
     ["decrypt_failed", "license ciphertext failed authentication", /^The license on this computer could not be opened/],
     ["missing_secret", "LICENSE_SECRET_KEY is missing; cannot decrypt the issued license", /^This copy of the app has no license key set up/],
-    ["missing_backend", "backend base URL is not a URL", /^The Backend URL is not a web address\./],
+    ["missing_backend", "backend base URL is not a URL", /^The house server address needs to be a web address, like http:\/\/127\.0\.0\.1:8081/],
     ["bad_response", "verify response is not a license issuance", /^The house server at house\.example sent an answer this app does not understand\./],
     ["download_failed", "java.lang.NullPointerException", /^The house server at house\.example did not hand over the download\./],
     ["unknown_provider", "provider key is invalid", /^The house server at house\.example does not know this store\./],

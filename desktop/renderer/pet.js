@@ -153,6 +153,42 @@ function closestTarget(e, sel) {
   return t && typeof t.closest === "function" ? t.closest(sel) : null;
 }
 
+/**
+ * The element a DOM event happened on (a form on submit, an input on input), or null.
+ * @param {Event} e
+ * @returns {HTMLElement | null}
+ */
+function eventEl(e) {
+  return /** @type {HTMLElement | null} */ (e && e.target);
+}
+
+/**
+ * Elements under `root` that match `sel`. Everything the overlay looks up this way is an HTML element
+ * (buttons, tabs, canvases, dust dots), so `.dataset`, `.style`, `.tabIndex` and `.focus()` are checked.
+ * @param {ParentNode} root
+ * @param {string} sel
+ * @returns {HTMLElement[]}
+ */
+function htmlAll(root, sel) {
+  return /** @type {HTMLElement[]} */ (Array.from(root.querySelectorAll(sel)));
+}
+
+/**
+ * The first element under `root` that matches `sel`, or null (see htmlAll).
+ * @param {ParentNode} root
+ * @param {string} sel
+ * @returns {HTMLElement | null}
+ */
+function htmlOne(root, sel) {
+  return /** @type {HTMLElement | null} */ (root.querySelector(sel));
+}
+
+/** The one Web Audio context for the small chirps (made on the first sound). @type {AudioContext | null} */
+let soundCtx = null;
+
+/** The wait before the next visiting guest (see startVisit / endVisit). */
+let visitTimer = 0;
+
 const sim = {
   x: 80,
   facing: 1,
@@ -992,7 +1028,7 @@ function paintPlants() {
   const P = window.PetDeskPlants;
   if (!P || !plantsRoot) return;
   const windOn = skyOf() === "wind";
-  const kids = Array.from(plantsRoot.querySelectorAll("[data-plant]"));
+  const kids = htmlAll(plantsRoot, "[data-plant]");
   const keep = Object.create(null);
   for (const plant of deskPlants) keep[plant.key] = plant;
   for (const el of kids) {
@@ -1009,7 +1045,7 @@ function paintPlants() {
       node.dataset.hit = "1";
       node.dataset.plant = plant.key;
       node.dataset.surface = "pending";
-      node.addEventListener("pointerdown", (e) => {
+      node.addEventListener("pointerdown", (/** @type {PointerEvent} */ e) => {
         if (e.button === 2) return;
         e.stopPropagation();
         node.setPointerCapture(e.pointerId);
@@ -1048,13 +1084,13 @@ function fillPlateColorUi(plate) {
   if (!P || !plate) return;
   const root = document.querySelector('[data-plate-colors="' + plate.key + '"]');
   if (!root) return;
-  for (const input of root.querySelectorAll("[data-plate-color]")) {
+  for (const input of /** @type {NodeListOf<HTMLInputElement>} */ (root.querySelectorAll("[data-plate-color]"))) {
     const which = input.getAttribute("data-plate-color");
     if (which === "bg") input.value = plate.bg;
     if (which === "fg") input.value = plate.fg;
     if (which === "muted") input.value = plate.muted;
   }
-  const sw = root.querySelector('[data-plate-swatches="' + plate.key + '"]');
+  const sw = htmlOne(root, '[data-plate-swatches="' + plate.key + '"]');
   if (sw && !sw.dataset.ready) {
     sw.dataset.ready = "1";
     for (const row of P.SWATCHES) {
@@ -2068,7 +2104,7 @@ function playSound(kindName) {
     }
     const Ctor = window.AudioContext || window.webkitAudioContext;
     if (!Ctor) return;
-    const ac = playSound.ctx || (playSound.ctx = new Ctor());
+    const ac = soundCtx || (soundCtx = new Ctor());
     void ac.resume();
     const now = ac.currentTime;
     const osc = ac.createOscillator();
@@ -2551,8 +2587,8 @@ if (choiceEl) {
   choiceEl.addEventListener("keydown", (e) => {
     const P = window.PetChoice;
     if (!choiceOpen || !P || !P.menuKey) return;
-    const items = [...choiceEl.querySelectorAll('[role="menuitem"]')];
-    const act = P.menuKey(e.key, items.indexOf(document.activeElement), items.length);
+    const items = htmlAll(choiceEl, '[role="menuitem"]');
+    const act = P.menuKey(e.key, items.indexOf(/** @type {HTMLElement} */ (document.activeElement)), items.length);
     // Escape is the document's dismiss key (below): it closes the menu and brings focus back.
     if (act == null || act === "close") return;
     e.preventDefault();
@@ -2802,7 +2838,7 @@ function showClockNote(payload) {
   if (hudCare) {
     hudCare.querySelectorAll("[data-need-focus]").forEach((el) => el.removeAttribute("data-need-focus"));
     if (careId) {
-      const btn = hudCare.querySelector(`[data-care="${careId}"]`);
+      const btn = htmlOne(hudCare, `[data-care="${careId}"]`);
       if (btn) {
         btn.setAttribute("data-need-focus", "1");
         if (btn.focus) btn.focus();
@@ -3176,8 +3212,8 @@ function switchTo(key) {
   }
   if (guestEl) guestEl.classList.remove("show");
   visit = null;
-  window.clearTimeout(startVisit.timer);
-  startVisit.timer = window.setTimeout(startVisit, window.PetVisitor?.VISIT_WAIT_MS || 7500);
+  window.clearTimeout(visitTimer);
+  visitTimer = window.setTimeout(startVisit, window.PetVisitor?.VISIT_WAIT_MS || 7500);
 }
 
 // One frame of the overlay. `tick` below is the loop: it schedules the next frame first and runs this
@@ -3546,7 +3582,7 @@ function tickFrame(now) {
 
   const nodes = dustRoot.children;
   for (let i = 0; i < nodes.length; i++) {
-    const el = nodes[i];
+    const el = /** @type {HTMLElement} */ (nodes[i]);
     const d = sim.dust[i];
     if (!d) {
       el.style.opacity = "0";
@@ -4053,7 +4089,7 @@ function plateTabKey(e) {
   const tab = closestTarget(e, '[role="tab"]');
   if (!tab || !K || !K.rovingIndex || !inPlate(tab)) return false;
   const list = tab.closest('[role="tablist"]');
-  const tabs = list ? [...list.querySelectorAll('[role="tab"]')] : [];
+  const tabs = list ? htmlAll(list, '[role="tab"]') : [];
   const next = K.rovingIndex(e.key, tabs.indexOf(tab), tabs.length);
   if (next < 0) return false;
   e.preventDefault();
@@ -4066,7 +4102,7 @@ function plateTabKey(e) {
  * one of them would drop focus with the old button; this remembers which one had it and puts it back.
  */
 function rebuiltFocus() {
-  const el = document.activeElement;
+  const el = /** @type {HTMLButtonElement | null} */ (document.activeElement);
   if (!el || !hud || !hud.contains(el) || el.tagName !== "BUTTON") return null;
   for (const k of REBUILT_KEYS) {
     if (el.dataset[k] == null) continue;
@@ -4112,7 +4148,7 @@ function cardKeys(on, opts) {
   }
   if (!cardKeysOn) return;
   cardKeysOn = false;
-  const active = document.activeElement;
+  const active = /** @type {HTMLElement | null} */ (document.activeElement);
   if (inCardOrPlate(active) && typeof active.blur === "function") active.blur();
   if (!fieldOf(document.activeElement)) window.desk?.setFocusable?.(false);
 }
@@ -4137,7 +4173,7 @@ for (const id of KEY_PLATE_IDS) {
 document.addEventListener("keydown", (e) => {
   const K = window.PetKeeper;
   if (e.defaultPrevented || !K || !K.cardKey) return;
-  const active = document.activeElement;
+  const active = /** @type {HTMLElement | null} */ (document.activeElement);
   const plate = inPlate(active) && !fieldOf(active);
   const act = K.cardKey({ key: e.key, cardOpen: !card.collapsed, menuOpen: !!(choiceOpen || plantChoiceKey), inPlate: plate });
   if (act === "card") {
@@ -4286,7 +4322,7 @@ if (weatherPlate) {
     }
   });
   weatherPlate.addEventListener("submit", (e) => {
-    if (!e.target || e.target.id !== "weather-add" || !window.PetWeatherAreas) return;
+    if (!e.target || eventEl(e).id !== "weather-add" || !window.PetWeatherAreas) return;
     e.preventDefault();
     e.stopPropagation();
     const A = window.PetWeatherAreas;
@@ -4591,7 +4627,7 @@ if (newsPlate) {
     }
   });
   newsPlate.addEventListener("submit", (e) => {
-    if (!e.target || e.target.id !== "news-add" || !window.PetNews) return;
+    if (!e.target || eventEl(e).id !== "news-add" || !window.PetNews) return;
     e.preventDefault();
     e.stopPropagation();
     const q = /** @type {HTMLInputElement | null} */ (document.getElementById("news-q"));
@@ -4715,7 +4751,7 @@ if (marketPlate) {
   });
   marketPlate.addEventListener("submit", (e) => {
     if (!window.PetMarket) return;
-    if (e.target && e.target.id === "market-add") {
+    if (e.target && eventEl(e).id === "market-add") {
       e.preventDefault();
       e.stopPropagation();
       const q = /** @type {HTMLInputElement | null} */ (document.getElementById("market-q"));
@@ -4802,7 +4838,7 @@ if (marketPlate) {
         });
       return;
     }
-    if (e.target && e.target.id === "nft-add") {
+    if (e.target && eventEl(e).id === "nft-add") {
       e.preventDefault();
       e.stopPropagation();
       const q = /** @type {HTMLInputElement | null} */ (document.getElementById("nft-q"));
@@ -4888,7 +4924,7 @@ bindPlateToggleDrag("weather-toggle", "weather");
 bindPlateToggleDrag("news-toggle", "news");
 bindPlateToggleDrag("market-toggle", "market");
 document.addEventListener("input", (e) => {
-  const t = e.target;
+  const t = /** @type {HTMLInputElement | null} */ (e.target);
   if (!t || !t.getAttribute || !t.getAttribute("data-plate-color")) return;
   const key = t.getAttribute("data-plate-key");
   const which = t.getAttribute("data-plate-color");
@@ -5127,7 +5163,7 @@ window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
       });
     },
     clickGiftDot() {
-      const el = giftRoot && giftRoot.querySelector(".gift-dot, .shed-dot");
+      const el = giftRoot && htmlOne(giftRoot, ".gift-dot, .shed-dot");
       if (el) el.click();
       paintHud();
       return snapshot();

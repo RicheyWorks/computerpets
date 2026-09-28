@@ -112,6 +112,7 @@ CROSS_DOMAIN = {
     "web.consent_plain",
     "web.consent_types_plain",
     "web.loop_guard_unlock_plain",
+    "web.desk_guard_plain",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -476,6 +477,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.consent_plain",
         "web.consent_types_plain",
         "web.loop_guard_unlock_plain",
+        "web.desk_guard_plain",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -695,6 +697,25 @@ def test_loop_guard_row_keeps_the_overlay_moving_and_the_unlock_words_plain():
     assert lg.extras["gates"]["messages"][0] == (
         "Nothing was sent to license.example.test. This page has to name the license website first."
     )
+
+
+def test_desk_guard_row_keeps_the_web_desk_moving_and_the_house_words_plain():
+    """A throwing trick cannot freeze the web desk; trick calls are typed; checkJs is down to 3; words are plain."""
+    dg = invoke("web.desk_guard_plain")
+    assert dg.ok, (dg.error, dg.detail)
+    for mark in ("web_loop=schedule_first+guarded", "fault=injected_trick_throws", "log=once_per_error+pet_key",
+                 "reset=safe_idle", "share=overlay_frame_guard_rules", "types=no_as_never", "checkjs=3+electron_types",
+                 "words=house_server+admin+license_website+adr"):
+        assert mark in dg.trace, (mark, dg.trace)
+    run = dg.extras["guardRun"]
+    assert run["frames"] == 1200 and run["pending"] == 1 and run["logs"] == 1
+    assert run["caught"] >= 2 and run["resets"] == run["caught"] and run["idle"]
+    assert run["log"].startswith("desk frame error (cat): Error: injected trick fault.")
+    assert all(dg.extras["parity"].values()), dg.extras["parity"]
+    assert all(dg.extras["wired"].values()), dg.extras["wired"]
+    assert int(dg.extras["checkjs"]["baseline"]) <= 3
+    assert all(v for k, v in dg.extras["checkjs"].items() if k != "baseline"), dg.extras["checkjs"]
+    assert all(dg.extras["words"].values()), dg.extras["words"]
 
 
 def test_first_run_rows_start_clean_and_show_the_hello_once():

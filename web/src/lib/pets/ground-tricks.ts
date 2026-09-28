@@ -480,6 +480,49 @@ type TrickPicker = {
   beginTrick(kind: string, x: number, facing: 1 | -1): GroundTrick;
 };
 
+/** Flags a trick or thank-you step reads (the same shape in every guest's module). */
+export type GroundStepFlags = {
+  asleep?: boolean;
+  hidden?: boolean;
+  leaving?: boolean;
+  cmd?: string;
+  windowPlay?: boolean;
+  card?: boolean;
+};
+
+/**
+ * What every guest's trick module offers for a running trick or thank-you: its own step takes what its
+ * own begin made. The desk keeps `s.trick` and `s.happy` from the module `tricksFor` gave for that pet,
+ * so the pair always matches; this type says so without an `as never` at each call. Some modules also
+ * take (and hand back) no trick at all, so the step may say `null` or `undefined`.
+ */
+type TrickStepper = {
+  stepTrick(trick: GroundTrick | null | undefined, dt: number, flags?: GroundStepFlags | null): GroundTrick | null | undefined;
+  stepHappy(happy: GroundHappy | null | undefined, dt: number, flags?: GroundStepFlags | null): GroundHappy | null | undefined;
+  nextTrickWait(justFinished: boolean, rand?: number, kind?: string): number;
+};
+
+/**
+ * One step of a running trick, with the same guest's module that began it. Every module hands a running
+ * trick back (done or not); if one ever handed back nothing, the trick ends here instead of freezing the pet.
+ */
+export function stepGroundTrick(T: GroundTricks, trick: GroundTrick, dt: number, flags?: GroundStepFlags | null): GroundTrick {
+  const mod: TrickStepper = T;
+  return mod.stepTrick(trick, dt, flags) ?? { ...trick, phase: "done" };
+}
+
+/** One step of a running thank-you, with the same guest's module that began it (ends it if it hands back nothing). */
+export function stepGroundHappy(T: GroundTricks, happy: GroundHappy, dt: number, flags?: GroundStepFlags | null): GroundHappy {
+  const mod: TrickStepper = T;
+  return mod.stepHappy(happy, dt, flags) ?? { ...happy, phase: "done" };
+}
+
+/** Seconds until this guest's next trick; `lastKind` keeps the same trick from coming twice in a row. */
+export function nextGroundTrickWait(T: GroundTricks, justFinished: boolean, rand?: number, lastKind?: GroundTrickKind | null): number {
+  const mod: TrickStepper = T;
+  return mod.nextTrickWait(justFinished, rand, lastKind ?? undefined);
+}
+
 /** Pick a trick and begin it with the same guest's module (what the desk did inline before). */
 export function beginPickedTrick(T: GroundTricks, musicOn: boolean, lastKind: string | null, x: number, facing: 1 | -1): GroundTrick {
   const mod: TrickPicker = T;

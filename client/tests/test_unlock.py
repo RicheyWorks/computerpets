@@ -833,8 +833,8 @@ def test_unlock_dialog_privacy_detail_is_whole_sentences_and_checked_against_hwi
         "belongs to this computer.",
         "The code still works like a fingerprint for this computer, because this computer always makes the "
         "same code.",
-        "The line under Backend URL names the website before the code is sent.",
-        "If the backend is on this computer, the code stays on this computer.",
+        "The line under the house server address names the website before the code is sent.",
+        "If the house server is on this computer, the code stays on this computer.",
         "If the app cannot read that ID, Unlock stops and asks you first.",
         "It uses the computer's name only after you say yes, and it uses a random ID instead if this computer "
         "has no name.",
@@ -847,8 +847,8 @@ def test_unlock_dialog_privacy_detail_is_whole_sentences_and_checked_against_hwi
         "The ID itself is never sent.",
         "The code still works like a fingerprint for this computer, because this computer always makes the "
         "same code.",
-        "The line under Backend URL names the website before the code is sent.",
-        "If the backend is on this computer, the code stays on this computer.",
+        "The line under the house server address names the website before the code is sent.",
+        "If the house server is on this computer, the code stays on this computer.",
     ]
     import re
 

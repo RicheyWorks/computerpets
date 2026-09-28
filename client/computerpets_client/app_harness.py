@@ -2622,6 +2622,25 @@ def _web_rows() -> list[Affordance]:
                 "say 'Nothing was sent to <host>. This page has to name the license website first.', and ROADMAP is dated."
             ),
         ),
+        Affordance(
+            "web.desk_guard_plain",
+            "web",
+            "Web desk loop survives a throwing trick; typed trick calls; desktop checkJs down to 3; house-server, admin, license, and ADR words in plain words",
+            "web frame-guard.ts + living-pet.tsx loop, cat-tricks.ts with an injected fault, overlay frame-guard.js, ground-tricks.ts steps, pet.js / desk-house.js / main.cjs checkJs, settings.html + unlock_dialog.py, plain-error, admin api.ts, license-net fallbacks, news/market headers, ADR 0019/0036/0037",
+            notes=(
+                "The web frame guard runs 1,200 frames of the desk's loop with a real trick module whose step throws: "
+                "the next frame is always queued first, the error is logged once as 'desk frame error (cat): ...', and "
+                "the pet goes back to a safe idle each time; the web and overlay guards reset a pet the same way. "
+                "living-pet.tsx runs its frame through guardedLoop, has no requestAnimationFrame or catch in the frame "
+                "body, and has no `as never` (stepGroundTrick / stepGroundHappy / nextGroundTrickWait are typed). The "
+                "desktop checkJs baseline is 3 or less (Rui's radio lines), pet.js keeps no state on functions, looks "
+                "elements up through htmlAll / htmlOne, and types its pointer handler; Electron's own types are checked "
+                "when installed. Settings and the blotter say 'House server address' and 'Asking the house server…', the "
+                "admin buttons' fallbacks are whole sentences, the license fallbacks say 'the license website' and 'the "
+                "download website', the news and quotes headers are plain and name the right websites, ADR 0036 and 0037 "
+                "titles match their index rows, 0019 has a plain-words note, and ROADMAP is dated."
+            ),
+        ),
     ]
 
 
@@ -2653,6 +2672,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("consent_types_plain", domain="web", action_id=aid)
     if local_id == "loop_guard_unlock_plain":
         return _run_web_smoke("loop_guard_unlock_plain", domain="web", action_id=aid)
+    if local_id == "desk_guard_plain":
+        return _run_web_smoke("desk_guard_plain", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

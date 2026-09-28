@@ -459,7 +459,7 @@ test("overlay main seals navigation and permissions and scrubs window rows", () 
   assert.doesNotMatch(petSrc.slice(lifeAt), /readWeatherHere|noteWeatherLocateYes|getCurrentPosition|armWeatherLocate/);
   assert.doesNotMatch(petSrc.slice(lifeAt), /forecastUrl\(/);
   assert.doesNotMatch(petSrc.slice(lifeAt), /geocodeUrl\(|reverseUrl\(/);
-  const addAt = petSrc.indexOf('e.target.id !== "weather-add"');
+  const addAt = petSrc.indexOf('eventEl(e).id !== "weather-add"');
   const showAskAt = petSrc.indexOf("function showHereAsk");
   const addBody = petSrc.slice(addAt, showAskAt);
   assert.match(addBody, /geocodeHonesty\("look"\)/);

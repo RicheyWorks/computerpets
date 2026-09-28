@@ -1,4 +1,4 @@
-/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. A send waits until the open news plate shows the line that names the website (Google News, Wikipedia, CoinGecko, GeckoTerminal, Yahoo Finance) and says this computer's internet address goes there too. The featured page also refuses inside `readFeatured` when that wikipedia line is missing. An RSS read refuses inside `readRss` when that news-host line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. Same map as desktop `news.js`. */
+/** Headlines for the news plate. Popular is Google News's top stories. World is Wikipedia's "In the news". Topics come from a Google News feed. X is Google News searching x.com when that works; otherwise the plate offers a link to open X. Nothing is asked for until the news plate is open and shows the line that names the website (Google News or Wikipedia) and says this computer's internet address goes there too. `readFeatured` and `readRss` check for that line themselves and ask nothing without it. A website that does not answer in twelve seconds counts as a miss: the plate says "can't reach", and an answer that comes later is thrown away. No made-up headlines. Same map as desktop `news.js`. */
 import { plainNetLine } from "./weather-areas.ts";
 
 export const NEWS_SOURCE = "Wikipedia In the news";
@@ -426,7 +426,7 @@ export function rssMayLeave(shown: unknown): boolean {
 type FeaturedFetch = (url: string, init?: RequestInit) => Promise<{ json: () => Promise<unknown> }>;
 type RssFetch = (url: string, init?: RequestInit) => Promise<{ text: () => Promise<string> }>;
 
-/** Twelve seconds covers headers and the body. Matches weather page and overlay plate IPC. */
+/** Twelve seconds covers the whole answer. The same wait as the weather page and the overlay plates. */
 export const NEWS_TIMEOUT_MS = 12_000;
 
 /** A silent news or wikipedia host. Callers flip the plate to unread / "can't reach". */

@@ -159,7 +159,8 @@ function createContractTestDouble(cfg) {
     }
 
     if (method === "GET" && u.hostname === "cdn.enterprisepet.example") {
-      return new Response(cfg.cdnBytes || Buffer.from("PK\u0003\u0004fake-zip"), {
+      // A plain Uint8Array copy: a Node Buffer may sit on shared memory, which a Response body does not take.
+      return new Response(new Uint8Array(cfg.cdnBytes || Buffer.from("PK\u0003\u0004fake-zip")), {
         status: 200,
         headers: { "Content-Type": "application/zip" },
       });

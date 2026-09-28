@@ -86,8 +86,8 @@ desk, the overlay, or the blotter:
 | [0033](0033-geocode-names-the-network-address.md) | A geocode look-up names the network address | Accepted |
 | [0034](0034-news-quotes-and-radio-name-the-network-address.md) | News, quotes, and Radio Find name the network address | Accepted |
 | [0035](0035-station-stream-names-the-network-address.md) | A station stream names the network address when Play is pressed | Accepted (the open itself waits in 0044) |
-| [0036](0036-cloud-talk-and-voice-name-the-network-address.md) | Cloud talk and cloud voice name the network address | Accepted (the request itself waits in 0044) |
-| [0037](0037-license-hash-names-the-network-address.md) | Unlock names the host before the license hash leaves | Accepted (the POST itself waits in 0045) |
+| [0036](0036-cloud-talk-and-voice-name-the-network-address.md) | Cloud talk and cloud voice say this computer's internet address goes to that website | Accepted (the request itself waits in 0044) |
+| [0037](0037-license-hash-names-the-network-address.md) | Unlock names the license website before the code made from this computer's ID is sent | Accepted (the POST itself waits in 0045) |
 | [0038](0038-signed-bundle-names-the-cdn-host.md) | A signed bundle names the CDN host before the GET leaves | Accepted (the GET itself waits in 0045) |
 | [0039](0039-unbound-download-names-the-backend-host.md) | An unbound download names the backend host before the POST leaves | Accepted (the POST itself waits in 0045) |
 | [0040](0040-news-quotes-and-radio-wait-for-the-line-in-main.md) | News, quotes, and Radio Find wait for the painted line in main | Accepted |
