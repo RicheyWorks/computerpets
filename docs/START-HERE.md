@@ -275,6 +275,14 @@ cd computerpets
 
 `$HOME` means "your user folder." On Windows that is usually `C:\Users\your-name`. The pets will land in `C:\Users\your-name\projects\computerpets`.
 
+**Smaller download (optional):** the plain copy also brings every older version of the project. On slow internet or a small disk, copy only the newest version instead. Type this in place of the `git clone` line above:
+
+```powershell
+git clone --depth 1 https://github.com/RicheyWorks/computerpets
+```
+
+Measured on a Windows PC in September 2026: the plain copy downloaded about 3.6 GB and used about 6.5 GB of disk. With `--depth 1` it downloaded about 1.6 GB and used about 4.4 GB. The pet pictures are the same either way, the pets start the same, and `git pull` in the `computerpets` folder still gets updates. It only leaves out the old versions; `git fetch --unshallow` brings them later if you ever want them. GitHub Desktop always makes the plain copy.
+
 **What you should see:** a folder named `computerpets`. Inside it you can see `desktop.ps1` and a folder named `desktop`.
 
 **If clone fails:**

@@ -1,4 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
+import { PortraitNote } from "@/components/pet-portrait";
 import { SignedIn, SignedOut, UserButton } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { cn } from "@/lib/utils";
@@ -132,6 +133,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       ) : (
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">{children}</div>
       )}
+      <PortraitNote />
     </div>
   );
 }

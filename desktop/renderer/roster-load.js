@@ -11,6 +11,19 @@
     return Array.isArray(rows) && rows.length > 0;
   }
 
+  /**
+   * One pet in a list: "Name · Kind" (Rui · Red Panda), never the catalog key unless there is no name.
+   * The tray, the house window's Pet list, the card's Call list, and the blotter (unlock_dialog.py
+   * pet_choice_text) all say it this way.
+   */
+  function choiceText(row) {
+    if (!row) return "";
+    const name = row.name ? String(row.name) : "";
+    const kind = row.speciesLabel ? String(row.speciesLabel) : "";
+    if (!name) return row.key ? String(row.key) : "";
+    return kind ? `${name} · ${kind}` : name;
+  }
+
   function missingLine() {
     return MISSING_LINE;
   }
@@ -43,6 +56,7 @@
   }
 
   const api = {
+    choiceText,
     takeRoster,
     foundRoster,
     missingLine,

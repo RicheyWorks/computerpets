@@ -9,6 +9,7 @@ import { LIVING_KINDS } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { talkBody } from "@/lib/pets/talk-post";
 import { talkHonesty } from "@/lib/pets/talk-net";
+import { mindTestLine } from "@/lib/ai/test-line";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { mindProblem } from "@/lib/plain-error";
 import type { MindBinding, MindSettings, VoiceKind } from "@/lib/ai/types";
@@ -110,7 +111,8 @@ function MindPage() {
           ...(talkLine ? { talkLine } : {}),
         }),
       });
-      setTestLine(`${res.source}: ${res.text}`);
+      const picked = mindPreset(petBind.plugin);
+      setTestLine(mindTestLine(res, { name: picked.name, local: picked.kind === "local" }, signedIn));
     } catch (err) {
       // The plain reason (key, rate limit, address, timeout, refused…); the raw error goes to the console.
       setTestLine(mindProblem(err));

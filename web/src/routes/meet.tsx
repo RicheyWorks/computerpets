@@ -4,7 +4,7 @@ import { DayWash } from "@/components/desk/blotter";
 import { DenCabinet } from "@/components/desk/den-cabinet";
 import { HouseFloor } from "@/components/desk/house-floor";
 import { DeskGrain, RoomWash } from "@/components/desk/room-wash";
-import { portraitSrc } from "@/lib/pets/catalog";
+import { PetPortrait } from "@/components/pet-portrait";
 import { guestsIn, ROOMS } from "@/lib/pets/rooms";
 import { MeetKeeperCard } from "@/components/desk/keeper-card";
 import { traitFor } from "@/lib/pets/traits";
@@ -89,10 +89,12 @@ export function MeetPage() {
                     className="group overflow-hidden rounded-[var(--radius-xl)] border border-border bg-surface no-underline transition-colors duration-200 hover:border-border-strong"
                   >
                     <div className="aspect-[4/5] overflow-hidden bg-elevated">
-                      <img
-                        src={portraitSrc(kind.key)}
+                      <PetPortrait
+                        speciesKey={kind.key}
                         alt=""
-                        className="h-full w-full object-cover transition-transform duration-400 ease-out group-hover:scale-[1.03]"
+                        name={kind.name}
+                        kind={kind.speciesLabel}
+                        className="transition-transform duration-400 ease-out group-hover:scale-[1.03]"
                       />
                     </div>
                     <div className="space-y-2 p-5">

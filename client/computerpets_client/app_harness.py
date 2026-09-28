@@ -2853,6 +2853,21 @@ def _web_rows() -> list[Affordance]:
                 "START-HERE says the copy is about 4 GB and needs about 8 GB free."
             ),
         ),
+        Affordance(
+            "web.portraits_tray_minds",
+            "web",
+            "Web portraits that did not download show a name tile and one Git LFS note; npm run dev starts again; every pet list says Name · Kind; Test this mind says who answered; START-HERE offers the smaller copy",
+            "web components/pet-portrait.tsx + lib/pets/portrait-state.ts + app-shell.tsx, lib/pets/desk-sprite-surface.ts, desktop renderer/roster-load.js choiceText + main.cjs + settings.html + pet.js, web lib/ai/test-line.ts + routes/mind.tsx, docs START-HERE",
+            notes=(
+                "A site portrait that is a Git LFS pointer or missing turns into a tile with the pet's initial, name and kind, "
+                "and the page shows one note with the Git LFS steps (not one per picture) until Got it. The web desk read the "
+                "overlay sprite surface with a default import; the dev server serves that plain script as-is, so npm run dev "
+                "never started the page (no clicks, care or talk). It now imports it for its side effect and reads the global. "
+                "The tray, the house window, the card Call list, Unlock and the Python blotter all say Name · Kind through one "
+                "overlay formatter. Test this mind says House lines answered, and why, instead of the raw local: source. "
+                "START-HERE offers git clone --depth 1 with the sizes measured on Windows."
+            ),
+        ),
     ]
 
 
@@ -2898,6 +2913,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("unlock_plain_lfs", domain="web", action_id=aid)
     if local_id == "pictures_start_names":
         return _run_web_smoke("pictures_start_names", domain="web", action_id=aid)
+    if local_id == "portraits_tray_minds":
+        return _run_web_smoke("portraits_tray_minds", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []
