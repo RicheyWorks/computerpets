@@ -5,14 +5,14 @@ export const MIND_PRESETS: MindPreset[] = [
   {
     id: "local",
     name: "House lines",
-    blurb: "No network. The personality roster speaks for itself.",
+    blurb: "No AI and no internet. Each pet speaks its own words.",
     kind: "local",
     needsKey: false,
   },
   {
     id: "xai",
     name: "xAI Grok",
-    blurb: "The house default cloud mind.",
+    blurb: "Grok, from xAI. The house's usual online AI.",
     kind: "openai",
     needsKey: true,
     defaultBaseUrl: "https://api.x.ai/v1",
@@ -23,7 +23,7 @@ export const MIND_PRESETS: MindPreset[] = [
   {
     id: "openai",
     name: "OpenAI",
-    blurb: "GPT via the official API.",
+    blurb: "GPT, from OpenAI.",
     kind: "openai",
     needsKey: true,
     defaultBaseUrl: "https://api.openai.com/v1",
@@ -45,7 +45,7 @@ export const MIND_PRESETS: MindPreset[] = [
   {
     id: "google",
     name: "Google Gemini",
-    blurb: "Gemini generateContent.",
+    blurb: "Gemini, from Google.",
     kind: "gemini",
     needsKey: true,
     defaultBaseUrl: "https://generativelanguage.googleapis.com/v1beta",
@@ -56,7 +56,7 @@ export const MIND_PRESETS: MindPreset[] = [
   {
     id: "groq",
     name: "Groq",
-    blurb: "Fast OpenAI-compatible llama.",
+    blurb: "Fast answers from open Llama models.",
     kind: "openai",
     needsKey: true,
     defaultBaseUrl: "https://api.groq.com/openai/v1",
@@ -67,7 +67,7 @@ export const MIND_PRESETS: MindPreset[] = [
   {
     id: "openrouter",
     name: "OpenRouter",
-    blurb: "One key, many models.",
+    blurb: "One key, many AIs.",
     kind: "openai",
     needsKey: true,
     defaultBaseUrl: "https://openrouter.ai/api/v1",
@@ -78,7 +78,7 @@ export const MIND_PRESETS: MindPreset[] = [
   {
     id: "together",
     name: "Together",
-    blurb: "Open models, OpenAI shape.",
+    blurb: "Many open AIs on one website.",
     kind: "openai",
     needsKey: true,
     defaultBaseUrl: "https://api.together.xyz/v1",
@@ -88,7 +88,7 @@ export const MIND_PRESETS: MindPreset[] = [
   {
     id: "fireworks",
     name: "Fireworks",
-    blurb: "OpenAI-compatible fireworks.",
+    blurb: "Fast open AIs on one website.",
     kind: "openai",
     needsKey: true,
     defaultBaseUrl: "https://api.fireworks.ai/inference/v1",
@@ -98,7 +98,7 @@ export const MIND_PRESETS: MindPreset[] = [
   {
     id: "deepseek",
     name: "DeepSeek",
-    blurb: "OpenAI-compatible DeepSeek.",
+    blurb: "DeepSeek's own AI.",
     kind: "openai",
     needsKey: true,
     defaultBaseUrl: "https://api.deepseek.com/v1",
@@ -108,7 +108,7 @@ export const MIND_PRESETS: MindPreset[] = [
   {
     id: "mistral",
     name: "Mistral",
-    blurb: "La Plateforme, OpenAI shape.",
+    blurb: "Mistral's own AI, from France.",
     kind: "openai",
     needsKey: true,
     defaultBaseUrl: "https://api.mistral.ai/v1",
@@ -118,7 +118,7 @@ export const MIND_PRESETS: MindPreset[] = [
   {
     id: "ollama",
     name: "Ollama",
-    blurb: "Local models on this machine.",
+    blurb: "An AI that runs on this computer.",
     kind: "ollama",
     needsKey: false,
     defaultBaseUrl: "http://127.0.0.1:11434",
@@ -128,7 +128,7 @@ export const MIND_PRESETS: MindPreset[] = [
   {
     id: "lmstudio",
     name: "LM Studio",
-    blurb: "Local OpenAI server from LM Studio.",
+    blurb: "An AI on this computer, through the LM Studio app.",
     kind: "openai",
     needsKey: false,
     defaultBaseUrl: "http://127.0.0.1:1234/v1",
@@ -137,7 +137,7 @@ export const MIND_PRESETS: MindPreset[] = [
   {
     id: "custom",
     name: "Custom webhook",
-    blurb: "POST your own mind. See the plugin contract.",
+    blurb: "Your own AI address. For builders has the details.",
     kind: "custom",
     needsKey: false,
     defaultBaseUrl: "http://127.0.0.1:8787/mind",
@@ -146,9 +146,9 @@ export const MIND_PRESETS: MindPreset[] = [
 ];
 
 export const VOICE_PRESETS: VoicePreset[] = [
-  { id: "browser", name: "Browser voice", blurb: "speechSynthesis. Works offline.", needsKey: false },
-  { id: "xai", name: "xAI TTS", blurb: "House voices Eve, Ara, Leo.", needsKey: true },
-  { id: "openai", name: "OpenAI TTS", blurb: "Official speech endpoint.", needsKey: true },
+  { id: "browser", name: "Browser voice", blurb: "Your browser's own voice. Works offline.", needsKey: false },
+  { id: "xai", name: "xAI voice", blurb: "House voices Eve, Ara, Leo.", needsKey: true },
+  { id: "openai", name: "OpenAI voice", blurb: "OpenAI's own speaking voice.", needsKey: true },
   { id: "none", name: "Silent", blurb: "Text only.", needsKey: false },
 ];
 

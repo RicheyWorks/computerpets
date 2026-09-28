@@ -93,7 +93,7 @@ test("a leftover browser key is scrubbed and kept only for this page", () => {
   const again = S.loadMindSettings();
   assert.equal(again.default.apiKey, undefined);
   assert.equal(again.keyKept, "empty");
-  assert.match(S.describeKeyKept(again.keyKept), /No plugin key is stored in this browser/);
+  assert.match(S.describeKeyKept(again.keyKept), /No key is saved in this browser/);
 });
 
 test("the desk bridge seals the key and the browser copy stays prefs", async () => {
@@ -131,7 +131,7 @@ test("the desk bridge seals the key and the browser copy stays prefs", async () 
   await new Promise((resolve) => setTimeout(resolve, 0));
   assert.equal(sent.default.apiKey, SECRET);
   assert.equal(S.loadMindSettings().keyKept, "os");
-  assert.match(S.describeKeyKept("os"), /OS secret store/);
+  assert.match(S.describeKeyKept("os"), /locked in this computer's secret store/);
   assert.equal(textOf(store).includes("apiKey"), false);
   assert.equal(textOf(session), "");
 
