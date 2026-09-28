@@ -239,6 +239,52 @@
   const CARD_LEASH_PX = 160;
 
   /**
+   * The open card near its pet and off the plates. At the right edge of the screen the news plate (right 8%, 288 px)
+   * left no clear spot on the screen within reach of a pet standing past it, so cardClearOfPlates put the card at
+   * 1745..2059 with the pet at 2382..2530, 323 px away. Now: the clear spot from cardClearOfPlates when it is within
+   * `reach` of the pet; if not, the card stays at the wanted x and is made shorter (it scrolls) so its top stays
+   * under the plates it would cover, if that leaves at least `minH`; only then the far clear spot (or the wanted x
+   * when there is none). `h` is the card's full height, `bottom` its bottom edge. Returns { x, maxH } where maxH is
+   * the card's whole height limit in px, or 0 for none.
+   * @param {{ x: number, w: number, h: number, bottom: number, plates: { left: number, top: number, right: number, bottom: number }[],
+   *   width: number, petLeft: number, petRight: number, reach?: number, minH?: number, gap?: number, edge?: number }} o
+   */
+  function cardSpotNearPet({ x, w, h, bottom, plates, width, petLeft, petRight, reach = CARD_LEASH_PX, minH = 220, gap = 8, edge = 8 }) {
+    const top = bottom - h;
+    const clear = cardClearOfPlates({ x, w, top, bottom, plates, width, gap, edge });
+    const away = (cx) => Math.max(0, petLeft - (cx + w), cx - petRight);
+    const shown = (plates || []).filter((p) => p && p.right - p.left > 1 && p.bottom - p.top > 1);
+    const over = (cx, t) => shown.filter((p) => Math.min(cx + w, p.right) - Math.max(cx, p.left) > 0 && Math.min(bottom, p.bottom) - Math.max(t, p.top) > 0);
+    if (!over(clear, top).length && (clear === x || away(clear) <= reach)) return { x: clear, maxH: 0 };
+    const hit = over(x, top);
+    if (hit.length) {
+      const under = Math.max(...hit.map((p) => p.bottom)) + gap;
+      const maxH = Math.floor(bottom - under);
+      if (maxH >= minH && !over(x, under).length) return { x, maxH };
+    }
+    return { x: clear, maxH: 0 };
+  }
+
+  /**
+   * The pet's x kept on the screen. A window play on a window that ran past the left edge walked the pet, and the
+   * ribbon it carried, off the screen (x = -109). Position only: the play goes on as it did.
+   */
+  function keepOnScreen({ x, w, width }) {
+    const n = Number(x);
+    if (!isFinite(n)) return 0;
+    const max = Math.max(0, (Number(width) || 0) - (Number(w) || 0));
+    return Math.min(Math.max(n, 0), max);
+  }
+
+  /**
+   * True once the talk pose is over: the pet's own line has ended (`until`). House chatter (a robin's song, a
+   * guest's line) kept the bubble up, and the pose was held with it for 13-30 s after the pet's line ended.
+   */
+  function talkPoseOver({ cmd, now, until }) {
+    return cmd === "talk" && typeof until === "number" && until > 0 && now >= until;
+  }
+
+  /**
    * True when a line on the card can really be seen: it has a box (the card is open, the line not hidden) and that
    * box overlaps the card's own visible box (the card scrolls) and the screen. Used before a talk leaves for a mind
    * on the internet: the line naming the website must be in view, not merely present in a folded card.
@@ -370,6 +416,9 @@
     cardHeldSpot,
     keeperWalkOn,
     CARD_LEASH_PX,
+    cardSpotNearPet,
+    keepOnScreen,
+    talkPoseOver,
     lineShows,
     ADVERTISED_CARE,
     CARE_DOOR_STATUS,

@@ -17,6 +17,21 @@ contextBridge.exposeInMainWorld("desk", {
   vitals: (payload) => ipcRenderer.send("vitals", payload),
   mindGet: () => ipcRenderer.sendSync("mind-get"),
   mindSet: (data) => ipcRenderer.invoke("mind-set", data),
+  // Minds Save tests the saved mind: the House window asks, and the overlay (which talks to minds) answers, since
+  // the House window has no fetch of its own. `line` is the network line painted in view on the House window.
+  mindTest: (line) => ipcRenderer.invoke("mind-test", typeof line === "string" ? line : ""),
+  onMindTest: (fn) => {
+    const wrapped = (_e, id, line) => {
+      Promise.resolve()
+        .then(() => fn(typeof line === "string" ? line : ""))
+        .then(
+          (reply) => ipcRenderer.send("mind-test-done", id, reply),
+          () => ipcRenderer.send("mind-test-done", id, { source: "local", problem: "unknown" }),
+        );
+    };
+    ipcRenderer.on("mind-test-run", wrapped);
+    return () => ipcRenderer.removeListener("mind-test-run", wrapped);
+  },
   cardGet: () => ipcRenderer.sendSync("card-get"),
   cardSet: (data) => ipcRenderer.send("card-set", data),
   quit: () => ipcRenderer.send("quit-desk"),
