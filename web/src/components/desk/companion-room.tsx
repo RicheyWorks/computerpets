@@ -62,6 +62,7 @@ import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { KeeperCard } from "@/components/desk/keeper-card";
 import { GuestChoice } from "@/components/desk/guest-choice";
 import { FirstHint } from "@/components/desk/first-hint";
+import { firstHintSeen } from "@/lib/pets/first-run";
 import { DemoWindowPlate } from "@/components/desk/demo-window-plate";
 import type { DeskWindow } from "@/lib/pets/windows";
 import { roomOf } from "@/lib/pets/rooms";
@@ -198,6 +199,9 @@ export function CompanionRoom({
   const cardFocus = useRef<"card" | "open" | null>(null);
   const [autoTablet, setAutoTablet] = useState(false);
   const [autoPhone, setAutoPhone] = useState(false);
+  /** The one-time hello is up (first-run.ts); on a phone the plaque waits until Got it. */
+  const [hintUp, setHintUp] = useState(false);
+  useEffect(() => setHintUp(!firstHintSeen()), []);
   const [orient, setOrient] = useState<TabletOrient>("blotter");
   const [handOrient, setHandOrient] = useState<PhoneOrient>("blotter");
   const [tending, setTending] = useState(false);
@@ -1177,10 +1181,14 @@ export function CompanionRoom({
           </p>
         ) : null}
         {latestNote ? <p className="mt-2 max-w-sm text-xs text-subtle">{latestNote}</p> : null}
-        <SpeciesPlaque speciesKey={kind.key} compact paper className="mt-5 max-w-sm" showDemoLink={false} />
+        {/* On a phone the hello comes first; the plaque waits for Got it and then sits folded above the care buttons. */}
+        {hand && hintUp ? null : (
+          <SpeciesPlaque speciesKey={kind.key} compact paper folded={hand} className="mt-5 max-w-sm" showDemoLink={false} />
+        )}
         <FirstHint
           name={displayName}
           onDone={() => {
+            setHintUp(false);
             // Got it is gone; keyboard focus lands on the keeper card's open (or name) button, not nowhere.
             roomRef.current?.querySelector<HTMLElement>('[data-card="open"], [data-card="collapse"]')?.focus();
           }}

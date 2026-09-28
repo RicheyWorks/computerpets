@@ -18,8 +18,15 @@ function pack(key) {
   };
 }
 
+// The pet's lines go through the shared no-recent-repeat picker (line-picker.js); the words are the roster's own.
 function pick(list) {
+  const Lines = window.PetLines;
+  if (Lines && Lines.pick) return Lines.pick(kind?.key || "pet", list);
   return list[Math.floor(Math.random() * list.length)] ?? list[0];
+}
+function offerLine(speaker, line) {
+  const Lines = window.PetLines;
+  return Lines && Lines.offer ? Lines.offer(speaker, line) : line;
 }
 function clamp(n, a, b) {
   return Math.max(a, Math.min(b, n));
@@ -1314,11 +1321,13 @@ function tickCalled(dt) {
       g.frame = ((g.frame || 0) + 1) % Math.max(1, frames.length);
     }
     if (G.shouldSing && G.shouldSing(g)) {
-      say(G.ROBIN_SONG);
+      const song = offerLine(g.key, G.ROBIN_SONG);
+      if (song) say(song);
       Object.assign(g, G.markSung(g));
     }
     if (G.shouldTell && G.shouldTell(g)) {
-      const line = G.tellLine ? G.tellLine(g) : "";
+      // A guest's tell is optional: said once, then quiet if the same words came in the last 60 s.
+      const line = offerLine(g.key, G.tellLine ? G.tellLine(g) : "");
       if (line) say(line);
       Object.assign(g, G.markTold(g));
     }
@@ -2758,7 +2767,8 @@ function pickGuestChoice(id) {
     const g = called.find((c) => c.key === key);
     if (!g || !G) return;
     if (id === "talk") {
-      const line = (G.tellLine && G.tellLine(g)) || (g.name ? `${g.name} nods.` : "A nod.");
+      // Asked to talk: the tell, or the nod when the tell was just said.
+      const line = offerLine(g.key, (G.tellLine && G.tellLine(g)) || "") || (g.name ? `${g.name} nods.` : "A nod.");
       say(line);
       return;
     }
@@ -5129,6 +5139,25 @@ window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
       })(),
     };
   }
+  function bubbleState() {
+    const r = bubble.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+    const top = document.elementFromPoint(cx, cy);
+    return {
+      open: bubble.classList.contains("open"),
+      text: bubbleText.textContent || "",
+      holdMs: Math.round(Math.max(0, speechUntil - performance.now())),
+      pointer: getComputedStyle(bubble).pointerEvents,
+      hit: bubble.hasAttribute("data-hit"),
+      top: top ? top.id || top.className || top.tagName : "",
+      topInBubble: !!(top && bubble.contains(top)),
+      cx: Math.round(cx),
+      cy: Math.round(cy),
+      w: Math.round(r.width),
+      h: Math.round(r.height),
+    };
+  }
   window.PetGuiHarness = {
     snapshot,
     openHostChoice() {
@@ -5190,5 +5219,13 @@ window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
       paintHud();
       return snapshot();
     },
+    /** A real talk answer (House lines only, so no request leaves), then where its bubble sits for a real click. */
+    async talkForClick() {
+      const mind = window.PetMind && window.PetMind.binding(kind.key);
+      if (!mind || mind.plugin !== "local") return { skipped: "the harness talks with House lines only", plugin: mind && mind.plugin };
+      await askMind({});
+      return bubbleState();
+    },
+    bubbleState,
   };
 })();

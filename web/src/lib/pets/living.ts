@@ -1,6 +1,7 @@
 import type { CareStats } from "./care";
 import { bondScore } from "./care";
 import { ANIM_FPS, ONCE_ANIMS, RED_PANDA_SPRITES, type PetAnim } from "./red-panda";
+import { linePicker } from "./line-picker";
 import { ROSTER, type RosterDef } from "./roster";
 
 export type { PetAnim };
@@ -39,8 +40,9 @@ const PHOTO_FPS: Record<PetAnim, number> = {
   play: 6.6,
 };
 
-function pick(lines: string[]) {
-  return lines[Math.floor(Math.random() * lines.length)] ?? lines[0]!;
+/** Each kind picks its own lines without a close repeat (`line-picker.ts`); the words are the roster's own. */
+function pick(speaker: string, lines: readonly string[]) {
+  return linePicker.pick(speaker, lines);
 }
 
 function generatedPack(key: string): SpritePack {
@@ -74,27 +76,27 @@ function kindFrom(def: RosterDef): LivingKind {
     sprites,
     fps: def.key === "red_panda" ? ANIM_FPS : PHOTO_FPS,
     once: ONCE_ANIMS,
-    greetLine: () => pick(lines.greet),
+    greetLine: () => pick(def.key, lines.greet),
     ambientLine: (stats) => {
-      if (stats.hunger < 28) return pick(lines.hungry);
-      if (stats.energy < 28) return pick(lines.tired);
+      if (stats.hunger < 28) return pick(def.key, lines.hungry);
+      if (stats.energy < 28) return pick(def.key, lines.tired);
       if (bondScore(stats) < 35) return lines.neglected;
-      return pick(lines.ambient);
+      return pick(def.key, lines.ambient);
     },
-    careLine: (action) => pick(action === "feed" ? lines.feed : action === "play" ? lines.play : lines.rest),
-    listenLine: () => pick(lines.listen),
+    careLine: (action) => pick(def.key, action === "feed" ? lines.feed : action === "play" ? lines.play : lines.rest),
+    listenLine: () => pick(def.key, lines.listen),
     fallbackLine: (message, stats) => {
       if (!message) {
-        if (stats.hunger < 28) return pick(lines.hungry);
-        if (stats.energy < 28) return pick(lines.tired);
-        return pick(lines.ambient);
+        if (stats.hunger < 28) return pick(def.key, lines.hungry);
+        if (stats.energy < 28) return pick(def.key, lines.tired);
+        return pick(def.key, lines.ambient);
       }
       const q = message.toLowerCase();
       if (q.includes("name")) return lines.named;
       if (q.includes("food") || q.includes("eat") || q.includes("hungry")) return lines.foodTalk;
       if (q.includes("sleep") || q.includes("tired")) return lines.sleepTalk;
       if (q.includes("love") || q.includes("good")) return lines.loveTalk;
-      return pick(lines.listen);
+      return pick(def.key, lines.listen);
     },
     preload: () => {
       if (typeof window === "undefined") return;
