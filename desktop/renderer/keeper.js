@@ -144,6 +144,77 @@
     return { x: bubbleX, clear: false };
   }
 
+  /**
+   * Opening the card stops a pet that was only wandering or idling. A walk the keeper asked for (to the food or the
+   * treat, after the ribbon, to the edge to hide, back in, to a called guest) goes on: opening the card cleared its
+   * target, and the order never came again, so the pet stood short of its food for good (hunger held at 78).
+   */
+  function cardStopsWalk(cmd) {
+    return !cmd || cmd === "wander" || cmd === "idle" || cmd === "none";
+  }
+
+  /**
+   * Whether a walk the keeper asked for picks up again once a window play, trick, or happy moment lets go of the
+   * pet. Feed during a window play aborted the play, and its end set the pet idle with the food still its target:
+   * it stood there for good (hunger held at 78), the card open or closed.
+   */
+  function orderWalkResumes({ cmd, target, asleep }) {
+    return target != null && !asleep && !cardStopsWalk(cmd);
+  }
+
+  /** How long the open card stays up after the keeper's last press on it, even when the pet walks off. */
+  const CARD_PRESS_HOLD_MS = 8000;
+
+  /**
+   * Whether the open card folds because the pet walks. It folded on the first step of any walk, so a care press on
+   * the card (Feed, Play) folded it under the pointer, and the unread hello went with it. Now: never while the hello
+   * is unread (Got it or closing the card ends that), and never within CARD_PRESS_HOLD_MS of a press on the card.
+   * The keeper can always close it (Escape, the fold button).
+   */
+  function cardFoldsOnWalk({ helloUnread, sinceLastPress, hold = CARD_PRESS_HOLD_MS }) {
+    if (helloUnread) return false;
+    return !(sinceLastPress < hold);
+  }
+
+  /**
+   * The open card's left edge, moved off the house plates (weather, news, market) it would cover: the first run put
+   * the card at 177..491 over the weather plate at 102..392 and the Quotes plate under it. From the wanted x it tries
+   * each plate's right side and left side and keeps the clear spot nearest the wanted one, on the screen; with no
+   * clear spot it stays where it was wanted. Boxes are { left, top, right, bottom }.
+   * @param {{ x: number, w: number, top: number, bottom: number, plates: { left: number, top: number, right: number, bottom: number }[], width: number, gap?: number, edge?: number }} o
+   */
+  function cardClearOfPlates({ x, w, top, bottom, plates, width, gap = 8, edge = 8 }) {
+    const shown = (plates || []).filter((p) => p && p.right - p.left > 1 && p.bottom - p.top > 1 && Math.min(bottom, p.bottom) - Math.max(top, p.top) > 0);
+    const hits = (cx) => shown.some((p) => Math.min(cx + w, p.right) - Math.max(cx, p.left) > 0);
+    if (!w || !hits(x)) return x;
+    const maxX = Math.max(edge, width - w - edge);
+    const tries = [];
+    for (const p of shown) tries.push(p.right + gap, p.left - gap - w);
+    let best = x;
+    let bestD = Infinity;
+    for (const t of tries) {
+      if (t < edge || t > maxX || hits(t)) continue;
+      const d = Math.abs(t - x);
+      if (d < bestD) {
+        best = t;
+        bestD = d;
+      }
+    }
+    return best;
+  }
+
+  /**
+   * Where the open card stands while the pet walks: where it stood when the walk began (x and lift held), and back
+   * on the pet once it stands still. It followed the pet every frame, so with the card up during a walk (a care
+   * press, the hello unread) its buttons slid out from under the pointer. `held` is the last result's `held`.
+   * @param {{ open: boolean, walking: boolean, held: { x: number, lift: number } | null, x: number, lift: number }} o
+   */
+  function cardHeldSpot({ open, walking, held, x, lift }) {
+    if (!open || !walking) return { x, lift, held: null };
+    const h = held || { x, lift };
+    return { x: h.x, lift: h.lift, held: h };
+  }
+
   function careDoorRefusal(verb) {
     const path = ADVERTISED_CARE[verb] || "";
     return {
@@ -250,6 +321,12 @@
     firstHint,
     firstHintShows,
     bubbleBesideCard,
+    cardStopsWalk,
+    orderWalkResumes,
+    CARD_PRESS_HOLD_MS,
+    cardFoldsOnWalk,
+    cardClearOfPlates,
+    cardHeldSpot,
     ADVERTISED_CARE,
     CARE_DOOR_STATUS,
     KEEPER_CARE,

@@ -58,7 +58,8 @@ test("/demo Rui idle is not a parked card sit, and hide still tucks", () => {
   assert.doesNotMatch(overlayHold, /"sit"/);
   assert.doesNotMatch(livingSrc, /if \(false && /);
   assert.doesNotMatch(petSrc, /if \(false && /);
-  assert.match(petSrc, /if \(cardOpen\(\) && sim\.anim === "walk" && !sim\.dragging\) \{\s*collapseKeeperCard\(\);/);
+  // A walk still folds the open card, once the hello is read and a few seconds after a press (PetKeeper.cardFoldsOnWalk).
+  assert.match(petSrc, /if \(cardOpen\(\) && sim\.anim === "walk" && !sim\.dragging && cardFoldsNow\(\)\) \{\s*collapseKeeperCard\(\);/);
   assert.match(livingSrc, /pointerEvents: "auto"/);
   assert.match(cssSrc, /#pet\.hidden[\s\S]{0,80}pointer-events:\s*auto/);
 });

@@ -512,9 +512,15 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
         else showLicense(status);
       });
 
-      // Tray Unlock… opens this window at Unlock, Minds… at Minds; a second click scrolls the open window.
+      // Tray Unlock… opens this window at Unlock, Minds… at Minds; a second click scrolls the open window. The address
+      // says which (#unlock, #minds), so a reload comes back to the same section: the scroll alone left #minds there.
+      // replaceState, not location.hash: the hash alone would jump to the Unlock button (its id is "unlock").
       function showSection(section) {
-        const node = document.getElementById(section === "unlock" ? "unlockSection" : "mindsSection");
+        const at = section === "unlock" ? "unlock" : "minds";
+        if (window.history && typeof window.history.replaceState === "function" && window.location.hash !== "#" + at) {
+          window.history.replaceState(window.history.state, "", "#" + at);
+        }
+        const node = document.getElementById(at === "unlock" ? "unlockSection" : "mindsSection");
         if (node && typeof node.scrollIntoView === "function") node.scrollIntoView({ block: "start" });
       }
       showSection(String(window.location && window.location.hash || "").replace(/^#/, ""));
