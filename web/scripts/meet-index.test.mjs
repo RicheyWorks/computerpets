@@ -67,7 +67,7 @@ test("thumb-sized: The house under a room's title, the keeper card's Check on a 
 test("/login tightens on a landscape phone (max-height 480px) so the buttons stay on screen", () => {
   const login = src("routes/login.tsx");
   assert.match(login, /<main data-login className="[^"]*\[@media\(max-height:480px\)\]:min-h-0/);
-  assert.match(login, /\[@media\(max-height:480px\)\]:p-5/);
+  assert.match(login, /\[@media\(max-height:480px\)\]:p-4/);
   assert.match(src("components/app-shell.tsx"), /\[@media\(max-height:480px\)\]:py-3/);
 });
 

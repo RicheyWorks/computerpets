@@ -2960,6 +2960,20 @@ def _web_rows() -> list[Affordance]:
                 "got a bare Not Found with a generic tab."
             ),
         ),
+        Affordance(
+            "web.kennel_first_notes",
+            "web",
+            "/collection shows the kennel first on a phone; 44 px line links and /login way back; /study and /log are field-note indexes; /login fits 568x320; the not-found title comes from the server; /demo stops looping on a phone",
+            "web components/desk/companion-room.tsx asideFirst + routes/collection.tsx + components/pet-card.tsx + styles.css + routes/hatch.tsx + routes/nest.tsx + components/desk/species-plaque.tsx + routes/login.tsx + components/desk/field-notes.tsx + lib/pets/meet-index.ts + routes/study.tsx + routes/log.tsx + routes/__root.tsx + lib/not-found.tsx + lib/pets/windows.ts swapWindows + components/desk/demo-stage.tsx + scripts/phone-desk-layout.test.mjs + scripts/kennel-first.test.mjs",
+            notes=(
+                "A new keeper on a 375x667 phone had to scroll a 411 px panel to reach the kennel: the first card sat at "
+                "y=682, below the fold; it now sits at 169-308 under the name. The hatchery's line link was 182x17 and "
+                "/login's sign-in-off Go to the desk a bare text link; both are 44 px. /study was 10,959 px and /log 6,607 "
+                "px of notes one after another; as field-note drawers with a search they are 4,370 and 3,418. /login "
+                "scrolled 4 px at 568x320 (32 px with an error line). The not-found tab said ComputerPets until the page "
+                "loaded. /demo on a phone looped (Maximum update depth exceeded, 13 times) and never took the phone layout."
+            ),
+        ),
     ]
 
 
@@ -3019,6 +3033,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("signin_return_quiet", domain="web", action_id=aid)
     if local_id == "meet_index_forget":
         return _run_web_smoke("meet_index_forget", domain="web", action_id=aid)
+    if local_id == "kennel_first_notes":
+        return _run_web_smoke("kennel_first_notes", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

@@ -14,7 +14,12 @@
 // on /log and /study and the keeper card's Check are 44 px on a phone; /login fits a landscape phone with its
 // buttons on screen; a mistyped link gets words, a tab title and ways on; and the signed-in rooms (the kennel, the hatchery, the nest) and a kennel pet's page are
 // checked at five phone sizes with a stand-in session: a second dev server with auth off (the dev keeper on
-// in-memory PGLite, seeded with a six-guest kennel; no account, no database file).
+// in-memory PGLite, seeded with a six-guest kennel; no account, no database file). There the kennel comes first: the
+// first card's name is on the screen without a scroll at every size (the whole card at 375×667 and 414×896), every
+// panel link is 44 px, and the sign-in-off "Go to the desk" on /login is 44 px. /study and /log on a phone are
+// field-note indexes: under 5,500 and 4,500 px, every note reachable (a tap opens it, Open all opens all, a search
+// finds one, #note-<slug> opens on arrival). /login at 568×320 does not scroll; the not-found tab title is in the
+// first server HTML; /demo/<slug> takes the phone layout with no update loop.
 // Starts the Vite dev server in-process and drives the system Chrome or Edge (playwright-core, no downloaded
 // browser). Skips, and says why, when no browser is found.
 // PHONE_LAYOUT_URL=http://127.0.0.1:8097/ uses an already running dev server instead.
@@ -385,6 +390,11 @@ function tapProblems(min) {
     const b = el.getBoundingClientRect();
     if (b.height < min - 0.5 || b.width < min - 0.5) bad.push(`"${name(el)}" is ${Math.round(b.width)}×${Math.round(b.height)} px, under ${min}`);
   }
+  // Every link in the left panel too: the room's line ("Or pair two you already keep."), the kennel's cards.
+  for (const el of [...document.querySelectorAll("[data-phone-floor] [data-desk-aside] a")].filter(seen)) {
+    const b = el.getBoundingClientRect();
+    if (b.height < min - 0.5) bad.push(`panel link "${name(el)}" is ${Math.round(b.width)}×${Math.round(b.height)} px, under ${min}`);
+  }
   const rows = [...document.querySelectorAll("[data-phone-floor] [data-desk-rail] li > *")].filter(seen);
   if (!rows.length) bad.push("no rail rows");
   for (const el of rows) {
@@ -640,8 +650,13 @@ test("site pages: the header fits and its menu works at phone and laptop sizes, 
 /** /meet on a phone: a page a visitor can get through (it was ~135,000 px tall at 375×667 before the room index). */
 export const MEET_PHONE_MAX_HEIGHT = 12_000;
 export const MEET_GUESTS = 221;
+/** [page, most px at a phone, notes, a kind one search finds]. */
+export const FIELD_NOTE_PAGES = [
+  ["/study", 5_500, 20, "fox"],
+  ["/log", 4_500, 10, "millipede"],
+];
 
-test("/meet on a phone: short enough to get through, a jump index opens each room, search finds a guest, all 221 guests reachable; thumb-sized house links; /login fits a landscape phone; a mistyped link gets ways on", { skip, timeout: 420_000 }, async () => {
+test("/meet on a phone: short enough to get through, a jump index opens each room, search finds a guest, all 221 guests reachable; thumb-sized house links; /study and /log field notes walkable; /login fits a landscape phone; a mistyped link gets ways on and its tab title from the server; /demo takes the phone layout", { skip, timeout: 720_000 }, async () => {
   const { url, browser } = await site();
   const problems = [];
   const phone = (w, h) => browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true, userAgent: IPHONE });
@@ -735,7 +750,7 @@ test("/meet on a phone: short enough to get through, a jump index opens each roo
     }
   }
   // /login on a landscape phone: the page does not scroll and the sign-in buttons (or, sign-in off, the way back) are on the screen.
-  for (const [w, h] of [[667, 375], [844, 390]]) {
+  for (const [w, h] of [[568, 320], [667, 375], [844, 390]]) {
     const ctx = await phone(w, h);
     try {
       const page = await ctx.newPage();
@@ -751,6 +766,118 @@ test("/meet on a phone: short enough to get through, a jump index opens each roo
       if (fit.off.length) problems.push(`/login ${w}×${h}: ${fit.off.join(", ")} off the screen`);
     } catch (err) {
       problems.push(`/login ${w}×${h}: ${String(err?.message || err).split("\n")[0]}`);
+    } finally {
+      await ctx.close();
+    }
+  }
+  // /study and /log on a phone: field-note indexes (they were 10,959 and 6,607 px of notes one after another).
+  for (const [path, most, count, find] of FIELD_NOTE_PAGES) {
+    for (const [w, h] of [[375, 667], [320, 568]]) {
+      const label = `${path} ${w}×${h}`;
+      const ctx = await phone(w, h);
+      try {
+        const page = await ctx.newPage();
+        const thrown = [];
+        page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
+        await page.goto(`${url}${path}`, { waitUntil: "load", timeout: 120_000 });
+        await page.waitForSelector("[data-field-notes] [data-note]", { timeout: 60_000 });
+        await page.waitForTimeout(800);
+        const first = await page.evaluate(() => ({
+          height: document.documentElement.scrollHeight,
+          notes: [...document.querySelectorAll("[data-note]")].map((d) => ({ id: d.id, open: d.open, tell: (d.querySelector("[data-note-tell]")?.textContent || "").trim().length })),
+        }));
+        if (first.height > most) problems.push(`${label}: the page is ${first.height}px tall (over ${most})`);
+        if (first.notes.length !== count) problems.push(`${label}: ${first.notes.length} field notes, wanted ${count}`);
+        if (first.notes.some((n) => n.open)) problems.push(`${label}: a note opens before anyone asks`);
+        if (first.notes.some((n) => !n.tell)) problems.push(`${label}: a note has no tell in the page`);
+        if (w === 375) {
+          // Every note is reachable: a tap on its name opens it with its tell on the page.
+          for (const n of first.notes) {
+            const summary = page.locator(`#${n.id} > summary`);
+            await summary.scrollIntoViewIfNeeded();
+            const tall = await summary.evaluate((s) => Math.round(s.getBoundingClientRect().height));
+            if (tall < TAP_MIN) problems.push(`${label}: #${n.id}'s name is ${tall}px tall`);
+            await summary.tap();
+            await page.waitForTimeout(80);
+            const shown = await page.evaluate((id) => {
+              const d = document.getElementById(id);
+              return !!d?.open && (d.querySelector("[data-note-tell]")?.getBoundingClientRect().height || 0) > 0;
+            }, n.id);
+            if (!shown) problems.push(`${label}: a tap on #${n.id} did not show its tell`);
+          }
+          // Close all, then Open all opens every note.
+          await page.locator("[data-notes-all]").tap();
+          await page.waitForTimeout(150);
+          const closed = await page.evaluate(() => [...document.querySelectorAll("[data-note]")].filter((d) => d.open).length);
+          if (closed) problems.push(`${label}: Close all left ${closed} open`);
+          await page.locator("[data-notes-all]").tap();
+          await page.waitForTimeout(150);
+          const opened = await page.evaluate(() => [...document.querySelectorAll("[data-note]")].filter((d) => d.open).length);
+          if (opened !== count) problems.push(`${label}: Open all opened ${opened} of ${count}`);
+          // Search: a kind finds its one note; a miss says so in words.
+          await page.fill("[data-notes-search]", find);
+          await page.waitForTimeout(250);
+          const found = await page.evaluate(() => ({
+            open: [...document.querySelectorAll("[data-note]")].filter((d) => !d.hidden && d.getBoundingClientRect().height > 0).map((d) => d.id),
+            line: document.querySelector("[data-notes-count]")?.textContent || "",
+          }));
+          if (found.open.length !== 1 || !/^1 note matches/.test(found.line)) problems.push(`${label}: searching "${find}" shows ${JSON.stringify(found)}`);
+          await page.fill("[data-notes-search]", "qqqzz");
+          await page.waitForTimeout(250);
+          const miss = await page.evaluate(() => document.querySelector("[data-notes-count]")?.textContent || "");
+          if (!/No guest by that name/.test(miss)) problems.push(`${label}: a search with no match says "${miss}"`);
+          // A note link opens that note on arrival.
+          const id = first.notes[first.notes.length - 1]?.id;
+          const deep = await ctx.newPage();
+          await deep.goto(`${url}${path}#${id}`, { waitUntil: "load", timeout: 120_000 });
+          await deep.waitForSelector("[data-field-notes] [data-note]", { timeout: 60_000 });
+          const arrived = await deep.waitForFunction((i) => document.getElementById(i)?.open === true, id, { timeout: 8_000 }).then(() => true, () => false);
+          if (!arrived) problems.push(`${label}: ${path}#${id} did not open that note`);
+          await deep.close();
+        }
+        for (const t of thrown) problems.push(`${label}: the page threw: ${t}`);
+      } catch (err) {
+        problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
+      } finally {
+        await ctx.close();
+      }
+    }
+  }
+  // The not-found tab title is in the first server HTML (it was "ComputerPets" until the page loaded).
+  try {
+    const res = await fetch(`${url}/no-such-room`);
+    const html = await res.text();
+    const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1];
+    if (res.status !== 404) problems.push(`/no-such-room: the server answered ${res.status}, not 404`);
+    if (title !== "No room here — ComputerPets") problems.push(`/no-such-room: the server's first tab title is "${title}"`);
+    const meet = ((await (await fetch(`${url}/meet`)).text()).match(/<title>([^<]*)<\/title>/) || [])[1];
+    if (!meet || /No room here/.test(meet)) problems.push(`/meet: the server's tab title is "${meet}"`);
+  } catch (err) {
+    problems.push(`/no-such-room (server HTML): ${String(err?.message || err).split("\n")[0]}`);
+  }
+  // /demo/<slug> on a phone: the phone layout, laid out clean, and no update loop (it looped and never took it).
+  for (const [w, h] of [[375, 667], [667, 375]]) {
+    const label = `/demo/rui ${w}×${h}`;
+    const ctx = await phone(w, h);
+    try {
+      const page = await ctx.newPage();
+      const loud = [];
+      page.on("console", (m) => {
+        if (m.type() === "error" && /Maximum update depth/.test(m.text())) loud.push(m.text().slice(0, 80));
+      });
+      page.on("pageerror", (err) => loud.push(String(err?.message || err).split("\n")[0]));
+      await page.goto(`${url}/demo/rui`, { waitUntil: "load", timeout: 120_000 });
+      const phoneFloor = await page.waitForSelector("[data-phone-floor] [data-desk-care]", { timeout: 60_000 }).then(() => true, () => false);
+      if (!phoneFloor) problems.push(`${label}: the demo never took the phone layout`);
+      else {
+        await page.waitForTimeout(1_500);
+        problems.push(...layoutProblems(await page.evaluate(measure), label));
+        const others = await page.evaluate(() => ["[data-mac-extra]", "[data-linux-mark]", "[data-windows-sit]", "[data-tablet-sit]"].filter((s) => document.querySelector(s)?.getBoundingClientRect().height > 0));
+        if (others.length) problems.push(`${label}: another desk's label shows over the phone (${others.join(", ")})`);
+      }
+      if (loud.length) problems.push(`${label}: ${loud.length}× ${loud[0]}`);
+    } catch (err) {
+      problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
     } finally {
       await ctx.close();
     }
@@ -875,6 +1002,8 @@ export const DEV_KENNEL_TITLES = ["Mochi the Red Panda", "Pepper the Cat", "Juni
 /** Signed-in rooms, with the stand-in session (standInSite). */
 export const SIGNED_IN_PAGES = ["/collection", "/hatch", "/nest"];
 export const SIGNED_IN_SIZES = PHONE_SIZES.filter((s) => ["320×568", "375×667", "414×896", "667×375", "844×390"].includes(`${s.w}×${s.h}`));
+/** Where the whole first kennel card (not just its name) is on the screen before any scroll. */
+export const KENNEL_WHOLE_CARD = ["375×667", "414×896"];
 
 test("signed-in rooms (kennel, hatchery, nest) and a kennel pet's page on phones: panels, rail, care buttons and header never overlap; thumb-sized links", { skip, timeout: 600_000 }, async () => {
   const { browser } = await site();
@@ -914,6 +1043,24 @@ test("signed-in rooms (kennel, hatchery, nest) and a kennel pet's page on phones
             const cards = await page.evaluate(() => [...new Set([...document.querySelectorAll('a[href^="/pets/"]')].map((a) => a.getAttribute("href")))]);
             if (cards.length < DEV_KENNEL_SIZE) problems.push(`${label}: the kennel shows ${cards.length} pet links, wanted ${DEV_KENNEL_SIZE} (the dev seed did not run?)`);
             if (!petPage && cards.length) petPage = cards[0];
+            // Kennel first: the first card's name is on the screen, inside the panel, with no scroll.
+            const first = await page.evaluate(() => {
+              const card = document.querySelector('[data-kennel] a[href^="/pets/"]');
+              const panel = document.querySelector("[data-desk-aside]");
+              if (!card || !panel) return null;
+              const r = (e) => {
+                const b = e.getBoundingClientRect();
+                return { t: Math.round(b.top), b: Math.round(b.bottom) };
+              };
+              return { card: r(card), name: r(card.querySelector("p.font-display") || card), panel: r(panel), vh: innerHeight, scrolled: panel.scrollTop };
+            });
+            const inside = (x, box) => x.t >= box.t - 1 && x.b <= box.b + 1;
+            if (!first) problems.push(`${label}: no kennel card in the panel`);
+            else {
+              const fold = { t: 0, b: Math.min(first.panel.b, first.vh) };
+              if (first.scrolled > 0 || !inside(first.name, first.panel) || !inside(first.name, fold)) problems.push(`${label}: the first kennel card's name is not on the screen without a scroll ${JSON.stringify(first)}`);
+              if (KENNEL_WHOLE_CARD.includes(`${size.w}×${size.h}`) && !inside(first.card, fold)) problems.push(`${label}: the first kennel card is cut off ${JSON.stringify(first)}`);
+            }
           }
           const cuts = await page.evaluate(railCuts);
           if (cuts.length) problems.push(`${label}: the rail rests with ${cuts.join(", ")} cut in half`);
@@ -953,6 +1100,20 @@ test("signed-in rooms (kennel, hatchery, nest) and a kennel pet's page on phones
         } finally {
           await page.close();
         }
+      }
+      // Sign-in off (the stand-in): /login's way back to the desk is a thumb-sized link.
+      {
+        const page = await ctx.newPage();
+        await page.goto(`${url}/login`, { waitUntil: "load", timeout: 120_000 });
+        const desk = await page
+          .waitForSelector("[data-login-desk]", { timeout: 60_000 })
+          .then(() => page.evaluate(() => {
+            const b = document.querySelector("[data-login-desk]").getBoundingClientRect();
+            return { w: Math.round(b.width), h: Math.round(b.height) };
+          }), () => null);
+        if (!desk) problems.push(`/login ${size.w}×${size.h} (sign-in off): no "Go to the desk" ([data-login-desk])`);
+        else if (desk.h < TAP_MIN) problems.push(`/login ${size.w}×${size.h} (sign-in off): "Go to the desk" is ${desk.w}×${desk.h}`);
+        await page.close();
       }
       // A pet page the kennel does not have: plain words and its own tab title.
       if (size === SIGNED_IN_SIZES[0]) {

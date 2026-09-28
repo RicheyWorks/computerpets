@@ -616,6 +616,45 @@
     margin: 0;
   }
 
+  /* The link inside a room's line ("Or pair two you already keep.", "The hatchery is open.") is 44 px tall too. */
+  [data-phone-floor] [data-line-link] {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    vertical-align: middle;
+  }
+
+  /* The kennel on a phone sits right under the name (asideFirst) and scrolls with the panel: no box inside a box. */
+  [data-phone-floor] [data-kennel] {
+    max-height: none;
+    overflow: visible;
+    margin-top: 0.75rem;
+    padding-right: 0;
+  }
+
+  /* A phone card is the pet, its kind, its stage and its bond; the long lines wait on the pet's own page. The
+     "The guests you keep." heading stays for screen readers; the Kennel label above the cards stays on screen. */
+  [data-phone-floor] [data-kennel] > .paper-card {
+    padding: 0.75rem;
+  }
+
+  [data-phone-floor] [data-kennel] > .paper-card > h2 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  [data-phone-floor] [data-kennel] > .paper-card > ul {
+    margin-top: 0.5rem;
+  }
+
+  [data-phone-floor] [data-kennel] [data-card-more] {
+    display: none;
+  }
+
   /* The drawer's top rule is drawn inside the row (a border took 1 px off the first row's 44 px tap target). */
   [data-phone-floor] [data-desk-rail] .den-cabinet-drawer > li:first-child {
     box-shadow: inset 0 1px 0 rgb(242 236 227 / 0.16);
@@ -1045,5 +1084,13 @@
   }
   50% {
     transform: translateX(-50%) rotate(14deg) translateY(-10px);
+  }
+}
+
+/* /demo on a phone shows the phone's own sit; the Mac, Linux, Windows and tablet labels sat over the name. In
+   the utilities layer so it outranks their own flex class. */
+@layer utilities {
+  [data-demo-stage]:has([data-phone-floor]) :is([data-mac-extra], [data-linux-mark], [data-windows-sit], [data-tablet-sit]) {
+    display: none;
   }
 }

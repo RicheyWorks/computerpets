@@ -44,3 +44,26 @@ export function matchLine(count: number, total: number, query: string, rooms: nu
   if (count === 0) return "No guest by that name. Try a kind, like fox or owl.";
   return count === 1 ? "1 guest matches." : `${count} guests match.`;
 }
+
+/**
+ * The same way through a room's field notes (/study, /log): each guest's note is a drawer, closed at first, with a
+ * search over them and a link that opens one (/study#note-rui). Every note stays in the page.
+ */
+export function noteAnchor(slug: string): string {
+  return `note-${slug}`;
+}
+
+/** The guest slug in a field-notes hash ("#note-rui" -> "rui"), or null. */
+export function noteFromHash(hash: string | null | undefined, slugs: readonly string[]): string | null {
+  const m = /^#?note-([a-z0-9_-]+)$/i.exec((hash ?? "").trim());
+  if (!m) return null;
+  const slug = m[1]!.toLowerCase();
+  return slugs.includes(slug) ? slug : null;
+}
+
+/** The words under a room's note search: how many match, in plain words. */
+export function notesLine(count: number, total: number, query: string, example: string): string {
+  if (!foldQuery(query)) return `${total} field notes. Open one, or type a name.`;
+  if (count === 0) return `No guest by that name here. Try a kind, like ${example}.`;
+  return count === 1 ? "1 note matches." : `${count} notes match.`;
+}
