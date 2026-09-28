@@ -1447,3 +1447,31 @@ def test_care_verbs_work_for_a_snake_and_a_walker():
     hidden = apply_hide(CareState(), nori)
     assert hidden.state.hidden is True
     assert hidden.line
+
+
+def test_every_kind_name_matches_across_python_overlay_web_and_backend():
+    """One kind name per pet, for all 221: the overlay roster is the source; nothing drifts from it."""
+    import json
+    import re
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[2]
+    overlay = {r["key"]: r["speciesLabel"] for r in json.loads((root / "desktop" / "renderer" / "roster.json").read_text(encoding="utf-8"))}
+    web_roster = {r["key"]: r["speciesLabel"] for r in json.loads((root / "web" / "public" / "companion-roster.json").read_text(encoding="utf-8"))}
+    catalog_ts = (root / "web" / "src" / "lib" / "pets" / "catalog.ts").read_text(encoding="utf-8")
+    web_catalog = dict(re.findall(r'\{ key: "([a-z0-9_]+)", displayName: "([^"]+)"', catalog_ts))
+    pet_type = (root / "src" / "main" / "java" / "com" / "enterprisepet" / "pet" / "PetType.java").read_text(encoding="utf-8")
+    backend = dict(re.findall(r'^\s+[A-Z0-9_]+\s*\("([a-z0-9_]+)",\s*"([^"]+)",\s*Rarity\.', pet_type, re.M))
+    python = {k: s.label for k, s in SPECIES.items()}
+    sources = {"python": python, "web_roster": web_roster, "web_catalog": web_catalog, "backend": backend}
+    assert len(overlay) == 221
+    for name, names in sources.items():
+        assert set(names) == set(overlay), (name, sorted(set(names) ^ set(overlay))[:10])
+    drift = {
+        key: {name: names[key] for name, names in sources.items() if names[key] != overlay[key]} | {"overlay": overlay[key]}
+        for key in overlay
+        if any(names[key] != overlay[key] for names in sources.values())
+    }
+    assert drift == {}, drift
+    assert overlay["mason_bee"] == python["mason_bee"] == "Blue Orchard Mason"
+    assert overlay["honey_queen"] == python["honey_queen"] == "Western Honey Bee Queen"

@@ -2057,6 +2057,95 @@ async function unlockPlainLfs() {
   ]);
 }
 
+/**
+ * The picture check at app start (the overlay from `npm start`, the web dev server), YAML pinned to LF so
+ * a Windows checkout passes the deploy checks, one kind name per pet across every catalog, and the
+ * START-HERE size line a new keeper needs before a 4 GB copy.
+ */
+async function picturesStartNames() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8").replace(/\r\n/g, "\n");
+
+  // 1) The overlay checks the pictures itself before it opens the glass; same picture, same steps.
+  const P = require(join(RENDERER, "pictures.js"));
+  const main = read("desktop", "main.cjs");
+  const boot = main.slice(main.indexOf("function bootDesk()"));
+  const at = boot.indexOf('Pictures.picturesState(path.join(__dirname, "renderer"), fs, path.join)');
+  const sh = read("desktop.sh");
+  const ps1 = read("desktop.ps1");
+  const shPicture = (sh.match(/^picture=(\S+)$/m) || [])[1];
+  const realState = P.picturesState(RENDERER, { readFileSync }, join);
+  const shState = !existsSync(join(ROOT, "desktop", shPicture || "none")) ? "missing" : readFileSync(join(ROOT, "desktop", shPicture)).subarray(0, 23).toString("latin1") === "version https://git-lfs" ? "lfs-pointers" : "ready";
+  const w = P.words("lfs-pointers");
+  const overlay = {
+    beforeWindow: at > 0 && boot.indexOf("createWindow();") > at,
+    smallWindow: /dialog\s*\.showMessageBox\(\{[\s\S]*?message: w\.message,\s*detail: w\.detail,/.test(main),
+    tray: P.trayRows(w).map((r) => r.label || r.type).join("|") === "Pet pictures did not download|How to fix…|Open git-lfs.com|separator|Quit",
+    samePicture: shPicture === "renderer/" + P.PICTURE.join("/"),
+    sameState: realState === shState,
+    sameSteps: sh.includes(P.STEPS) && ps1.includes(P.STEPS) && w.detail.includes(P.STEPS),
+    secondStart: /if \(picturesGate\) \{\s*showPicturesMessage\(\);\s*return;\s*\}/.test(main),
+  };
+  if (!Object.values(overlay).every(Boolean)) bad.push(`overlay picture check: ${JSON.stringify(overlay)}`);
+
+  // Web dev server: the site portraits are Git LFS too; the plugin warns with the same steps.
+  const web = await import(pathToFileURL(join(ROOT, "web", "scripts", "pictures-check.mjs")).href);
+  const said = [];
+  const fakePointer = { readFileSync: () => Buffer.from("version https://git-lfs.github.com/spec/v1\n") };
+  web.picturesCheckPlugin(join(ROOT, "web", "public"), fakePointer).configResolved({ logger: { warn: (l) => said.push(l) } });
+  const vite = read("web", "vite.config.ts");
+  const webCheck = {
+    lfsPortraits: /^web\/public\/pets\/\*\* filter=lfs/m.test(read(".gitattributes")),
+    wired: /plugins: \[\s*\/\/[^\n]*\n\s*picturesCheckPlugin\(\),/.test(vite),
+    warns: said.length === 1 && said[0].includes(web.STEPS) && said[0].includes("run npm run dev again"),
+    sameSteps: web.STEPS === P.STEPS,
+    state: web.portraitsState(),
+  };
+  if (!webCheck.lfsPortraits || !webCheck.wired || !webCheck.warns || !webCheck.sameSteps) bad.push(`web picture check: ${JSON.stringify(webCheck)}`);
+
+  // Python blotter: draws its own pets (frames.py), loads no picture files, so it has nothing to check.
+  const frames = read("client", "computerpets_client", "frames.py");
+  const python = { drawsOwn: frames.includes("The repo does not ship PNG sprite packs.") && frames.includes("QPainter") };
+  if (!python.drawsOwn) bad.push("python blotter picture truth");
+
+  // 2) YAML stays LF on a Windows checkout (the deploy checks grep line ends).
+  const attrs = read(".gitattributes");
+  const yaml = { yaml: /^\*\.yaml text eol=lf$/m.test(attrs), yml: /^\*\.yml text eol=lf$/m.test(attrs), sh: /^\*\.sh text eol=lf$/m.test(attrs) };
+  if (!Object.values(yaml).every(Boolean)) bad.push(`YAML eol: ${JSON.stringify(yaml)}`);
+
+  // 3) One kind name per pet: overlay roster, web roster, web catalog, Python, backend.
+  const overlayRoster = new Map(JSON.parse(read("desktop", "renderer", "roster.json")).map((r) => [r.key, r.speciesLabel]));
+  const webRoster = new Map(JSON.parse(read("web", "public", "companion-roster.json")).map((r) => [r.key, r.speciesLabel]));
+  const catalog = new Map([...read("web", "src", "lib", "pets", "catalog.ts").matchAll(/\{ key: "([a-z0-9_]+)", displayName: "([^"]+)"/g)].map((m) => [m[1], m[2]]));
+  const py = new Map([...read("client", "computerpets_client", "species.py").matchAll(/key="([a-z0-9_]+)",\s*\n\s*slug="[^"]*",\s*\n\s*name="[^"]*",\s*\n\s*label="([^"]+)"/g)].map((m) => [m[1], m[2]]));
+  const java = new Map([...read("src", "main", "java", "com", "enterprisepet", "pet", "PetType.java").matchAll(/^\s+[A-Z0-9_]+\s*\("([a-z0-9_]+)",\s*"([^"]+)",\s*Rarity\./gm)].map((m) => [m[1], m[2]]));
+  const drift = [...overlayRoster].filter(([k, n]) => [webRoster, catalog, py, java].some((m) => m.get(k) !== n)).map(([k]) => k);
+  const names = { overlay: overlayRoster.size, web: webRoster.size, catalog: catalog.size, python: py.size, backend: java.size, drift, bees: ["mason_bee", "leafcutter", "honey_drone", "honey_queen"].map((k) => py.get(k)) };
+  if (drift.length || [names.overlay, names.web, names.catalog, names.python, names.backend].some((n) => n !== 221)) bad.push(`kind names: ${JSON.stringify(names)}`);
+
+  // 4) Audit: START-HERE says the copy is about 4 GB and needs about 8 GB free, before and when it fails.
+  const start = read("docs", "START-HERE.md");
+  const size = {
+    need: start.includes("- About 8 GB of free space. The copy is big: about 4 GB comes down the internet the first time"),
+    wait: start.includes("8. Wait until it finishes. The copy is about 4 GB, so this can take a while. Let it run."),
+    failed: start.includes("- Check the computer has about 8 GB of free space. A full disk stops the copy partway."),
+  };
+  if (!Object.values(size).every(Boolean)) bad.push(`START-HERE size: ${JSON.stringify(size)}`);
+
+  const roadmap = read("docs", "ROADMAP.md");
+  if (!roadmap.includes("- [x] The overlay and the web dev server say so when the pet pictures did not download")) bad.push("ROADMAP entry missing");
+  const extras = { overlay, web: webCheck, python, yaml, names, size, pictures: realState };
+  if (bad.length) return fail(bad.join("; "), extras);
+  return ok("The overlay started from npm start and the web dev server both say plainly when the pictures are Git LFS pointers; YAML stays LF; every kind name matches across all five catalogs; START-HERE gives the copy size", extras, [
+    "pictures=overlay_checks_before_glass",
+    "pictures=web_dev_server_warns",
+    "pictures=python_draws_own",
+    "eol=yaml_lf",
+    "names=one_per_kind_221",
+    "start_here=copy_size",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -2078,6 +2167,7 @@ const COMMANDS = {
   overlay_birds_plain: overlayBirdsPlain,
   flake_house_plain: flakeHousePlain,
   unlock_plain_lfs: unlockPlainLfs,
+  pictures_start_names: picturesStartNames,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,
