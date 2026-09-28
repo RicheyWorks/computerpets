@@ -1607,6 +1607,21 @@ def _desk_rows() -> list[Affordance]:
 
 
 LAUNCH_PIECES = ("ready", "missing", "unfinished", "changed")
+
+
+def launch_next(pieces: str, pictures: str, script: str) -> str:
+    """The plain next step check mode prints last: what to type, for the pictures first, then the pieces."""
+    run = r".\desktop.ps1" if script == "desktop.ps1" else "sh desktop.sh"
+    if pictures != "ready":
+        return (
+            "next: The pet pictures are not here yet. Install Git LFS from https://git-lfs.com, then in the computerpets "
+            f"folder type git lfs install and then git lfs pull. Then type {run} and press Enter."
+        )
+    return {
+        "missing": f"next: Type {run} and press Enter. It gets the pieces (a few minutes the first time), then the pets come on.",
+        "unfinished": f"next: Type {run} and press Enter. It finishes getting the pieces, then the pets come on.",
+        "changed": f"next: Type {run} and press Enter. It gets the new pieces, then the pets come on.",
+    }.get(pieces, f"next: Type {run} and press Enter to turn the pets on.")
 LAUNCH_PICTURES = ("ready", "missing", "lfs-pointers")
 LAUNCH_PICTURE = ("desktop", "renderer", "sprites", "crow", "idle", "1.png")
 
@@ -1673,6 +1688,11 @@ def _launch_check(aid: str) -> InvokeResult:
             fails.append(f"{script} check printed no pieces state")
         if not pictures or pictures.group(1) != real_pictures:
             fails.append(f"{script} check said pictures {pictures.group(1) if pictures else 'nothing'}, the file says {real_pictures}")
+        if pieces and pictures:
+            want = launch_next(pieces.group(1), pictures.group(1), script)
+            lines = [ln.strip() for ln in out.splitlines() if ln.strip()]
+            if not lines or lines[-1] != want:
+                fails.append(f"{script} check's last line is {lines[-1] if lines else 'nothing'!r}, wanted {want!r}")
     if before != after:
         fails.append("check mode changed the install stamp")
     for word in ("npm install", "Getting the pieces"):
@@ -1680,14 +1700,16 @@ def _launch_check(aid: str) -> InvokeResult:
             fails.append(f"check mode must not install ({word!r} printed)")
     state = pieces.group(1) if pieces else "none"
     seen = pictures.group(1) if pictures else "none"
+    next_line = next((ln.strip() for ln in out.splitlines() if ln.startswith("next: ")), "")
+    next_ok = bool(next_line) and not any("last line" in f for f in fails)
     ok = not fails
     return InvokeResult(
         aid,
         "desk",
         ok,
         detail=f"{script}: node {version or 'none'}; pieces {state}; pictures {seen}; exit {proc.returncode}",
-        extras={"script": script, "node": version, "npm": bool(npm), "exit": proc.returncode, "pieces": state, "pictures": seen, "picturesReal": real_pictures, "expect": expect},
-        trace=[f"script={script}", f"node={version or 'none'}", f"expect={expect}", f"exit={proc.returncode}", f"pieces={state}", f"pictures={seen}"],
+        extras={"script": script, "node": version, "npm": bool(npm), "exit": proc.returncode, "pieces": state, "pictures": seen, "picturesReal": real_pictures, "expect": expect, "next": next_line},
+        trace=[f"script={script}", f"node={version or 'none'}", f"expect={expect}", f"exit={proc.returncode}", f"pieces={state}", f"pictures={seen}", f"next={'plain' if next_ok else 'missing'}"],
         error=None if ok else "; ".join(fails),
     )
 
@@ -2974,6 +2996,20 @@ def _web_rows() -> list[Affordance]:
                 "loaded. /demo on a phone looped (Maximum update depth exceeded, 13 times) and never took the phone layout."
             ),
         ),
+        Affordance(
+            "web.kennel_drawers",
+            "web",
+            "the eighteen room pages are field-note drawers; /demo docks its plates on a phone; both start checks say what to type next; 44 px missing-page links; /mind is short on a phone; /demo/<unknown> has its own tab title",
+            "web components/desk/field-notes.tsx + routes/{canopy,cellar,corner,creek,far,garden,grid,hive,meadow,pond,reef,roost,sea,shore,snakes,stone,well,wood}.tsx + components/desk/desk-plates.tsx docked + components/desk/companion-room.tsx + styles.css + routes/pets.$key.tsx + routes/demo.$slug.tsx + routes/mind.tsx + desktop.ps1 + desktop.sh + app_harness.launch_next + scripts/phone-desk-layout.test.mjs + scripts/kennel-drawers.test.mjs",
+            notes=(
+                "The eighteen room pages listed their notes one after another: 6,221 to 6,983 px at 375x667, /grid 8,962 "
+                "and /hive 11,181. As field-note drawers they are 3,276 to 3,478, /grid 4,098 and /hive 5,158, every note "
+                "still in the page. On a phone /demo put its weather plate over the kicker and the guest's name; the three "
+                "plates now dock in the panel with 44 px buttons. desktop.ps1 -Check and desktop.sh --check listed the "
+                "pieces but not what to type; the last line now says it. /mind was 3,148 px on a phone and is 1,967. "
+                "Back to kennel and See who is awake were bare text links. /demo/<unknown> said just ComputerPets in the tab."
+            ),
+        ),
     ]
 
 
@@ -3035,6 +3071,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("meet_index_forget", domain="web", action_id=aid)
     if local_id == "kennel_first_notes":
         return _run_web_smoke("kennel_first_notes", domain="web", action_id=aid)
+    if local_id == "kennel_drawers":
+        return _run_web_smoke("kennel_drawers", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

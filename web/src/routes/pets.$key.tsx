@@ -71,7 +71,7 @@ function PetDetail() {
           {loadProblem ? "Couldn't open your kennel." : "This pet is not in your kennel."}
         </h1>
         {loadProblem ? <p className="text-sm text-muted">{loadProblem}</p> : null}
-        <Link to="/collection" className="text-sm text-primary">
+        <Link to="/collection" data-back-kennel className="inline-flex min-h-11 items-center text-sm text-primary">
           Back to kennel
         </Link>
       </main>

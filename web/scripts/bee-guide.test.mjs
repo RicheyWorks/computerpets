@@ -71,8 +71,8 @@ test("Comb stays Comb — the bee roster does not restack her", () => {
   assert.doesNotMatch(beeSrc, /key:\s*"honeybee"/);
   assert.doesNotMatch(beeSrc, /slug:\s*"comb"/);
   assert.match(rosterSrc, /BEE_ROSTER/);
-  assert.match(denSrc, /INSECT_GUIDE\.map/);
-  assert.match(denSrc, /BEE_GUIDE\.map/);
+  assert.match(denSrc, /<FieldNotes\s+notes=\{INSECT_GUIDE\}/);
+  assert.match(denSrc, /<FieldNotes\s+notes=\{BEE_GUIDE\}/);
 });
 
 test("the catalog includes the ten bee keys", () => {

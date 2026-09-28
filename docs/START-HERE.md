@@ -595,7 +595,7 @@ Read the last few lines.
 
 - If it talks about `npm` or `install`, the pieces did not finish downloading. Check the internet. Stay in the `computerpets` folder (or `desktop` if you used the three-line start). Run `npm install` again, then `npm start`.
 - If you closed the window while words were still scrolling, open a new one and run `.\desktop.ps1` again. It sees the pieces are half-finished and gets the pieces again.
-- To see what the start sees without turning anything on, type `.\desktop.ps1 -Check`. It prints your Node version and whether the pieces are `ready`, `missing`, `unfinished`, or `changed`.
+- To see what the start sees without turning anything on, type `.\desktop.ps1 -Check`. It prints your Node version and whether the pieces are `ready`, `missing`, `unfinished`, or `changed`. Its last line says what to type next.
 
 ### A window flashed and vanished
 

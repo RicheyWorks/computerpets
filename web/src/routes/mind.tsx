@@ -168,7 +168,7 @@ function MindPage() {
   }, [talkTick, talkAsked, talkLine]);
 
   return (
-    <main className="space-y-10 pb-16 pt-20">
+    <main className="space-y-8 pb-16 pt-6 sm:space-y-10 sm:pt-20">
       <header className="max-w-2xl space-y-3">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Talk</p>
         <h1 className="font-display text-5xl leading-none">Minds</h1>
@@ -186,7 +186,9 @@ function MindPage() {
       <h2 id="mind-which" className="font-display text-2xl">
         {MIND_WORDS.which}
       </h2>
-      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {/* On a phone the AI cards sit two to a row and only the card in use keeps its blurb (the tag says the rest:
+          No AI, Needs a key, On this computer); /mind was 3,148 px at 375×667, most of it fourteen full cards. */}
+      <section data-mind-cards className="grid grid-flow-row-dense grid-cols-2 gap-2 sm:grid-flow-row sm:gap-3 lg:grid-cols-3">
         {MIND_PRESETS.map((preset) => {
           const active = shown.plugin === preset.id;
           return (
@@ -198,13 +200,13 @@ function MindPage() {
               onClick={() => setDefault({ plugin: preset.id })}
               className={
                 active
-                  ? "rounded-[var(--radius-lg)] border border-border-strong bg-elevated p-4 text-left"
-                  : "rounded-[var(--radius-lg)] border border-border bg-surface p-4 text-left hover:border-border-strong"
+                  ? "col-span-2 rounded-[var(--radius-lg)] border border-border-strong bg-elevated p-3 text-left sm:col-span-1 sm:p-4"
+                  : "rounded-[var(--radius-lg)] border border-border bg-surface p-3 text-left hover:border-border-strong sm:p-4"
               }
             >
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">{presetTag(preset)}</p>
-              <p className="mt-1 font-display text-2xl">{preset.name}</p>
-              <p className="mt-2 text-sm text-muted">{preset.blurb}</p>
+              <p className="mt-1 font-display text-lg leading-tight sm:text-2xl">{preset.name}</p>
+              <p className={`mt-2 text-sm text-muted ${active ? "" : "max-sm:hidden"}`}>{preset.blurb}</p>
               {active ? (
                 // Plain words, not only a lighter card. A guest's picked AI waits for sign-in (the note says so).
                 <span data-mind-in-use className="mt-3 inline-block rounded-full border border-border-strong px-2 py-0.5 text-[11px] uppercase tracking-[0.16em] text-fg">
@@ -276,8 +278,8 @@ function MindPage() {
                   onClick={() => write({ ...draft, voice: v.id as VoiceKind })}
                   className={
                     draft.voice === v.id
-                      ? "rounded-[var(--radius-sm)] bg-elevated px-3 py-2 text-sm"
-                      : "rounded-[var(--radius-sm)] px-3 py-2 text-sm text-muted hover:text-fg"
+                      ? "min-h-11 rounded-[var(--radius-sm)] bg-elevated px-3 py-2 text-sm"
+                      : "min-h-11 rounded-[var(--radius-sm)] px-3 py-2 text-sm text-muted hover:text-fg"
                   }
                 >
                   {v.name}
@@ -349,7 +351,7 @@ function MindPage() {
 
       {/* Builder words (plugin bus, server key names, the webhook contract) stay here, folded away. docs/MIND.md has the rest. */}
       <details id="mind-builders" className="rounded-[var(--radius-xl)] border border-border bg-surface p-5 sm:p-6">
-        <summary className="cursor-pointer font-display text-2xl">For builders</summary>
+        <summary className="min-h-11 cursor-pointer py-1.5 font-display text-2xl">For builders</summary>
         <p className="mt-4 text-[11px] uppercase tracking-[0.2em] text-subtle">Plugin bus</p>
         <p className="mt-1 font-display text-xl">Any mind. Same house.</p>
         <p className="mt-2 max-w-2xl text-sm text-muted">

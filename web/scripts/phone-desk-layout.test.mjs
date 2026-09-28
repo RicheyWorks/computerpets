@@ -19,7 +19,12 @@
 // panel link is 44 px, and the sign-in-off "Go to the desk" on /login is 44 px. /study and /log on a phone are
 // field-note indexes: under 5,500 and 4,500 px, every note reachable (a tap opens it, Open all opens all, a search
 // finds one, #note-<slug> opens on arrival). /login at 568×320 does not scroll; the not-found tab title is in the
-// first server HTML; /demo/<slug> takes the phone layout with no update loop.
+// first server HTML; /demo/<slug> takes the phone layout with no update loop. The eighteen room pages (/snakes, /sea,
+// /garden, ...) are field-note indexes too: closed drawers under 4,000 px at 375×667 (/grid 4,800, /hive 6,000 with
+// its two sets), every note a 44 px tap that shows its tell, each set's Open all, search by name, #note-<slug> on
+// arrival. On a phone /demo docks its weather, news and market plates in the panel (they sat over the kicker and the
+// name) and they open on a tap; /mind stays under 2,400 px with every mind a tap away; /demo/<unknown> has its own
+// tab title and a 44 px "See who is awake"; /pets/<not-a-pet>'s "Back to kennel" is 44 px.
 // Starts the Vite dev server in-process and drives the system Chrome or Edge (playwright-core, no downloaded
 // browser). Skips, and says why, when no browser is found.
 // PHONE_LAYOUT_URL=http://127.0.0.1:8097/ uses an already running dev server instead.
@@ -908,6 +913,235 @@ test("/meet on a phone: short enough to get through, a jump index opens each roo
   assert.deepEqual(problems, [], problems.join("\n"));
 });
 
+/** [room page, most px at 375×667, notes]; /hive has two sets (the insects, then bees and comb). */
+export const ROOM_NOTE_PAGES = [
+  ["/canopy", 4_000, 10],
+  ["/cellar", 4_000, 10],
+  ["/corner", 4_000, 10],
+  ["/creek", 4_000, 10],
+  ["/far", 4_000, 10],
+  ["/garden", 4_000, 10],
+  ["/grid", 4_800, 10],
+  ["/hive", 6_000, 20],
+  ["/meadow", 4_000, 10],
+  ["/pond", 4_000, 10],
+  ["/reef", 4_000, 10],
+  ["/roost", 4_000, 10],
+  ["/sea", 4_000, 10],
+  ["/shore", 4_000, 10],
+  ["/snakes", 4_000, 10],
+  ["/stone", 4_000, 10],
+  ["/well", 4_000, 10],
+  ["/wood", 4_000, 11],
+];
+export const MIND_PHONE_MAX_HEIGHT = 2_400;
+export const MIND_CARDS = 14;
+
+test("the eighteen room pages' field notes on a phone: closed drawers, every note reachable, Open all, search, #note- links; /demo plates dock off the hour line; /mind is short; /demo/<unknown> gets words, a tab title and a thumb-sized way on", { skip, timeout: 900_000 }, async () => {
+  const { url, browser } = await site();
+  const problems = [];
+  const phone = (w, h) => browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true, userAgent: IPHONE });
+  // The rooms listed every note one after another (6,221 to 11,181 px at 375×667); now each note is a closed drawer.
+  for (const [w, h] of [[375, 667], [320, 568]]) {
+    const ctx = await phone(w, h);
+    try {
+      for (const [path, most, count] of ROOM_NOTE_PAGES) {
+        const label = `${path} ${w}×${h}`;
+        const page = await ctx.newPage();
+        const thrown = [];
+        page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
+        try {
+          await page.goto(`${url}${path}`, { waitUntil: "load", timeout: 120_000 });
+          await page.waitForSelector("[data-field-notes] [data-note]", { timeout: 60_000 });
+          await page.waitForTimeout(600);
+          const first = await page.evaluate(() => ({
+            height: document.documentElement.scrollHeight,
+            sets: [...document.querySelectorAll("[data-field-notes]")].map((s) => [...s.querySelectorAll("[data-note]")].length),
+            notes: [...document.querySelectorAll("[data-note]")].map((d) => ({
+              id: d.id,
+              open: d.open,
+              name: (d.querySelector("summary .font-display")?.textContent || "").trim(),
+              tell: (d.querySelector("[data-note-tell]")?.textContent || "").trim().length,
+            })),
+          }));
+          const extra = w === 320 ? 400 : 0;
+          if (first.height > most + extra) problems.push(`${label}: the page is ${first.height}px tall (over ${most + extra})`);
+          if (first.notes.length !== count) problems.push(`${label}: ${first.notes.length} field notes, wanted ${count}`);
+          if (first.notes.some((n) => n.open)) problems.push(`${label}: a note opens before anyone asks`);
+          if (first.notes.some((n) => !n.tell)) problems.push(`${label}: a note has no tell in the page`);
+          if (w === 375) {
+            for (const n of first.notes) {
+              const summary = page.locator(`[id="${n.id}"] > summary`);
+              await summary.scrollIntoViewIfNeeded();
+              const tall = await summary.evaluate((s) => Math.round(s.getBoundingClientRect().height));
+              if (tall < TAP_MIN) problems.push(`${label}: #${n.id}'s name is ${tall}px tall`);
+              await summary.tap();
+              await page.waitForTimeout(60);
+              const shown = await page.evaluate((id) => {
+                const d = document.getElementById(id);
+                return !!d?.open && (d.querySelector("[data-note-tell]")?.getBoundingClientRect().height || 0) > 0;
+              }, n.id);
+              if (!shown) problems.push(`${label}: a tap on #${n.id} did not show its tell`);
+            }
+            // Each set's Close all, then Open all, opens every note in that set.
+            for (let i = 0; i < first.sets.length; i += 1) {
+              const all = page.locator("[data-field-notes]").nth(i).locator("[data-notes-all]");
+              await all.tap();
+              await page.waitForTimeout(120);
+              await all.tap();
+              await page.waitForTimeout(120);
+              const opened = await page.evaluate((k) => [...document.querySelectorAll("[data-field-notes]")[k].querySelectorAll("[data-note]")].filter((d) => d.open).length, i);
+              if (opened !== first.sets[i]) problems.push(`${label}: set ${i + 1}'s Open all opened ${opened} of ${first.sets[i]}`);
+            }
+            // Search: the last note's name finds it.
+            const last = first.notes[first.notes.length - 1];
+            const search = page.locator("[data-field-notes]").last().locator("[data-notes-search]");
+            await search.fill(last.name);
+            await page.waitForTimeout(200);
+            const found = await page.evaluate((id) => {
+              const set = document.getElementById(id)?.closest("[data-field-notes]");
+              return {
+                hit: !!document.getElementById(id) && !document.getElementById(id).hidden,
+                shown: set ? [...set.querySelectorAll("[data-note]")].filter((d) => !d.hidden).length : 0,
+                line: set?.querySelector("[data-notes-count]")?.textContent || "",
+              };
+            }, last.id);
+            if (!found.hit || found.shown > 2 || !/match/.test(found.line)) problems.push(`${label}: searching "${last.name}" shows ${JSON.stringify(found)}`);
+            // A note link opens that note on arrival.
+            const deep = await ctx.newPage();
+            await deep.goto(`${url}${path}#${last.id}`, { waitUntil: "load", timeout: 120_000 });
+            await deep.waitForSelector("[data-field-notes] [data-note]", { timeout: 60_000 });
+            const arrived = await deep.waitForFunction((i) => document.getElementById(i)?.open === true, last.id, { timeout: 8_000 }).then(() => true, () => false);
+            if (!arrived) problems.push(`${label}: ${path}#${last.id} did not open that note`);
+            await deep.close();
+          }
+          for (const t of thrown) problems.push(`${label}: the page threw: ${t}`);
+        } catch (err) {
+          problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
+        } finally {
+          await page.close();
+        }
+      }
+    } finally {
+      await ctx.close();
+    }
+  }
+  // /demo on a phone: the weather, news and market plates (and the desktop's "A window") sat over the kicker and the
+  // guest's name; on a phone they dock in the panel instead, thumb-sized, and open on a tap.
+  for (const [w, h] of [[320, 568], [375, 667], [667, 375]]) {
+    const label = `/demo/rui ${w}×${h}`;
+    const ctx = await phone(w, h);
+    try {
+      const page = await ctx.newPage();
+      await page.goto(`${url}/demo/rui`, { waitUntil: "load", timeout: 120_000 });
+      await page.waitForSelector("[data-phone-floor] [data-desk-care]", { timeout: 60_000 });
+      await page.waitForTimeout(1_500);
+      const plates = await page.evaluate(() => {
+        const box = (e) => {
+          const b = e?.getBoundingClientRect();
+          return b && b.width ? { t: b.top, b: b.bottom, l: b.left, r: b.right } : null;
+        };
+        const hit = (a, b) => a && b && Math.min(a.r, b.r) - Math.max(a.l, b.l) > 1 && Math.min(a.b, b.b) - Math.max(a.t, b.t) > 1;
+        const aside = document.querySelector("[data-desk-aside]");
+        const heads = [aside?.querySelector("p"), aside?.querySelector("h1")].map(box);
+        const all = [...document.querySelectorAll("[data-desk-plate], [data-demo-window]")];
+        return {
+          docked: [...document.querySelectorAll("[data-demo-plates] [data-plate-docked]")].map((e) => e.getAttribute("data-desk-plate")),
+          loose: all.filter((e) => !aside?.contains(e) && box(e)).map((e) => e.getAttribute("data-desk-plate") || "a window"),
+          over: all.filter((e) => heads.some((hd) => hit(box(e), hd))).map((e) => e.getAttribute("data-desk-plate") || "a window"),
+          buttons: [...document.querySelectorAll("[data-plate-docked] > button:first-child")].map((b) => Math.round(b.getBoundingClientRect().height)),
+        };
+      });
+      if (JSON.stringify(plates.docked) !== JSON.stringify(["weather", "news", "market"])) problems.push(`${label}: docked plates ${JSON.stringify(plates.docked)}`);
+      if (plates.loose.length) problems.push(`${label}: ${plates.loose.join(", ")} still float over the room`);
+      if (plates.over.length) problems.push(`${label}: ${plates.over.join(", ")} sit over the kicker or the name`);
+      for (const b of plates.buttons) if (b < TAP_MIN) problems.push(`${label}: a docked plate's button is ${b}px tall`);
+      if (w === 375) {
+        const news = page.locator('[data-demo-plates] [data-desk-plate="news"] > button').first();
+        await news.scrollIntoViewIfNeeded();
+        await news.tap();
+        await page.waitForTimeout(300);
+        const opened = await page.evaluate(() => document.querySelector('[data-demo-plates] [data-desk-plate="news"]')?.children.length || 0);
+        if (opened < 2) problems.push(`${label}: a tap on the docked news plate did not open it`);
+      }
+    } catch (err) {
+      problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
+    } finally {
+      await ctx.close();
+    }
+  }
+  // /mind on a phone was 3,148 px of cards one per row; now two to a row, the chosen one whole, thumb-sized.
+  for (const [w, h] of [[375, 667], [320, 568]]) {
+    const label = `/mind ${w}×${h}`;
+    const ctx = await phone(w, h);
+    try {
+      const page = await ctx.newPage();
+      await page.goto(`${url}/mind`, { waitUntil: "load", timeout: 120_000 });
+      await page.waitForSelector("[data-mind-card]", { timeout: 60_000 });
+      await page.waitForTimeout(800);
+      const mind = await page.evaluate(() => ({
+        height: document.documentElement.scrollHeight,
+        cards: [...document.querySelectorAll("[data-mind-card]")].map((c) => ({ id: c.getAttribute("data-mind-card"), h: Math.round(c.getBoundingClientRect().height), on: c.getAttribute("aria-pressed") === "true", blurb: (c.querySelector("p.text-muted")?.getBoundingClientRect().height || 0) > 0 })),
+        small: [...document.querySelectorAll("main a, main button, main summary, main select, main input")].filter((e) => {
+          const b = e.getBoundingClientRect();
+          return b.height > 0 && b.height < 44;
+        }).map((e) => (e.textContent || e.tagName).trim().slice(0, 24)),
+      }));
+      const most = w === 320 ? MIND_PHONE_MAX_HEIGHT + 200 : MIND_PHONE_MAX_HEIGHT;
+      if (mind.height > most) problems.push(`${label}: the page is ${mind.height}px tall (over ${most})`);
+      if (mind.cards.length !== MIND_CARDS) problems.push(`${label}: ${mind.cards.length} mind cards, wanted ${MIND_CARDS}`);
+      if (mind.cards.some((c) => c.h < TAP_MIN)) problems.push(`${label}: a mind card is under ${TAP_MIN}px`);
+      const chosen = mind.cards.filter((c) => c.on);
+      if (chosen.length !== 1 || !chosen[0].blurb) problems.push(`${label}: the chosen mind does not show what it is ${JSON.stringify(chosen)}`);
+      if (mind.small.length) problems.push(`${label}: small taps ${JSON.stringify(mind.small)}`);
+      if (w === 375) {
+        // Every mind is reachable: a tap on another card chooses it and shows its words.
+        const other = mind.cards.find((c) => !c.on);
+        if (other) {
+          const card = page.locator(`[data-mind-card="${other.id}"]`);
+          await card.scrollIntoViewIfNeeded();
+          await card.tap();
+          await page.waitForTimeout(300);
+          const shows = await page.evaluate((id) => {
+            const c = document.querySelector(`[data-mind-card="${id}"]`);
+            return c?.getAttribute("aria-pressed") === "true" && (c.querySelector("p.text-muted")?.getBoundingClientRect().height || 0) > 0;
+          }, other.id);
+          if (!shows) problems.push(`${label}: a tap on ${other.id} did not choose it and show its words`);
+        }
+      }
+    } catch (err) {
+      problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
+    } finally {
+      await ctx.close();
+    }
+  }
+  // /demo/<unknown>: plain words, its own tab title (it said just "ComputerPets") and a thumb-sized way on.
+  try {
+    const html = await (await fetch(`${url}/demo/nope`)).text();
+    const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1];
+    if (title !== "No demo here — ComputerPets") problems.push(`/demo/nope: the server's first tab title is "${title}"`);
+    const rui = ((await (await fetch(`${url}/demo/rui`)).text()).match(/<title>([^<]*)<\/title>/) || [])[1];
+    if (rui !== "Rui — ComputerPets") problems.push(`/demo/rui: the server's tab title is "${rui}"`);
+    const ctx = await phone(375, 667);
+    try {
+      const page = await ctx.newPage();
+      await page.goto(`${url}/demo/nope`, { waitUntil: "load", timeout: 120_000 });
+      const link = await page.waitForSelector("[data-demo-missing]", { timeout: 60_000 }).then(() => page.evaluate(() => {
+        const b = document.querySelector("[data-demo-missing]").getBoundingClientRect();
+        return { w: Math.round(b.width), h: Math.round(b.height) };
+      }), () => null);
+      if (!link) problems.push(`/demo/nope: no "See who is awake" ([data-demo-missing])`);
+      else if (link.h < TAP_MIN) problems.push(`/demo/nope: "See who is awake" is ${link.w}×${link.h}`);
+      if ((await page.title()) !== "No demo here — ComputerPets") problems.push(`/demo/nope: the tab says "${await page.title()}"`);
+    } finally {
+      await ctx.close();
+    }
+  } catch (err) {
+    problems.push(`/demo/nope: ${String(err?.message || err).split("\n")[0]}`);
+  }
+  assert.deepEqual(problems, [], problems.join("\n"));
+});
+
 /** Signed-out: each gated page sends the visitor to sign in, and sign-in remembers the page (safeReturnTo). */
 export const GATED_PAGES = [
   ["/collection", "/login?next=%2Fcollection"],
@@ -1123,6 +1357,12 @@ test("signed-in rooms (kennel, hatchery, nest) and a kennel pet's page on phones
         if (!/not in your kennel|Couldn't open your kennel/.test(h1 || "")) problems.push(`/pets/not-a-pet: says "${h1}"`);
         const title = await page.title();
         if (title !== "Your pet — ComputerPets") problems.push(`/pets/not-a-pet: the tab says "${title}"`);
+        const back = await page.evaluate(() => {
+          const b = document.querySelector("[data-back-kennel]")?.getBoundingClientRect();
+          return b ? { w: Math.round(b.width), h: Math.round(b.height) } : null;
+        });
+        if (!back) problems.push(`/pets/not-a-pet: no "Back to kennel" ([data-back-kennel])`);
+        else if (back.h < TAP_MIN) problems.push(`/pets/not-a-pet: "Back to kennel" is ${back.w}×${back.h}`);
         await page.close();
       }
       if (hits.length) problems.push(`${size.w}×${size.h}: the signed-in rooms asked the house server nobody ran (${hits.length}×)`);
