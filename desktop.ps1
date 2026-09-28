@@ -36,11 +36,28 @@ function Get-Pieces {
 }
 $pieces = Get-Pieces
 
+# 3. The pictures. The overlay's pet pictures are stored with Git LFS. A Git without LFS copies
+#    small text pointers instead, and every pet would be invisible.
+$picture = "renderer\sprites\crow\idle\1.png"
+function Get-Pictures {
+  if (-not (Test-Path $picture)) { return "missing" }
+  $bytes = [System.IO.File]::ReadAllBytes((Resolve-Path $picture).Path)
+  $head = [System.Text.Encoding]::ASCII.GetString($bytes, 0, [Math]::Min(23, $bytes.Length))
+  if ($head -eq "version https://git-lfs") { return "lfs-pointers" }
+  return "ready"
+}
+$seen = Get-Pictures
+
 # -Check says what the start sees and changes nothing: no install, no overlay.
 if ($Check) {
   Write-Host "ok: node $version"
   Write-Host "pieces: $pieces"
+  Write-Host "pictures: $seen"
   exit 0
+}
+
+if ($seen -ne "ready") {
+  Stop-Start "The pet pictures did not download. They come through Git LFS, which this Git does not have yet. Install Git LFS from https://git-lfs.com, then in the computerpets folder run git lfs install and then git lfs pull, and run .\desktop.ps1 again."
 }
 
 if ($pieces -ne "ready") {
@@ -56,6 +73,6 @@ if ($pieces -ne "ready") {
   Set-Content -Path $stamp -Value (Get-Date -Format o) -Encoding ASCII
 }
 
-# 3. Turn the pets on. npm start is electron .
+# 4. Turn the pets on. npm start is electron .
 & npm start
 exit $LASTEXITCODE

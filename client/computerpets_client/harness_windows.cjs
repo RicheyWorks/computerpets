@@ -449,6 +449,11 @@ async function settingsWindow() {
     if ($("licenseOk").textContent !== "Locked. Pets on the desk still work.") fails.push(`license line on open: ${$("licenseOk").textContent}`);
     if ($("licenseErr").textContent !== "") fails.push(`an error on open: ${$("licenseErr").textContent}`);
     trace.push(`plugins=${pluginIds.length}`, `pets=${$("petType").options.length}`);
+    // The Pet list reads like the blotter's: name and kind, never the catalog key.
+    const petTexts = $("petType").options.map((o) => o.textContent);
+    const keyShown = roster.filter((r, i) => (petTexts[i] || "").includes(r.key) && r.key.includes("_"));
+    if (petTexts[0] !== "Rui · Red Panda" || keyShown.length) fails.push(`Pet list lines: first "${petTexts[0]}", ${keyShown.length} show a key`);
+    else trace.push("pets=name_and_kind");
     // A new keeper opening Minds reads that talk works without an AI; House lines hide the model, address, and key boxes.
     const intro = $("mindsIntro");
     if (!intro || intro.textContent !== "Pets talk without an AI. Adding one is optional.") fails.push(`Minds intro is ${intro ? intro.textContent : "missing"}`);
@@ -558,6 +563,20 @@ async function settingsWindow() {
     if (!/^A code is already saved in hwid\.txt\./.test(at.textContent)) fails.push(`with hwid.txt the mark line says "${at.textContent.slice(0, 60)}"`);
     else if (at.textContent.split("\n").length < 4) fails.push("the saved-code Details wording is not one sentence per line");
     else trace.push("details=folded_toggles", "mark=stored");
+
+    // The Unlock fields: plain labels, one helper line each, the same words as the blotter dialog.
+    const fieldWords = [
+      ["provider", "Where you own the game", /^Only Steam works here for now\./],
+      ["steamId", "Your Steam ID", /17 digits that start with 7656\. Steam shows it under Account details\.$/],
+      ["appId", "Steam App ID", /ComputerPets has no Steam page yet\.$/],
+    ];
+    const dialogPy = fs.readFileSync(path.join(__dirname, "unlock_dialog.py"), "utf8");
+    const unplainField = fieldWords.filter(([id, label, help]) => {
+      const line = $(`${id}Help`) ? $(`${id}Help`).textContent : "";
+      return !html.includes(`<label for="${id}">${label}</label>`) || !help.test(line) || !dialogPy.includes(`"${line}"`) || !dialogPy.includes(`"${label}"`);
+    });
+    if (unplainField.length) fails.push(`Unlock field words: ${unplainField.map(([id]) => id).join(", ")}`);
+    else trace.push("unlock_fields=plain_labels+helpers_same_as_blotter");
 
     // Unlock with no Steam ID, then against a refused connection: plain words only.
     $("backend").value = BACKEND;

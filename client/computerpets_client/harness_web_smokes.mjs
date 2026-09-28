@@ -4,7 +4,7 @@
  * --gui stays Electron desktop (gui-harness.cjs); this file is headless only.
  */
 import { createRequire } from "node:module";
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -1716,8 +1716,17 @@ async function mindsFlightPlain() {
       const talk = (start.match(/^- \*\*Talk\*\* [^\n]*$/m) || [""])[0];
       return talk.length > 0 && wordsIn(talk) <= 25;
     })(),
-    // The folded list: one pet per line, Rui's line first, Rose last, 109 pets in all.
-    talkListKept: /<summary>Which sound each pet makes \(for later\)<\/summary>\n\n\*\*Talk\*\* from Rui plays his warm house cry \(`red_panda\.wav`\)\.\nEvery other pet here plays its own cry the same way:\n\n(- [A-Z][a-z]+ prefers `[a-z_]+\.wav`\n){108}- Rose prefers `haloarchaea\.wav`\n\nWords still show in the bubble\.\nSystem speech stays the backup for other guests\.\n/.test(start),
+    // The folded list: Rui's line first, then small room headings, one pet per line, Rose last, 109 pets in all.
+    talkListKept: (() => {
+      const at = start.indexOf("<summary>Which sound each pet makes (for later)</summary>\n\n**Talk** from Rui plays his warm house cry (`red_panda.wav`).\nEvery other pet here plays its own cry the same way:\n\n");
+      const fold = at < 0 ? "" : start.slice(at, start.indexOf("</details>", at));
+      const lines = fold.split("\n").filter(Boolean).slice(3);
+      const pets = lines.filter((l) => /^- [A-Z][a-z]+ prefers `[a-z_]+\.wav`$/.test(l));
+      const heads = lines.filter((l) => /^\*\*[A-Z][A-Za-z -]+\*\*$/.test(l));
+      return pets.length === 109 && heads.length >= 8 && pets.length + heads.length + 2 === lines.length
+        && pets[pets.length - 1] === "- Rose prefers `haloarchaea.wav`"
+        && lines.slice(-2).join("\n") === "Words still show in the bubble.\nSystem speech stays the backup for other guests.";
+    })(),
   };
   if (startHere.bullets < 4 || startHere.bullets > 8 || startHere.longest > 20 || !startHere.desktopFirst || !startHere.honest || !startHere.helpers || !startHere.browserAfter || !startHere.detailKept || !startHere.talkShort || !startHere.talkListKept) bad.push(`START-HERE opening: ${JSON.stringify(startHere)}`);
 
@@ -1955,6 +1964,99 @@ async function flakeHousePlain() {
   ]);
 }
 
+/**
+ * Plain Unlock fields on the overlay and the blotter, "random ID" everywhere, the START-HERE cry list in
+ * small room groups, and the Git LFS check a Mac or Linux keeper needs (a Git without LFS copies text
+ * pointers for the overlay pictures, so every pet was invisible with no word why).
+ */
+async function unlockPlainLfs() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8").replace(/\r\n/g, "\n");
+  const settings = read("desktop", "renderer", "settings.html");
+  const dialogPy = read("client", "computerpets_client", "unlock_dialog.py");
+  const pyWord = (name) => (dialogPy.match(new RegExp(`^${name} = "([^"]*)"$`, "m")) || [])[1];
+
+  // 1) Unlock fields: a plain label and one true helper line each, word for word on both doors.
+  const fieldIds = { provider: "PROVIDER", steamId: "STEAM_ID", appId: "APP_ID" };
+  const fields = Object.fromEntries(Object.entries(fieldIds).map(([id, py]) => {
+    const label = pyWord(`${py}_LABEL`);
+    const help = pyWord(`${py}_HELP`);
+    return [id, !!label && !!help && settings.includes(`<label for="${id}">${label}</label>`) && settings.includes(`<p class="hint" id="${id}Help">${help}</p>`) && help.split(/\s+/).length <= 20];
+  }));
+  const honest = {
+    steamOnly: /^Only Steam works here for now\./.test(pyWord("PROVIDER_HELP") || "") && settings.includes('<select id="provider"><option value="steam">Steam</option></select>'),
+    steamIdShape: /17 digits that start with 7656/.test(pyWord("STEAM_ID_HELP") || ""),
+    noSteamPage: /ComputerPets has no Steam page yet\./.test(pyWord("APP_ID_HELP") || ""),
+    oldLabelsGone: !/<label>(Provider|Steam ID|App ID)<\/label>/.test(settings) && !/form\.addRow\("(Provider|Steam ID|App ID)"/.test(dialogPy),
+    petList: settings.includes("`${row.name} · ${row.speciesLabel}`") && dialogPy.includes('return f"{name} · {kind}" if kind else name'),
+    askTitle: pyWord("WEAK_ASK_TITLE") === "Could not read this computer's ID" && !/operating-system id/.test(dialogPy),
+  };
+  if (!Object.values(fields).every(Boolean) || !Object.values(honest).every(Boolean)) bad.push(`Unlock fields: ${JSON.stringify({ fields, honest })}`);
+
+  // 2) "random ID" in every user-facing place and pin; no lowercase "random id" left outside the ROADMAP history.
+  const idFiles = [
+    ["desktop", "renderer", "settings.html"], ["client", "computerpets_client", "unlock_dialog.py"], ["client", "computerpets_client", "license", "hwid.py"],
+    ["desktop", "license", "hwid.cjs"], ["desktop", "license", "hwid.test.cjs"], ["desktop", "license", "session.test.cjs"], ["client", "tests", "test_unlock.py"],
+    ["desktop", "README.md"], ["client", "README.md"], ["docs", "CLIENT-CONTRACT.md"], ["docs", "adr", "0030-missing-os-id-waits-for-a-yes.md"],
+  ];
+  const lower = idFiles.filter((f) => /\brandom id\b/.test(read(...f))).map((f) => f.join("/"));
+  const randomId = { lower, button: settings.includes(">Use the computer name, or a random ID if there is no name</button>"), python: pyWord("WEAK_FALLBACK_YES") === "Use the computer name, or a random ID if there is no name" };
+  if (lower.length || !randomId.button || !randomId.python) bad.push(`random ID: ${JSON.stringify(randomId)}`);
+
+  // 3) START-HERE: the folded cry list under small room headings, every pet and file kept, Rui's line first.
+  const start = read("docs", "START-HERE.md");
+  const sAt = start.indexOf("<summary>Which sound each pet makes (for later)</summary>");
+  const fold = sAt > 0 ? start.slice(sAt, start.indexOf("</details>", sAt)) : "";
+  const heads = [...fold.matchAll(/^\*\*([A-Z][A-Za-z -]+)\*\*$/gm)].map((m) => m[1]);
+  const pets = [...fold.matchAll(/^- ([A-Z][a-z]+) prefers `([a-z_]+)\.wav`$/gm)].map((m) => [m[1], m[2]]);
+  const sounds = {
+    heads,
+    pets: pets.length,
+    unique: new Set(pets.map(([, k]) => k)).size,
+    rui: fold.includes("**Talk** from Rui plays his warm house cry (`red_panda.wav`)."),
+    first: pets[0] && pets[0].join(" ") === "Soot crow",
+    last: pets.length > 0 && pets[pets.length - 1].join(" ") === "Rose haloarchaea",
+    kept: fold.includes("Words still show in the bubble.") && fold.includes("System speech stays the backup for other guests."),
+  };
+  if (heads.length !== 10 || sounds.pets !== 109 || sounds.unique !== 109 || !sounds.rui || !sounds.first || !sounds.last || !sounds.kept) bad.push(`START-HERE sounds: ${JSON.stringify(sounds)}`);
+
+  // 4) Git LFS: the overlay pictures are LFS files; both start scripts say so in plain words and stop early.
+  const attrs = read(".gitattributes");
+  const sh = read("desktop.sh");
+  const ps1 = read("desktop.ps1");
+  const lfsStop = (src) => {
+    const printed = src.search(/pictures: \$seen/);
+    const stop = src.search(/The pet pictures did not download\. They come through Git LFS/);
+    const install = src.search(/& npm install|^\s*npm install \|\|/m);
+    return printed > 0 && stop > printed && stop < install && /version https:\/\/git-lfs/.test(src) && /git lfs install and then git lfs pull/.test(src);
+  };
+  const mac = start.slice(start.indexOf("\n## Mac\n"), start.indexOf("\n## Linux\n"));
+  const linux = start.slice(start.indexOf("\n## Linux\n"), start.indexOf("\n## Another way to visit them (browser)\n"));
+  const lfs = {
+    attrs: /^desktop\/renderer\/sprites\/\*\* filter=lfs/m.test(attrs),
+    sh: lfsStop(sh),
+    ps1: lfsStop(ps1),
+    docs: [mac, linux].every((part) => /git lfs install/.test(part) && /git lfs pull/.test(part)) && /git lfs pull/.test(read("README.md")) && /lfs-pointers/.test(read("desktop", "README.md")),
+    test: existsSync(join(RENDERER, "sprites-real.test.cjs")) && /version https:\/\/git-lfs/.test(read("desktop", "renderer", "sprites-real.test.cjs")),
+    harness: /launch_pictures_state/.test(read("client", "computerpets_client", "app_harness.py")),
+  };
+  if (!Object.values(lfs).every(Boolean)) bad.push(`Git LFS check: ${JSON.stringify(lfs)}`);
+
+  const roadmap = read("docs", "ROADMAP.md");
+  const entry = roadmap.includes("- [x] Mac and Linux keepers are told when the pet pictures did not download");
+  if (!entry) bad.push("ROADMAP entry missing");
+  const extras = { fields, honest, randomId, sounds, lfs };
+  if (bad.length) return fail(bad.join("; "), extras);
+  return ok("Unlock fields have plain labels and one true helper each on the overlay and the blotter; random ID everywhere; the START-HERE cry list sits under room headings; both start scripts stop with plain Git LFS words when the pictures are pointers", extras, [
+    "unlock_fields=plain_labels+helpers_same",
+    "pet_list=name_and_kind",
+    "random_id=capital_ID_everywhere",
+    "start_here=cry_list_room_groups",
+    "lfs=start_scripts_stop_on_pointers",
+    "lfs=mac_linux_docs",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -1975,6 +2077,7 @@ const COMMANDS = {
   minds_flight_plain: mindsFlightPlain,
   overlay_birds_plain: overlayBirdsPlain,
   flake_house_plain: flakeHousePlain,
+  unlock_plain_lfs: unlockPlainLfs,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

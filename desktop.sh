@@ -31,12 +31,26 @@ pieces() {
 }
 state=$(pieces)
 
+# 3. The pictures. The overlay's pet pictures are stored with Git LFS. A Git without LFS (common on
+#    Mac and Linux) copies small text pointers instead, and every pet would be invisible.
+picture=renderer/sprites/crow/idle/1.png
+pictures() {
+  if [ ! -f "$picture" ]; then echo missing
+  elif head -c 23 "$picture" | grep -q '^version https://git-lfs'; then echo lfs-pointers
+  else echo ready
+  fi
+}
+seen=$(pictures)
+
 # --check says what the start sees and changes nothing: no install, no overlay.
 if [ "${1:-}" = "--check" ]; then
   echo "ok: node $version"
   echo "pieces: $state"
+  echo "pictures: $seen"
   exit 0
 fi
+
+[ "$seen" = ready ] || stop_start "The pet pictures did not download. They come through Git LFS, which this Git does not have yet. Install Git LFS from https://git-lfs.com, then in the computerpets folder run git lfs install and then git lfs pull, and run sh desktop.sh again."
 
 if [ "$state" != ready ]; then
   echo "Getting the pieces (npm install). The first time can take a few minutes. Leave this window open."
@@ -46,5 +60,5 @@ if [ "$state" != ready ]; then
   date > "$stamp"
 fi
 
-# 3. Turn the pets on. npm start is electron .
+# 4. Turn the pets on. npm start is electron .
 exec npm start

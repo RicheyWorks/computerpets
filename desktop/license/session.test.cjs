@@ -381,7 +381,7 @@ describe("license session", () => {
           petType: "red_panda",
           provider: "steam",
         }),
-      (err) => err instanceof LicenseError && err.code === "hwid_needs_fallback_yes" && /computer name/.test(err.message) && /random id/.test(err.message)
+      (err) => err instanceof LicenseError && err.code === "hwid_needs_fallback_yes" && /computer name/.test(err.message) && /random ID/.test(err.message)
     );
     assert.equal(backend.calls.length, 0);
     assert.equal([...files.keys()].some((key) => key.endsWith("hwid.txt")), false);

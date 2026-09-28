@@ -108,6 +108,37 @@ test("the start checks Node and the pieces in plain words, and a half-finished i
   assert.match(startSrc, /gets the pieces again/);
 });
 
+test("the start checks the pet pictures came through Git LFS, and says how to get them in plain words", () => {
+  const shSrc = readFileSync(join(repo, "desktop.sh"), "utf8");
+  const attrs = readFileSync(join(repo, ".gitattributes"), "utf8");
+  // The overlay pictures really are Git LFS files, so a Git without LFS leaves text pointers.
+  assert.match(attrs, /^desktop\/renderer\/sprites\/\*\* filter=lfs/m);
+  for (const src of [ps1Src, shSrc]) {
+    assert.match(src, /renderer[\\/]+sprites[\\/]+crow[\\/]+idle[\\/]+1\.png/);
+    assert.match(src, /version https:\/\/git-lfs/);
+    assert.match(src, /The pet pictures did not download\. They come through Git LFS/);
+    assert.match(src, /https:\/\/git-lfs\.com/);
+    assert.match(src, /git lfs install and then git lfs pull/);
+    // Check mode prints the pictures line; the real start stops on pointers before npm install and npm start.
+    const printed = src.search(/pictures: \$seen/);
+    const stop = src.search(/The pet pictures did not download/);
+    assert.ok(printed > 0 && printed < stop, "check mode prints pictures before the stop");
+    assert.ok(stop < src.search(/& npm install|^\s*npm install \|\|/m), "the pictures stop comes before npm install");
+    assert.ok(stop < src.lastIndexOf("npm start"), "the pictures stop comes before npm start");
+  }
+  // Mac and Linux keepers are told to get Git LFS before they copy the pets, and how to fix a copy made without it.
+  const mac = startSrc.slice(startSrc.indexOf("\n## Mac\n"), startSrc.indexOf("\n## Linux\n"));
+  const linux = startSrc.slice(startSrc.indexOf("\n## Linux\n"), startSrc.indexOf("\n## Another way to visit them (browser)\n"));
+  for (const part of [mac, linux]) {
+    assert.match(part, /git lfs install/);
+    assert.match(part, /git lfs pull/);
+    assert.ok(part.indexOf("git lfs install") < part.indexOf("sh desktop.sh"), "LFS comes before the start");
+  }
+  assert.match(mac, /brew install git-lfs/);
+  assert.match(linux, /sudo apt install git-lfs/);
+  assert.match(readmeSrc, /git lfs pull/);
+});
+
 test("the taught house is the overlay that runs: keeper card, On the desk, local care", () => {
   assert.match(startSrc, /keeper card/);
   assert.match(startSrc, /Hunger, Rest, Bond/);
