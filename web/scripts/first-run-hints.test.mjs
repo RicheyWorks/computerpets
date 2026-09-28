@@ -201,7 +201,7 @@ test("overlay choice menu keys match the web sit menu", () => {
   assert.match(html, /<div id="choice" data-hit role="menu" aria-label="A sit" aria-orientation="vertical"><\/div>/);
   const pet = desk("renderer/pet.js");
   assert.match(pet, /btn\.setAttribute\("role", "menuitem"\);\n\s+btn\.tabIndex = i === 0 \? 0 : -1;/);
-  assert.match(pet, /const act = P\.menuKey\(e\.key, items\.indexOf\(document\.activeElement\), items\.length\);/);
+  assert.match(pet, /const act = P\.menuKey\(e\.key, items\.indexOf\(\/\*\* @type \{HTMLElement\} \*\/ \(document\.activeElement\)\), items\.length\);/);
   assert.match(pet, /const inMenu = !!\(choiceEl && choiceEl\.contains\(document\.activeElement\)\);\n\s+closeChoice\(\);\n\s+if \(inMenu\) returnChoiceFocus\(\);/);
   assert.match(pet, /const out = choiceOpen && choiceEl \? focusablesIn\(choiceEl\) : \[\];/);
   // The first document keydown in pet.js is still the menu's dismiss (it classifies the key first).

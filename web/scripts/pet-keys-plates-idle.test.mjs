@@ -144,7 +144,7 @@ test("admin: Details is a real toggle, the list has a name, focus follows lock a
   assert.match(page, /<h2 id=\{ledgerId\} className="sr-only">\n\s+\{ledgerCaption\(rows\.length\)\}/);
   assert.match(page, /<ul className="space-y-3" aria-labelledby=\{ledgerId\} ref=\{ledgerList\}>/);
   assert.match(page, /\(focusAfterGate\(unlocked\) === "search" \? searchInput : keyInput\)\.current\?\.focus\(\);/);
-  assert.match(page, /showError\(err, "Unlock failed\."\);\n\s+keyInput\.current\?\.focus\(\);/);
+  assert.match(page, /showError\(err, ADMIN_FALLBACK\.unlock\);\r?\n\s+keyInput\.current\?\.focus\(\);/);
   assert.match(page, /ref=\{keyInput\}\n\s+type="password"/);
   assert.match(page, /ref=\{searchInput\}/);
 });

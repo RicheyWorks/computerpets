@@ -94,7 +94,7 @@ test("admin revoke: only the ledger's own {revoked:true, jti} confirmation count
   assert.equal(B.isRevokeDone("<html>ok</html>", "a1"), false);
   const api = src("src/lib/admin/api.ts");
   const revoke = api.slice(api.indexOf("export async function revokeLicense"));
-  const ok = revoke.indexOf('if (!res.ok) throw await failure(res, "Revoke failed.");');
+  const ok = revoke.indexOf("if (!res.ok) throw await failure(res, ADMIN_FALLBACK.revoke);");
   const done = revoke.indexOf('if (!isRevokeDone(await readJsonBody(res), jti)) throw notTheService(res.status, "the ledger\'s revoke confirmation");');
   assert.ok(ok > 0 && done > ok, "the confirmation is checked after a 2xx");
   // The Java service answers exactly this shape.

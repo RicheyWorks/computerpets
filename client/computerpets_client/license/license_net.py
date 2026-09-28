@@ -16,10 +16,10 @@ from urllib.parse import urlparse
 
 from .errors import LicenseError
 
-LICENSE_HOST_NAME = "the license host"
+LICENSE_HOST_NAME = "the license website"
 LOCAL_STAYS = "Unlocking stays on this computer. The code made from this computer's ID does not leave."
 DOWNLOAD_LOCAL = "This download stays on this computer. It talks to this computer. It does not send the code made from this computer's ID."
-BUNDLE_HOST_NAME = "the bundle host"
+BUNDLE_HOST_NAME = "the download website"
 BUNDLE_IDLE = "Your pet's files are not downloaded until this line names the website."
 BUNDLE_LOCAL = "This download stays on this computer. Your pet's files come from this computer."
 _LOOPBACK = frozenset({"127.0.0.1", "localhost", "::1"})

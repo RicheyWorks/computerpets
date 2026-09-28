@@ -1,4 +1,4 @@
-/** Desk quotes. Coins (majors + pump.fun-style contract paste) + NFT collections/marketplaces. A quote waits until the open quotes plate shows the line that names the website (Google News, Wikipedia, CoinGecko, GeckoTerminal, Yahoo Finance) and says this computer's internet address goes there too. CoinGecko, GeckoTerminal, Yahoo, and a typed look-up also refuse inside the read wrappers when that painted line is missing. A host that never answers times out after twelve seconds. That miss rejects so the plate can flip to unread / "can't reach". A late body is not parsed. Same map as desktop market.js. No invented key. */
+/** Prices for the quotes plate: big coins, a small coin pasted by its address (the pump.fun kind), stocks, and NFT collection floors with marketplace links. Nothing is asked for until the quotes plate is open and shows the line that names the website (CoinGecko, GeckoTerminal, or Yahoo Finance) and says this computer's internet address goes there too. The CoinGecko, GeckoTerminal, Yahoo, and typed look-up reads check for that line themselves and ask nothing without it. A website that does not answer in twelve seconds counts as a miss: the plate says "can't reach", and an answer that comes later is thrown away. No made-up prices and no key. Same map as desktop `market.js`. */
 import { PLAIN_NET_HEAD, PLAIN_NET_TAIL, plainNetLine } from "./weather-areas.ts";
 
 export const MARKET_LABEL = "Quotes";
@@ -339,7 +339,7 @@ export function lookMayLeave(shown: unknown): boolean {
 
 type JsonFetch = (url: string, init?: RequestInit) => Promise<{ json: () => Promise<unknown> }>;
 
-/** Twelve seconds covers headers and the body. Matches weather page and overlay plate IPC. */
+/** Twelve seconds covers the whole answer. The same wait as the weather page and the overlay plates. */
 export const QUOTE_TIMEOUT_MS = 12_000;
 
 /** A silent quote host. Callers flip the plate to unread / "can't reach". */

@@ -146,7 +146,7 @@ def network_class(err: object) -> str | None:
 def _sentence(kind: str, host: str, status: int = 0) -> str:
     at = _where(host)
     if kind == "notfound":
-        return f"Couldn't find {at}. Check the Backend URL. {PETS_STILL}"
+        return f"Couldn't find {at}. Check the house server address. {PETS_STILL}"
     if kind == "timeout":
         return f"{_capital(at)} took too long to answer. {PETS_STILL}"
     if kind == "tls":
@@ -168,7 +168,7 @@ def house_sentence(code: str, host: str = "") -> str:
         "denied": f"{_capital(at)} did not confirm that you own the game. Check the Steam ID and the App ID, then try again. {PETS_STILL}",
         "decrypt_failed": f"The license on this computer could not be opened, so it was not used. Unlock again to get a fresh one. {PETS_STILL}",
         "missing_secret": f"This copy of the app has no license key set up, so it cannot open a license. {PETS_STILL}",
-        "missing_backend": f"The Backend URL is not a web address. It should look like http://127.0.0.1:8081 or https://house.example. {PETS_STILL}",
+        "missing_backend": f"The house server address needs to be a web address, like http://127.0.0.1:8081 or https://house.example. {PETS_STILL}",
         "bad_response": f"{_capital(at)} sent an answer this app does not understand. Try again later. {PETS_STILL}",
         "download_failed": f"{_capital(at)} did not hand over the download. Unlock again, then download. {PETS_STILL}",
         "unknown_provider": f"{_capital(at)} does not know this store. Pick Steam and try again. {PETS_STILL}",

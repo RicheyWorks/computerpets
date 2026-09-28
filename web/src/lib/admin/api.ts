@@ -43,6 +43,16 @@ export class AdminApiError extends HouseError {
   }
 }
 
+/**
+ * What each admin button says when the license service gave no plain reason of its own.
+ * Whole sentences that say what did not happen and what to do next.
+ */
+export const ADMIN_FALLBACK = {
+  unlock: "Couldn't open the license list. Try again in a moment.",
+  lookup: "Couldn't look up those licenses. Try again in a moment.",
+  revoke: "The license was not revoked. Try again in a moment.",
+} as const;
+
 /** A 401: the key is wrong, or this computer's clock is far enough off that the signature is stale. */
 export const ADMIN_KEY_REJECTED =
   "The license service did not accept this admin key. Check the key and this computer's clock, then try again.";
@@ -177,7 +187,7 @@ async function adminFetch(apiBase: string, adminKey: string, path: string, init?
 export async function unlockAdmin(apiBase: string, adminKey: string): Promise<LicenseAudit[]> {
   const res = await adminFetch(apiBase, adminKey, "/api/admin/licenses");
   if (res.status === 404) throw await failure(res, NOT_LICENSE_SERVICE);
-  if (!res.ok) throw await failure(res, "Unlock failed.");
+  if (!res.ok) throw await failure(res, ADMIN_FALLBACK.unlock);
   const body = await readJsonBody(res);
   if (!isLicenseList(body)) throw notTheService(res.status, "a license list");
   saveAdminSession(apiBase, adminKey);
@@ -191,7 +201,7 @@ export async function getLicense(apiBase: string, adminKey: string, jti: string)
     if (isLicenseMissing(await readJsonBody(res))) return null;
     throw notTheService(404, "the ledger's not-found answer");
   }
-  if (!res.ok) throw await failure(res, "Lookup failed.");
+  if (!res.ok) throw await failure(res, ADMIN_FALLBACK.lookup);
   const body = await readJsonBody(res);
   if (!isLicenseRow(body)) throw notTheService(res.status, "a license row");
   return body as LicenseAudit;
@@ -207,7 +217,7 @@ export async function listLicenses(
     : "/api/admin/licenses";
   const res = await adminFetch(apiBase, adminKey, path);
   if (res.status === 404) throw await failure(res, NOT_LICENSE_SERVICE);
-  if (!res.ok) throw await failure(res, "Lookup failed.");
+  if (!res.ok) throw await failure(res, ADMIN_FALLBACK.lookup);
   // Same check as unlock: only a license list is an answer from the license service.
   const body = await readJsonBody(res);
   if (!isLicenseList(body)) throw notTheService(res.status, "a license list");
@@ -238,7 +248,7 @@ export async function revokeLicense(apiBase: string, adminKey: string, jti: stri
     if (typeof reason === "string" && reason) console.error("[admin] license service 404:", reason);
     throw new AdminApiError(404, "Not found or already revoked.", typeof reason === "string" ? reason : "");
   }
-  if (!res.ok) throw await failure(res, "Revoke failed.");
+  if (!res.ok) throw await failure(res, ADMIN_FALLBACK.revoke);
   // Only the ledger's own {"revoked":true, "jti":<this jti>} counts as revoked.
   if (!isRevokeDone(await readJsonBody(res), jti)) throw notTheService(res.status, "the ledger's revoke confirmation");
 }

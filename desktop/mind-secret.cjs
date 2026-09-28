@@ -464,7 +464,7 @@ function writeMindRecord(data, codec, previous) {
     if (prior) return { file: { ...prefs, [SEALED]: prior }, kept: "none" };
     return { file: prefs, kept: "none" };
   }
-  const locked = data && typeof data === "object" && data.keyKept === "locked" && prior;
+  const locked = data && typeof data === "object" && "keyKept" in data && data.keyKept === "locked" && prior;
   if (locked) return { file: { ...prefs, [SEALED]: prior }, kept: "locked" };
   return { file: prefs, kept: "empty" };
 }

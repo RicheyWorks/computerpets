@@ -216,8 +216,8 @@ test("clipboard and file-system grants stay denied; geolocation is not a standin
   const radioBody = pet.slice(pet.indexOf("function lookupRadio"), pet.indexOf("function skyLabel"));
   assert.ok(radioBody.indexOf("radioMaySend") < radioBody.indexOf("readRadioSearch"));
   assert.doesNotMatch(radioBody, /fetch\(url,/);
-  const coinAt = pet.indexOf('e.target.id === "market-add"');
-  const nftAt = pet.indexOf('e.target.id === "nft-add"');
+  const coinAt = pet.indexOf('eventEl(e).id === "market-add"');
+  const nftAt = pet.indexOf('eventEl(e).id === "nft-add"');
   assert.ok(pet.slice(coinAt, nftAt).indexOf("quoteLookMaySend") < pet.slice(coinAt, nftAt).indexOf("readQuoteSearch"));
   assert.ok(pet.slice(nftAt, nftAt + 1500).indexOf("quoteLookMaySend") < pet.slice(nftAt, nftAt + 1500).indexOf("readQuoteSearch"));
   const refreshAt = pet.lastIndexOf("fetchNews();\n  fetchMarket();");

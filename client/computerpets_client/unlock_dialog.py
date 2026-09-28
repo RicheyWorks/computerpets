@@ -43,7 +43,7 @@ WEAK_FALLBACK_YES = "Use the computer name, or a random id if there is no name"
 
 # The short first line. The privacy detail folds under Details, in whole sentences.
 UNLOCK_INTRO = "Pets work without unlocking. Unlocking is optional."
-UNLOCK_WHAT = "Unlock proves Steam ownership to the house backend. It does not open a second overlay."
+UNLOCK_WHAT = "Unlock proves Steam ownership to the house server. It does not open a second overlay."
 DETAILS_LABEL = "Details"
 
 # Each sentence is checked against license/hwid.py and license/session.py:
@@ -64,8 +64,8 @@ MARK_UNREAD_TEXT = " ".join(
         "license belongs to this computer.",
         "The code still works like a fingerprint for this computer, because this computer always makes "
         "the same code.",
-        "The line under Backend URL names the website before the code is sent.",
-        "If the backend is on this computer, the code stays on this computer.",
+        "The line under the house server address names the website before the code is sent.",
+        "If the house server is on this computer, the code stays on this computer.",
         "If the app cannot read that ID, Unlock stops and asks you first.",
         "It uses the computer's name only after you say yes, and it uses a random ID instead if this "
         "computer has no name.",
@@ -81,8 +81,8 @@ MARK_STORED_TEXT = " ".join(
         "The ID itself is never sent.",
         "The code still works like a fingerprint for this computer, because this computer always makes "
         "the same code.",
-        "The line under Backend URL names the website before the code is sent.",
-        "If the backend is on this computer, the code stays on this computer.",
+        "The line under the house server address names the website before the code is sent.",
+        "If the house server is on this computer, the code stays on this computer.",
     )
 )
 
@@ -183,7 +183,7 @@ class UnlockDialog(QDialog):
             self.pet_type.setEditText(str(current))
 
         form = QFormLayout()
-        form.addRow("Backend URL", self.backend)
+        form.addRow("House server address", self.backend)
         form.addRow("", self.net)
         form.addRow("", self.bundle)
         form.addRow("Provider", QLabel("steam"))
@@ -367,7 +367,7 @@ class UnlockDialog(QDialog):
     def _begin_unlock(self, allow_weak: bool) -> bool:
         self._unlock_allowed_weak = allow_weak
         self.err.setText("")
-        self.ok.setText("Talking to the backend…")
+        self.ok.setText("Asking the house server…")
         fields = {
             "backendUrl": self.backend.text().strip(),
             "provider": "steam",

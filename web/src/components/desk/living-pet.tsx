@@ -4,7 +4,10 @@ import type { SpritePack } from "@/lib/pets/living";
 import { playDeskSound, playStep } from "@/lib/pets/desk-audio";
 import {
   beginPickedTrick,
+  nextGroundTrickWait,
   sleepHoldFrame,
+  stepGroundHappy,
+  stepGroundTrick,
   startThankYou,
   tricksFor,
   type GroundHappy,
@@ -13,6 +16,7 @@ import {
   type GroundTrickKind,
 } from "@/lib/pets/ground-tricks";
 import { paintDemoFrame } from "@/lib/pets/desk-sprite-surface";
+import { guardedLoop, makeGuard, safeIdle } from "@/lib/pets/frame-guard";
 import {
   actPose,
   afterSettleWait,
@@ -442,10 +446,10 @@ export function LivingPet({
       {
         const GT = tricksFor(kindRef.current);
         if (s.trick && GT && GT.shouldAbort({ asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd, windowPlay: !!s.play })) {
-          s.trick = GT.stepTrick(s.trick as never, 0, { asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd, windowPlay: !!s.play }) as GroundTrick;
+          s.trick = stepGroundTrick(GT, s.trick, 0, { asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd, windowPlay: !!s.play });
         }
         if (s.happy && GT && GT.happyShouldAbort({ asleep: false, hidden: hiddenRef.current, leaving: s.leaving, cmd })) {
-          s.happy = GT.stepHappy(s.happy as never, 0, { asleep: false, hidden: hiddenRef.current, leaving: s.leaving, cmd }) as GroundHappy;
+          s.happy = stepGroundHappy(GT, s.happy, 0, { asleep: false, hidden: hiddenRef.current, leaving: s.leaving, cmd });
         }
       }
       if (asleepRef.current && cmd !== "talk" && cmd !== "play" && cmd !== "eat" && cmd !== "seek" && cmd !== "leave" && cmd !== "enter") {
@@ -556,8 +560,16 @@ export function LivingPet({
       }
     };
 
-    const tick = (now: number) => {
-      try {
+    // One broken frame (a trick module that throws, a bad pose) is logged once per error and pet,
+    // sends this pet back to a safe idle, and the next frame runs as usual.
+    const frameGuard = makeGuard({
+      reset: () => {
+        safeIdle(s);
+        clearAct();
+      },
+    });
+
+    const frame = (now: number) => {
       const dt = Math.min(0.1, (now - last) / 1000);
       last = now;
       const box = stageBox();
@@ -595,12 +607,12 @@ export function LivingPet({
         };
         const GT = tricksFor(kindRef.current);
         if (s.happy && GT) {
-          s.happy = GT.stepHappy(s.happy as never, dt, {
+          s.happy = stepGroundHappy(GT, s.happy, dt, {
             asleep: false,
             hidden: hiddenRef.current,
             leaving: s.leaving,
             cmd: cmdRef.current,
-          }) as GroundHappy;
+          });
           s.x = s.happy.x;
           if (!asleepRef.current) s.anim = s.happy.anim;
           if (s.happy.phase === "done") {
@@ -622,14 +634,14 @@ export function LivingPet({
             s.trickWait = GT ? GT.nextTrickWait(true) : 9 + Math.random() * 8;
           }
         } else if (s.trick && GT) {
-          s.trick = GT.stepTrick(s.trick as never, dt, {
+          s.trick = stepGroundTrick(GT, s.trick, dt, {
             asleep: asleepRef.current,
             hidden: hiddenRef.current,
             leaving: s.leaving,
             cmd: cmdRef.current,
             windowPlay: false,
             card: !!cardRef.current,
-          }) as GroundTrick;
+          });
           s.x = s.trick.x;
           if (!asleepRef.current) s.anim = s.trick.anim;
           if (s.trick.phase === "done") {
@@ -637,7 +649,7 @@ export function LivingPet({
             s.trick = null;
             s.land = 1;
             s.anim = asleepRef.current ? "sleep" : "idle";
-            s.trickWait = GT.nextTrickWait(true, undefined, s.lastTrick as never);
+            s.trickWait = nextGroundTrickWait(GT, true, undefined, s.lastTrick);
           }
         } else if (
           !reduced &&
@@ -938,12 +950,16 @@ export function LivingPet({
           el.style.transform = `translate3d(${d.x}px, ${-floorY(height) + d.y}px, 0)`;
         }
       }
-
-      raf = requestAnimationFrame(tick);
-      } catch {
-        raf = requestAnimationFrame(tick);
-      }
     };
+
+    const tick = guardedLoop(
+      frame,
+      (next) => {
+        raf = requestAnimationFrame(next);
+      },
+      frameGuard,
+      () => kindRef.current ?? "red_panda",
+    );
 
     raf = requestAnimationFrame(tick);
 
