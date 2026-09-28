@@ -1976,6 +1976,21 @@ def _card_rows() -> list[Affordance]:
             ),
         ),
         Affordance(
+            "card.long_walk_talk",
+            "card",
+            "Past the first minute: the held card on a leash, the menu's card holds, a cloud talk waits for its line and says why it failed",
+            "keeper.js cardHeldSpot / CARD_LEASH_PX / lineShows + pet.js openKeeperCard / talkLineInView + mind.js talkProblemLine",
+            notes=(
+                "Source smoke via harness_smokes (card_long_walk_talk): on a long walk the held card is pulled along at "
+                "CARD_LEASH_PX (it stood 672 px behind the pet); a card opened from the menu counts as a press, so it "
+                "does not fold on the next wander step; the pet's idle chooser leaves a Hide or Call back walk alone (a "
+                "Hide longer than its line became a wander and the pet never hid); a Talk to a mind on the internet opens the card and leaves only "
+                "once the line naming the website is really in view (it left from a folded card); a refused key still "
+                "gets a house line and says why in the web's MIND_LINES words (mind.js runs in a vm, fetch answered 401). "
+                "Driven for real by gui.first_run_drive under --gui."
+            ),
+        ),
+        Affordance(
             "card.notify_open",
             "card",
             "Notif deep-link opens pet card on need",
@@ -2177,6 +2192,8 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("card_paint_wire", domain="card", action_id=aid)
     if local_id == "walk_rules":
         return _run_node_smoke("card_walk_rules", domain="card", action_id=aid)
+    if local_id == "long_walk_talk":
+        return _run_node_smoke("card_long_walk_talk", domain="card", action_id=aid)
     main_rows = {
         "alarm": "alarm_clock",
         "timer": "timer_clock",
@@ -3335,7 +3352,7 @@ def _gui_rows() -> list[Affordance]:
             mode="gui",
             fate="excluded",
             exclude_reason=(
-                "Opens real windows on the keeper's screen for about a minute. Default stays excluded. "
+                "Opens real windows on the keeper's screen for about five minutes. Default stays excluded. "
                 "Pass --gui on BLACKBEARD to launch desktop Electron with a throwaway --user-data-dir under "
                 "target/first-run-drive (removed after; it stops if userData is anything else) and walk the first run: "
                 "the hello on an open keeper card that fits the screen, Got it at least 24 px, the pet on screen, the "
@@ -3345,10 +3362,18 @@ def _gui_rows() -> list[Affordance]:
                 "the hello unread and read, Got it kept in card.json, a click on the pet making the window focusable "
                 "and Escape closing the card, the card at the right edge, the House window (Minds, Unlock, #unlock "
                 "kept through a reload, close), Hide the window and tray Show, Quit, and a second start without the "
-                "hello. Menus are recorded, "
+                "hello. Past the first minute: the window inside the work area, the menu at the pet, a card opened from "
+                "the menu staying up, every care word from the card and the menu (Feed, Treat, Play, the trick, Praise, "
+                "Medicine, Talk, Rest, Hide, Call back) moving its stat the right way and the pet back to normal, the "
+                "held card within a leash of the pet on a long walk, Minds (House lines first; xAI with a stand-in key "
+                "sealed; a Talk from the menu opening the card and leaving only with its line in view; the refused key "
+                "saying why; every api.x.ai request answered 401 inside the drive), the talk sound muted and volume 35, "
+                "another pet from Companions, and all of it after the restart. `--scale 1.25` / `1.5` adds "
+                "--force-device-scale-factor. Menus are recorded, "
                 "not popped up, and input goes through Chromium (CDP), never the OS mouse or keyboard. "
                 "Offline pins: desktop/renderer/first-run-fit.test.cjs, desktop/renderer/first-run-drive.test.cjs, "
-                "desktop/renderer/card-rules.test.cjs, and card.walk_rules."
+                "desktop/renderer/card-rules.test.cjs, desktop/renderer/desk-drive-long.test.cjs, card.walk_rules, "
+                "and card.long_walk_talk."
             ),
         ),
     ]
@@ -3645,7 +3670,7 @@ def _run_first_run_drive() -> InvokeResult:
     try:
         proc = subprocess.run(
             [node, str(script)], capture_output=True, text=True, encoding="utf-8", errors="replace",
-            cwd=str(repo_root()), timeout=240, check=False, env=env,
+            cwd=str(repo_root()), timeout=480, check=False, env=env,
         )
     except Exception as exc:  # noqa: BLE001
         err = f"{type(exc).__name__}: {exc}"

@@ -249,6 +249,57 @@ function cardWalkRules() {
   return ok("order walks kept; card holds and stands off plates; tap takes keys", { x, holdMs: K.CARD_PRESS_HOLD_MS, resumes }, trace);
 }
 
+/**
+ * Past the first minute (the longer first-run drive): the held card on a leash, a card opened from the menu counted
+ * as a press, a cloud talk only with its line really in view, and a refused key that says why (the web's words).
+ * mind.js runs in a vm with its fetch answered 401 here; nothing leaves the machine.
+ */
+async function cardLongWalkTalk() {
+  const vm = require("node:vm");
+  const K = load("keeper.js");
+  const petSrc = fs.readFileSync(path.join(RENDERER, "pet.js"), "utf8");
+  const trace = [];
+  const w = 314;
+  const far = K.cardHeldSpot({ open: true, walking: true, held: { x: 1742, lift: 0 }, x: 1100, lift: 0, petLeft: 1000, petRight: 1176, w, width: 2560 });
+  if (typeof K.CARD_LEASH_PX !== "number" || far.x !== 1176 + K.CARD_LEASH_PX) return fail(`held card at ${far.x}, not pulled to the pet`, { x: far.x });
+  trace.push(`leash=${K.CARD_LEASH_PX}px`);
+  if (!/lastCardPress = performance\.now\(\);\n\s+persistCard\(\);/.test(petSrc)) return fail("opening the card is not a press");
+  trace.push("open=counts_as_press");
+  if (!K.keeperWalkOn || !K.keeperWalkOn({ cmd: "leave", target: 16 }) || K.keeperWalkOn({ cmd: "wander", target: 16 }) || !petSrc.includes("if (window.PetKeeper?.keeperWalkOn?.({ cmd: sim.cmd, target: sim.target })) return;")) {
+    return fail("the idle chooser can swap a Hide walk for a wander");
+  }
+  trace.push("hide_walk=kept");
+  const card = { left: 1000, top: 18, right: 1320, bottom: 900 };
+  if (!K.lineShows || K.lineShows({ left: 0, top: 0, right: 0, bottom: 0 }, card, 2560, 1392) || !K.lineShows({ left: 1016, top: 600, right: 1300, bottom: 640 }, card, 2560, 1392)) {
+    return fail("lineShows judgement drifted");
+  }
+  if (!petSrc.includes("return lineOnCard(el);") || !/pendingTalk = result;\n(\s+\/\/[^\n]*\n)*\s+openKeeperCard\(\);/.test(petSrc)) {
+    return fail("a cloud talk can leave with its line out of view");
+  }
+  trace.push("talk=line_in_view_first");
+  const store = () => ({ getItem: () => null, setItem: () => {}, removeItem: () => {} });
+  const win = {
+    PetWeatherAreas: load("weather-areas.js"),
+    localStorage: store(),
+    sessionStorage: store(),
+    URL,
+    URLSearchParams,
+    AbortController,
+    setTimeout,
+    clearTimeout,
+    fetch: async () => ({ ok: false, status: 401, json: async () => ({}) }),
+  };
+  win.window = win;
+  vm.runInContext(fs.readFileSync(path.join(RENDERER, "mind.js"), "utf8"), vm.createContext(win));
+  const M = win.PetMind;
+  await M.save({ default: { plugin: "xai", apiKey: "stand-in-not-real" }, voice: "browser", pets: {} });
+  const reply = await M.run({ species: "red_panda", fallback: "house line", lineInView: true, shown: M.talkHonesty(M.binding("red_panda")) });
+  const line = M.talkProblemLine(reply.problem);
+  if (reply.text !== "house line" || reply.problem !== "key" || !/did not accept your key/.test(line)) return fail("a refused key is silent", { problem: reply.problem });
+  trace.push("refused_key=says_why");
+  return ok("card on a leash; opening is a press; Hide walks kept; talk waits for its line; a refused key says why", { leash: K.CARD_LEASH_PX, problem: reply.problem, line }, trace);
+}
+
 /** Keeper-card house-server row: hidden with no server named, the saved URL wins, plain words only. */
 function houseServerRow() {
   const H = require(path.join(__dirname, "..", "..", "desktop", "house-server.cjs"));
@@ -1115,6 +1166,7 @@ const COMMANDS = {
   choice_close_exit: choiceCloseExit,
   card_paint_wire: cardPaintWire,
   card_walk_rules: cardWalkRules,
+  card_long_walk_talk: cardLongWalkTalk,
   house_server_row: houseServerRow,
   news_favorites: newsFavorites,
   market_favorites: marketFavorites,
