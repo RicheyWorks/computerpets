@@ -4,3 +4,8 @@ web/public/pets/** filter=lfs diff=lfs merge=lfs -text
 # Shell scripts run under /bin/sh on Linux and Mac. Keep them LF on every checkout,
 # so a build made on Windows (core.autocrlf=true) does not ship CRLF probes.
 *.sh text eol=lf
+# YAML is read by line-anchored checks (deploy/**/*.test.sh grep for lines that end in a word). A
+# Windows checkout with core.autocrlf=true left a carriage return on every line, and 17 of the 37
+# deploy checks failed. Keep YAML LF everywhere. Terraform (.tf/.hcl) passes either way, so it is not pinned.
+*.yaml text eol=lf
+*.yml text eol=lf
