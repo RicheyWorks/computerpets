@@ -3,6 +3,7 @@ import { CompanionRoom } from "@/components/desk/companion-room";
 import { DESK_TEND, type CareStats, type SanctuaryCare } from "@/lib/pets/care";
 import type { LivingKind } from "@/lib/pets/living";
 import { roomOf } from "@/lib/pets/rooms";
+import { petTitle, useDocumentTitle } from "@/lib/page-title";
 
 export function DeskStage({
   kind,
@@ -16,6 +17,8 @@ export function DeskStage({
   onSelectKind?: (key: string) => void;
 }) {
   const room = roomOf(kind.key);
+  // "Rui the Red Panda — ComputerPets": the tab says who is on the desk (the route's head title says "The desk" first).
+  useDocumentTitle(petTitle(name ?? kind.name, kind.speciesLabel));
   return (
     <CompanionRoom
       kind={kind}

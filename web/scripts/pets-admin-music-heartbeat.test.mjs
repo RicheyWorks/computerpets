@@ -127,7 +127,8 @@ test("keeper-card has one heartbeat reader: no own intervals or fetches, both su
   assert.equal((card.match(/heartbeatPoll\.subscribe\(setBeat\)/g) || []).length, 1);
   assert.equal((card.match(/useHeartbeat\(\)/g) || []).length, 3, "the hook plus KeeperCard and KeeperHeartbeat");
   const keeper = src("src/lib/pets/keeper.ts");
-  assert.match(keeper, /export const heartbeatPoll = createHeartbeatPoll\(\);/);
+  // One page poll, asking on its own only when a house server answered on this browser before (quiet-heartbeat.test.mjs).
+  assert.match(keeper, /export const heartbeatPoll = createHeartbeatPoll\(\{ gate: \(\) => houseServerSeen\(\), onAnswer: \(\) => rememberHouseServer\(\), backoff: true \}\);/);
 });
 
 const MUSICS = [

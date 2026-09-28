@@ -2606,6 +2606,126 @@ async function siteHeaderRail() {
   ]);
 }
 
+async function signinReturnQuiet() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8").replace(/\r\n/g, "\n");
+  const importTs = (...parts) => import(pathToFileURL(join(ROOT, ...parts)).href);
+  const sweep = read("web", "scripts", "phone-desk-layout.test.mjs");
+
+  // 1) Sign-in returns to the gated page it came from; only same-site paths are followed.
+  const R = await importTs("web", "src", "lib", "auth", "return-to.ts");
+  const refused = ["https://evil.example", "//evil.example", "/\\evil.example", "javascript:alert(1)", "/\t/evil.example", "/%2F%2Fevil.example", "/%5Cevil.example", "/.//evil.example", "/a/..//evil.example", "/login", "/api/auth/sign-out", `/${"a".repeat(600)}`];
+  const login = read("web", "src", "routes", "login.tsx");
+  const gates = read("web", "src", "lib", "auth", "gates.tsx");
+  const shell = read("web", "src", "components", "app-shell.tsx");
+  const signin = {
+    kept: R.safeReturnTo("/collection") === "/collection" && R.safeReturnTo("/pets/rui?x=1#a") === "/pets/rui?x=1#a",
+    refused: refused.every((s) => R.safeReturnTo(s) === "/"),
+    href: R.signInHref("/collection") === "/login?next=%2Fcollection" && R.signInHref("/") === "/login",
+    gate: gates.includes("const [next] = useState(() => safeReturnTo(here));") && gates.includes("<Navigate to={SIGN_IN_PATH} search={{ next }} />"),
+    login: login.includes("const returnTo = safeReturnTo(next);") && login.includes("callbackURL: returnTo, errorCallbackURL: signInHref(returnTo)"),
+    header: shell.includes("const back = safeReturnTo(pathname);") && shell.includes("search={signInSearch}"),
+    sweep: sweep.includes('["/collection", "/login?next=%2Fcollection"]') && sweep.includes("/login?next=%2Fmeet"),
+  };
+  if (!Object.values(signin).every(Boolean)) bad.push(`signin: ${JSON.stringify(signin)}`);
+
+  // 2) The heartbeat probe asks nothing on its own until a house server has answered on this browser.
+  const K = await importTs("web", "src", "lib", "pets", "keeper.ts");
+  const timers = new Map();
+  let reads = 0;
+  const poll = K.createHeartbeatPoll({
+    doc: null,
+    url: "http://127.0.0.1:1/x",
+    gate: () => false,
+    setIntervalImpl: (fn, ms) => (timers.set(timers.size + 1, { fn, ms }), timers.size),
+    clearIntervalImpl: (id) => timers.delete(id),
+    fetchImpl: async () => {
+      reads++;
+      throw new TypeError("fetch failed");
+    },
+  });
+  const off = poll.subscribe(() => {});
+  await new Promise((r) => setImmediate(r));
+  const quietReads = reads;
+  const quietTimers = timers.size;
+  const unchecked = K.heartbeatLine(poll.current(), poll.answered());
+  await poll.check();
+  off();
+  const keeper = read("web", "src", "lib", "pets", "keeper.ts");
+  const card = read("web", "src", "components", "desk", "keeper-card.tsx");
+  const quiet = {
+    noRequest: quietReads === 0 && quietTimers === 0,
+    words: unchecked === "House server not checked (optional)",
+    check: reads === 1,
+    gated: keeper.includes("export const heartbeatPoll = createHeartbeatPoll({ gate: () => houseServerSeen(), onAnswer: () => rememberHouseServer(), backoff: true });"),
+    backoff: K.HEARTBEAT_BACKOFF_MAX_SKIPS === 31,
+    button: card.includes("data-heartbeat-check") && card.includes("void heartbeatPoll.check();"),
+    sweep: sweep.includes("the desk asked the house server nobody ran") && sweep.includes("the gate is shut for good"),
+  };
+  if (!Object.values(quiet).every(Boolean)) bad.push(`quiet: ${JSON.stringify(quiet)}`);
+
+  // 3) Thumb-sized on phones: rail rows and the room's own links are 44 px; the rail still rests on whole rows.
+  const css = read("web", "src", "styles.css");
+  const room = read("web", "src", "components", "desk", "companion-room.tsx");
+  const P = await importTs("web", "src", "lib", "pets", "phone-desk.ts");
+  const taps = {
+    rail: /\[data-phone-floor\] \[data-desk-rail\] \{\n\s+--rail-row: 2\.75rem;/.test(css),
+    links: /\[data-phone-floor\] \[data-room-links\] a,\n\s+\[data-phone-floor\] \[data-talk-send\] \{[^}]*min-height: 2\.75rem;/.test(css),
+    marked: room.includes("<div data-room-links ") && room.includes("data-talk-send"),
+    wholeRows: P.railRows(308, 44) === 308 && P.railRows(300, 44) === 264,
+    sweep: sweep.includes("export const TAP_MIN = 44;") && sweep.includes("tapProblems"),
+  };
+  if (!Object.values(taps).every(Boolean)) bad.push(`taps: ${JSON.stringify(taps)}`);
+
+  // 4) The speech bubble never rises over the site header.
+  const pet = read("web", "src", "components", "desk", "living-pet.tsx");
+  const bubble = {
+    room: P.bubbleRoom(101, 62) === 33 && P.bubbleLift(120, 33) === 33 && P.bubbleLift(18, 33) === 18 && P.bubbleRoom(101, null) === Infinity,
+    wired: pet.includes("${-bubbleLift(drawY + 18, bubbleRoomRef.current)}px") && shell.includes("data-site-header"),
+    sweep: sweep.includes("sits over the site header") && sweep.includes("rose over the site header"),
+  };
+  if (!Object.values(bubble).every(Boolean)) bad.push(`bubble: ${JSON.stringify(bubble)}`);
+
+  // 5) Tab titles for the desk and a pet page.
+  const T = await importTs("web", "src", "lib", "page-title.ts");
+  const titles = {
+    pet: T.petTitle("Rui", "Red Panda") === "Rui the Red Panda — ComputerPets" && T.pageTitle("The desk") === "The desk — ComputerPets",
+    desk: read("web", "src", "routes", "index.tsx").includes('head: () => ({ meta: [{ title: pageTitle("The desk") }] }),') && read("web", "src", "components", "desk", "desk-stage.tsx").includes("useDocumentTitle(petTitle(name ?? kind.name, kind.speciesLabel));"),
+    petPage: read("web", "src", "routes", "pets.$key.tsx").includes('head: () => ({ meta: [{ title: pageTitle("Your pet") }] }),'),
+    sweep: sweep.includes("Rui the Red Panda — ComputerPets") && sweep.includes("Your pet — ComputerPets"),
+  };
+  if (!Object.values(titles).every(Boolean)) bad.push(`titles: ${JSON.stringify(titles)}`);
+
+  // 6) Signed-in rooms in the phone sweep, with a stand-in session (auth off, in-memory PGLite; no account).
+  const signedIn = {
+    standIn: sweep.includes('VITE_AUTH_ENABLED: "false", DATABASE_URL: ""') && sweep.includes("async function standInSite()"),
+    pages: sweep.includes('export const SIGNED_IN_PAGES = ["/collection", "/hatch", "/nest"];'),
+    checks: sweep.includes("the header still offers Sign in") && sweep.includes("(signed in)"),
+  };
+  if (!Object.values(signedIn).every(Boolean)) bad.push(`signedIn: ${JSON.stringify(signedIn)}`);
+
+  // 7) New-keeper audit: a sign-in that came back with an error says so on /login (it used to land on the desk silently).
+  const audit = {
+    unfinished: login.includes('const SIGN_IN_UNFINISHED = "Sign-in did not finish. Try again.";') && login.includes("useState<string | null>(error ? SIGN_IN_UNFINISHED : null)"),
+    sweep: sweep.includes("&error=access_denied"),
+  };
+  if (!Object.values(audit).every(Boolean)) bad.push(`audit: ${JSON.stringify(audit)}`);
+
+  const roadmap = read("docs", "ROADMAP.md");
+  if (!roadmap.includes("- [x] Sign-in returns to the page that asked")) bad.push("ROADMAP entry missing");
+  const extras = { signin, quiet, taps, bubble, titles, signedIn, audit };
+  if (bad.length) return fail(bad.join("; "), extras);
+  return ok("Sign-in returns to the gated page (same-site paths only); the desk asks the optional house server only after it has answered here (Check, backoff); 44 px rail rows and room links on phones; the speech bubble stays under the header; tab titles for the desk and a pet page; signed-in rooms in the phone sweep (stand-in session); a failed sign-in says so", extras, [
+    "signin=returns_same_site_only",
+    "heartbeat=quiet_until_seen",
+    "taps=44px_rail_and_links",
+    "bubble=under_header",
+    "titles=desk_and_pet",
+    "sweep=signed_in_rooms",
+    "login=unfinished_says_so",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -2633,6 +2753,7 @@ const COMMANDS = {
   no_repeat_signed_in: noRepeatSignedIn,
   phone_layout_told_once: phoneLayoutToldOnce,
   site_header_rail: siteHeaderRail,
+  signin_return_quiet: signinReturnQuiet,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

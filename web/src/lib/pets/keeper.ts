@@ -64,6 +64,8 @@ export type Heartbeat = {
   uptimeSeconds: number | null;
   port: number | null;
   careDoor: "local";
+  /** False only before the page has asked at all (the page asks only when there is a sign a house server runs). */
+  checked?: boolean;
 };
 
 export const UNREAD_HEARTBEAT: Heartbeat = {
@@ -86,8 +88,44 @@ export function parseHeartbeat(raw: unknown): Heartbeat {
   return { status, profile, uptimeSeconds, port, careDoor: "local" };
 }
 
+/** Nothing asked yet: the line says "not checked" and offers Check (see createHeartbeatPoll's gate). */
+export const UNCHECKED_HEARTBEAT: Heartbeat = { ...UNREAD_HEARTBEAT, checked: false };
+
 /** One heartbeat read every 15 seconds, however many keeper surfaces show it. */
 export const HEARTBEAT_POLL_MS = 15_000;
+/** A known house server that stops answering is asked less and less often: 15 s, 30 s, 1 min … up to 8 min. */
+export const HEARTBEAT_BACKOFF_MAX_SKIPS = 31;
+
+/** This browser has seen a house server answer (so the page may ask on its own). */
+export const HOUSE_SERVER_SEEN_KEY = "computerpets.houseServer.seen";
+
+type SeenStore = { getItem: (k: string) => string | null; setItem: (k: string, v: string) => void };
+
+function seenStore(): SeenStore | null {
+  try {
+    return typeof localStorage !== "undefined" ? localStorage : null;
+  } catch {
+    return null;
+  }
+}
+
+/** A sign a house server runs for this browser: it has answered here before. */
+export function houseServerSeen(store: SeenStore | null = seenStore()): boolean {
+  try {
+    return store?.getItem(HOUSE_SERVER_SEEN_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+/** Remember that a house server answered here, so later visits ask on their own. */
+export function rememberHouseServer(store: SeenStore | null = seenStore()): void {
+  try {
+    store?.setItem(HOUSE_SERVER_SEEN_KEY, "1");
+  } catch {
+    /* private mode: the keeper presses Check again next time */
+  }
+}
 
 type HeartbeatFetch = (url: string, init?: RequestInit) => Promise<{ json: () => Promise<unknown> }>;
 
@@ -97,6 +135,8 @@ export type HeartbeatPoll = {
   answered: () => boolean;
   subscribe: (fn: (beat: Heartbeat) => void) => () => void;
   read: () => Promise<Heartbeat>;
+  /** The keeper pressed Check: ask once now, whatever the gate says; an answer turns the regular poll on. */
+  check: () => Promise<Heartbeat>;
 };
 
 /**
@@ -174,6 +214,19 @@ export function createHeartbeatPoll(opts: {
   ms?: number;
   /** Defaults to the page's document; null means always showing. */
   doc?: VisibleDoc | null;
+  /**
+   * Ask on its own only when this says a house server may be running (the page's poll: it answered on this
+   * browser before). Without it the poll always asks. A browser prints every refused request to its console
+   * (net::ERR_CONNECTION_REFUSED) whatever the page catches, so a keeper who never ran the optional house
+   * server should not be asked every 15 seconds: the line says "not checked" and Check asks once.
+   */
+  gate?: () => boolean;
+  /** Called when the server answers (the page remembers it for the next visit). */
+  onAnswer?: () => void;
+  /** Ask a known server that stopped answering less often (doubling, up to HEARTBEAT_BACKOFF_MAX_SKIPS ticks). */
+  backoff?: boolean;
+  /** Clock for the resubscribe guard (a card that remounts does not ask again within one interval). */
+  now?: () => number;
 } = {}): HeartbeatPoll {
   const fetchImpl: HeartbeatFetch = opts.fetchImpl ?? ((url, init) => fetch(url, init));
   const every = opts.setIntervalImpl ?? ((fn, ms) => setInterval(fn, ms));
@@ -181,37 +234,66 @@ export function createHeartbeatPoll(opts: {
   const url = opts.url ?? HEARTBEAT_URL;
   const ms = opts.ms ?? HEARTBEAT_POLL_MS;
   const subs = new Set<(beat: Heartbeat) => void>();
-  let beat: Heartbeat = UNREAD_HEARTBEAT;
+  let beat: Heartbeat = opts.gate ? UNCHECKED_HEARTBEAT : UNREAD_HEARTBEAT;
   let seen = false;
   let stopPoll: (() => void) | null = null;
+  let misses = 0;
+  const now = opts.now ?? (() => Date.now());
+  let lastRead = Number.NEGATIVE_INFINITY;
 
   async function read(): Promise<Heartbeat> {
+    lastRead = now();
     try {
       const res = await fetchImpl(url, { cache: "no-store" });
       beat = parseHeartbeat(await res.json());
       seen = true;
+      misses = 0;
+      opts.onAnswer?.();
     } catch {
       beat = { ...UNREAD_HEARTBEAT };
+      misses += 1;
     }
     for (const fn of subs) fn(beat);
     return beat;
+  }
+
+  // The wait before the next read: one interval, or with backoff 2, 4, 8 … up to 32 intervals after misses in a row.
+  const waitMs = () => (opts.backoff ? ms * Math.min(2 ** misses, HEARTBEAT_BACKOFF_MAX_SKIPS + 1) : ms);
+  // Half an interval of slack, so a timer that fires a little early still counts.
+  const due = () => now() - lastRead >= waitMs() - ms / 2;
+
+  // One tick of the regular poll: a known server that stopped answering is skipped for a while (backoff).
+  function tick() {
+    if (opts.backoff && !due()) return;
+    void read();
+  }
+
+  function startPoll() {
+    if (stopPoll) return;
+    stopPoll = everyVisible(tick, ms, {
+      doc: opts.doc,
+      setIntervalImpl: every,
+      clearIntervalImpl: stop,
+      onResume: true,
+    });
   }
 
   return {
     current: () => beat,
     answered: () => seen,
     read,
+    async check() {
+      const got = await read();
+      if (seen && subs.size) startPoll();
+      return got;
+    },
     subscribe(fn) {
       subs.add(fn);
       fn(beat);
-      if (subs.size === 1) {
-        void read();
-        stopPoll = everyVisible(() => void read(), ms, {
-          doc: opts.doc,
-          setIntervalImpl: every,
-          clearIntervalImpl: stop,
-          onResume: true,
-        });
+      if (subs.size === 1 && (!opts.gate || opts.gate() || seen)) {
+        // A card that remounts (a page change, a re-render) does not ask again inside one interval or a backoff.
+        if (due()) void read();
+        startPoll();
       }
       return () => {
         subs.delete(fn);
@@ -355,8 +437,12 @@ export function visibleTimeline(
   };
 }
 
-/** The page's one heartbeat poll. It starts on the first subscribe (in an effect), never at import. */
-export const heartbeatPoll = createHeartbeatPoll();
+/**
+ * The page's one heartbeat poll. It starts on the first subscribe (in an effect), never at import, and only
+ * when a house server answered on this browser before; otherwise nothing is asked until the keeper presses
+ * Check, so a keeper who never ran the optional house server sees no refused requests in the console.
+ */
+export const heartbeatPoll = createHeartbeatPoll({ gate: () => houseServerSeen(), onAnswer: () => rememberHouseServer(), backoff: true });
 
 export function formatUptime(seconds: number | null) {
   if (seconds == null) return "";
@@ -370,6 +456,8 @@ export function formatUptime(seconds: number | null) {
   return `${days}d`;
 }
 
+/** The heartbeat line before the page has asked (no sign of a house server yet). The keeper card offers Check. */
+export const HOUSE_SERVER_UNCHECKED = "House server not checked (optional)";
 /** The heartbeat line before the house server has ever answered this session. Plain and calm: it is optional. */
 export const NO_HOUSE_SERVER = "House server not running (optional)";
 /** The house server answered this session, then stopped (or said it is down). Same words on the overlay. */
@@ -385,6 +473,7 @@ export const CARE_TRUTH = "Your pet's care stays on this computer.";
  * and then stopped. Ports, the profile, and raw UP/DOWN live in heartbeatDetail (the line's tooltip).
  */
 export function heartbeatLine(beat: Heartbeat, answered = true) {
+  if (beat.checked === false) return HOUSE_SERVER_UNCHECKED;
   if (!answered && beat.status !== "UP") return NO_HOUSE_SERVER;
   if (beat.status !== "UP") return HOUSE_SERVER_STOPPED;
   const up = formatUptime(beat.uptimeSeconds);
@@ -406,7 +495,7 @@ export function heartbeatTone(beat: Heartbeat, answered = true): HeartbeatTone {
 /** The technical detail behind the heartbeat line, for its tooltip only: "Java 8081 · UP · local · 2m". */
 export function heartbeatDetail(beat: Heartbeat) {
   const port = beat.port ?? JAVA_PORT;
-  const bits = [`Java ${port}`, beat.status];
+  const bits = [`Java ${port}`, beat.checked === false ? "not checked" : beat.status];
   if (beat.profile) bits.push(beat.profile);
   const up = formatUptime(beat.uptimeSeconds);
   if (up) bits.push(up);

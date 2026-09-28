@@ -72,7 +72,9 @@ test("signed-in desk home: a failed load says so with a retry, not silently the 
 
 test("/login: a failed sign-in click shows one plain sentence", () => {
   const text = src("src/routes/login.tsx");
-  assert.match(text, /await signIn\(providerId, \{ callbackURL: "\/" \}\);/);
+  // Sign-in returns to the page that sent the visitor (safeReturnTo; the desk when there was none).
+  assert.match(text, /await signIn\(providerId, \{ callbackURL: returnTo, errorCallbackURL: signInHref\(returnTo\) \}\);/);
+  assert.match(text, /const returnTo = safeReturnTo\(next\);/);
   assert.match(text, /setProblem\(loadProblem\("signin", err\)\)/);
   assert.match(text, /onClick=\{\(\) => void start\(p\.providerId\)\}/);
   assert.match(text, /role="alert"/);

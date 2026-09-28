@@ -1,6 +1,7 @@
-import type { ReactNode } from "react";
-import { Navigate } from "@tanstack/react-router";
+import { useState, type ReactNode } from "react";
+import { Navigate, useRouterState } from "@tanstack/react-router";
 import { authEnabled, signOut } from "./client";
+import { RETURN_FALLBACK, safeReturnTo } from "./return-to";
 import { useCurrentUser, useCurrentUserState } from "./use-current-user";
 
 /**
@@ -41,7 +42,13 @@ export function SignedOut({ children }: { children: ReactNode }) {
  * render this.
  */
 export function RedirectToSignIn({ to = SIGN_IN_PATH }: { to?: string }) {
-  return <Navigate to={to} />;
+  // Remember the page that asked for sign-in (a safe same-site path only), so sign-in returns there.
+  const here = useRouterState({ select: (s) => `${s.location.pathname}${s.location.searchStr ?? ""}` });
+  // Read once: this stays mounted for a moment after the move, and on /login itself `here` would say "back to /login"
+  // (refused, so the desk), and a second Navigate without `next` wiped the page it had remembered.
+  const [next] = useState(() => safeReturnTo(here));
+  if (to !== SIGN_IN_PATH || next === RETURN_FALLBACK) return <Navigate to={to} />;
+  return <Navigate to={SIGN_IN_PATH} search={{ next }} />;
 }
 
 /**
@@ -66,16 +73,39 @@ export function UserButton() {
           {label.charAt(0).toUpperCase()}
         </span>
       )}
-      <span className="text-sm font-medium">{label}</span>
+      {/* On a phone the header has room for the initial only (a signed-in header ran 9 px off a 320 px screen):
+          the name shows from sm up, and Sign out moves into the Menu (MenuSignOut). */}
+      <span className="hidden max-w-[10rem] truncate text-sm font-medium sm:inline" title={label}>
+        {label}
+      </span>
+      <span className="sr-only sm:hidden">Signed in as {label}</span>
       {authEnabled && (
         <button
           type="button"
           onClick={() => void signOut()}
-          className="cursor-pointer text-sm underline-offset-4 opacity-70 hover:underline"
+          className="hidden cursor-pointer whitespace-nowrap text-sm underline-offset-4 opacity-70 hover:underline sm:inline"
         >
           Sign out
         </button>
       )}
+    </div>
+  );
+}
+
+/** Sign out inside the site Menu, on a phone only (the header shows it from sm up). Nothing when signed out. */
+export function MenuSignOut() {
+  const user = useCurrentUser();
+  if (!user || !authEnabled) return null;
+  return (
+    <div className="mt-1 border-t border-border/60 pt-1 sm:hidden">
+      <button
+        type="button"
+        data-menu-sign-out
+        onClick={() => void signOut()}
+        className="block w-full cursor-pointer whitespace-nowrap rounded-[var(--radius-sm)] px-3 py-2.5 text-left text-sm text-muted hover:text-fg"
+      >
+        Sign out
+      </button>
     </div>
   );
 }
