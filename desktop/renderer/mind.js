@@ -642,6 +642,50 @@
     return readRemoteTalk(request, timeoutMs == null ? TALK_TIMEOUT_MS : timeoutMs);
   }
 
+  /**
+   * Why a mind did not answer a talk, in the web's own plain words (web/src/lib/plain-error.ts MIND_LINES and
+   * TALK_LINES.mind). A refused key, a busy site, a wrong address, a site that could not be reached: the pet still
+   * says a house line, and this line says why. It answered with a house line and said nothing, so a key that never
+   * worked looked like a mind that did.
+   */
+  const MIND_LINES = {
+    key: "The AI website did not accept your key. Check your key for that AI website.",
+    busy: "The AI website is too busy for your key right now. Try again in a minute.",
+    address: "The AI website answered, but not at that address or for that model. Check the AI website address and the model.",
+    server: "The AI website had a problem. Try again later.",
+    timeout: "The mind took too long to answer.",
+    unreachable: "Couldn't reach the AI website. Check the AI website address and that the AI is running.",
+    not_found: "Couldn't find the AI website. Check the AI website address.",
+    tls: "Couldn't make a safe connection to the AI website.",
+    url: "The AI website address was refused before anything was sent. Use an https address (http only for an AI on this computer) with no name or password in it.",
+    empty: "The mind answered with nothing.",
+    unknown: "Something went wrong on the way to the AI website.",
+  };
+  const TALK_MIND_LINE = "The mind did not answer, so that was a house line.";
+
+  function mindStatus(id, status) {
+    return Object.assign(new Error(`${id} ${status}`), { status });
+  }
+
+  /** Which of MIND_LINES a failed talk gets (an HTTP status, a timeout, a fetch that never connected). */
+  function mindProblemKind(err) {
+    const status = err && typeof err.status === "number" ? err.status : 0;
+    if (status === 401 || status === 403) return "key";
+    if (status === 429) return "busy";
+    if (status === 404) return "address";
+    if (status >= 500) return "server";
+    if (isTalkTimeout(err)) return "timeout";
+    if (err && err.message === "empty") return "empty";
+    if (err && err.name === "TypeError") return "unreachable";
+    return "unknown";
+  }
+
+  /** The card's quiet line after a talk the mind did not answer; "" when it did (or house lines were asked). */
+  function talkProblemLine(kind) {
+    if (!kind || !Object.prototype.hasOwnProperty.call(MIND_LINES, kind)) return "";
+    return `${TALK_MIND_LINE} ${MIND_LINES[kind]}`;
+  }
+
   async function run(ctx) {
     const bind = binding(ctx.species);
     const p = preset(bind.plugin);
@@ -650,7 +694,7 @@
     const key = bind.apiKey || "";
     const fallback = { text: ctx.fallback, source: "local" };
     if (p.kind === "local") return fallback;
-    if (!base && p.kind !== "local") return fallback;
+    if (!base && p.kind !== "local") return Object.assign({}, fallback, { problem: "url" });
     const shown = ctx && typeof ctx.shown === "string" ? ctx.shown : "";
     try {
       return await readTalk(shown, bind, async function (signal) {
@@ -670,6 +714,7 @@
             ],
           }),
         }, leave));
+        if (res && res.ok === false) throw mindStatus(p.id, res.status);
         const body = await res.json();
         const text = clip(body.choices?.[0]?.message?.content);
         if (text) return { text, source: p.id };
@@ -688,6 +733,7 @@
             messages: [{ role: "user", content: userTurn(ctx) }],
           }),
         }, leave));
+        if (res && res.ok === false) throw mindStatus(p.id, res.status);
         const body = await res.json();
         const text = clip(body.content?.[0]?.text);
         if (text) return { text, source: p.id };
@@ -704,6 +750,7 @@
             ],
           }),
         }, leave));
+        if (res && res.ok === false) throw mindStatus(p.id, res.status);
         const body = await res.json();
         const text = clip(body.message?.content);
         if (text) return { text, source: p.id };
@@ -720,6 +767,7 @@
             generationConfig: { maxOutputTokens: 80, temperature: 0.9 },
           }),
         }, leave));
+        if (res && res.ok === false) throw mindStatus(p.id, res.status);
         const body = await res.json();
         const text = clip(body.candidates?.[0]?.content?.parts?.[0]?.text);
         if (text) return { text, source: p.id };
@@ -736,17 +784,19 @@
             message: ctx.message ?? null,
           }),
         }, leave));
+        if (res && res.ok === false) throw mindStatus(p.id, res.status);
         const body = await res.json();
         const text = clip(body.text || body.content);
         if (text) return { text, source: "custom" };
       }
-    } catch {
-      /* house lines */
+    } catch (err) {
+      // House lines answer, and the reply says why the mind did not (the card shows it; the raw error stays here).
+      return Object.assign({}, fallback, { problem: mindProblemKind(err) });
     }
-    return fallback;
+    return Object.assign({}, fallback, { problem: "empty" });
     }, fallback);
     } catch (err) {
-      if (isTalkTimeout(err)) return fallback;
+      if (isTalkTimeout(err)) return Object.assign({}, fallback, { problem: "timeout" });
       throw err;
     }
   }
@@ -776,5 +826,9 @@
     talkMaySend,
     talkMayLeave,
     readTalk,
+    MIND_LINES,
+    TALK_MIND_LINE,
+    mindProblemKind,
+    talkProblemLine,
   };
 })();

@@ -310,6 +310,9 @@ const KEY_PLATE_IDS = ["weather-plate", "news-plate", "market-plate"];
 const REBUILT_KEYS = ["color", "voice", "bus", "step", "sleep", "linePlay", "lineDrop"];
 let talkAsked = false;
 let pendingTalk = null;
+// When the card last came up: it fades in (styles.css #hud, 160 ms), and a line still fading in is not yet in view.
+let cardShownAt = -Infinity;
+const CARD_FADE_MS = 200;
 let sleepNode = null;
 let lureDrag = null;
 
@@ -814,6 +817,21 @@ function paintTalkNet() {
   const line = talkAsked && M && M.talkHonesty ? M.talkHonesty(talkBind()) : "";
   el.textContent = line || "";
   el.hidden = !line;
+  // A talk waiting on this line brings it into the card's view first (the card scrolls; the line sits low in it).
+  if (line && pendingTalk && typeof el.scrollIntoView === "function") el.scrollIntoView({ block: "nearest" });
+}
+
+/**
+ * The line on the open card where the keeper can see it (PetKeeper.lineShows). Present in the page was not
+ * enough: with the card folded the line had no box at all and a menu Talk still left for the website.
+ */
+function lineOnCard(el) {
+  if (!el || el.hidden || !hud || card.collapsed || !hud.classList.contains("show")) return false;
+  if (performance.now() - cardShownAt < CARD_FADE_MS) return false;
+  if (!el.getClientRects || el.getClientRects().length === 0) return false;
+  const K = window.PetKeeper;
+  if (!K || !K.lineShows) return true;
+  return K.lineShows(el.getBoundingClientRect(), hud.getBoundingClientRect(), window.innerWidth, window.innerHeight);
 }
 
 function talkLineInView() {
@@ -822,13 +840,22 @@ function talkLineInView() {
   const M = window.PetMind;
   const line = M && M.talkHonesty ? M.talkHonesty(talkBind()) : "";
   if (!line) return false;
-  return (el.textContent || "").indexOf(line) !== -1;
+  if ((el.textContent || "").indexOf(line) === -1) return false;
+  return lineOnCard(el);
 }
 
 function talkShown() {
   const el = document.getElementById("hud-talk-net");
-  if (!el || el.hidden || !talkAsked) return "";
+  if (!el || el.hidden || !talkAsked || !lineOnCard(el)) return "";
   return el.textContent || "";
+}
+
+/** The quiet line under the talk line after a talk the mind did not answer (PetMind.talkProblemLine); "" hides it. */
+function paintTalkWhy(line) {
+  const el = document.getElementById("hud-talk-why");
+  if (!el) return;
+  el.textContent = line || "";
+  el.hidden = !line;
 }
 
 function flushTalk() {
@@ -1192,6 +1219,9 @@ function collapseKeeperCard() {
 function openKeeperCard() {
   if (!card.collapsed) return;
   card.collapsed = false;
+  // Opening the card counts as a press (PetKeeper.cardFoldsOnWalk): a card opened from the menu folded on the pet's
+  // next wander step, a few seconds after the keeper asked for it, before a button could be pressed.
+  lastCardPress = performance.now();
   persistCard();
   paintHud();
   // Opening the card stops a wandering pet; a walk the keeper asked for (Feed, Treat, Play, Hide, Call back) goes on.
@@ -1742,7 +1772,10 @@ function paintHud() {
   if (barHygiene) barHygiene.style.setProperty("--w", `${life.hygiene}%`);
   if (barBond) barBond.style.setProperty("--w", `${life.bond}%`);
   if (card.collapsed) hud.classList.remove("show");
-  else hud.classList.add("show");
+  else {
+    if (!hud.classList.contains("show")) cardShownAt = performance.now();
+    hud.classList.add("show");
+  }
   paintCard();
   window.desk?.vitals({
     key: kind.key,
@@ -2968,7 +3001,14 @@ function handle(cmd) {
     }
     talkAsked = true;
     pendingTalk = result;
+    // The talk leaves only once the line naming the website is in view, so a Talk from the menu opens the card
+    // (before this it waited on a folded card, or left without the line ever showing).
+    openKeeperCard();
     paintHud();
+    // A card that just opened is still fading in; look again once it is up.
+    setTimeout(() => {
+      if (pendingTalk) paintHud();
+    }, CARD_FADE_MS + 20);
     return;
   }
   if (cmd === "call") {
@@ -3007,8 +3047,10 @@ async function askMind(result) {
       shown: talkShown(),
     });
     say(reply.text, replyHold(reply.text));
+    paintTalkWhy(reply && reply.problem && window.PetMind.talkProblemLine ? window.PetMind.talkProblemLine(reply.problem) : "");
   } catch {
     say(fallback, replyHold(fallback));
+    paintTalkWhy(window.PetMind.talkProblemLine ? window.PetMind.talkProblemLine("unknown") : "");
   }
   hudUntil = performance.now() + 5000;
 }
@@ -3651,10 +3693,26 @@ function tickFrame(now) {
   // and following the pet slid its buttons out from under the pointer.
   let cardLiftPx = lift;
   if (window.PetKeeper?.cardHeldSpot) {
-    const held = window.PetKeeper.cardHeldSpot({ open: !!hudW, walking: sim.anim === "walk" && !sim.dragging, held: cardHeld, x: cardX, lift });
+    // On a long walk the held card is on a leash: past CARD_LEASH_PX from the pet it is pulled along (it stood
+    // wherever the walk began, a screen away from the pet by the end of it).
+    const held = window.PetKeeper.cardHeldSpot({
+      open: !!hudW,
+      walking: sim.anim === "walk" && !sim.dragging,
+      held: cardHeld,
+      x: cardX,
+      lift,
+      petLeft: drawX,
+      petRight: drawX + BASE,
+      w: hudW,
+      width,
+    });
     cardHeld = held.held;
     cardX = held.x;
     cardLiftPx = held.lift;
+    if (cardHeld && hudW && window.PetKeeper.cardClearOfPlates) {
+      const heldBottom = window.innerHeight - 178 - cardLiftPx;
+      cardX = window.PetKeeper.cardClearOfPlates({ x: cardX, w: hudW, top: heldBottom - (hud.offsetHeight || 0), bottom: heldBottom, plates: plateBoxes(), width });
+    }
   }
   if (!card.collapsed && choiceOpen && hudW && cardX < choiceX + choiceW + 8) {
     cardX = clamp(choiceX + choiceW + 8, 8, Math.max(8, width - (hudW + 8)));
@@ -5088,6 +5146,8 @@ setInterval(() => {
   const held = window.PetLife?.wanderWhileAsleep(life) || window.PetCard?.wanderWhileAsleep(life?.asleep);
   if (sim.play || sim.trick || sim.happy) return;
   if (sim.cmd === "seek" || sim.cmd === "eat" || sim.anim === "eat" || sim.thankYou) return;
+  // A Hide or Call back walk goes on to its end (PetKeeper.keeperWalkOn); a wander here stranded the Hide.
+  if (window.PetKeeper?.keeperWalkOn?.({ cmd: sim.cmd, target: sim.target })) return;
   if (held) {
     issue(held.cmd);
     return;

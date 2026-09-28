@@ -104,6 +104,7 @@ CROSS_DOMAIN = {
     "card.music",
     "card.mind",
     "card.walk_rules",
+    "card.long_walk_talk",
     "gui.choice_close_exit",
     "web.guest_choice",
     "web.ethogram_tricks",
@@ -1234,6 +1235,17 @@ def test_card_walk_rules_row_drives_keeper_js():
         assert mark in row.trace, (mark, row.trace)
     assert row.extras["x"] == 400
     assert row.extras["resumes"] >= 3
+
+
+def test_card_long_walk_talk_row_drives_keeper_and_mind_js():
+    """card.long_walk_talk: the card on a leash, opening is a press, talk waits for its line, a refused key says why."""
+    row = invoke("card.long_walk_talk")
+    assert row.ok, (row.error, row.detail)
+    for mark in ("open=counts_as_press", "hide_walk=kept", "talk=line_in_view_first", "refused_key=says_why"):
+        assert mark in row.trace, (mark, row.trace)
+    assert any(t.startswith("leash=") for t in row.trace), row.trace
+    assert row.extras["problem"] == "key"
+    assert row.extras["line"].startswith("The mind did not answer, so that was a house line.")
 
 
 def test_blotter_pure_surfaces():

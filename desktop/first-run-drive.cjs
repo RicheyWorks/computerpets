@@ -2,7 +2,11 @@
 /**
  * Drives the desktop app's first run in real Electron, the way a new keeper meets it: the transparent overlay, the
  * hello on the keeper card, the pet, its care menu, the House window (Minds, Unlock), hiding and showing the window,
- * Quit, and a second start. Playwright's _electron (playwright-core from web/node_modules or desktop/node_modules;
+ * Quit, and a second start; then past the first minute: every care word from the card and the menu (the stats move the
+ * right way and the pet comes back to normal), the held card on a long walk, Minds (House lines first, then xAI with a
+ * stand-in key: sealed, and a Talk that fails honestly), sounds, another pet, and all of it after a restart. Every
+ * request to api.x.ai is answered 401 inside the drive (page.route), so nothing leaves for the internet. `--scale 1.25`
+ * (or 1.5) starts Electron with --force-device-scale-factor to check the same fit at display scaling. Playwright's _electron (playwright-core from web/node_modules or desktop/node_modules;
  * nothing is downloaded) launches desktop/node_modules/electron with --user-data-dir set to a throwaway folder under
  * the gitignored target\first-run-drive, so the keeper's own settings and pets (%APPDATA%\computerpets-desktop) are
  * never read or written; it stops if Electron reports any other userData. Native menus are recorded instead of
@@ -10,8 +14,8 @@
  * own input path (CDP), never the OS mouse or keyboard, so nothing lands on the real desktop. The folder is removed
  * at the end and every window closes.
  *
- * Opens real windows on the screen, so it is opt-in: `node desktop/first-run-drive.cjs`, or the app harness's
- * `--gui` row gui.first_run_drive. Prints one JSON line: { ok, checks: [{ id, ok, detail }], ms, userData }.
+ * Opens real windows on the screen, so it is opt-in: `node desktop/first-run-drive.cjs [--scale 1.25]`, or the app
+ * harness's `--gui` row gui.first_run_drive. Prints one JSON line: { ok, checks: [{ id, ok, detail }], ms, userData, scale }.
  */
 const path = require("node:path");
 const fs = require("node:fs");
@@ -51,6 +55,21 @@ function allLabels(items) {
   return (items || []).flatMap((it) => [...(it.label ? [it.label] : []), ...allLabels(it.submenu)]);
 }
 
+/** A stand-in xAI key for the Minds checks; api.x.ai never sees it (the drive answers every request itself). */
+const STANDIN_KEY = "xai-standin-not-a-real-key-0000";
+
+/** `--scale 1.25` from the command line: a device scale factor between 1 and 3, else none. */
+function scaleArg(argv) {
+  const i = argv.indexOf("--scale");
+  const n = i >= 0 ? Number(argv[i + 1]) : NaN;
+  return isFinite(n) && n >= 1 && n <= 3 ? n : null;
+}
+
+/** The biggest gap in px between two boxes [left, top, right, bottom] side by side (0 when they overlap in x). */
+function sideGap(a, b) {
+  return Math.max(0, a[0] - b[2], b[0] - a[2]);
+}
+
 /** The throwaway folder must sit under target\first-run-drive, never the keeper's own userData. */
 function throwawayOk(dir) {
   const rel = path.relative(WORK, path.resolve(dir));
@@ -82,7 +101,8 @@ async function removeDir(dir) {
   return !fs.existsSync(dir);
 }
 
-async function drive() {
+async function drive(opts = {}) {
+  const scale = opts && opts.scale ? opts.scale : null;
   const t0 = Date.now();
   /** @type {{ id: string, ok: boolean, detail: string }[]} */
   const checks = [];
@@ -95,11 +115,13 @@ async function drive() {
   if (!throwawayOk(ud)) throw new Error(`refusing user data ${ud}`);
   fs.mkdirSync(ud, { recursive: true });
   const errors = [];
+  /** Every request the overlay made to api.x.ai, and whether the line naming it was in view on the card then. */
+  const cloud = [];
 
   async function launch() {
     const app = await pw._electron.launch({
       executablePath: exe,
-      args: [DESKTOP, `--user-data-dir=${ud}`],
+      args: [DESKTOP, `--user-data-dir=${ud}`, ...(scale ? [`--force-device-scale-factor=${scale}`] : [])],
       cwd: DESKTOP,
       env: { ...process.env, COMPUTERPETS_GUI_HARNESS: "" },
       timeout: 90_000,
@@ -120,15 +142,32 @@ async function drive() {
         return m;
       };
       g.__popups = [];
-      Menu.prototype.popup = function () {
+      Menu.prototype.popup = function (o) {
         g.__popups.push(this);
+        this.__at = o && typeof o.x === "number" ? { x: o.x, y: o.y } : null;
       };
     });
     const page = await app.firstWindow({ timeout: 60_000 });
     await page.waitForLoadState("load");
     page.on("pageerror", (e) => errors.push(`overlay: ${String(e).slice(0, 160)}`));
     page.on("console", (m) => {
-      if (m.type() === "error") errors.push(`overlay console: ${m.text().slice(0, 160)}`);
+      // The drive's own 401 for api.x.ai shows as a failed load; that one is the stand-in key being refused.
+      if (m.type() === "error" && !(cloud.length && /status of 401/.test(m.text()))) errors.push(`overlay console: ${m.text().slice(0, 160)}`);
+    });
+    await page.route("https://api.x.ai/**", async (route) => {
+      const inView = await page
+        .evaluate(() => {
+          const e = document.getElementById("hud-talk-net");
+          const hud = document.getElementById("hud");
+          if (!e || !hud || e.hidden || !e.getClientRects().length) return false;
+          if (hud.dataset.collapsed === "1" || Number(getComputedStyle(hud).opacity) < 0.95) return false;
+          const a = e.getBoundingClientRect();
+          const b = hud.getBoundingClientRect();
+          return a.bottom > b.top + 1 && a.top < b.bottom - 1 && a.top >= 0 && a.bottom <= innerHeight;
+        })
+        .catch(() => false);
+      cloud.push({ at: Date.now(), inView });
+      await route.fulfill({ status: 401, contentType: "application/json", body: JSON.stringify({ error: "Incorrect API key provided" }) });
     });
     return { app, page };
   }
@@ -151,6 +190,9 @@ async function drive() {
     }, [label, which]);
 
   let app = null;
+  /** The first pet and the one chosen from Companions, for the restart check. */
+  let firstKey = null;
+  let switchedKey = null;
   try {
     let page;
     ({ app, page } = await launch());
@@ -189,9 +231,15 @@ async function drive() {
       const b = await page.locator("#pet").boundingBox();
       return b ? { x: b.x + b.width / 2, y: b.y + b.height / 2 } : null;
     };
+    /** The pet's box when the menu was last asked for, for menu_at_pet. */
+    let menuPet = null;
     const petMenu = async () => {
       const p = await petMiddle();
       if (!p) return null;
+      menuPet = await page.evaluate(() => {
+        const r = document.getElementById("pet")?.getBoundingClientRect();
+        return r ? [Math.round(r.left), Math.round(r.top), Math.round(r.right), Math.round(r.bottom)] : null;
+      });
       await page.mouse.click(p.x, p.y, { button: "right" });
       await page.waitForTimeout(500);
       return menuItems(app, "pet");
@@ -223,6 +271,15 @@ async function drive() {
     check("pet_on_screen", s.pet && s.pet[2] - s.pet[0] > 20 && onScreen(s.pet, s.w, s.h), `pet ${s.pet}`);
     const under = (s.plates || []).filter((p) => s.card && overlaps(p.box, s.card));
     check("plates_clear_of_card", s.open && (s.plates || []).length > 0 && !under.length, `${(s.plates || []).length} plates shown; under the card ${s.card}: ${under.map((p) => `${p.id} ${p.box}`).join(", ") || "none"}`);
+    // The overlay window covers the work area and no more (1 DIP of rounding allowed at 1.25 / 1.5 scaling).
+    const win = await app.evaluate(({ BrowserWindow, screen }) => {
+      const w = BrowserWindow.getAllWindows().find((x) => /index\.html/.test(x.webContents.getURL()));
+      if (!w) return null;
+      const d = screen.getDisplayMatching(w.getBounds());
+      return { b: w.getBounds(), work: d.workArea, sf: d.scaleFactor };
+    });
+    const fits = !!win && win.b.x >= win.work.x - 1 && win.b.y >= win.work.y - 1 && win.b.x + win.b.width <= win.work.x + win.work.width + 1 && win.b.y + win.b.height <= win.work.y + win.work.height + 1;
+    check("window_fits_work_area", fits, win ? `window ${JSON.stringify(win.b)} in work area ${JSON.stringify(win.work)} at scale ${win.sf}` : "no overlay window");
 
     // 2. The pet's line never paints over the open card (it talks on its own; a Talk makes sure it does).
     let b = await sampleBubble(6000);
@@ -259,6 +316,15 @@ async function drive() {
     const dups = duplicateLabels(menu || []);
     check("care_menu_no_twins", !dups.length, dups.length ? `twice: ${dups.join(", ")}` : "none");
     check("trick_word_matches", !!s.special && s.special !== "Special" && labels.includes(s.special), `card "${s.special}"; menu has it ${labels.includes(s.special)}`);
+    const trickWord = s.special;
+    // The menu opens where the pet was clicked (window coordinates), on the pet, at any display scaling.
+    const at = await app.evaluate(() => {
+      const g = /** @type {any} */ (globalThis);
+      const m = g.__popups.at(-1);
+      return m ? m.__at : null;
+    });
+    const mp = menuPet;
+    check("menu_at_pet", !!at && !!mp && at.x >= mp[0] - 2 && at.x <= mp[2] + 2 && at.y >= mp[1] - 2 && at.y <= mp[3] + 2, `menu at ${at ? `${at.x},${at.y}` : "no point"}; pet ${mp}`);
 
     /** The page's own walk state (sim is pet.js's), for the card-holds checks. */
     const walking = () => page.evaluate(() => (typeof sim !== "undefined" && sim ? sim.anim === "walk" : false));
@@ -422,6 +488,167 @@ async function drive() {
     const bRight = await sampleBubble(2400);
     check("bubble_clear_at_right_edge", bRight.over === 0, `${bRight.over} of ${bRight.shown} samples over the card${bRight.worst ? `; ${bRight.worst}` : ""}`);
 
+    // 6b. Past the first minute: every care word, from the card or the menu, does what it says, the stats move the
+    // right way, and the pet comes back to normal after it. A stat is set first where the word needs room to move (a
+    // full belly cannot be fed; medicine needs a sick pet); the check reads the page's own life and walk state.
+    const lifeNow = () =>
+      page.evaluate(() => {
+        const l = /** @type {any} */ (typeof life !== "undefined" && life ? life : {});
+        const m = /** @type {any} */ (typeof sim !== "undefined" && sim ? sim : {});
+        const r = (n) => Math.round(Number(n) || 0);
+        return { hunger: r(l.hunger), mood: r(l.mood), energy: r(l.energy), health: r(l.health), bond: r(l.bond), sick: !!l.sick, asleep: !!l.asleep, hidden: !!l.hidden, cmd: m.cmd, anim: m.anim };
+      });
+    /** Back to normal: wandering (a window play counts), or idle / sitting with nowhere to go; awake, no trick, not hidden. */
+    const settle = (ms = 30_000) =>
+      page
+        .waitForFunction(
+          () => {
+            const m = /** @type {any} */ (typeof sim !== "undefined" ? sim : null);
+            const l = /** @type {any} */ (typeof life !== "undefined" ? life : null);
+            if (!m || !l || l.hidden || l.asleep || m.trick || m.anim === "eat" || m.anim === "talk") return false;
+            return m.cmd === "wander" || ((m.cmd === "idle" || m.cmd === "sit") && m.target == null);
+          },
+          null,
+          { timeout: ms, polling: 250 },
+        )
+        .then(() => true, () => false);
+    const openCard = async () => {
+      if ((await state()).open) return;
+      await petMenu();
+      await clickItem(app, "Keeper card");
+      await page.waitForTimeout(450);
+    };
+    const press = async (how, what) => {
+      if (how === "menu") {
+        await petMenu();
+        return clickItem(app, what);
+      }
+      for (let tries = 0; tries < 3; tries += 1) {
+        await openCard();
+        if (await page.locator(`#hud [data-care="${what}"]`).click({ timeout: 2500 }).then(() => true, () => false)) return true;
+      }
+      return false;
+    };
+    const said = () => page.waitForFunction(() => !!document.getElementById("bubble")?.classList.contains("open"), null, { timeout: 5000, polling: 150 }).then(() => true, () => false);
+    const acted = () =>
+      page
+        .waitForFunction(() => {
+          const m = /** @type {any} */ (typeof sim !== "undefined" ? sim : null);
+          return !!m && (!!m.trick || !!m.play || m.cmd === "seek" || m.anim === "play" || !!document.getElementById("bubble")?.classList.contains("open"));
+        }, null, { timeout: 6000, polling: 150 })
+        .then(() => true, () => false);
+    // A card opened from the menu stays up while the pet wanders off (it folded on the next wander step, so its
+    // buttons went before they could be pressed).
+    await settle(20_000);
+    if ((await state()).open) {
+      await page.locator("#hud-collapse").click({ timeout: 5000 }).catch(() => {});
+      await page.waitForTimeout(400);
+    }
+    await petMenu();
+    await clickItem(app, "Keeper card");
+    await page.waitForTimeout(300);
+    const h3 = await holds(6000);
+    check("card_stays_after_open", h3.open === h3.n, `open in ${h3.open} of ${h3.n} samples after Keeper card; the pet walked ${h3.walked}`);
+    const careSteps = [
+      { id: "care_feed", how: "menu", what: "Feed", stage: { hunger: 40 }, ok: (a, b) => b.hunger > a.hunger, show: "hunger" },
+      { id: "care_treat", how: "card", what: "snack", stage: { hunger: 40 }, ok: (a, b) => b.hunger > a.hunger, show: "hunger" },
+      { id: "care_play", how: "card", what: "play", stage: { mood: 40, energy: 90 }, ok: (a, b) => b.mood > a.mood && b.energy < a.energy, show: "mood energy" },
+      { id: "care_trick", how: "menu", what: trickWord, act: true, ok: () => true, show: "" },
+      { id: "care_praise", how: "menu", what: "Praise", stage: { bond: 10 }, ok: (a, b) => b.bond > a.bond, show: "bond" },
+      { id: "care_medicine", how: "card", what: "medicine", stage: { sick: true, health: 40 }, ok: (a, b) => b.health > a.health && !b.sick, show: "health sick" },
+      { id: "care_talk", how: "card", what: "talk", say: true, ok: () => true, show: "" },
+      { id: "care_rest", how: "menu", what: "Rest", stage: { energy: 30 }, end: "asleep", ok: (a, b) => b.asleep && b.energy > a.energy, show: "energy asleep" },
+      { id: "care_hide", how: "card", what: "hide", end: "hidden", ok: (a, b) => b.hidden, show: "hidden" },
+      { id: "care_call_back", how: "menu", what: "Call back", ok: (a, b) => !b.hidden, show: "hidden" },
+      { id: "care_hide_menu", how: "menu", what: "Hide", end: "hidden", ok: (a, b) => b.hidden, show: "hidden" },
+      { id: "care_call_back_card", how: "card", what: "call", ok: (a, b) => !b.hidden, show: "hidden" },
+    ];
+    for (const step of careSteps) {
+      // Hide follows Rest (a sleeping pet is sent away) and Call back follows Hide; the rest start from normal.
+      if (!["care_hide", "care_call_back", "care_call_back_card"].includes(step.id)) await settle(20_000);
+      if (step.stage) await page.evaluate((st) => Object.assign(/** @type {any} */ (life), st), step.stage);
+      const a = await lifeNow();
+      const t = Date.now();
+      const pressed = !!step.what && (await press(step.how, step.what));
+      const spoke = step.say ? await said() : true;
+      const did = step.act ? await acted() : true;
+      let back = false;
+      if (step.end === "asleep") {
+        back = await page.waitForFunction(() => !!(/** @type {any} */ (life).asleep), null, { timeout: 8000, polling: 200 }).then(() => true, () => false);
+      } else if (step.end === "hidden") {
+        back = await page
+          .waitForFunction(() => !!(/** @type {any} */ (life).hidden) && !!document.getElementById("pet")?.classList.contains("hidden"), null, { timeout: 30_000, polling: 250 })
+          .then(() => true, () => false);
+      } else {
+        await page.waitForTimeout(1200);
+        // A talk holds its pose while the bubble has words (the house's own chatter can keep it up); give it longer.
+        back = await settle(step.say ? 45_000 : 30_000);
+      }
+      const b = await lifeNow();
+      const where = await page.evaluate(() => {
+        const m = /** @type {any} */ (typeof sim !== "undefined" ? sim : {});
+        return `pet ${m.cmd}/${m.anim} at ${Math.round(m.x)}${m.target == null ? "" : ` -> ${Math.round(m.target)}`}${m.play ? " (window play)" : ""}${typeof leaving !== "undefined" && leaving ? " leaving" : ""}`;
+      });
+      const moved = step.show
+        .split(" ")
+        .filter(Boolean)
+        .map((k) => `${k} ${a[k]} -> ${b[k]}`)
+        .join(", ");
+      check(
+        step.id,
+        pressed && spoke && did && back && step.ok(a, b),
+        `${step.how} ${step.what}: ${moved || (step.say ? `said ${spoke}` : `acted ${did}`)}; ${step.end ? `${step.end} ${back}` : `back to ${b.cmd}/${b.anim} ${back}`} in ${((Date.now() - t) / 1000).toFixed(1)} s${pressed ? "" : " (the press missed)"}${back ? "" : `; ${where}`}`,
+      );
+    }
+
+    // 6c. The held card on a long walk stays within a leash of the pet (it stood where the walk began). The pet is
+    // put at 60% of the screen and its food at the far left (the one Feed press is made with Math.random pinned, since
+    // the food lands at random), so the card, which opens over the pet's right side, is left behind; it is sampled
+    // while it is open and the pet walks.
+    await settle(20_000);
+    const leashFrom = Math.round(s.w * 0.6);
+    for (let tries = 0; tries < 3; tries += 1) {
+      const q = await petMiddle();
+      if (!q) break;
+      await page.mouse.move(q.x, q.y);
+      await page.mouse.down();
+      for (let i = 1; i <= 12; i += 1) await page.mouse.move(q.x + ((leashFrom - q.x) * i) / 12, q.y, { steps: 2 });
+      await page.mouse.up();
+      await page.waitForTimeout(400);
+      const there = await page.locator("#pet").boundingBox();
+      if (there && Math.abs(there.x + there.width / 2 - leashFrom) < 200) break;
+      await settle(10_000);
+    }
+    await openCard();
+    await page.evaluate(() => Object.assign(/** @type {any} */ (life), { hunger: 40 }));
+    const startPet = (await state()).pet;
+    const foodAt = await page.evaluate(() => {
+      const r = Math.random;
+      Math.random = () => 0;
+      try {
+        /** @type {HTMLElement | null} */ (document.querySelector('#hud [data-care="feed"]'))?.click();
+      } finally {
+        Math.random = r;
+      }
+      const mk = /** @type {any} */ (typeof mark !== "undefined" ? mark : null);
+      return mk ? Math.round(mk.x) : null;
+    });
+    let leashN = 0;
+    let maxGap = 0;
+    let lastPet = startPet;
+    for (let t = 0; t < 12_000; t += 250) {
+      const o = await state();
+      if (o.open && o.card && o.pet && (await walking())) {
+        leashN += 1;
+        maxGap = Math.max(maxGap, sideGap(o.card, o.pet));
+        lastPet = o.pet;
+      }
+      await page.waitForTimeout(250);
+    }
+    const walked = startPet && lastPet ? Math.abs(lastPet[0] - startPet[0]) : 0;
+    check("card_leash_on_long_walk", leashN >= 4 && walked >= 400 && maxGap <= 260, `food at ${foodAt}; the pet walked ${walked} px with the card open (${leashN} samples); widest card-to-pet gap ${maxGap} px (leash 260)`);
+    await settle(30_000);
+
     // 7. Minds… opens the House window; Unlock… takes it to Unlock; closing it closes it.
     await petMenu();
     const winP = app.waitForEvent("window", { timeout: 20_000 }).catch(() => null);
@@ -455,6 +682,92 @@ async function drive() {
       check("house_minds", false, "no House window opened");
     }
 
+    // 7b. Minds: House lines first; xAI with a stand-in key is saved sealed (mind.json holds no plain key); a Talk
+    // from the menu with the card folded opens the card and leaves only once the line naming xAI is in view; the
+    // refused key (the drive's own 401) still gets a house line, and the card says why.
+    await petMenu();
+    const mindsP = app.waitForEvent("window", { timeout: 20_000 }).catch(() => null);
+    await clickItem(app, "Minds…");
+    const minds = await mindsP;
+    if (minds) {
+      await minds.waitForLoadState("load");
+      await minds.waitForTimeout(900);
+      const m0 = await minds.evaluate(() => ({
+        plugin: /** @type {HTMLSelectElement | null} */ (document.getElementById("plugin"))?.value,
+        fields: !document.getElementById("mindFields")?.hidden,
+      }));
+      check("minds_house_default", m0.plugin === "local" && !m0.fields, `Minds starts at ${m0.plugin}; key fields ${m0.fields ? "shown" : "hidden"}`);
+      await minds.selectOption("#plugin", "xai");
+      await minds.fill("#key", STANDIN_KEY);
+      await minds.click("#save");
+      await minds.waitForTimeout(900);
+      const savedLine = await minds.evaluate(() => (document.getElementById("ok")?.textContent || "").trim());
+      let raw = "";
+      try {
+        raw = fs.readFileSync(path.join(ud, "mind.json"), "utf8");
+      } catch {
+        /* missing */
+      }
+      check("minds_key_sealed", /Saved/.test(savedLine) && /"xai"/.test(raw) && !raw.includes(STANDIN_KEY), `"${savedLine}"; mind.json names xai ${/"xai"/.test(raw)}, plain key in it ${raw.includes(STANDIN_KEY)}`);
+      await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().find((w) => /House/.test(w.getTitle()))?.close());
+      await page.waitForTimeout(700);
+    } else {
+      check("minds_house_default", false, "no House window opened");
+    }
+    await settle(20_000);
+    if ((await state()).open) {
+      await page.locator("#hud-collapse").click({ timeout: 5000 }).catch(() => {});
+      await page.waitForTimeout(400);
+    }
+    const sentFrom = cloud.length;
+    await petMenu();
+    await clickItem(app, "Talk");
+    const whyShown = await page
+      .waitForFunction(() => {
+        const e = document.getElementById("hud-talk-why");
+        return !!e && !e.hidden && !!(e.textContent || "").trim();
+      }, null, { timeout: 10_000, polling: 200 })
+      .then(() => true, () => false);
+    await page.waitForTimeout(300);
+    const sent = cloud.slice(sentFrom);
+    const afterTalk = await state();
+    check("talk_line_before_cloud", sent.length >= 1 && sent.every((c) => c.inView) && afterTalk.open, `${sent.length} request(s) to api.x.ai; the line in view at each: ${sent.map((c) => c.inView).join(", ") || "none"}; card open ${afterTalk.open}`);
+    const why = await page.evaluate(() => {
+      const e = document.getElementById("hud-talk-why");
+      return e && !e.hidden ? (e.textContent || "").trim() : "";
+    });
+    check("talk_failure_says_why", whyShown && /did not accept your key/.test(why), why ? `"${why}"` : "nothing said why the mind did not answer");
+
+    // 7c. Sounds: the talk sound muted and the pet's volume at 35; then another pet from Companions.
+    await openCard();
+    firstKey = await page.evaluate(() => (typeof kind !== "undefined" && kind ? kind.key : null));
+    await page.evaluate(() => {
+      const v = /** @type {HTMLInputElement | null} */ (document.getElementById("hud-volume"));
+      if (!v) return;
+      v.value = "35";
+      v.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    await page.locator('#hud-mutes [data-bus="talk"]').click({ timeout: 5000 }).catch(() => {});
+    await page.waitForTimeout(500);
+    const snd = await page.evaluate(() => {
+      const c = /** @type {any} */ (typeof card !== "undefined" ? card : {});
+      const k = typeof kind !== "undefined" && kind ? kind.key : "";
+      return { talk: !!(c.mutes && c.mutes.talk), vol: c.pets && c.pets[k] ? c.pets[k].volume : null };
+    });
+    check("sound_settings", snd.talk && snd.vol === 35, `talk muted ${snd.talk}; volume ${snd.vol}`);
+    await petMenu();
+    const nextPet = await app.evaluate(() => {
+      const g = /** @type {any} */ (globalThis);
+      const comp = g.__popups.at(-1)?.items.find((i) => i.label === "Companions");
+      const it = comp && comp.submenu ? comp.submenu.items.find((i) => i.type === "radio" && !i.checked && / · /.test(i.label || "") && !/Rui/.test(i.label || "")) : null;
+      if (!it) return null;
+      it.click();
+      return it.label;
+    });
+    await page.waitForTimeout(1800);
+    switchedKey = await page.evaluate(() => (typeof kind !== "undefined" && kind ? kind.key : null));
+    check("pet_switch", !!nextPet && !!switchedKey && switchedKey !== firstKey, `Companions "${nextPet}": ${firstKey} -> ${switchedKey}`);
+
     // 8. Hide the window, tray Show.
     await petMenu();
     await clickItem(app, "Hide the window");
@@ -484,6 +797,19 @@ async function drive() {
     await page.waitForTimeout(3000);
     const again = await page.evaluate(() => !document.getElementById("first-hint")?.hidden);
     check("second_start_no_hello", !again, again ? "the hello came back" : "hello stays gone");
+    // Every setting from 7b and 7c after the restart: the pet chosen, the mute, the first pet's volume, the mind.
+    const kept = await page.evaluate((first) => {
+      const c = /** @type {any} */ (typeof card !== "undefined" ? card : {});
+      const k = typeof kind !== "undefined" && kind ? kind.key : null;
+      const M = /** @type {any} */ (window).PetMind;
+      const bind = M && k ? M.binding(k) : {};
+      return { key: k, talk: !!(c.mutes && c.mutes.talk), vol: c.pets && first && c.pets[first] ? c.pets[first].volume : null, plugin: bind.plugin, keyKept: !!bind.apiKey };
+    }, firstKey);
+    check(
+      "settings_survive_restart",
+      !!switchedKey && kept.key === switchedKey && kept.talk && kept.vol === 35 && kept.plugin === "xai" && kept.keyKept,
+      `pet ${kept.key} (chosen ${switchedKey}); talk muted ${kept.talk}; ${firstKey} volume ${kept.vol}; mind ${kept.plugin}, key kept ${kept.keyKept}`,
+    );
     check("no_page_errors", !errors.length, errors.length ? errors.slice(0, 4).join(" | ") : "none");
   } catch (e) {
     check("drive", false, String(e && e.stack ? e.stack.split("\n")[0] : e));
@@ -505,13 +831,13 @@ async function drive() {
   } catch {
     /* another run */
   }
-  return { ok: checks.every((c) => c.ok), checks, ms: Date.now() - t0, userData: ud };
+  return { ok: checks.every((c) => c.ok), checks, ms: Date.now() - t0, userData: ud, scale };
 }
 
-module.exports = { overlaps, onScreen, duplicateLabels, allLabels, throwawayOk, WORK, drive };
+module.exports = { overlaps, onScreen, duplicateLabels, allLabels, throwawayOk, scaleArg, sideGap, STANDIN_KEY, WORK, drive };
 
 if (require.main === module) {
-  drive().then(
+  drive({ scale: scaleArg(process.argv.slice(2)) }).then(
     (r) => {
       process.stdout.write(`${JSON.stringify(r)}\n`);
       process.exitCode = r.ok ? 0 : r.skipped ? 2 : 1;

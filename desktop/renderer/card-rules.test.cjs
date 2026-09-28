@@ -61,7 +61,7 @@ test("the open card holds still while the pet walks, and goes back to the pet wh
   assert.deepEqual([b.x, b.lift], [400, 3]);
   assert.deepEqual(K.cardHeldSpot({ open: true, walking: false, held: b.held, x: 650, lift: 0 }), { x: 650, lift: 0, held: null });
   assert.deepEqual(K.cardHeldSpot({ open: false, walking: true, held: b.held, x: 650, lift: 5 }), { x: 650, lift: 5, held: null });
-  assert.match(petSrc, /window\.PetKeeper\.cardHeldSpot\(\{ open: !!hudW, walking: sim\.anim === "walk" && !sim\.dragging, held: cardHeld, x: cardX, lift \}\)/);
+  assert.match(petSrc, /window\.PetKeeper\.cardHeldSpot\(\{\n\s+open: !!hudW,\n\s+walking: sim\.anim === "walk" && !sim\.dragging,\n\s+held: cardHeld,\n\s+x: cardX,\n\s+lift,/);
   assert.match(petSrc, /hud\.style\.transform = `translate3d\(\$\{cardX\}px, \$\{-cardLiftPx\}px, 0\)`;/);
 });
 
