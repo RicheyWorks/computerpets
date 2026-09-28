@@ -721,6 +721,8 @@ select {
 
 #bubble.open {
   opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 #bubble p {

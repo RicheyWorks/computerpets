@@ -58,4 +58,9 @@ export type MindSettings = {
   pets: Record<string, MindBinding>;
   /** Where the plugin key lives. Not a secret, and not written to browser storage. */
   keyKept?: string;
+  /**
+   * True once the keeper picked a mind for all pets. Until then the house decides (`effectiveDefault`):
+   * House lines for anyone not signed in, today's signed-in default for a signed-in keeper.
+   */
+  picked?: boolean;
 };

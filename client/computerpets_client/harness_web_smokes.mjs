@@ -1893,7 +1893,7 @@ async function flakeHousePlain() {
     words: MIND_WORDS.allPets === "Use for all pets" && MIND_WORDS.sameAsAll === "Same as all pets",
     python: pyWord("ALL_PETS_LABEL") === MIND_WORDS.allPets && pyWord("SAME_AS_ALL_LABEL") === MIND_WORDS.sameAsAll,
     overlay: settings.includes(`<button id="save" type="button">${MIND_WORDS.allPets}</button>`),
-    web: page.includes("{MIND_WORDS.allPets}</h2>") && page.includes("{MIND_WORDS.sameAsAll} ({mindPreset(draft.default.plugin).name})"),
+    web: page.includes("{MIND_WORDS.allPets}</h2>") && page.includes("{MIND_WORDS.sameAsAll} ({selected.name})"),
     gone: ![settings, page, mindsPy, read("docs", "MIND.md")].some((s) => /house default/i.test(s)),
   };
   if (!Object.values(allPets).every(Boolean)) bad.push(`all pets words: ${JSON.stringify(allPets)}`);
@@ -2243,6 +2243,105 @@ async function portraitsTrayMinds() {
   ]);
 }
 
+async function houseLinesTalk() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8").replace(/\r\n/g, "\n");
+  const importTs = (...parts) => import(pathToFileURL(join(ROOT, ...parts)).href);
+  const vm = await import("node:vm");
+  const KEY = "computerpets.mind.v1";
+  const memStore = (seed) => {
+    const map = new Map(seed ? [[KEY, JSON.stringify(seed)]] : []);
+    return { getItem: (k) => (map.has(k) ? map.get(k) : null), setItem: (k, v) => map.set(k, String(v)), removeItem: (k) => map.delete(k) };
+  };
+
+  // 1) House lines by default: web (guest or no pick), overlay fresh install, Python blotter.
+  const S = await importTs("web", "src", "lib", "ai", "settings.ts");
+  const hadWindow = globalThis.window;
+  const install = (seed) => {
+    globalThis.window = { localStorage: memStore(seed), sessionStorage: memStore(), addEventListener() {}, removeEventListener() {} };
+    S.resetMindStoreForTests();
+    return S.loadMindSettings();
+  };
+  const fresh = install();
+  const oldStock = install({ default: { plugin: "xai", model: "grok-4.5" }, voice: "browser", pets: {} });
+  const pickedAi = install({ default: { plugin: "anthropic", model: "claude-sonnet-4-5" }, voice: "browser", pets: {} });
+  const flagged = install({ picked: true, default: { plugin: "xai", model: "grok-4.5" }, voice: "browser", pets: {} });
+  S.resetMindStoreForTests();
+  if (hadWindow === undefined) delete globalThis.window;
+  else globalThis.window = hadWindow;
+  const MindSecret = require(join(ROOT, "desktop", "mind-secret.cjs"));
+  const overlayFresh = MindSecret.readMindRecord(null, null).mind;
+  const win = { localStorage: memStore(), sessionStorage: memStore(), addEventListener() {}, location: { protocol: "file:" } };
+  win.window = win;
+  vm.runInContext(read("desktop", "renderer", "mind.js"), vm.createContext(win));
+  const listenerPy = read("client", "computerpets_client", "listener.py");
+  const web = {
+    guest: S.effectiveDefault(fresh, false).plugin === "local" && fresh.picked === false,
+    guestBinding: S.bindingFor(fresh, "red_panda").plugin === "local" && S.askedBinding(fresh, "red_panda") === null,
+    signedInNoPick: S.effectiveDefault(fresh, true).plugin === "xai" && S.effectiveDefault(fresh, true, false).plugin === "local",
+    oldStockIsNoPick: oldStock.picked === false && S.effectiveDefault(oldStock, false).plugin === "local",
+    pickKept: [false, true].every((si) => S.effectiveDefault(pickedAi, si).plugin === "anthropic" && S.effectiveDefault(flagged, si).plugin === "xai"),
+  };
+  const everywhere = {
+    ...web,
+    overlay: overlayFresh.default.plugin === "local" && win.PetMind.binding("red_panda").plugin === "local",
+    python: /if door == "blotter":\n\s+return _house\(\)/.test(listenerPy),
+  };
+  if (!Object.values(everywhere).every(Boolean)) bad.push(`house lines default: ${JSON.stringify(everywhere)}`);
+
+  // 2) /mind shows the mind that will answer, in words; the desk asks for it.
+  const page = read("web", "src", "routes", "mind.tsx");
+  const room = read("web", "src", "components", "desk", "companion-room.tsx");
+  const keeper = read("web", "src", "components", "desk", "keeper-card.tsx");
+  const T = await importTs("web", "src", "lib", "ai", "test-line.ts");
+  const mind = {
+    shown: page.includes("const shown = effectiveDefault(draft, signedIn, houseDefaultKey);") && page.includes("const active = shown.plugin === preset.id;") && !page.includes("draft.default."),
+    inUse: page.includes("aria-pressed={active}") && page.includes('{guestPickedAi ? "Picked" : "In use"}'),
+    guestNote: page.includes("{guestNote(selected.name)}") && T.guestNote("OpenAI") === "OpenAI only answers for a signed-in keeper. Until you sign in, House lines answer.",
+    desk: room.includes("const mind = useMindBinding(kind.key, signedIn);") && keeper.includes("const asked = useAskedBinding(guestKey);"),
+  };
+  if (!Object.values(mind).every(Boolean)) bad.push(`/mind shows who answers: ${JSON.stringify(mind)}`);
+
+  // 3) Talk with no AI: the keeper's words show back; the answer holds 4 s + 0.3 s a word (12 s cap) on web and overlay; a click closes it.
+  const B = await importTs("web", "src", "lib", "pets", "talk-bubble.ts");
+  const samples = ["", "Hi.", "Say that again, closer to my ear tufts.", "word ".repeat(40)];
+  const pet = read("desktop", "renderer", "pet.js");
+  const html = read("desktop", "renderer", "index.html");
+  const css = read("desktop", "renderer", "styles.css");
+  const living = read("web", "src", "components", "desk", "living-pet.tsx");
+  const talk = {
+    holds: samples.map((t) => B.replyHoldMs(t)),
+    same: samples.every((t) => win.PetMind.replyHoldMs(t) === B.replyHoldMs(t)),
+    echo: B.heardLine("hello rui") === "You said: “hello rui”" && room.includes("{heardLine(heard)}") && room.includes("data-talk-echo"),
+    guestWaits: (room.match(/onSong=\{guestSay\}/g) || []).length === 2 && !room.includes("onSong={say}") && room.includes("if (performance.now() < replyUntil.current) return;"),
+    webClose: room.includes("onSpeechClose={closeSpeech}") && living.includes("data-speech-close") && living.includes("onClick={onSpeechClose}"),
+    overlayHold: pet.includes("say(reply.text, replyHold(reply.text));") && pet.includes("say(fallback, replyHold(fallback));"),
+    overlayClose: /bubble\.addEventListener\("click", \(\) => \{\n\s+speechUntil = 0;/.test(pet) && html.includes('<div id="bubble" data-hit title="Click to close">') && /#bubble\.open \{\n  opacity: 1;\n  pointer-events: auto;/.test(css),
+  };
+  if (JSON.stringify(talk.holds) !== JSON.stringify([4000, 4300, 6400, 12000]) || !talk.same || !talk.echo || !talk.guestWaits || !talk.webClose || !talk.overlayHold || !talk.overlayClose) bad.push(`talk: ${JSON.stringify(talk)}`);
+
+  // 4) Python floor: 3.10 written everywhere, and an older Python is told so in one line at start.
+  const init = read("client", "computerpets_client", "__init__.py");
+  const py = {
+    pyproject: read("client", "pyproject.toml").includes('requires-python = ">=3.10"'),
+    guard: init.includes("MIN_PYTHON = (3, 10)") && init.includes("ComputerPets needs Python %d.%d or newer. This is Python %d.%d.%d. ") && init.includes("raise SystemExit(1)"),
+    docs: ["docs/START-HERE.md", "docs/SETUP.md", "docs/CONTRIBUTING.md", "client/README.md", "docs/APP-HARNESS.md"].every((d) => !/Python 3\.11|3\.11 or newer|>=3\.11/.test(read(...d.split("/")))),
+  };
+  if (!Object.values(py).every(Boolean)) bad.push(`python floor: ${JSON.stringify(py)}`);
+
+  const roadmap = read("docs", "ROADMAP.md");
+  if (!roadmap.includes("- [x] House lines is the default mind for anyone not signed in")) bad.push("ROADMAP entry missing");
+  const extras = { everywhere, mind, talk, py };
+  if (bad.length) return fail(bad.join("; "), extras);
+  return ok("House lines answer by default for guests and fresh installs on web, overlay and blotter; /mind marks the mind In use; talk shows your words and holds the answer long enough to read, click to close; Python 3.10 floor", extras, [
+    "default=house_lines_web_overlay_blotter",
+    "pick=kept",
+    "mind_page=in_use",
+    "talk=echo+hold+click_close",
+    "python=3.10_floor+plain_stop",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -2266,6 +2365,7 @@ const COMMANDS = {
   unlock_plain_lfs: unlockPlainLfs,
   pictures_start_names: picturesStartNames,
   portraits_tray_minds: portraitsTrayMinds,
+  house_lines_talk: houseLinesTalk,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

@@ -62,6 +62,11 @@ const tongueEl = document.getElementById("tongue");
 const shadow = document.getElementById("shadow");
 const bubble = document.getElementById("bubble");
 const bubbleText = document.getElementById("bubble-text");
+// A click on an open bubble closes it (the bubble is a hit target only while open).
+bubble.addEventListener("click", () => {
+  speechUntil = 0;
+  bubble.classList.remove("open");
+});
 const dustRoot = document.getElementById("dust");
 const messRoot = document.getElementById("mess");
 const giftRoot = document.getElementById("gifts");
@@ -2948,11 +2953,17 @@ async function askMind(result) {
       fallback,
       shown: talkShown(),
     });
-    say(reply.text);
+    say(reply.text, replyHold(reply.text));
   } catch {
-    say(fallback);
+    say(fallback, replyHold(fallback));
   }
   hudUntil = performance.now() + 5000;
+}
+
+/** A talk reply stays up long enough to read; a click on the bubble closes it sooner. */
+function replyHold(text) {
+  const M = window.PetMind;
+  return M && typeof M.replyHoldMs === "function" ? M.replyHoldMs(text) : 4200;
 }
 
 function gaitProfile() {

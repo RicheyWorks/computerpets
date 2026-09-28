@@ -73,6 +73,7 @@ import { guestMarks, guestPick, guestTap, type GuestChoiceId } from "@/lib/pets/
 import { classifyKey, installFileDropGuard } from "@/lib/pets/presence";
 import { careNotSaved, RETRY_LABEL, talkProblem as talkProblemLine, type CareNotSavedAct } from "@/lib/plain-error";
 import { everyVisible, petArtLabel, petTapLabel, roomLabel } from "@/lib/pets/keeper";
+import { heardLine, replyHoldMs } from "@/lib/pets/talk-bubble";
 
 type DeskCare = "rest" | "clean" | "medicine" | "bath" | "praise";
 
@@ -151,10 +152,11 @@ export function CompanionRoom({
   demoWindow?: boolean;
 }) {
   const displayName = name ?? kind.name;
-  const mind = useMindBinding(kind.key);
-  const mindSettings = useMindSettings();
   const { user, isPending } = useCurrentUserState();
   const signedIn = !isPending && user != null;
+  // Nothing picked: House lines for a guest; a signed-in keeper keeps the old default (the house still needs its key).
+  const mind = useMindBinding(kind.key, signedIn);
+  const mindSettings = useMindSettings();
   const talkLine = signedIn ? talkHonesty(mind) : "";
   const voiceLine = signedIn ? voiceHonesty(mindSettings.voice) : "";
   const [talkAsked, setTalkAsked] = useState(false);
@@ -165,6 +167,8 @@ export function CompanionRoom({
   const [stats, setStats] = useState<CareStats>(() => liveDeskCare(kind, persistLocal, seed));
   const [speech, setSpeech] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
+  /** What the keeper typed, shown back under the talk box until the pet's answer goes away. */
+  const [heard, setHeard] = useState<string | null>(null);
   const [latestNote, setLatestNote] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   /** A care act (play, feed, rest, clean, medicine) the house could not save; the meters stayed put. */
@@ -319,6 +323,34 @@ export function CompanionRoom({
     speechUntil.current = performance.now() + hold;
   }, []);
 
+  /** A talk reply stays up long enough to read (about 4 s plus a little per word, 12 s at most). */
+  const replyUntil = useRef(0);
+  const sayReply = useCallback(
+    (text: string) => {
+      const hold = replyHoldMs(text);
+      say(text, hold);
+      replyUntil.current = performance.now() + hold;
+    },
+    [say],
+  );
+
+  /** A called guest's line waits while a talk reply is still up; it used to cover the reply within a second. */
+  const guestSay = useCallback(
+    (text: string) => {
+      if (performance.now() < replyUntil.current) return;
+      say(text);
+    },
+    [say],
+  );
+
+  /** A click on the bubble closes it. */
+  const closeSpeech = useCallback(() => {
+    speechUntil.current = 0;
+    replyUntil.current = 0;
+    setSpeech(null);
+    setHeard(null);
+  }, []);
+
   const issue = useCallback((cmd: PetCommand) => {
     setOrder((o) => ({ cmd, id: o.id + 1 }));
   }, []);
@@ -328,7 +360,14 @@ export function CompanionRoom({
     if (!speech) return;
     return everyVisible(
       () => {
-        if (performance.now() > speechUntil.current) setSpeech(null);
+        if (performance.now() > speechUntil.current) {
+          setSpeech(null);
+          // The answer is gone, so the keeper's words go with it.
+          if (replyUntil.current) {
+            replyUntil.current = 0;
+            setHeard(null);
+          }
+        }
       },
       350,
       { onResume: true },
@@ -553,11 +592,11 @@ export function CompanionRoom({
         }),
       });
       setTalkProblem(null);
-      say(res.text, Math.min(9000, 2200 + res.text.length * 55));
+      sayReply(res.text);
       await playVoice(res.audio, res.text);
     } catch (err) {
       // The pet still answers with a house line; a quiet line says why. Raw text goes to the console only.
-      say(message ? kind.listenLine() : kind.ambientLine(stats));
+      sayReply(message ? kind.listenLine() : kind.ambientLine(stats));
       setTalkProblem({ line: talkProblemLine(err, talkUsesPlugin(mind, mindSettings.voice)), message });
     } finally {
       setBusy(false);
@@ -903,6 +942,7 @@ export function CompanionRoom({
         command={order.cmd}
         orderId={order.id}
         speech={speech}
+        onSpeechClose={closeSpeech}
         sprites={kind.sprites}
         fps={kind.fps}
         once={kind.once}
@@ -1011,7 +1051,7 @@ export function CompanionRoom({
         <RobinFlyer
           hidden={stats.hidden || leaving}
           startId={robinCall}
-          onSong={say}
+          onSong={guestSay}
           hostKey={kind.key}
           hostSleeping={kind.key === "red_panda" && (!!stats.asleep || ruiLieHold)}
           hostPoseRef={poseRef}
@@ -1023,7 +1063,7 @@ export function CompanionRoom({
         hidden={stats.hidden || leaving}
         hostSleeping={kind.key === "red_panda" && (!!stats.asleep || ruiLieHold)}
         hostPoseRef={poseRef}
-        onSong={say}
+        onSong={guestSay}
         windows={demoWindow ? deskWindows : []}
       />
 
@@ -1312,6 +1352,7 @@ export function CompanionRoom({
               const msg = draft.trim();
               if (!msg) return;
               setDraft("");
+              setHeard(msg);
               void talk(msg);
             }}
           >
@@ -1330,6 +1371,11 @@ export function CompanionRoom({
               Send
             </button>
           </form>
+        ) : null}
+        {typedTalk && heard ? (
+          <p data-talk-echo className="pointer-events-auto max-w-md text-center text-sm text-muted" aria-live="polite">
+            {heardLine(heard)}
+          </p>
         ) : null}
         <div className="pointer-events-auto text-center text-[11px] uppercase tracking-[0.16em] text-subtle">
           {footer ?? (
