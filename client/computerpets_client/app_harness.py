@@ -1410,6 +1410,25 @@ def _desk_rows() -> list[Affordance]:
             ),
         ),
         Affordance(
+            "desk.no_tray",
+            "desk",
+            "Linux with no tray to see: every tray row in the pet's menu, Hide asks, a second start brings the pets back; a native Wayland start goes to XWayland or says why",
+            "main.cjs popupPetMenu / hideWindowFromPetMenu / learnTrayHost / second-instance / bootDesk waylandPlan + overlay-gate.cjs readTrayHost / hideWords / gateWithoutTray",
+            notes=(
+                "Loads the real desktop/main.cjs under the stand-in Electron with overlay-gate.cjs readTrayHost answering "
+                "\"no\" (GNOME without AppIndicator, a bare X server: no StatusNotifier host and no _NET_SYSTEM_TRAY_S "
+                "owner). Every enabled tray row but Show is in the pet's own menu (Require hardware compositing and Follow "
+                "me across desktops were tray-only); the overlay is told (tray-host, tray-host-get) so the hello points at "
+                "the pet's menu; Hide the window asks first (Hide, Cancel) and says how the pets come back; a second start "
+                "shows the window with the keeper card open. With a tray, Hide hides at once as before. A gate (no "
+                "compositor) with no tray: OK quits too and the message says so. A native Wayland start "
+                "(--ozone-platform=wayland) with XWayland asks app.relaunch for --ozone-platform=x11 once and quits; with "
+                "none, no window and the wayland-native words. Found driving the desktop on Linux under Xvfb and a headless "
+                "sway: Electron crashed at a native Wayland boot (screen.getCursorScreenPoint), and with no tray Hide left "
+                "no way back that was said."
+            ),
+        ),
+        Affordance(
             "desk.market.search",
             "desk",
             "Quotes look-up through main market-search",
@@ -1633,10 +1652,27 @@ LAUNCH_NO_SCREEN = (
 )
 
 
-def launch_next(pieces: str, pictures: str, script: str, display: str = "ok") -> str:
+def launch_lfs_here() -> bool:
+    """Whether this Git has Git LFS (`git lfs version` answers): desktop.sh then says to fetch, not to install it."""
+    git = shutil.which("git")
+    if not git:
+        return False
+    try:
+        return subprocess.run([git, "lfs", "version"], capture_output=True, text=True, timeout=60).returncode == 0
+    except (OSError, subprocess.SubprocessError):
+        return False
+
+
+def launch_next(pieces: str, pictures: str, script: str, display: str = "ok", lfs: bool = False) -> str:
     """The plain next step check mode prints last: what to type, for the pictures first, then the screen (desktop.sh
-    on Linux prints display: none with no DISPLAY or WAYLAND_DISPLAY), then the pieces."""
+    on Linux prints display: none with no DISPLAY or WAYLAND_DISPLAY), then the pieces. desktop.sh on a computer that
+    has Git LFS already (`lfs`) says to fetch the pictures, not to install Git LFS."""
     run = r".\desktop.ps1" if script == "desktop.ps1" else "sh desktop.sh"
+    if pictures != "ready" and lfs and script == "desktop.sh":
+        return (
+            "next: The pet pictures are not here yet. Git LFS is installed but has not fetched them. In the computerpets "
+            f"folder type git lfs install and then git lfs pull. Then type {run} and press Enter."
+        )
     if pictures != "ready":
         return (
             "next: The pet pictures are not here yet. Install Git LFS from https://git-lfs.com, then in the computerpets "
@@ -1859,6 +1895,8 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("pictures_gate", domain="desk", action_id=aid)
     if local_id == "overlay_gate":
         return _run_node_smoke("overlay_gate", domain="desk", action_id=aid)
+    if local_id == "no_tray":
+        return _run_node_smoke("no_tray", domain="desk", action_id=aid)
     if local_id == "market.search":
         return _run_node_smoke("market_search", domain="desk", action_id=aid)
     if local_id == "settings.window":
@@ -3425,7 +3463,14 @@ def _gui_rows() -> list[Affordance]:
                 "the box under Xvfb): a GPU drawing in software gets the app's own Allow software compositing pressed "
                 "(gate_software_says_so, then a restart), and a desktop with no compositor ends the drive at its message "
                 "(gate_no_compositor_says_so; the drive reports gated, not ok). With no secret store (no keyring), "
-                "settings_survive_restart accepts the key not kept when the Minds page said it was not written to disk. "
+                "settings_survive_restart accepts the key not kept when the Minds page said it was not written to disk "
+                "(with gnome-keyring unlocked in a throwaway D-Bus session the key is kept, on any desktop name). A third "
+                "start checks no tray to see (the app's own answer on Linux, COMPUTERPETS_TRAY=none elsewhere): the hello "
+                "names the pet's menu (no_tray_hello), every tray row is in the pet's menu (no_tray_pet_menu), Hide the "
+                "window asks and Cancel keeps the pets (no_tray_hide_asks), a second copy brings them back with the card "
+                "open (no_tray_second_start), and Turn off names this computer's start (turn_off_words). `--wayland` "
+                "starts natively on Wayland: with XWayland the app asks to start again on X11 (gate_wayland_restarts_on_x11) "
+                "and the drive follows; with none it checks the message (gate_wayland_says_so). "
                 "A start that shows neither window nor message is closed and killed, not waited on forever. "
                 "`--scale 1.25` / `1.5` adds "
                 "--force-device-scale-factor. Menus are recorded, "
@@ -3433,7 +3478,8 @@ def _gui_rows() -> list[Affordance]:
                 "Offline pins: desktop/renderer/first-run-fit.test.cjs, desktop/renderer/first-run-drive.test.cjs, "
                 "desktop/renderer/card-rules.test.cjs, desktop/renderer/desk-drive-long.test.cjs, "
                 "desktop/renderer/desk-audit-1557.test.cjs, desktop/renderer/linux-drive.test.cjs, card.walk_rules, "
-                "card.long_walk_talk, card.audit_1557, and desk.overlay_gate."
+                "desktop/renderer/linux-tray.test.cjs, card.long_walk_talk, card.audit_1557, desk.overlay_gate, and "
+                "desk.no_tray."
             ),
         ),
     ]

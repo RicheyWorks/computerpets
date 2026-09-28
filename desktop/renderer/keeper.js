@@ -37,6 +37,14 @@
   const KEEPER_KICKER = "Keeper card";
   const VOICE_TRUTH = "Rui, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Echo, Peck, Quill, Keel, Ember, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Rue, Wick, Burr, Floss, Bloom, Vesper, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Ochre, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Well, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Wax, Frill, Cap, Lattice, Horn, Ring, Mane, Puff, Flame, Starter, Pact, Gleam, Choir, Drift, Shard, Dusk, Knot, Brine, Beacon, Hush, Arca, Reed, Pebble, Eft, Dapple, Slip, Pinch, Whorl, Hinge, Latch, Prickle, Boot, Reach, Spot, Orb, Pane, Hold, Loom, and Leap talk with house cry first; system speech is the backup.";
   const QUIT_TRUTH = "Turns the pets off. To bring them back, type .\\desktop.ps1 again, just like the first time.";
+  /** The Mac and Linux start with sh desktop.sh; the card told them to type .\\desktop.ps1 (Windows only). */
+  const QUIT_TRUTH_SH = "Turns the pets off. To bring them back, type sh desktop.sh again, just like the first time.";
+
+  /** Turn off's words for this computer: how the pets come back is how they were started. */
+  function quitTruth(platform) {
+    const p = String(platform || "");
+    return p === "linux" || p === "darwin" || /^(Linux|Mac)/i.test(p) ? QUIT_TRUTH_SH : QUIT_TRUTH;
+  }
 
   const UNREAD = {
     status: "DOWN",
@@ -105,9 +113,13 @@
 
   /**
    * The first-run hello on the keeper card, written for a child who never installed anything.
-   * It points at the card, clicking and right-clicking the pet, and the tray icon by the clock.
+   * It points at the card, clicking and right-clicking the pet, and the tray icon by the clock. Where no tray icon
+   * can be seen (opts.tray "no": GNOME without AppIndicator, a bare X server) it points at the pet's own menu instead,
+   * which has everything the tray has.
+   * @param {string} name
+   * @param {{ tray?: string }} [opts]
    */
-  function firstHint(name) {
+  function firstHint(name, opts) {
     const who = String(name || "").trim() || "your pet";
     const Who = who.charAt(0).toUpperCase() + who.slice(1);
     return {
@@ -115,7 +127,9 @@
       lines: [
         `This is ${who}'s keeper card. It shows if ${who} is hungry, sleepy, or happy. Press Feed, Play, or Rest to help.`,
         `Click ${who} any time to open this card again. Right-click ${who} for more things to do.`,
-        "Near the clock there is a tiny ComputerPets picture. That is the tray icon. Right-click it to pick a new friend, or pick Quit to turn the pets off.",
+        opts && opts.tray === "no"
+          ? `This computer shows no tray icon by the clock, so ${who}'s menu has it all. Right-click ${who} and pick Companions to pick a new friend, or pick Quit to turn the pets off.`
+          : "Near the clock there is a tiny ComputerPets picture. That is the tray icon. Right-click it to pick a new friend, or pick Quit to turn the pets off.",
       ],
       ok: FIRST_HINT_OK,
     };
@@ -407,6 +421,8 @@
     FIRST_HINT_OK,
     firstHint,
     firstHintShows,
+    quitTruth,
+    QUIT_TRUTH_SH,
     bubbleBesideCard,
     cardStopsWalk,
     orderWalkResumes,

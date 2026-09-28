@@ -6,6 +6,13 @@ contextBridge.exposeInMainWorld("desk", {
   setHits: (rects) => ipcRenderer.send("set-hits", Array.isArray(rects) ? rects : []),
   setFocusable: (focusable) => ipcRenderer.send("set-focusable", !!focusable),
   openMenu: (x, y) => ipcRenderer.send("pet-menu", { x, y }),
+  // Whether the tray icon can be seen ("no" where there is no tray to see): the hello points at the pet's menu then.
+  trayHost: () => ipcRenderer.sendSync("tray-host-get"),
+  onTrayHost: (fn) => {
+    const wrapped = (_e, state) => fn(typeof state === "string" ? state : "unknown");
+    ipcRenderer.on("tray-host", wrapped);
+    return () => ipcRenderer.removeListener("tray-host", wrapped);
+  },
   switchPet: (key) => ipcRenderer.send("switch-pet", key),
   notify: (title, body, meta) => {
     const payload =

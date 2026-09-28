@@ -79,6 +79,7 @@ CROSS_DOMAIN = {
     "desk.quit",
     "desk.pictures_gate",
     "desk.overlay_gate",
+    "desk.no_tray",
     "desk.market.search",
     "desk.settings.window",
     "desk.license.offline",
@@ -394,7 +395,11 @@ def test_start_script_stops_on_git_lfs_pointers_before_installing(tmp_path):
     assert check.returncode == 0 and "pictures: lfs-pointers" in check.stdout
     start = run()
     assert start.returncode == 1
-    assert "The pet pictures did not download. They come through Git LFS" in start.stdout
+    from computerpets_client.app_harness import launch_lfs_here
+
+    # A Git that has Git LFS already is told to fetch the pictures, not to install Git LFS (seen on the box).
+    said = "Git LFS is installed here, but it has not fetched them yet" if launch_lfs_here() else "They come through Git LFS"
+    assert f"The pet pictures did not download. {said}" in start.stdout
     assert "git lfs pull" in start.stdout
     assert "Getting the pieces" not in start.stdout and not (tmp_path / "desktop" / "node_modules").exists()
     picture.write_bytes(b"\x89PNG\r\n\x1a\n" + b"\0" * 32)
@@ -413,7 +418,7 @@ def test_start_script_check_says_what_to_type_next_for_each_state(tmp_path):
     import subprocess
     import time
 
-    from computerpets_client.app_harness import LAUNCH_PICTURE, launch_next, repo_root
+    from computerpets_client.app_harness import LAUNCH_PICTURE, launch_lfs_here, launch_next, repo_root
 
     node, npm, sh = shutil.which("node"), shutil.which("npm"), shutil.which("sh")
     if not (node and npm and sh):
@@ -440,7 +445,7 @@ def test_start_script_check_says_what_to_type_next_for_each_state(tmp_path):
 
     # No pictures: the pictures come first (the real start stops there).
     state, line = last()
-    assert line == launch_next(state, "missing", "desktop.sh") and "git lfs pull" in line
+    assert line == launch_next(state, "missing", "desktop.sh", lfs=launch_lfs_here()) and "git lfs pull" in line
     picture.write_bytes(b"\x89PNG\r\n\x1a\n" + b"\0" * 32)
     seen = []
     state, line = last()
@@ -1248,6 +1253,23 @@ def test_overlay_gate_row_boots_real_main_and_says_why_in_a_message_box():
     assert og.extras["recheck"]["windows"] == 1 and og.extras["recheck"]["trays"] == 1
     assert og.extras["yes"] == og.extras["unknown"] == {"windows": 1, "dialogs": 0}
 
+
+
+def test_no_tray_row_keeps_every_tray_action_in_reach_and_wayland_says_why():
+    """The real main.cjs with no tray to see (Linux): the pet menu has it all, Hide asks, a second start brings them back."""
+    nt = invoke("desk.no_tray")
+    assert nt.ok, (nt.error, nt.detail)
+    for mark in ("pet_menu=every_tray_row_but_show", "hide=asks_when_no_tray", "second_start=window_back+card_open",
+                 "overlay=told_tray_host", "gate_ok=quits_when_no_tray", "wayland=relaunch_x11_or_says_why"):
+        assert mark in nt.trace, (mark, nt.trace)
+    ov = nt.extras["overlay"]
+    assert ov["missing"] == "" and ov["told"] == "no" and ov["trayHostGet"] == "no"
+    assert ov["box"] == "Hide the pets? There is no tray icon on this desktop to bring them back from."
+    assert ov["buttons"] == "Hide|Cancel" and ov["keptUp"] and ov["hidden"] and ov["back"] and ov["opened"]
+    assert nt.extras["withTray"] == {"dialogs": 0, "hidden": True}
+    assert nt.extras["gate"] == {"dialogs": 1, "detailSaysSo": True, "quits": 1}
+    assert nt.extras["waylandX"]["args"] == "--ozone-platform=x11" and nt.extras["waylandX"]["relaunches"] == 1
+    assert nt.extras["waylandClosed"]["windows"] == 0 and nt.extras["waylandClosed"]["relaunches"] == 0
 
 def test_python_blotter_draws_its_own_pets_and_loads_no_picture_files():
     """The Git LFS picture check is for the overlay and the site; the blotter paints its pets, so it has none to check."""
