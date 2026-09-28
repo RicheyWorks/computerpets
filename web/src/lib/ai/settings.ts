@@ -373,10 +373,10 @@ export function resetMindStoreForTests() {
 }
 
 export function describeKeyKept(kept: string | undefined): string {
-  if (kept === "os") return "The plugin key is in the OS secret store. This browser does not keep it in plain text.";
+  if (kept === "os") return "Your key is locked in this computer's secret store. This browser does not keep it.";
   if (kept === "none" || kept === "plain") return "This browser has no secret store, so the key was not saved. It stays on this page until you leave.";
-  if (kept === "locked") return "The secret store did not open. The seal stays. The key is not shown.";
-  return "No plugin key is stored in this browser.";
+  if (kept === "locked") return "This computer's secret store did not open. Your key stays locked away. It is not shown.";
+  return "No key is saved in this browser.";
 }
 
 export function loadMindSettings(): MindSettings {

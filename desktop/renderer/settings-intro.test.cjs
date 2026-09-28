@@ -124,7 +124,7 @@ test("settings: Minds says first that pets talk without an AI, and House lines h
   const mindsStart = html.indexOf('<h1 id="mindsSection">Minds</h1>');
   const pluginAt = html.indexOf('<select id="plugin"></select>');
   assert.ok(mindsStart >= 0 && pluginAt > mindsStart);
-  const before = textOf(html.slice(mindsStart + '<h1 id="mindsSection">Minds</h1>'.length, html.indexOf("<label>Plugin</label>")));
+  const before = textOf(html.slice(mindsStart + '<h1 id="mindsSection">Minds</h1>'.length, html.indexOf('<label for="plugin">Which AI</label>')));
   assert.equal(before, "Pets talk without an AI. Adding one is optional.");
   assert.equal(paragraph("mindsIntro"), before);
   assert.equal(paragraph("mindHouse"), "House lines need nothing else. Your pets answer with their own words.");

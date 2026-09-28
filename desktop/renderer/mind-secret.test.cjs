@@ -596,9 +596,9 @@ describe("overlay main wiring", () => {
 });
 
 describe("minds settings copy", () => {
-  it("tells the keeper the key is not plain text in mind.json", () => {
+  it("tells the keeper, in plain words, the key is not saved as plain text", () => {
     const html = fs.readFileSync(path.join(__dirname, "settings.html"), "utf8");
-    assert.match(html, /not written in plain text in mind\.json/);
+    assert.match(html, /never saved as plain words in the pets' settings file/);
     assert.doesNotMatch(html, /keyStore\.textContent = key\.value/);
     assert.doesNotMatch(html, /ok\.textContent = key\.value/);
   });
