@@ -1,4 +1,4 @@
-# 0035. A station stream names the network address when Play is pressed
+# 0035. Pressing Play on a station says this computer's internet address goes to that station
 
 - **Status:** Accepted (the open itself waits in [0044](0044-station-stream-and-cloud-talk-wait-for-the-painted-line.md))
 - **Date:** 2026-09-22

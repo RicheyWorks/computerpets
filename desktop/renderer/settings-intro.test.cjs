@@ -120,3 +120,20 @@ test("settings: Backend URL and license fields are a labeled optional section", 
   const folded = html.slice(detailsStart, detailsEnd);
   assert.doesNotMatch(folded, /id="licenseNet"|id="bundleNet"/);
 });
+test("settings: Minds says first that pets talk without an AI, and House lines hide the AI boxes", () => {
+  const mindsStart = html.indexOf('<h1 id="mindsSection">Minds</h1>');
+  const pluginAt = html.indexOf('<select id="plugin"></select>');
+  assert.ok(mindsStart >= 0 && pluginAt > mindsStart);
+  const before = textOf(html.slice(mindsStart + '<h1 id="mindsSection">Minds</h1>'.length, html.indexOf("<label>Plugin</label>")));
+  assert.equal(before, "Pets talk without an AI. Adding one is optional.");
+  assert.equal(paragraph("mindsIntro"), before);
+  assert.equal(paragraph("mindHouse"), "House lines need nothing else. Your pets answer with their own words.");
+  const fieldsStart = html.indexOf('<div id="mindFields">');
+  const fieldsEnd = html.indexOf("</div>", fieldsStart);
+  assert.ok(fieldsStart > pluginAt && fieldsEnd > fieldsStart);
+  const fields = html.slice(fieldsStart, fieldsEnd);
+  for (const id of ["model", "base", "key", "mindAbout"]) assert.match(fields, new RegExp(`id="${id}"`), `${id} sits in the AI boxes`);
+  assert.match(html, /const house = !p \|\| p\.kind === "local";\s*if \(mindFields\) mindFields\.hidden = house;\s*if \(mindHouse\) mindHouse\.hidden = !house;/);
+  assert.match(html, /<button id="redownload" class="ghost" type="button">Download my pet<\/button>/);
+  assert.doesNotMatch(html, />Signed download</);
+});

@@ -1,4 +1,5 @@
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
+import { guardedLoop, makeGuestGuard } from "@/lib/pets/frame-guard";
 import { dayPart } from "@/lib/pets/hours";
 import { weatherOf, type Weather } from "@/lib/pets/weather";
 import { carryX } from "@/lib/pets/ribbon";
@@ -66,18 +67,25 @@ export function BlotterMarks({
 }) {
   const drag = useRef<{ x: number; from: number; moved: boolean } | null>(null);
   const lureRef = useRef<HTMLButtonElement>(null);
+  const [guard] = useState(() => makeGuestGuard({ outcome: "The lure stays where it is and keeps following on the next frame." }));
   useEffect(() => {
     if (!mark?.carried || !poseRef) return;
     let raf = 0;
-    const tick = () => {
+    // Safe state for a carry that threw: the lure stays where it was drawn last; the loop keeps running.
+    guard.onReset(() => {});
+    const step = () => {
       const el = lureRef.current;
       const pose = poseRef.current;
       if (el && pose) el.style.left = `${carryX(mark, pose.x, pose.facing)}px`;
-      raf = window.requestAnimationFrame(tick);
     };
+    const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, () => "carried lure");
     raf = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(raf);
-  }, [mark, poseRef]);
+    return () => {
+      tick.stop();
+      guard.onReset(null);
+      window.cancelAnimationFrame(raf);
+    };
+  }, [guard, mark, poseRef]);
   useEffect(() => {
     if (!onFlee || hidden || mark?.kind !== "lure" || (mark.hops ?? 0) > 0 || mark.stolen || mark.carried) return;
     const id = window.setTimeout(() => onFlee(randomLureX()), 2200);

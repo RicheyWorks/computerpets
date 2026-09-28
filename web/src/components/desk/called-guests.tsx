@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { guardedLoop, makeGuestGuard } from "@/lib/pets/frame-guard";
 import { livingByKey } from "@/lib/pets/living";
 import {
   beginCalled,
@@ -21,6 +22,9 @@ import { traitFor } from "@/lib/pets/traits";
 import type { DeskWindow } from "@/lib/pets/windows";
 import { firstGrassBound, loadPlants } from "@/lib/pets/desk-plants";
 import { paintCalledFrame } from "@/lib/pets/desk-sprite-surface";
+
+/** The frame guard's key for the shared part of the walk-on frame (not one guest's own step or paint). */
+const ALL_CALLED = "called guests";
 
 export function CalledGuests({
   keys,
@@ -55,6 +59,9 @@ export function CalledGuests({
   sleepRef.current = hostSleeping;
   songRef.current = onSong;
   windowsRef.current = windows;
+  // One guard for every walk-on. Each guest's step and paint runs under its own key, so one broken guest
+  // leaves and the rest keep walking; an error in the shared part of the frame sends them all off.
+  const [guard] = useState(() => makeGuestGuard({ outcome: "That guest leaves the desk; the other pets keep moving." }));
 
   useEffect(() => {
     if (!list.length) {
@@ -75,7 +82,43 @@ export function CalledGuests({
     setOn(true);
     let last = performance.now();
     let raf = 0;
-    const tick = (now: number) => {
+    const hide = (key: string) => {
+      const nodes = rootRef.current?.querySelectorAll<HTMLElement>("[data-called]") ?? [];
+      for (const el of nodes) {
+        if (key === ALL_CALLED || el.getAttribute("data-called") === key) el.style.display = "none";
+      }
+    };
+    // Safe state for a guest that threw: that guest leaves (dropped, hidden). The shared part of the frame
+    // throwing sends every guest off and ends the walk-on.
+    guard.onReset((key) => {
+      if (key === ALL_CALLED) {
+        walkers.current = [];
+        tick.stop();
+        setOn(false);
+      } else {
+        walkers.current = walkers.current.filter((row) => row.key !== key);
+      }
+      hide(key);
+    });
+    const paintGuest = (el: HTMLElement, key: string, g: CalledWalker, dt: number) => {
+      el.style.display = "";
+      const trait = traitFor(key);
+      el.style.transform = `translate3d(${g.x}px, ${-(g.lift || 0)}px, 0) scale(${g.facing * (trait.scale || 1) * 0.72}, 1)`;
+      const imgs = poseFrames(g, { sit: sitFrames.current[key], walk: frames.current[key], idle: frames.current[key] });
+      if (Math.abs(g.target - g.x) > 2 && g.phase !== "perch" && g.phase !== "meet" && g.phase !== "bound") {
+        acc.current[key] = (acc.current[key] || 0) + dt;
+        if (acc.current[key] > 1 / 6.4 && imgs.length) {
+          acc.current[key] = 0;
+          frame.current[key] = ((frame.current[key] || 0) + 1) % imgs.length;
+        }
+      }
+      const art = el.querySelector("canvas");
+      if (art instanceof HTMLCanvasElement && imgs.length) {
+        const src = imgs[(frame.current[key] || 0) % imgs.length] || imgs[0];
+        if (src) paintCalledFrame(art, src);
+      }
+    };
+    const step = (now: number) => {
       const dt = Math.min(0.08, (now - last) / 1000);
       last = now;
       const w = window.innerWidth;
@@ -93,19 +136,22 @@ export function CalledGuests({
         transomBound: firstTransomBound(windowsRef.current, { width: w, height: window.innerHeight, floorLift: 0 }),
         grassBound: firstGrassBound(loadPlants(w, window.innerHeight), { width: w, height: window.innerHeight, floorLift: 0 }),
       };
-      walkers.current = walkers.current.map((g) => {
-        const next = stepCalled(g, dt, w, flags);
-        if (shouldSing(next)) {
-          songRef.current?.(ROBIN_SONG);
-          return markSung(next);
-        }
-        if (shouldTell(next)) {
-          const line = tellLine(next);
-          if (line) songRef.current?.(line);
-          return markTold(next);
-        }
-        return next;
-      }).filter((g) => stillVisible(g));
+      const moved: CalledWalker[] = [];
+      for (const g of walkers.current) {
+        guard.step((row: CalledWalker) => {
+          let next = stepCalled(row, dt, w, flags);
+          if (shouldSing(next)) {
+            songRef.current?.(ROBIN_SONG);
+            next = markSung(next);
+          } else if (shouldTell(next)) {
+            const line = tellLine(next);
+            if (line) songRef.current?.(line);
+            next = markTold(next);
+          }
+          if (stillVisible(next)) moved.push(next);
+        }, g, g.key);
+      }
+      walkers.current = moved;
       const nodes = rootRef.current?.querySelectorAll<HTMLElement>("[data-called]") ?? [];
       for (const el of nodes) {
         const key = el.getAttribute("data-called") || "";
@@ -114,32 +160,22 @@ export function CalledGuests({
           el.style.display = "none";
           continue;
         }
-        el.style.display = "";
-        const trait = traitFor(key);
-        el.style.transform = `translate3d(${g.x}px, ${-(g.lift || 0)}px, 0) scale(${g.facing * (trait.scale || 1) * 0.72}, 1)`;
-        const imgs = poseFrames(g, { sit: sitFrames.current[key], walk: frames.current[key], idle: frames.current[key] });
-        if (Math.abs(g.target - g.x) > 2 && g.phase !== "perch" && g.phase !== "meet" && g.phase !== "bound") {
-          acc.current[key] = (acc.current[key] || 0) + dt;
-          if (acc.current[key] > 1 / 6.4 && imgs.length) {
-            acc.current[key] = 0;
-            frame.current[key] = ((frame.current[key] || 0) + 1) % imgs.length;
-          }
-        }
-        const art = el.querySelector("canvas");
-        if (art instanceof HTMLCanvasElement && imgs.length) {
-          const src = imgs[(frame.current[key] || 0) % imgs.length] || imgs[0];
-          if (src) paintCalledFrame(art, src);
-        }
+        guard.step(() => paintGuest(el, key, g, dt), 0, key);
       }
       if (!walkers.current.length) {
         setOn(false);
-        return;
+        return false;
       }
-      raf = window.requestAnimationFrame(tick);
+      return true;
     };
+    const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, () => ALL_CALLED);
     raf = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(raf);
-  }, [hostKey, hostPoseRef, list]);
+    return () => {
+      tick.stop();
+      guard.onReset(null);
+      window.cancelAnimationFrame(raf);
+    };
+  }, [guard, hostKey, hostPoseRef, list]);
 
   if (!on && !list.length) return null;
 

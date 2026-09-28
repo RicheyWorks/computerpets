@@ -69,7 +69,7 @@ desk, the overlay, or the blotter:
 | [0016](0016-weather-locate-waits-for-an-in-app-yes.md) | A live weather locate waits for an in-app yes | Accepted |
 | [0017](0017-saved-computer-place-waits-for-a-forecast-yes.md) | A saved computer place waits for a forecast yes | Accepted (later load send superseded in part by 0032) |
 | [0018](0018-mind-key-is-not-plain-text.md) | The overlay plugin key is not plain text in mind.json | Accepted |
-| [0019](0019-license-mark-is-a-local-hash.md) | A license mark is a local hash of a named machine id | Accepted |
+| [0019](0019-license-mark-is-a-local-hash.md) | The license code is a scrambled code made on this computer from its ID | Accepted |
 | [0020](0020-desk-mind-key-is-not-in-the-browser.md) | The desk `/mind` key is not stored in the browser | Accepted |
 | [0021](0021-desk-talk-does-not-send-the-key.md) | Desk talk does not send the plugin key to the house | Accepted |
 | [0022](0022-gemini-key-stays-off-the-query.md) | The overlay Gemini call does not put the plugin key on the query string | Accepted |
@@ -82,10 +82,10 @@ desk, the overlay, or the blotter:
 | [0029](0029-enumerator-does-not-read-a-window-class.md) | The window enumerator does not read a keeper window class | Accepted |
 | [0030](0030-missing-os-id-waits-for-a-yes.md) | A missing OS id waits for a yes before a weaker license mark | Accepted |
 | [0031](0031-later-locate-still-asks-in-the-app.md) | A later weather locate still asks in the app | Accepted |
-| [0032](0032-later-forecast-names-the-network-address.md) | A later forecast names the network address | Accepted |
-| [0033](0033-geocode-names-the-network-address.md) | A geocode look-up names the network address | Accepted |
-| [0034](0034-news-quotes-and-radio-name-the-network-address.md) | News, quotes, and Radio Find name the network address | Accepted |
-| [0035](0035-station-stream-names-the-network-address.md) | A station stream names the network address when Play is pressed | Accepted (the open itself waits in 0044) |
+| [0032](0032-later-forecast-names-the-network-address.md) | A later forecast says this computer's internet address goes to the weather website | Accepted |
+| [0033](0033-geocode-names-the-network-address.md) | Looking up a place says this computer's internet address goes to the place look-up website | Accepted |
+| [0034](0034-news-quotes-and-radio-name-the-network-address.md) | News, quotes, and Radio Find say this computer's internet address goes to that website | Accepted |
+| [0035](0035-station-stream-names-the-network-address.md) | Pressing Play on a station says this computer's internet address goes to that station | Accepted (the open itself waits in 0044) |
 | [0036](0036-cloud-talk-and-voice-name-the-network-address.md) | Cloud talk and cloud voice say this computer's internet address goes to that website | Accepted (the request itself waits in 0044) |
 | [0037](0037-license-hash-names-the-network-address.md) | Unlock names the license website before the code made from this computer's ID is sent | Accepted (the POST itself waits in 0045) |
 | [0038](0038-signed-bundle-names-the-cdn-host.md) | A signed bundle names the CDN host before the GET leaves | Accepted (the GET itself waits in 0045) |

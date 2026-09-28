@@ -1,4 +1,4 @@
-# 0032. A later forecast names the network address
+# 0032. A later forecast says this computer's internet address goes to the weather website
 
 - **Status:** Accepted
 - **Date:** 2026-09-22

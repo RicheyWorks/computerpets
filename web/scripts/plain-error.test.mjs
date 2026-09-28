@@ -185,7 +185,9 @@ test("plain-error: admin raw detail sits behind a Details toggle, never the defa
   assert.doesNotMatch(text, /\{note\}\s*<\/p>\s*:\s*null/);
   const api = src("src/lib/admin/api.ts");
   assert.match(api, /class AdminApiError extends HouseError/);
-  assert.match(api, /Cannot reach the license service\. Check the API URL\./);
+  assert.match(api, /throw new AdminApiError\(0, ADMIN_UNREACHABLE\);/);
+  assert.match(api, /export const ADMIN_UNREACHABLE =\s*"Couldn't reach the license service\. Check that its address is right and that it is running, then try again\.";/);
+  assert.doesNotMatch(api, /API URL|Cannot reach/);
   assert.match(api, /status === 429\) return PLAIN_LINES\.busy/);
   assert.match(api, /status >= 500\) return `The license service had a problem \(error \$\{status\}\)\. Try again later\.`/);
   assert.doesNotMatch(api, /readError/, "service body text is detail, not the message");

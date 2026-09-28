@@ -54,16 +54,35 @@ test("the admin page's fallback lines are whole sentences, not 'Unlock failed.'"
   for (const k of ["unlock", "lookup", "revoke"]) assert.match(page, new RegExp(`showError\\(err, ADMIN_FALLBACK\\.${k}\\);`));
 });
 
-test("the license fallbacks say the license website and the download website in all three places", () => {
+test("the license lines keep no dead stand-in name: every miss names the real host, in all three places", async () => {
+  // A miss needs a named host (no host never leaves), so a "the license website" stand-in could never show.
   const Main = require(join(repo, "desktop", "license", "license-net.cjs"));
   const Page = require(join(repo, "desktop", "renderer", "license-net.js"));
-  const py = read("client", "computerpets_client", "license", "license_net.py");
-  for (const M of [Main, Page]) {
-    assert.equal(M.LICENSE_HOST_NAME, "the license website");
-    assert.equal(M.BUNDLE_HOST_NAME, "the download website");
+  const sources = [
+    read("desktop", "license", "license-net.cjs"),
+    read("desktop", "renderer", "license-net.js"),
+    read("client", "computerpets_client", "license", "license_net.py"),
+  ];
+  for (const src of sources) {
+    assert.doesNotMatch(src, /HOST_NAME/);
+    assert.doesNotMatch(src, /\|\| "the (license|download) website"|or "the (license|download) website"/);
   }
-  assert.match(py, /^LICENSE_HOST_NAME = "the license website"\r?$/m);
-  assert.match(py, /^BUNDLE_HOST_NAME = "the download website"\r?$/m);
+  for (const M of [Main, Page]) {
+    assert.equal(M.LICENSE_HOST_NAME, undefined);
+    assert.equal(M.BUNDLE_HOST_NAME, undefined);
+    assert.equal(M.licenseTarget(""), null);
+    assert.deepEqual(M.licenseTarget("https://license.example.test/a?x=1"), { local: false, label: "license.example.test" });
+    assert.deepEqual(M.bundleTarget("https://cdn.example.test/p.zip?sig=1"), { local: false, label: "cdn.example.test" });
+  }
+  await assert.rejects(Main.postLicenseHash("", "https://license.example.test/a", () => 1), {
+    message: "Nothing was sent to license.example.test. This page has to name the license website first.",
+  });
+  await assert.rejects(Main.postUnboundDownload("", "https://license.example.test/a", () => 1), {
+    message: "Nothing was sent to license.example.test. This page has to name the license website first.",
+  });
+  await assert.rejects(Main.getSignedBundle("", "https://cdn.example.test/p.zip", () => 1, true), {
+    message: "Your pet's files were not downloaded from cdn.example.test. This page has to name the download website first.",
+  });
 });
 
 test("the news and quotes file headers are plain and name the right websites", () => {
@@ -97,6 +116,16 @@ test("ADR 0036 and 0037 titles are plain and match the index; 0019 has a plain-w
   assert.equal(title("0037"), "Unlock names the license website before the code made from this computer's ID is sent");
   for (const n of ["0036", "0037"]) {
     assert.ok(index.includes(`[${n}](${file(n)}) | ${title(n)} |`), n);
+  }
+  // 0019 and 0032 to 0035 got plain titles too (titles and index rows only; the decisions are unchanged).
+  assert.equal(title("0019"), "The license code is a scrambled code made on this computer from its ID");
+  assert.equal(title("0032"), "A later forecast says this computer's internet address goes to the weather website");
+  assert.equal(title("0033"), "Looking up a place says this computer's internet address goes to the place look-up website");
+  assert.equal(title("0034"), "News, quotes, and Radio Find say this computer's internet address goes to that website");
+  assert.equal(title("0035"), "Pressing Play on a station says this computer's internet address goes to that station");
+  for (const n of ["0019", "0032", "0033", "0034", "0035", "0036", "0037"]) {
+    assert.ok(index.includes(`[${n}](${file(n)}) | ${title(n)} |`), `${n} index row matches its title`);
+    assert.doesNotMatch(title(n), /network address|\bhash\b|geocode|machine id|\bhost\b/, n);
   }
   const adr19 = readFileSync(join(dir, file("0019")), "utf8");
   assert.match(adr19, /- \*\*Plain words \(2026-09-27\):\*\* "device fingerprint" below means a code that stays the same for this computer/);

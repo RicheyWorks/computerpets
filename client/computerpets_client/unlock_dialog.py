@@ -200,7 +200,7 @@ class UnlockDialog(QDialog):
 
         unlock_btn = QPushButton("Unlock")
         unlock_btn.clicked.connect(self._unlock)
-        download_btn = QPushButton("Signed download")
+        download_btn = QPushButton("Download my pet")
         download_btn.clicked.connect(self._download)
         clear_btn = QPushButton("Clear")
         clear_btn.clicked.connect(self._clear)
