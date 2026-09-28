@@ -49,10 +49,22 @@ function Get-Pictures {
 $seen = Get-Pictures
 
 # -Check says what the start sees and changes nothing: no install, no overlay.
+# The last line says what to type next, in plain words (the pictures first: the start stops there).
 if ($Check) {
   Write-Host "ok: node $version"
   Write-Host "pieces: $pieces"
   Write-Host "pictures: $seen"
+  if ($seen -ne "ready") {
+    Write-Host "next: The pet pictures are not here yet. Install Git LFS from https://git-lfs.com, then in the computerpets folder type git lfs install and then git lfs pull. Then type .\desktop.ps1 and press Enter."
+  } elseif ($pieces -eq "missing") {
+    Write-Host "next: Type .\desktop.ps1 and press Enter. It gets the pieces (a few minutes the first time), then the pets come on."
+  } elseif ($pieces -eq "unfinished") {
+    Write-Host "next: Type .\desktop.ps1 and press Enter. It finishes getting the pieces, then the pets come on."
+  } elseif ($pieces -eq "changed") {
+    Write-Host "next: Type .\desktop.ps1 and press Enter. It gets the new pieces, then the pets come on."
+  } else {
+    Write-Host "next: Type .\desktop.ps1 and press Enter to turn the pets on."
+  }
   exit 0
 }
 

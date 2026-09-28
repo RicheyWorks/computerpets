@@ -175,7 +175,11 @@ import { cn } from "@/lib/utils";
 import { PLATE_LINES, RETRY_LABEL, plateProblem } from "@/lib/plain-error";
 
 
-function usePlateChrome(key: PlateKey) {
+/**
+ * A plate's place, drag and colors. Docked (the /demo room on a phone): the plate sits in the room's panel, in the
+ * flow, so it keeps its colors but not its saved spot, and a press does not drag it (or move the desktop's spot).
+ */
+function usePlateChrome(key: PlateKey, docked = false) {
   const [plate, setPlate] = useState<DeskPlate | null>(null);
   const press = useRef<{ x: number; y: number } | null>(null);
   const skipToggle = useRef(false);
@@ -194,6 +198,7 @@ function usePlateChrome(key: PlateKey) {
   }
 
   function onTogglePointerDown(e: ReactPointerEvent<HTMLButtonElement>) {
+    if (docked) return;
     e.stopPropagation();
     e.currentTarget.setPointerCapture(e.pointerId);
     press.current = { x: e.clientX, y: e.clientY };
@@ -201,6 +206,7 @@ function usePlateChrome(key: PlateKey) {
   }
 
   function onTogglePointerMove(e: ReactPointerEvent<HTMLButtonElement>) {
+    if (docked) return;
     if (!e.currentTarget.hasPointerCapture(e.pointerId) || !press.current || !plateRef.current) return;
     let row = plateRef.current;
     if (!row.dragging && clickMoved(e.clientX - press.current.x, e.clientY - press.current.y)) {
@@ -239,7 +245,8 @@ function usePlateChrome(key: PlateKey) {
     persist(applySwatch(plateRef.current, id));
   }
 
-  const style = plate ? (paintStyle(plate) as CSSProperties) : undefined;
+  const painted = plate ? (paintStyle(plate) as CSSProperties) : undefined;
+  const style = painted && docked ? { ...painted, left: undefined, top: undefined, right: undefined } : painted;
 
   const colorUi = plate ? (
     <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -281,6 +288,9 @@ function usePlateChrome(key: PlateKey) {
   };
 }
 
+/** A plate docked in the /demo room's panel on a phone: full width, in the flow, over nothing. */
+const DOCKED_PLATE = "desk-plate pointer-events-auto relative w-full rounded-sm border border-border/50 shadow-lg";
+
 const WEATHER_ID = "desk-weather";
 const NEWS_ID = "desk-news";
 /** Headlines refresh every 20 minutes while the page shows. */
@@ -308,9 +318,12 @@ function writeCard(patch: Partial<CardPrefs>) {
 export function DeskWeatherPlate({
   onBounds,
   onSky,
+  docked = false,
 }: {
   onBounds?: (win: DeskWindow | null) => void;
   onSky?: (sky: LiveSky | null) => void;
+  /** In the room's panel on a phone, in the flow (usePlateChrome). */
+  docked?: boolean;
 }) {
   const ref = useRef<HTMLElement>(null);
   const [card, setCard] = useState(() => loadCard());
@@ -333,7 +346,7 @@ export function DeskWeatherPlate({
   const areas = useMemo(() => parseAreas(card), [card]);
   const area = currentArea(areas);
   const tab = areas.tab;
-  const chrome = usePlateChrome("weather");
+  const chrome = usePlateChrome("weather", docked);
   const shownGate = forecastGate(areas, card.hereForecastAck);
   const lineInView = open && tab === "current";
   const honesty = forecastHonesty(shownGate);
@@ -578,10 +591,15 @@ export function DeskWeatherPlate({
       ref={ref}
       data-hit
       data-desk-plate="weather"
-      className={cn(
-        "desk-plate pointer-events-auto absolute z-[4] w-[min(18rem,42%)] rounded-sm border border-border/50 shadow-lg",
-        open && "w-[min(22rem,52%)]",
-      )}
+      data-plate-docked={docked ? "" : undefined}
+      className={
+        docked
+          ? DOCKED_PLATE
+          : cn(
+              "desk-plate pointer-events-auto absolute z-[4] w-[min(18rem,42%)] rounded-sm border border-border/50 shadow-lg",
+              open && "w-[min(22rem,52%)]",
+            )
+      }
       style={{
         ...chrome.style,
         background: "color-mix(in srgb, var(--plate-bg, #161412) 82%, transparent)",
@@ -774,7 +792,7 @@ export function DeskWeatherPlate({
   );
 }
 
-export function DeskNewsPlate() {
+export function DeskNewsPlate({ docked = false }: { docked?: boolean } = {}) {
   const [card, setCard] = useState(() => loadCard());
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState<NewsItem[]>([]);
@@ -792,7 +810,7 @@ export function DeskNewsPlate() {
   const prefs = useMemo(() => parseNewsPrefs(card), [card]);
   const topic = currentTopic(prefs);
   const tab = prefs.tab as NewsTab;
-  const chrome = usePlateChrome("news");
+  const chrome = usePlateChrome("news", docked);
 
   function keepNews(house: ReturnType<typeof parseNewsPrefs>) {
     setCard(writeCard(newsToCardPatch(house)));
@@ -876,10 +894,15 @@ export function DeskNewsPlate() {
     <article
       data-hit
       data-desk-plate="news"
-      className={cn(
-        "desk-plate pointer-events-auto absolute z-[4] w-[min(18rem,40%)] rounded-sm border border-border/50 shadow-lg",
-        open && "w-[min(24rem,52%)]",
-      )}
+      data-plate-docked={docked ? "" : undefined}
+      className={
+        docked
+          ? DOCKED_PLATE
+          : cn(
+              "desk-plate pointer-events-auto absolute z-[4] w-[min(18rem,40%)] rounded-sm border border-border/50 shadow-lg",
+              open && "w-[min(24rem,52%)]",
+            )
+      }
       style={{
         ...chrome.style,
         background: "color-mix(in srgb, var(--plate-bg, #161412) 82%, transparent)",
@@ -1052,7 +1075,7 @@ export function DeskNewsPlate() {
   );
 }
 
-export function DeskMarketPlate() {
+export function DeskMarketPlate({ docked = false }: { docked?: boolean } = {}) {
   const [card, setCard] = useState(() => loadCard());
   const [open, setOpen] = useState(false);
   const [live, setLive] = useState<MarketLive | null>(null);
@@ -1076,7 +1099,7 @@ export function DeskMarketPlate() {
   const house = useMemo(() => parseMarket(card), [card]);
   const ticker = currentTicker(house);
   const nft = currentNft(house);
-  const chrome = usePlateChrome("market");
+  const chrome = usePlateChrome("market", docked);
 
   function keep(patch: Partial<CardPrefs>) {
     setCard(writeCard(patch));
@@ -1306,10 +1329,15 @@ export function DeskMarketPlate() {
     <article
       data-hit
       data-desk-plate="market"
-      className={cn(
-        "desk-plate pointer-events-auto absolute z-[4] w-[min(18rem,42%)] rounded-sm border border-border/50 shadow-lg",
-        open && "w-[min(36rem,92%)]",
-      )}
+      data-plate-docked={docked ? "" : undefined}
+      className={
+        docked
+          ? DOCKED_PLATE
+          : cn(
+              "desk-plate pointer-events-auto absolute z-[4] w-[min(18rem,42%)] rounded-sm border border-border/50 shadow-lg",
+              open && "w-[min(36rem,92%)]",
+            )
+      }
       style={{
         ...chrome.style,
         background: "color-mix(in srgb, var(--plate-bg, #161412) 82%, transparent)",

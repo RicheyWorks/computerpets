@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { guestMatches, noteAnchor, noteFromHash, notesLine } from "@/lib/pets/meet-index";
 
@@ -19,18 +19,26 @@ export type FieldNote = {
  * A room's field notes, walkable on a phone. /study listed twenty tall notes one after another (8,697 px of the
  * page's 10,959 at 375×667) and /log ten (4,472 of 6,607). Now each note is a drawer with the guest's name and kind,
  * closed at first; "Open all" opens them, "Find a guest" filters them by name or kind, and /study#note-rui opens
- * Rui's. Every note stays in the page (a closed drawer still holds its words), so nothing is out of reach.
+ * Rui's. Every note stays in the page (a closed drawer still holds its words), so nothing is out of reach. The
+ * eighteen room pages (/snakes, /sea, /garden, ...) use it too; /hive has two sets (the insects, then bees and comb).
  */
 export function FieldNotes({
   notes,
   heading,
   example,
+  kicker = "Field notes",
+  intro,
 }: {
   notes: readonly FieldNote[];
   heading: string;
-  /** A kind to suggest when a search finds nothing ("millipede"). */
-  example: string;
+  /** A kind to suggest when a search finds nothing ("millipede"); the last note's kind when not given. */
+  example?: string;
+  /** The small label over the heading ("Bees and comb" on /hive's second set). */
+  kicker?: string;
+  /** The words under the heading, when a room says it its own way. */
+  intro?: ReactNode;
 }) {
+  const hint = example ?? (notes[notes.length - 1]?.species.toLowerCase() || "fox");
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState<ReadonlySet<string>>(() => new Set());
   const searchId = useId();
@@ -67,11 +75,11 @@ export function FieldNotes({
   return (
     <section className="border-t border-border" data-field-notes>
       <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Field notes</p>
+        <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">{kicker}</p>
         <h2 className="mt-2 font-display text-3xl sm:text-4xl">{heading}</h2>
         <p className="mt-3 max-w-xl text-sm text-muted">
-          A short tell, one mix-up, and the corner of the house they already keep. Open a demo if you want them to stay
-          on your screen.
+          {intro ??
+            "A short tell, one mix-up, and the corner of the house they already keep. Open a demo if you want them to stay on your screen."}
         </p>
 
         <div className="mt-6 flex flex-wrap items-end gap-3">
@@ -85,7 +93,7 @@ export function FieldNotes({
               data-notes-search
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={`A name or a kind: ${notes[0]?.name ?? ""}, ${example}`}
+              placeholder={`A name or a kind: ${notes[0]?.name ?? ""}, ${hint}`}
               autoComplete="off"
               className="mt-1 h-11 w-full rounded-[var(--radius-sm)] border border-border bg-surface px-3 text-base text-fg outline-none placeholder:text-subtle focus:ring-2 focus:ring-primary/30"
             />
@@ -102,7 +110,7 @@ export function FieldNotes({
           </button>
         </div>
         <p className="mt-2 text-sm text-muted" aria-live="polite" data-notes-count>
-          {notesLine(shown.length, notes.length, query, example)}
+          {notesLine(shown.length, notes.length, query, hint)}
         </p>
 
         <div className="mt-6 grid items-start gap-3 md:grid-cols-2 md:gap-4">

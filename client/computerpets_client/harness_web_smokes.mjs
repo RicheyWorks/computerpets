@@ -2909,6 +2909,73 @@ async function kennelFirstNotes() {
   ]);
 }
 
+async function kennelDrawers() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8").replace(/\r\n/g, "\n");
+  const sweep = read("web", "scripts", "phone-desk-layout.test.mjs");
+
+  // 1) The eighteen room pages: field-note drawers (they listed 6,221 to 11,181 px of notes one after another).
+  const ROOMS = { canopy: ["CANOPY_GUIDE"], cellar: ["FUNGI_GUIDE"], corner: ["CORNER_GUIDE"], creek: ["CREEK_GUIDE"], far: ["FAR_GUIDE"], garden: ["GARDEN_GUIDE"], grid: ["GRID_GUIDE"], hive: ["INSECT_GUIDE", "BEE_GUIDE"], meadow: ["MEADOW_GUIDE"], pond: ["POND_GUIDE"], reef: ["REEF_GUIDE"], roost: ["ROOST_GUIDE"], sea: ["SEA_GUIDE"], shore: ["SHORE_GUIDE"], snakes: ["SNAKE_GUIDE"], stone: ["STONE_GUIDE"], well: ["WELL_GUIDE"], wood: ["WOOD_GUIDE"] };
+  const unwired = Object.entries(ROOMS).filter(([r, gs]) => {
+    const s = read("web", "src", "routes", `${r}.tsx`);
+    return /_GUIDE\.map\(/.test(s) || !gs.every((g) => new RegExp(`<FieldNotes\\s+notes=\\{${g}\\}`).test(s));
+  }).map(([r]) => r);
+  const fn = read("web", "src", "components", "desk", "field-notes.tsx");
+  const rooms = {
+    eighteen: Object.keys(ROOMS).length === 18 && unwired.length === 0,
+    props: fn.includes('kicker = "Field notes"') && fn.includes("intro?: ReactNode") && fn.includes("example ?? (notes[notes.length - 1]?.species.toLowerCase()"),
+    hive: read("web", "src", "routes", "hive.tsx").includes('kicker="Bees and comb"'),
+    sweep: sweep.includes("export const ROOM_NOTE_PAGES") && sweep.includes('["/hive", 6_000, 20]') && sweep.includes("'s Open all opened"),
+  };
+  if (!Object.values(rooms).every(Boolean)) bad.push(`rooms: ${JSON.stringify(rooms)} unwired=${unwired.join(",")}`);
+
+  // 2) /demo on a phone: the plates dock in the panel, off the kicker and the name.
+  const plates = read("web", "src", "components", "desk", "desk-plates.tsx");
+  const room = read("web", "src", "components", "desk", "companion-room.tsx");
+  const demo = {
+    docked: plates.includes("function usePlateChrome(key: PlateKey, docked = false)") && plates.includes("const DOCKED_PLATE =") && ["weather", "news", "market"].every((k) => plates.includes(`usePlateChrome("${k}", docked)`)),
+    room: room.includes("<div data-demo-plates") && room.includes("<DeskNewsPlate docked />") && !room.includes("windows={demoWindow ? deskWindows"),
+    taps: read("web", "src", "styles.css").includes("[data-plate-docked] > button:first-child {"),
+    sweep: sweep.includes("still float over the room") && sweep.includes("sit over the kicker or the name"),
+  };
+  if (!Object.values(demo).every(Boolean)) bad.push(`demo: ${JSON.stringify(demo)}`);
+
+  // 3) Both start scripts' check mode ends with what to type next.
+  const sh = read("desktop.sh");
+  const ps = read("desktop.ps1");
+  const next = {
+    sh: sh.includes("next: Type sh desktop.sh and press Enter to turn the pets on.") && sh.includes("It finishes getting the pieces"),
+    ps: ps.includes("next: Type .\\desktop.ps1 and press Enter to turn the pets on.") && ps.includes("It finishes getting the pieces"),
+    harness: read("client", "computerpets_client", "app_harness.py").includes("def launch_next("),
+  };
+  if (!Object.values(next).every(Boolean)) bad.push(`next: ${JSON.stringify(next)}`);
+
+  // 4) 44 px missing-page links, 5) /mind short on a phone, 7) the audit fix: /demo/<unknown> has its own tab title.
+  const demoPage = read("web", "src", "routes", "demo.$slug.tsx");
+  const mind = read("web", "src", "routes", "mind.tsx");
+  const edges = {
+    back: read("web", "src", "routes", "pets.$key.tsx").includes('data-back-kennel className="inline-flex min-h-11 items-center'),
+    missing: demoPage.includes('data-demo-missing className="inline-flex min-h-11 items-center'),
+    mind: mind.includes("data-mind-cards className=\"grid grid-flow-row-dense grid-cols-2") && mind.includes('${active ? "" : "max-sm:hidden"}'),
+    title: demoPage.includes(': "No demo here — ComputerPets"'),
+    sweep: sweep.includes("export const MIND_PHONE_MAX_HEIGHT = 2_400") && sweep.includes("/pets/not-a-pet: \"Back to kennel\" is") && sweep.includes('"No demo here — ComputerPets"'),
+  };
+  if (!Object.values(edges).every(Boolean)) bad.push(`edges: ${JSON.stringify(edges)}`);
+
+  const roadmap = read("docs", "ROADMAP.md");
+  if (!roadmap.includes("- [x] The kennel drawers on a phone")) bad.push("ROADMAP entry missing");
+  const extras = { rooms, demo, next, edges };
+  if (bad.length) return fail(bad.join("; "), extras);
+  return ok("the eighteen room pages are field-note drawers; /demo docks its plates on a phone; both start checks say what to type next; 44 px missing-page links; /mind is short on a phone; /demo/<unknown> has its own tab title", extras, [
+    "rooms=eighteen_drawers",
+    "demo=plates_docked_phone",
+    "next=plain_command_both_scripts",
+    "taps=missing_links_44px",
+    "mind=two_per_row_phone",
+    "title=demo_unknown",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -2939,6 +3006,7 @@ const COMMANDS = {
   signin_return_quiet: signinReturnQuiet,
   meet_index_forget: meetIndexForget,
   kennel_first_notes: kennelFirstNotes,
+  kennel_drawers: kennelDrawers,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

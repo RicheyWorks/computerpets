@@ -990,17 +990,19 @@ export function CompanionRoom({
       <DayWash sky={skyNow()} />
       <RoomWash room={room.id} />
       <DeskGrain />
-      {demoWindow ? (
+      {/* On a phone the /demo plates dock in the panel (after the keeper card) instead of floating over the hour
+          line and the name; a phone has no windows, so the drawn ones stay off and the guests get none. */}
+      {demoWindow && !hand ? (
         <DemoWindowPlate onBounds={onDemoBounds} />
       ) : null}
-      {demoWindow ? (
+      {demoWindow && !hand ? (
         <DeskWeatherPlate
           onBounds={onWeatherBounds}
           onSky={setLiveSky}
         />
       ) : null}
-      {demoWindow ? <DeskNewsPlate /> : null}
-      {demoWindow ? <DeskMarketPlate /> : null}
+      {demoWindow && !hand ? <DeskNewsPlate /> : null}
+      {demoWindow && !hand ? <DeskMarketPlate /> : null}
 
       <BlotterMarks
         mark={mark}
@@ -1038,7 +1040,7 @@ export function CompanionRoom({
           poseRef.current = { x, facing };
         }}
         onLieHold={setRuiLieHold}
-        windows={demoWindow ? deskWindows : []}
+        windows={demoWindow && !hand ? deskWindows : []}
         musicOn={kind.key === "red_panda" && musicOn}
         label={petArtLabel(displayName, { hidden: stats.hidden || deskOff, asleep: !!stats.asleep, unwell: stats.sick })}
         cardOpen={cardOpen}
@@ -1144,7 +1146,7 @@ export function CompanionRoom({
         hostSleeping={kind.key === "red_panda" && (!!stats.asleep || ruiLieHold)}
         hostPoseRef={poseRef}
         onSong={guestSay}
-        windows={demoWindow ? deskWindows : []}
+        windows={demoWindow && !hand ? deskWindows : []}
       />
 
       {choiceOpen ? (
@@ -1347,6 +1349,13 @@ export function CompanionRoom({
           </button>
         ) : null}
         {hand && asideFirst ? null : aside}
+        {demoWindow && hand ? (
+          <div data-demo-plates className="mt-5 max-w-sm space-y-2">
+            <DeskWeatherPlate docked onSky={setLiveSky} />
+            <DeskNewsPlate docked />
+            <DeskMarketPlate docked />
+          </div>
+        ) : null}
       </aside>
 
       <div

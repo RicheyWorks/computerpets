@@ -91,8 +91,9 @@ test("the cellar page is a field guide, not a portrait catalog", () => {
   assert.match(denSrc, /createFileRoute\("\/cellar"\)/);
   assert.match(denSrc, /CellarDen/);
   assert.match(denSrc, /SpeciesPlaque/);
-  assert.match(denSrc, /\/demo\/\$slug/);
-  assert.match(denSrc, /FUNGI_GUIDE\.map/);
+  // The notes render through the shared drawers (components/desk/field-notes.tsx), each with its /demo/<slug> link.
+  assert.match(readFileSync(join(root, "src/components/desk/field-notes.tsx"), "utf8"), /\/demo\/\$slug/);
+  assert.match(denSrc, /<FieldNotes\s+notes=\{FUNGI_GUIDE\}/);
 });
 
 test("the catalog and living roster include the ten fungi keys", () => {

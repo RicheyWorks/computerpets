@@ -106,6 +106,29 @@ test("the start checks Node and the pieces in plain words, and a half-finished i
   assert.match(readFileSync(join(repo, ".gitignore"), "utf8"), /^desktop\/node_modules\/$/m);
   assert.match(startSrc, /desktop\.ps1 -Check/);
   assert.match(startSrc, /gets the pieces again/);
+  assert.match(startSrc, /Its last line says what to type next\./);
+});
+
+test("check mode ends with the plain next step for every pieces state, in both start scripts", () => {
+  const shSrc = readFileSync(join(repo, "desktop.sh"), "utf8");
+  for (const [src, run] of [[ps1Src, ".\\desktop.ps1"], [shSrc, "sh desktop.sh"]]) {
+    const at = src.search(/ok: node/);
+    const block = src.slice(at, src.indexOf("exit 0", at));
+    const said = (words) => block.includes(`next: ${words}`);
+    assert.ok(said(`Type ${run} and press Enter. It gets the pieces (a few minutes the first time), then the pets come on.`), `${run}: missing`);
+    assert.ok(said(`Type ${run} and press Enter. It finishes getting the pieces, then the pets come on.`), `${run}: unfinished`);
+    assert.ok(said(`Type ${run} and press Enter. It gets the new pieces, then the pets come on.`), `${run}: changed`);
+    assert.ok(said(`Type ${run} and press Enter to turn the pets on.`), `${run}: ready`);
+    assert.ok(said("The pet pictures are not here yet. Install Git LFS from https://git-lfs.com"), `${run}: pictures`);
+    // The pictures come first (the real start stops there), and check mode still installs nothing.
+    assert.ok(block.indexOf("pictures are not here yet") < block.indexOf("finishes getting the pieces"));
+    assert.doesNotMatch(block, /npm install|Getting the pieces/);
+    // Short, plain sentences: no line over 30 words, no jargon.
+    for (const line of block.match(/next: [^"]*/g)) {
+      for (const sentence of line.slice(6).split(/(?<=\.) /)) assert.ok(sentence.split(/\s+/).length <= 30, sentence);
+      assert.doesNotMatch(line, /node_modules|stamp|Electron|dependenc/i);
+    }
+  }
 });
 
 test("the start checks the pet pictures came through Git LFS, and says how to get them in plain words", () => {

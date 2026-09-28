@@ -90,8 +90,9 @@ test("the well page is a field guide, not a costume party", () => {
   assert.match(denSrc, /createFileRoute\("\/well"\)/);
   assert.match(denSrc, /WellDen/);
   assert.match(denSrc, /SpeciesPlaque/);
-  assert.match(denSrc, /\/demo\/\$slug/);
-  assert.match(denSrc, /WELL_GUIDE\.map/);
+  // The notes render through the shared drawers (components/desk/field-notes.tsx), each with its /demo/<slug> link.
+  assert.match(readFileSync(join(root, "src/components/desk/field-notes.tsx"), "utf8"), /\/demo\/\$slug/);
+  assert.match(denSrc, /<FieldNotes\s+notes=\{WELL_GUIDE\}/);
   assert.match(denSrc, /a paramecium is not an animal/i);
   assert.doesNotMatch(denSrc, /axolotl/i);
   assert.doesNotMatch(denSrc, /slime/i);

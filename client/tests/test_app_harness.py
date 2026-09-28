@@ -133,6 +133,7 @@ CROSS_DOMAIN = {
     "web.signin_return_quiet",
     "web.meet_index_forget",
     "web.kennel_first_notes",
+    "web.kennel_drawers",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -344,6 +345,9 @@ def test_start_script_checks_node_and_pieces_without_installing():
         assert result.extras["pictures"] in {"ready", "missing", "lfs-pointers"}
         assert result.extras["pictures"] == result.extras["picturesReal"]
         assert result.extras["node"] and result.extras["node"].startswith("v")
+        # The last line says what to type next, in plain words (launch_next), for the folder as it is.
+        assert result.extras["next"].startswith("next: ") and "press Enter" in result.extras["next"]
+        assert "next=plain" in result.trace
     else:
         # No Node, an older Node, or no npm: the start stops with plain words.
         assert result.extras["exit"] != 0
@@ -389,6 +393,69 @@ def test_start_script_stops_on_git_lfs_pointers_before_installing(tmp_path):
     picture.write_bytes(b"\x89PNG\r\n\x1a\n" + b"\0" * 32)
     assert launch_pictures_state(tmp_path) == "ready"
     assert "pictures: ready" in run("--check").stdout
+
+
+@pytest.mark.skipif(
+    os.name == "nt",
+    reason="Windows runs desktop.ps1, and this test would copy a start script into a temp folder (antivirus flags "
+    "temporary scripts there). desk.launch_check holds desktop.ps1's next line to the real folder on Windows.",
+)
+def test_start_script_check_says_what_to_type_next_for_each_state(tmp_path):
+    """sh desktop.sh --check ends with the plain next step: pictures first, then missing, unfinished, changed, ready."""
+    import shutil
+    import subprocess
+    import time
+
+    from computerpets_client.app_harness import LAUNCH_PICTURE, launch_next, repo_root
+
+    node, npm, sh = shutil.which("node"), shutil.which("npm"), shutil.which("sh")
+    if not (node and npm and sh):
+        pytest.skip("needs node, npm, and sh on PATH to reach check mode")
+    major = subprocess.run([node, "-v"], capture_output=True, text=True, timeout=60).stdout.strip()
+    if not major.startswith("v") or int(major[1:].split(".")[0]) < 22:
+        pytest.skip(f"needs Node 22 or newer to reach check mode (this is {major})")
+    shutil.copy(repo_root() / "desktop.sh", tmp_path / "desktop.sh")
+    desk = tmp_path / "desktop"
+    desk.mkdir()
+    (desk / "package.json").write_text("{}", encoding="utf-8")
+    picture = tmp_path.joinpath(*LAUNCH_PICTURE)
+    picture.parent.mkdir(parents=True)
+
+    def last() -> tuple[str, str]:
+        out = subprocess.run([sh, str(tmp_path / "desktop.sh"), "--check"], capture_output=True, text=True, timeout=120)
+        assert out.returncode == 0, out.stdout + out.stderr
+        lines = [ln for ln in out.stdout.splitlines() if ln.strip()]
+        state = next(ln.split(": ", 1)[1] for ln in lines if ln.startswith("pieces: "))
+        return state, lines[-1]
+
+    # No pictures: the pictures come first (the real start stops there).
+    state, line = last()
+    assert line == launch_next(state, "missing", "desktop.sh") and "git lfs pull" in line
+    picture.write_bytes(b"\x89PNG\r\n\x1a\n" + b"\0" * 32)
+    seen = []
+    state, line = last()
+    seen.append(state)
+    assert state == "missing" and line == "next: Type sh desktop.sh and press Enter. It gets the pieces (a few minutes the first time), then the pets come on."
+    (desk / "node_modules" / "electron").mkdir(parents=True)
+    (desk / "node_modules" / "electron" / "path.txt").write_text("electron", encoding="utf-8")
+    state, line = last()
+    seen.append(state)
+    assert state == "unfinished" and line == "next: Type sh desktop.sh and press Enter. It finishes getting the pieces, then the pets come on."
+    stamp = desk / "node_modules" / ".computerpets-installed"
+    stamp.write_text("done", encoding="utf-8")
+    old = time.time() - 60
+    os.utime(stamp, (old, old))
+    state, line = last()
+    seen.append(state)
+    assert state == "changed" and line == "next: Type sh desktop.sh and press Enter. It gets the new pieces, then the pets come on."
+    os.utime(stamp, None)
+    os.utime(desk / "package.json", (old, old))
+    state, line = last()
+    seen.append(state)
+    assert state == "ready" and line == "next: Type sh desktop.sh and press Enter to turn the pets on."
+    assert seen == ["missing", "unfinished", "changed", "ready"]
+    # Check mode never installs.
+    assert not (desk / "node_modules" / ".package-lock.json").exists()
 
 
 def test_main_rows_drive_the_real_main_process_offline():
@@ -559,6 +626,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.signin_return_quiet",
         "web.meet_index_forget",
         "web.kennel_first_notes",
+        "web.kennel_drawers",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -1030,6 +1098,17 @@ def test_kennel_first_notes_row_kennel_taps_field_notes_login_title_demo():
         assert mark in kf.trace, (mark, kf.trace)
     for group in ("kennel", "taps", "notes", "edges", "demo"):
         assert all(kf.extras[group].values()), (group, kf.extras[group])
+
+
+def test_kennel_drawers_row_rooms_plates_next_taps_mind_title():
+    """Eighteen room drawers; /demo plates dock on a phone; start checks say what to type; 44 px; /mind; demo title."""
+    kd = invoke("web.kennel_drawers")
+    assert kd.ok, (kd.error, kd.detail)
+    for mark in ("rooms=eighteen_drawers", "demo=plates_docked_phone", "next=plain_command_both_scripts",
+                 "taps=missing_links_44px", "mind=two_per_row_phone", "title=demo_unknown"):
+        assert mark in kd.trace, (mark, kd.trace)
+    for group in ("rooms", "demo", "next", "edges"):
+        assert all(kd.extras[group].values()), (group, kd.extras[group])
 
 
 def test_pictures_gate_row_boots_real_main_with_pointers_and_opens_no_glass():
