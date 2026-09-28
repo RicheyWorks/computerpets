@@ -1,12 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { Badge } from "@/components/ui/badge";
 import { Meter } from "@/components/ui/progress";
-import { findSpecies, portraitSrc, rarityLabel, type Rarity } from "@/lib/pets/catalog";
+import { PetPortrait } from "@/components/pet-portrait";
+import { findSpecies, rarityLabel, type Rarity } from "@/lib/pets/catalog";
 import type { CompanionView } from "@/lib/pets/actions";
 import { bondScore, moodWord } from "@/lib/pets/care";
 import { isLivingSpecies } from "@/lib/pets/living";
 import { lookHint } from "@/lib/pets/nest";
-import { cn } from "@/lib/utils";
 
 const TONE: Record<Rarity, "common" | "uncommon" | "rare" | "legendary"> = {
   COMMON: "common",
@@ -15,23 +15,7 @@ const TONE: Record<Rarity, "common" | "uncommon" | "rare" | "legendary"> = {
   LEGENDARY: "legendary",
 };
 
-export function PetPortrait({
-  speciesKey,
-  alt,
-  className,
-}: {
-  speciesKey: string;
-  alt: string;
-  className?: string;
-}) {
-  return (
-    <img
-      src={portraitSrc(speciesKey)}
-      alt={alt}
-      className={cn("h-full w-full object-cover", className)}
-    />
-  );
-}
+export { PetPortrait };
 
 export function RarityBadge({ rarity }: { rarity: string }) {
   const key = (rarity as Rarity) in TONE ? (rarity as Rarity) : "COMMON";
@@ -52,6 +36,8 @@ export function PetCard({ pet }: { pet: CompanionView }) {
         <PetPortrait
           speciesKey={pet.species_key}
           alt={pet.name}
+          name={pet.name}
+          kind={species?.displayName}
           className="transition-transform duration-400 ease-out group-hover:scale-[1.03]"
         />
       </div>

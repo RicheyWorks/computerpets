@@ -1997,7 +1997,7 @@ function fillCallLists() {
     for (const row of rows) {
       const opt = document.createElement("option");
       opt.value = row.name;
-      opt.textContent = `${row.name} · ${row.speciesLabel || row.key}`;
+      opt.textContent = window.PetRoster.choiceText(row);
       hudCallPick.appendChild(opt);
     }
   }

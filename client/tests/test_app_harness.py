@@ -125,6 +125,7 @@ CROSS_DOMAIN = {
     "web.flake_house_plain",
     "web.unlock_plain_lfs",
     "web.pictures_start_names",
+    "web.portraits_tray_minds",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -541,6 +542,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.flake_house_plain",
         "web.unlock_plain_lfs",
         "web.pictures_start_names",
+        "web.portraits_tray_minds",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -892,6 +894,20 @@ def test_pictures_start_names_row_says_so_at_app_start_and_keeps_one_name_per_ki
     assert ps.extras["names"]["drift"] == []
     assert ps.extras["names"]["bees"] == ["Blue Orchard Mason", "Alfalfa Leafcutter", "Western Honey Bee Drone", "Western Honey Bee Queen"]
     assert ps.extras["pictures"] == launch_pictures_state(repo_root())
+
+
+def test_portraits_tray_minds_row_tiles_one_note_dev_start_name_kind_plain_test_and_small_copy():
+    """Broken web portraits: name tiles and one Git LFS note; npm run dev starts; Name · Kind everywhere; plain mind test; depth 1."""
+    pt = invoke("web.portraits_tray_minds")
+    assert pt.ok, (pt.error, pt.detail)
+    for mark in ("portraits=tile_and_one_note", "dev_server=surface_global", "pet_line=name_kind_221",
+                 "mind_test=plain_source", "start_here=depth_1"):
+        assert mark in pt.trace, (mark, pt.trace)
+    assert all(pt.extras["portraits"].values()), pt.extras["portraits"]
+    assert pt.extras["dev"] == {"noDefault": True, "setsGlobal": True, "sideEffect": True, "valueImports": 0}
+    assert pt.extras["tray"]["rows"] == 221 and pt.extras["tray"]["wrong"] == 0
+    assert pt.extras["minds"]["plainGuest"] and pt.extras["minds"]["wired"]
+    assert all(pt.extras["depth"].values()), pt.extras["depth"]
 
 
 def test_pictures_gate_row_boots_real_main_with_pointers_and_opens_no_glass():

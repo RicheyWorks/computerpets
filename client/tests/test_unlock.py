@@ -1006,7 +1006,7 @@ def test_unlock_pet_list_shows_name_and_kind_not_the_key_and_the_ask_title_is_pl
 
     repo = Path(__file__).resolve().parents[2]
     settings = (repo / "desktop" / "renderer" / "settings.html").read_text(encoding="utf-8")
-    assert "o.textContent = row.name ? (row.speciesLabel ? `${row.name} · ${row.speciesLabel}` : row.name) : row.key;" in settings
+    assert "o.textContent = window.PetRoster.choiceText(row);" in settings
     assert dialog.pet_choice_text("Rui", "Red Panda") == "Rui · Red Panda"
     assert dialog.WEAK_ASK_TITLE == "Could not read this computer's ID"
     source = Path(dialog.__file__).read_text(encoding="utf-8")
@@ -1029,3 +1029,33 @@ def test_unlock_pet_list_shows_name_and_kind_not_the_key_and_the_ask_title_is_pl
     finally:
         window.deleteLater()
         app.processEvents()
+
+
+def test_pet_line_is_the_same_on_the_tray_house_window_and_blotter_for_all_221():
+    """The overlay formatter (roster-load.js choiceText) and the blotter's pet_choice_text give the same line."""
+    import json
+    import shutil
+    import subprocess
+
+    import pytest
+
+    from computerpets_client import unlock_dialog as dialog
+
+    node = shutil.which("node")
+    if not node:
+        pytest.skip("node is not installed; the overlay formatter cannot run here")
+    repo = Path(__file__).resolve().parents[2]
+    rows = json.loads((repo / "desktop" / "renderer" / "roster.json").read_text(encoding="utf-8"))
+    script = (
+        "const R = require(process.argv[1]); const rows = JSON.parse(require('fs').readFileSync(process.argv[2], 'utf8'));"
+        "process.stdout.write(JSON.stringify(rows.map((r) => R.choiceText(r))));"
+    )
+    out = subprocess.run(
+        [node, "-e", script, str(repo / "desktop" / "renderer" / "roster-load.js"), str(repo / "desktop" / "renderer" / "roster.json")],
+        capture_output=True, text=True, encoding="utf-8", check=True,
+    ).stdout
+    overlay = json.loads(out)
+    blotter = [dialog.pet_choice_text(r["name"], r["speciesLabel"]) for r in rows]
+    assert len(overlay) == 221
+    assert overlay == blotter
+    assert overlay[0] == "Rui · Red Panda"

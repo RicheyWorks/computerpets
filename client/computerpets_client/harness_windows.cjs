@@ -2,7 +2,7 @@
  * Buffffff app_harness: the House window (settings.html), Unlock offline, and the full tray menu,
  * all through the real desktop/main.cjs under the stand-in Electron of harness_main.cjs.
  *
- * - The House window runs its own scripts (weather-areas, license-net, presence, mind, and the
+ * - The House window runs its own scripts (weather-areas, license-net, presence, mind, roster-load, and the
  *   inline page script) against a small stand-in DOM, bridged to main by the real preload.cjs.
  * - Unlock drives the real desktop/license code with fake house-server answers. The license key
  *   and the bundle signing key are test-only values made here; nothing reads a real secret, the
@@ -434,7 +434,7 @@ async function settingsWindow() {
     const missing = ids.filter((id) => !$(id));
     if (missing.length) return fail(`settings.html has no ${missing.join(", ")}`);
     if (JSON.stringify(required) !== JSON.stringify(["electron"])) fails.push(`preload required ${required.join(", ")}`);
-    if (JSON.stringify(srcs) !== JSON.stringify(["weather-areas.js", "license-net.js", "presence.js", "mind.js"])) fails.push(`settings.html loads ${srcs.join(", ")}`);
+    if (JSON.stringify(srcs) !== JSON.stringify(["weather-areas.js", "license-net.js", "presence.js", "mind.js", "roster-load.js"])) fails.push(`settings.html loads ${srcs.join(", ")}`);
     if (!(page.docHandlers.drop || []).length) fails.push("the drop guard is not installed on the House window");
     if (page.scrolled[page.scrolled.length - 1] !== "mindsSection") fails.push("the window did not start at Minds");
 

@@ -183,6 +183,7 @@ const GPU = { gate: null, ctx: null };
  */
 const PICTURES = { state: null };
 const RealPictures = require(path.join(RENDERER, "pictures.js"));
+const Roster = require(path.join(RENDERER, "roster-load.js"));
 
 const STUBS = {
   "./gpu-path.cjs": {
@@ -297,7 +298,7 @@ function item(template, label) {
 function checkedKey(submenu, roster) {
   const row = (submenu || []).find((r) => r.checked);
   if (!row) return "";
-  const hit = roster.find((r) => row.label === `${r.name} — ${r.speciesLabel}`);
+  const hit = roster.find((r) => row.label === Roster.choiceText(r));
   return hit ? hit.key : "";
 }
 
@@ -373,7 +374,7 @@ async function trayOnTheDesk() {
     const companions = item(t0, "Companions");
     if (!onDesk || !Array.isArray(onDesk.submenu)) return fail("tray has no On the desk submenu", { labels: t0.map((r) => r.label) });
     const picks = Desk.deskPicks().map((key) => roster.find((r) => r.key === key)).filter(Boolean);
-    const want = picks.map((r) => `${r.name} — ${r.speciesLabel}`);
+    const want = picks.map((r) => Roster.choiceText(r));
     const got = onDesk.submenu.map((r) => r.label);
     if (JSON.stringify(got) !== JSON.stringify(want)) fails.push("On the desk rows are not the desk picks in order");
     if (!companions || companions.submenu.length !== roster.length) fails.push(`Companions lists ${companions ? companions.submenu.length : 0} of ${roster.length}`);
