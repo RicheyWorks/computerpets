@@ -183,6 +183,12 @@ const GPU = { gate: null, ctx: null };
  */
 const PICTURES = { state: null };
 const RealPictures = require(path.join(RENDERER, "pictures.js"));
+/**
+ * The Linux compositor answer a row asks for (bootMain opts.compositor): rows boot with "yes" so the host's own X
+ * server never decides them; desk.overlay_gate boots with "no". The words are the real overlay-gate.cjs.
+ */
+const COMPOSITOR = { state: null, asked: 0 };
+const RealGate = require(path.join(DESKTOP, "overlay-gate.cjs"));
 const Roster = require(path.join(RENDERER, "roster-load.js"));
 
 const STUBS = {
@@ -197,6 +203,13 @@ const STUBS = {
   },
   "./gpu-sense.cjs": { read: () => new Promise(() => {}) },
   "./renderer/pictures.js": { ...RealPictures, picturesState: () => PICTURES.state || "ready" },
+  "./overlay-gate.cjs": {
+    ...RealGate,
+    readCompositor: async () => {
+      COMPOSITOR.asked += 1;
+      return COMPOSITOR.state || "yes";
+    },
+  },
   "./windows-enum.cjs": { listRaw: () => new Promise(() => {}), disposePump() {} },
   "./vdesk-win.cjs": {
     readFollow: () => false,
@@ -236,10 +249,12 @@ async function bootMain(opts = {}) {
     quits: 0,
     relaunches: 0,
     dialogs: [],
-    dialogAnswer: 1,
+    dialogAnswer: typeof opts.dialogAnswer === "number" ? opts.dialogAnswer : 1,
   };
   GPU.gate = opts.gate || null;
   PICTURES.state = opts.pictures || null;
+  COMPOSITOR.state = opts.compositor || null;
+  COMPOSITOR.asked = 0;
   GPU.ctx = ctx;
   const electron = makeElectron(ctx);
   const realLoad = Module._load;
@@ -485,6 +500,87 @@ async function picturesGate() {
         "second_start=words_again",
         "link=through_open_link_gate",
         "ready=glass_opens",
+      ]);
+}
+
+/**
+ * The pet window kept closed on purpose says why in a message box as well as the tray (a Linux desktop may show no
+ * tray): a GPU drawing in software (the refusal), and a Linux desktop with no compositor (the window would be solid
+ * black over the whole screen). Check again opens the window once a compositor runs; a second start says it again.
+ */
+async function overlayGate() {
+  const seen = {};
+  const fails = [];
+  const refused = { open: false, path: "refused", reason: "software-refused", label: "Software compositing. Overlay closed." };
+  // 1. The GPU gate refused: no window, the words in a message box, Allow software compositing restarts on software.
+  let ctx = await bootMain({ gate: refused, dialogAnswer: 2 });
+  try {
+    const w = RealGate.closedWords("software-refused");
+    const box = ctx.dialogs[0] || {};
+    const labels = ctx.tray().map((r) => r.label || r.type);
+    seen.software = { windows: ctx.windows.length, dialogs: ctx.dialogs.length, message: box.message, buttons: (box.buttons || []).join("|"), tray: labels.join("|") };
+    if (ctx.windows.length !== 0) fails.push(`software: ${ctx.windows.length} windows opened`);
+    if (ctx.dialogs.length !== 1 || box.message !== w.message || box.detail !== w.detail) fails.push("software: no message box with the words");
+    if (seen.software.buttons !== "Allow software compositing|Quit|OK") fails.push(`software: buttons ${seen.software.buttons}`);
+    if (!labels.includes("Allow software compositing") || !labels.includes("Why the pets are not on the screen")) fails.push(`software: tray ${seen.software.tray}`);
+    for (const fn of ctx.appEvents["second-instance"] || []) fn();
+    if (ctx.dialogs.length !== 2) fails.push("software: a second start did not say it again");
+    ctx.writeExpect = true;
+    ctx.dialogAnswer = 0;
+    item(ctx.tray(), "Why the pets are not on the screen").click();
+    await new Promise((r) => setImmediate(r));
+    if (ctx.expects.join() !== "software" || ctx.relaunches !== 1 || ctx.quits !== 1) fails.push(`software: Allow wrote ${ctx.expects.join()}, relaunched ${ctx.relaunches}, quit ${ctx.quits}`);
+  } finally {
+    ctx.cleanup();
+  }
+  delete require.cache[MAIN];
+  // 2. No compositor (Linux): no window, no ticks, the words; Check again with none still says it; with one, opens.
+  ctx = await bootMain({ compositor: "no", dialogAnswer: 2 });
+  try {
+    const w = RealGate.closedWords("no-compositor");
+    const box = ctx.dialogs[0] || {};
+    const labels = ctx.tray().map((r) => r.label || r.type);
+    seen.compositor = { windows: ctx.windows.length, dialogs: ctx.dialogs.length, message: box.message, buttons: (box.buttons || []).join("|"), tray: labels.join("|"), ticks: ctx.intervals.length, tip: ctx.tips[ctx.tips.length - 1] || "" };
+    if (ctx.windows.length !== 0 || ctx.intervals.length !== 0) fails.push(`compositor: ${ctx.windows.length} windows, ${ctx.intervals.length} ticks`);
+    if (ctx.dialogs.length !== 1 || box.message !== w.message || box.detail !== w.detail) fails.push("compositor: no message box with the words");
+    if (seen.compositor.buttons !== "Check again|Quit|OK") fails.push(`compositor: buttons ${seen.compositor.buttons}`);
+    if (seen.compositor.tray !== "No compositor. Overlay closed.|separator|Check again|Why the pets are not on the screen|Quit") fails.push(`compositor: tray ${seen.compositor.tray}`);
+    if (!/^No compositor\. Overlay closed\./.test(seen.compositor.tip)) fails.push(`compositor: tip ${seen.compositor.tip}`);
+    for (const fn of ctx.appEvents["second-instance"] || []) fn();
+    if (ctx.dialogs.length !== 2) fails.push("compositor: a second start did not say it again");
+    item(ctx.tray(), "Check again").click();
+    for (let i = 0; i < 5; i += 1) await new Promise((r) => setImmediate(r));
+    if (ctx.windows.length !== 0 || ctx.dialogs.length !== 3) fails.push(`compositor: Check again with none opened ${ctx.windows.length} windows, said it ${ctx.dialogs.length - 2} more times`);
+    COMPOSITOR.state = "yes";
+    item(ctx.tray(), "Check again").click();
+    for (let i = 0; i < 5; i += 1) await new Promise((r) => setImmediate(r));
+    const after = ctx.tray().map((r) => r.label || r.type);
+    seen.recheck = { windows: ctx.windows.length, trays: ctx.trays.length, tray: after.slice(0, 3).join("|"), ticks: ctx.intervals.length };
+    if (ctx.windows.length !== 1 || ctx.trays.length !== 1 || !after.includes("Show") || ctx.intervals.length === 0) fails.push(`compositor: Check again with one running ${JSON.stringify(seen.recheck)}`);
+    if (ctx.quits !== 0) fails.push("compositor: quit on its own");
+  } finally {
+    ctx.cleanup();
+  }
+  delete require.cache[MAIN];
+  // 3. A compositor (or Windows, the Mac, or an answer that could not be read): the glass opens, nothing is said.
+  for (const state of ["yes", "unknown"]) {
+    ctx = await bootMain({ compositor: state });
+    try {
+      seen[state] = { windows: ctx.windows.length, dialogs: ctx.dialogs.length };
+      if (ctx.windows.length !== 1 || ctx.dialogs.length !== 0) fails.push(`${state}: ${JSON.stringify(seen[state])}`);
+    } finally {
+      ctx.cleanup();
+    }
+    delete require.cache[MAIN];
+  }
+  return fails.length
+    ? fail(fails.join("; "), seen)
+    : ok("The real main.cjs keeps the pet window closed and says why in a message box as well as the tray: software compositing (Allow restarts on software) and a Linux desktop with no compositor (Check again opens it once one runs)", seen, [
+        "software=message_box+allow_restarts",
+        "no_compositor=no_glass+message_box",
+        "check_again=opens_when_composited",
+        "second_start=words_again",
+        "composited=glass_opens",
       ]);
 }
 
@@ -922,6 +1018,7 @@ module.exports = {
   tray_on_the_desk: trayOnTheDesk,
   quit_desk: quitDesk,
   pictures_gate: picturesGate,
+  overlay_gate: overlayGate,
   mind_get_set: mindGetSet,
   saved_lines: savedLines,
   alarm_clock: alarmClock,

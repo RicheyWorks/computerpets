@@ -34,6 +34,7 @@
       "gpu-probe.ps1",
       "gpu-probe.sh",
       "gpu-probe-mac.sh",
+      "overlay-gate.cjs",
       "license/**/*.cjs",
       "!license/**/*.test.cjs",
       "!license/contract-test-double.cjs",

@@ -40,7 +40,7 @@ test("no OS input and no popped-up menus: menus are recorded, input goes through
 });
 
 test("the drive walks the whole first run", () => {
-  for (const id of ["hello_shows", "card_on_screen", "got_it_target", "pet_on_screen", "bubble_clear_of_card", "care_menu", "care_menu_no_twins", "trick_word_matches", "plates_clear_of_card", "rain_falls_full_height", "feed_with_card_opened_on_the_way", "card_holds_after_press_hello_unread", "got_it_persists", "card_holds_after_press_hello_read", "escape_closes_card", "card_fits_at_right_edge", "house_minds", "house_unlock", "house_hash_reload", "house_closes", "hide_window", "tray_show", "quit", "second_start_no_hello", "no_page_errors", "throwaway_removed", "window_fits_work_area", "menu_at_pet", "card_stays_after_open", "card_leash_on_long_walk", "minds_house_default", "minds_key_sealed", "talk_line_before_cloud", "talk_failure_says_why", "sound_settings", "pet_switch", "settings_survive_restart", "card_by_pet_at_right_edge", "rest_wakes_when_rested", "talk_pose_ends_with_own_line", "play_stays_on_screen", "minds_save_tests_key", "volume_is_this_pets"]) {
+  for (const id of ["hello_shows", "card_on_screen", "got_it_target", "pet_on_screen", "bubble_clear_of_card", "care_menu", "care_menu_no_twins", "trick_word_matches", "plates_clear_of_card", "rain_falls_full_height", "feed_with_card_opened_on_the_way", "card_holds_after_press_hello_unread", "got_it_persists", "card_holds_after_press_hello_read", "escape_closes_card", "card_fits_at_right_edge", "house_minds", "house_unlock", "house_hash_reload", "house_closes", "hide_window", "tray_show", "quit", "second_start_no_hello", "no_page_errors", "throwaway_removed", "window_fits_work_area", "menu_at_pet", "card_stays_after_open", "card_leash_on_long_walk", "minds_house_default", "minds_key_sealed", "talk_line_before_cloud", "talk_failure_says_why", "sound_settings", "pet_switch", "settings_survive_restart", "card_by_pet_at_right_edge", "rest_wakes_when_rested", "talk_pose_ends_with_own_line", "play_stays_on_screen", "minds_save_tests_key", "volume_is_this_pets", "minds_test_button", "gate_software_says_so", "gate_no_compositor_says_so"]) {
     assert.match(src, new RegExp(`check\\(\\s*"${id}"`), id);
   }
 });
@@ -57,8 +57,10 @@ test("the Minds checks never reach the internet: api.x.ai is answered inside the
   assert.match(src, /await route\.fulfill\(\{ status: 401,/);
   assert.equal(D.STANDIN_KEY, "xai-standin-not-a-real-key-0000");
   assert.doesNotMatch(src, /route\.continue\(|XAI_API_KEY|process\.env\.[A-Z_]*KEY/);
-  // The route is set in launch(), before any Talk, for both starts.
-  assert.ok(src.indexOf('await page.route("https://api.x.ai/**"') < src.indexOf("return { app, page };"));
+  // The route is set on the overlay page as launch() meets it (attach), before any Talk, for both starts.
+  const attach = src.indexOf("async function attach(page) {");
+  assert.ok(attach > 0 && attach < src.indexOf('await page.route("https://api.x.ai/**"') && src.indexOf('await page.route("https://api.x.ai/**"') < src.indexOf("return page;", attach));
+  assert.match(src, /if \(page\) return \{ app, page: await attach\(page\) \};/);
 });
 
 test("display scaling: --scale adds --force-device-scale-factor, and the gap judgement", () => {

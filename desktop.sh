@@ -42,14 +42,29 @@ pictures() {
 }
 seen=$(pictures)
 
+# 4. A screen to put the pets on (Linux). Started over SSH or from a text console there is none, and Electron
+#    stopped with "Missing X server or $DISPLAY" and a crash (SIGSEGV) instead of words. A Mac always has one.
+screen_here() {
+  if [ "$(uname -s 2>/dev/null)" != Linux ]; then echo ok
+  elif [ -n "${WAYLAND_DISPLAY:-}" ]; then echo wayland
+  elif [ -n "${DISPLAY:-}" ]; then echo x11
+  else echo none
+  fi
+}
+display=$(screen_here)
+no_screen="There is no desktop screen here for the pets: DISPLAY and WAYLAND_DISPLAY are empty, as in a Terminal over SSH or on a text console. Open a Terminal on your desktop, go to the computerpets folder, type sh desktop.sh and press Enter."
+
 # --check says what the start sees and changes nothing: no install, no overlay.
-# The last line says what to type next, in plain words (the pictures first: the start stops there).
+# The last line says what to type next, in plain words (the pictures first, then the screen: the start stops there).
 if [ "${1:-}" = "--check" ]; then
   echo "ok: node $version"
   echo "pieces: $state"
   echo "pictures: $seen"
+  echo "display: $display"
   if [ "$seen" != ready ]; then
     echo "next: The pet pictures are not here yet. Install Git LFS from https://git-lfs.com, then in the computerpets folder type git lfs install and then git lfs pull. Then type sh desktop.sh and press Enter."
+  elif [ "$display" = none ]; then
+    echo "next: $no_screen"
   else
     case "$state" in
       missing) echo "next: Type sh desktop.sh and press Enter. It gets the pieces (a few minutes the first time), then the pets come on." ;;
@@ -63,6 +78,8 @@ fi
 
 [ "$seen" = ready ] || stop_start "The pet pictures did not download. They come through Git LFS, which this Git does not have yet. Install Git LFS from https://git-lfs.com, then in the computerpets folder run git lfs install and then git lfs pull, and run sh desktop.sh again."
 
+[ "$display" != none ] || stop_start "$no_screen"
+
 if [ "$state" != ready ]; then
   echo "Getting the pieces (npm install). The first time can take a few minutes. Leave this window open."
   npm install || stop_start "npm install did not finish. Check the internet, then run sh desktop.sh again. It gets the pieces again."
@@ -71,5 +88,5 @@ if [ "$state" != ready ]; then
   date > "$stamp"
 fi
 
-# 4. Turn the pets on. npm start is electron .
+# 5. Turn the pets on. npm start is electron .
 exec npm start
