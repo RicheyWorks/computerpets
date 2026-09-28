@@ -236,7 +236,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       ) : meet || den || tide || garden || hive || pond || roost || corner || wood || canopy || stone || creek || log || shore || reef || meadow || cellar || well || far || grid || study ? (
         <div>{children}</div>
       ) : (
-        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">{children}</div>
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 [@media(max-height:480px)]:py-3">{children}</div>
       )}
       <PortraitNote />
     </div>

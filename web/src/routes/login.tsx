@@ -44,11 +44,12 @@ function Login() {
   }
 
   return (
-    <main className="mx-auto grid min-h-[70vh] max-w-md place-items-center">
-      <div className="w-full space-y-6 rounded-[var(--radius-xl)] border border-border bg-surface p-6 sm:p-8">
+    // A landscape phone is ~375 px tall: the card tightens so the sign-in buttons stay on screen with no scroll.
+    <main data-login className="mx-auto grid min-h-[70vh] max-w-md place-items-center [@media(max-height:480px)]:min-h-0">
+      <div className="w-full space-y-6 rounded-[var(--radius-xl)] border border-border bg-surface p-6 sm:p-8 [@media(max-height:480px)]:space-y-3 [@media(max-height:480px)]:p-5">
         <div className="space-y-2">
           <p className="text-[11px] uppercase tracking-[0.18em] text-subtle">Keeper desk</p>
-          <h1 className="font-display text-3xl">Sit, hatch, nest</h1>
+          <h1 className="font-display text-3xl [@media(max-height:480px)]:text-2xl">Sit, hatch, nest</h1>
           <p className="text-sm text-muted">
             Sign in to sit with the house. Hatch, nest, and keep a kennel.
           </p>
