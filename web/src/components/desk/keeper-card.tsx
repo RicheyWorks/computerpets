@@ -888,6 +888,22 @@ export function KeeperCard({
           </div>
           <p className="keeper-heartbeat" data-heartbeat={heartbeatTone(beat, heartbeatPoll.answered())} title={heartbeatDetail(beat)}>
             {heartbeatLine(beat, heartbeatPoll.answered())}
+            {beat.checked === false ? (
+              <>
+                {" "}
+                <button
+                  type="button"
+                  className="keeper-heartbeat-check"
+                  data-heartbeat-check
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    void heartbeatPoll.check();
+                  }}
+                >
+                  Check
+                </button>
+              </>
+            ) : null}
           </p>
           {/* No GPU line on the web page: a browser cannot read the GPU, so it would always say "no reading". The desktop app and the blotter show it. */}
           <p className="keeper-listener" data-listener={listener.id}>

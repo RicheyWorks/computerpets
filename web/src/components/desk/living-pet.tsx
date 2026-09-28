@@ -31,7 +31,7 @@ import { traitFor } from "@/lib/pets/traits";
 import { afterPlace, arriveFinish, pointerUp, walkLand } from "@/lib/pets/arrive";
 import { carePointer } from "@/lib/pets/mac-desk";
 import { HOLD_MS, isPhone, isTablet, readSit, tabletLift } from "@/lib/pets/tablet-desk";
-import { followHover, tapPxFor } from "@/lib/pets/phone-desk";
+import { bubbleLift, bubbleRoom, followHover, tapPxFor } from "@/lib/pets/phone-desk";
 import {
   beginPlay,
   canStart,
@@ -222,6 +222,8 @@ export function LivingPet({
     if (first && node.dataset && !node.dataset.frame) paintDemoFrame(node, first);
   }, [sprites]);
   const bubbleRef = useRef<HTMLDivElement>(null);
+  /* How far the bubble may rise and still end below the site header (bubbleRoom); read on open and on resize, not per frame. */
+  const bubbleRoomRef = useRef(Number.POSITIVE_INFINITY);
   const shadowRef = useRef<HTMLDivElement>(null);
   const dustRef = useRef<HTMLDivElement>(null);
   const tongueRef = useRef<SVGSVGElement>(null);
@@ -310,6 +312,32 @@ export function LivingPet({
   arrivedRef.current = onArrived;
   tapRef.current = onTap;
   tendRef.current = onTend;
+
+  // The bubble never rises over the site header (a landscape phone is short): its room under the header is read
+  // when a line opens and on resize; the frame loop only caps the lift (bubbleLift).
+  useEffect(() => {
+    const el = bubbleRef.current;
+    if (!el || typeof window === "undefined") return;
+    const read = () => {
+      const parent = el.offsetParent as HTMLElement | null;
+      const head = document.querySelector("[data-site-header]");
+      if (!parent || !head) {
+        bubbleRoomRef.current = Number.POSITIVE_INFINITY;
+        return;
+      }
+      const restTop = parent.getBoundingClientRect().top + parent.clientTop + el.offsetTop;
+      bubbleRoomRef.current = bubbleRoom(restTop, head.getBoundingClientRect().bottom);
+    };
+    read();
+    window.addEventListener("resize", read);
+    // A longer line (or a late web font) makes the bubble taller, and its resting top higher.
+    const grow = typeof ResizeObserver === "function" ? new ResizeObserver(read) : null;
+    grow?.observe(el);
+    return () => {
+      window.removeEventListener("resize", read);
+      grow?.disconnect();
+    };
+  }, [speech]);
 
   useEffect(() => {
     const root = wrapRef.current;
@@ -933,7 +961,7 @@ export function LivingPet({
       }
       if (bubbleRef.current) {
         const bx = clamp(drawX + SPRITE * 0.5 - BUBBLE_W * 0.5, 10, Math.max(10, width - BUBBLE_W - 10));
-        bubbleRef.current.style.transform = `translate3d(${bx}px, ${-drawY - 18}px, 0)`;
+        bubbleRef.current.style.transform = `translate3d(${bx}px, ${-bubbleLift(drawY + 18, bubbleRoomRef.current)}px, 0)`;
       }
       if (tongueRef.current) {
         const flick = p.crawl && s.actMotion === "tongue" && !reduced ? tongueFlick(s.actT, s.actHold) : 0;

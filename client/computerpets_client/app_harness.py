@@ -2926,6 +2926,24 @@ def _web_rows() -> list[Affordance]:
                 "on every hard load; npm run dev printed 22 code-split warnings; the sign-in tab had no title."
             ),
         ),
+        Affordance(
+            "web.signin_return_quiet",
+            "web",
+            "Sign-in returns to the gated page (same-site paths only); the desk asks the optional house server only after it has answered here (Check, backoff); 44 px rail rows and room links on phones; the speech bubble stays under the header; tab titles for the desk and a pet page; signed-in rooms in the phone sweep (stand-in session); a failed sign-in says so",
+            "web lib/auth/return-to.ts + lib/auth/gates.tsx + routes/login.tsx + components/app-shell.tsx + lib/pets/keeper.ts createHeartbeatPoll + components/desk/keeper-card.tsx + styles.css + lib/pets/phone-desk.ts bubbleRoom + components/desk/living-pet.tsx + lib/page-title.ts + scripts/phone-desk-layout.test.mjs + scripts/signin-return.test.mjs + scripts/quiet-heartbeat.test.mjs",
+            notes=(
+                "Signing in from the kennel, the hatchery, the nest or a pet page always ended on the desk; it now returns "
+                "to that page, and only a same-site path is ever followed (absolute URLs, //, backslashes, schemes, control "
+                "characters, their percent-encoded forms and dot segments that collapse to // all land on the desk). The desk "
+                "knocked on 127.0.0.1:8081 at load and every 15 seconds for keepers who never ran the optional house server, "
+                "and the browser printed each refused request; it now asks only after the server has answered on this "
+                "browser (or the keeper presses Check), backs off when a known server stops, and does not ask again when a "
+                "card remounts. Rail rows and the room's links are 44 px on phones; the speech bubble no longer rises over "
+                "the header on a landscape phone; the desk and a pet page have tab titles; the kennel, hatchery and nest "
+                "are in the phone sweep signed in (auth off, in-memory PGLite); a sign-in that failed at the provider says "
+                "so on /login instead of dropping the visitor on the desk."
+            ),
+        ),
     ]
 
 
@@ -2981,6 +2999,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("phone_layout_told_once", domain="web", action_id=aid)
     if local_id == "site_header_rail":
         return _run_web_smoke("site_header_rail", domain="web", action_id=aid)
+    if local_id == "signin_return_quiet":
+        return _run_web_smoke("signin_return_quiet", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

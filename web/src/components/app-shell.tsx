@@ -1,7 +1,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { PortraitNote } from "@/components/pet-portrait";
-import { SignedIn, SignedOut, UserButton } from "@/lib/auth/gates";
+import { MenuSignOut, SignedIn, SignedOut, UserButton } from "@/lib/auth/gates";
+import { RETURN_FALLBACK, safeReturnTo } from "@/lib/auth/return-to";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { cn } from "@/lib/utils";
 
@@ -124,6 +125,7 @@ export function SiteMenu({ items, pathname }: { items: readonly NavItem[]; pathn
             ))}
           </ul>
         </nav>
+        <MenuSignOut />
       </div>
     </div>
   );
@@ -162,10 +164,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const study = pathname === "/study";
   const live = pathname === "/live";
   const nav = NAV.filter((item) => !(demo && item.hideOnDemo));
+  // Sign in from any page comes back to that page (a safe same-site path; the desk needs no reminder).
+  const back = safeReturnTo(pathname);
+  const signInSearch = back === RETURN_FALLBACK ? {} : { next: back };
 
   return (
     <div className={cn("bg-bg text-fg", desk || demo || live || kennelGuest || kennel || shelf || hatchery || nest ? "h-dvh overflow-hidden" : "min-h-dvh")}>
       <header
+        data-site-header
         className={cn(
           "z-30 border-b border-border/80",
           demo || kennelGuest || kennel || shelf || hatchery || nest || desk
@@ -213,6 +219,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <SignedOut>
                     <Link
                       to="/login"
+                      search={signInSearch}
                       className="whitespace-nowrap rounded-[var(--radius-sm)] border border-border px-3 py-2 text-sm text-fg no-underline hover:border-border-strong"
                     >
                       Sign in
