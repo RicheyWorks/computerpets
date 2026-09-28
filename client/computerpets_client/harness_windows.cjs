@@ -471,10 +471,20 @@ async function settingsWindow() {
     if (!/^https:\/\/api\.x\.ai\//.test(xaiBase) || !xaiModel) fails.push(`xai filled ${xaiModel} ${xaiBase}`);
     if ($("mindFields").hidden !== false || $("mindHouse").hidden !== true) fails.push("choosing xai did not show the model, address, and key boxes");
     else trace.push("minds=house_lines_need_nothing");
+    // The address and key boxes carry plain labels and a short helper line (same words as the web desk and the blotter).
+    const pageHtml = fs.readFileSync(path.join(RENDERER, "settings.html"), "utf8");
+    const plainBoxes =
+      pageHtml.includes('<label for="base">AI website address</label>') &&
+      pageHtml.includes('<label for="key">Your key for that AI website</label>') &&
+      !/<label[^>]*>(Base URL|API key)<\/label>/.test(pageHtml) &&
+      !!$("baseHelp") && $("baseHelp").textContent === "Where that AI answers. Picking an AI fills this in, so most people leave it alone." &&
+      !!$("keyHelp") && $("keyHelp").textContent === "A secret code from that AI website's own page. Keep it secret, like a password.";
+    if (!plainBoxes) fails.push("the address and key boxes are not in plain words");
+    else trace.push("minds=plain_address_and_key");
 
-    // Validation: each bad Base URL is named and nothing is saved.
+    // Validation: each bad AI website address is named and nothing is saved.
     const bad = [
-      ["http://api.x.ai/v1", /must start with https:\/\//],
+      ["http://api.x.ai/v1", /^The AI website address must start with https:\/\//],
       ["http://localhost:8080/v1", /only works with Ollama, LM Studio, or Custom/],
       ["https://me:hunter2@api.x.ai/v1", /name and password/],
       ["api.x.ai", /not a web address/],
@@ -483,9 +493,9 @@ async function settingsWindow() {
       $("base").value = raw;
       $("key").value = SECRET;
       await $("save").click();
-      if (!want.test($("mindErr").textContent)) fails.push(`Base URL ${raw} said "${$("mindErr").textContent}"`);
-      if ($("ok").textContent) fails.push(`Base URL ${raw} still said "${$("ok").textContent}"`);
-      if (fs.existsSync(mindFile)) fails.push(`Base URL ${raw} was saved`);
+      if (!want.test($("mindErr").textContent)) fails.push(`AI website address ${raw} said "${$("mindErr").textContent}"`);
+      if ($("ok").textContent) fails.push(`AI website address ${raw} still said "${$("ok").textContent}"`);
+      if (fs.existsSync(mindFile)) fails.push(`AI website address ${raw} was saved`);
     }
     trace.push(`base_url_refused=${bad.length}`);
 
@@ -569,7 +579,7 @@ async function settingsWindow() {
     if (leaked.length) fails.push(`secret text on disk: ${leaked.map((f) => path.basename(f)).join(", ")}`);
     return fails.length
       ? fail(fails.join("; "), { passed: trace })
-      : ok("House window: fields, Base URL checks, sealed save, Not saved, no store, Details, plain Unlock errors", { plugins: pluginIds.length, pets: roster.length }, trace);
+      : ok("House window: fields, AI website address checks, sealed save, Not saved, no store, Details, plain Unlock errors", { plugins: pluginIds.length, pets: roster.length }, trace);
 
   } finally {
     warn.restore();

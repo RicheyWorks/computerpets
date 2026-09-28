@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * Plain words for Unlock / Signed download failures. Network trouble (refused,
+ * Plain words for Unlock / Download my pet failures. Network trouble (refused,
  * no such host, timeout, TLS, HTTP 5xx) becomes one sentence that names the
  * host; the raw error goes to the log, never to the Settings window. The
  * house's own license codes (expired, hwid_mismatch, denied, ...) each get one

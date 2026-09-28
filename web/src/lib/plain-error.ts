@@ -233,17 +233,17 @@ export function petNotSaved(act: PetNotSavedAct, err: unknown, log: PlainLog = c
 
 /** Why a mind (AI plugin) test did not answer, in plain words. */
 export const MIND_LINES = {
-  key: "The mind's service did not accept the API key. Check the key for this plugin.",
-  busy: "The mind's service is rate limiting this key right now. Try again in a minute.",
-  address: "The mind's service answered, but not at that address or for that model. Check the Base URL and the model.",
-  server: "The mind's service had a problem. Try again later.",
+  key: "The AI website did not accept your key. Check your key for that AI website.",
+  busy: "The AI website is too busy for your key right now. Try again in a minute.",
+  address: "The AI website answered, but not at that address or for that model. Check the AI website address and the model.",
+  server: "The AI website had a problem. Try again later.",
   timeout: "The mind took too long to answer.",
-  unreachable: "Couldn't reach the mind's service. Check the Base URL and that the service is running.",
-  not_found: "Couldn't find the mind's service. Check the Base URL.",
-  tls: "Couldn't make a secure connection to the mind's service.",
-  url: "The Base URL was refused before anything was sent. Use an https address (http only for a mind on this computer) with no name or password in it.",
+  unreachable: "Couldn't reach the AI website. Check the AI website address and that the AI is running.",
+  not_found: "Couldn't find the AI website. Check the AI website address.",
+  tls: "Couldn't make a safe connection to the AI website.",
+  url: "The AI website address was refused before anything was sent. Use an https address (http only for an AI on this computer) with no name or password in it.",
   empty: "The mind answered with nothing.",
-  unknown: "Something went wrong on the way to the mind's service.",
+  unknown: "Something went wrong on the way to the AI website.",
 } as const;
 
 export type MindProblemKind = keyof typeof MIND_LINES;

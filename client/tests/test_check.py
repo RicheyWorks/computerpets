@@ -40,6 +40,7 @@ def test_offscreen_check_constructs_window(tmp_path):
     assert "awake" in result.stdout or "resting" in result.stdout
     assert "Steal ribbon" in result.stdout
     assert "is well" in result.stdout
+    assert "ok: minds Pets talk without an AI. Adding one is optional. House lines, no AI boxes" in result.stdout
 
 
 def test_desk_has_play_and_the_house_special(tmp_path):

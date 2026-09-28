@@ -1444,8 +1444,10 @@ async function deskGuardPlain() {
   };
   const unwired = Object.entries(wired).filter(([, v]) => !v).map(([k]) => k);
   if (unwired.length) bad.push(`web desk loop guard not wired: ${unwired.join(", ")}`);
-  // Desktop checkJs: down to Rui's three radio lines, with Electron's own types checked when installed.
+  // Desktop checkJs: held to desktop/checkjs-baseline.txt (the file test-all checks against), with Electron's own
+  // types checked when installed. The number is read from the file, never written here.
   const baselineJs = readFileSync(join(ROOT, "desktop", "checkjs-baseline.txt"), "utf8").trim();
+  const contributingJs = readFileSync(join(ROOT, "docs", "CONTRIBUTING.md"), "utf8");
   const petJs = readFileSync(join(RENDERER, "pet.js"), "utf8");
   const script = readFileSync(join(ROOT, "scripts", "checkjs-baseline.mjs"), "utf8");
   const electronCfg = readFileSync(join(ROOT, "desktop", "tsconfig.checkjs-electron.json"), "utf8");
@@ -1454,8 +1456,10 @@ async function deskGuardPlain() {
     noFunctionState: !/playSound\.ctx|startVisit\.timer/.test(petJs) && /let soundCtx = null;/.test(petJs) && /let visitTimer = 0;/.test(petJs),
     typedLookups: /function htmlAll\(root, sel\)/.test(petJs) && /function htmlOne\(root, sel\)/.test(petJs) && /\(\/\*\* @type \{PointerEvent\} \*\/ e\)/.test(petJs),
     electron: /"extends": "\.\/tsconfig\.checkjs\.json"/.test(electronCfg) && /node_modules\/electron\/electron\.d\.ts/.test(electronCfg) && script.includes("tsconfig.checkjs-electron.json"),
+    docCount: (contributingJs.match(/`desktop\/checkjs-baseline\.txt` \((\d+) at last count/) || [])[1] || "",
   };
-  if (!/^\d+$/.test(baselineJs) || Number(baselineJs) > 3) bad.push(`desktop checkJs baseline is ${baselineJs}, above 3`);
+  if (!/^\d+$/.test(baselineJs)) bad.push(`desktop/checkjs-baseline.txt should hold one whole number, not "${baselineJs}"`);
+  else if (checkjs.docCount !== baselineJs) bad.push(`CONTRIBUTING says ${checkjs.docCount || "no"} checkJs errors at last count; desktop/checkjs-baseline.txt holds ${baselineJs}`);
   if (!checkjs.noFunctionState || !checkjs.typedLookups || !checkjs.electron) bad.push(`checkjs cleanup: ${JSON.stringify(checkjs)}`);
   // Plain words.
   const settings = readFileSync(join(RENDERER, "settings.html"), "utf8");
@@ -1487,14 +1491,14 @@ async function deskGuardPlain() {
   const updated = (roadmap.match(/Last Updated[^0-9]*(\d{4}-\d{2}-\d{2})/) || [])[1] || "";
   if (updated < "2026-09-27") bad.push(`ROADMAP Last Updated is ${updated}`);
   if (bad.length) return fail(bad.join("; "), { guardRun, parity, wired, checkjs, words });
-  return ok("the web desk loop logs a throwing trick once and sends the pet back to idle; trick calls are typed; desktop checkJs is down to 3; house-server, admin, license, and ADR words are plain", { guardRun, parity, wired, checkjs, words, updated }, [
+  return ok(`the web desk loop logs a throwing trick once and sends the pet back to idle; trick calls are typed; desktop checkJs is held to its baseline file (${baselineJs}); house-server, admin, license, and ADR words are plain`, { guardRun, parity, wired, checkjs, words, updated }, [
     "web_loop=schedule_first+guarded",
     "fault=injected_trick_throws",
     "log=once_per_error+pet_key",
     "reset=safe_idle",
     "share=overlay_frame_guard_rules",
     "types=no_as_never",
-    "checkjs=3+electron_types",
+    "checkjs=baseline_file+electron_types",
     "words=house_server+admin+license_website+adr",
   ]);
 }
@@ -1564,7 +1568,7 @@ async function guestLoopsMount() {
   const tap = `${run.stdout || ""}`;
   const count = (label) => Number((tap.match(new RegExp(`^# ${label} (\\d+)$`, "m")) || [])[1] || -1);
   const mount = { status: run.status, pass: count("pass"), fail: count("fail"), tests: [...tap.matchAll(/^ok \d+ - (.+)$/gm)].map((m) => m[1].split(":")[0]) };
-  if (run.status !== 0 || mount.pass !== 6 || mount.fail !== 0) bad.push(`mount tests: ${JSON.stringify({ ...mount, err: (run.stderr || "").slice(0, 200) })}`);
+  if (run.status !== 0 || mount.pass !== 8 || mount.fail !== 0) bad.push(`mount tests: ${JSON.stringify({ ...mount, err: (run.stderr || "").slice(0, 200) })}`);
 
   // 4) Music waits out the backoff after a broken dance (web and overlay), and the thank-you call is typed.
   const music = [FG, Overlay].map((M) => {
@@ -1633,6 +1637,115 @@ async function guestLoopsMount() {
   ]);
 }
 
+async function mindsFlightPlain() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8");
+  const lib = (rel) => import(pathToFileURL(join(WEB, "src", "lib", ...rel.split("/"))).href);
+
+  // 1) Minds words: the same plain sentences on the web desk, the overlay Settings window, and the blotter.
+  const { MIND_WORDS } = await lib("ai/mind-words.ts");
+  const settings = read("desktop", "renderer", "settings.html");
+  const mindsPy = read("client", "computerpets_client", "minds.py");
+  const page = read("web", "src", "routes", "mind.tsx");
+  const pyConst = { intro: "MINDS_INTRO", house: "HOUSE_NOTE", address: "ADDRESS_LABEL", addressHelp: "ADDRESS_HELP", key: "KEY_LABEL", keyHelp: "KEY_HELP" };
+  const pyWord = (name) => (mindsPy.match(new RegExp(`^${name} = "([^"]*)"\\r?$`, "m")) || [])[1];
+  const same = Object.fromEntries(Object.entries(pyConst).map(([k, py]) => [k, pyWord(py) === MIND_WORDS[k] && settings.includes(MIND_WORDS[k])]));
+  if (!Object.values(same).every(Boolean)) bad.push(`Minds words differ between web, overlay, and blotter: ${JSON.stringify(same)}`);
+  const Mind = (() => {
+    const window = { PetMindSecret: null, desk: null, location: { protocol: "file:" } };
+    window.window = window;
+    require("node:vm").runInNewContext(read("desktop", "renderer", "mind.js"), window, { filename: "mind.js" });
+    return window.PetMind;
+  })();
+  const refusals = [
+    ["xai", "api.x.ai/v1"],
+    ["openai", "https://me:hunter2@api.openai.com/v1"],
+    ["xai", "http://localhost:8080/v1"],
+    ["openai", "http://api.openai.com/v1"],
+    ["custom", "https://192.168.1.20/v1"],
+  ].map(([id, raw]) => Mind.baseUrlProblem(raw, id));
+  const P = await lib("plain-error.ts");
+  const mindLines = Object.values(P.MIND_LINES);
+  const minds = {
+    same: Object.values(same).every(Boolean),
+    webHidesForHouse: /\{selected\.kind === "local" \? \(/.test(page) && page.includes("{MIND_WORDS.house}") && page.includes('id="mind-intro"'),
+    webLabels: page.includes("label={MIND_WORDS.address} hint={MIND_WORDS.addressHelp}") && page.includes("label={MIND_WORDS.key} hint={MIND_WORDS.keyHelp}") && !/label="(Base URL|API key)"/.test(page),
+    overlayLabels: settings.includes('<label for="base">AI website address</label>') && settings.includes('<label for="key">Your key for that AI website</label>') && !/<label[^>]*>(Base URL|API key)<\/label>/.test(settings),
+    refusals: refusals.every((r) => /^[A-Z].*\.$/.test(r) && !/Base URL|API key|plugin's/.test(r)) && refusals.some((r) => r.includes("AI website address")),
+    mindLines: mindLines.every((l) => !/Base URL|API key|mind's service/.test(l)) && P.MIND_LINES.key.includes("your key"),
+    blotter: read("client", "computerpets_client", "app.py").includes('print(f"ok: minds {MINDS_INTRO} House lines, no AI boxes")'),
+  };
+  if (!Object.values(minds).every(Boolean)) bad.push(`Minds words: ${JSON.stringify(minds)}`);
+
+  // 2) "Download my pet" in the plain-error headers and the harness label; desk_guard_plain reads the checkJs file.
+  const smokes = read("client", "computerpets_client", "harness_web_smokes.mjs");
+  const deskGuard = smokes.slice(smokes.indexOf("async function deskGuardPlain()"), smokes.indexOf("async function guestLoopsMount()"));
+  const words = {
+    plainErrorJs: /^ \* Plain words for Unlock \/ Download my pet failures\./m.test(read("desktop", "license", "plain-error.cjs")),
+    plainErrorPy: read("client", "computerpets_client", "license", "plain_error.py").startsWith('"""Plain words for Unlock / Download my pet failures.'),
+    harnessLabel: read("client", "computerpets_client", "app_harness.py").includes('"Unlock / Download my pet offline:') && !/Signed download/.test(read("client", "computerpets_client", "app_harness.py")),
+    deskGuardFile: deskGuard.includes('readFileSync(join(ROOT, "desktop", "checkjs-baseline.txt"), "utf8")') && !/Number\(baselineJs\) > \d/.test(deskGuard) && deskGuard.includes("checkjs.docCount !== baselineJs"),
+  };
+  if (!Object.values(words).every(Boolean)) bad.push(`download words / checkJs file: ${JSON.stringify(words)}`);
+
+  // 3) The robin and the bird leave the page after a flight (normal end or the desk hiding mid-flight), with no loop left.
+  const flyers = ["robin-fly.tsx", "bird-fly.tsx"].map((f) => read("web", "src", "components", "desk", f).replace(/\r\n/g, "\n"));
+  const flightSrc = flyers.every((src) => /\n  if \(!on\) return null;\n/.test(src) && !/!on && !startId/.test(src));
+  const { spawnSync } = require("node:child_process");
+  const run = spawnSync(process.execPath, ["--experimental-strip-types", "--no-warnings", "--test", "--test-reporter=tap", "--test-name-pattern=normal flight|mid-flight", join("scripts", "desk-mount.test.mjs")], { cwd: WEB, encoding: "utf8", timeout: 40000 });
+  const tap = `${run.stdout || ""}`;
+  const count = (label) => Number((tap.match(new RegExp(`^# ${label} (\\d+)$`, "m")) || [])[1] || -1);
+  const flight = { src: flightSrc, status: run.status, pass: count("pass"), fail: count("fail") };
+  if (!flightSrc || run.status !== 0 || flight.pass !== 2 || flight.fail !== 0) bad.push(`flight end: ${JSON.stringify({ ...flight, err: (run.stderr || "").slice(0, 200) })}`);
+
+  // 4) START-HERE opens with short kid-plain lines, desktop first, the honest download, and the browser after.
+  const start = read("docs", "START-HERE.md").replace(/\r\n/g, "\n");
+  const look = start.slice(start.indexOf("\n## What that looks like\n"), start.indexOf("\n### More detail, for later\n"));
+  const bullets = look.split("\n").filter((l) => l.startsWith("- "));
+  const wordsIn = (l) => l.replace(/\*\*/g, "").slice(2).split(/\s+/).filter(Boolean).length;
+  const startHere = {
+    bullets: bullets.length,
+    longest: Math.max(...bullets.map(wordsIn)),
+    desktopFirst: /real desktop/.test(bullets[0] || ""),
+    honest: bullets.some((b) => /no store download yet/.test(b) && /GitHub/.test(b)),
+    helpers: bullets.some((b) => /install two free helper programs once/.test(b)),
+    browserAfter: /The browser comes later\. The desktop comes first\./.test(bullets[bullets.length - 1] || ""),
+    detailKept: start.indexOf("\n### More detail, for later\n") > 0 && start.includes("Rui, Sip, Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground"),
+    // Step 6 (the first minutes with a pet): Talk is one short line; the full list of cries is folded, not lost.
+    talkShort: (() => {
+      const talk = (start.match(/^- \*\*Talk\*\* [^\n]*$/m) || [""])[0];
+      return talk.length > 0 && wordsIn(talk) <= 25;
+    })(),
+    talkListKept: /<summary>Which sound each pet makes \(for later\)<\/summary>\n\n\*\*Talk\*\* from Rui plays his warm house cry[^\n]*Rose prefers `haloarchaea\.wav` the same way\./.test(start),
+  };
+  if (startHere.bullets < 4 || startHere.bullets > 8 || startHere.longest > 20 || !startHere.desktopFirst || !startHere.honest || !startHere.helpers || !startHere.browserAfter || !startHere.detailKept || !startHere.talkShort || !startHere.talkListKept) bad.push(`START-HERE opening: ${JSON.stringify(startHere)}`);
+
+  // 5) ARCHITECTURE: a plain-words paragraph comes before the dense now/later lists and the hard locks; detail kept.
+  const arch = read("docs", "ARCHITECTURE.md").replace(/\r\n/g, "\n");
+  const plainAt = arch.indexOf("### 11.4 Honest now vs later\n\n**In plain words:**");
+  const architecture = {
+    plainFirst: plainAt > 0 && plainAt < arch.indexOf("**Now (already in the house)**"),
+    locks: /### 11\.5 Hard locks\n\nIn plain words: /.test(arch),
+    detailKept: arch.includes("- DirectX 12 and Vulkan are not started.") && arch.includes("- Desktop presence is not filesystem theft."),
+  };
+  if (!Object.values(architecture).every(Boolean)) bad.push(`ARCHITECTURE plain words: ${JSON.stringify(architecture)}`);
+
+  const roadmap = read("docs", "ROADMAP.md");
+  const updated = (roadmap.match(/Last Updated[^0-9]*(\d{4}-\d{2}-\d{2})/) || [])[1] || "";
+  if (updated < "2026-09-27") bad.push(`ROADMAP Last Updated is ${updated}`);
+  if (bad.length) return fail(bad.join("; "), { same, minds, words, flight, startHere, architecture });
+  return ok("Minds says 'AI website address' and 'Your key for that AI website' with a helper line on the web desk, the overlay, and the blotter; the blotter says pets talk without an AI; Download my pet everywhere; desk_guard_plain reads the checkJs file; the robin and the bird leave the page after a flight; START-HERE opens kid-plain; ARCHITECTURE has plain words first", { same, minds, words, flight, startHere, architecture, updated }, [
+    "minds=same_words_web+overlay+blotter",
+    "minds=plain_address_and_key+helper",
+    "minds=house_lines_no_ai_boxes",
+    "download=download_my_pet",
+    "checkjs=baseline_file_in_desk_guard",
+    "flight=canvas_off_page+no_loop",
+    "start_here=kid_plain+desktop_first+honest",
+    "architecture=plain_words_first",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -1650,6 +1763,7 @@ const COMMANDS = {
   loop_guard_unlock_plain: loopGuardUnlockPlain,
   desk_guard_plain: deskGuardPlain,
   guest_loops_mount: guestLoopsMount,
+  minds_flight_plain: mindsFlightPlain,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

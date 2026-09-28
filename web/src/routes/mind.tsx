@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { MIND_PRESETS, VOICE_PRESETS, mindPreset } from "@/lib/ai/catalog";
+import { MIND_WORDS } from "@/lib/ai/mind-words";
 import { describeBinding, describeKeyKept, saveMindSettings } from "@/lib/ai/settings";
 import { refreshMindSettings, useMindSettings } from "@/lib/ai/use-mind";
 import { LIVING_KINDS } from "@/lib/pets/living";
@@ -149,6 +150,9 @@ function MindPage() {
           Fourteen plugins. OpenAI-compatible, Claude, Gemini, Ollama, a custom webhook.
           Assign a house default or give each animal their own brain.
         </p>
+        <p id="mind-intro" className="text-base">
+          {MIND_WORDS.intro}
+        </p>
         <p className="text-sm text-subtle">
           {counts} mind{counts === 1 ? "" : "s"} in use · {describeKeyKept(live.keyKept)}
         </p>
@@ -182,38 +186,47 @@ function MindPage() {
       <section className="grid gap-6 rounded-[var(--radius-xl)] border border-border bg-surface p-5 sm:p-6 lg:grid-cols-2">
         <div className="space-y-4">
           <h2 className="font-display text-2xl">House default</h2>
-          <Field label="Model">
-            <input
-              value={draft.default.model ?? selected.defaultModel ?? ""}
-              onChange={(e) => setDefault({ model: e.target.value })}
-              placeholder={selected.defaultModel}
-              className="h-11 w-full rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm"
-            />
-          </Field>
-          <Field label="Base URL">
-            <input
-              value={draft.default.baseUrl ?? selected.defaultBaseUrl ?? ""}
-              onChange={(e) => setDefault({ baseUrl: e.target.value })}
-              placeholder={selected.defaultBaseUrl}
-              className="h-11 w-full rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm"
-            />
-          </Field>
-          {selected.needsKey ? (
-            <>
-              <Field label="API key">
+          {selected.kind === "local" ? (
+            // House lines: no AI, so no model, address, or key boxes.
+            <p id="mind-house" className="text-sm text-muted">
+              {MIND_WORDS.house}
+            </p>
+          ) : (
+            <div id="mind-fields" className="space-y-4">
+              <Field label="Model">
                 <input
-                  type="password"
-                  autoComplete="off"
-                  value={draft.default.apiKey ?? ""}
-                  onChange={(e) => setDefault({ apiKey: e.target.value })}
-                  placeholder={selected.envKey ? `or ${selected.envKey} on the server` : "optional"}
+                  value={draft.default.model ?? selected.defaultModel ?? ""}
+                  onChange={(e) => setDefault({ model: e.target.value })}
+                  placeholder={selected.defaultModel}
                   className="h-11 w-full rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm"
                 />
               </Field>
-              <p className="text-sm text-muted">{describeKeyKept(live.keyKept)}</p>
-            </>
-          ) : (
-            <p className="text-sm text-muted">No key. This mind lives here.</p>
+              <Field label={MIND_WORDS.address} hint={MIND_WORDS.addressHelp}>
+                <input
+                  value={draft.default.baseUrl ?? selected.defaultBaseUrl ?? ""}
+                  onChange={(e) => setDefault({ baseUrl: e.target.value })}
+                  placeholder={selected.defaultBaseUrl}
+                  className="h-11 w-full rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm"
+                />
+              </Field>
+              {selected.needsKey ? (
+                <>
+                  <Field label={MIND_WORDS.key} hint={MIND_WORDS.keyHelp}>
+                    <input
+                      type="password"
+                      autoComplete="off"
+                      value={draft.default.apiKey ?? ""}
+                      onChange={(e) => setDefault({ apiKey: e.target.value })}
+                      placeholder={selected.envKey ? `or ${selected.envKey} on the server` : "optional"}
+                      className="h-11 w-full rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm"
+                    />
+                  </Field>
+                  <p className="text-sm text-muted">{describeKeyKept(live.keyKept)}</p>
+                </>
+              ) : (
+                <p className="text-sm text-muted">No key needed for this AI.</p>
+              )}
+            </div>
           )}
           <div>
             <p className="mb-2 text-[11px] uppercase tracking-[0.16em] text-subtle">Voice</p>
@@ -317,11 +330,12 @@ function MindPage() {
   );
 }
 
-function Field({ label, children }: { label: string; children: ReactNode }) {
+function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
     <label className="block space-y-1.5">
       <span className="text-[11px] uppercase tracking-[0.16em] text-subtle">{label}</span>
       {children}
+      {hint ? <span className="block text-xs text-muted">{hint}</span> : null}
     </label>
   );
 }

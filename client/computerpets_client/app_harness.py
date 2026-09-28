@@ -1391,13 +1391,13 @@ def _desk_rows() -> list[Affordance]:
         Affordance(
             "desk.settings.window",
             "desk",
-            "The House window (Minds + Unlock) itself: fields, save, Base URL checks, Details, plain errors",
+            "The House window (Minds + Unlock) itself: fields, save, AI website address checks, Details, plain errors",
             "settings.html + mind.js + license-net.js + presence.js through the real preload.cjs and main.cjs",
             notes=(
                 "Tray Minds... opens settings.html sandboxed and isolated with the preload, at Minds; Unlock... reuses "
                 "the window and scrolls it to Unlock. The page's own scripts run against a stand-in DOM (harness_windows.cjs) "
                 "and the real preload.cjs, which may require only electron. 14 plugins with local first, the whole roster "
-                "under Pet, Locked on open. Four bad Base URLs are named and not saved; a good save seals the key "
+                "under Pet, Locked on open. Four bad AI website addresses are named and not saved; a good save seals the key "
                 "(mind.json has no plain key); an unwritable mind.json says Not saved; no secret store says the key was not "
                 "written to disk. Details is folded, the summary toggles it, and the mark line follows hwid.txt. Unlock with "
                 "an empty Steam ID or a refused connection shows only plain words; the raw error is logged. No network."
@@ -1406,7 +1406,7 @@ def _desk_rows() -> list[Affordance]:
         Affordance(
             "desk.license.offline",
             "desk",
-            "Unlock / Signed download offline: valid, expired, wrong machine, network down, 500, 403, no store",
+            "Unlock / Download my pet offline: valid, expired, wrong machine, network down, 500, 403, no store",
             "main.cjs license-* IPC + desktop/license session / client / decrypt / plain-error",
             notes=(
                 "The real license code answers fake house-server replies (contract double and hand-made answers). "
@@ -1978,6 +1978,20 @@ def _card_rows() -> list[Affordance]:
             ),
         ),
         Affordance(
+            "card.minds_blotter",
+            "card",
+            "Blotter Minds: pets talk without an AI; House lines shows no AI boxes; same words on all three doors",
+            "minds.py + app.py minds_label / --check, web mind-words.ts + routes/mind.tsx, overlay settings.html + mind.js",
+            notes=(
+                "Offline: minds.py holds the Minds intro, the House lines note, and the plain address and key labels "
+                "with their helper lines, word for word the same as web mind-words.ts and overlay settings.html. "
+                "House lines (and anything unknown) shows no box; every real AI shows Model, AI website address, and "
+                "Your key for that AI website. The blotter window shows the intro and House lines note under the "
+                "listener line and --check fails if an AI box or a Base URL / API key label appears. The web /mind "
+                "page and the overlay hide the boxes for House lines too."
+            ),
+        ),
+        Affordance(
             "card.alarm",
             "card",
             "Alarm rings once while the overlay is hidden and keeps its day",
@@ -2231,6 +2245,62 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
             extras=checks,
             trace=[f"gpu.{name}={'ok' if ok else 'fail'}" for name, ok in checks.items()],
             error=None if not failed else f"gpu sense drifted: {', '.join(failed)}",
+        )
+    if local_id == "minds_blotter":
+        from . import minds
+        from .listener import PRESETS
+
+        web_words = _read("web/src/lib/ai/mind-words.ts")
+        settings = _read("desktop/renderer/settings.html")
+        mind_js = _read("desktop/renderer/mind.js")
+        page = _read("web/src/routes/mind.tsx")
+        blotter_src = _read("client/computerpets_client/app.py")
+        words = {
+            "intro": minds.MINDS_INTRO,
+            "house": minds.HOUSE_NOTE,
+            "address": minds.ADDRESS_LABEL,
+            "addressHelp": minds.ADDRESS_HELP,
+            "key": minds.KEY_LABEL,
+            "keyHelp": minds.KEY_HELP,
+        }
+        refusals = re.findall(
+            r'return "([^"]*)";',
+            mind_js[mind_js.find("function baseUrlProblem("):mind_js.find("function binding(")],
+        )
+        real = [row["id"] for row in PRESETS if row["kind"] != "local"]
+        checks = {
+            "web_same": all(f'  {k}: "{v.replace(chr(34), chr(92) + chr(34))}",' in web_words for k, v in words.items()),
+            "overlay_same": all(v in settings for v in words.values()),
+            "house_no_boxes": minds.mind_fields("local") == [] and minds.mind_fields("nope") == [],
+            "ai_three_boxes": all(
+                [f["label"] for f in minds.mind_fields(pid)] == ["Model", minds.ADDRESS_LABEL, minds.KEY_LABEL] for pid in real
+            ),
+            "blotter_note": (
+                "self.minds_label = QLabel(blotter_minds_text())" in blotter_src
+                and 'setObjectName("mindsNote")' in blotter_src
+                and 'print(f"ok: minds {MINDS_INTRO} House lines, no AI boxes")' in blotter_src
+            ),
+            "web_hides": 'selected.kind === "local" ?' in page and "{MIND_WORDS.house}" in page and "label={MIND_WORDS.address}" in page,
+            "no_jargon": (
+                not re.search(r"<label[^>]*>(Base URL|API key)</label>", settings)
+                and 'label="Base URL"' not in page
+                and 'label="API key"' not in page
+                and len(refusals) >= 5
+                and all("Base URL" not in r and "API key" not in r for r in refusals)
+            ),
+        }
+        failed = [name for name, ok in checks.items() if not ok]
+        trace = [f"minds.{name}={'ok' if ok else 'fail'}" for name, ok in checks.items()]
+        if not failed:
+            trace += ["minds=same_words_web+overlay+blotter", "house_lines=no_ai_boxes", "blotter=talk_without_ai"]
+        return InvokeResult(
+            aid,
+            "card",
+            not failed,
+            detail="minds " + ",".join(checks),
+            extras=checks,
+            trace=trace,
+            error=None if not failed else f"minds words drifted: {', '.join(failed)}",
         )
     if local_id == "listener":
         from .listener import name_listener
@@ -2626,7 +2696,7 @@ def _web_rows() -> list[Affordance]:
         Affordance(
             "web.desk_guard_plain",
             "web",
-            "Web desk loop survives a throwing trick; typed trick calls; desktop checkJs down to 3; house-server, admin, license, and ADR words in plain words",
+            "Web desk loop survives a throwing trick; typed trick calls; desktop checkJs held to its baseline file; house-server, admin, license, and ADR words in plain words",
             "web frame-guard.ts + living-pet.tsx loop, cat-tricks.ts with an injected fault, overlay frame-guard.js, ground-tricks.ts steps, pet.js / desk-house.js / main.cjs checkJs, settings.html + unlock_dialog.py, plain-error, admin api.ts, license-net fallbacks, news/market headers, ADR 0019/0036/0037",
             notes=(
                 "The web frame guard runs 1,200 frames of the desk's loop with a real trick module whose step throws: "
@@ -2634,7 +2704,7 @@ def _web_rows() -> list[Affordance]:
                 "the pet goes back to a safe idle each time; the web and overlay guards reset a pet the same way. "
                 "living-pet.tsx runs its frame through guardedLoop, has no requestAnimationFrame or catch in the frame "
                 "body, and has no `as never` (stepGroundTrick / stepGroundHappy / nextGroundTrickWait are typed). The "
-                "desktop checkJs baseline is 3 or less (Rui's radio lines), pet.js keeps no state on functions, looks "
+                "desktop checkJs matches desktop/checkjs-baseline.txt and the count CONTRIBUTING quotes, pet.js keeps no state on functions, looks "
                 "elements up through htmlAll / htmlOne, and types its pointer handler; Electron's own types are checked "
                 "when installed. Settings and the blotter say 'House server address' and 'Asking the house server…', the "
                 "admin buttons' fallbacks are whole sentences, the license lines keep no dead stand-in host name (every "
@@ -2659,6 +2729,25 @@ def _web_rows() -> list[Affordance]:
                 "name, the READMEs say house server, the admin line is plain, ADR 0019 and 0032-0035 titles are plain and "
                 "match the index, CONTRIBUTING quotes both baseline files, Settings says pets talk without an AI and "
                 "hides the AI boxes for House lines, and ROADMAP is dated."
+            ),
+        ),
+        Affordance(
+            "web.minds_flight_plain",
+            "web",
+            "Plain Minds boxes on all three doors; Download my pet everywhere; desk_guard_plain reads the checkJs file; robin and bird leave the page after a flight; kid-plain START-HERE and ARCHITECTURE",
+            "web mind-words.ts + routes/mind.tsx + plain-error.ts MIND_LINES, overlay settings.html + mind.js baseUrlProblem, client minds.py + app.py, plain-error.cjs / plain_error.py, robin-fly / bird-fly + desk-mount.test.mjs, docs START-HERE / ARCHITECTURE",
+            notes=(
+                "The Minds intro, the House lines note, 'AI website address' and 'Your key for that AI website' and their "
+                "helper lines are the same words in web mind-words.ts, overlay settings.html, and client minds.py. The web "
+                "/mind page hides the model, address, and key boxes for House lines like the overlay does. The overlay's "
+                "refusal lines (run through the real mind.js) and the web MIND_LINES never say Base URL, API key, or "
+                "mind's service. plain-error headers and the harness label say Download my pet. desk_guard_plain reads "
+                "desktop/checkjs-baseline.txt and the count CONTRIBUTING quotes, with no number of its own. The robin and "
+                "bird mount tests fly a whole flight and hide the desk mid-flight: no canvas is left on the page and no "
+                "frame loop keeps running. START-HERE opens with 4-8 short lines (desktop first, no store download yet, "
+                "two helper programs, browser after) with the full detail kept below, and the Step 6 Talk line is short with "
+                "the full cry list folded; ARCHITECTURE 11.4 and 11.5 start "
+                "with plain words and keep the technical detail."
             ),
         ),
     ]
@@ -2696,6 +2785,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("desk_guard_plain", domain="web", action_id=aid)
     if local_id == "guest_loops_mount":
         return _run_web_smoke("guest_loops_mount", domain="web", action_id=aid)
+    if local_id == "minds_flight_plain":
+        return _run_web_smoke("minds_flight_plain", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

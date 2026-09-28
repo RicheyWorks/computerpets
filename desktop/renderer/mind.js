@@ -433,7 +433,7 @@
   }
 
   /**
-   * One plain sentence for a Base URL talk would refuse, or "" when talk can use it.
+   * One plain sentence for an AI website address talk would refuse, or "" when talk can use it.
    * Same rules as safeUrl, so Minds never says "Saved" for a mind that falls back to house lines.
    */
   function baseUrlProblem(raw, id) {
@@ -444,27 +444,27 @@
     try {
       url = new URL(text);
     } catch {
-      return "The Base URL is not a web address. Copy it from the plugin's own page, starting with https.";
+      return "That is not a web address. Copy the AI website address from that AI website's own page. It starts with https.";
     }
     if (url.protocol !== "https:" && url.protocol !== "http:") {
-      return "The Base URL is not a web address. Copy it from the plugin's own page, starting with https.";
+      return "That is not a web address. Copy the AI website address from that AI website's own page. It starts with https.";
     }
     if (url.username || url.password) {
-      return "Take the name and password out of the Base URL. They are never saved, so put the key in the API key box instead.";
+      return "Take the name and password out of the AI website address. They are never saved, so put your key in the \"Your key for that AI website\" box instead.";
     }
     const host = url.hostname.replace(/^\[|\]$/g, "");
     const local = host === "127.0.0.1" || host === "localhost" || host === "::1";
     if (local) {
       if (!(p.id === "ollama" || p.id === "lmstudio" || p.id === "custom")) {
-        return "A Base URL on this computer only works with Ollama, LM Studio, or Custom. Pick one of those, or use the plugin's https address.";
+        return "An AI website address on this computer only works with Ollama, LM Studio, or Custom. Pick one of those, or use that AI website's https address.";
       }
       return "";
     }
-    if (url.protocol !== "https:") return "The Base URL must start with https:// so the key is not sent in the open.";
+    if (url.protocol !== "https:") return "The AI website address must start with https:// so your key is not sent in the open.";
     if (/^(10|127|0)\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[0-1])\./.test(host)) {
-      return "The Base URL points at a private network address. Talk only goes to a public https address or to this computer.";
+      return "The AI website address points at a private network address, inside a home or office network. Talk only goes to a public https address or to this computer.";
     }
-    return safeUrl(text, p.id) ? "" : "The Base URL is not a web address. Copy it from the plugin's own page, starting with https.";
+    return safeUrl(text, p.id) ? "" : "That is not a web address. Copy the AI website address from that AI website's own page. It starts with https.";
   }
 
   function binding(species) {
