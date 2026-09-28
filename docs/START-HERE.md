@@ -131,7 +131,8 @@ Today that needs two free helpers — Git (the copier) and Node (the flashlight 
 
 - A computer with **Windows 10 or Windows 11**
 - The internet
-- About 15 minutes the first time (the first start can feel slow — that is normal)
+- About 8 GB of free space. The copy is big: about 4 GB comes down the internet the first time, and the pet pictures are most of it.
+- About 15 minutes of your time the first time, plus that download. On slow internet the copy can take an hour or more. The first start can feel slow too — that is normal.
 - A grown-up nearby if a download asks for a password
 
 You do not need an account. You do not need money. You do not need Java. You do not need a license. You do not need to learn Node.
@@ -249,7 +250,7 @@ https://github.com/RicheyWorks/computerpets
 
 6. Pick a Local path. **Documents** is a good, boring choice. GitHub Desktop will make a `computerpets` folder there.
 7. Click **Clone**.
-8. Wait until it finishes.
+8. Wait until it finishes. The copy is about 4 GB, so this can take a while. Let it run.
 
 **What you should see:** GitHub Desktop shows the ComputerPets project. Look at the path it prints under the name. That is *your* copy.
 
@@ -602,6 +603,7 @@ You started the pets, then closed the PowerShell. Open PowerShell in the `comput
 ### `git clone` failed
 
 - Check the internet.
+- Check the computer has about 8 GB of free space. A full disk stops the copy partway.
 - Type `git --version`. If Git is missing, do Step 1, then open a new PowerShell.
 - Or use GitHub Desktop and the URL path instead.
 
@@ -650,6 +652,8 @@ sh desktop.sh
 ```
 
 If it says the pet pictures did not download, install Git LFS (step 2). Then type `git lfs pull` in the `computerpets` folder.
+
+The overlay says the same thing in a small window if you start it the other way below.
 
 Or:
 

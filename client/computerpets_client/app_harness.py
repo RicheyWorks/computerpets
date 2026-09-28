@@ -1380,6 +1380,19 @@ def _desk_rows() -> list[Affordance]:
             ),
         ),
         Affordance(
+            "desk.pictures_gate",
+            "desk",
+            "Started from npm start with Git LFS pointers or no pictures, the overlay says so instead of opening a glass of invisible pets",
+            "main.cjs bootDesk + renderer/pictures.js + dialog.showMessageBox + tray + presence/open-link.cjs",
+            notes=(
+                "Loads the real desktop/main.cjs under the stand-in Electron with the pet picture read as lfs-pointers, then "
+                "missing: no overlay window and no ticks, one small window with the Git LFS steps (Open git-lfs.com, OK), and "
+                "the tray says Pet pictures did not download with How to fix, Open git-lfs.com, and Quit. A second start shows "
+                "the words again; git-lfs.com opens through the same web-page-only gate as a clicked link. With the pictures "
+                "ready the glass opens and no window is shown. Other desk rows boot with the pictures ready."
+            ),
+        ),
+        Affordance(
             "desk.market.search",
             "desk",
             "Quotes look-up through main market-search",
@@ -1792,6 +1805,8 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("tray_on_the_desk", domain="desk", action_id=aid)
     if local_id == "quit":
         return _run_node_smoke("quit_desk", domain="desk", action_id=aid)
+    if local_id == "pictures_gate":
+        return _run_node_smoke("pictures_gate", domain="desk", action_id=aid)
     if local_id == "market.search":
         return _run_node_smoke("market_search", domain="desk", action_id=aid)
     if local_id == "settings.window":
@@ -2823,6 +2838,21 @@ def _web_rows() -> list[Affordance]:
                 "plain Git LFS words; the Mac and Linux steps say git lfs install and git lfs pull."
             ),
         ),
+        Affordance(
+            "web.pictures_start_names",
+            "web",
+            "The overlay from npm start and the web dev server say plainly when the pet pictures are Git LFS pointers; YAML stays LF; one kind name per pet; START-HERE gives the copy size",
+            "desktop renderer/pictures.js + main.cjs bootDesk, web scripts/pictures-check.mjs + vite.config.ts, .gitattributes, client species.py + web catalog.ts + PetType.java + rosters, docs START-HERE",
+            notes=(
+                "Started straight from npm start, the overlay reads renderer/sprites/crow/idle/1.png before it opens the glass: "
+                "a Git LFS pointer or a missing file opens a small window with the same Git LFS steps as desktop.sh and "
+                "desktop.ps1, and the tray keeps them (How to fix, Open git-lfs.com, Quit). The web dev server warns once with "
+                "the same steps when web/public/pets (also Git LFS) holds pointers. The Python blotter draws its own pets and "
+                "loads no pictures. *.yaml and *.yml are eol=lf, so a Windows checkout passes all 37 deploy checks. Every kind "
+                "name matches across the overlay roster, web roster, web catalog, Python and the backend for all 221. "
+                "START-HERE says the copy is about 4 GB and needs about 8 GB free."
+            ),
+        ),
     ]
 
 
@@ -2866,6 +2896,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("flake_house_plain", domain="web", action_id=aid)
     if local_id == "unlock_plain_lfs":
         return _run_web_smoke("unlock_plain_lfs", domain="web", action_id=aid)
+    if local_id == "pictures_start_names":
+        return _run_web_smoke("pictures_start_names", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

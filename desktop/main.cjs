@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, screen, Notification, powerMonitor, shell } = require("electron");
+const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, screen, Notification, powerMonitor, dialog, shell } = require("electron");
 const fs = require("fs");
 const path = require("path");
 const { createLicenseSession } = require("./license/session.cjs");
@@ -20,6 +20,7 @@ const OpenLink = require("./presence/open-link.cjs");
 const MindSecret = require("./mind-secret.cjs");
 const PetCard = require("./renderer/card.js");
 const VDesk = require("./vdesk-win.cjs");
+const Pictures = require("./renderer/pictures.js");
 
 /** Buffffff opt-in: COMPUTERPETS_GUI_HARNESS=1 runs Electron smokes then quits. */
 const GUI_HARNESS = process.env.COMPUTERPETS_GUI_HARNESS === "1";
@@ -99,6 +100,12 @@ function licenseIpc(fn) {
  * @type {({ open: boolean, path?: string, reason: string, label: string } & Record<string, any>) | null}
  */
 let gpuGate = null;
+/**
+ * Set when the pet pictures are Git LFS pointers or missing: the overlay says so instead of
+ * opening a glass of invisible pets.
+ * @type {ReturnType<typeof Pictures.words> | null}
+ */
+let picturesGate = null;
 /** @type {BrowserWindow | null} */
 let win = null;
 /** @type {BrowserWindow | null} */
@@ -210,13 +217,23 @@ const sealedContents = new WeakSet();
  * every other scheme is refused and logged. The window-open answer is always "deny",
  * so no Electron window is made for a link. See presence/open-link.cjs.
  */
+const linkDeps = {
+  openExternal: (url) => shell.openExternal(url),
+  log: (line) => console.warn(line),
+};
+
 function sealDeskContents(contents) {
   OpenLink.sealContents(contents, {
     presence: Presence,
-    openExternal: (url) => shell.openExternal(url),
-    log: (line) => console.warn(line),
+    openExternal: linkDeps.openExternal,
+    log: linkDeps.log,
     sealed: sealedContents,
   });
+}
+
+/** Main-process links (the Git LFS page) go through the same web-page-only gate as a clicked link. */
+function openWebPage(url) {
+  return OpenLink.openLink(url, linkDeps);
 }
 
 /** The weather control on the overlay glass. The minds window is not that control. */
@@ -336,6 +353,42 @@ function gpuPathRows() {
   return rows;
 }
 
+/** Show the Git LFS steps in a small window; the tray keeps them one click away. */
+function showPicturesMessage() {
+  if (!picturesGate) return;
+  const w = picturesGate;
+  dialog
+    .showMessageBox({
+      type: "info",
+      title: "ComputerPets",
+      message: w.message,
+      detail: w.detail,
+      buttons: ["Open git-lfs.com", "OK"],
+      defaultId: 1,
+      cancelId: 1,
+      noLink: true,
+    })
+    .then((r) => {
+      if (r.response === 0) openWebPage(w.link);
+    })
+    .catch(() => {});
+}
+
+/** @returns {MenuRow[]} */
+function picturesTrayTemplate() {
+  if (!picturesGate) return [];
+  const act = {
+    explain: () => showPicturesMessage(),
+    link: () => openWebPage(picturesGate?.link ?? Pictures.LINK),
+    quit: () => app.quit(),
+  };
+  return /** @type {MenuRow[]} */ (
+    Pictures.trayRows(picturesGate).map((row) =>
+      row.action ? { label: row.label, click: act[/** @type {"explain" | "link" | "quit"} */ (row.action)] } : row,
+    )
+  );
+}
+
 /** @returns {MenuRow[]} */
 function refusedTrayTemplate() {
   /** @type {MenuRow[]} */
@@ -410,6 +463,13 @@ function macAppMenu() {
 }
 
 function refreshMenus() {
+  if (picturesGate) {
+    const rows = picturesTrayTemplate();
+    tray?.setContextMenu(Menu.buildFromTemplate(rows));
+    tray?.setToolTip(picturesGate.tray + " — ComputerPets");
+    if (Desk.appMenu(process.platform)) Menu.setApplicationMenu(Menu.buildFromTemplate(rows));
+    return;
+  }
   const refused = gpuGate && !gpuGate.open;
   const template = refused ? refusedTrayTemplate() : trayTemplate();
   tray?.setContextMenu(Menu.buildFromTemplate(template));
@@ -699,6 +759,23 @@ function bootDesk() {
   app.whenReady().then(async () => {
     loadRoster();
     if (process.platform === "darwin") app.dock?.hide();
+    // Git LFS pictures first: without them every pet would be invisible, so say so plainly.
+    const pictures = Pictures.picturesState(path.join(__dirname, "renderer"), fs, path.join);
+    if (pictures !== "ready") {
+      picturesGate = Pictures.words(pictures);
+      if (GUI_HARNESS) {
+        writeGuiHarnessResult({
+          ok: false,
+          error: "pictures-" + pictures,
+          results: { "gui.pictures": { ok: false, detail: picturesGate.detail } },
+        });
+        app.quit();
+        return;
+      }
+      createTray();
+      showPicturesMessage();
+      return;
+    }
     try {
       gpuGate = await GpuPath.gate(app, fs);
     } catch {
@@ -749,6 +826,10 @@ if (GUI_HARNESS) {
     app.quit();
   } else {
     app.on("second-instance", () => {
+      if (picturesGate) {
+        showPicturesMessage();
+        return;
+      }
       win?.showInactive();
       win?.setAlwaysOnTop(true, "screen-saver");
     });

@@ -77,6 +77,7 @@ CROSS_DOMAIN = {
     "desk.launch_check",
     "desk.tray.switch",
     "desk.quit",
+    "desk.pictures_gate",
     "desk.market.search",
     "desk.settings.window",
     "desk.license.offline",
@@ -123,6 +124,7 @@ CROSS_DOMAIN = {
     "web.overlay_birds_plain",
     "web.flake_house_plain",
     "web.unlock_plain_lfs",
+    "web.pictures_start_names",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -538,6 +540,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.overlay_birds_plain",
         "web.flake_house_plain",
         "web.unlock_plain_lfs",
+        "web.pictures_start_names",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -873,6 +876,53 @@ def test_unlock_plain_lfs_row_keeps_unlock_words_plain_and_names_git_lfs():
         assert all(ul.extras[group].values()), (group, ul.extras[group])
     assert ul.extras["randomId"]["lower"] == []
     assert ul.extras["sounds"]["pets"] == 109 and len(ul.extras["sounds"]["heads"]) == 10
+
+
+def test_pictures_start_names_row_says_so_at_app_start_and_keeps_one_name_per_kind():
+    """Overlay and web dev server picture checks, YAML LF, one kind name per pet, and the START-HERE copy size."""
+    from computerpets_client.app_harness import launch_pictures_state, repo_root
+
+    ps = invoke("web.pictures_start_names")
+    assert ps.ok, (ps.error, ps.detail)
+    for mark in ("pictures=overlay_checks_before_glass", "pictures=web_dev_server_warns", "pictures=python_draws_own",
+                 "eol=yaml_lf", "names=one_per_kind_221", "start_here=copy_size"):
+        assert mark in ps.trace, (mark, ps.trace)
+    for group in ("overlay", "python", "yaml", "size"):
+        assert all(ps.extras[group].values()), (group, ps.extras[group])
+    assert ps.extras["names"]["drift"] == []
+    assert ps.extras["names"]["bees"] == ["Blue Orchard Mason", "Alfalfa Leafcutter", "Western Honey Bee Drone", "Western Honey Bee Queen"]
+    assert ps.extras["pictures"] == launch_pictures_state(repo_root())
+
+
+def test_pictures_gate_row_boots_real_main_with_pointers_and_opens_no_glass():
+    """The real main.cjs with Git LFS pointers or no pictures: no window, the Git LFS words, tray fix, link gate."""
+    pg = invoke("desk.pictures_gate")
+    assert pg.ok, (pg.error, pg.detail)
+    for mark in ("pointers=no_glass+small_window", "missing=no_glass+small_window", "tray=how_to_fix+git_lfs_link+quit",
+                 "second_start=words_again", "link=through_open_link_gate", "ready=glass_opens"):
+        assert mark in pg.trace, (mark, pg.trace)
+    for state in ("lfs-pointers", "missing"):
+        row = pg.extras[state]
+        assert row["windows"] == 0 and row["ticks"] == 0
+        assert row["message"] == "The pet pictures did not download."
+        assert "git lfs install and then git lfs pull, and start ComputerPets again." in row["detail"]
+    assert pg.extras["ready"] == {"windows": 1, "dialogs": 0}
+
+def test_python_blotter_draws_its_own_pets_and_loads_no_picture_files():
+    """The Git LFS picture check is for the overlay and the site; the blotter paints its pets, so it has none to check."""
+    from pathlib import Path
+
+    pkg = Path(__file__).resolve().parents[1] / "computerpets_client"
+    frames = (pkg / "frames.py").read_text(encoding="utf-8")
+    assert "The repo does not ship PNG sprite packs." in frames and "QPainter" in frames
+    loads = []
+    for py in pkg.rglob("*.py"):
+        if py.name in ("app_harness.py", "bundle_zip.py"):
+            continue
+        src = py.read_text(encoding="utf-8").replace("\\", "/")
+        if any(mark in src for mark in ("renderer/sprites", '"sprites"', "public/pets", '.png"', ".png'", '.jpg"', ".jpg'")):
+            loads.append(py.name)
+    assert loads == []
 
 
 def test_first_run_rows_start_clean_and_show_the_hello_once():
