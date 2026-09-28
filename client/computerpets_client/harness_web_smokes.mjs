@@ -2424,7 +2424,7 @@ async function noRepeatSignedIn() {
   const more = {
     bubbleClick: main.includes('payload.results["gui.bubble_click"] = bubble;') && main.includes('wc.sendInputEvent({ type: "mouseDown", x, y, button: "left", clickCount: 1 });'),
     harnessTempPruned: main.includes("HarnessData.pruneStale(fs, path, os.tmpdir(), process.pid);"),
-    phoneHintFirst: room.includes("{hand && hintUp ? null : (") && room.includes("folded={hand}"),
+    phoneHintFirst: room.includes("{(hand || deskFold) && hintUp ? null : (") && room.includes("folded={hand || deskFold}"),
     plaqueFolds: plaque.includes("folded") && plaque.includes("About the "),
   };
   if (!Object.values(more).every(Boolean)) bad.push(`more: ${JSON.stringify(more)}`);
@@ -2461,7 +2461,7 @@ async function phoneLayoutToldOnce() {
   const phone = {
     fit: JSON.stringify(P.phoneFit({ asideTop: 68, railTop: 68, careTop: 384 })) === JSON.stringify({ asideMax: 308, railMax: 308 }) && P.PHONE_FIT_GAP === 8,
     tight: P.plaqueNeedsLine(420, 308) === true && P.plaqueNeedsLine(308, 308) === false,
-    wired: room.includes("style={hand && fit ? { maxHeight: fit.asideMax } : undefined}") && room.includes("style={hand && fit ? { maxHeight: fit.railMax } : undefined}") && room.includes("line={hand && plaqueLine}"),
+    wired: room.includes("style={hand && fit ? { maxHeight: fit.asideMax } : !hand && !pad && deskFit ? { maxHeight: deskFit.asideMax } : undefined}") && room.includes("style={hand && fit ? { maxHeight: fit.railMax } : !hand && !pad && deskFit ? { maxHeight: deskFit.railMax } : undefined}") && room.includes("line={hand && plaqueLine}"),
     railWidth: room.includes("z-20 w-[5.5rem] overflow-y-auto overscroll-contain text-right"),
     plaqueLine: plaque.includes('data-plaque="line"'),
     bubbleOnTop: living.includes("absolute bottom-[214px] left-0 z-30 w-[min(220px,70vw)]"),
@@ -2918,14 +2918,14 @@ async function kennelDrawers() {
   const ROOMS = { canopy: ["CANOPY_GUIDE"], cellar: ["FUNGI_GUIDE"], corner: ["CORNER_GUIDE"], creek: ["CREEK_GUIDE"], far: ["FAR_GUIDE"], garden: ["GARDEN_GUIDE"], grid: ["GRID_GUIDE"], hive: ["INSECT_GUIDE", "BEE_GUIDE"], meadow: ["MEADOW_GUIDE"], pond: ["POND_GUIDE"], reef: ["REEF_GUIDE"], roost: ["ROOST_GUIDE"], sea: ["SEA_GUIDE"], shore: ["SHORE_GUIDE"], snakes: ["SNAKE_GUIDE"], stone: ["STONE_GUIDE"], well: ["WELL_GUIDE"], wood: ["WOOD_GUIDE"] };
   const unwired = Object.entries(ROOMS).filter(([r, gs]) => {
     const s = read("web", "src", "routes", `${r}.tsx`);
-    return /_GUIDE\.map\(/.test(s) || !gs.every((g) => new RegExp(`<FieldNotes\\s+notes=\\{${g}\\}`).test(s));
+    return /_GUIDE\.map\(/.test(s) || !gs.every((g, i) => new RegExp(i ? `notes: ${g},` : `<FieldNotes\\s+notes=\\{${g}\\}`).test(s));
   }).map(([r]) => r);
   const fn = read("web", "src", "components", "desk", "field-notes.tsx");
   const rooms = {
     eighteen: Object.keys(ROOMS).length === 18 && unwired.length === 0,
-    props: fn.includes('kicker = "Field notes"') && fn.includes("intro?: ReactNode") && fn.includes("example ?? (notes[notes.length - 1]?.species.toLowerCase()"),
-    hive: read("web", "src", "routes", "hive.tsx").includes('kicker="Bees and comb"'),
-    sweep: sweep.includes("export const ROOM_NOTE_PAGES") && sweep.includes('["/hive", 6_000, 20]') && sweep.includes("'s Open all opened"),
+    props: fn.includes('kicker = "Field notes"') && fn.includes("intro?: ReactNode") && fn.includes("example ?? (all[all.length - 1]?.species.toLowerCase()"),
+    hive: read("web", "src", "routes", "hive.tsx").includes('kicker: "Bees and comb"'),
+    sweep: sweep.includes("export const ROOM_NOTE_PAGES") && sweep.includes('["/hive", 6_000, 20]') && sweep.includes("Open all opened"),
   };
   if (!Object.values(rooms).every(Boolean)) bad.push(`rooms: ${JSON.stringify(rooms)} unwired=${unwired.join(",")}`);
 
@@ -2976,6 +2976,77 @@ async function kennelDrawers() {
   ]);
 }
 
+async function kennelTargets() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8").replace(/\r\n/g, "\n");
+  const sweep = read("web", "scripts", "phone-desk-layout.test.mjs");
+  const room = read("web", "src", "components", "desk", "companion-room.tsx");
+
+  // 1) /demo/<unknown> is a real 404 (the loader throws notFound), with its words, tab title and 44 px link.
+  const demoPage = read("web", "src", "routes", "demo.$slug.tsx");
+  const missing = {
+    loader: demoPage.includes("if (!livingBySlug(params.slug)) throw notFound();") && demoPage.includes("notFoundComponent: DemoMissing,"),
+    words: demoPage.includes("function DemoMissing()") && demoPage.includes('data-demo-missing className="inline-flex min-h-11 items-center') && demoPage.includes(': "No demo here — ComputerPets"'),
+    sweep: sweep.includes("the server answered ${res.status}, not 404"),
+  };
+  if (!Object.values(missing).every(Boolean)) bad.push(`missing: ${JSON.stringify(missing)}`);
+
+  // 2) Desktop sizes: 24×24 targets; the panel and the rail end on the screen.
+  const css = read("web", "src", "styles.css");
+  const Desk = await import(pathToFileURL(join(WEB, "src", "lib", "pets", "phone-desk.ts")).href);
+  const fit = Desk.deskFit({ aside: { top: 120, left: 32, right: 352 }, rail: { top: 140, left: 1072, right: 1248 }, below: [{ top: 600, left: 200, right: 700 }], viewH: 800, gap: 8 });
+  const targets = {
+    css: css.includes(":is(.den-cabinet-room, .den-cabinet-guest):not([data-phone-floor] *) {") && css.includes(":is([data-line-link], [data-room-links] a, [data-talk-send], [data-open-room]):not([data-phone-floor] *) {"),
+    fit: fit.asideMax === 472 && fit.railMax === 652 && room.includes("maxHeight: deskFit.asideMax") && room.includes("maxHeight: deskFit.railMax"),
+    helloFirst: room.includes("{(hand || deskFold) && hintUp ? null : ("),
+    sweep: sweep.includes("export const DESK_TARGET_MIN = 24;") && sweep.includes("function deskTargetProblems(") && sweep.includes('export const DESK_PAGES = ["/", "/catalog", "/demo/rui"];'),
+  };
+  if (!Object.values(targets).every(Boolean)) bad.push(`targets: ${JSON.stringify(targets)}`);
+
+  // 3) /demo's plates start clear of the panel, the rail and the header; the desktop overlay's spots are unchanged.
+  const P = await import(pathToFileURL(join(WEB, "src", "lib", "pets", "desk-plates.ts")).href);
+  const Overlay = require(join(RENDERER, "desk-plates.js"));
+  const keep = { left: 352, right: 208, top: 57 };
+  let lockstep = true;
+  for (const [w, h] of [[1024, 768], [1280, 800], [1440, 900], [1920, 1080]]) {
+    for (const k of P.PLATE_KEYS) {
+      if (JSON.stringify(P.defaultSpot(k, w, h, keep)) !== JSON.stringify(Overlay.defaultSpot(k, w, h, keep))) lockstep = false;
+      if (JSON.stringify(P.defaultSpot(k, w, h)) !== JSON.stringify(Overlay.defaultSpot(k, w, h))) lockstep = false;
+    }
+  }
+  const weather = P.defaultSpot("weather", 1280, 800, keep);
+  const bare = Overlay.defaultSpot("weather", 1280, 800);
+  const plates = {
+    lockstep,
+    clear: weather.x >= 352 + P.KEEP_GAP && weather.y >= 57 + 8,
+    overlayUnchanged: bare.x === 51.2 && bare.y === 64 && !/loadPlates\([^)]*,[^)]*,[^)]*,/.test(read("desktop", "renderer", "pet.js")),
+    web: read("web", "src", "components", "desk", "desk-plates.tsx").includes("loadPlates(window.innerWidth, window.innerHeight, undefined, roomKeepOff())"),
+  };
+  if (!Object.values(plates).every(Boolean)) bad.push(`plates: ${JSON.stringify(plates)}`);
+
+  // 4) /hive: one search for the insects and bees and comb. 5) A phone's /demo jumps to its plates.
+  const hive = read("web", "src", "routes", "hive.tsx");
+  const more = {
+    hive: (hive.match(/<FieldNotes\b/g) || []).length === 1 && hive.includes("more={BEES_AND_COMB}") && hive.includes("notes: BEE_GUIDE,"),
+    notes: read("web", "src", "components", "desk", "field-notes.tsx").includes("more?: FieldNoteSet;"),
+    jump: room.includes("data-plates-jump") && room.includes('<div data-demo-plates role="group" aria-label="Weather, news, market"'),
+  };
+  if (!Object.values(more).every(Boolean)) bad.push(`more: ${JSON.stringify(more)}`);
+
+  const roadmap = read("docs", "ROADMAP.md");
+  if (!roadmap.includes("- [x] The kennel targets at desktop sizes")) bad.push("ROADMAP entry missing");
+  const extras = { missing, targets, plates, more };
+  if (bad.length) return fail(bad.join("; "), extras);
+  return ok("/demo/<unknown> is a real 404; desktop targets are 24 px and the panel and rail fit the screen; /demo's plates start clear of the panel; /hive has one search; a phone's /demo jumps to its plates", extras, [
+    "missing=real_404",
+    "targets=desktop_24px",
+    "fit=panel_rail_on_screen",
+    "plates=clear_of_panel",
+    "hive=one_search",
+    "jump=phone_plates",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -3007,6 +3078,7 @@ const COMMANDS = {
   meet_index_forget: meetIndexForget,
   kennel_first_notes: kennelFirstNotes,
   kennel_drawers: kennelDrawers,
+  kennel_targets: kennelTargets,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

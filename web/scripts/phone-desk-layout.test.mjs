@@ -21,10 +21,13 @@
 // finds one, #note-<slug> opens on arrival). /login at 568×320 does not scroll; the not-found tab title is in the
 // first server HTML; /demo/<slug> takes the phone layout with no update loop. The eighteen room pages (/snakes, /sea,
 // /garden, ...) are field-note indexes too: closed drawers under 4,000 px at 375×667 (/grid 4,800, /hive 6,000 with
-// its two sets), every note a 44 px tap that shows its tell, each set's Open all, search by name, #note-<slug> on
+// the insects and bees and comb under one search), every note a 44 px tap that shows its tell, each set's Open all, search by name, #note-<slug> on
 // arrival. On a phone /demo docks its weather, news and market plates in the panel (they sat over the kicker and the
 // name) and they open on a tap; /mind stays under 2,400 px with every mind a tap away; /demo/<unknown> has its own
-// tab title and a 44 px "See who is awake"; /pets/<not-a-pet>'s "Back to kennel" is 44 px.
+// tab title, a 404 and a 44 px "See who is awake"; /pets/<not-a-pet>'s "Back to kennel" is 44 px. A phone's /demo has a
+// 44 px "Weather, news, market" jump near the top of the panel. At desktop sizes (1024×768, 1280×800, 1440×900) every
+// target on /, /catalog and /demo is at least 24×24 (WCAG 2.2) with none crowding another, the rail and the panel end
+// on the screen (1366×768 and 1280×720 too, the hello's Got it with them) and /demo's plates sit clear of the panel.
 // Starts the Vite dev server in-process and drives the system Chrome or Edge (playwright-core, no downloaded
 // browser). Skips, and says why, when no browser is found.
 // PHONE_LAYOUT_URL=http://127.0.0.1:8097/ uses an already running dev server instead.
@@ -407,6 +410,85 @@ function tapProblems(min) {
     if (b.height < min - 0.5) bad.push(`rail row "${name(el)}" is ${Math.round(b.height)} px tall, under ${min}`);
   }
   return { bad, links: links.length, rows: rows.length };
+}
+
+/** WCAG 2.2 target size (minimum): a desktop-size room's pointer targets are at least 24 by 24 px. */
+export const DESK_TARGET_MIN = 24;
+/** The named desktop targets this pass grew (and that must not crowd each other). */
+const DESK_TARGETS = "[data-plaque] a, [data-plaque] button, [data-desk-rail] a, [data-desk-rail] button, [data-room-links] a, [data-talk-send], [data-line-link], [data-desk-care] button, [data-desk-plate] > button, [data-first-hint-ok], [data-open-room]";
+
+/**
+ * Runs in the page: at a desktop size, every visible pointer target under min px (sr-only buttons until focused and
+ * links inside a sentence are exempt, as WCAG allows), the named targets (rail rows, plaque links, room links, Send,
+ * care buttons, plate bars) that overlap each other, and whether the rail and the left panel end on the screen.
+ */
+function deskTargetProblems({ min, named }) {
+  const bad = [];
+  const name = (el) => (el.textContent || el.getAttribute("aria-label") || el.tagName).trim().replace(/\s+/g, " ").slice(0, 32);
+  const shown = (el) => {
+    const b = el.getBoundingClientRect();
+    if (b.width <= 1 || b.height <= 1) return false;
+    if (b.bottom <= 0 || b.top >= innerHeight || b.right <= 0 || b.left >= innerWidth) return false;
+    for (let p = el; p; p = p.parentElement) {
+      const cs = getComputedStyle(p);
+      if (cs.visibility === "hidden" || cs.display === "none" || Number(cs.opacity) === 0) return false;
+    }
+    // Scrolled out of the rail or the panel (both scroll inside).
+    for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+      if (/(auto|scroll|hidden)/.test(getComputedStyle(p).overflowY)) {
+        const pb = p.getBoundingClientRect();
+        if (b.bottom <= pb.top + 1 || b.top >= pb.bottom - 1) return false;
+      }
+    }
+    return true;
+  };
+  const inSentence = (el) => {
+    const p = el.parentElement;
+    return getComputedStyle(el).display === "inline" && !!p && !el.closest("[data-room-links]") && (p.textContent || "").replace(/\s+/g, " ").trim().length > (el.textContent || "").trim().length + 12;
+  };
+  const all = [...document.querySelectorAll("a[href], button, summary, select, input:not([type=hidden])")].filter(shown).filter((el) => !el.closest("[data-desk-plate] > div"));
+  for (const el of all) {
+    if (inSentence(el)) continue;
+    const b = el.getBoundingClientRect();
+    if (b.width < min - 0.5 || b.height < min - 0.5) bad.push(`"${name(el)}" is ${Math.round(b.width)}×${Math.round(b.height)} px, under ${min}`);
+  }
+  // What shows of a target: a rail guest half scrolled out of the rail is cut at the rail's edge (a tap there lands
+  // on whatever is under it, not the guest), so two targets crowd only where both show.
+  const seen = (el) => {
+    const r = el.getBoundingClientRect();
+    let b = { left: r.left, right: r.right, top: r.top, bottom: r.bottom };
+    for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+      const cs = getComputedStyle(p);
+      if (/(auto|scroll|hidden|clip)/.test(cs.overflowY) || /(auto|scroll|hidden|clip)/.test(cs.overflowX)) {
+        const pb = p.getBoundingClientRect();
+        b = { left: Math.max(b.left, pb.left), right: Math.min(b.right, pb.right), top: Math.max(b.top, pb.top), bottom: Math.min(b.bottom, pb.bottom) };
+      }
+    }
+    return b;
+  };
+  const boxes = [...document.querySelectorAll(named)].filter(shown).map((el) => ({ el, b: seen(el) }));
+  for (let i = 0; i < boxes.length; i += 1) {
+    for (let j = i + 1; j < boxes.length; j += 1) {
+      const a = boxes[i];
+      const c = boxes[j];
+      if (a.el.contains(c.el) || c.el.contains(a.el)) continue;
+      const x = Math.min(a.b.right, c.b.right) - Math.max(a.b.left, c.b.left);
+      const y = Math.min(a.b.bottom, c.b.bottom) - Math.max(a.b.top, c.b.top);
+      if (x > 1 && y > 1) bad.push(`"${name(a.el)}" and "${name(c.el)}" overlap`);
+    }
+  }
+  const rail = document.querySelector("[data-desk-rail]");
+  if (rail) {
+    const top = rail.scrollTop;
+    rail.scrollTop = rail.scrollHeight;
+    const guests = [...rail.querySelectorAll(".den-cabinet-guest")];
+    const last = guests[guests.length - 1]?.getBoundingClientRect();
+    if (last && last.bottom > innerHeight + 1) bad.push(`the rail's last guest is below the screen (bottom ${Math.round(last.bottom)} of ${innerHeight})`);
+    rail.scrollTop = top;
+  }
+  const aside = document.querySelector("[data-desk-aside]")?.getBoundingClientRect();
+  if (aside && aside.bottom > innerHeight + 1) bad.push(`the left panel runs ${Math.round(aside.bottom - innerHeight)} px below the screen`);
+  return { bad, targets: all.length, named: boxes.length };
 }
 
 /** The heartbeat probe's address (the optional house server): the desk asks it only after it has answered here. */
@@ -913,7 +995,7 @@ test("/meet on a phone: short enough to get through, a jump index opens each roo
   assert.deepEqual(problems, [], problems.join("\n"));
 });
 
-/** [room page, most px at 375×667, notes]; /hive has two sets (the insects, then bees and comb). */
+/** [room page, most px at 375×667, notes]; /hive's 20 are the insects, then bees and comb, under one search. */
 export const ROOM_NOTE_PAGES = [
   ["/canopy", 4_000, 10],
   ["/cellar", 4_000, 10],
@@ -969,6 +1051,8 @@ test("the eighteen room pages' field notes on a phone: closed drawers, every not
           if (first.notes.length !== count) problems.push(`${label}: ${first.notes.length} field notes, wanted ${count}`);
           if (first.notes.some((n) => n.open)) problems.push(`${label}: a note opens before anyone asks`);
           if (first.notes.some((n) => !n.tell)) problems.push(`${label}: a note has no tell in the page`);
+          // One search per room: /hive's bees and comb had a second one of their own.
+          if (first.sets.length !== 1) problems.push(`${label}: ${first.sets.length} field-note sections (one search should cover every note)`);
           if (w === 375) {
             for (const n of first.notes) {
               const summary = page.locator(`[id="${n.id}"] > summary`);
@@ -997,7 +1081,14 @@ test("the eighteen room pages' field notes on a phone: closed drawers, every not
             const last = first.notes[first.notes.length - 1];
             const search = page.locator("[data-field-notes]").last().locator("[data-notes-search]");
             await search.fill(last.name);
-            await page.waitForTimeout(200);
+            // A cold dev server can hand the page over before the search listens: type it again if the count line
+            // has not moved (the check is what the search finds, not how fast the first keystroke lands).
+            const moved = () => page.waitForFunction((n) => /match/.test(document.querySelector("[data-notes-count]")?.textContent || "") || !n, last.name, { timeout: 3_000 }).then(() => true, () => false);
+            if (!(await moved())) {
+              await search.fill("");
+              await search.fill(last.name);
+              await moved();
+            }
             const found = await page.evaluate((id) => {
               const set = document.getElementById(id)?.closest("[data-field-notes]");
               return {
@@ -1007,6 +1098,12 @@ test("the eighteen room pages' field notes on a phone: closed drawers, every not
               };
             }, last.id);
             if (!found.hit || found.shown > 2 || !/match/.test(found.line)) problems.push(`${label}: searching "${last.name}" shows ${JSON.stringify(found)}`);
+            // The same search finds the first note too (on /hive: an insect, where the last is a bee).
+            await search.fill(first.notes[0].name);
+            await page.waitForTimeout(200);
+            const firstHit = await page.evaluate((id) => !!document.getElementById(id) && !document.getElementById(id).hidden, first.notes[0].id);
+            if (!firstHit) problems.push(`${label}: the search did not find "${first.notes[0].name}"`);
+            await search.fill("");
             // A note link opens that note on arrival.
             const deep = await ctx.newPage();
             await deep.goto(`${url}${path}#${last.id}`, { waitUntil: "load", timeout: 120_000 });
@@ -1056,6 +1153,28 @@ test("the eighteen room pages' field notes on a phone: closed drawers, every not
       if (plates.loose.length) problems.push(`${label}: ${plates.loose.join(", ")} still float over the room`);
       if (plates.over.length) problems.push(`${label}: ${plates.over.join(", ")} sit over the kicker or the name`);
       for (const b of plates.buttons) if (b < TAP_MIN) problems.push(`${label}: a docked plate's button is ${b}px tall`);
+      // A jump near the top of the panel takes a phone to the plates (they sit at the end of a long scroll).
+      const jump = await page.evaluate(() => {
+        const j = document.querySelector("[data-plates-jump]")?.getBoundingClientRect();
+        const a = document.querySelector("[data-desk-aside]")?.getBoundingClientRect();
+        return j && a ? { t: Math.round(j.top), b: Math.round(j.bottom), h: Math.round(j.height), top: Math.round(a.top), fold: Math.round(Math.min(a.bottom, innerHeight)) } : null;
+      });
+      if (!jump) problems.push(`${label}: no "Weather, news, market" jump ([data-plates-jump])`);
+      else {
+        if (jump.h < TAP_MIN) problems.push(`${label}: the plates jump is ${jump.h}px tall`);
+        // Upright it is on the screen as the page opens; on its side the panel is only 85 to 155 px tall, so the jump
+        // is the first thing under the name and the tagline (a short scroll, where the plates are a long one).
+        if (w < h ? jump.b > jump.fold + 1 : jump.b - jump.top > 170) problems.push(`${label}: the plates jump is not near the top of the panel ${JSON.stringify(jump)}`);
+        await page.locator("[data-plates-jump]").tap();
+        await page.waitForTimeout(300);
+        const landed = await page.evaluate(() => {
+          const a = document.querySelector("[data-desk-aside]").getBoundingClientRect();
+          const p = document.querySelector("[data-demo-plates]").getBoundingClientRect();
+          return { inView: p.top >= a.top - 1 && p.top < Math.min(a.bottom, innerHeight) - 20, focus: document.activeElement?.closest("[data-desk-plate]")?.getAttribute("data-desk-plate") || null };
+        });
+        if (!landed.inView || landed.focus !== "weather") problems.push(`${label}: the plates jump did not land on the plates ${JSON.stringify(landed)}`);
+        await page.evaluate(() => { document.querySelector("[data-desk-aside]").scrollTop = 0; });
+      }
       if (w === 375) {
         const news = page.locator('[data-demo-plates] [data-desk-plate="news"] > button').first();
         await news.scrollIntoViewIfNeeded();
@@ -1117,8 +1236,11 @@ test("the eighteen room pages' field notes on a phone: closed drawers, every not
   }
   // /demo/<unknown>: plain words, its own tab title (it said just "ComputerPets") and a thumb-sized way on.
   try {
-    const html = await (await fetch(`${url}/demo/nope`)).text();
+    const res = await fetch(`${url}/demo/nope`);
+    const html = await res.text();
     const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1];
+    if (res.status !== 404) problems.push(`/demo/nope: the server answered ${res.status}, not 404`);
+    if (!html.includes("No demo for that name.")) problems.push("/demo/nope: the server's first HTML lacks its words");
     if (title !== "No demo here — ComputerPets") problems.push(`/demo/nope: the server's first tab title is "${title}"`);
     const rui = ((await (await fetch(`${url}/demo/rui`)).text()).match(/<title>([^<]*)<\/title>/) || [])[1];
     if (rui !== "Rui — ComputerPets") problems.push(`/demo/rui: the server's tab title is "${rui}"`);
@@ -1138,6 +1260,88 @@ test("the eighteen room pages' field notes on a phone: closed drawers, every not
     }
   } catch (err) {
     problems.push(`/demo/nope: ${String(err?.message || err).split("\n")[0]}`);
+  }
+  assert.deepEqual(problems, [], problems.join("\n"));
+});
+
+/** Desktop sizes the target check walks (WCAG 2.2 target size), and the pages. */
+export const DESK_SIZES = [
+  [1024, 768],
+  [1280, 800],
+  [1440, 900],
+];
+export const DESK_PAGES = ["/", "/catalog", "/demo/rui"];
+/** Short laptop screens where the left panel ran off the bottom (the hello's Got it with it). */
+export const DESK_SHORT = [
+  [1366, 768],
+  [1280, 720],
+];
+
+test("desktop sizes: every target at least 24×24 with no two crowding, the rail and the panel end on the screen, the hello's Got it above the care buttons, /demo's plates clear of the panel", { skip, timeout: 420_000 }, async () => {
+  const { url, browser } = await site();
+  const problems = [];
+  for (const [w, h] of [...DESK_SIZES, ...DESK_SHORT]) {
+    const ctx = await browser.newContext({ viewport: { width: w, height: h } });
+    try {
+      for (const path of DESK_SHORT.some(([a, b]) => a === w && b === h) ? ["/"] : DESK_PAGES) {
+        const label = `${path} ${w}×${h}`;
+        const page = await ctx.newPage();
+        const thrown = [];
+        page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
+        try {
+          await page.goto(`${url}${path}`, { waitUntil: "load", timeout: 120_000 });
+          await page.waitForSelector("[data-desk-care] button", { timeout: 60_000 });
+          await page.waitForFunction(() => !!document.querySelector("[data-desk-rail]")?.style.maxHeight, null, { timeout: 8_000 }).catch(() => problems.push(`${label}: the rail was never fitted to the screen`));
+          await page.waitForTimeout(1_200);
+          const t = await page.evaluate(deskTargetProblems, { min: DESK_TARGET_MIN, named: DESK_TARGETS });
+          problems.push(...t.bad.map((p) => `${label}: ${p}`));
+          if (t.named < 30) problems.push(`${label}: only ${t.named} named targets on the screen (the rail, the plaque, the care buttons?)`);
+          // The hello (first visit): its Got it is on the screen, inside the panel, and not under the care buttons.
+          const hello = await page.evaluate(() => {
+            const ok = document.querySelector("[data-first-hint-ok]")?.getBoundingClientRect();
+            const aside = document.querySelector("[data-desk-aside]")?.getBoundingClientRect();
+            return ok && aside ? { ok: { t: ok.top, b: ok.bottom }, aside: { t: aside.top, b: aside.bottom }, vh: innerHeight } : null;
+          });
+          if (!hello) problems.push(`${label}: no hello with a Got it`);
+          else if (hello.ok.b > Math.min(hello.vh, hello.aside.b) + 1) problems.push(`${label}: the hello's Got it is cut off ${JSON.stringify(hello)}`);
+          if (path === "/demo/rui") {
+            const plates = await page.evaluate(() => {
+              const box = (sel) => {
+                const b = document.querySelector(sel)?.getBoundingClientRect();
+                return b && b.width ? { t: b.top, b: b.bottom, l: b.left, r: b.right } : null;
+              };
+              const hit = (a, b) => a && b && Math.min(a.r, b.r) - Math.max(a.l, b.l) > 1 && Math.min(a.b, b.b) - Math.max(a.t, b.t) > 1;
+              const aside = document.querySelector("[data-desk-aside]");
+              const parts = {
+                header: box("header"),
+                kicker: box("[data-desk-aside] > p"),
+                name: box("[data-desk-aside] h1"),
+                plaque: box("[data-desk-aside] [data-plaque]"),
+                hello: box("[data-first-hint]"),
+                rail: box("[data-desk-rail]"),
+                care: box("[data-desk-care]"),
+              };
+              const list = ["weather", "news", "market"].map((k) => ({ k, b: box(`[data-desk-plate="${k}"]`) }));
+              const over = [];
+              for (const p of list) {
+                if (!p.b) over.push(`${p.k} is missing`);
+                for (const [n, b] of Object.entries(parts)) if (hit(p.b, b)) over.push(`${p.k} sits over the ${n}`);
+              }
+              for (let i = 0; i < list.length; i += 1) for (let j = i + 1; j < list.length; j += 1) if (hit(list[i].b, list[j].b)) over.push(`${list[i].k} and ${list[j].k} overlap`);
+              return over;
+            });
+            problems.push(...plates.map((p) => `${label}: ${p}`));
+          }
+          for (const e of thrown) problems.push(`${label}: the page threw: ${e}`);
+        } catch (err) {
+          problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
+        } finally {
+          await page.close();
+        }
+      }
+    } finally {
+      await ctx.close();
+    }
   }
   assert.deepEqual(problems, [], problems.join("\n"));
 });
