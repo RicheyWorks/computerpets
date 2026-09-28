@@ -1746,6 +1746,99 @@ async function mindsFlightPlain() {
   ]);
 }
 
+async function overlayBirdsPlain() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8").replace(/\r\n/g, "\n");
+  const lib = (rel) => import(pathToFileURL(join(WEB, "src", "lib", ...rel.split("/"))).href);
+  const { spawnSync } = require("node:child_process");
+
+  // 1) The overlay robin and bird: the real pet.js functions fly, hide, and break on a fake element; none stays on the glass.
+  const run = spawnSync(process.execPath, ["--test", "--test-reporter=tap", join(RENDERER, "overlay-birds.test.cjs")], { cwd: join(ROOT, "desktop"), encoding: "utf8", timeout: 40000 });
+  const tap = `${run.stdout || ""}`;
+  const count = (label) => Number((tap.match(new RegExp(`^# ${label} (\\d+)$`, "m")) || [])[1] || -1);
+  const pet = read("desktop", "renderer", "pet.js");
+  const resetAt = pet.indexOf("function resetAfterFrameError(petKey) {");
+  const reset = pet.slice(resetAt, pet.indexOf("\n}", resetAt));
+  const birds = {
+    status: run.status,
+    pass: count("pass"),
+    fail: count("fail"),
+    resetDrops: reset.includes('petKey === "robin") dropRobin()') && reset.includes('petKey === "bird") dropBird()') && reset.includes('petKey === "visit guest") endVisit()') && reset.includes("safeIdle(sim)"),
+    oneWayOut: !/robinFly = null;\s*robinEl\.classList\.remove/.test(pet) && !/birdFly = null;\s*birdEl\.classList\.remove/.test(pet),
+  };
+  if (birds.status !== 0 || birds.pass !== 9 || birds.fail !== 0 || !birds.resetDrops || !birds.oneWayOut) bad.push(`overlay birds: ${JSON.stringify({ ...birds, err: (run.stderr || "").slice(0, 200) })}`);
+
+  // 2) + 4) Which AI, the model box, and the key box: the same plain words on the web, the overlay, and the Python client.
+  const { MIND_WORDS, presetTag } = await lib("ai/mind-words.ts");
+  const settings = read("desktop", "renderer", "settings.html");
+  const mindsPy = read("client", "computerpets_client", "minds.py");
+  const page = read("web", "src", "routes", "mind.tsx");
+  const pyWord = (name) => (mindsPy.match(new RegExp(`^${name} = "([^"]*)"$`, "m")) || [])[1];
+  const pyConst = { which: "WHICH_LABEL", model: "MODEL_LABEL", modelHelp: "MODEL_HELP", keyPlaceholder: "KEY_PLACEHOLDER" };
+  const same = Object.fromEntries(Object.entries(pyConst).map(([k, py]) => [k, !!MIND_WORDS[k] && pyWord(py) === MIND_WORDS[k] && settings.includes(MIND_WORDS[k])]));
+  if (!Object.values(same).every(Boolean)) bad.push(`Which AI / model / key words differ: ${JSON.stringify(same)}`);
+  const mindsHtml = settings.slice(settings.indexOf('<h1 id="mindsSection">'), settings.indexOf('<h2 id="unlockSection">'));
+  const keyLines = [...settings.slice(settings.indexOf("function paintKey("), settings.indexOf("paintKey(s.keyKept);")).matchAll(/textContent = "([^"]*)"/g)].map((m) => m[1]);
+  const overlay = {
+    whichLabel: settings.includes(`<label for="plugin">${MIND_WORDS.which}</label>`) && !/<label[^>]*>Plugin<\/label>/.test(settings),
+    modelLabel: settings.includes(`<label for="model">${MIND_WORDS.model}</label>`) && settings.includes(`<p class="hint" id="modelHelp">${MIND_WORDS.modelHelp}</p>`),
+    keyPlaceholder: settings.includes(`placeholder="${MIND_WORDS.keyPlaceholder}"`),
+    noJargon: !/plugin key|mind\.json|\bPlugin\b/.test(mindsHtml.replace(/<[^>]+>/g, " ")),
+    keyLines: keyLines.length === 6 && keyLines.every((l) => !/plugin key|mind\.json|OS secret store/.test(l)),
+    saveErr: /mindErr\.textContent = "Not saved\. The settings file could not be written/.test(settings),
+    python: mindsPy.includes('{"id": "model", "label": MODEL_LABEL, "help": MODEL_HELP}'),
+  };
+  if (!Object.values(overlay).every(Boolean)) bad.push(`overlay Minds words: ${JSON.stringify(overlay)}`);
+
+  // 3) The web /mind top is kid-plain; builder material sits in a closed For builders fold.
+  const foldAt = page.indexOf('<details id="mind-builders"');
+  const fold = foldAt > 0 ? page.slice(foldAt, page.indexOf("</details>", foldAt)) : "";
+  const top = foldAt > 0 ? page.slice(page.indexOf("return ("), foldAt) : page;
+  const builderWords = ["Plugin bus", "Any mind. Same house.", "Fourteen plugins", "OpenAI-compatible", "Write a plugin", "POST /mind", "envKey"];
+  const { MIND_PRESETS } = await lib("ai/catalog.ts");
+  const web = {
+    fold: /<summary[^>]*>For builders<\/summary>/.test(fold) && !/\bopen\b/.test(page.slice(foldAt, page.indexOf(">", foldAt))),
+    topPlain: builderWords.every((w) => !top.includes(w)),
+    kept: builderWords.every((w) => fold.includes(w)),
+    placeholder: page.includes("placeholder={MIND_WORDS.keyPlaceholder}") && !page.includes("on the server` : \"optional\""),
+    modelBox: page.includes("label={MIND_WORDS.model} hint={MIND_WORDS.modelHelp}") && !/label="(Model|Model override)"/.test(page),
+    which: page.includes("{MIND_WORDS.which}") && page.includes("<Field label={MIND_WORDS.which}>"),
+    cards: MIND_PRESETS.length === 14 && MIND_PRESETS.every((p) => !/OpenAI-compatible|OpenAI shape|generateContent|POST|plugin|roster/.test(p.blurb)) && page.includes("{presetTag(preset)}") && presetTag({ id: "local", kind: "local" }) === "No AI",
+  };
+  if (!Object.values(web).every(Boolean)) bad.push(`web /mind: ${JSON.stringify(web)}`);
+
+  // 5) START-HERE "More detail, for later" and the Step 6 tray block: short lines, every fact kept.
+  const start = read("docs", "START-HERE.md");
+  const detail = start.slice(start.indexOf("### More detail, for later"), start.indexOf("That walk is the Electron overlay"));
+  const tray = start.slice(start.indexOf("The tray has a line named **On the desk**."), start.indexOf("Clicks on empty glass pass through. If you click"));
+  const sentences = (blk) => blk.split("\n").map((l) => l.replace(/^\s*-\s*/, "").trim()).filter((l) => l && !l.startsWith("#") && !/^\*\*[^*]+\*\*$/.test(l)).flatMap((l) => l.split(/(?<=[.:])\s+(?=[A-Z(`*])/));
+  const longest = Math.max(...sentences(detail).concat(sentences(tray)).map((s) => s.split(/\s+/).length));
+  const facts = [
+    "Hunger, Rest, Bond", "**Feed**, **Play**, **Rest**", "Rui, Sip, Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground",
+    "Clicks on empty glass pass through to your windows.", "House server stopped answering (optional). Pets still work.",
+    "House server not running (optional)", "Your pet's care stays on this computer.", "`/pet/feed`, `/pet/play`, and `/pet/rest` answer 409",
+    "Listening · House lines", "It never prints a key.", "Type `99.9 seattle fm` or `KEXP` and Find actually returns stations.",
+    "Mac and Linux window play is a later door.", "**Companions** still has all **221**.", "`/demo/crackle`", "The firefly already owns `/demo/spark`.",
+  ];
+  const startHere = { longest, missing: facts.filter((f) => !(detail + tray).includes(f)), trayBullets: (tray.match(/^- /gm) || []).length };
+  if (longest > 18 || startHere.missing.length || startHere.trayBullets !== 5) bad.push(`START-HERE detail: ${JSON.stringify(startHere)}`);
+
+  const roadmap = read("docs", "ROADMAP.md");
+  const updated = (roadmap.match(/Last Updated[^0-9]*(\d{4}-\d{2}-\d{2})/) || [])[1] || "";
+  const entry = roadmap.includes("- [x] The overlay robin and bird leave the glass when a frame breaks");
+  if (updated < "2026-09-27" || !entry) bad.push(`ROADMAP: ${JSON.stringify({ updated, entry })}`);
+  if (bad.length) return fail(bad.join("; "), { birds, same, overlay, web, startHere });
+  return ok("the overlay robin and bird never stay on the glass (flight end, hide, broken frame); Which AI, AI model name, and the key placeholder read the same on the web, the overlay, and the Python client; /mind is kid-plain with builder words folded; START-HERE detail is short lines", { birds, same, overlay, web, startHere, updated }, [
+    "overlay_birds=flight_end+hide+broken_frame_leave",
+    "reset=drop_robin+drop_bird+end_visit",
+    "minds=which_ai+model_name+key_placeholder_same",
+    "overlay=no_plugin_key_or_mind_json_words",
+    "mind_page=kid_top+for_builders_fold",
+    "cards=plain_blurbs+tags",
+    "start_here=detail_short_lines+facts_kept",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -1764,6 +1857,7 @@ const COMMANDS = {
   desk_guard_plain: deskGuardPlain,
   guest_loops_mount: guestLoopsMount,
   minds_flight_plain: mindsFlightPlain,
+  overlay_birds_plain: overlayBirdsPlain,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

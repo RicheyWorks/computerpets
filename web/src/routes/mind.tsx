@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { MIND_PRESETS, VOICE_PRESETS, mindPreset } from "@/lib/ai/catalog";
-import { MIND_WORDS } from "@/lib/ai/mind-words";
+import { MIND_WORDS, presetTag } from "@/lib/ai/mind-words";
 import { describeBinding, describeKeyKept, saveMindSettings } from "@/lib/ai/settings";
 import { refreshMindSettings, useMindSettings } from "@/lib/ai/use-mind";
 import { LIVING_KINDS } from "@/lib/pets/living";
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/mind")({
   head: () => ({
     meta: [
       { title: "Minds — ComputerPets" },
-      { name: "description", content: "Plug any AI into the house. One contract, fourteen plugins." },
+      { name: "description", content: "Pets talk without an AI. Pick one if you like, for the whole house or one animal." },
     ],
   }),
 });
@@ -144,20 +144,22 @@ function MindPage() {
   return (
     <main className="space-y-10 pb-16 pt-20">
       <header className="max-w-2xl space-y-3">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Plugin bus</p>
-        <h1 className="font-display text-5xl leading-none">Any mind. Same house.</h1>
-        <p className="text-base text-muted">
-          Fourteen plugins. OpenAI-compatible, Claude, Gemini, Ollama, a custom webhook.
-          Assign a house default or give each animal their own brain.
-        </p>
+        <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Talk</p>
+        <h1 className="font-display text-5xl leading-none">Minds</h1>
         <p id="mind-intro" className="text-base">
           {MIND_WORDS.intro}
+        </p>
+        <p id="mind-how" className="text-base text-muted">
+          Pick an AI below, or keep House lines. One animal can have its own AI too.
         </p>
         <p className="text-sm text-subtle">
           {counts} mind{counts === 1 ? "" : "s"} in use · {describeKeyKept(live.keyKept)}
         </p>
       </header>
 
+      <h2 id="mind-which" className="font-display text-2xl">
+        {MIND_WORDS.which}
+      </h2>
       <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {MIND_PRESETS.map((preset) => {
           const active = draft.default.plugin === preset.id;
@@ -172,7 +174,7 @@ function MindPage() {
                   : "rounded-[var(--radius-lg)] border border-border bg-surface p-4 text-left hover:border-border-strong"
               }
             >
-              <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">{preset.kind}</p>
+              <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">{presetTag(preset)}</p>
               <p className="mt-1 font-display text-2xl">{preset.name}</p>
               <p className="mt-2 text-sm text-muted">{preset.blurb}</p>
               {preset.defaultModel ? (
@@ -193,7 +195,7 @@ function MindPage() {
             </p>
           ) : (
             <div id="mind-fields" className="space-y-4">
-              <Field label="Model">
+              <Field label={MIND_WORDS.model} hint={MIND_WORDS.modelHelp}>
                 <input
                   value={draft.default.model ?? selected.defaultModel ?? ""}
                   onChange={(e) => setDefault({ model: e.target.value })}
@@ -217,7 +219,7 @@ function MindPage() {
                       autoComplete="off"
                       value={draft.default.apiKey ?? ""}
                       onChange={(e) => setDefault({ apiKey: e.target.value })}
-                      placeholder={selected.envKey ? `or ${selected.envKey} on the server` : "optional"}
+                      placeholder={MIND_WORDS.keyPlaceholder}
                       className="h-11 w-full rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm"
                     />
                   </Field>
@@ -251,7 +253,7 @@ function MindPage() {
 
         <div className="space-y-4">
           <h2 className="font-display text-2xl">Per animal</h2>
-          <Field label="Companion">
+          <Field label="Animal">
             <select
               value={petKey}
               onChange={(e) => setPetKey(e.target.value)}
@@ -264,7 +266,7 @@ function MindPage() {
               ))}
             </select>
           </Field>
-          <Field label="Mind">
+          <Field label={MIND_WORDS.which}>
             <select
               value={draft.pets[petKey]?.plugin ?? "inherit"}
               onChange={(e) => {
@@ -282,7 +284,7 @@ function MindPage() {
             </select>
           </Field>
           {draft.pets[petKey] ? (
-            <Field label="Model override">
+            <Field label={MIND_WORDS.model} hint="Only for this animal. Empty uses what that AI picks.">
               <input
                 value={petBind.model ?? ""}
                 onChange={(e) => setPet({ model: e.target.value })}
@@ -309,8 +311,21 @@ function MindPage() {
         </div>
       </section>
 
-      <section className="rounded-[var(--radius-xl)] border border-border bg-surface p-5 sm:p-6">
-        <h2 className="font-display text-2xl">Write a plugin</h2>
+      {/* Builder words (plugin bus, server key names, the webhook contract) stay here, folded away. docs/MIND.md has the rest. */}
+      <details id="mind-builders" className="rounded-[var(--radius-xl)] border border-border bg-surface p-5 sm:p-6">
+        <summary className="cursor-pointer font-display text-2xl">For builders</summary>
+        <p className="mt-4 text-[11px] uppercase tracking-[0.2em] text-subtle">Plugin bus</p>
+        <p className="mt-1 font-display text-xl">Any mind. Same house.</p>
+        <p className="mt-2 max-w-2xl text-sm text-muted">
+          Fourteen plugins. OpenAI-compatible, Claude, Gemini, Ollama, a custom webhook.
+          Assign a house default or give each animal their own brain.
+        </p>
+        {selected.envKey ? (
+          <p id="mind-env-key" className="mt-2 max-w-2xl text-sm text-muted">
+            A signed-in keeper can leave the key box empty when the server has <code>{selected.envKey}</code> set.
+          </p>
+        ) : null}
+        <h3 className="mt-6 font-display text-xl">Write a plugin</h3>
         <p className="mt-2 max-w-2xl text-sm text-muted">
           Point Custom webhook at any URL. We POST JSON. Reply with <code>{"{ text }"}</code>.
         </p>
@@ -325,7 +340,7 @@ function MindPage() {
 }
 
 { "text": "You came back. The desk was almost lonely." }`}</pre>
-      </section>
+      </details>
     </main>
   );
 }

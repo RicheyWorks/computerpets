@@ -30,11 +30,15 @@ def _web(name: str) -> str:
 def test_the_same_words_on_the_web_desk_the_overlay_and_the_blotter():
     pairs = {
         "intro": minds.MINDS_INTRO,
+        "which": minds.WHICH_LABEL,
         "house": minds.HOUSE_NOTE,
+        "model": minds.MODEL_LABEL,
+        "modelHelp": minds.MODEL_HELP,
         "address": minds.ADDRESS_LABEL,
         "addressHelp": minds.ADDRESS_HELP,
         "key": minds.KEY_LABEL,
         "keyHelp": minds.KEY_HELP,
+        "keyPlaceholder": minds.KEY_PLACEHOLDER,
     }
     for name, text in pairs.items():
         assert _web(name) == text, name
@@ -44,10 +48,14 @@ def test_the_same_words_on_the_web_desk_the_overlay_and_the_blotter():
     assert f'<p class="hint" id="baseHelp">{minds.ADDRESS_HELP}</p>' in SETTINGS
     assert f'<label for="key">{minds.KEY_LABEL}</label>' in SETTINGS
     assert f'<p class="hint" id="keyHelp">{minds.KEY_HELP}</p>' in SETTINGS
+    assert f'<label for="plugin">{minds.WHICH_LABEL}</label>' in SETTINGS
+    assert f'<label for="model">{minds.MODEL_LABEL}</label>' in SETTINGS
+    assert f'<p class="hint" id="modelHelp">{minds.MODEL_HELP}</p>' in SETTINGS
+    assert f'placeholder="{minds.KEY_PLACEHOLDER}"' in SETTINGS
 
 
 def test_no_base_url_or_api_key_words_left_on_a_minds_screen():
-    assert not re.search(r"<label[^>]*>(Base URL|API key)</label>", SETTINGS)
+    assert not re.search(r"<label[^>]*>(Base URL|API key|Plugin|Model)</label>", SETTINGS)
     # The overlay's refusal lines (what a keeper reads when an address is refused) use the plain name too.
     said = re.findall(r'return "([^"]*)";', MIND_JS[MIND_JS.index("function baseUrlProblem("):MIND_JS.index("function binding(")])
     assert len(said) >= 5
@@ -63,7 +71,9 @@ def test_house_lines_shows_no_ai_boxes_and_every_real_ai_shows_all_three():
         if row["kind"] == "local":
             continue
         labels = [f["label"] for f in minds.mind_fields(row["id"])]
-        assert labels == ["Model", minds.ADDRESS_LABEL, minds.KEY_LABEL], row["id"]
+        assert labels == [minds.MODEL_LABEL, minds.ADDRESS_LABEL, minds.KEY_LABEL], row["id"]
+        helps = [f["help"] for f in minds.mind_fields(row["id"])]
+        assert helps == [minds.MODEL_HELP, minds.ADDRESS_HELP, minds.KEY_HELP], row["id"]
     assert minds.blotter_minds_text().startswith("Pets talk without an AI.")
     assert "House lines need nothing else." in minds.blotter_minds_text()
 
@@ -82,7 +92,7 @@ def test_the_blotter_window_says_talk_works_without_an_ai_and_shows_no_ai_box(tm
     assert window.minds_label.objectName() == "mindsNote"
     assert window.minds_label.text() == minds.blotter_minds_text()
     assert window.minds_label.isVisible()
-    words = {minds.ADDRESS_LABEL, minds.KEY_LABEL, "Base URL", "API key", "Model"}
+    words = {minds.MODEL_LABEL, minds.ADDRESS_LABEL, minds.KEY_LABEL, "Base URL", "API key", "Model"}
     assert not [w for w in window.findChildren(QLabel) if w.text().strip() in words]
     assert not [w for w in window.findChildren(QLineEdit) if w.echoMode() != QLineEdit.EchoMode.Normal]
     assert window.listener_label.text() == "Listening · House lines"

@@ -116,6 +116,7 @@ CROSS_DOMAIN = {
     "web.desk_guard_plain",
     "web.guest_loops_mount",
     "web.minds_flight_plain",
+    "web.overlay_birds_plain",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -484,6 +485,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.desk_guard_plain",
         "web.guest_loops_mount",
         "web.minds_flight_plain",
+        "web.overlay_birds_plain",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -775,6 +777,21 @@ def test_minds_flight_row_keeps_words_plain_and_leaves_no_bird_on_the_page():
     assert 4 <= start["bullets"] <= 8 and start["longest"] <= 20 and start["desktopFirst"] and start["browserAfter"]
     assert start["talkShort"] and start["talkListKept"]
     assert all(mf.extras["architecture"].values()), mf.extras["architecture"]
+
+
+def test_overlay_birds_row_leaves_no_bird_on_the_glass_and_keeps_minds_plain():
+    """Overlay robin and bird leave on flight end, hide, and a broken frame; Which AI / model words match; /mind folded."""
+    ob = invoke("web.overlay_birds_plain")
+    assert ob.ok, (ob.error, ob.detail)
+    for mark in ("overlay_birds=flight_end+hide+broken_frame_leave", "reset=drop_robin+drop_bird+end_visit",
+                 "minds=which_ai+model_name+key_placeholder_same", "overlay=no_plugin_key_or_mind_json_words",
+                 "mind_page=kid_top+for_builders_fold", "cards=plain_blurbs+tags", "start_here=detail_short_lines+facts_kept"):
+        assert mark in ob.trace, (mark, ob.trace)
+    assert ob.extras["birds"]["pass"] == 9 and ob.extras["birds"]["fail"] == 0
+    assert all(ob.extras["same"].values()), ob.extras["same"]
+    assert all(ob.extras["overlay"].values()), ob.extras["overlay"]
+    assert all(ob.extras["web"].values()), ob.extras["web"]
+    assert ob.extras["startHere"]["longest"] <= 18 and ob.extras["startHere"]["missing"] == []
 
 
 def test_first_run_rows_start_clean_and_show_the_hello_once():

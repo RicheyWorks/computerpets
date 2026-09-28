@@ -26,13 +26,94 @@ This is the picture. Hold it in your head. The rest of the page is how you get t
 
 You can skip this part for now. Come back after Rui is walking.
 
-- A pet walks on your **real desktop**. Homework stays homework. The pet is a living sticker on top.
-- A **keeper card** pops up when you **click the animal**. It says their name, whether they are a hatchling or grown, their bond word, and three meters: Hunger, Rest, Bond. Three buttons sit under that: **Feed**, **Play**, **Rest**. The card scrolls if it is taller than the work area, so Feed at the top stays reachable. The left choice ribbon scrolls too. Collapse hides the card completely so you can read their words. While the card is open the host stands still. Voice, color, saved lines, an alarm, a timer, mute, **Sleep aid** (Off, or Rain and thunder — a house-made storm bed, about three minutes, then it loops; music mute quiets it), **Call** (any of the 221, or a den such as plant), Rui's radio station box, and **Turn off** sit on the expanded card. Type `99.9 seattle fm` or `KEXP` and Find actually returns stations. Empty is `no station from that look-up`. Unreachable is `can't reach`. A weather area can prefer Local stations. Turn off quits the overlay. Start again with `.\desktop.ps1`.
-- Near the clock (bottom-right) a small ComputerPets tray icon sits. Right-click it. **On the desk** picks Rui, Sip, and the grid ten without scrolling two hundred twenty-one names: Rui, Sip, Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground.
-- Clicks on empty glass pass through to your windows. Hits stay on the pet, the keeper card buttons, treats, and gifts. The floor is the Windows work area — above the taskbar, under the cursor.
-- Brown blobs on the floor are **mess** — click them (or use **Clean**) to tidy up. Little ribboned boxes are **gifts** — click to pick them up. The dark chips labeled **Weather**, **News**, and **Quotes** are desk plates: click the header to open, drag the header to move.
-- Rui can jump onto the **side** of a real window, hang on, then drop or dive back to the desk. Arc jumps onto the **top** (title-bar / ridge), holds, then hops or slides off. Volt wraps a **corner** (top-left or top-right), holds, then uncoils off. Trace follows the **outline** as a path, then hops or drops back to the desk. Flux occupies the **glass** as a field, holds, then drifts or drops back. Spark **crackles** a window edge: short hops from corner to corner, then hops or drops back. Ion **charges** a window corner, bolts diagonally across the glass to the opposite corner, holds, then hops or drops back. Gauss **orbits** the outside of the frame, sits, then hops or drops back. Relay **clicks** two nodes — one window then the next, or two nodes on the same window — then hops or drops back. Fuse **holds** a window as a cartridge in a clip, then pops off. Ground **earths** the bottom of a window as a lug, holds the return, then steps or drops back. Miso hops onto the **top** of a window (the ledge a house cat uses), sits, then hops down. Pip walks to a window and stays on the **floor** at its feet, looks up, watches, then trots away. Thimble hops to a window, **thumps** on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a **drawer**, cheeks inventory, then pops back to the floor. Whee waddles to a window, loaves on the floor at its feet, **wheeks**, popcorns once, then waddles off. Other guests walk a sill or stay on the floor. The overlay reads window bounds, not pixels. Mac and Linux window play is a later door. When Rui sleeps, Sip and the American robin land on him and chill. The robin sings. After a feed, Rui does a happy dance. Call a den and the guests walk in without blinking. Walk wakes a sleeping Rui.
-- The card has no server line until you name a house server (the house server address in Settings). Then it says `House server running` or `House server stopped answering (optional). Pets still work.` If the server you named has not answered once since the pets started, it says `House server not running (optional)` instead — calm, because you do not need one. `stopped answering` is only for a server that answered and then stopped. You do not need one. Care still works. The card says `Your pet's care stays on this computer.` — feeding, playing, and resting never go to a server. (For grown-ups: if Java is up, `/pet/feed`, `/pet/play`, and `/pet/rest` answer 409. They do not feed, play, or rest anyone.) The card also says who is listening. That line is `Listening · House lines` until a real mind can be asked. It never prints a key.
+**The pet**
+
+- A pet walks on your **real desktop**. Homework stays homework.
+- The pet is a living sticker on top.
+
+**The keeper card**
+
+- A **keeper card** pops up when you **click the animal**.
+- It says their name.
+- It says whether they are a hatchling or grown.
+- It shows their bond word and three meters: Hunger, Rest, Bond.
+- Three buttons sit under that: **Feed**, **Play**, **Rest**.
+- The card scrolls if it is taller than the work area.
+- So Feed at the top stays reachable.
+- The left choice ribbon scrolls too.
+- Collapse hides the card completely so you can read their words.
+- While the card is open the host stands still.
+- The expanded card has more:
+  - Voice, color, saved lines, an alarm, a timer, mute.
+  - **Sleep aid**: Off, or Rain and thunder.
+    Rain and thunder is a house-made storm bed. It lasts about three minutes, then it loops. Music mute quiets it.
+  - **Call** (any of the 221, or a den such as plant).
+  - Rui's radio station box.
+  - **Turn off**.
+- Type `99.9 seattle fm` or `KEXP` and Find actually returns stations. Empty is `no station from that look-up`. Unreachable is `can't reach`. A weather area can prefer Local stations.
+- Turn off quits the overlay. Start again with `.\desktop.ps1`.
+
+**The tray**
+
+- Near the clock (bottom-right) a small ComputerPets tray icon sits. Right-click it.
+- **On the desk** picks Rui, Sip, and the grid ten. You do not scroll two hundred twenty-one names.
+- Those twelve are Rui, Sip, Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground.
+
+**Clicks and the floor**
+
+- Clicks on empty glass pass through to your windows.
+- Hits stay on the pet, the keeper card buttons, treats, and gifts.
+- The floor is the Windows work area — above the taskbar, under the cursor.
+
+**Things on the floor**
+
+- Brown blobs on the floor are **mess**. Click them (or use **Clean**) to tidy up.
+- Little ribboned boxes are **gifts**. Click to pick them up.
+- The dark chips labeled **Weather**, **News**, and **Quotes** are desk plates.
+- Click the header to open a plate. Drag the header to move it.
+
+**Pets on real windows**
+
+- Rui can jump onto the **side** of a real window and hang on. Then he drops or dives back to the desk.
+- Arc jumps onto the **top** (title-bar / ridge), holds, then hops or slides off.
+- Volt wraps a **corner** (top-left or top-right), holds, then uncoils off.
+- Trace follows the **outline** as a path, then hops or drops back to the desk.
+- Flux occupies the **glass** as a field, holds, then drifts or drops back.
+- Spark **crackles** a window edge: short hops from corner to corner, then hops or drops back.
+- Ion **charges** a window corner. It bolts diagonally across the glass to the opposite corner, holds, then hops or drops back.
+- Gauss **orbits** the outside of the frame, sits, then hops or drops back.
+- Relay **clicks** two nodes: one window then the next, or two nodes on the same window. Then it hops or drops back.
+- Fuse **holds** a window as a cartridge in a clip, then pops off.
+- Ground **earths** the bottom of a window as a lug, holds the return, then steps or drops back.
+- Miso hops onto the **top** of a window (the ledge a house cat uses), sits, then hops down.
+- Pip walks to a window and stays on the **floor** at its feet. Pip looks up, watches, then trots away.
+- Thimble hops to a window, **thumps** on the floor beside it, then vanishes.
+- Clip hops to a window and ducks into the bottom-inside corner as a **drawer**. Clip cheeks inventory, then pops back to the floor.
+- Whee waddles to a window, loaves on the floor at its feet, **wheeks**, popcorns once, then waddles off.
+- Other guests walk a sill or stay on the floor.
+- The overlay reads window bounds, not pixels. Mac and Linux window play is a later door.
+
+**Rui's day**
+
+- When Rui sleeps, Sip and the American robin land on him and chill. The robin sings.
+- After a feed, Rui does a happy dance.
+- Call a den and the guests walk in without blinking.
+- Walk wakes a sleeping Rui.
+
+**The server line (you do not need a server)**
+
+- The card has no server line until you name a house server (the house server address in Settings).
+- Then it says `House server running` or `House server stopped answering (optional). Pets still work.`
+- Maybe the server you named has not answered once since the pets started.
+- Then it says `House server not running (optional)` instead. That is calm, because you do not need one.
+- `stopped answering` is only for a server that answered and then stopped.
+- You do not need one. Care still works.
+- The card says `Your pet's care stays on this computer.`
+- Feeding, playing, and resting never go to a server.
+- (For grown-ups: if Java is up, `/pet/feed`, `/pet/play`, and `/pet/rest` answer 409. They do not feed, play, or rest anyone.)
+- The card also says who is listening.
+- That line is `Listening · House lines` until a real mind can be asked.
+- It never prints a key.
 
 That walk is the Electron overlay. It is Chromium on your desk, not DirectX 12, not a Microsoft Store app, not a browser tab.
 
@@ -307,7 +388,13 @@ The pet is on your desk. Now you can care for it.
 
 </details>
 
-The tray has a line named **On the desk**. That is how you pick Rui, Sip, and the grid ten (Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground) without scrolling the whole house. **Companions** still has all **221**. Spark on the desk is the same Spark whose browser room is `/demo/crackle`. The firefly already owns `/demo/spark`.
+The tray has a line named **On the desk**.
+
+- It picks Rui, Sip, and the grid ten (Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground).
+- You do not scroll the whole house.
+- **Companions** still has all **221**.
+- Spark on the desk is the same Spark whose browser room is `/demo/crackle`.
+- The firefly already owns `/demo/spark`.
 
 Clicks on empty glass pass through. If you click "nothing," you click the window underneath. That is on purpose.
 

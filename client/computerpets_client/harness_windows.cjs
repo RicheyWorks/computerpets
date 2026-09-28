@@ -443,7 +443,7 @@ async function settingsWindow() {
     const pluginIds = plugin.options.map((o) => o.value);
     if (pluginIds.length !== 14 || pluginIds[0] !== "local" || pluginIds.indexOf("xai") < 0) fails.push(`plugin list is ${pluginIds.join(",")}`);
     if (plugin.value !== "local") fails.push(`default plugin is ${plugin.value}`);
-    if ($("keyStore").textContent !== "No plugin key is stored in mind.json.") fails.push(`key line on open: ${$("keyStore").textContent}`);
+    if ($("keyStore").textContent !== "No key is saved yet.") fails.push(`key line on open: ${$("keyStore").textContent}`);
     const roster = JSON.parse(fs.readFileSync(path.join(RENDERER, "roster.json"), "utf8"));
     if ($("petType").options.length !== roster.length || $("petType").value !== "red_panda") fails.push(`Pet lists ${$("petType").options.length} of ${roster.length}, picked ${$("petType").value}`);
     if ($("licenseOk").textContent !== "Locked. Pets on the desk still work.") fails.push(`license line on open: ${$("licenseOk").textContent}`);
@@ -506,7 +506,7 @@ async function settingsWindow() {
     const disk = fs.existsSync(mindFile) ? fs.readFileSync(mindFile, "utf8") : "";
     if ($("ok").textContent !== "Saved. Talk to them again.") fails.push(`good save said "${$("ok").textContent}" ${$("mindErr").textContent}`);
     if ($("mindErr").textContent) fails.push("a good save left an error showing");
-    if (!/OS secret store/.test($("keyStore").textContent)) fails.push(`key line after save: ${$("keyStore").textContent}`);
+    if (!/locked in this computer's secret store/.test($("keyStore").textContent)) fails.push(`key line after save: ${$("keyStore").textContent}`);
     if (!disk || disk.includes(SECRET) || disk.includes("apiKey")) fails.push("mind.json is missing or holds the plain key");
     const back = ctx.sendSync("mind-get");
     if (!back || !back.default || back.default.apiKey !== SECRET || back.default.plugin !== "xai") fails.push("main did not keep the saved mind");
@@ -517,7 +517,7 @@ async function settingsWindow() {
     fs.mkdirSync(mindFile, { recursive: true });
     $("model").value = "grok-4.5-mini";
     await $("save").click();
-    if (!/^Not saved\. mind\.json could not be written/.test($("mindErr").textContent)) fails.push(`unwritable mind.json said "${$("mindErr").textContent}"`);
+    if (!/^Not saved\. The settings file could not be written/.test($("mindErr").textContent)) fails.push(`unwritable mind.json said "${$("mindErr").textContent}"`);
     else if ($("ok").textContent) fails.push(`unwritable mind.json still said "${$("ok").textContent}"`);
     else if (/no secret store/.test($("keyStore").textContent)) fails.push("unwritable mind.json blamed the secret store");
     else trace.push("unwritable=not_saved");
