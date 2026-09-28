@@ -97,6 +97,9 @@ function makeElectron(ctx) {
     setImage() {}
     on() {}
     popUpContextMenu() {}
+    destroy() {
+      this.destroyed = true;
+    }
   }
   class FakeNotification {
     static isSupported() {
@@ -183,7 +186,7 @@ const GPU = { gate: null, ctx: null };
 /**
  * The pet picture a row asks for (bootMain opts.pictures). Rows about menus and IPC boot with the pictures
  * "ready" so they do not depend on Git LFS; desk.pictures_gate boots with "lfs-pointers" and "missing".
- * Only picturesState is stood in; the words and tray rows are the real renderer/pictures.js.
+ * Only picturesSurvey is stood in (a "partial" row says 12 of 221); the words and tray rows are the real renderer/pictures.js.
  */
 const PICTURES = { state: null };
 const RealPictures = require(path.join(RENDERER, "pictures.js"));
@@ -211,7 +214,13 @@ const STUBS = {
     },
   },
   "./gpu-sense.cjs": { read: () => new Promise(() => {}) },
-  "./renderer/pictures.js": { ...RealPictures, picturesState: () => PICTURES.state || "ready" },
+  "./renderer/pictures.js": {
+    ...RealPictures,
+    picturesSurvey: () => {
+      const state = PICTURES.state || "ready";
+      return { state, missing: state === "partial" ? 12 : state === "lfs-pointers" ? 221 : 0, total: 221 };
+    },
+  },
   "./overlay-gate.cjs": {
     ...RealGate,
     readCompositor: async () => {
@@ -259,6 +268,7 @@ async function bootMain(opts = {}) {
     notes: [],
     opened: [],
     intervals: [],
+    intervalFns: [],
     fetches: [],
     fetchImpl: null,
     quits: 0,
@@ -285,6 +295,7 @@ async function bootMain(opts = {}) {
   };
   global.setInterval = (fn, ms) => {
     ctx.intervals.push(ms);
+    ctx.intervalFns.push({ fn, ms });
     return { ref() {}, unref() {}, hasRef: () => false };
   };
   global.clearInterval = () => {};
@@ -462,10 +473,11 @@ async function trayOnTheDesk() {
 async function picturesGate() {
   const seen = {};
   const fails = [];
-  for (const state of ["lfs-pointers", "missing"]) {
+  for (const state of ["lfs-pointers", "missing", "partial"]) {
     const ctx = await bootMain({ pictures: state });
     try {
-      const w = RealPictures.words(state);
+      // A pull that stopped partway: the stand-in survey says 12 of 221 pets still hold pointers.
+      const w = RealPictures.words(state, { missing: 12, total: 221 });
       const tray = ctx.tray();
       const labels = tray.map((r) => r.label || r.type);
       const box = ctx.dialogs[0] || {};
@@ -482,8 +494,10 @@ async function picturesGate() {
       if (row.windows !== 0) fails.push(`${state}: main opened ${row.windows} windows`);
       if (row.dialogs !== 1 || row.message !== w.message || row.detail !== w.detail) fails.push(`${state}: the small window did not carry the words`);
       if (row.buttons !== "Open git-lfs.com|OK") fails.push(`${state}: buttons ${row.buttons}`);
-      if (row.tray !== "Pet pictures did not download|How to fix…|Open git-lfs.com|separator|Quit") fails.push(`${state}: tray ${row.tray}`);
-      if (!/^Pet pictures did not download/.test(row.tip)) fails.push(`${state}: tray tip ${row.tip}`);
+      const trayWords = state === "partial" ? "Some pet pictures did not download" : "Pet pictures did not download";
+      if (row.tray !== `${trayWords}|How to fix…|Open git-lfs.com|separator|Quit`) fails.push(`${state}: tray ${row.tray}`);
+      if (!row.tip.startsWith(trayWords)) fails.push(`${state}: tray tip ${row.tip}`);
+      if (state === "partial" && !/^12 of 221 pets are still missing their pictures: Git LFS stopped before it fetched them all\. In the computerpets folder run git lfs pull/.test(row.detail || "")) fails.push(`partial: detail ${row.detail}`);
       if (row.ticks !== 0) fails.push(`${state}: main started ${row.ticks} ticks with no glass`);
       item(tray, "How to fix…").click();
       if (ctx.dialogs.length !== 2) fails.push(`${state}: How to fix did not show the words again`);
@@ -513,9 +527,10 @@ async function picturesGate() {
   }
   return fails.length
     ? fail(fails.join("; "), seen)
-    : ok("Started from npm start with Git LFS pointers or no pictures, the real main.cjs opens no glass, shows the Git LFS steps in a small window and the tray, and opens git-lfs.com through the link gate", seen, [
+    : ok("Started from npm start with Git LFS pointers, a pull that stopped partway, or no pictures, the real main.cjs opens no glass, shows the Git LFS steps (or how many pets still miss pictures) in a small window and the tray, and opens git-lfs.com through the link gate", seen, [
         "pointers=no_glass+small_window",
         "missing=no_glass+small_window",
+        "partial=no_glass+how_many_pets+git_lfs_pull",
         "tray=how_to_fix+git_lfs_link+quit",
         "second_start=words_again",
         "link=through_open_link_gate",
@@ -649,6 +664,53 @@ async function noTray() {
     ctx.cleanup();
   }
   delete require.cache[MAIN];
+  // A tray host that shows up after the start (a panel that starts late): main asks again every 10 s, makes the tray
+  // icon again so it docks, tells the overlay, and Hide stops asking. A host that goes away turns the asking back on.
+  ctx = await bootMain({ tray: "no", dialogAnswer: 1 });
+  try {
+    for (let i = 0; i < 5; i += 1) await new Promise((r) => setImmediate(r));
+    const win = ctx.windows[0];
+    const watch = ctx.intervalFns.filter((t) => t.ms === 10_000);
+    const settle = async () => {
+      for (let i = 0; i < 5; i += 1) await new Promise((r) => setImmediate(r));
+    };
+    const told = () => ctx.sent.filter((m) => m[0] === "tray-host").map((m) => m[1]).join("|");
+    const quiet = told();
+    if (watch[0]) {
+      watch[0].fn();
+      await settle();
+    }
+    const stillNo = { told: told(), trays: ctx.trays.length };
+    TRAY.state = "yes";
+    if (watch[0]) {
+      watch[0].fn();
+      await settle();
+    }
+    if (win) win.visible = true;
+    const dialogsBefore = ctx.dialogs.length;
+    ctx.send("pet-menu", { x: 10, y: 10 });
+    item(ctx.popups[ctx.popups.length - 1], "Hide the window").click();
+    await settle();
+    const shows = { told: told(), trays: ctx.trays.length, oldGone: !!(ctx.trays[0] && ctx.trays[0].destroyed), get: ctx.send("tray-host-get"), hideAsked: ctx.dialogs.length !== dialogsBefore, hidden: !!win && win.visible === false };
+    TRAY.state = "no";
+    if (watch[0]) {
+      watch[0].fn();
+      await settle();
+    }
+    if (win) win.visible = true;
+    ctx.send("pet-menu", { x: 10, y: 10 });
+    item(ctx.popups[ctx.popups.length - 1], "Hide the window").click();
+    await settle();
+    const gone = { told: told(), trays: ctx.trays.length, hideAsked: ctx.dialogs.length > dialogsBefore };
+    seen.appears = { watches: watch.length, quiet, stillNo, shows, gone };
+    if (watch.length !== 1) fails.push(`tray appears: ${watch.length} ask-again timers of 10 s`);
+    if (quiet !== "no" || stillNo.told !== "no" || stillNo.trays !== 1) fails.push(`tray appears: asking again with no tray changed something ${JSON.stringify(stillNo)}`);
+    if (shows.told !== "no|yes" || shows.trays !== 2 || !shows.oldGone || shows.get !== "yes" || shows.hideAsked || !shows.hidden) fails.push(`tray appears: ${JSON.stringify(shows)}`);
+    if (gone.told !== "no|yes|no" || gone.trays !== 2 || !gone.hideAsked) fails.push(`tray goes away: ${JSON.stringify(gone)}`);
+  } finally {
+    ctx.cleanup();
+  }
+  delete require.cache[MAIN];
   // With a tray to see, Hide the window hides at once, as before.
   ctx = await bootMain({ tray: "yes" });
   try {
@@ -708,8 +770,9 @@ async function noTray() {
   }
   return fails.length
     ? fail(fails.join("; "), seen)
-    : ok("With no tray to see, the real main.cjs puts every tray row in the pet's menu, asks before Hide the window, brings the pets back with the card open on a second start, tells the overlay, and lets a gate's OK quit; a native Wayland start goes again on XWayland or says why", seen, [
+    : ok("With no tray to see, the real main.cjs puts every tray row in the pet's menu, asks before Hide the window, brings the pets back with the card open on a second start, tells the overlay, and lets a gate's OK quit; a tray host that shows up later is seen within 10 s (tray made again, Hide stops asking); a native Wayland start goes again on XWayland or says why", seen, [
         "pet_menu=every_tray_row_but_show",
+        "tray_appears=asked_again+tray_made_again+hide_stops_asking",
         "hide=asks_when_no_tray",
         "second_start=window_back+card_open",
         "overlay=told_tray_host",

@@ -1,90 +1,123 @@
 param([switch]$Check)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
-Set-Location $PSScriptRoot\desktop
+# The window stays in the computerpets folder when this ends, however it ends (a stop, -Check, Ctrl+C, the pets
+# turned off): it went into desktop\ and stayed there, so "run .\desktop.ps1 again" in the same window said
+# .\desktop.ps1 was not recognized, and cd web went looking for desktop\web.
+Push-Location $PSScriptRoot\desktop
+try {
+  # Plain words, then stop. A keeper should never have to read a PowerShell error to know what to do.
+  function Stop-Start([string]$Words) {
+    Write-Host $Words
+    exit 1
+  }
 
-# Plain words, then stop. A keeper should never have to read a PowerShell error to know what to do.
-function Stop-Start([string]$Words) {
-  Write-Host $Words
-  exit 1
-}
+  # 1. Node runs the overlay. Check it is here and new enough before anything else.
+  if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+    Stop-Start "Node is not installed in this window yet. Install the LTS from https://nodejs.org (version 22 or newer), close this window, open a new PowerShell in the computerpets folder, and run .\desktop.ps1 again."
+  }
+  if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
+    Stop-Start "npm is missing. It comes with Node. Install the LTS from https://nodejs.org again, open a new PowerShell in the computerpets folder, and run .\desktop.ps1 again."
+  }
+  $version = "$(& node -v)".Trim()
+  $major = 0
+  if ($version -match '^v(\d+)\.') { $major = [int]$Matches[1] }
+  if ($major -lt 22) {
+    Stop-Start "This Node is $version. The pets need version 22 or newer. Install the LTS from https://nodejs.org, open a new PowerShell in the computerpets folder, and run .\desktop.ps1 again."
+  }
 
-# 1. Node runs the overlay. Check it is here and new enough before anything else.
-if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
-  Stop-Start "Node is not installed in this window yet. Install the LTS from https://nodejs.org (version 22 or newer), close this window, open a new PowerShell in the computerpets folder, and run .\desktop.ps1 again."
-}
-if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
-  Stop-Start "npm is missing. It comes with Node. Install the LTS from https://nodejs.org again, open a new PowerShell in the computerpets folder, and run .\desktop.ps1 again."
-}
-$version = "$(& node -v)".Trim()
-$major = 0
-if ($version -match '^v(\d+)\.') { $major = [int]$Matches[1] }
-if ($major -lt 22) {
-  Stop-Start "This Node is $version. The pets need version 22 or newer. Install the LTS from https://nodejs.org, open a new PowerShell in the computerpets folder, and run .\desktop.ps1 again."
-}
+  # 2. The pieces. node_modules alone is not enough: a get-the-pieces run that was closed halfway
+  #    leaves the folder without Electron. The stamp is written only after npm install finishes,
+  #    and a newer package.json (after a pull) asks for the pieces again.
+  $electron = "node_modules\electron\path.txt"
+  $stamp = "node_modules\.computerpets-installed"
+  function Get-Pieces {
+    if (-not (Test-Path $electron)) { return "missing" }
+    if (-not (Test-Path $stamp)) { return "unfinished" }
+    if ((Get-Item "package.json").LastWriteTimeUtc -gt (Get-Item $stamp).LastWriteTimeUtc) { return "changed" }
+    return "ready"
+  }
+  $pieces = Get-Pieces
 
-# 2. The pieces. node_modules alone is not enough: a get-the-pieces run that was closed halfway
-#    leaves the folder without Electron. The stamp is written only after npm install finishes,
-#    and a newer package.json (after a pull) asks for the pieces again.
-$electron = "node_modules\electron\path.txt"
-$stamp = "node_modules\.computerpets-installed"
-function Get-Pieces {
-  if (-not (Test-Path $electron)) { return "missing" }
-  if (-not (Test-Path $stamp)) { return "unfinished" }
-  if ((Get-Item "package.json").LastWriteTimeUtc -gt (Get-Item $stamp).LastWriteTimeUtc) { return "changed" }
-  return "ready"
-}
-$pieces = Get-Pieces
+  # 3. The pictures. The overlay's pet pictures are stored with Git LFS. A Git without LFS copies
+  #    small text pointers instead, and every pet would be invisible. A git lfs pull that stopped partway
+  #    (a lost connection, a full disk) leaves some pets as pointers, and those pets would be invisible too,
+  #    so every pet's folder is looked at, not only the crow's. A pointer is a small text file (about 130
+  #    bytes) and every real picture is over 10 KB, so only files under 1 KB are opened: fast enough for
+  #    every start.
+  $sprites = "renderer\sprites"
+  $picture = "renderer\sprites\crow\idle\1.png"
+  $gone = 0
+  $pets = 0
+  function Get-Pictures {
+    if (-not (Test-Path $picture)) { return "missing" }
+    $root = (Resolve-Path $sprites).Path
+    $found = @{}
+    $head = New-Object byte[] 23
+    foreach ($f in ([System.IO.DirectoryInfo]::new($root)).EnumerateFiles("*.png", [System.IO.SearchOption]::AllDirectories)) {
+      if ($f.Length -ge 1024) { continue }
+      $stream = $f.OpenRead()
+      try { $n = $stream.Read($head, 0, 23) } finally { $stream.Close() }
+      if ([System.Text.Encoding]::ASCII.GetString($head, 0, $n) -eq "version https://git-lfs") {
+        $found[$f.FullName.Substring($root.Length + 1).Split("\")[0]] = $true
+      }
+    }
+    $script:gone = $found.Count
+    $script:pets = @([System.IO.Directory]::GetDirectories($root)).Count
+    if ($script:gone -eq 0) { return "ready" }
+    if ($script:gone -ge $script:pets) { return "lfs-pointers" }
+    return "partial"
+  }
+  $seen = Get-Pictures
+  # "12 of 221 pets are still missing their pictures" (one pet: "is ... its").
+  $still = "$gone of $pets pets are still missing their pictures"
+  if ($gone -eq 1) { $still = "1 of $pets pets is still missing its pictures" }
 
-# 3. The pictures. The overlay's pet pictures are stored with Git LFS. A Git without LFS copies
-#    small text pointers instead, and every pet would be invisible.
-$picture = "renderer\sprites\crow\idle\1.png"
-function Get-Pictures {
-  if (-not (Test-Path $picture)) { return "missing" }
-  $bytes = [System.IO.File]::ReadAllBytes((Resolve-Path $picture).Path)
-  $head = [System.Text.Encoding]::ASCII.GetString($bytes, 0, [Math]::Min(23, $bytes.Length))
-  if ($head -eq "version https://git-lfs") { return "lfs-pointers" }
-  return "ready"
-}
-$seen = Get-Pictures
+  # -Check says what the start sees and changes nothing: no install, no overlay.
+  # The last line says what to type next, in plain words (the pictures first: the start stops there).
+  if ($Check) {
+    Write-Host "ok: node $version"
+    Write-Host "pieces: $pieces"
+    Write-Host "pictures: $seen"
+    if ($seen -eq "partial") {
+      Write-Host "next: $($still): Git LFS stopped before it fetched them all. In the computerpets folder type git lfs pull. Then type .\desktop.ps1 and press Enter."
+    } elseif ($seen -ne "ready") {
+      Write-Host "next: The pet pictures are not here yet. Install Git LFS from https://git-lfs.com, then in the computerpets folder type git lfs install and then git lfs pull. Then type .\desktop.ps1 and press Enter."
+    } elseif ($pieces -eq "missing") {
+      Write-Host "next: Type .\desktop.ps1 and press Enter. It gets the pieces (a few minutes the first time), then the pets come on."
+    } elseif ($pieces -eq "unfinished") {
+      Write-Host "next: Type .\desktop.ps1 and press Enter. It finishes getting the pieces, then the pets come on."
+    } elseif ($pieces -eq "changed") {
+      Write-Host "next: Type .\desktop.ps1 and press Enter. It gets the new pieces, then the pets come on."
+    } else {
+      Write-Host "next: Type .\desktop.ps1 and press Enter to turn the pets on."
+    }
+    exit 0
+  }
 
-# -Check says what the start sees and changes nothing: no install, no overlay.
-# The last line says what to type next, in plain words (the pictures first: the start stops there).
-if ($Check) {
-  Write-Host "ok: node $version"
-  Write-Host "pieces: $pieces"
-  Write-Host "pictures: $seen"
+  if ($seen -eq "partial") {
+    Stop-Start "$still. Git LFS stopped before it fetched them all. In the computerpets folder run git lfs pull, and run .\desktop.ps1 again."
+  }
   if ($seen -ne "ready") {
-    Write-Host "next: The pet pictures are not here yet. Install Git LFS from https://git-lfs.com, then in the computerpets folder type git lfs install and then git lfs pull. Then type .\desktop.ps1 and press Enter."
-  } elseif ($pieces -eq "missing") {
-    Write-Host "next: Type .\desktop.ps1 and press Enter. It gets the pieces (a few minutes the first time), then the pets come on."
-  } elseif ($pieces -eq "unfinished") {
-    Write-Host "next: Type .\desktop.ps1 and press Enter. It finishes getting the pieces, then the pets come on."
-  } elseif ($pieces -eq "changed") {
-    Write-Host "next: Type .\desktop.ps1 and press Enter. It gets the new pieces, then the pets come on."
-  } else {
-    Write-Host "next: Type .\desktop.ps1 and press Enter to turn the pets on."
+    Stop-Start "The pet pictures did not download. They come through Git LFS, which this Git does not have yet. Install Git LFS from https://git-lfs.com, then in the computerpets folder run git lfs install and then git lfs pull, and run .\desktop.ps1 again."
   }
-  exit 0
-}
 
-if ($seen -ne "ready") {
-  Stop-Start "The pet pictures did not download. They come through Git LFS, which this Git does not have yet. Install Git LFS from https://git-lfs.com, then in the computerpets folder run git lfs install and then git lfs pull, and run .\desktop.ps1 again."
-}
-
-if ($pieces -ne "ready") {
-  Write-Host "Getting the pieces (npm install). The first time can take a few minutes. Leave this window open."
-  & npm install
-  if ($LASTEXITCODE -ne 0) {
-    Stop-Start "npm install did not finish. Check the internet, then run .\desktop.ps1 again. It gets the pieces again."
+  if ($pieces -ne "ready") {
+    Write-Host "Getting the pieces (npm install). The first time can take a few minutes. Leave this window open."
+    & npm install
+    if ($LASTEXITCODE -ne 0) {
+      Stop-Start "npm install did not finish. Check the internet, then run .\desktop.ps1 again. It gets the pieces again."
+    }
+    if (-not (Test-Path $electron)) { & npm rebuild electron }
+    if (-not (Test-Path $electron)) {
+      Stop-Start "The overlay piece (Electron) did not download. Check the internet, delete the desktop\node_modules folder, and run .\desktop.ps1 again."
+    }
+    Set-Content -Path $stamp -Value (Get-Date -Format o) -Encoding ASCII
   }
-  if (-not (Test-Path $electron)) { & npm rebuild electron }
-  if (-not (Test-Path $electron)) {
-    Stop-Start "The overlay piece (Electron) did not download. Check the internet, delete the desktop\node_modules folder, and run .\desktop.ps1 again."
-  }
-  Set-Content -Path $stamp -Value (Get-Date -Format o) -Encoding ASCII
-}
 
-# 4. Turn the pets on. npm start is electron .
-& npm start
-exit $LASTEXITCODE
+  # 4. Turn the pets on. npm start is electron .
+  & npm start
+  exit $LASTEXITCODE
+} finally {
+  Pop-Location
+}

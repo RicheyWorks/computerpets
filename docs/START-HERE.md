@@ -285,6 +285,8 @@ Measured on a Windows PC in September 2026: the plain copy downloaded about 3.6 
 
 **What you should see:** a folder named `computerpets`. Inside it you can see `desktop.ps1` and a folder named `desktop`.
 
+You will also see a long pile of files with odd names that start with `_`. Those are the builders' notes. Leave them alone. You only need `desktop.ps1`.
+
 **If clone fails:**
 
 - Check the internet
@@ -364,6 +366,7 @@ That is the same start the grown-up docs already use.
 **The first time:**
 
 - Lots of words scroll by. Names. Numbers. Progress. That is `npm install` getting the pieces. It can take several minutes. You need the internet. Wait.
+- It may say some pieces have `vulnerabilities` and tell you to type `npm audit fix --force`. Do not type that. It swaps in a different Electron and can stop the pets from starting. The grown-ups update Electron on purpose.
 - Then more words, and a pet appears **on your real desktop**.
 - Look near the clock (the bottom-right corner). A small ComputerPets tray icon should sit there.
 - Look for the **keeper card** next to the pet. Name. Stage. Bond word. Hunger, Rest, Bond. Feed, Play, Rest.
@@ -595,7 +598,8 @@ Read the last few lines.
 
 - If it talks about `npm` or `install`, the pieces did not finish downloading. Check the internet. Stay in the `computerpets` folder (or `desktop` if you used the three-line start). Run `npm install` again, then `npm start`.
 - If you closed the window while words were still scrolling, open a new one and run `.\desktop.ps1` again. It sees the pieces are half-finished and gets the pieces again.
-- To see what the start sees without turning anything on, type `.\desktop.ps1 -Check`. It prints your Node version and whether the pieces are `ready`, `missing`, `unfinished`, or `changed`. Its last line says what to type next.
+- To see what the start sees without turning anything on, type `.\desktop.ps1 -Check`. It prints your Node version, whether the pieces are `ready`, `missing`, `unfinished`, or `changed`, and whether the pet pictures are all there. Its last line says what to type next.
+- If it says some pets are still missing their pictures, Git LFS stopped before it fetched them all. In the `computerpets` folder type `git lfs pull`, then `.\desktop.ps1` again.
 
 ### A window flashed and vanished
 
@@ -661,6 +665,8 @@ sh desktop.sh
 
 If it says the pet pictures did not download, install Git LFS (step 2). Then type `git lfs pull` in the `computerpets` folder.
 
+If it says some pets are still missing their pictures, Git LFS stopped partway. Type `git lfs pull` in the `computerpets` folder again, then `sh desktop.sh`.
+
 The overlay says the same thing in a small window if you start it the other way below.
 
 Or:
@@ -679,13 +685,24 @@ The extra control sits in the **menu bar** (the thin strip at the top of the scr
 
 Same helpers, plus Git LFS for the pet pictures. On Ubuntu or Debian that is `sudo apt install git-lfs`. Then type `git lfs install` once, before you copy the pets.
 
-Then in a terminal, inside your `computerpets` folder:
+Node must be version 22 or newer. Type `node -v`. The `nodejs` that `apt` brings is often older. If you see `v20` or smaller, get the **LTS** Node from [https://nodejs.org](https://nodejs.org) instead.
+
+Copy the pets:
+
+```bash
+mkdir -p ~/projects
+cd ~/projects
+git clone https://github.com/RicheyWorks/computerpets
+cd computerpets
+```
+
+Then, still in that `computerpets` folder:
 
 ```bash
 sh desktop.sh
 ```
 
-If it says the pet pictures did not download, type `git lfs pull` in that folder, then `sh desktop.sh` again.
+If it says the pet pictures did not download, type `git lfs pull` in that folder, then `sh desktop.sh` again. If it says some pets are still missing their pictures, Git LFS stopped partway; do the same thing. `sh desktop.sh --check` looks without turning anything on, and its last line says what to type next.
 
 The mark sits in the **panel**. A click opens care. First click is a sit. Drag is a carry. A right-click tends.
 
@@ -785,6 +802,22 @@ python -m computerpets_client
 ```
 
 Grown-up words for the blotter live in [client/README.md](../client/README.md).
+
+---
+
+## Blotter on Mac or Linux
+
+This is the same optional blotter, for a Mac or Linux Terminal. Python 3.10 or newer. In a Terminal inside the `computerpets` folder, type these lines, one at a time:
+
+```bash
+cd client
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -e .
+python -m computerpets_client
+```
+
+On Linux the blotter window needs a few small screen pieces. If they are missing, it says how many and prints the exact `sudo apt install` line to type. Type that line, then `python -m computerpets_client` again.
 
 ---
 ## You did it
