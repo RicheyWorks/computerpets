@@ -179,6 +179,42 @@ export function samePhoneFit(a: PhoneFit | null, b: PhoneFit | null): boolean {
   return !!a && !!b && a.asideMax === b.asideMax && a.railMax === b.railMax;
 }
 
+/** A box on the screen, in viewport px (only the edges deskFit needs). */
+export type DeskBox = { top: number; left: number; right: number };
+
+export type DeskFitInput = {
+  /** The left panel (name, plaque, hello, keeper card). */
+  aside: DeskBox;
+  /** The room rail on the right (the rooms, then the guests' drawer). */
+  rail: DeskBox;
+  /** What sits along the bottom: the care buttons, the talk line, the room links. */
+  below: readonly DeskBox[];
+  /** The screen's height. */
+  viewH: number;
+  gap?: number;
+};
+
+export type DeskFit = { asideMax: number; railMax: number };
+
+/**
+ * A desktop-size room: the left panel and the room rail each end above whatever of the care buttons, the talk line
+ * and the room links sits under them, and above the screen's bottom otherwise, and scroll inside past that. At 1024×768, 1280×720 and 1366×768
+ * the panel ran 31 to 79 px off the screen (the hello's Got it with it) and the hello sat under Feed and Play; at
+ * 1024 to 1440 px wide the rail's guest drawer ran 137 to 169 px past the bottom, so its last guests were out of reach.
+ */
+export function deskFit(input: DeskFitInput): DeskFit {
+  const gap = input.gap ?? PHONE_FIT_GAP;
+  const room = (box: DeskBox) => {
+    let floor = input.viewH;
+    for (const part of input.below) {
+      const beside = part.right <= box.left - gap || part.left >= box.right + gap;
+      if (!beside) floor = Math.min(floor, part.top);
+    }
+    return Math.max(PHONE_FIT_MIN, Math.floor(floor - box.top - gap));
+  };
+  return { asideMax: room(input.aside), railMax: room(input.rail) };
+}
+
 /** The folded plaque still does not fit above the care buttons: show it as one line instead. */
 export function plaqueNeedsLine(scrollHeight: number, clientHeight: number): boolean {
   return scrollHeight > clientHeight + 1;

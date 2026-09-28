@@ -134,6 +134,7 @@ CROSS_DOMAIN = {
     "web.meet_index_forget",
     "web.kennel_first_notes",
     "web.kennel_drawers",
+    "web.kennel_targets",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -627,6 +628,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.meet_index_forget",
         "web.kennel_first_notes",
         "web.kennel_drawers",
+        "web.kennel_targets",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -1109,6 +1111,17 @@ def test_kennel_drawers_row_rooms_plates_next_taps_mind_title():
         assert mark in kd.trace, (mark, kd.trace)
     for group in ("rooms", "demo", "next", "edges"):
         assert all(kd.extras[group].values()), (group, kd.extras[group])
+
+
+def test_kennel_targets_row_404_desktop_targets_fit_plates_hive_jump():
+    """/demo/<unknown> 404; 24 px desktop targets; the panel and rail fit; plates clear; /hive one search; phone jump."""
+    kt = invoke("web.kennel_targets")
+    assert kt.ok, (kt.error, kt.detail)
+    for mark in ("missing=real_404", "targets=desktop_24px", "fit=panel_rail_on_screen", "plates=clear_of_panel",
+                 "hive=one_search", "jump=phone_plates"):
+        assert mark in kt.trace, (mark, kt.trace)
+    for group in ("missing", "targets", "plates", "more"):
+        assert all(kt.extras[group].values()), (group, kt.extras[group])
 
 
 def test_pictures_gate_row_boots_real_main_with_pointers_and_opens_no_glass():

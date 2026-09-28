@@ -3010,6 +3010,19 @@ def _web_rows() -> list[Affordance]:
                 "Back to kennel and See who is awake were bare text links. /demo/<unknown> said just ComputerPets in the tab."
             ),
         ),
+        Affordance(
+            "web.kennel_targets",
+            "web",
+            "/demo/<unknown> is a real 404; desktop targets are 24 px and the panel and rail fit the screen; /demo's plates start clear of the panel; /hive has one search; a phone's /demo jumps to its plates",
+            "web routes/demo.$slug.tsx + styles.css + routes/catalog.tsx + lib/pets/phone-desk.ts deskFit + components/desk/companion-room.tsx + lib/pets/desk-plates.ts keepOff + desktop/renderer/desk-plates.js + components/desk/desk-plates.tsx + components/desk/field-notes.tsx more + routes/hive.tsx + scripts/phone-desk-layout.test.mjs + scripts/kennel-targets.test.mjs",
+            notes=(
+                "/demo/<unknown> answered 200. At 1280x800 the plaque links were 170x17 and 133x18, the rail's guests 17 to "
+                "46 px wide and 18 to 23 tall, the room links 13 px tall; every one is now at least 24x24. At 1024x768, "
+                "1280x720 and 1366x768 the left panel ran off the screen with the hello's Got it, and the hello sat under "
+                "Feed and Play; the rail's guest drawer ran 137 to 169 px past the bottom at 1024 to 1440 wide. /demo's "
+                "weather plate sat on the small label above the guest's name at every desktop size. /hive had two searches."
+            ),
+        ),
     ]
 
 
@@ -3073,6 +3086,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("kennel_first_notes", domain="web", action_id=aid)
     if local_id == "kennel_drawers":
         return _run_web_smoke("kennel_drawers", domain="web", action_id=aid)
+    if local_id == "kennel_targets":
+        return _run_web_smoke("kennel_targets", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

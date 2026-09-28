@@ -1,12 +1,20 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { FieldNotes } from "@/components/desk/field-notes";
+import { FieldNotes, type FieldNoteSet } from "@/components/desk/field-notes";
 import { HiveDen, HiveRail } from "@/components/desk/hive-den";
 import { RoomHero } from "@/components/desk/room-hero";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { BEE_GUIDE } from "@/lib/pets/bee-guide";
 import { INSECT_GUIDE } from "@/lib/pets/insect-guide";
 import { INSECT_KEYS } from "@/lib/pets/insects";
+
+const BEES_AND_COMB: FieldNoteSet = {
+  notes: BEE_GUIDE,
+  kicker: "Bees and comb",
+  heading: "Not ten copies of Comb.",
+  intro:
+    "Comb stays Comb. These ten are other bees, a drone, a queen, and the nest as a place. A colony is many bees, one nest. Neglect can go quiet.",
+};
 
 export const Route = createFileRoute("/hive")({
   component: HivePage,
@@ -56,13 +64,8 @@ function HivePage() {
       </section>
 
       {/* The field notes: closed drawers, a search and #note-<slug> links (components/desk/field-notes.tsx). */}
-      <FieldNotes notes={INSECT_GUIDE} heading="The insects, told apart." />
-      <FieldNotes
-        notes={BEE_GUIDE}
-        heading="Not ten copies of Comb."
-        kicker="Bees and comb"
-        intro="Comb stays Comb. These ten are other bees, a drone, a queen, and the nest as a place. A colony is many bees, one nest. Neglect can go quiet."
-      />
+      {/* One search and one Open all for both sets: the bees and comb were a second section with its own search. */}
+      <FieldNotes notes={INSECT_GUIDE} heading="The insects, told apart." more={BEES_AND_COMB} />
     </main>
   );
 }
