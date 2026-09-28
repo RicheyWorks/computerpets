@@ -131,7 +131,7 @@ test("the overlay special is the same living sit as the desk, and the floor keep
   assert.match(lifeSrc, /PetSpecial/);
   assert.match(lifeSrc, /applySpecial/);
   assert.match(htmlSrc, /specials\.js/);
-  assert.match(petSrc, /verbFor\(kind\.key\)/);
+  assert.match(petSrc, /trickLabel\(kind\.key\)/);
   assert.match(mainSrc, /lastVitals\.verb \|\| "Special"/);
   assert.doesNotMatch(lifeSrc, /pick\(extra\.special \|\| \["\.\.\."\]\), cmd: "idle"/);
 });

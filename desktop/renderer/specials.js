@@ -282,6 +282,21 @@
     return VERB[key] || "Special";
   }
 
+  /** The care words beside the trick on the keeper card, the pet menu and the tray (main.cjs careMenu). */
+  const CARE_WORDS = ["Feed", "Treat", "Play", "Rest", "Talk", "Hide", "Call back", "Clean", "Bath", "Medicine", "Praise", "Shed"];
+
+  /**
+   * The trick's word on the keeper card, the pet menu, the tray and the sit menu. The card's button said "Special"
+   * for every guest while the menus said the verb ("Steal ribbon" for Rui), and the salamander's and the grouper's
+   * menus had two Hide rows (the trick, and the Hide that sends the pet away). Where the verb is another button's
+   * word the trick says it is the trick, as the web care bar does (web/src/lib/pets/care-labels.ts).
+   */
+  function trickLabel(key) {
+    const verb = verbFor(key);
+    const low = verb.trim().toLowerCase();
+    return CARE_WORDS.some((w) => w.toLowerCase() === low) ? `${verb} trick` : verb;
+  }
+
   /** Same care law as web/src/lib/pets/specials.ts and the blotter. */
   function applySpecial(stats, special) {
     const next = { ...stats, bond: clamp((stats.bond || 0) + 2) };
@@ -330,6 +345,8 @@
     clamp,
     commandFor,
     verbFor,
+    CARE_WORDS,
+    trickLabel,
     applySpecial,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;

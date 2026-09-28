@@ -1644,6 +1644,22 @@ function bubbleOverPlates() {
   return over;
 }
 
+/** Runs in the page: the panel's own kicker and name lines the open speech bubble crosses (a phone on its side). */
+function bubbleOverNames() {
+  const bub = document.querySelector('[data-speech="open"]');
+  if (!bub) return null;
+  const bb = (bub.firstElementChild || bub).getBoundingClientRect();
+  const over = [];
+  for (const el of document.querySelectorAll("[data-desk-aside] h1, [data-desk-aside] p.uppercase.text-subtle")) {
+    const r = el.getBoundingClientRect();
+    if (r.width < 2 || r.height < 2) continue;
+    if (Math.min(bb.right, r.right) - Math.max(bb.left, r.left) > 1 && Math.min(bb.bottom, r.bottom) - Math.max(bb.top, r.top) > 1) {
+      over.push(`${el.tagName === "H1" ? "name" : "kicker"} ${JSON.stringify({ bubble: [bb.left, bb.top, bb.right, bb.bottom].map(Math.round), line: [r.left, r.top, r.right, r.bottom].map(Math.round) })}`);
+    }
+  }
+  return over;
+}
+
 /** Runs in the page: boxes inside the panel that scroll on their own (a scroller inside a scroller). */
 function panelScrollers() {
   const aside = document.querySelector("[data-desk-aside]");
@@ -1703,8 +1719,9 @@ test("the rail shows the current guest on arrival and on a room change; the spee
     }
   }
   // The speech bubble: it crossed the Quotes plate and the hello at 1280×800. Sampled while a line shows (the pet
-  // walks), then with the news plate dragged over the bubble on a desktop: the bubble moves off it.
-  for (const size of [{ w: 1024, h: 768 }, { w: 1280, h: 800 }, { w: 1440, h: 900 }, { w: 375, h: 667, phone: true }, { w: 667, h: 375, phone: true }]) {
+  // walks), then with the news plate dragged over the bubble on a desktop: the bubble moves off it. On a phone on
+  // its side it kept off the docked plates but painted over the panel's own kicker (844×390 and 568×320).
+  for (const size of [{ w: 1024, h: 768 }, { w: 1280, h: 800 }, { w: 1440, h: 900 }, { w: 375, h: 667, phone: true }, { w: 667, h: 375, phone: true }, { w: 844, h: 390, phone: true }, { w: 568, h: 320, phone: true }]) {
     const label = `/demo/rui ${size.w}×${size.h} (a line showing)`;
     const ctx = await context(size);
     const page = await ctx.newPage();
@@ -1719,6 +1736,7 @@ test("the rail shows the current guest on arrival and on a room change; the spee
         await page.waitForTimeout(600);
         for (let i = 0; i < 8; i += 1) {
           for (const o of (await page.evaluate(bubbleOverPlates)) || []) seen.add(o);
+          if (size.phone && size.w > size.h) for (const o of (await page.evaluate(bubbleOverNames)) || []) seen.add(o);
           await page.waitForTimeout(150);
         }
       }

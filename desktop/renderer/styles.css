@@ -793,7 +793,10 @@ select {
   left: 0;
   bottom: 178px;
   width: 280px;
-  max-height: calc(100vh - 196px);
+  /* 280 of content, as PetKeeper.HUD_WIDTH says; with padding and border the card is 314 by up to (max-height + 31).
+     max-height was calc(100vh - 196px), so the tallest card stood 13 px above the top of the screen (314 by 1227 on
+     a 1392 px work area), the "Keeper card" kicker and the name cut. The 31 of padding and border come off here. */
+  max-height: calc(100vh - 227px);
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -903,6 +906,13 @@ select {
 
 .first-hint-lines li + li {
   margin-top: 3px;
+}
+
+/* "Got it" was 48 by 21, under the 24 px a pointer target needs. */
+#hud #first-hint-ok {
+  min-width: 64px;
+  min-height: 28px;
+  padding: 4px 12px;
 }
 
 #hud-kicker,
