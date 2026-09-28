@@ -1963,6 +1963,19 @@ def _card_rows() -> list[Affordance]:
             notes="Source smoke via harness_smokes; full HUD paint stays gui.card_hud_paint.",
         ),
         Affordance(
+            "card.walk_rules",
+            "card",
+            "The keeper card and the pet's walks: Feed reaches the food, the card stays up and holds still, off the plates",
+            "keeper.js cardStopsWalk / orderWalkResumes / cardFoldsOnWalk / cardHeldSpot / cardClearOfPlates + pet.js",
+            notes=(
+                "Source smoke via harness_smokes (card_walk_rules): opening the card stops a wander but not a walk the "
+                "keeper asked for, and a window play's end resumes it (Feed held hunger at 78, card open or closed); "
+                "the card does not fold on a walk while the hello is unread or for 8 s after a press on it, and holds "
+                "still meanwhile; it stands off the house plates (400, not 177 over the weather plate); a click on the "
+                "pet hands it the keyboard so Escape reaches it. Driven for real by gui.first_run_drive under --gui."
+            ),
+        ),
+        Affordance(
             "card.notify_open",
             "card",
             "Notif deep-link opens pet card on need",
@@ -2162,6 +2175,8 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
         )
     if local_id == "paint_wire":
         return _run_node_smoke("card_paint_wire", domain="card", action_id=aid)
+    if local_id == "walk_rules":
+        return _run_node_smoke("card_walk_rules", domain="card", action_id=aid)
     main_rows = {
         "alarm": "alarm_clock",
         "timer": "timer_clock",
@@ -3324,11 +3339,16 @@ def _gui_rows() -> list[Affordance]:
                 "Pass --gui on BLACKBEARD to launch desktop Electron with a throwaway --user-data-dir under "
                 "target/first-run-drive (removed after; it stops if userData is anything else) and walk the first run: "
                 "the hello on an open keeper card that fits the screen, Got it at least 24 px, the pet on screen, the "
-                "pet's line never over the open card, the care menu with no row twice and the card's trick word, Feed "
-                "raising hunger, Got it kept in card.json, the card at the right edge, the House window (Minds, Unlock, "
-                "close), Hide the window and tray Show, Quit, and a second start without the hello. Menus are recorded, "
+                "house plates clear of the open card, rain falling the height of the screen, the pet's line never over "
+                "the open card, the care menu with no row twice and the card's trick word, Feed (during a window play "
+                "when it can) with the card opened on the way raising hunger, the card staying up after a press with "
+                "the hello unread and read, Got it kept in card.json, a click on the pet making the window focusable "
+                "and Escape closing the card, the card at the right edge, the House window (Minds, Unlock, #unlock "
+                "kept through a reload, close), Hide the window and tray Show, Quit, and a second start without the "
+                "hello. Menus are recorded, "
                 "not popped up, and input goes through Chromium (CDP), never the OS mouse or keyboard. "
-                "Offline pins: desktop/renderer/first-run-fit.test.cjs and desktop/renderer/first-run-drive.test.cjs."
+                "Offline pins: desktop/renderer/first-run-fit.test.cjs, desktop/renderer/first-run-drive.test.cjs, "
+                "desktop/renderer/card-rules.test.cjs, and card.walk_rules."
             ),
         ),
     ]
