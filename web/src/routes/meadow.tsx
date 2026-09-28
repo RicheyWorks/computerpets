@@ -19,7 +19,7 @@ export const Route = createFileRoute("/meadow")({
   }),
 });
 
-export function MeadowPage() {
+function MeadowPage() {
   const [selected, setSelected] = useState(MEADOW_KEYS[0]!);
 
   return (

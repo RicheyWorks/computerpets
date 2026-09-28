@@ -19,7 +19,7 @@ export const Route = createFileRoute("/stone")({
   }),
 });
 
-export function StonePage() {
+function StonePage() {
   const [selected, setSelected] = useState(STONE_KEYS[0]!);
 
   return (

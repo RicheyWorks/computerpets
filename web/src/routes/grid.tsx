@@ -19,7 +19,7 @@ export const Route = createFileRoute("/grid")({
   }),
 });
 
-export function GridPage() {
+function GridPage() {
   const [selected, setSelected] = useState(GRID_KEYS[0]!);
 
   return (

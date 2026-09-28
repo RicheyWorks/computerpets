@@ -20,7 +20,7 @@ export const Route = createFileRoute("/hive")({
   }),
 });
 
-export function HivePage() {
+function HivePage() {
   const [selected, setSelected] = useState(INSECT_KEYS[0]!);
 
   return (

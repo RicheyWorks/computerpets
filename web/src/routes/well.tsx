@@ -19,7 +19,7 @@ export const Route = createFileRoute("/well")({
   }),
 });
 
-export function WellPage() {
+function WellPage() {
   const [selected, setSelected] = useState(WELL_KEYS[0]!);
 
   return (

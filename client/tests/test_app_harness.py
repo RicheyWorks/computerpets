@@ -129,6 +129,7 @@ CROSS_DOMAIN = {
     "web.house_lines_talk",
     "web.no_repeat_signed_in",
     "web.phone_layout_told_once",
+    "web.site_header_rail",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -551,6 +552,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.house_lines_talk",
         "web.no_repeat_signed_in",
         "web.phone_layout_told_once",
+        "web.site_header_rail",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -977,6 +979,18 @@ def test_phone_layout_told_once_row_no_overlap_one_tell_temp_cleanup_click_throu
         assert all(pl.extras[group].values()), (group, pl.extras[group])
     assert pl.extras["widths"] == [320, 360, 375, 390, 414]
     assert pl.extras["routeTree"] is True
+
+
+def test_site_header_rail_row_menu_landscape_rail_snap_hydration_code_split():
+    """One Menu fits the header; landscape care on screen; the rail snaps whole rows; no hydration mismatch or warnings."""
+    sh = invoke("web.site_header_rail")
+    assert sh.ok, (sh.error, sh.detail)
+    for mark in ("header=menu_fits_320_to_laptop", "menu=escape_outside_tab_close", "landscape=care_on_screen",
+                 "rail=snap_whole_rows", "ssr=no_hydration_mismatch", "dev=no_code_split_warnings", "login=titled"):
+        assert mark in sh.trace, (mark, sh.trace)
+    for group in ("header", "landscape", "rail", "audit"):
+        assert all(sh.extras[group].values()), (group, sh.extras[group])
+    assert sh.extras["loud"] == []
 
 
 def test_pictures_gate_row_boots_real_main_with_pointers_and_opens_no_glass():

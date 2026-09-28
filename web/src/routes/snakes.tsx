@@ -19,7 +19,7 @@ export const Route = createFileRoute("/snakes")({
   }),
 });
 
-export function SnakesPage() {
+function SnakesPage() {
   const [selected, setSelected] = useState(SNAKE_KEYS[0]!);
 
   return (

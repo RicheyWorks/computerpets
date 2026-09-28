@@ -19,7 +19,7 @@ export const Route = createFileRoute("/reef")({
   }),
 });
 
-export function ReefPage() {
+function ReefPage() {
   const [selected, setSelected] = useState(REEF_KEYS[0]!);
 
   return (

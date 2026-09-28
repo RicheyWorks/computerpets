@@ -4,7 +4,11 @@ import { GROK_PROVIDERS, authEnabled, signIn } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
 import { loadProblem } from "@/lib/plain-error";
 
-export const Route = createFileRoute("/login")({ component: Login });
+export const Route = createFileRoute("/login")({
+  component: Login,
+  // The tab said only "ComputerPets" here (and on every signed-in page a signed-out visitor is sent to).
+  head: () => ({ meta: [{ title: "Sign in — ComputerPets" }, { name: "description", content: "Sign in to sit with the house." }] }),
+});
 
 function Login() {
   const [problem, setProblem] = useState<string | null>(null);

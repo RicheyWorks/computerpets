@@ -2534,6 +2534,78 @@ async function phoneLayoutToldOnce() {
   ]);
 }
 
+async function siteHeaderRail() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8").replace(/\r\n/g, "\n");
+  const importTs = (...parts) => import(pathToFileURL(join(ROOT, ...parts)).href);
+  const sweep = read("web", "scripts", "phone-desk-layout.test.mjs");
+
+  // 1) The site header: every place in one Menu (a disclosure) that fits a 320 px phone and a laptop; nothing wraps.
+  const shell = read("web", "src", "components", "app-shell.tsx");
+  const headerSrc = shell.slice(shell.indexOf("<header"), shell.indexOf("</header>"));
+  const menuSrc = shell.slice(shell.indexOf("export function SiteMenu"), shell.indexOf("export function AppShell"));
+  const header = {
+    noSideScroll: !headerSrc.includes("overflow-x-auto"),
+    menu: headerSrc.includes("<SiteMenu items={nav} pathname={pathname} />"),
+    disclosure: menuSrc.includes("aria-expanded={open}") && menuSrc.includes("aria-controls={panelId}") && menuSrc.includes('<nav aria-label="Site">') && !menuSrc.includes('role="menu"'),
+    escape: menuSrc.includes('if (e.key !== "Escape") return;') && menuSrc.includes("buttonRef.current?.focus();"),
+    outside: menuSrc.includes('document.addEventListener("pointerdown", onDown);'),
+    signInOneLine: /whitespace-nowrap[^"]*"\n\s+>\n\s+Sign in/.test(headerSrc),
+    places: [...shell.matchAll(/\{ to: "[^"]+", label: "[^"]+", inline: (?:true|false), hideOnDemo: (?:true|false) \}/g)].length === 27,
+    sweep: ["headerProblems", "menuProblems", "Escape did not close the menu", "Escape did not give focus back to Menu", "a tap outside did not close the menu", "wraps onto", "is clipped by its"].every((s) => sweep.includes(s)),
+  };
+  if (!Object.values(header).every(Boolean)) bad.push(`header: ${JSON.stringify(header)}`);
+
+  // 2) A landscape phone: the room fits the screen (no 520 px floor on a phone), the care buttons take the width.
+  const room = read("web", "src", "components", "desk", "companion-room.tsx");
+  const css = read("web", "src", "styles.css");
+  const landscape = {
+    noFloorOnPhone: room.includes('? "relative isolate h-dvh min-h-0 w-full overflow-hidden bg-elevated"') && room.includes(': "relative isolate h-dvh min-h-[520px] w-full overflow-hidden bg-elevated"'),
+    wideCare: /\[data-phone-orient="sit"\] \.blotter-care-phone \{\n\s+max-width: min\(40rem, calc\(100vw - 2rem\)\);/.test(css),
+    belowHeader: !room.includes("3.25rem"),
+    sweep: sweep.includes("is off the screen") && sweep.includes("the desk page scrolls") && /\{ w: 667, h: 375,/.test(sweep) && /\{ w: 844, h: 390,/.test(sweep),
+  };
+  if (!Object.values(landscape).every(Boolean)) bad.push(`landscape: ${JSON.stringify(landscape)}`);
+
+  // 3) The room rail rests on whole rows: rows snap to the top and the rail's height is whole rows.
+  const P = await importTs("web", "src", "lib", "pets", "phone-desk.ts");
+  const rail = {
+    rows: P.railRows(308, 32) === 288 && P.railRows(20, 32) === 32 && P.railRows(100, undefined) === 100,
+    fit: P.phoneFit({ asideTop: 68, railTop: 68, careTop: 384, railRow: 32 }).railMax === 288,
+    measured: room.includes('railRow: rail.querySelector("li")?.getBoundingClientRect().height,'),
+    snap: css.includes("scroll-snap-type: y mandatory;") && /\[data-phone-floor\] \[data-desk-rail\] li \{[^}]*scroll-snap-align: start;/.test(css),
+    sweep: sweep.includes("cut in half") && sweep.includes("after a wheel"),
+  };
+  if (!Object.values(rail).every(Boolean)) bad.push(`rail: ${JSON.stringify(rail)}`);
+
+  // 4) New-keeper audit: no hydration mismatch (the session reads as loading until hydration), no code-split
+  //    warnings from npm run dev (route files export only Route), and the sign-in page has a tab title.
+  const hook = read("web", "src", "lib", "auth", "use-current-user.ts");
+  const routesDir = join(ROOT, "web", "src", "routes");
+  const loud = readdirSync(routesDir).filter((f) => f.endsWith(".tsx") && /^export (?!const Route\b)/m.test(readFileSync(join(routesDir, f), "utf8")));
+  const audit = {
+    hydration: hook.includes("return useSyncExternalStore(noSubscribe, () => true, () => false);") && hook.includes("if (!hydrated) return { user: null, isPending: true };"),
+    codeSplit: loud.length === 0,
+    loginTitle: read("web", "src", "routes", "login.tsx").includes('title: "Sign in — ComputerPets"'),
+    sweepPages: ["/meet", "/catalog", "/collection", "/login", "/hatch", "/log", "/pets/rui"].every((p) => sweep.includes(`"${p}"`)) && sweep.includes("the page threw"),
+  };
+  if (!Object.values(audit).every(Boolean)) bad.push(`audit: ${JSON.stringify({ audit, loud })}`);
+
+  const roadmap = read("docs", "ROADMAP.md");
+  if (!roadmap.includes("- [x] Site header on phones: one Menu holds every place")) bad.push("ROADMAP entry missing");
+  const extras = { header, landscape, rail, audit, loud };
+  if (bad.length) return fail(bad.join("; "), extras);
+  return ok("Site header: one Menu (disclosure; Escape and a tap outside close it, focus back) fits 320 px to a laptop, nothing wraps; landscape phones fit the room so every care button is on screen; the rail snaps whole rows; no hydration mismatch, no code-split warnings, a titled sign-in page", extras, [
+    "header=menu_fits_320_to_laptop",
+    "menu=escape_outside_tab_close",
+    "landscape=care_on_screen",
+    "rail=snap_whole_rows",
+    "ssr=no_hydration_mismatch",
+    "dev=no_code_split_warnings",
+    "login=titled",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -2560,6 +2632,7 @@ const COMMANDS = {
   house_lines_talk: houseLinesTalk,
   no_repeat_signed_in: noRepeatSignedIn,
   phone_layout_told_once: phoneLayoutToldOnce,
+  site_header_rail: siteHeaderRail,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

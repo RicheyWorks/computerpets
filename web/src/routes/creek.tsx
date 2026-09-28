@@ -19,7 +19,7 @@ export const Route = createFileRoute("/creek")({
   }),
 });
 
-export function CreekPage() {
+function CreekPage() {
   const [selected, setSelected] = useState(CREEK_KEYS[0]!);
 
   return (
