@@ -384,7 +384,121 @@ The pet is on your desk. Now you can care for it.
 <details>
 <summary>Which sound each pet makes (for later)</summary>
 
-**Talk** from Rui plays his warm house cry (`red_panda.wav`); Soot prefers `crow.wav`, Wedge prefers `raven.wav`, Heart prefers `barn_owl.wav`, Hook prefers `red_tail.wav`, Dee prefers `chickadee.wav`, Brick prefers `robin.wav`, Drake prefers `mallard.wav`, Vee prefers `canada_goose.wav`, Drum prefers `pileated.wav`, Sip prefers `hummingbird.wav`, Echo prefers `budgie.wav`, Peck prefers `penguin.wav`, Quill prefers `parrot.wav`, Keel prefers `toucan.wav`, Ember prefers `phoenix.wav`, Miso prefers `cat.wav`, Pip prefers `dog.wav`, Thimble prefers `rabbit.wav`, Clip prefers `hamster.wav`, Whee prefers `guinea_pig.wav`, Ink prefers `turtle.wav`, Coin prefers `goldfish.wav`, Rue prefers `fox.wav`, Wick prefers `ferret.wav`, Burr prefers `hedgehog.wav`, Floss prefers `chinchilla.wav`, Bloom prefers `axolotl.wav`, Vesper prefers `dragon.wav`, Nori prefers `ball_python.wav`, Saffron prefers `corn_snake.wav`, Bandit prefers `kingsnake.wav`, Jade prefers `green_tree_python.wav`, Bluff prefers `hognose.wav`, Sash prefers `garter.wav`, Lula prefers `boa.wav`, Coral prefers `milk_snake.wav`, Blush prefers `rosy_boa.wav`, Atlas prefers `carpet_python.wav`, Cup prefers `octopus.wav`, Sepia prefers `cuttlefish.wav`, Chamber prefers `nautilus.wav`, Pulse prefers `moon_jelly.wav`, Ochre prefers `sea_star.wav`, Tenant prefers `hermit_crab.wav`, Ledger prefers `horseshoe_crab.wav`, Anchor prefers `seahorse.wav`, Kite prefers `manta.wav`, Door prefers `moray.wav`, Felt prefers `moss.wav`, Vein prefers `maidenhair.wav`, Fan prefers `ginkgo.wav`, Mast prefers `oak.wav`, and Disk prefers `water_lily.wav`, Moth prefers `orchid.wav`, Arm prefers `saguaro.wav`, Snap prefers `venus_flytrap.wav`, Well prefers `pitcher.wav`, Dew prefers `sundew.wav`, Comb prefers `honeybee.wav`, Milk prefers `monarch.wav`, Ghost prefers `luna.wav`, Spark prefers `firefly.wav`, Dart prefers `darner.wav`, Twig prefers `stick.wav`, Column prefers `carpenter_ant.wav`, Seven prefers `ladybird.wav`, Fold prefers `mantis.wav`, Brood prefers `cicada.wav`, Wax prefers `honeycomb.wav`, Frill prefers `oyster.wav`, Cap prefers `fly_agaric.wav`, Lattice prefers `morel.wav`, Horn prefers `chanterelle.wav`, Ring prefers `turkey_tail.wav`, Mane prefers `lions_mane.wav`, Puff prefers `puffball.wav`, Flame prefers `chicken_of_woods.wav`, Starter prefers `yeast.wav`, Pact prefers `lichen.wav`, Gleam prefers `photovore.wav`, Choir prefers `choir.wav`, Drift prefers `nimbus.wav`, Shard prefers `silica.wav`, Dusk prefers `terminator.wav`, Knot prefers `nexus.wav`, Brine prefers `halovore.wav`, Beacon prefers `magneton.wav`, Hush prefers `umbral.wav`, Arca prefers `cyst.wav`, Reed prefers `frog.wav`, Pebble prefers `toad.wav`, Eft prefers `newt.wav`, Dapple prefers `salamander.wav`, Slip prefers `caecilian.wav`, Pinch prefers `crayfish.wav`, Whorl prefers `pond_snail.wav`, Hinge prefers `mussel.wav`, Latch prefers `leech.wav`, Prickle prefers `stickleback.wav`, Boot prefers `paramecium.wav`, Reach prefers `amoeba.wav`, Spot prefers `euglena.wav`, Orb prefers `volvox.wav`, Pane prefers `diatom.wav`, Hold prefers `kelp.wav`, and Spin prefers `chlamydomonas.wav`, and Bell prefers `stentor.wav`, and Rod prefers `coli.wav`, and Rose prefers `haloarchaea.wav` the same way. Words still show in the bubble. System speech stays the backup for other guests.
+**Talk** from Rui plays his warm house cry (`red_panda.wav`).
+Every other pet here plays its own cry the same way:
+
+- Soot prefers `crow.wav`
+- Wedge prefers `raven.wav`
+- Heart prefers `barn_owl.wav`
+- Hook prefers `red_tail.wav`
+- Dee prefers `chickadee.wav`
+- Brick prefers `robin.wav`
+- Drake prefers `mallard.wav`
+- Vee prefers `canada_goose.wav`
+- Drum prefers `pileated.wav`
+- Sip prefers `hummingbird.wav`
+- Echo prefers `budgie.wav`
+- Peck prefers `penguin.wav`
+- Quill prefers `parrot.wav`
+- Keel prefers `toucan.wav`
+- Ember prefers `phoenix.wav`
+- Miso prefers `cat.wav`
+- Pip prefers `dog.wav`
+- Thimble prefers `rabbit.wav`
+- Clip prefers `hamster.wav`
+- Whee prefers `guinea_pig.wav`
+- Ink prefers `turtle.wav`
+- Coin prefers `goldfish.wav`
+- Rue prefers `fox.wav`
+- Wick prefers `ferret.wav`
+- Burr prefers `hedgehog.wav`
+- Floss prefers `chinchilla.wav`
+- Bloom prefers `axolotl.wav`
+- Vesper prefers `dragon.wav`
+- Nori prefers `ball_python.wav`
+- Saffron prefers `corn_snake.wav`
+- Bandit prefers `kingsnake.wav`
+- Jade prefers `green_tree_python.wav`
+- Bluff prefers `hognose.wav`
+- Sash prefers `garter.wav`
+- Lula prefers `boa.wav`
+- Coral prefers `milk_snake.wav`
+- Blush prefers `rosy_boa.wav`
+- Atlas prefers `carpet_python.wav`
+- Cup prefers `octopus.wav`
+- Sepia prefers `cuttlefish.wav`
+- Chamber prefers `nautilus.wav`
+- Pulse prefers `moon_jelly.wav`
+- Ochre prefers `sea_star.wav`
+- Tenant prefers `hermit_crab.wav`
+- Ledger prefers `horseshoe_crab.wav`
+- Anchor prefers `seahorse.wav`
+- Kite prefers `manta.wav`
+- Door prefers `moray.wav`
+- Felt prefers `moss.wav`
+- Vein prefers `maidenhair.wav`
+- Fan prefers `ginkgo.wav`
+- Mast prefers `oak.wav`
+- Disk prefers `water_lily.wav`
+- Moth prefers `orchid.wav`
+- Arm prefers `saguaro.wav`
+- Snap prefers `venus_flytrap.wav`
+- Well prefers `pitcher.wav`
+- Dew prefers `sundew.wav`
+- Comb prefers `honeybee.wav`
+- Milk prefers `monarch.wav`
+- Ghost prefers `luna.wav`
+- Spark prefers `firefly.wav`
+- Dart prefers `darner.wav`
+- Twig prefers `stick.wav`
+- Column prefers `carpenter_ant.wav`
+- Seven prefers `ladybird.wav`
+- Fold prefers `mantis.wav`
+- Brood prefers `cicada.wav`
+- Wax prefers `honeycomb.wav`
+- Frill prefers `oyster.wav`
+- Cap prefers `fly_agaric.wav`
+- Lattice prefers `morel.wav`
+- Horn prefers `chanterelle.wav`
+- Ring prefers `turkey_tail.wav`
+- Mane prefers `lions_mane.wav`
+- Puff prefers `puffball.wav`
+- Flame prefers `chicken_of_woods.wav`
+- Starter prefers `yeast.wav`
+- Pact prefers `lichen.wav`
+- Gleam prefers `photovore.wav`
+- Choir prefers `choir.wav`
+- Drift prefers `nimbus.wav`
+- Shard prefers `silica.wav`
+- Dusk prefers `terminator.wav`
+- Knot prefers `nexus.wav`
+- Brine prefers `halovore.wav`
+- Beacon prefers `magneton.wav`
+- Hush prefers `umbral.wav`
+- Arca prefers `cyst.wav`
+- Reed prefers `frog.wav`
+- Pebble prefers `toad.wav`
+- Eft prefers `newt.wav`
+- Dapple prefers `salamander.wav`
+- Slip prefers `caecilian.wav`
+- Pinch prefers `crayfish.wav`
+- Whorl prefers `pond_snail.wav`
+- Hinge prefers `mussel.wav`
+- Latch prefers `leech.wav`
+- Prickle prefers `stickleback.wav`
+- Boot prefers `paramecium.wav`
+- Reach prefers `amoeba.wav`
+- Spot prefers `euglena.wav`
+- Orb prefers `volvox.wav`
+- Pane prefers `diatom.wav`
+- Hold prefers `kelp.wav`
+- Spin prefers `chlamydomonas.wav`
+- Bell prefers `stentor.wav`
+- Rod prefers `coli.wav`
+- Rose prefers `haloarchaea.wav`
+
+Words still show in the bubble.
+System speech stays the backup for other guests.
 
 </details>
 

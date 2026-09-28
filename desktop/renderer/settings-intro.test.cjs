@@ -107,7 +107,53 @@ test("settings: the privacy detail is whole, careful sentences", () => {
   }
   // The first-read wording lives once, in the markup; paintMark restores it rather than keeping a second copy.
   assert.equal(html.split("Opening this window did not look").length - 1, 1);
-  assert.match(html, /node\.textContent = mark\.read === "stored" \? storedMarkText : firstMarkText;/);
+  assert.match(html, /node\.textContent = mark\.read === "stored" \? storedMarkText\.split\(\/\(\?<=\\\.\) \(\?=\[A-Z\]\)\/\)\.join\("\\n"\) : firstMarkText;/);
+});
+
+test("settings: Unlock Details reads like START-HERE, one short sentence per line, every fact kept", () => {
+  const raw = html.match(/<p id="licenseMark">([^<]*)<\/p>/);
+  assert.ok(raw, "licenseMark is one plain paragraph");
+  const lines = raw[1].split("\n").map((l) => l.trim()).filter(Boolean);
+  assert.ok(lines.length >= 15, `short lines, not a wall (${lines.length} lines)`);
+  for (const line of lines) {
+    assert.equal(sentences(line).length, 1, `"${line}" is one sentence on its own line`);
+    assert.ok(words(line).length <= 18, `"${line}" is short (${words(line).length} words)`);
+  }
+  // The box keeps the line breaks; without this the lines would run together again.
+  assert.match(html, /#licenseMark \{ white-space: pre-line; \}/);
+  // Every fact from the old one-paragraph wording is still there.
+  const text = lines.join(" ");
+  for (const fact of [
+    "Opening this window did not look at this computer's ID.",
+    "looks at the ID only when no code is saved yet",
+    "downloading a pet whose license belongs to this computer",
+    "The ID is the machine-id file on Linux, MachineGuid on Windows, or the platform UUID on a Mac.",
+    "mixes that ID with its own name and the kind of computer",
+    "It scrambles the result with SHA-256 into a code.",
+    "It saves only that code in hwid.txt in its data folder.",
+    "Later unlocks use the saved code again.",
+    "So your license keeps working on this computer.",
+    "The ID itself is never sent.",
+    "Only the code goes to the license website.",
+    "only when you unlock or download a pet whose license belongs to this computer",
+    "The code still works like a fingerprint for this computer.",
+    "this computer always makes the same code",
+    "The line under the house server address names the website before the code is sent.",
+    "If the house server is on this computer, the code stays on this computer.",
+    "If the app cannot read that ID, Unlock stops and asks you first.",
+    "It uses the computer's name only after you press the button that says so.",
+    "It uses a random ID instead if this computer has no name.",
+    "Renaming the computer changes a code made from its name.",
+    "If the code came from a random ID, deleting hwid.txt gives this computer a different code.",
+  ]) {
+    assert.ok(text.includes(fact), `still says: ${fact}`);
+  }
+  // The stored-code wording is painted one sentence per line too (hwid.txt keeps its dot).
+  const stored = html.match(/const storedMarkText = "([^"]+)";/)[1];
+  const painted = stored.split(/(?<=\.) (?=[A-Z])/);
+  assert.equal(painted[0], "A code is already saved in hwid.txt.");
+  assert.equal(painted.length, sentences(stored).length);
+  for (const line of painted) assert.ok(words(line).length <= 18, `stored line "${line}" is short`);
 });
 
 test("settings: Backend URL and license fields are a labeled optional section", () => {

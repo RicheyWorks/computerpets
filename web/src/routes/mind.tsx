@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { MIND_PRESETS, VOICE_PRESETS, mindPreset } from "@/lib/ai/catalog";
 import { MIND_WORDS, presetTag } from "@/lib/ai/mind-words";
-import { describeBinding, describeKeyKept, saveMindSettings } from "@/lib/ai/settings";
+import { describeKeyKept, saveMindSettings } from "@/lib/ai/settings";
 import { refreshMindSettings, useMindSettings } from "@/lib/ai/use-mind";
 import { LIVING_KINDS } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
@@ -177,9 +177,6 @@ function MindPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">{presetTag(preset)}</p>
               <p className="mt-1 font-display text-2xl">{preset.name}</p>
               <p className="mt-2 text-sm text-muted">{preset.blurb}</p>
-              {preset.defaultModel ? (
-                <p className="mt-3 font-mono text-xs text-subtle">{preset.defaultModel}</p>
-              ) : null}
             </button>
           );
         })}
@@ -187,7 +184,7 @@ function MindPage() {
 
       <section className="grid gap-6 rounded-[var(--radius-xl)] border border-border bg-surface p-5 sm:p-6 lg:grid-cols-2">
         <div className="space-y-4">
-          <h2 className="font-display text-2xl">House default</h2>
+          <h2 id="mind-all-pets" className="font-display text-2xl">{MIND_WORDS.allPets}</h2>
           {selected.kind === "local" ? (
             // House lines: no AI, so no model, address, or key boxes.
             <p id="mind-house" className="text-sm text-muted">
@@ -252,7 +249,7 @@ function MindPage() {
         </div>
 
         <div className="space-y-4">
-          <h2 className="font-display text-2xl">Per animal</h2>
+          <h2 className="font-display text-2xl">One animal</h2>
           <Field label="Animal">
             <select
               value={petKey}
@@ -275,7 +272,7 @@ function MindPage() {
               }}
               className="h-11 w-full rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm"
             >
-              <option value="inherit">House default ({describeBinding(draft.default)})</option>
+              <option value="inherit">{MIND_WORDS.sameAsAll} ({mindPreset(draft.default.plugin).name})</option>
               {MIND_PRESETS.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
@@ -292,7 +289,7 @@ function MindPage() {
               />
             </Field>
           ) : (
-            <p className="text-sm text-muted">Using the house default.</p>
+            <p className="text-sm text-muted">{MIND_WORDS.sameAsAll}.</p>
           )}
           <div className="flex flex-wrap gap-2">
             <Button disabled={busy} onClick={() => test()}>
@@ -318,13 +315,22 @@ function MindPage() {
         <p className="mt-1 font-display text-xl">Any mind. Same house.</p>
         <p className="mt-2 max-w-2xl text-sm text-muted">
           Fourteen plugins. OpenAI-compatible, Claude, Gemini, Ollama, a custom webhook.
-          Assign a house default or give each animal their own brain.
+          Pick one AI under {MIND_WORDS.allPets}, or give one animal its own under One animal.
         </p>
         {selected.envKey ? (
           <p id="mind-env-key" className="mt-2 max-w-2xl text-sm text-muted">
             A signed-in keeper can leave the key box empty when the server has <code>{selected.envKey}</code> set.
           </p>
         ) : null}
+        <h3 className="mt-6 font-display text-xl">Model ids</h3>
+        <p className="mt-2 max-w-2xl text-sm text-muted">The model each AI starts with. The AI model name box can change it.</p>
+        <ul id="mind-model-ids" className="mt-2 space-y-1 text-sm text-muted">
+          {MIND_PRESETS.filter((p) => p.defaultModel).map((p) => (
+            <li key={p.id}>
+              {p.name}: <code className="font-mono text-xs">{p.defaultModel}</code>
+            </li>
+          ))}
+        </ul>
         <h3 className="mt-6 font-display text-xl">Write a plugin</h3>
         <p className="mt-2 max-w-2xl text-sm text-muted">
           Point Custom webhook at any URL. We POST JSON. Reply with <code>{"{ text }"}</code>.

@@ -22,6 +22,10 @@ function fakeRaf() {
   let queue = [];
   return {
     schedule: (fn) => queue.push(fn),
+    /** cancelAnimationFrame for the frame asked for last. */
+    cancelLast: () => {
+      queue.pop();
+    },
     run(n) {
       for (let i = 0; i < n; i++) {
         const due = queue;
@@ -107,6 +111,36 @@ test("musicMayDance holds music off for the backoff after a broken trick, same a
   assert.match(living, /const musicWantsDance = musicMayDance\(s, dt\) && musicRef\.current/);
 });
 
+test("a loop with a cancel leaves no frame queued on the very frame it stops (return false, or stop from a reset)", () => {
+  for (const lib of [FG, Overlay]) {
+    // Return false: the frame already asked for is cancelled at once, not one paint later.
+    const raf = fakeRaf();
+    let n = 0;
+    let cancels = 0;
+    const loop = lib.guardedLoop(() => (++n < 3 ? true : false), raf.schedule, lib.makeGuard({ log: () => {} }), () => "robin", () => {
+      cancels += 1;
+      raf.cancelLast();
+    });
+    raf.schedule(loop);
+    raf.run(3);
+    assert.equal(n, 3);
+    assert.equal(loop.stopped(), true);
+    assert.equal(raf.pending(), 0, "nothing waits behind a guest that has left");
+    assert.equal(cancels, 1);
+    loop.stop();
+    assert.equal(cancels, 1, "stopping twice cancels once");
+    // A reset that stops the loop mid-frame cancels the frame it had just asked for.
+    const raf2 = fakeRaf();
+    const guard = lib.makeGuard({ log: () => {}, reset: () => loop2.stop() });
+    const loop2 = lib.guardedLoop(() => {
+      throw new Error("broken flight");
+    }, raf2.schedule, guard, () => "bird", () => raf2.cancelLast());
+    raf2.schedule(loop2);
+    raf2.run(1);
+    assert.equal(raf2.pending(), 0, "a broken guest leaves no frame behind either");
+  }
+});
+
 test("the overlay's guardedLoop has the same stop rules", () => {
   const raf = fakeRaf();
   let n = 0;
@@ -122,7 +156,7 @@ for (const g of GUESTS) {
     const src = readFileSync(join(root, "src/components/desk", g.file), "utf8");
     assert.match(src, /import \{ guardedLoop, makeGuestGuard \} from "@\/lib\/pets\/frame-guard";/);
     assert.match(src, /const \[guard\] = useState\(\(\) => makeGuestGuard\(\{ outcome: "[^"]+" \}\)\);/);
-    assert.ok(src.includes(`const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, ${g.key});`), "guardedLoop with its key");
+    assert.ok(src.includes(`const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, ${g.key}, () => window.cancelAnimationFrame(raf));`), "guardedLoop with its key and its cancel");
     assert.match(src, /guard\.onReset\(/, "a reset for this guest");
     assert.match(src, /tick\.stop\(\);\s*guard\.onReset\(null\);\s*window\.cancelAnimationFrame\(raf\);/, "cleanup stops the loop");
     assert.doesNotMatch(src, /raf = window\.requestAnimationFrame\(tick\);\s*\};/, "no frame schedules itself at its end any more");

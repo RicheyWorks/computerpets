@@ -150,7 +150,10 @@ export function makeGuestGuard(opts: Omit<FrameGuardOptions, "reset"> = {}): Gue
   };
 }
 
-/** A running frame loop. `stop()` ends it: the frame already asked for returns without running or asking again. */
+/**
+ * A running frame loop. `stop()` ends it. With a `cancel`, the frame already asked for is cancelled on the spot;
+ * without one it returns without running or asking again.
+ */
 export type GuardedLoop = ((now: number) => void) & { stop(): void; stopped(): boolean };
 
 /**
@@ -158,25 +161,32 @@ export type GuardedLoop = ((now: number) => void) & { stop(): void; stopped(): b
  * `schedule` is requestAnimationFrame; `frame(now)` is the tick body; `keyOf()` names the pet.
  * A frame that returns `false` is done (a guest that has flown or walked off): the loop stops there.
  * A guest's `reset` can call `stop()` too, so a guest that broke leaves instead of freezing on the desk.
+ * `cancel` (cancelAnimationFrame for the frame `schedule` asked for) runs once when the loop stops, so a guest
+ * that has left leaves no frame waiting behind it. Without it, one stale frame stayed queued until the next
+ * paint, and "no frame loop keeps running" was only true one frame later.
  */
 export function guardedLoop(
   frame: (now: number) => void | boolean,
   schedule: (loop: (now: number) => void) => void,
   guard: FrameGuard,
   keyOf?: () => string,
+  cancel?: () => void,
 ): GuardedLoop {
   let stopped = false;
+  const halt = () => {
+    if (stopped) return;
+    stopped = true;
+    cancel?.();
+  };
   const run = (now: number) => {
-    if (frame(now) === false) stopped = true;
+    if (frame(now) === false) halt();
   };
   const loop = ((now: number) => {
     if (stopped) return;
     schedule(loop);
     guard.step(run, now, keyOf ? keyOf() : "");
   }) as GuardedLoop;
-  loop.stop = () => {
-    stopped = true;
-  };
+  loop.stop = halt;
   loop.stopped = () => stopped;
   return loop;
 }

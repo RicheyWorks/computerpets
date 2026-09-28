@@ -117,6 +117,7 @@ CROSS_DOMAIN = {
     "web.guest_loops_mount",
     "web.minds_flight_plain",
     "web.overlay_birds_plain",
+    "web.flake_house_plain",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -486,6 +487,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.guest_loops_mount",
         "web.minds_flight_plain",
         "web.overlay_birds_plain",
+        "web.flake_house_plain",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -745,7 +747,7 @@ def test_guest_loops_row_keeps_every_desk_guest_moving_and_mounts_the_real_pets(
     for shape in gl.extras["shapes"].values():
         assert shape["logs"] == 1 and shape["resets"] == 2 and shape["caught"] == 2
     mount = gl.extras["mount"]
-    assert mount["pass"] == 8 and mount["fail"] == 0
+    assert mount["pass"] == 9 and mount["fail"] == 0
     assert mount["tests"][:2] == ["LivingPet", "LivingPet with the robin"]
     assert gl.extras["music"] == [16, 16]
     assert all(gl.extras["typed"].values()) and all(gl.extras["license"].values())
@@ -792,6 +794,22 @@ def test_overlay_birds_row_leaves_no_bird_on_the_glass_and_keeps_minds_plain():
     assert all(ob.extras["overlay"].values()), ob.extras["overlay"]
     assert all(ob.extras["web"].values()), ob.extras["web"]
     assert ob.extras["startHere"]["longest"] <= 18 and ob.extras["startHere"]["missing"] == []
+
+
+def test_flake_house_plain_row_passes_every_seed_and_keeps_words_plain():
+    """desk-mount 9/9 under three seeds (no stale frame when a flight ends); Use for all pets; short Unlock lines."""
+    fh = invoke("web.flake_house_plain")
+    assert fh.ok, (fh.error, fh.detail)
+    for mark in ("mount=seeds_3_all_9_of_9", "loop=halt_cancels_queued_frame", "guests=5_pass_cancel",
+                 "minds=use_for_all_pets_same", "cards=name_tag_blurb+model_ids_folded",
+                 "unlock=short_lines_overlay+blotter", "start_here=one_pet_per_line", "readme=minds_plain_first"):
+        assert mark in fh.trace, (mark, fh.trace)
+    assert [r["pass"] for r in fh.extras["runs"]] == [9, 9, 9]
+    assert all(r["fail"] == 0 and r["aligned"] for r in fh.extras["runs"])
+    for group in ("flake", "allPets", "cards", "readme"):
+        assert all(fh.extras[group].values()), (group, fh.extras[group])
+    assert fh.extras["unlock"]["overlayLongest"] <= 18 and fh.extras["unlock"]["blotterLongest"] <= 18
+    assert fh.extras["sounds"]["pets"] == 109
 
 
 def test_first_run_rows_start_clean_and_show_the_hello_once():

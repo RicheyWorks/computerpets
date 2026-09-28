@@ -36,5 +36,7 @@ export async function mountSetup({ faults = {}, width, height } = {}) {
     if (fn) globalThis.__mountFaults[name] = fn;
     else delete globalThis.__mountFaults[name];
   };
-  return { ...dom, React, h: React.createElement, stage, frames, load, fault };
+  /** The raw frame stepper (no act): for stepping one frame at a time inside a single act. */
+  const framesNow = dom.frames;
+  return { ...dom, React, h: React.createElement, stage, frames, framesNow, load, fault };
 }

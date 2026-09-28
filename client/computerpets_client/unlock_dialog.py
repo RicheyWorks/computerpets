@@ -50,37 +50,40 @@ DETAILS_LABEL = "Details"
 # the three named sources, sha256("computerpets:" + platform + ":" + raw), hwid.txt in the
 # blotter data folder, a stored hash reused and not rewritten, and the weak fallback that
 # waits for a yes (computer name, else a random id).
-MARK_UNREAD_TEXT = " ".join(
+# One short sentence per line, like START-HERE and the overlay Details (the label keeps the breaks).
+MARK_UNREAD_TEXT = "\n".join(
     (
         "Opening this window did not look at this computer's ID.",
-        "Unlock, or downloading a pet whose license belongs to this computer, looks at the ID only when "
-        "no code is saved yet: the machine-id file on Linux, MachineGuid on Windows, or the platform "
-        "UUID on a Mac.",
-        "The blotter mixes that ID with the app's name and the kind of computer, scrambles the result "
-        "with SHA-256 into a code, and saves only that code in hwid.txt in its data folder.",
-        "Later unlocks use the saved code again, so your license keeps working on this computer.",
+        "Unlock looks at the ID only when no code is saved yet.",
+        "So does downloading a pet whose license belongs to this computer.",
+        "The ID is the machine-id file on Linux, MachineGuid on Windows, or the platform UUID on a Mac.",
+        "The blotter mixes that ID with the app's name and the kind of computer.",
+        "It scrambles the result with SHA-256 into a code.",
+        "It saves only that code in hwid.txt in its data folder.",
+        "Later unlocks use the saved code again.",
+        "So your license keeps working on this computer.",
         "The ID itself is never sent.",
-        "Only the code goes to the license website, and only when you unlock or download a pet whose "
-        "license belongs to this computer.",
-        "The code still works like a fingerprint for this computer, because this computer always makes "
-        "the same code.",
+        "Only the code goes to the license website.",
+        "It goes only when you unlock or download a pet whose license belongs to this computer.",
+        "The code still works like a fingerprint for this computer.",
+        "That is because this computer always makes the same code.",
         "The line under the house server address names the website before the code is sent.",
         "If the house server is on this computer, the code stays on this computer.",
         "If the app cannot read that ID, Unlock stops and asks you first.",
-        "It uses the computer's name only after you say yes, and it uses a random ID instead if this "
-        "computer has no name.",
+        "It uses the computer's name only after you say yes.",
+        "It uses a random ID instead if this computer has no name.",
         "Renaming the computer changes a code made from its name.",
         "If the code came from a random ID, deleting hwid.txt gives this computer a different code.",
     )
 )
 
-MARK_STORED_TEXT = " ".join(
+MARK_STORED_TEXT = "\n".join(
     (
         "A code is already saved in hwid.txt.",
         "Unlock uses it again and does not look at this computer's ID again.",
         "The ID itself is never sent.",
-        "The code still works like a fingerprint for this computer, because this computer always makes "
-        "the same code.",
+        "The code still works like a fingerprint for this computer.",
+        "That is because this computer always makes the same code.",
         "The line under the house server address names the website before the code is sent.",
         "If the house server is on this computer, the code stays on this computer.",
     )

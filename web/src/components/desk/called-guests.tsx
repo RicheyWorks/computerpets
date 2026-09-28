@@ -168,7 +168,7 @@ export function CalledGuests({
       }
       return true;
     };
-    const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, () => ALL_CALLED);
+    const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, () => ALL_CALLED, () => window.cancelAnimationFrame(raf));
     raf = window.requestAnimationFrame(tick);
     return () => {
       tick.stop();

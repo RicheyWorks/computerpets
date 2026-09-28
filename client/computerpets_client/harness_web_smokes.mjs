@@ -1553,7 +1553,7 @@ async function guestLoopsMount() {
   for (const [file, key] of Object.entries(guests)) {
     const src = readFileSync(join(DESK, file), "utf8");
     wired[file] =
-      src.includes(`const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, ${key});`) &&
+      src.includes(`const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, ${key}, () => window.cancelAnimationFrame(raf));`) &&
       /const \[guard\] = useState\(\(\) => makeGuestGuard\(\{ outcome: "[^"]+" \}\)\);/.test(src) &&
       /guard\.onReset\(/.test(src) &&
       /tick\.stop\(\);\s*guard\.onReset\(null\);\s*window\.cancelAnimationFrame\(raf\);/.test(src) &&
@@ -1568,7 +1568,7 @@ async function guestLoopsMount() {
   const tap = `${run.stdout || ""}`;
   const count = (label) => Number((tap.match(new RegExp(`^# ${label} (\\d+)$`, "m")) || [])[1] || -1);
   const mount = { status: run.status, pass: count("pass"), fail: count("fail"), tests: [...tap.matchAll(/^ok \d+ - (.+)$/gm)].map((m) => m[1].split(":")[0]) };
-  if (run.status !== 0 || mount.pass !== 8 || mount.fail !== 0) bad.push(`mount tests: ${JSON.stringify({ ...mount, err: (run.stderr || "").slice(0, 200) })}`);
+  if (run.status !== 0 || mount.pass !== 9 || mount.fail !== 0) bad.push(`mount tests: ${JSON.stringify({ ...mount, err: (run.stderr || "").slice(0, 200) })}`);
 
   // 4) Music waits out the backoff after a broken dance (web and overlay), and the thank-you call is typed.
   const music = [FG, Overlay].map((M) => {
@@ -1716,7 +1716,8 @@ async function mindsFlightPlain() {
       const talk = (start.match(/^- \*\*Talk\*\* [^\n]*$/m) || [""])[0];
       return talk.length > 0 && wordsIn(talk) <= 25;
     })(),
-    talkListKept: /<summary>Which sound each pet makes \(for later\)<\/summary>\n\n\*\*Talk\*\* from Rui plays his warm house cry[^\n]*Rose prefers `haloarchaea\.wav` the same way\./.test(start),
+    // The folded list: one pet per line, Rui's line first, Rose last, 109 pets in all.
+    talkListKept: /<summary>Which sound each pet makes \(for later\)<\/summary>\n\n\*\*Talk\*\* from Rui plays his warm house cry \(`red_panda\.wav`\)\.\nEvery other pet here plays its own cry the same way:\n\n(- [A-Z][a-z]+ prefers `[a-z_]+\.wav`\n){108}- Rose prefers `haloarchaea\.wav`\n\nWords still show in the bubble\.\nSystem speech stays the backup for other guests\.\n/.test(start),
   };
   if (startHere.bullets < 4 || startHere.bullets > 8 || startHere.longest > 20 || !startHere.desktopFirst || !startHere.honest || !startHere.helpers || !startHere.browserAfter || !startHere.detailKept || !startHere.talkShort || !startHere.talkListKept) bad.push(`START-HERE opening: ${JSON.stringify(startHere)}`);
 
@@ -1839,6 +1840,121 @@ async function overlayBirdsPlain() {
   ]);
 }
 
+/**
+ * The desk-mount flake is gone, and the Minds / Unlock / START-HERE words read plainly.
+ * The flake: a guest frame that returned false left one stale rAF queued, and the bird's random flight
+ * length sometimes ended on the last frame of a 60-frame batch (about 1 run in 60). guardedLoop now
+ * cancels that frame when the loop stops, and the mount tests seed Math.random.
+ */
+async function flakeHousePlain() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8").replace(/\r\n/g, "\n");
+  const lib = (rel) => import(pathToFileURL(join(WEB, "src", "lib", ...rel.split("/"))).href);
+  const { spawnSync } = require("node:child_process");
+
+  // 1) desk-mount.test.mjs under several seeds: 9/9 every time, including the every-alignment test.
+  const seeds = [1, 1813, 20260927];
+  const runs = seeds.map((seed) => {
+    const run = spawnSync(process.execPath, ["--experimental-strip-types", "--no-warnings", "--test", "--test-reporter=tap", join("scripts", "desk-mount.test.mjs")], { cwd: WEB, encoding: "utf8", timeout: 60000, env: { ...process.env, COMPUTERPETS_MOUNT_SEED: String(seed) } });
+    const tap = `${run.stdout || ""}`;
+    const count = (label) => Number((tap.match(new RegExp(`^# ${label} (\\d+)$`, "m")) || [])[1] || -1);
+    return { seed, status: run.status, pass: count("pass"), fail: count("fail"), aligned: /^ok \d+ - RobinFlyer and BirdFlyer: on the very frame a flight ends/m.test(tap) };
+  });
+  if (!runs.every((r) => r.status === 0 && r.pass === 9 && r.fail === 0 && r.aligned)) bad.push(`desk-mount seeds: ${JSON.stringify(runs)}`);
+  const guardTs = read("web", "src", "lib", "pets", "frame-guard.ts");
+  const guardJs = read("desktop", "renderer", "frame-guard.js");
+  const mountDom = read("web", "scripts", "mount-dom.mjs");
+  const sites = ["robin-fly.tsx", "bird-fly.tsx", "called-guests.tsx", "desk-plants.tsx", "blotter.tsx"];
+  const flake = {
+    webHalt: /if \(frame\(now\) === false\) halt\(\);/.test(guardTs) && guardTs.includes("loop.stop = halt;") && guardTs.includes("cancel?.();"),
+    overlayHalt: /if \(frame\(now\) === false\) halt\(\);/.test(guardJs) && guardJs.includes("loop.stop = halt;") && guardJs.includes('if (typeof cancel === "function") cancel();'),
+    sites: sites.every((f) => read("web", "src", "components", "desk", f).includes("() => window.cancelAnimationFrame(raf)")),
+    seeded: /export function seededRandom/.test(mountDom) && /COMPUTERPETS_MOUNT_SEED/.test(mountDom),
+    noRetry: !/retry|retries|flaky/i.test(read("web", "scripts", "desk-mount.test.mjs")),
+  };
+  if (!Object.values(flake).every(Boolean)) bad.push(`flake fix: ${JSON.stringify(flake)}`);
+
+  // 2) "Use for all pets" / "Same as all pets" word for word on the web, the overlay, and the Python client.
+  const { MIND_WORDS } = await lib("ai/mind-words.ts");
+  const settings = read("desktop", "renderer", "settings.html");
+  const mindsPy = read("client", "computerpets_client", "minds.py");
+  const page = read("web", "src", "routes", "mind.tsx");
+  const pyWord = (name) => (mindsPy.match(new RegExp(`^${name} = "([^"]*)"$`, "m")) || [])[1];
+  const allPets = {
+    words: MIND_WORDS.allPets === "Use for all pets" && MIND_WORDS.sameAsAll === "Same as all pets",
+    python: pyWord("ALL_PETS_LABEL") === MIND_WORDS.allPets && pyWord("SAME_AS_ALL_LABEL") === MIND_WORDS.sameAsAll,
+    overlay: settings.includes(`<button id="save" type="button">${MIND_WORDS.allPets}</button>`),
+    web: page.includes("{MIND_WORDS.allPets}</h2>") && page.includes("{MIND_WORDS.sameAsAll} ({mindPreset(draft.default.plugin).name})"),
+    gone: ![settings, page, mindsPy, read("docs", "MIND.md")].some((s) => /house default/i.test(s)),
+  };
+  if (!Object.values(allPets).every(Boolean)) bad.push(`all pets words: ${JSON.stringify(allPets)}`);
+
+  // 3) /mind AI cards: name, plain tag, plain blurb; model ids only inside For builders.
+  const foldAt = page.indexOf('<details id="mind-builders"');
+  const fold = page.slice(foldAt, page.indexOf("</details>", foldAt));
+  const outside = page.slice(0, foldAt) + page.slice(page.indexOf("</details>", foldAt));
+  const cardsAt = page.indexOf("MIND_PRESETS.map((preset)");
+  const card = cardsAt > 0 ? page.slice(cardsAt, page.indexOf("</button>", cardsAt)) : "";
+  const cardText = [...card.matchAll(/<p [^>]*>([^<]*)<\/p>/g)].map((m) => m[1]);
+  const cards = {
+    card: JSON.stringify(cardText) === JSON.stringify(["{presetTag(preset)}", "{preset.name}", "{preset.blurb}"]) && !card.includes("defaultModel") && !card.includes("font-mono"),
+    fold: fold.includes('<ul id="mind-model-ids"') && fold.includes("{p.defaultModel}"),
+    noModelCode: !/<code[^>]*>\{[a-z.]*defaultModel\}/.test(outside),
+  };
+  if (!Object.values(cards).every(Boolean)) bad.push(`mind cards: ${JSON.stringify(cards)}`);
+
+  // 4) Unlock Details (overlay and blotter): one short sentence per line.
+  const markLines = ((settings.match(/<p id="licenseMark">([^<]*)<\/p>/) || [])[1] || "").split("\n").map((l) => l.trim()).filter(Boolean);
+  const dialogSrc = read("client", "computerpets_client", "unlock_dialog.py");
+  const pyLines = (name) => { const at = dialogSrc.indexOf(`${name} = "\\n".join(`); return at < 0 ? [] : [...dialogSrc.slice(at, dialogSrc.indexOf("\n)\n", at)).matchAll(/^ {8}"(.*)",$/gm)].map((m) => m[1]); };
+  const wordCount = (l) => l.split(/\s+/).filter(Boolean).length;
+  const unlock = {
+    overlayLines: markLines.length,
+    overlayLongest: Math.max(...markLines.map(wordCount)),
+    preLine: settings.includes("#licenseMark { white-space: pre-line; }"),
+    storedPainted: settings.includes('storedMarkText.split(/(?<=\\.) (?=[A-Z])/).join("\\n")'),
+    blotterLines: pyLines("MARK_UNREAD_TEXT").length,
+    blotterLongest: Math.max(...pyLines("MARK_UNREAD_TEXT").concat(pyLines("MARK_STORED_TEXT")).map(wordCount)),
+    facts: ["MachineGuid", "SHA-256", "hwid.txt", "The ID itself is never sent.", "like a fingerprint for this computer", "random ID instead if this computer has no name"].every((f) => markLines.join(" ").includes(f)),
+  };
+  if (unlock.overlayLines < 15 || unlock.overlayLongest > 18 || !unlock.preLine || !unlock.storedPainted || unlock.blotterLines < 15 || unlock.blotterLongest > 18 || !unlock.facts) bad.push(`unlock lines: ${JSON.stringify(unlock)}`);
+
+  // 5) START-HERE: the folded cry list is one pet per line.
+  const start = read("docs", "START-HERE.md");
+  const sAt = start.indexOf("<summary>Which sound each pet makes (for later)</summary>");
+  const soundFold = sAt > 0 ? start.slice(sAt, start.indexOf("</details>", sAt)) : "";
+  const petLines = soundFold.split("\n").filter((l) => /^- [A-Z][a-z]+ prefers `[a-z_]+\.wav`$/.test(l));
+  const sounds = {
+    pets: petLines.length,
+    rui: soundFold.includes("**Talk** from Rui plays his warm house cry (`red_panda.wav`)."),
+    last: petLines[petLines.length - 1] === "- Rose prefers `haloarchaea.wav`",
+    kept: soundFold.includes("Words still show in the bubble.") && soundFold.includes("System speech stays the backup for other guests."),
+    wavs: (soundFold.match(/`[a-z_]+\.wav`/g) || []).length,
+  };
+  if (sounds.pets !== 109 || !sounds.rui || !sounds.last || !sounds.kept || sounds.wavs !== 110) bad.push(`START-HERE sounds: ${JSON.stringify(sounds)}`);
+
+  // 6) docs/README.md Minds line: the plain /mind top first, builder detail after.
+  const readmeLine = (read("docs", "README.md").match(/^\| \*\*\[Mind plugins\]\(MIND\.md\)\*\* \| ([^|]*) \|$/m) || [])[1] || "";
+  const readme = { plainFirst: readmeLine.startsWith(`${MIND_WORDS.intro} `), builder: /OpenAI-compatible, Claude, Gemini, Ollama, custom webhook\.$/.test(readmeLine) };
+  if (!Object.values(readme).every(Boolean)) bad.push(`README Minds line: ${JSON.stringify({ ...readme, readmeLine })}`);
+
+  const roadmap = read("docs", "ROADMAP.md");
+  const entry = roadmap.includes("- [x] The desk-mount flake is fixed at the root");
+  if (!entry) bad.push("ROADMAP entry missing");
+  const extras = { runs, flake, allPets, cards, unlock, sounds, readme };
+  if (bad.length) return fail(bad.join("; "), extras);
+  return ok("desk-mount passes 9/9 under every seed (a stopped guest loop cancels its queued frame); Use for all pets reads the same on the web, the overlay, and the Python client; AI cards show name, tag, and blurb only; Unlock Details and the START-HERE cry list are one line each; README Minds starts plain", extras, [
+    `mount=seeds_${seeds.length}_all_9_of_9`,
+    "loop=halt_cancels_queued_frame",
+    "guests=5_pass_cancel",
+    "minds=use_for_all_pets_same",
+    "cards=name_tag_blurb+model_ids_folded",
+    "unlock=short_lines_overlay+blotter",
+    "start_here=one_pet_per_line",
+    "readme=minds_plain_first",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -1858,6 +1974,7 @@ const COMMANDS = {
   guest_loops_mount: guestLoopsMount,
   minds_flight_plain: mindsFlightPlain,
   overlay_birds_plain: overlayBirdsPlain,
+  flake_house_plain: flakeHousePlain,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

@@ -95,7 +95,7 @@ export function BirdFlyer({
       }
       return true;
     };
-    const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, () => FLY_BIRD_KEY);
+    const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, () => FLY_BIRD_KEY, () => window.cancelAnimationFrame(raf));
     raf = window.requestAnimationFrame(tick);
     return () => {
       tick.stop();
