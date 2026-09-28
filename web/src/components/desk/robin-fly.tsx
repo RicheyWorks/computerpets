@@ -111,7 +111,7 @@ export function RobinFlyer({
       }
       return true;
     };
-    const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, () => ROBIN_KEY);
+    const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, () => ROBIN_KEY, () => window.cancelAnimationFrame(raf));
     raf = window.requestAnimationFrame(tick);
     return () => {
       tick.stop();

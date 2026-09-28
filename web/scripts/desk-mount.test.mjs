@@ -5,6 +5,7 @@
 import { test, before } from "node:test";
 import assert from "node:assert/strict";
 import { mountSetup } from "./mount-setup.mjs";
+import { MOUNT_SEED } from "./mount-dom.mjs";
 
 let m;
 let living;
@@ -301,4 +302,40 @@ test("BlotterMarks: a carry that throws leaves the ribbon where it was and it ke
   assert.ok(carry.calls >= 4);
   m.fault("carryX", null);
   await s.unmount();
+});
+
+// The old flake: a flight's length comes from Math.random, the normal-flight test stepped frames in batches of 60,
+// and the loop (schedule first, then run) still had one frame queued on the frame the flight ended. When the
+// flight ended on the last frame of a batch, "no frame loop keeps running" saw that stale frame: about 1 run in 60.
+// Now the loop cancels that frame the moment it stops, so it holds on every frame, for every seed.
+test("RobinFlyer and BirdFlyer: on the very frame a flight ends, no frame is left queued (many seeds, every alignment)", async () => {
+  const { RobinFlyer } = await m.load("components/desk/robin-fly.tsx");
+  const { BirdFlyer } = await m.load("components/desk/bird-fly.tsx");
+  const ends = new Set();
+  for (const [Flyer, attr, seeds] of [[RobinFlyer, "data-robin", 3], [BirdFlyer, "data-bird", 60]]) {
+    for (let seed = 1; seed <= seeds; seed++) {
+      m.reseed(seed);
+      const seen = [];
+      const s = m.stage();
+      await s.render(m.h(Flyer, { startId: 1, onVisible: (on) => seen.push(on) }));
+      let n = 0;
+      let leftBehind = -1;
+      await m.React.act(() => {
+        while (!seen.includes(false) && n < 9000) {
+          m.framesNow(1, 16);
+          n += 1;
+        }
+        leftBehind = m.pending();
+      });
+      assert.deepEqual(seen, [true, false], `${attr} seed ${seed}: the flight ended on its own`);
+      assert.equal(leftBehind, 0, `${attr} seed ${seed}: no frame queued on frame ${n}, the frame it ended`);
+      assert.equal(!!s.container.querySelector(`[${attr}]`), false, `${attr} seed ${seed}: canvas off the page`);
+      ends.add(`${attr}:${n % 60}`);
+      await s.unmount();
+      assert.equal(m.pending(), 0);
+    }
+  }
+  const birdEnds = [...ends].filter((e) => e.startsWith("data-bird:")).length;
+  assert.ok(birdEnds >= 20, `bird flights ended at ${birdEnds} different places in a 60-frame batch`);
+  m.reseed(MOUNT_SEED);
 });

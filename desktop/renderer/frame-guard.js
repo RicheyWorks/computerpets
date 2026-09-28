@@ -95,21 +95,25 @@
    * The frame loop: schedule the next frame first, then run the frame through the guard.
    * `schedule` is requestAnimationFrame; `frame(now)` is the old tick body; `keyOf()` names the host pet.
    * A frame that returns `false` is done: the loop stops there. `loop.stop()` ends it from outside
-   * (a reset for a guest that should leave). Same rules as the web desk's `frame-guard.ts`.
+   * (a reset for a guest that should leave). `cancel` runs once when the loop stops, so the frame already
+   * asked for does not stay queued. Same rules as the web desk's `frame-guard.ts`.
    */
-  function guardedLoop(frame, schedule, guard, keyOf) {
+  function guardedLoop(frame, schedule, guard, keyOf, cancel) {
     let stopped = false;
+    function halt() {
+      if (stopped) return;
+      stopped = true;
+      if (typeof cancel === "function") cancel();
+    }
     function run(now) {
-      if (frame(now) === false) stopped = true;
+      if (frame(now) === false) halt();
     }
     function loop(now) {
       if (stopped) return;
       schedule(loop);
       guard.step(run, now, typeof keyOf === "function" ? keyOf() : "");
     }
-    loop.stop = () => {
-      stopped = true;
-    };
+    loop.stop = halt;
     loop.stopped = () => stopped;
     return loop;
   }

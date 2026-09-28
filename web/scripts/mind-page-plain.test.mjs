@@ -97,3 +97,29 @@ test("the AI cards and voice buttons on /mind use plain words, not plugin shapes
   assert.match(page, /\{presetTag\(preset\)\}/);
   assert.doesNotMatch(page, />\{preset\.kind\}</, "the card no longer shows the plugin kind");
 });
+
+test("Use for all pets and Same as all pets read the same on the web, the overlay, and the Python client", () => {
+  assert.equal(MIND_WORDS.allPets, "Use for all pets");
+  assert.equal(MIND_WORDS.sameAsAll, "Same as all pets");
+  assert.equal(pyWord("ALL_PETS_LABEL"), MIND_WORDS.allPets);
+  assert.equal(pyWord("SAME_AS_ALL_LABEL"), MIND_WORDS.sameAsAll);
+  assert.ok(settings.includes(`<button id="save" type="button">${MIND_WORDS.allPets}</button>`));
+  assert.match(page, /<h2 id="mind-all-pets"[^>]*>\{MIND_WORDS\.allPets\}<\/h2>/);
+  assert.match(page, /<option value="inherit">\{MIND_WORDS\.sameAsAll\} \(\{mindPreset\(draft\.default\.plugin\)\.name\}\)<\/option>/);
+  for (const src of [page, settings]) assert.doesNotMatch(src, /[Hh]ouse default\b(?! or give)/, "no house default left outside the builder line");
+});
+
+test("an AI card shows only its tag, name, and blurb; the model ids sit in For builders", () => {
+  const cardsAt = page.indexOf("{MIND_PRESETS.map((preset) => {");
+  const card = page.slice(cardsAt, page.indexOf("</section>", cardsAt));
+  assert.ok(cardsAt > 0);
+  assert.doesNotMatch(card, /defaultModel|font-mono/, "no model id on a card");
+  assert.match(card, /\{presetTag\(preset\)\}/);
+  assert.match(card, /\{preset\.name\}/);
+  assert.match(card, /\{preset\.blurb\}/);
+  const foldAt = page.indexOf('<details id="mind-builders"');
+  const fold = page.slice(foldAt, page.indexOf("</details>", foldAt));
+  assert.match(fold, /<ul id="mind-model-ids"/);
+  assert.match(fold, /\{p\.name\}: <code className="font-mono text-xs">\{p\.defaultModel\}<\/code>/);
+  assert.doesNotMatch(page.slice(0, foldAt), /defaultModel\}<\/p>/);
+});

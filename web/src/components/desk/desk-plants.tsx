@@ -49,7 +49,7 @@ export function DeskPlants({ windOn }: { windOn?: boolean }) {
       const still = plantsRef.current.every((p) => p.mode === "still");
       setLean(still ? 0 : windLean(age, wind.current, selected));
     };
-    const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, () => "plants");
+    const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, () => "plants", () => window.cancelAnimationFrame(raf));
     raf = window.requestAnimationFrame(tick);
     return () => {
       tick.stop();

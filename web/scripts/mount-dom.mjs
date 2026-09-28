@@ -371,12 +371,33 @@ class Image {
   }
 }
 
+/** A small seeded random (mulberry32): the same seed gives the same numbers on every run and every computer. */
+export function seededRandom(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * The seed a mount test starts from. The desk's flights, waits, and dances roll Math.random.
+ * COMPUTERPETS_MOUNT_SEED picks another one, to sweep many seeds when hunting a flake.
+ */
+export const MOUNT_SEED = Number(process.env.COMPUTERPETS_MOUNT_SEED) || 20260927;
+
 /**
  * Installs the DOM on globalThis. Call before importing react-dom. Returns the test's handles:
  * `frames(n, ms)` runs n animation frames `ms` apart on the fake clock; `logs` has console.warn lines.
+ * Math.random is seeded (`seed`, default MOUNT_SEED), so a run is the same every time; `reseed(n)` starts a new
+ * stream and `restoreRandom()` puts the real one back. Timers stay real, but no mounted desk loop uses one.
  */
-export function installDom({ width = 1000, height = 600 } = {}) {
+export function installDom({ width = 1000, height = 600, seed = MOUNT_SEED } = {}) {
   let clock = 1000;
+  const realRandom = Math.random;
+  Math.random = seededRandom(seed);
   let nextId = 1;
   let queue = new Map();
   const win = {
@@ -459,6 +480,13 @@ export function installDom({ width = 1000, height = 600 } = {}) {
     logs,
     restoreConsole() {
       console.warn = warn;
+    },
+    /** Starts Math.random again from `n`. */
+    reseed(n) {
+      Math.random = seededRandom(n);
+    },
+    restoreRandom() {
+      Math.random = realRandom;
     },
     now: () => clock,
     pending: () => queue.size,
