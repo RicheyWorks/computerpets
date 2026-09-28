@@ -314,7 +314,8 @@ test("a desk save does not hand a pasted key query to the seal", async () => {
   const kept = S.loadMindSettings();
   assert.equal(kept.default.baseUrl, "https://api.example.test/v1?alt=sse");
   assert.equal(kept.pets.red_panda.baseUrl, "not a url");
-  assert.equal(kept.default.model, "grok-4.5");
+  // An AI saved without a model keeps no model (that AI picks). It used to inherit xAI's grok-4.5.
+  assert.equal(kept.default.model, undefined);
 });
 
 test("the desk page does not say the key stays in the browser", () => {

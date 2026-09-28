@@ -126,6 +126,7 @@ CROSS_DOMAIN = {
     "web.unlock_plain_lfs",
     "web.pictures_start_names",
     "web.portraits_tray_minds",
+    "web.house_lines_talk",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -543,6 +544,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.unlock_plain_lfs",
         "web.pictures_start_names",
         "web.portraits_tray_minds",
+        "web.house_lines_talk",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -908,6 +910,20 @@ def test_portraits_tray_minds_row_tiles_one_note_dev_start_name_kind_plain_test_
     assert pt.extras["tray"]["rows"] == 221 and pt.extras["tray"]["wrong"] == 0
     assert pt.extras["minds"]["plainGuest"] and pt.extras["minds"]["wired"]
     assert all(pt.extras["depth"].values()), pt.extras["depth"]
+
+
+def test_house_lines_talk_row_default_mind_in_use_talk_hold_and_python_floor():
+    """House lines by default for guests and fresh installs; picks kept; /mind says In use; talk echo, hold, click close; 3.10."""
+    hl = invoke("web.house_lines_talk")
+    assert hl.ok, (hl.error, hl.detail)
+    for mark in ("default=house_lines_web_overlay_blotter", "pick=kept", "mind_page=in_use",
+                 "talk=echo+hold+click_close", "python=3.10_floor+plain_stop"):
+        assert mark in hl.trace, (mark, hl.trace)
+    assert all(hl.extras["everywhere"].values()), hl.extras["everywhere"]
+    assert all(hl.extras["mind"].values()), hl.extras["mind"]
+    assert hl.extras["talk"]["holds"] == [4000, 4300, 6400, 12000]
+    assert hl.extras["talk"]["same"] and hl.extras["talk"]["overlayClose"] and hl.extras["talk"]["guestWaits"]
+    assert all(hl.extras["py"].values()), hl.extras["py"]
 
 
 def test_pictures_gate_row_boots_real_main_with_pointers_and_opens_no_glass():
