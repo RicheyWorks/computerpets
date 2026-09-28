@@ -14,7 +14,8 @@ Pets walk without a license — same as the overlay. Unlock is fail-closed. Ther
 
 ## Run
 
-Python 3.11+ (3.12 recommended). On Linux, Qt also needs the usual EGL/GL
+Python 3.10+ (3.12 recommended). An older Python stops at start with a plain
+"needs Python 3.10 or newer" line. On Linux, Qt also needs the usual EGL/GL
 packages (`libegl1`, `libgl1`, `libxcb-cursor0`, …) — GitHub Actions installs
 them in the `pyqt-client` job.
 

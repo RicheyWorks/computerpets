@@ -30,7 +30,7 @@ To run the Spring Boot backend, you will need the following:
 
 The first PyQt6 desk is in `client/`. It uses Qt’s GPU-backed scene (`QGraphicsView` + `QOpenGLWidget`), not a custom shader engine.
 
-- **Python** — 3.11 or newer (3.12+ recommended)
+- **Python** — 3.10 or newer (3.12+ recommended)
 - **PyQt6** and **cryptography** — `pip install -e ".[dev]"` from `client/`
 - **GPU Drivers** — optional; without a usable OpenGL surface the scene falls back to Qt software raster and says so
 

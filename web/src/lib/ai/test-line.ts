@@ -19,3 +19,8 @@ export function mindTestLine(
   }
   return `House lines answered: ${said} ${picked.name} did not answer. For builders, below, names the server key it needs.`;
 }
+
+/** Under Use for all pets, when a guest picked an online AI: it only answers for a signed-in keeper. */
+export function guestNote(name: string): string {
+  return `${name} only answers for a signed-in keeper. Until you sign in, House lines answer.`;
+}

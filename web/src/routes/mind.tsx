@@ -3,13 +3,15 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { MIND_PRESETS, VOICE_PRESETS, mindPreset } from "@/lib/ai/catalog";
 import { MIND_WORDS, presetTag } from "@/lib/ai/mind-words";
-import { describeKeyKept, saveMindSettings } from "@/lib/ai/settings";
+import { describeKeyKept, effectiveDefault, saveMindSettings } from "@/lib/ai/settings";
+import { readMindListener } from "@/lib/ai/listener-read";
+import { presentListener } from "@/lib/ai/listener";
 import { refreshMindSettings, useMindSettings } from "@/lib/ai/use-mind";
 import { LIVING_KINDS } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { talkBody } from "@/lib/pets/talk-post";
 import { talkHonesty } from "@/lib/pets/talk-net";
-import { mindTestLine } from "@/lib/ai/test-line";
+import { guestNote, mindTestLine } from "@/lib/ai/test-line";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { mindProblem } from "@/lib/plain-error";
 import type { MindBinding, MindSettings, VoiceKind } from "@/lib/ai/types";
@@ -38,14 +40,33 @@ function MindPage() {
   const [talkTick, setTalkTick] = useState(0);
   const { user, isPending } = useCurrentUserState();
   const signedIn = !isPending && user != null;
-  const selected = mindPreset(draft.default.plugin);
-  const petBind = draft.pets[petKey] ?? draft.default;
+  // Signed in with nothing picked: ask the house whether it holds the key for the old default.
+  const [houseDefaultKey, setHouseDefaultKey] = useState<boolean | undefined>(undefined);
+  useEffect(() => {
+    if (!signedIn || draft.picked) return;
+    let cancelled = false;
+    void readMindListener({ data: {} })
+      .then((row) => {
+        if (!cancelled) setHouseDefaultKey(presentListener(row).id === "xai");
+      })
+      .catch(() => {
+        if (!cancelled) setHouseDefaultKey(undefined);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [signedIn, draft.picked]);
+  /** The mind for all pets that will answer: the pick, or House lines when nothing is picked and no house key would answer. */
+  const shown = effectiveDefault(draft, signedIn, houseDefaultKey);
+  const selected = mindPreset(shown.plugin);
+  const petBind = draft.pets[petKey] ?? shown;
+  const guestPickedAi = !isPending && !signedIn && selected.kind !== "local";
   const talkLine = signedIn ? talkHonesty(petBind) : "";
 
   const counts = useMemo(() => {
-    const used = new Set<string>([draft.default.plugin, ...Object.values(draft.pets).map((b) => b.plugin)]);
+    const used = new Set<string>([shown.plugin, ...Object.values(draft.pets).map((b) => b.plugin)]);
     return used.size;
-  }, [draft]);
+  }, [draft, shown.plugin]);
 
   function write(next: MindSettings) {
     setDraft(next);
@@ -53,16 +74,19 @@ function MindPage() {
   }
 
   function setDefault(patch: Partial<MindBinding>) {
-    const plugin = patch.plugin ?? draft.default.plugin;
+    // Picking (or editing) starts from what the page shows, and from then on it is the keeper's pick.
+    const base = shown;
+    const plugin = patch.plugin ?? base.plugin;
     const preset = mindPreset(plugin);
     write({
       ...draft,
+      picked: true,
       default: {
-        ...draft.default,
+        ...base,
         ...patch,
         plugin,
-        model: patch.model ?? (patch.plugin ? preset.defaultModel : draft.default.model),
-        baseUrl: patch.baseUrl ?? (patch.plugin ? preset.defaultBaseUrl : draft.default.baseUrl),
+        model: patch.model ?? (patch.plugin ? preset.defaultModel : base.model),
+        baseUrl: patch.baseUrl ?? (patch.plugin ? preset.defaultBaseUrl : base.baseUrl),
       },
     });
   }
@@ -72,7 +96,7 @@ function MindPage() {
     if (patch === null) {
       delete pets[petKey];
     } else {
-      const base = pets[petKey] ?? { ...draft.default };
+      const base = pets[petKey] ?? { ...shown };
       const plugin = patch.plugin ?? base.plugin;
       const preset = mindPreset(plugin);
       pets[petKey] = {
@@ -164,11 +188,13 @@ function MindPage() {
       </h2>
       <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {MIND_PRESETS.map((preset) => {
-          const active = draft.default.plugin === preset.id;
+          const active = shown.plugin === preset.id;
           return (
             <button
               key={preset.id}
               type="button"
+              aria-pressed={active}
+              data-mind-card={preset.id}
               onClick={() => setDefault({ plugin: preset.id })}
               className={
                 active
@@ -179,6 +205,12 @@ function MindPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">{presetTag(preset)}</p>
               <p className="mt-1 font-display text-2xl">{preset.name}</p>
               <p className="mt-2 text-sm text-muted">{preset.blurb}</p>
+              {active ? (
+                // Plain words, not only a lighter card. A guest's picked AI waits for sign-in (the note says so).
+                <span data-mind-in-use className="mt-3 inline-block rounded-full border border-border-strong px-2 py-0.5 text-[11px] uppercase tracking-[0.16em] text-fg">
+                  {guestPickedAi ? "Picked" : "In use"}
+                </span>
+              ) : null}
             </button>
           );
         })}
@@ -187,6 +219,11 @@ function MindPage() {
       <section className="grid gap-6 rounded-[var(--radius-xl)] border border-border bg-surface p-5 sm:p-6 lg:grid-cols-2">
         <div className="space-y-4">
           <h2 id="mind-all-pets" className="font-display text-2xl">{MIND_WORDS.allPets}</h2>
+          {guestPickedAi ? (
+            <p id="mind-guest-note" className="text-sm text-muted">
+              {guestNote(selected.name)}
+            </p>
+          ) : null}
           {selected.kind === "local" ? (
             // House lines: no AI, so no model, address, or key boxes.
             <p id="mind-house" className="text-sm text-muted">
@@ -196,7 +233,7 @@ function MindPage() {
             <div id="mind-fields" className="space-y-4">
               <Field label={MIND_WORDS.model} hint={MIND_WORDS.modelHelp}>
                 <input
-                  value={draft.default.model ?? selected.defaultModel ?? ""}
+                  value={shown.model ?? selected.defaultModel ?? ""}
                   onChange={(e) => setDefault({ model: e.target.value })}
                   placeholder={selected.defaultModel}
                   className="h-11 w-full rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm"
@@ -204,7 +241,7 @@ function MindPage() {
               </Field>
               <Field label={MIND_WORDS.address} hint={MIND_WORDS.addressHelp}>
                 <input
-                  value={draft.default.baseUrl ?? selected.defaultBaseUrl ?? ""}
+                  value={shown.baseUrl ?? selected.defaultBaseUrl ?? ""}
                   onChange={(e) => setDefault({ baseUrl: e.target.value })}
                   placeholder={selected.defaultBaseUrl}
                   className="h-11 w-full rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm"
@@ -216,7 +253,7 @@ function MindPage() {
                     <input
                       type="password"
                       autoComplete="off"
-                      value={draft.default.apiKey ?? ""}
+                      value={shown.apiKey ?? ""}
                       onChange={(e) => setDefault({ apiKey: e.target.value })}
                       placeholder={MIND_WORDS.keyPlaceholder}
                       className="h-11 w-full rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm"
@@ -274,7 +311,7 @@ function MindPage() {
               }}
               className="h-11 w-full rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm"
             >
-              <option value="inherit">{MIND_WORDS.sameAsAll} ({mindPreset(draft.default.plugin).name})</option>
+              <option value="inherit">{MIND_WORDS.sameAsAll} ({selected.name})</option>
               {MIND_PRESETS.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}

@@ -15,7 +15,7 @@ import {
 import { UNREAD_LISTENER, presentListener, type ListenerName } from "@/lib/ai/listener";
 import { listenerReadBody } from "@/lib/ai/listener-post";
 import { readMindListener } from "@/lib/ai/listener-read";
-import { useMindBinding } from "@/lib/ai/use-mind";
+import { useAskedBinding } from "@/lib/ai/use-mind";
 import {
   applyFeedFor,
   applyPlay,
@@ -107,9 +107,10 @@ export function KeeperCard({
   const meters = keeperMeters(stats);
   const beat = useHeartbeat();
   const [listener, setListener] = useState<ListenerName>(UNREAD_LISTENER);
-  const asked = useMindBinding(guestKey);
-  const askedPlugin = asked.plugin;
-  const askedBase = asked.baseUrl;
+  // Nothing picked: no plugin in the read, so the house names who answers (House lines for a guest).
+  const asked = useAskedBinding(guestKey);
+  const askedPlugin = asked?.plugin;
+  const askedBase = asked?.baseUrl;
   const [card, setCard] = useState<CardPrefs>(() => loadCard());
   const [draft, setDraft] = useState("");
   /** A keyboard Drop removes its own button; focus goes to the line that slid up (or the field). */

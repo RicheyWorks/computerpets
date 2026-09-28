@@ -2868,6 +2868,20 @@ def _web_rows() -> list[Affordance]:
                 "START-HERE offers git clone --depth 1 with the sizes measured on Windows."
             ),
         ),
+        Affordance(
+            "web.house_lines_talk",
+            "web",
+            "House lines answer by default for guests and fresh installs on web, overlay and blotter; /mind marks the mind In use; talk shows your words and holds the answer long enough to read, click to close; Python 3.10 floor",
+            "web lib/ai/settings.ts effectiveDefault + routes/mind.tsx + lib/pets/talk-bubble.ts + components/desk/companion-room.tsx + living-pet.tsx, desktop mind-secret.cjs + renderer/mind.js + pet.js + index.html + styles.css, client listener.py + __init__.py + pyproject.toml",
+            notes=(
+                "A guest, or a fresh install with no pick, gets House lines on the web desk and /mind shows House lines In use; "
+                "the overlay and the Python blotter already start on House lines. A signed-in keeper who picked nothing keeps "
+                "the old default (xAI Grok with the house key); any pick is kept as before. A guest who picks an AI sees it "
+                "marked Picked and one line saying House lines answer until sign-in. Talk shows the keeper's words back, "
+                "holds the answer 4 s plus 0.3 s a word (12 s at most) on web and overlay, and a click closes it; a called "
+                "guest's line waits instead of covering it. Python 3.10 is the written floor and an older one stops in one line."
+            ),
+        ),
     ]
 
 
@@ -2915,6 +2929,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("pictures_start_names", domain="web", action_id=aid)
     if local_id == "portraits_tray_minds":
         return _run_web_smoke("portraits_tray_minds", domain="web", action_id=aid)
+    if local_id == "house_lines_talk":
+        return _run_web_smoke("house_lines_talk", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

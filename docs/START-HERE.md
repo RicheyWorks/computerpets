@@ -735,7 +735,7 @@ This is **not** the main quest. You can skip it. The pets on your desktop do not
 
 The blotter is one more way to visit. It is a small window with a wooden desk inside. Rui walks on it first, and all the animals can visit. It is made with Python, not Node.
 
-You need one more free helper: **Python 3.11 or newer**.
+You need one more free helper: **Python 3.10 or newer**.
 
 1. Open [https://www.python.org/downloads](https://www.python.org/downloads).
 2. Click the big **Download Python** button.
@@ -774,7 +774,7 @@ cd client
 
 ### If it says the Python is too old
 
-Type `py -0p`. It lists the Pythons on this computer. You need 3.11 or newer. Install a newer one from [https://www.python.org/downloads](https://www.python.org/downloads), delete the `client\.venv` folder, and start this section again.
+Type `py -0p`. It lists the Pythons on this computer. You need 3.10 or newer. An older one stops at the start and says so in one line. Install a newer one from [https://www.python.org/downloads](https://www.python.org/downloads), delete the `client\.venv` folder, and start this section again.
 
 ### Next time
 
