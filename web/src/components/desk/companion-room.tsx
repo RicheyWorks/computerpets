@@ -70,7 +70,8 @@ import { roomOf } from "@/lib/pets/rooms";
 import { playClaim } from "@/lib/pets/play";
 import { colonyOf, colonyWord, isHivePlace, stampColony } from "@/lib/pets/hive";
 import { isPhone, isTablet, readSit, tabletOrient, type TabletOrient } from "@/lib/pets/tablet-desk";
-import { deskFit as fitDesk, phoneFit, phoneOrient, plaqueNeedsLine, samePhoneFit, type DeskFit, type PhoneFit, type PhoneOrient } from "@/lib/pets/phone-desk";
+import { CARE_WORDS, distinctLabel } from "@/lib/pets/care-labels";
+import { deskFit as fitDesk, phoneFit, phoneOrient, plaqueNeedsLine, railScrollFor, samePhoneFit, type DeskFit, type PhoneFit, type PhoneOrient } from "@/lib/pets/phone-desk";
 import { guestMarks, guestPick, guestTap, type GuestChoiceId } from "@/lib/pets/guest-choice";
 import { classifyKey, installFileDropGuard } from "@/lib/pets/presence";
 import { careNotSaved, RETRY_LABEL, talkProblem as talkProblemLine, type CareNotSavedAct } from "@/lib/plain-error";
@@ -172,6 +173,8 @@ export function CompanionRoom({
   const pendingTalk = useRef<{ message?: string } | null>(null);
   const [talkTick, setTalkTick] = useState(0);
   const trait = traitFor(kind.key);
+  // The trick's word on the care bar and the tap menu: never the word of another button (distinctLabel).
+  const trickWord = distinctLabel(trait.verb, [...CARE_WORDS, treatFor(kind.key).verb, ...(extraCare ?? []).map((m) => m.label), ...(extraMarks ?? []).map((m) => m.label)]);
   const [stats, setStats] = useState<CareStats>(() => liveDeskCare(kind, persistLocal, seed));
   const [speech, setSpeech] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
@@ -365,6 +368,39 @@ export function CompanionRoom({
     if (hand || pad || !deskFit || deskFold || !aside) return;
     if (plaqueNeedsLine(aside.scrollHeight, aside.clientHeight)) setDeskFold(true);
   }, [hand, pad, deskFit, deskFold, hintUp]);
+
+  // The room rail shows the current guest: on arrival and when the guest or the room changes, a row below (or above)
+  // the rail's end scrolls into the middle; on a phone onto a whole row, so the snap leaves it there (railScrollFor).
+  // Once per guest and room: a keeper's own scrolling of the rail is left alone after that.
+  const railShownRef = useRef("");
+  const railRoom = roomOf(kind.key).id;
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const key = `${railRoom} ${kind.key} ${hand ? "hand" : pad ? "pad" : "desk"}`;
+    if (railShownRef.current === key) return;
+    const frame = requestAnimationFrame(() => {
+      const here = rail.querySelector<HTMLElement>(".den-cabinet-guest.is-here");
+      const row = here?.closest("li") ?? here;
+      // Not a scroller yet (the fit comes next) or every row shows: nothing to do, and try again after the fit.
+      if (!row || rail.scrollHeight <= rail.clientHeight + 1) return;
+      const top = rail.getBoundingClientRect().top + rail.clientTop - rail.scrollTop;
+      const first = rail.querySelector("li")?.getBoundingClientRect().top ?? top;
+      const origin = first - top;
+      const b = row.getBoundingClientRect();
+      const next = railScrollFor({
+        scrollTop: rail.scrollTop - origin,
+        viewH: rail.clientHeight,
+        scrollH: rail.scrollHeight - origin,
+        rowTop: b.top - top - origin,
+        rowH: b.height,
+        snap: hand ? b.height : undefined,
+      });
+      if (Math.abs(next + origin - rail.scrollTop) > 0.5) rail.scrollTop = next + origin;
+      railShownRef.current = key;
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [railRoom, kind.key, hand, pad, fit, deskFit]);
 
   useEffect(() => {
     // The folded plaque runs past the room above the care buttons: fold it to one line (never while the hello is up).
@@ -1018,6 +1054,28 @@ export function CompanionRoom({
   );
   const busyOrHidden = busy || stats.hidden;
   const age = stage ?? stageOf(stats);
+  // The docked plates sit at the end of the panel; this jump takes a phone there without a long scroll. On its side
+  // the jump sits beside the name (landJump): two short lines of small words, still 44 px tall.
+  const landJump = demoWindow && hand && handOrient === "sit";
+  const platesJump =
+    demoWindow && hand ? (
+      <button
+        type="button"
+        data-plates-jump
+        onClick={() => {
+          const plates = roomRef.current?.querySelector<HTMLElement>("[data-demo-plates]");
+          plates?.scrollIntoView({ block: "start" });
+          plates?.querySelector<HTMLElement>("button")?.focus({ preventScroll: true });
+        }}
+        className={
+          landJump
+            ? "inline-flex min-h-11 max-w-[5.5rem] items-center text-left text-xs leading-tight text-primary"
+            : "mt-1 inline-flex min-h-11 items-center text-sm text-primary"
+        }
+      >
+        Weather, news, market
+      </button>
+    ) : null;
 
   return (
     <section
@@ -1213,7 +1271,7 @@ export function CompanionRoom({
             walking: order.cmd === "wander" || order.cmd === "seek" || order.cmd === "play" || order.cmd === "enter",
             gifts: stats.gifts.length,
             treatVerb: treatFor(kind.key).verb,
-            specialVerb: trait.verb,
+            specialVerb: trickWord,
           })}
           onPick={(id, how) => {
             if (how?.keys) choiceByKeys.current = true;
@@ -1266,6 +1324,7 @@ export function CompanionRoom({
       <aside
         ref={asideRef}
         data-desk-aside
+        data-aside-fit={!hand && !pad && deskFit ? "" : undefined}
         style={hand && fit ? { maxHeight: fit.asideMax } : !hand && !pad && deskFit ? { maxHeight: deskFit.asideMax } : undefined}
         className={
           hand
@@ -1280,9 +1339,18 @@ export function CompanionRoom({
         }
       >
         {hand && asideFirst ? null : kicker}
-        <h1 className={hand ? (asideFirst ? "font-display text-4xl leading-none" : "mt-2 font-display text-4xl leading-none") : "mt-2 font-display text-5xl leading-none sm:text-6xl"}>
-          {displayName}
-        </h1>
+        {landJump ? (
+          // A phone on its side has a 140 px panel above the care bar (at 667×375): under the tagline the jump started
+          // at the panel's end, so it took a scroll to reach. Beside the name it shows; a long name wraps it under.
+          <div data-name-row className={asideFirst ? "flex flex-wrap items-center gap-x-3" : "mt-2 flex flex-wrap items-center gap-x-3"}>
+            <h1 className="font-display text-4xl leading-none">{displayName}</h1>
+            {platesJump}
+          </div>
+        ) : (
+          <h1 className={hand ? (asideFirst ? "font-display text-4xl leading-none" : "mt-2 font-display text-4xl leading-none") : "mt-2 font-display text-5xl leading-none sm:text-6xl"}>
+            {displayName}
+          </h1>
+        )}
         {/* asideFirst on a phone: the name, the kennel's cards, then the hour and the weather, then the rest. */}
         {hand && asideFirst ? (
           <>
@@ -1291,21 +1359,7 @@ export function CompanionRoom({
           </>
         ) : null}
         <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>
-        {demoWindow && hand ? (
-          // The docked plates sit at the end of the panel; this jump takes a phone there without a long scroll.
-          <button
-            type="button"
-            data-plates-jump
-            onClick={() => {
-              const plates = roomRef.current?.querySelector<HTMLElement>("[data-demo-plates]");
-              plates?.scrollIntoView({ block: "start" });
-              plates?.querySelector<HTMLElement>("button")?.focus({ preventScroll: true });
-            }}
-            className="mt-1 inline-flex min-h-11 items-center text-sm text-primary"
-          >
-            Weather, news, market
-          </button>
-        ) : null}
+        {landJump ? null : platesJump}
         {line}
         {careProblem ? (
           <p role="status" aria-live="polite" data-care-problem={careProblem.act} className="mt-2 max-w-sm text-sm text-muted">
@@ -1471,7 +1525,8 @@ export function CompanionRoom({
               { label: treatFor(kind.key).verb, onClick: () => dropTreatAt(randomTreatX()), disabled: busyOrHidden },
               { label: "Play", onClick: startChase, disabled: busyOrHidden },
               {
-                label: trait.verb,
+                // Never the word of another button (the phoenix's treat and trick were both "Ember").
+                label: trickWord,
                 disabled: busy,
                 onClick: doSpecial,
               },

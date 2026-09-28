@@ -31,7 +31,7 @@ function Catalog() {
         </p>
       }
       aside={
-        <div className="mt-5 max-h-[calc(100dvh-16rem)] max-w-sm space-y-3 overflow-y-auto pr-1">
+        <div data-aside-list className="mt-5 max-h-[calc(100dvh-16rem)] max-w-sm space-y-3 overflow-y-auto pr-1">
           <aside className="paper-card rounded-[var(--radius-lg)] border p-4">
             <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Shelf</p>
             <h2 className="mt-1 font-display text-2xl">The two hundred twenty-one.</h2>
