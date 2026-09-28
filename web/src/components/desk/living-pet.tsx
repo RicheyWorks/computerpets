@@ -82,6 +82,8 @@ type LivingPetProps = {
   command: PetCommand;
   orderId: number;
   speech: string | null;
+  /** A click on the speech bubble closes it. Without this the bubble lets clicks through. */
+  onSpeechClose?: () => void;
   sprites?: SpritePack;
   fps?: Record<PetAnim, number>;
   once?: ReadonlySet<PetAnim>;
@@ -183,6 +185,7 @@ export function LivingPet({
   command,
   orderId,
   speech,
+  onSpeechClose,
   sprites = RED_PANDA_SPRITES,
   fps = ANIM_FPS,
   once = ONCE_ANIMS,
@@ -1088,12 +1091,25 @@ export function LivingPet({
       </div>
       <div
         ref={bubbleRef}
-        className="absolute bottom-[214px] left-0 z-10 w-[min(220px,70vw)] pointer-events-none transition-opacity duration-200"
+        data-speech={speech ? "open" : "closed"}
+        className={`absolute bottom-[214px] left-0 z-10 w-[min(220px,70vw)] transition-opacity duration-200 ${speech && onSpeechClose ? "pointer-events-auto" : "pointer-events-none"}`}
         style={{ willChange: "transform", opacity: speech ? 1 : 0 }}
       >
-        <p className="rounded-[var(--radius-md)] border border-border bg-surface/95 px-3 py-2 text-sm leading-snug text-fg shadow-lg">
-          {speech ?? "\u00a0"}
-        </p>
+        {speech && onSpeechClose ? (
+          <button
+            type="button"
+            data-speech-close
+            title="Click to close"
+            onClick={onSpeechClose}
+            className="block w-full cursor-pointer rounded-[var(--radius-md)] border border-border bg-surface/95 px-3 py-2 text-left text-sm leading-snug text-fg shadow-lg"
+          >
+            {speech}
+          </button>
+        ) : (
+          <p className="rounded-[var(--radius-md)] border border-border bg-surface/95 px-3 py-2 text-sm leading-snug text-fg shadow-lg">
+            {speech ?? "\u00a0"}
+          </p>
+        )}
       </div>
       <svg
         ref={tongueRef}

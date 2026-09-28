@@ -214,7 +214,7 @@ test("START-HERE teaches the blotter as an optional side door in PowerShell", ()
   assert.ok(browser < blotterAt && blotterAt < done, "the blotter comes after the desktop walk and the browser");
   assert.match(blotter, /This is \*\*not\*\* the main quest/);
   assert.match(blotter, /You do not need a backend\. You do not need a license key\./);
-  assert.match(blotter, /Python 3\.11 or newer/);
+  assert.match(blotter, /Python 3\.10 or newer/);
   const boxes = fences(blotter, "powershell");
   assert.ok(boxes.length >= 3);
   for (const lines of boxes) assert.match(lines[0], /^cd client$/, "each box starts with cd");
@@ -255,8 +255,8 @@ test("client README runs in bash and PowerShell, and says the house server addre
   assert.match(clientMain, /from \.app import main/);
   assert.match(clientPyproject, /computerpets-client = "computerpets_client\.app:main"/);
   assert.match(run, /`computerpets-client` is the same entry/);
-  assert.match(clientPyproject, /requires-python = ">=3\.11"/);
-  assert.match(run, /Python 3\.11\+/);
+  assert.match(clientPyproject, /requires-python = ">=3\.10"/);
+  assert.match(run, /Python 3\.10\+/);
   assert.match(clientPyproject, /dev = \["pytest>=8"\]/);
   assert.match(clientSession, /env\.get\("COMPUTERPETS_BACKEND_URL"\)/);
   assert.match(clientSession, /env\.get\("LICENSE_SECRET_KEY"\)/);

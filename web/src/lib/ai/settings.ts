@@ -16,11 +16,47 @@ export const MIND_STORAGE_KEY = "computerpets.mind.v1";
 
 const MAX_KEY = 4000;
 
+/** Nothing picked yet: House lines, the same as the overlay and the Python blotter. */
 export const DEFAULT_MIND: MindSettings = {
-  default: { plugin: "xai", model: "grok-4.5" },
+  default: { plugin: "local" },
   voice: "browser",
   pets: {},
 };
+
+/** A signed-in keeper who picked nothing keeps the old default. The house still needs its own key to use it. */
+export const SIGNED_IN_DEFAULT: MindBinding = { plugin: "xai", model: "grok-4.5" };
+
+/**
+ * Saved before `picked` existed: xAI Grok with the stock model, no address and no key was the page's old
+ * default, not a choice. Anything else was a choice.
+ */
+function legacyPicked(raw: unknown): boolean {
+  const def = (raw && typeof raw === "object" ? (raw as Partial<MindSettings>).default : null) as
+    | { plugin?: unknown; model?: unknown; baseUrl?: unknown; apiKey?: unknown }
+    | null
+    | undefined;
+  if (!def || typeof def !== "object") return false;
+  const plugin = typeof def.plugin === "string" ? def.plugin.trim() : "";
+  if (!plugin) return false;
+  const stockModel = def.model === undefined || def.model === "" || def.model === SIGNED_IN_DEFAULT.model;
+  const noBase = typeof def.baseUrl !== "string" || !def.baseUrl.trim();
+  if (plugin === SIGNED_IN_DEFAULT.plugin && stockModel && noBase && !clipKey(def.apiKey)) return false;
+  return true;
+}
+
+/** Read from storage or the overlay seal: the saved flag, or the legacy rule for older saves. */
+function pickedOnRead(raw: unknown): boolean {
+  const flag = raw && typeof raw === "object" ? (raw as { picked?: unknown }).picked : undefined;
+  if (typeof flag === "boolean") return flag;
+  return legacyPicked(raw);
+}
+
+/** Handed to save: the flag when the page sends one, otherwise a named plugin counts as a pick. */
+function pickedOnSave(raw: unknown): boolean {
+  const src = raw && typeof raw === "object" ? (raw as Partial<MindSettings>) : {};
+  if (typeof src.picked === "boolean") return src.picked;
+  return typeof src.default?.plugin === "string" && src.default.plugin.trim().length > 0;
+}
 
 type KeyBag = { default: string; pets: Record<string, string> };
 
@@ -80,7 +116,7 @@ function voiceOf(raw: unknown): VoiceKind {
   return "browser";
 }
 
-function prefsFrom(raw: unknown): MindSettings {
+function prefsFrom(raw: unknown, picked: boolean = pickedOnRead(raw)): MindSettings {
   const src = raw && typeof raw === "object" ? (raw as Partial<MindSettings>) : {};
   const petsIn = src.pets && typeof src.pets === "object" ? src.pets : {};
   const pets: Record<string, MindBinding> = {};
@@ -88,11 +124,12 @@ function prefsFrom(raw: unknown): MindSettings {
     if (!petNameOk(name)) continue;
     pets[name] = bindingPrefs(petsIn[name], "local");
   }
-  const defaults = bindingPrefs(src.default, DEFAULT_MIND.default.plugin);
+  const defaults = picked ? bindingPrefs(src.default, DEFAULT_MIND.default.plugin) : { ...DEFAULT_MIND.default };
   return {
     default: { ...DEFAULT_MIND.default, ...defaults },
     voice: voiceOf(src.voice ?? "browser"),
     pets,
+    picked,
   };
 }
 
@@ -130,6 +167,7 @@ function attach(prefs: MindSettings, keys: KeyBag, kept: string): MindSettings {
     voice: prefs.voice,
     pets: {},
     keyKept: kept,
+    picked: prefs.picked === true,
   };
   if (keys.default) mind.default = { ...mind.default, apiKey: keys.default };
   for (const name of Object.keys(prefs.pets)) {
@@ -260,7 +298,7 @@ function readPrefs(): MindSettings {
   const local = parseStored(readText(storageOf("localStorage")));
   const session = parseStored(readText(storageOf("sessionStorage")));
   if (!local && !session) {
-    return { default: { ...DEFAULT_MIND.default }, voice: DEFAULT_MIND.voice, pets: {} };
+    return { default: { ...DEFAULT_MIND.default }, voice: DEFAULT_MIND.voice, pets: {}, picked: false };
   }
   return prefsFrom(local ?? session);
 }
@@ -320,6 +358,7 @@ function ensureBoot() {
       default: { ...prefs.default, ...sealPrefs.default },
       voice: sealPrefs.voice || prefs.voice,
       pets: { ...prefs.pets, ...sealPrefs.pets },
+      picked: sealPrefs.picked === true || prefs.picked === true,
     };
     const merged = attach(prefsNow, leftover, "os");
     snapshot = merged;
@@ -386,7 +425,7 @@ export function loadMindSettings(): MindSettings {
 }
 
 export function saveMindSettings(next: MindSettings): Promise<{ kept: string }> {
-  const prefs = prefsFrom(next);
+  const prefs = prefsFrom(next, pickedOnSave(next));
   const keys = collectKeys(next);
   const hint = rawKept(next);
   if (typeof window === "undefined") {
@@ -427,8 +466,24 @@ export function saveMindSettings(next: MindSettings): Promise<{ kept: string }> 
     });
 }
 
-export function bindingFor(settings: MindSettings, species: string): MindBinding {
-  return settings.pets[species] ?? settings.default;
+/**
+ * The mind for all pets that will be asked. The keeper's pick when there is one. Otherwise House lines for
+ * anyone not signed in (and for a signed-in keeper when the house has no key for the old default), and the
+ * old default for a signed-in keeper. `houseHasDefaultKey` is only known on pages that asked the house.
+ */
+export function effectiveDefault(settings: MindSettings, signedIn: boolean, houseHasDefaultKey?: boolean): MindBinding {
+  if (settings.picked) return settings.default;
+  if (!signedIn || houseHasDefaultKey === false) return { ...DEFAULT_MIND.default };
+  return { ...SIGNED_IN_DEFAULT };
+}
+
+export function bindingFor(settings: MindSettings, species: string, signedIn = false): MindBinding {
+  return settings.pets[species] ?? effectiveDefault(settings, signedIn);
+}
+
+/** What a listener read should name: a pet's own mind, the pick, or nothing (the house decides). */
+export function askedBinding(settings: MindSettings, species: string): MindBinding | null {
+  return settings.pets[species] ?? (settings.picked ? settings.default : null);
 }
 
 export function describeBinding(binding: MindBinding) {

@@ -105,7 +105,7 @@ test("Use for all pets and Same as all pets read the same on the web, the overla
   assert.equal(pyWord("SAME_AS_ALL_LABEL"), MIND_WORDS.sameAsAll);
   assert.ok(settings.includes(`<button id="save" type="button">${MIND_WORDS.allPets}</button>`));
   assert.match(page, /<h2 id="mind-all-pets"[^>]*>\{MIND_WORDS\.allPets\}<\/h2>/);
-  assert.match(page, /<option value="inherit">\{MIND_WORDS\.sameAsAll\} \(\{mindPreset\(draft\.default\.plugin\)\.name\}\)<\/option>/);
+  assert.match(page, /<option value="inherit">\{MIND_WORDS\.sameAsAll\} \(\{selected\.name\}\)<\/option>/);
   for (const src of [page, settings]) assert.doesNotMatch(src, /[Hh]ouse default\b(?! or give)/, "no house default left outside the builder line");
 });
 

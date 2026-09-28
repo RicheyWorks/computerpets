@@ -751,8 +751,15 @@
     }
   }
 
+  /** How long a talk reply stays up: about 4 s plus a little per word, 12 s at most. Same rule as the web desk's talk-bubble.ts. */
+  function replyHoldMs(text) {
+    const words = String(text == null ? "" : text).trim().split(/\s+/).filter(Boolean).length;
+    return Math.min(12000, 4000 + words * 300);
+  }
+
   window.PetMind = {
     PRESETS,
+    replyHoldMs,
     load,
     save,
     preset,

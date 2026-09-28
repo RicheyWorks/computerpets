@@ -77,9 +77,9 @@ test("companion room: a failed talk keeps the house line and adds a quiet reason
   const text = src("src/components/desk/companion-room.tsx");
   const send = text.slice(text.indexOf("async function sendTalk"), text.indexOf("async function talk("));
   assert.match(send, /\} catch \(err\) \{/);
-  assert.match(send, /say\(message \? kind\.listenLine\(\) : kind\.ambientLine\(stats\)\);/, "the house line still speaks");
+  assert.match(send, /sayReply\(message \? kind\.listenLine\(\) : kind\.ambientLine\(stats\)\);/, "the house line still speaks");
   assert.match(send, /setTalkProblem\(\{ line: talkProblemLine\(err, talkUsesPlugin\(mind, mindSettings\.voice\)\), message \}\);/);
-  assert.match(send, /setTalkProblem\(null\);\n      say\(res\.text/);
+  assert.match(send, /setTalkProblem\(null\);\n      sayReply\(res\.text\);/);
   assert.match(text, /<p role="status" aria-live="polite" data-talk-problem/);
   assert.match(text, /onClick=\{\(\) => void talk\(talkProblem\.message\)\}/);
 });
