@@ -1,4 +1,4 @@
-"""Plain words for Unlock / Signed download failures. Port of desktop/license/plain-error.cjs.
+"""Plain words for Unlock / Download my pet failures. Port of desktop/license/plain-error.cjs.
 
 Network trouble (refused, no such host, timeout, TLS, HTTP 5xx) becomes one sentence that names
 the host. Every house license code gets one plain sentence; only codes whose messages were

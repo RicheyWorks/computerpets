@@ -18,6 +18,7 @@
       select, input { width: 100%; box-sizing: border-box; height: 40px; border: 1px solid #2a2621; background: #1f1c19; color: #f2ece3; border-radius: 8px; padding: 0 10px; }
       button { margin-top: 16px; height: 40px; padding: 0 14px; border: 0; border-radius: 8px; background: #c4a574; color: #161412; font-weight: 600; }
       button.ghost { background: transparent; color: #c4a574; border: 1px solid #2a2621; margin-left: 8px; }
+      p.hint { margin: 4px 0 0; color: #9a9288; font-size: 12px; }
       .ok { margin-top: 12px; color: #9a9288; font-size: 13px; }
       .err { margin-top: 12px; color: #d9a08a; font-size: 13px; }
       hr { border: 0; border-top: 1px solid #2a2621; margin: 28px 0 0; }
@@ -39,10 +40,12 @@
       <p class="lead" id="mindAbout">Plug any AI into the overlay. A plugin key is not written in plain text in mind.json. When this computer has a secret store, the key is sealed there.</p>
       <label>Model</label>
       <input id="model" />
-      <label>Base URL</label>
+      <label for="base">AI website address</label>
       <input id="base" />
-      <label>API key</label>
+      <p class="hint" id="baseHelp">Where that AI answers. Picking an AI fills this in, so most people leave it alone.</p>
+      <label for="key">Your key for that AI website</label>
       <input id="key" type="password" autocomplete="off" />
+      <p class="hint" id="keyHelp">A secret code from that AI website's own page. Keep it secret, like a password.</p>
       </div>
       <p class="ok" id="keyStore"></p>
       <button id="save" type="button">Save house default</button>
@@ -137,7 +140,7 @@
       document.getElementById("save").addEventListener("click", async () => {
         okLine.textContent = "";
         mindErr.textContent = "";
-        // A Base URL talk would refuse is named here; nothing is saved until it is fixed.
+        // An AI website address talk would refuse is named here; nothing is saved until it is fixed.
         const problem = window.PetMind.baseUrlProblem ? window.PetMind.baseUrlProblem(base.value, plugin.value) : "";
         if (problem) {
           mindErr.textContent = problem;
