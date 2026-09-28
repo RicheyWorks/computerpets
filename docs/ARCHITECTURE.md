@@ -886,6 +886,8 @@ Sprites stay lockstep between `web/public/sprites/` and `desktop/renderer/sprite
 
 ### 11.4 Honest now vs later
 
+**In plain words:** the lists below are dense, so here is the short version first. Today the pets live on your real Windows desktop, in a web page, and in a small Python window, and they are the same 221 animals everywhere. Feeding, playing, and resting stay on your computer. Pets talk with their own House lines unless you add an AI. Your key for that AI is sealed in the computer's secret store when it has one, and desk talk never sends it to the house. Dropped files are never opened, folders and window titles are never read, and the keys you press are not recorded. Later work (like DirectX 12 or Vulkan drawing) has not started, and the page says so instead of pretending. The rules at the end ("Hard locks") are things that must never change: the catalog stays 221, nobody makes up store or collection IDs, finished animals are not redrawn, and the desktop pet never reads your files. The technical detail follows for grown-ups and developers.
+
 **Now (already in the house)**
 
 - Two hundred twenty-one living guests. Rui is the bar. Arc (`cyber_dragon`) sits the first grid den. Volt (`volt_dragon`) sits the second. Trace (`trace_dragon`) sits the third. Flux (`flux_dragon`) sits the fourth. Spark (`spark_dragon`) sits the fifth. Ion (`ion_dragon`) sits the sixth. Gauss (`gauss_dragon`) sits the seventh. Relay (`relay_dragon`) sits the eighth. Fuse (`fuse_dragon`) sits the ninth. Ground (`ground_dragon`) sits the tenth. The leftover campaign on the original 210 is done. The typical grid ten is closed.
@@ -910,6 +912,8 @@ Sprites stay lockstep between `web/public/sprites/` and `desktop/renderer/sprite
 - Later cyber-dragon guests, if asked, sit one at a time. Do not invent nine empty rooms.
 
 ### 11.5 Hard locks
+
+In plain words: these are the rules that never bend. Each line below says one of them in full detail.
 
 - Catalog is **two hundred twenty-one**. Arc (`cyber_dragon`, slug `arc`) is the first cyber-dragon guest. Volt (`volt_dragon`, slug `volt`) is the second. Trace (`trace_dragon`, slug `trace`) is the third. Flux (`flux_dragon`, slug `flux`) is the fourth. Spark (`spark_dragon`, slug `crackle`) is the fifth. Ion (`ion_dragon`, slug `ion`) is the sixth. Gauss (`gauss_dragon`, slug `gauss`) is the seventh. Relay (`relay_dragon`, slug `relay`) is the eighth. Fuse (`fuse_dragon`, slug `fuse`) is the ninth. Ground (`ground_dragon`, slug `ground`) is the tenth. Do not add an eleventh new guest in this sit.
 - No invented NFT collection addresses. No invented live Microsoft Store IDs.

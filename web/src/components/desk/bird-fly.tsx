@@ -104,7 +104,9 @@ export function BirdFlyer({
     };
   }, [guard, guest.sprites.idle, guest.sprites.play, hidden, hostPoseRef, onVisible, startId]);
 
-  if (!on && !startId) return null;
+  // Only while the bird is on the desk. When a flight ends, breaks, or the desk hides mid-flight, the canvas
+  // is taken off the page, so no picture is left frozen on the desk or offscreen, and its loop has stopped.
+  if (!on) return null;
   return (
     <canvas
       ref={canvas}

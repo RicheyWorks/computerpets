@@ -20,6 +20,7 @@ from PyQt6.QtWidgets import (
     QGraphicsView,
     QHBoxLayout,
     QLabel,
+    QLineEdit,
     QMainWindow,
     QPushButton,
     QStatusBar,
@@ -32,6 +33,7 @@ from .choice import guest_marks, guest_pick, guest_tap, walking_cmd
 from .gift import gift_line, leave_gift, pick_gift
 from .gpu import SPARK_H, SPARK_W, gpu_line, initial_sample, ink, read_local, remember, sparkline
 from .listener import listener_line
+from .minds import ADDRESS_LABEL, KEY_LABEL, MINDS_INTRO, blotter_minds_text, mind_fields
 from .presence import (
     allow_permission,
     arm_weather_locate,
@@ -341,6 +343,13 @@ class DeskWindow(QMainWindow):
         self.listener_label.setObjectName("listenerSense")
         self.listener_label.setStyleSheet("color: #9a9288; font-size: 11px;")
         layout.addWidget(self.listener_label)
+        # Minds, in the same words as the overlay Settings and the web desk. The blotter's pets always
+        # use House lines, so there is nothing to set up and no AI box is shown.
+        self.minds_label = QLabel(blotter_minds_text())
+        self.minds_label.setObjectName("mindsNote")
+        self.minds_label.setWordWrap(True)
+        self.minds_label.setStyleSheet("color: #9a9288; font-size: 11px;")
+        layout.addWidget(self.minds_label)
         self.setCentralWidget(root)
 
         status = QStatusBar()
@@ -968,6 +977,19 @@ def main(argv: list[str] | None = None) -> int:
         print(window.renderer_label)
         print(f"ok: gpu sense {window.gpu_label.text()}")
         print(f"ok: listener {window.listener_label.text()}")
+        ai_words = {ADDRESS_LABEL, KEY_LABEL, "Base URL", "API key"}
+        ai_labels = [w for w in window.findChildren(QLabel) if w.text().strip() in ai_words]
+        secret_boxes = [w for w in window.findChildren(QLineEdit) if w.echoMode() != QLineEdit.EchoMode.Normal]
+        if (
+            window.minds_label.text() != blotter_minds_text()
+            or not window.minds_label.isVisible()
+            or mind_fields("local")
+            or ai_labels
+            or secret_boxes
+        ):
+            print("check failed: the blotter Minds note is missing or shows AI boxes", file=sys.stderr)
+            return 1
+        print(f"ok: minds {MINDS_INTRO} House lines, no AI boxes")
         dropped = refuse_file_drop(["Files", "text/uri-list"], 1)
         if dropped["accept"] or dropped["read"] or not dropped["files"]:
             print("check failed: presence would read a dropped file", file=sys.stderr)

@@ -90,6 +90,7 @@ CROSS_DOMAIN = {
     "card.speak_opts",
     "card.volume_mutes",
     "card.listener",
+    "card.minds_blotter",
     "card.house_server",
     "card.alarm",
     "card.timer",
@@ -114,6 +115,7 @@ CROSS_DOMAIN = {
     "web.loop_guard_unlock_plain",
     "web.desk_guard_plain",
     "web.guest_loops_mount",
+    "web.minds_flight_plain",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -357,7 +359,7 @@ def test_house_window_unlock_and_tray_rows_run_offline_with_plain_words():
     """The House window, Unlock offline, and the whole tray menu, through the real main.cjs."""
     window = invoke("desk.settings.window")
     assert window.ok, window.error
-    for mark in ("plugins=14", "pets=221", "unlock_opens=unlock", "minds=house_lines_need_nothing", "base_url_refused=4", "save=sealed",
+    for mark in ("plugins=14", "pets=221", "unlock_opens=unlock", "minds=house_lines_need_nothing", "minds=plain_address_and_key", "base_url_refused=4", "save=sealed",
                  "disk_plain_key=0", "unwritable=not_saved", "no_store=not_written", "details=folded_toggles",
                  "mark=stored", "unlock_refused=plain"):
         assert mark in window.trace, (mark, window.trace)
@@ -461,6 +463,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "card.speak_opts",
         "card.volume_mutes",
         "card.listener",
+        "card.minds_blotter",
         "card.house_server",
     "card.house_server",
         "gui.choice_close_exit",
@@ -480,6 +483,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.loop_guard_unlock_plain",
         "web.desk_guard_plain",
         "web.guest_loops_mount",
+        "web.minds_flight_plain",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -706,11 +710,11 @@ def test_loop_guard_row_keeps_the_overlay_moving_and_the_unlock_words_plain():
 
 
 def test_desk_guard_row_keeps_the_web_desk_moving_and_the_house_words_plain():
-    """A throwing trick cannot freeze the web desk; trick calls are typed; checkJs is down to 3; words are plain."""
+    """A throwing trick cannot freeze the web desk; trick calls are typed; checkJs is held to its file; words are plain."""
     dg = invoke("web.desk_guard_plain")
     assert dg.ok, (dg.error, dg.detail)
     for mark in ("web_loop=schedule_first+guarded", "fault=injected_trick_throws", "log=once_per_error+pet_key",
-                 "reset=safe_idle", "share=overlay_frame_guard_rules", "types=no_as_never", "checkjs=3+electron_types",
+                 "reset=safe_idle", "share=overlay_frame_guard_rules", "types=no_as_never", "checkjs=baseline_file+electron_types",
                  "words=house_server+admin+license_website+adr"):
         assert mark in dg.trace, (mark, dg.trace)
     run = dg.extras["guardRun"]
@@ -719,8 +723,11 @@ def test_desk_guard_row_keeps_the_web_desk_moving_and_the_house_words_plain():
     assert run["log"].startswith("desk frame error (cat): Error: injected trick fault.")
     assert all(dg.extras["parity"].values()), dg.extras["parity"]
     assert all(dg.extras["wired"].values()), dg.extras["wired"]
-    assert int(dg.extras["checkjs"]["baseline"]) <= 3
-    assert all(v for k, v in dg.extras["checkjs"].items() if k != "baseline"), dg.extras["checkjs"]
+    from pathlib import Path
+
+    baseline = (Path(__file__).resolve().parents[2] / "desktop" / "checkjs-baseline.txt").read_text(encoding="utf-8").strip()
+    assert dg.extras["checkjs"]["baseline"] == baseline and dg.extras["checkjs"]["docCount"] == baseline
+    assert all(v for k, v in dg.extras["checkjs"].items() if k not in ("baseline", "docCount")), dg.extras["checkjs"]
     assert all(dg.extras["words"].values()), dg.extras["words"]
 
 
@@ -736,11 +743,38 @@ def test_guest_loops_row_keeps_every_desk_guest_moving_and_mounts_the_real_pets(
     for shape in gl.extras["shapes"].values():
         assert shape["logs"] == 1 and shape["resets"] == 2 and shape["caught"] == 2
     mount = gl.extras["mount"]
-    assert mount["pass"] == 6 and mount["fail"] == 0
+    assert mount["pass"] == 8 and mount["fail"] == 0
     assert mount["tests"][:2] == ["LivingPet", "LivingPet with the robin"]
     assert gl.extras["music"] == [16, 16]
     assert all(gl.extras["typed"].values()) and all(gl.extras["license"].values())
     assert all(gl.extras["words"].values()), gl.extras["words"]
+
+
+def test_minds_blotter_row_says_talk_works_without_an_ai_in_the_same_words():
+    """The blotter's Minds note and the plain address and key boxes match the web desk and the overlay."""
+    mb = invoke("card.minds_blotter")
+    assert mb.ok, (mb.error, mb.detail)
+    for mark in ("minds=same_words_web+overlay+blotter", "house_lines=no_ai_boxes", "blotter=talk_without_ai"):
+        assert mark in mb.trace, (mark, mb.trace)
+    assert all(mb.extras.values()), mb.extras
+
+
+def test_minds_flight_row_keeps_words_plain_and_leaves_no_bird_on_the_page():
+    """Plain Minds boxes everywhere; robin and bird leave the page after a flight; START-HERE and ARCHITECTURE plain."""
+    mf = invoke("web.minds_flight_plain")
+    assert mf.ok, (mf.error, mf.detail)
+    for mark in ("minds=same_words_web+overlay+blotter", "minds=plain_address_and_key+helper",
+                 "minds=house_lines_no_ai_boxes", "download=download_my_pet", "checkjs=baseline_file_in_desk_guard",
+                 "flight=canvas_off_page+no_loop", "start_here=kid_plain+desktop_first+honest",
+                 "architecture=plain_words_first"):
+        assert mark in mf.trace, (mark, mf.trace)
+    assert all(mf.extras["minds"].values()), mf.extras["minds"]
+    assert all(mf.extras["words"].values()), mf.extras["words"]
+    assert mf.extras["flight"]["pass"] == 2 and mf.extras["flight"]["fail"] == 0
+    start = mf.extras["startHere"]
+    assert 4 <= start["bullets"] <= 8 and start["longest"] <= 20 and start["desktopFirst"] and start["browserAfter"]
+    assert start["talkShort"] and start["talkListKept"]
+    assert all(mf.extras["architecture"].values()), mf.extras["architecture"]
 
 
 def test_first_run_rows_start_clean_and_show_the_hello_once():
