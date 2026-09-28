@@ -105,6 +105,7 @@ CROSS_DOMAIN = {
     "card.mind",
     "card.walk_rules",
     "card.long_walk_talk",
+    "card.audit_1557",
     "gui.choice_close_exit",
     "web.guest_choice",
     "web.ethogram_tricks",
@@ -1246,6 +1247,16 @@ def test_card_long_walk_talk_row_drives_keeper_and_mind_js():
     assert any(t.startswith("leash=") for t in row.trace), row.trace
     assert row.extras["problem"] == "key"
     assert row.extras["line"].startswith("The mind did not answer, so that was a house line.")
+
+
+def test_card_audit_1557_row_drives_life_keeper_and_mind_js():
+    """card.audit_1557: rest wakes when full, talk pose ends with the line, on screen, Save tests the key, volume, right edge."""
+    row = invoke("card.audit_1557")
+    assert row.ok, (row.error, row.detail)
+    for mark in ("rest_wake=100", "talk_pose=own_line", "on_screen=-109->0", "save_test=refused_plain", "volume=this_pet", "right_edge=near_pet_under_plate"):
+        assert mark in row.trace, (mark, row.trace)
+    assert row.extras["said"] == "The mind did not answer. The AI website did not accept your key. Check your key for that AI website. House lines will."
+    assert row.extras["spot"] == {"x": 2238, "maxH": 786}
 
 
 def test_blotter_pure_surfaces():

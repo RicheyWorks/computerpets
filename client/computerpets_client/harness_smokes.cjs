@@ -240,7 +240,8 @@ function cardWalkRules() {
   trace.push("walk=card_holds_still");
   const plates = [{ left: 102, top: 111, right: 392, bottom: 150 }, { left: 102, top: 529, right: 392, bottom: 568 }];
   const x = K.cardClearOfPlates({ x: 177, w: 314, top: 18, bottom: 1214, plates, width: 2560 });
-  if (x !== 400 || !petSrc.includes("window.PetKeeper.cardClearOfPlates(")) return fail(`card at ${x} over the plates`, { x });
+  // pet.js lays the card out through cardSpotNearPet, which starts from cardClearOfPlates (card.audit_1557).
+  if (x !== 400 || !petSrc.includes("window.PetKeeper.cardSpotNearPet(")) return fail(`card at ${x} over the plates`, { x });
   trace.push("plates=card_at_400_not_177");
   if (!/if \(lift\.kind === "tap"\) \{\n\s+openKeeperCard\(\);\n(\s+\/\/[^\n]*\n)*\s+cardKeys\(true\);/.test(petSrc)) {
     return fail("a click on the pet does not hand the card the keyboard");
@@ -298,6 +299,51 @@ async function cardLongWalkTalk() {
   if (reply.text !== "house line" || reply.problem !== "key" || !/did not accept your key/.test(line)) return fail("a refused key is silent", { problem: reply.problem });
   trace.push("refused_key=says_why");
   return ok("card on a leash; opening is a press; Hide walks kept; talk waits for its line; a refused key says why", { leash: K.CARD_LEASH_PX, problem: reply.problem, line }, trace);
+}
+
+/** The #1557 audit: rest wakes when full, the talk pose ends with the pet's line, on screen, Save tests the key, volume, right edge. */
+async function cardAudit1557() {
+  const vm = require("node:vm");
+  const K = load("keeper.js");
+  const Life = load("life.js");
+  const petSrc = fs.readFileSync(path.join(RENDERER, "pet.js"), "utf8");
+  const html = fs.readFileSync(path.join(RENDERER, "index.html"), "utf8");
+  const settings = fs.readFileSync(path.join(RENDERER, "settings.html"), "utf8");
+  const care = fs.readFileSync(path.join(__dirname, "..", "..", "web", "src", "lib", "pets", "care.ts"), "utf8");
+  const trace = [];
+  const trait = { extra: {}, hungerH: 6, energyH: 9, hygieneH: 14, hardy: 0.8, social: 1, messy: 0.4, sleepStart: 22, sleepEnd: 6 };
+  const day = new Date(2023, 10, 14, 14, 0, 0).getTime();
+  const rested = Life.act({ ...Life.blank(day), energy: 70, hunger: 70, lastTick: day }, trait, "rest", day, "fox");
+  const woke = Life.decay(rested.life, trait, day + 5600, "fox");
+  const webWake = /export const REST_WAKE_ENERGY = (\d+);/.exec(care);
+  if (woke.life.asleep || !webWake || Number(webWake[1]) !== Life.REST_WAKE_ENERGY || !care.includes("s.energy < REST_WAKE_ENERGY")) {
+    return fail("a fully rested pet sleeps on, or the web rule differs", { asleep: woke.life.asleep });
+  }
+  trace.push(`rest_wake=${Life.REST_WAKE_ENERGY}`);
+  if (!K.talkPoseOver || !K.talkPoseOver({ cmd: "talk", now: 4300, until: 4200 }) || K.talkPoseOver({ cmd: "talk", now: 4100, until: 4200 }) || !petSrc.includes("talkPoseOver?.({ cmd: sim.cmd, now, until: talkPoseUntil })) issue(\"idle\");")) {
+    return fail("the talk pose waits for the house chatter");
+  }
+  trace.push("talk_pose=own_line");
+  if (!K.keepOnScreen || K.keepOnScreen({ x: -109, w: 176, width: 2560 }) !== 0 || !petSrc.includes("keepOnScreen({ x: sim.play.x, w: BASE, width })")) return fail("a window play can leave the screen");
+  trace.push("on_screen=-109->0");
+  const store = () => ({ getItem: () => null, setItem: () => {}, removeItem: () => {} });
+  const win = { PetWeatherAreas: load("weather-areas.js"), localStorage: store(), sessionStorage: store(), URL, URLSearchParams, AbortController, setTimeout, clearTimeout, fetch: async () => ({ ok: false, status: 401, json: async () => ({}) }) };
+  win.window = win;
+  vm.runInContext(fs.readFileSync(path.join(RENDERER, "mind.js"), "utf8"), vm.createContext(win));
+  const M = win.PetMind;
+  const bind = { plugin: "xai", apiKey: "stand-in-not-real" };
+  const reply = await M.run({ bind, species: "red_panda", fallback: "", message: "Hello. Who are you?", shown: M.talkHonesty(bind) });
+  const said = M.mindTestLine ? M.mindTestLine(reply, "xAI") : "";
+  if (said !== `The mind did not answer. ${M.MIND_LINES.key} House lines will.` || !/await testSaved\(\);/.test(settings) || !/connect-src 'none'/.test(settings)) {
+    return fail("Minds Save does not test the key in the web's words", { said });
+  }
+  trace.push("save_test=refused_plain");
+  if (!/<label class="keeper-volume" data-hit>\n\s+Volume for this pet\n/.test(html)) return fail("the volume slider does not say it is this pet's");
+  trace.push("volume=this_pet");
+  const spot = K.cardSpotNearPet ? K.cardSpotNearPet({ x: 2238, w: 314, h: 900, bottom: 1214, plates: [{ left: 2067, top: 111, right: 2355, bottom: 420 }], width: 2560, petLeft: 2382, petRight: 2530 }) : null;
+  if (!spot || spot.x !== 2238 || spot.maxH !== 786) return fail("at the right edge the card leaves its pet", { spot });
+  trace.push("right_edge=near_pet_under_plate");
+  return ok("rest wakes when full; talk pose ends with the pet's line; on screen; Save tests the key; volume is this pet's; card by the pet at the right edge", { said, spot }, trace);
 }
 
 /** Keeper-card house-server row: hidden with no server named, the saved URL wins, plain words only. */
@@ -1167,6 +1213,7 @@ const COMMANDS = {
   card_paint_wire: cardPaintWire,
   card_walk_rules: cardWalkRules,
   card_long_walk_talk: cardLongWalkTalk,
+  card_audit_1557: cardAudit1557,
   house_server_row: houseServerRow,
   news_favorites: newsFavorites,
   market_favorites: marketFavorites,

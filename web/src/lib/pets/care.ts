@@ -5,6 +5,11 @@ export type MessPile = { id: number; x: number; kind?: "gift" | "shed" };
 /** Overlay already recovers this fast at night. The desk and blotter keep the same sit. */
 export const NIGHT_HUNGER = 0.45;
 export const NIGHT_ENERGY_PER_MS = 18 / 3_600_000;
+/**
+ * A rest sleep held into the day ends once the pet is fully rested; it held forever while the pet was fed. Same
+ * number and rule as the desktop's life.js decay (REST_WAKE_ENERGY); scripts/rest-wake.test.mjs runs both.
+ */
+export const REST_WAKE_ENERGY = 100;
 
 /** Tend rail the living desk already keeps. /demo uses the same marks. */
 export const DESK_TEND = [
@@ -363,7 +368,7 @@ export function decayStats(stats: Partial<CareStats>, lastTick: number, now = Da
   const s = normalizeCare(stats, now);
   const dt = Math.max(0, now - lastTick);
   const nightAsleep = resting && !s.hidden && !s.sick;
-  const held = !!s.asleep && !s.sick && !s.hidden && s.hunger >= 12;
+  const held = !!s.asleep && !s.sick && !s.hidden && s.hunger >= 12 && s.energy < REST_WAKE_ENERGY;
   const asleep = nightAsleep || held;
   const next: CareStats = {
     ...s,

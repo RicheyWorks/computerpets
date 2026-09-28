@@ -1092,6 +1092,41 @@ ipcMain.on("mind-get", (e) => {
 
 ipcMain.handle("mind-set", (_e, data) => writeMind(data));
 
+// Minds Save tests the mind it saved, the way the web's Test this mind does. The House window has no fetch of its
+// own (connect-src 'none'), so the overlay asks the mind (it already talks to minds, behind the same line-in-view
+// rule) and main only carries the question and the answer. Only the House window may ask; only the overlay answers.
+let mindTestSeq = 0;
+const mindTests = new Map();
+function mindTestReply(raw) {
+  const r = raw && typeof raw === "object" ? raw : {};
+  const out = { source: typeof r.source === "string" ? r.source.slice(0, 40) : "local", text: typeof r.text === "string" ? r.text.slice(0, 400) : "" };
+  if (typeof r.problem === "string" && r.problem) out.problem = r.problem.slice(0, 40);
+  return out;
+}
+ipcMain.handle("mind-test", (e, line) => {
+  if (!settingsWin || settingsWin.isDestroyed() || e.sender !== settingsWin.webContents) return { source: "none", text: "" };
+  if (!win || win.isDestroyed()) return { source: "none", text: "" };
+  const id = ++mindTestSeq;
+  return new Promise((resolve) => {
+    // A little past the talk timeout (12 s): the overlay answers "timeout" itself before this.
+    const timer = setTimeout(() => {
+      mindTests.delete(id);
+      resolve({ source: "local", text: "", problem: "timeout" });
+    }, 15_000);
+    mindTests.set(id, (reply) => {
+      clearTimeout(timer);
+      mindTests.delete(id);
+      resolve(mindTestReply(reply));
+    });
+    win.webContents.send("mind-test-run", id, typeof line === "string" ? line : "");
+  });
+});
+ipcMain.on("mind-test-done", (e, id, reply) => {
+  if (!win || win.isDestroyed() || e.sender !== win.webContents) return;
+  const done = mindTests.get(id);
+  if (done) done(reply);
+});
+
 ipcMain.on("card-get", (e) => {
   e.returnValue = readCard();
 });
