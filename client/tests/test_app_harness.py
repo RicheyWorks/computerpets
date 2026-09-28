@@ -234,6 +234,7 @@ def test_gaps_are_honest_and_accounted():
     assert "gui.host_place" in hole_ids
     assert "gui.bubble_click" in hole_ids
     assert "gui.clickthrough_hits" in hole_ids
+    assert "gui.first_run_drive" in hole_ids
     assert "gui.blotter_qt" in hole_ids
     assert "ethogram.tricks.red_panda" in hole_ids
     assert "blotter.plaque" in hole_ids
@@ -656,6 +657,7 @@ def test_gui_mode_rows_stay_excluded_by_default_and_document_gui_flag():
         "gui.host_place",
         "gui.bubble_click",
         "gui.clickthrough_hits",
+        "gui.first_run_drive",
         "gui.blotter_qt",
         "blotter.plaque",
         "blotter.frames_paint",
@@ -675,6 +677,38 @@ def test_gui_mode_rows_stay_excluded_by_default_and_document_gui_flag():
     assert len(gui_skipped) >= 5
 
 
+
+
+def test_first_run_drive_is_gui_optin_and_reads_its_json(monkeypatch):
+    """gui.first_run_drive runs desktop/first-run-drive.cjs only under --gui and turns its checks into the row."""
+    import json
+    import shutil
+    import subprocess
+    import computerpets_client.app_harness as h
+
+    holes = {row.id: row for row in gaps()}
+    row = holes["gui.first_run_drive"]
+    assert row.mode == "gui" and row.fate == "excluded"
+    assert "--gui" in (row.exclude_reason or "") and "throwaway" in (row.exclude_reason or "")
+    assert (h.repo_root() / "desktop" / "first-run-drive.cjs").is_file()
+    calls = []
+
+    def fake_run(cmd, **kw):
+        calls.append((cmd, kw))
+        body = {"ok": False, "ms": 5, "checks": [
+            {"id": "card_on_screen", "ok": True, "detail": "card 177,18,491,1214"},
+            {"id": "bubble_clear_of_card", "ok": False, "detail": "15 of 15 samples"},
+        ]}
+        return subprocess.CompletedProcess(cmd, 1, stdout=json.dumps(body) + "\n", stderr="")
+
+    monkeypatch.setattr(shutil, "which", lambda _n: "node")
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    res = h._invoke_gui("first_run_drive")
+    assert calls and calls[0][0][1].endswith("first-run-drive.cjs")
+    assert "COMPUTERPETS_GUI_HARNESS" not in calls[0][1]["env"]
+    assert not res.ok and "bubble_clear_of_card" in (res.error or "")
+    assert any(t.startswith("FAIL bubble_clear_of_card") for t in res.trace)
+    assert "1/2 first-run checks" in res.detail
 
 
 def test_tricks_alias_resolution_dragons():

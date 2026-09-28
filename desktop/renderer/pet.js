@@ -109,6 +109,7 @@ const firstHintEl = document.getElementById("first-hint");
 const firstHintTitle = document.getElementById("first-hint-title");
 const firstHintList = document.getElementById("first-hint-lines");
 const firstHintOk = document.getElementById("first-hint-ok");
+const hudSpecial = /** @type {HTMLButtonElement | null} */ (document.querySelector('#hud [data-care="special"]'));
 const hudBody = document.getElementById("hud-body");
 const hudVolume = /** @type {HTMLInputElement | null} */ (document.getElementById("hud-volume"));
 const hudColors = document.getElementById("hud-colors");
@@ -1713,7 +1714,7 @@ function paintHud() {
     mess: life.mess.length,
     stage: life.stage,
     bond: life.bond,
-    verb: window.PetSpecial?.verbFor(kind.key) || "Special",
+    verb: window.PetSpecial?.trickLabel(kind.key) || "Special",
   });
 }
 
@@ -1772,6 +1773,8 @@ function paintCard() {
   paintHouseMusic();
   if (hudCollapse) hudCollapse.setAttribute("aria-expanded", card.collapsed ? "false" : "true");
   paintFirstHint();
+  // The trick's own word, the same as the pet menu and the tray (it said "Special" for every guest).
+  if (hudSpecial) hudSpecial.textContent = (kind && window.PetSpecial?.trickLabel(kind.key)) || "Special";
   if (hudVolume) hudVolume.value = String(guest.volume);
   if (hudVoiceTruth) hudVoiceTruth.textContent = (K && K.VOICE_TRUTH) || C.VOICE_TRUTH;
   if (hudOffTruth) hudOffTruth.textContent = (K && K.QUIT_TRUTH) || C.QUIT_TRUTH;
@@ -2696,7 +2699,7 @@ function openChoice(target) {
     walking,
     gifts: (life && life.gifts && life.gifts.length) || 0,
     treatVerb: "Treat",
-    specialVerb: window.PetSpecial?.verbFor(kind.key) || "Special",
+    specialVerb: window.PetSpecial?.trickLabel(kind.key) || "Special",
   });
   choiceEl.replaceChildren();
   // A real menu, like the web sit menu: menuitem buttons, one Tab stop, arrows / Home / End walk it.
@@ -3588,19 +3591,26 @@ function tickFrame(now) {
   const shrink = 1 - hopPx / 90;
   shadow.style.transform = `translate3d(${drawX + 40}px, 0, 0) scale(${shrink * scale}, ${shrink})`;
   shadow.style.opacity = String((0.28 - hopPx / 90) * (life.hidden ? 0.2 : 1));
+  // The card's real width (border and padding in), not the 280 of content: the clamp let a 314 px card run 26 px
+  // past the right edge of the screen when the pet stood there.
   const hudW = card.collapsed
     ? 0
-    : (window.PetKeeper?.HUD_WIDTH ?? 280);
+    : (hud.offsetWidth || (window.PetKeeper?.HUD_WIDTH ?? 280) + 34);
   const choiceW = choiceOpen && choiceEl ? Math.min(168, choiceEl.offsetWidth || 168) : 0;
-  const cardLift = card.collapsed ? 0 : Math.min((hud.offsetHeight || 0) + 16, 220);
-  const bx = clamp(drawX + BASE * 0.5 - 110, 10, Math.max(10, width - 230));
-  bubble.style.transform = `translate3d(${bx}px, ${-lift - 10 - cardLift}px, 0)`;
   let choiceX = clamp(drawX - choiceW - 12, 8, Math.max(8, width - choiceW - 8));
   let cardX = clamp(drawX + BASE * 0.55, 8, Math.max(8, width - (hudW + 8)));
   if (!card.collapsed && choiceOpen && hudW && cardX < choiceX + choiceW + 8) {
     cardX = clamp(choiceX + choiceW + 8, 8, Math.max(8, width - (hudW + 8)));
   }
   if (choiceEl && choiceOpen) choiceEl.style.transform = `translate3d(${choiceX}px, 0, 0)`;
+  // The line goes over the pet; with the card open it goes beside the card at the pet's head, never over it (it
+  // painted over the open card's words: the old lift stopped at 220 px and the card is most of the screen tall).
+  const bx0 = clamp(drawX + BASE * 0.5 - 110, 10, Math.max(10, width - 230));
+  const spot = window.PetKeeper?.bubbleBesideCard
+    ? window.PetKeeper.bubbleBesideCard({ bubbleX: bx0, bubbleW: 220, cardX, cardW: hudW, width })
+    : { x: bx0, clear: !hudW };
+  const cardLift = card.collapsed || spot.clear ? 0 : Math.min((hud.offsetHeight || 0) + 16, 220);
+  bubble.style.transform = `translate3d(${spot.x}px, ${-lift - 10 - cardLift}px, 0)`;
   hud.style.transform = `translate3d(${cardX}px, ${-lift}px, 0)`;
   if (tongueEl) {
     const flick = p.crawl && sim.actMotion === "tongue" ? window.PetEthogram.tongueFlick(sim.actT, sim.actHold) : 0;
