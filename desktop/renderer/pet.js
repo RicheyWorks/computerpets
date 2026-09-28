@@ -466,6 +466,8 @@ function paintWeather() {
       s.className = "wx-rain";
       s.style.left = `${4 + i * 6}%`;
       s.style.animationDelay = `${(i % 6) * 0.16}s`;
+      // Not all at one speed, so the streaks read as rain rather than a row of lines.
+      s.style.animationDuration = `${(0.95 + (i % 5) * 0.09).toFixed(2)}s`;
       weatherRoot.appendChild(s);
     }
   }
@@ -1192,11 +1194,16 @@ function openKeeperCard() {
   card.collapsed = false;
   persistCard();
   paintHud();
-  sim.target = null;
-  sim.waypoints = [];
-  sim.pause = 0;
-  sim.turnHold = 0;
-  sim.pendingFacing = null;
+  // Opening the card stops a wandering pet; a walk the keeper asked for (Feed, Treat, Play, Hide, Call back) goes on.
+  // Clearing its target stranded the pet short of its food for good (PetKeeper.cardStopsWalk).
+  const stopWalk = window.PetKeeper?.cardStopsWalk ? window.PetKeeper.cardStopsWalk(sim.cmd) : true;
+  if (stopWalk) {
+    sim.target = null;
+    sim.waypoints = [];
+    sim.pause = 0;
+    sim.turnHold = 0;
+    sim.pendingFacing = null;
+  }
   if (sim.play && window.PetWindowPlay) {
     const work = { width: window.innerWidth, height: window.innerHeight, floorLift: 0 };
     sim.play = window.PetWindowPlay.stepPlay(
@@ -1226,7 +1233,40 @@ function openKeeperCard() {
     }
     if (!sim.trick || sim.trick.phase === "done") sim.trick = null;
   }
-  if (sim.anim === "walk" && !life?.asleep) sim.anim = "idle";
+  if (stopWalk && sim.anim === "walk" && !life?.asleep) sim.anim = "idle";
+  if (!stopWalk && !sim.play && !sim.trick && !sim.happy && sim.anim !== "walk" && !(sim.turnHold > 0)) resumeOrderWalk();
+}
+
+/** A walk the keeper asked for (Feed, Treat, Hide, Call back) goes on once play lets go (PetKeeper.orderWalkResumes). */
+function resumeOrderWalk() {
+  const K = window.PetKeeper;
+  if (!K?.orderWalkResumes || !K.orderWalkResumes({ cmd: sim.cmd, target: sim.target, asleep: !!life?.asleep })) return;
+  aimAt(sim.target);
+}
+
+/** When the keeper last pressed something on the open card (PetKeeper.cardFoldsOnWalk holds the card up after). */
+let lastCardPress = Number.NEGATIVE_INFINITY;
+/** @type {{ x: number, lift: number } | null} The open card's spot, held while the pet walks. */
+let cardHeld = null;
+
+/** The shown house plates' boxes, read at most every 400 ms (a keeper can drag them). */
+let plateBoxCache = { at: Number.NEGATIVE_INFINITY, boxes: /** @type {{ left: number, top: number, right: number, bottom: number }[]} */ ([]) };
+function plateBoxes() {
+  const now = performance.now();
+  if (now - plateBoxCache.at < 400) return plateBoxCache.boxes;
+  const boxes = keyPlates().map((p) => {
+    const r = p.getBoundingClientRect();
+    return { left: r.left, top: r.top, right: r.right, bottom: r.bottom };
+  });
+  plateBoxCache = { at: now, boxes };
+  return boxes;
+}
+
+/** The open card folds on a walk only once the hello is read and the last press on it is a while back. */
+function cardFoldsNow() {
+  const K = window.PetKeeper;
+  if (!K || !K.cardFoldsOnWalk) return true;
+  return K.cardFoldsOnWalk({ helloUnread: K.firstHintShows ? K.firstHintShows(card) : false, sinceLastPress: performance.now() - lastCardPress });
 }
 
 function callGuestsFromCard() {
@@ -3334,6 +3374,7 @@ function tickFrame(now) {
         sim.happy = null;
         sim.land = 1;
         sim.anim = life?.asleep ? "sleep" : cardOpen() ? "idle" : "idle";
+        resumeOrderWalk();
       }
     } else if (sim.play && window.PetWindowPlay) {
       sim.play = window.PetWindowPlay.stepPlay(sim.play, dt, { x: sim.x, lift: sim.play.lift }, wins, work, BASE, playFlags);
@@ -3345,6 +3386,7 @@ function tickFrame(now) {
         sim.land = 1;
         sim.anim = life?.asleep ? "sleep" : "idle";
         sim.playWait = window.PetWindowPlay.nextPlayWait(true);
+        resumeOrderWalk();
       }
     } else if (sim.trick && T) {
       sim.trick = T.stepTrick(sim.trick, dt, trickFlags);
@@ -3356,6 +3398,7 @@ function tickFrame(now) {
         sim.land = 1;
         sim.anim = life?.asleep ? "sleep" : "idle";
         sim.trickWait = T.nextTrickWait(true, undefined, sim.lastTrick);
+        resumeOrderWalk();
       }
     } else if (
       window.PetWindowPlay &&
@@ -3585,7 +3628,7 @@ function tickFrame(now) {
   const lift = hopPx + walkBob + water + perch + pose.dy + climbLift;
   pet.style.transformOrigin = sim.play && (sim.play.phase === "dive" || sim.play.phase === "leap" || sim.play.phase === "ridge-leap" || sim.play.phase === "ridge-off" || sim.play.phase === "coil-on" || sim.play.phase === "coil-off" || sim.play.phase === "path-on" || sim.play.phase === "path-off" || sim.play.phase === "field-on" || sim.play.phase === "field-off" || sim.play.phase === "crackle-on" || sim.play.phase === "crackle-hop" || sim.play.phase === "crackle-off" || sim.play.phase === "charge-on" || sim.play.phase === "charge-bolt" || sim.play.phase === "charge-off" || sim.play.phase === "orbit-on" || sim.play.phase === "orbit-off" || sim.play.phase === "click-on" || sim.play.phase === "click-hop" || sim.play.phase === "click-off" || sim.play.phase === "hold-on" || sim.play.phase === "hold-off" || sim.play.phase === "earth-on" || sim.play.phase === "earth-off" || sim.play.phase === "ledge-on" || sim.play.phase === "ledge-off" || sim.play.phase === "circle-on" || sim.play.phase === "circle-off") ? "center center" : "center bottom";
   pet.style.transform = `translate3d(${drawX}px, ${-lift}px, 0) rotate(${pose.rot + climbRot}deg) scale(${sim.facing * squat * scale}, ${stretch * scale})`;
-  if (cardOpen() && sim.anim === "walk" && !sim.dragging) {
+  if (cardOpen() && sim.anim === "walk" && !sim.dragging && cardFoldsNow()) {
     collapseKeeperCard();
   }
   const shrink = 1 - hopPx / 90;
@@ -3599,6 +3642,20 @@ function tickFrame(now) {
   const choiceW = choiceOpen && choiceEl ? Math.min(168, choiceEl.offsetWidth || 168) : 0;
   let choiceX = clamp(drawX - choiceW - 12, 8, Math.max(8, width - choiceW - 8));
   let cardX = clamp(drawX + BASE * 0.55, 8, Math.max(8, width - (hudW + 8)));
+  // Off the house plates: the first-run card sat over the weather and Quotes plates (PetKeeper.cardClearOfPlates).
+  if (hudW && window.PetKeeper?.cardClearOfPlates) {
+    const cardBottom = window.innerHeight - 178 - lift;
+    cardX = window.PetKeeper.cardClearOfPlates({ x: cardX, w: hudW, top: cardBottom - (hud.offsetHeight || 0), bottom: cardBottom, plates: plateBoxes(), width });
+  }
+  // The open card holds still while the pet walks (PetKeeper.cardHeldSpot): it stays up through a care walk now,
+  // and following the pet slid its buttons out from under the pointer.
+  let cardLiftPx = lift;
+  if (window.PetKeeper?.cardHeldSpot) {
+    const held = window.PetKeeper.cardHeldSpot({ open: !!hudW, walking: sim.anim === "walk" && !sim.dragging, held: cardHeld, x: cardX, lift });
+    cardHeld = held.held;
+    cardX = held.x;
+    cardLiftPx = held.lift;
+  }
   if (!card.collapsed && choiceOpen && hudW && cardX < choiceX + choiceW + 8) {
     cardX = clamp(choiceX + choiceW + 8, 8, Math.max(8, width - (hudW + 8)));
   }
@@ -3611,7 +3668,7 @@ function tickFrame(now) {
     : { x: bx0, clear: !hudW };
   const cardLift = card.collapsed || spot.clear ? 0 : Math.min((hud.offsetHeight || 0) + 16, 220);
   bubble.style.transform = `translate3d(${spot.x}px, ${-lift - 10 - cardLift}px, 0)`;
-  hud.style.transform = `translate3d(${cardX}px, ${-lift}px, 0)`;
+  hud.style.transform = `translate3d(${cardX}px, ${-cardLiftPx}px, 0)`;
   if (tongueEl) {
     const flick = p.crawl && sim.actMotion === "tongue" ? window.PetEthogram.tongueFlick(sim.actT, sim.actHold) : 0;
     tongueEl.style.opacity = String(flick);
@@ -3924,6 +3981,9 @@ window.addEventListener("pointerup", (e) => {
   const lift = window.PetArrive.pointerUp(dx, dy, liftTapPx());
   if (lift.kind === "tap") {
     openKeeperCard();
+    // The keeper clicked the pet, so the card takes the keyboard (as the menu's Keeper card does): Escape reaches
+    // it. It did not, so Escape went to whatever window had it. A card that opened by itself takes nothing.
+    cardKeys(true);
     if (window.PetChoice?.guestTap() === "choice") openChoice({ role: "host" });
     return;
   }
@@ -4199,6 +4259,10 @@ if (hud) {
   // A click inside the open card hands it the keyboard too, so Tab and Escape work from there.
   hud.addEventListener("pointerdown", () => {
     if (!card.collapsed) cardKeys(true);
+  }, true);
+  // Any press on the card (a pointer or the keyboard's Enter and Space make a click) holds it up for a while.
+  hud.addEventListener("click", () => {
+    lastCardPress = performance.now();
   }, true);
 }
 // With the card open, a click on a plate joins the same Tab cycle (a closed card leaves plates as they were).

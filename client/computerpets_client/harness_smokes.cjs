@@ -206,6 +206,49 @@ function cardPaintWire() {
 }
 
 
+/**
+ * The keeper card and the pet's walks (from the first-run drive): opening the card or a window play never strands a
+ * walk the keeper asked for; the card stays up through a care walk and holds still; it stands off the house plates;
+ * a click on the pet hands it the keyboard (Escape).
+ */
+function cardWalkRules() {
+  const K = load("keeper.js");
+  const petSrc = fs.readFileSync(path.join(RENDERER, "pet.js"), "utf8");
+  const trace = [];
+  if (["seek", "leave", "enter", "eat"].some((c) => K.cardStopsWalk(c)) || !K.cardStopsWalk("wander") || !K.cardStopsWalk("idle")) {
+    return fail("opening the card would stop a walk the keeper asked for");
+  }
+  trace.push("open_card=keeps_order_walk");
+  if (!K.orderWalkResumes({ cmd: "seek", target: 1054, asleep: false }) || K.orderWalkResumes({ cmd: "wander", target: 600, asleep: false })) {
+    return fail("a play's end would not resume the walk to the food");
+  }
+  const resumes = (petSrc.match(/\n\s+resumeOrderWalk\(\);/g) || []).length;
+  if (resumes < 3) return fail(`resumeOrderWalk after play/trick/happy: ${resumes} of 3`, { resumes });
+  trace.push("play_end=resumes_order_walk");
+  const folds = [
+    K.cardFoldsOnWalk({ helloUnread: true, sinceLastPress: Infinity }),
+    K.cardFoldsOnWalk({ helloUnread: false, sinceLastPress: 1200 }),
+    K.cardFoldsOnWalk({ helloUnread: false, sinceLastPress: K.CARD_PRESS_HOLD_MS }),
+  ];
+  if (folds.join() !== "false,false,true" || !petSrc.includes("&& cardFoldsNow()) {")) return fail("card fold rule drifted", { folds });
+  trace.push(`fold=never_unread+${K.CARD_PRESS_HOLD_MS}ms_after_press`);
+  const a = K.cardHeldSpot({ open: true, walking: true, held: null, x: 400, lift: 3 });
+  const b = K.cardHeldSpot({ open: true, walking: true, held: a.held, x: 612, lift: 7 });
+  if (b.x !== 400 || b.lift !== 3 || K.cardHeldSpot({ open: true, walking: false, held: b.held, x: 650, lift: 0 }).x !== 650) {
+    return fail("card does not hold still through a walk", { b });
+  }
+  trace.push("walk=card_holds_still");
+  const plates = [{ left: 102, top: 111, right: 392, bottom: 150 }, { left: 102, top: 529, right: 392, bottom: 568 }];
+  const x = K.cardClearOfPlates({ x: 177, w: 314, top: 18, bottom: 1214, plates, width: 2560 });
+  if (x !== 400 || !petSrc.includes("window.PetKeeper.cardClearOfPlates(")) return fail(`card at ${x} over the plates`, { x });
+  trace.push("plates=card_at_400_not_177");
+  if (!/if \(lift\.kind === "tap"\) \{\n\s+openKeeperCard\(\);\n(\s+\/\/[^\n]*\n)*\s+cardKeys\(true\);/.test(petSrc)) {
+    return fail("a click on the pet does not hand the card the keyboard");
+  }
+  trace.push("tap=card_takes_keyboard");
+  return ok("order walks kept; card holds and stands off plates; tap takes keys", { x, holdMs: K.CARD_PRESS_HOLD_MS, resumes }, trace);
+}
+
 /** Keeper-card house-server row: hidden with no server named, the saved URL wins, plain words only. */
 function houseServerRow() {
   const H = require(path.join(__dirname, "..", "..", "desktop", "house-server.cjs"));
@@ -1071,6 +1114,7 @@ const COMMANDS = {
   gift_place: giftPlace,
   choice_close_exit: choiceCloseExit,
   card_paint_wire: cardPaintWire,
+  card_walk_rules: cardWalkRules,
   house_server_row: houseServerRow,
   news_favorites: newsFavorites,
   market_favorites: marketFavorites,
