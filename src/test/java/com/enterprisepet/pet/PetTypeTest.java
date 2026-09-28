@@ -80,13 +80,13 @@ class PetTypeTest {
             new ExpectedSpecies("cicada", "Periodical Cicada", PetType.Rarity.RARE),
             new ExpectedSpecies("bumblebee", "Common Eastern Bumble Bee", PetType.Rarity.COMMON),
             new ExpectedSpecies("carpenter_bee", "Eastern Carpenter Bee", PetType.Rarity.UNCOMMON),
-            new ExpectedSpecies("mason_bee", "Blue Orchard Mason Bee", PetType.Rarity.COMMON),
-            new ExpectedSpecies("leafcutter", "Alfalfa Leafcutter Bee", PetType.Rarity.COMMON),
+            new ExpectedSpecies("mason_bee", "Blue Orchard Mason", PetType.Rarity.COMMON),
+            new ExpectedSpecies("leafcutter", "Alfalfa Leafcutter", PetType.Rarity.COMMON),
             new ExpectedSpecies("stingless", "Maya Stingless Bee", PetType.Rarity.UNCOMMON),
             new ExpectedSpecies("sweat_bee", "Bicolored Sweat Bee", PetType.Rarity.COMMON),
             new ExpectedSpecies("mining_bee", "Neighborly Mining Bee", PetType.Rarity.COMMON),
-            new ExpectedSpecies("honey_drone", "Western Honey Bee (drone)", PetType.Rarity.UNCOMMON),
-            new ExpectedSpecies("honey_queen", "Western Honey Bee (queen)", PetType.Rarity.RARE),
+            new ExpectedSpecies("honey_drone", "Western Honey Bee Drone", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("honey_queen", "Western Honey Bee Queen", PetType.Rarity.RARE),
             new ExpectedSpecies("honeycomb", "Honeycomb", PetType.Rarity.UNCOMMON),
             new ExpectedSpecies("oyster", "Oyster Mushroom", PetType.Rarity.COMMON),
             new ExpectedSpecies("fly_agaric", "Fly Agaric", PetType.Rarity.UNCOMMON),
@@ -445,7 +445,7 @@ class PetTypeTest {
         assertThat(PetType.BUMBLEBEE.displayName()).isEqualTo("Common Eastern Bumble Bee");
         assertThat(PetType.CARPENTER_BEE.key()).isEqualTo("carpenter_bee");
         assertThat(PetType.MASON_BEE.rarity()).isEqualTo(PetType.Rarity.COMMON);
-        assertThat(PetType.HONEY_DRONE.displayName()).isEqualTo("Western Honey Bee (drone)");
+        assertThat(PetType.HONEY_DRONE.displayName()).isEqualTo("Western Honey Bee Drone");
         assertThat(PetType.HONEY_QUEEN.rarity()).isEqualTo(PetType.Rarity.RARE);
         assertThat(PetType.HONEYCOMB.displayName()).isEqualTo("Honeycomb");
         assertThat(PetType.MANTIS.rarity()).isEqualTo(PetType.Rarity.UNCOMMON);

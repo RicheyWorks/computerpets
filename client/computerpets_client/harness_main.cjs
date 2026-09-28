@@ -159,6 +159,12 @@ function makeElectron(ctx) {
     Notification: FakeNotification,
     powerMonitor: { on() {} },
     shell: { openExternal: (url) => ctx.opened.push(url) },
+    dialog: {
+      showMessageBox: (opts) => {
+        ctx.dialogs.push(opts);
+        return Promise.resolve({ response: ctx.dialogAnswer });
+      },
+    },
     safeStorage: {
       isEncryptionAvailable: () => ctx.encryption,
       encryptString: (text) => codec(text),
@@ -169,6 +175,14 @@ function makeElectron(ctx) {
 
 /** The GPU gate a row asks for (bootMain opts.gate); writeExpect answers are counted on the ctx. */
 const GPU = { gate: null, ctx: null };
+
+/**
+ * The pet picture a row asks for (bootMain opts.pictures). Rows about menus and IPC boot with the pictures
+ * "ready" so they do not depend on Git LFS; desk.pictures_gate boots with "lfs-pointers" and "missing".
+ * Only picturesState is stood in; the words and tray rows are the real renderer/pictures.js.
+ */
+const PICTURES = { state: null };
+const RealPictures = require(path.join(RENDERER, "pictures.js"));
 
 const STUBS = {
   "./gpu-path.cjs": {
@@ -181,6 +195,7 @@ const STUBS = {
     },
   },
   "./gpu-sense.cjs": { read: () => new Promise(() => {}) },
+  "./renderer/pictures.js": { ...RealPictures, picturesState: () => PICTURES.state || "ready" },
   "./windows-enum.cjs": { listRaw: () => new Promise(() => {}), disposePump() {} },
   "./vdesk-win.cjs": {
     readFollow: () => false,
@@ -219,8 +234,11 @@ async function bootMain(opts = {}) {
     fetchImpl: null,
     quits: 0,
     relaunches: 0,
+    dialogs: [],
+    dialogAnswer: 1,
   };
   GPU.gate = opts.gate || null;
+  PICTURES.state = opts.pictures || null;
   GPU.ctx = ctx;
   const electron = makeElectron(ctx);
   const realLoad = Module._load;
@@ -398,6 +416,75 @@ async function trayOnTheDesk() {
   } finally {
     ctx.cleanup();
   }
+}
+
+/**
+ * The overlay started from npm start with Git LFS pointers (or no pictures): the real main.cjs opens no
+ * glass, shows the small window with the Git LFS steps, keeps them in the tray, and the link goes through
+ * the same web-page-only gate as a clicked link. A second start shows the words again.
+ */
+async function picturesGate() {
+  const seen = {};
+  const fails = [];
+  for (const state of ["lfs-pointers", "missing"]) {
+    const ctx = await bootMain({ pictures: state });
+    try {
+      const w = RealPictures.words(state);
+      const tray = ctx.tray();
+      const labels = tray.map((r) => r.label || r.type);
+      const box = ctx.dialogs[0] || {};
+      const row = {
+        windows: ctx.windows.length,
+        dialogs: ctx.dialogs.length,
+        message: box.message,
+        detail: box.detail,
+        buttons: (box.buttons || []).join("|"),
+        tray: labels.join("|"),
+        tip: ctx.tips[ctx.tips.length - 1] || "",
+        ticks: ctx.intervals.length,
+      };
+      if (row.windows !== 0) fails.push(`${state}: main opened ${row.windows} windows`);
+      if (row.dialogs !== 1 || row.message !== w.message || row.detail !== w.detail) fails.push(`${state}: the small window did not carry the words`);
+      if (row.buttons !== "Open git-lfs.com|OK") fails.push(`${state}: buttons ${row.buttons}`);
+      if (row.tray !== "Pet pictures did not download|How to fix…|Open git-lfs.com|separator|Quit") fails.push(`${state}: tray ${row.tray}`);
+      if (!/^Pet pictures did not download/.test(row.tip)) fails.push(`${state}: tray tip ${row.tip}`);
+      if (row.ticks !== 0) fails.push(`${state}: main started ${row.ticks} ticks with no glass`);
+      item(tray, "How to fix…").click();
+      if (ctx.dialogs.length !== 2) fails.push(`${state}: How to fix did not show the words again`);
+      item(tray, "Open git-lfs.com").click();
+      for (const fn of ctx.appEvents["second-instance"] || []) fn();
+      if (ctx.dialogs.length !== 3) fails.push(`${state}: a second start did not show the words again`);
+      ctx.dialogAnswer = 0;
+      for (const fn of ctx.appEvents["second-instance"] || []) fn();
+      await new Promise((r) => setImmediate(r));
+      if (ctx.opened.length !== 2 || !ctx.opened.every((u) => u === "https://git-lfs.com/")) fails.push(`${state}: opened ${ctx.opened.join("|")}`);
+      item(tray, "Quit").click();
+      if (ctx.quits !== 1) fails.push(`${state}: tray Quit did not ask app.quit`);
+      row.opened = ctx.opened.slice();
+      seen[state] = row;
+    } finally {
+      ctx.cleanup();
+    }
+    // bootMain loads main.cjs once per process; drop it so the next state boots fresh.
+    delete require.cache[MAIN];
+  }
+  const ready = await bootMain({ pictures: "ready" });
+  try {
+    seen.ready = { windows: ready.windows.length, dialogs: ready.dialogs.length };
+    if (ready.windows.length !== 1 || ready.dialogs.length !== 0) fails.push(`ready: ${JSON.stringify(seen.ready)}`);
+  } finally {
+    ready.cleanup();
+  }
+  return fails.length
+    ? fail(fails.join("; "), seen)
+    : ok("Started from npm start with Git LFS pointers or no pictures, the real main.cjs opens no glass, shows the Git LFS steps in a small window and the tray, and opens git-lfs.com through the link gate", seen, [
+        "pointers=no_glass+small_window",
+        "missing=no_glass+small_window",
+        "tray=how_to_fix+git_lfs_link+quit",
+        "second_start=words_again",
+        "link=through_open_link_gate",
+        "ready=glass_opens",
+      ]);
 }
 
 async function quitDesk() {
@@ -833,6 +920,7 @@ module.exports = {
   first_run: firstRun,
   tray_on_the_desk: trayOnTheDesk,
   quit_desk: quitDesk,
+  pictures_gate: picturesGate,
   mind_get_set: mindGetSet,
   saved_lines: savedLines,
   alarm_clock: alarmClock,

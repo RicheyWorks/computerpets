@@ -1102,6 +1102,7 @@ const COMMANDS = {
   links_open: Replay.links_open,
   tray_on_the_desk: MainHarness.tray_on_the_desk,
   quit_desk: MainHarness.quit_desk,
+  pictures_gate: MainHarness.pictures_gate,
   market_search: MainHarness.market_search,
   mind_get_set: MainHarness.mind_get_set,
   saved_lines: MainHarness.saved_lines,

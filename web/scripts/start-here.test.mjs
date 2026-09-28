@@ -264,3 +264,13 @@ test("client README runs in bash and PowerShell, and says the house server addre
   assert.match(run, /Without `COMPUTERPETS_BACKEND_URL`, Unlock uses `http:\/\/127\.0\.0\.1:8081`\./);
   assert.match(clientApp, /if args\.offscreen or args\.check:\r?\n\s+os\.environ\.setdefault\("QT_QPA_PLATFORM", "offscreen"\)/);
 });
+test("START-HERE says how big the copy is, before the download and when it fails", () => {
+  const need = sectionOf(startSrc, "What you need");
+  assert.match(need, /About 8 GB of free space\. The copy is big: about 4 GB comes down the internet the first time/);
+  assert.match(need, /On slow internet the copy can take an hour or more\./);
+  assert.match(startSrc, /8\. Wait until it finishes\. The copy is about 4 GB, so this can take a while\. Let it run\./);
+  const failed = startSrc.slice(startSrc.indexOf("### `git clone` failed"), startSrc.indexOf("### You went looking for a Store page"));
+  assert.match(failed, /about 8 GB of free space\. A full disk stops the copy partway\./);
+  const mac = startSrc.slice(startSrc.indexOf("\n## Mac\n"), startSrc.indexOf("\n## Linux\n"));
+  assert.match(mac, /The overlay says the same thing in a small window if you start it the other way below\./);
+});
