@@ -4,7 +4,7 @@
  * --gui stays Electron desktop (gui-harness.cjs); this file is headless only.
  */
 import { createRequire } from "node:module";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -1373,6 +1373,127 @@ async function loopGuardUnlockPlain() {
   ]);
 }
 
+async function deskGuardPlain() {
+  const bad = [];
+  const lib = (rel) => import(pathToFileURL(join(WEB, "src", "lib", ...rel.split("/"))).href);
+  const FG = await lib("pets/frame-guard.ts");
+  const Cat = await lib("pets/cat-tricks.ts");
+  const Overlay = require(join(RENDERER, "frame-guard.js"));
+  // The web desk's loop shape with a real trick module whose step throws.
+  const Broken = { ...Cat, stepTrick() { throw new Error("injected trick fault"); } };
+  const queue = [];
+  const logs = [];
+  const pet = { x: 300, facing: 1, anim: "idle", hop: 0, land: 0, trick: null, trickWait: 0, happy: null, play: null, act: null, actMotion: null, pendingPose: null, poseHold: 0 };
+  const guard = FG.makeGuard({ log: (t) => logs.push(t), reset: () => FG.safeIdle(pet) });
+  let frames = 0;
+  let begun = 0;
+  let resets = 0;
+  let last = 0;
+  const frame = (now) => {
+    const dt = Math.min(0.1, (now - last) / 1000);
+    last = now;
+    frames += 1;
+    if (pet.trick) {
+      pet.trick = Broken.stepTrick(pet.trick, dt, { cmd: "wander" });
+    } else {
+      pet.trickWait -= dt;
+      if (pet.trickWait <= 0) {
+        pet.trick = Broken.beginTrick(Broken.TRICKS[0], pet.x, pet.facing);
+        pet.anim = pet.trick.anim;
+        begun += 1;
+        pet.trickWait = Broken.nextTrickWait(false);
+      }
+    }
+  };
+  const tick = FG.guardedLoop(frame, (fn) => queue.push(fn), guard, () => Cat.TRICK_KEY);
+  queue.push(tick);
+  let now = 0;
+  for (let i = 0; i < 1200 && queue.length; i += 1) {
+    const had = !!pet.trick;
+    now += 1000 / 60;
+    queue.shift()(now);
+    if (had && !pet.trick && pet.anim === "idle") resets += 1;
+  }
+  const guardRun = { frames, pending: queue.length, caught: guard.caught(), logs: logs.length, begun, resets, idle: pet.anim === "idle" && pet.trick === null, log: logs[0] || "" };
+  if (frames !== 1200 || queue.length !== 1) bad.push(`web desk loop stopped: ${frames} frames, ${queue.length} queued`);
+  if (guard.caught() < 2 || begun < 2 || resets !== guard.caught()) bad.push(`broken trick was not reset each time ${JSON.stringify(guardRun)}`);
+  if (logs.length !== 1 || !/^desk frame error \(cat\): Error: injected trick fault\./.test(logs[0])) bad.push(`log was not once with the pet key: ${JSON.stringify(logs)}`);
+  // Shared rules: the web guard and the overlay guard reset a pet the same way.
+  const sim = { ...pet, trick: { kind: "loaf" }, happy: {}, play: {}, act: "sniff", actMotion: {}, pendingPose: "sit", poseHold: 2, anim: "loaf", hop: 3, land: 1, trickWait: 2, thankYou: true, cmd: "talk" };
+  const parity = {
+    safeIdle: JSON.stringify(FG.safeIdle({ ...sim })) === JSON.stringify(Overlay.safeIdle({ ...sim })),
+    backoff: FG.TRICK_BACKOFF === Overlay.TRICK_BACKOFF,
+    limit: FG.LOG_LIMIT === Overlay.LOG_LIMIT,
+    errorText: FG.errorText(new TypeError("x")) === Overlay.errorText(new TypeError("x")),
+  };
+  if (!Object.values(parity).every(Boolean)) bad.push(`web and overlay frame guards differ: ${JSON.stringify(parity)}`);
+  // The desk runs its frame through that guard, and the trick calls are typed (no `as never`).
+  const livingPet = readFileSync(join(WEB, "src", "components", "desk", "living-pet.tsx"), "utf8");
+  const body = livingPet.slice(livingPet.indexOf("const frame = (now: number) => {"), livingPet.indexOf("const tick = guardedLoop("));
+  const wired = {
+    loop: /const tick = guardedLoop\(\s*frame,/.test(livingPet),
+    reset: /safeIdle\(s\);/.test(livingPet),
+    noTailRaf: body.length > 5000 && !/requestAnimationFrame|catch \{/.test(body),
+    noAsNever: !/as never/.test(livingPet),
+    typedSteps: /stepGroundTrick\(GT, s\.trick,/.test(livingPet) && /stepGroundHappy\(GT, s\.happy,/.test(livingPet) && /nextGroundTrickWait\(GT, true, undefined, s\.lastTrick\)/.test(livingPet),
+  };
+  const unwired = Object.entries(wired).filter(([, v]) => !v).map(([k]) => k);
+  if (unwired.length) bad.push(`web desk loop guard not wired: ${unwired.join(", ")}`);
+  // Desktop checkJs: down to Rui's three radio lines, with Electron's own types checked when installed.
+  const baselineJs = readFileSync(join(ROOT, "desktop", "checkjs-baseline.txt"), "utf8").trim();
+  const petJs = readFileSync(join(RENDERER, "pet.js"), "utf8");
+  const script = readFileSync(join(ROOT, "scripts", "checkjs-baseline.mjs"), "utf8");
+  const electronCfg = readFileSync(join(ROOT, "desktop", "tsconfig.checkjs-electron.json"), "utf8");
+  const checkjs = {
+    baseline: baselineJs,
+    noFunctionState: !/playSound\.ctx|startVisit\.timer/.test(petJs) && /let soundCtx = null;/.test(petJs) && /let visitTimer = 0;/.test(petJs),
+    typedLookups: /function htmlAll\(root, sel\)/.test(petJs) && /function htmlOne\(root, sel\)/.test(petJs) && /\(\/\*\* @type \{PointerEvent\} \*\/ e\)/.test(petJs),
+    electron: /"extends": "\.\/tsconfig\.checkjs\.json"/.test(electronCfg) && /node_modules\/electron\/electron\.d\.ts/.test(electronCfg) && script.includes("tsconfig.checkjs-electron.json"),
+  };
+  if (!/^\d+$/.test(baselineJs) || Number(baselineJs) > 3) bad.push(`desktop checkJs baseline is ${baselineJs}, above 3`);
+  if (!checkjs.noFunctionState || !checkjs.typedLookups || !checkjs.electron) bad.push(`checkjs cleanup: ${JSON.stringify(checkjs)}`);
+  // Plain words.
+  const settings = readFileSync(join(RENDERER, "settings.html"), "utf8");
+  const dialog = readFileSync(join(ROOT, "client", "computerpets_client", "unlock_dialog.py"), "utf8");
+  const plainErrJs = readFileSync(join(ROOT, "desktop", "license", "plain-error.cjs"), "utf8");
+  const plainErrPy = readFileSync(join(ROOT, "client", "computerpets_client", "license", "plain_error.py"), "utf8");
+  const admin = readFileSync(join(WEB, "src", "routes", "admin.tsx"), "utf8");
+  const adminApi = readFileSync(join(WEB, "src", "lib", "admin", "api.ts"), "utf8");
+  const fallbackBlock = adminApi.slice(adminApi.indexOf("export const ADMIN_FALLBACK = {"), adminApi.indexOf("} as const;", adminApi.indexOf("export const ADMIN_FALLBACK = {")));
+  const adminFallbacks = [...fallbackBlock.matchAll(/^\s+(unlock|lookup|revoke): "([^"]+)",\r?$/gm)].map((m) => m[2]);
+  const netFiles = [join(ROOT, "desktop", "license", "license-net.cjs"), join(RENDERER, "license-net.js"), join(ROOT, "client", "computerpets_client", "license", "license_net.py")].map((f) => readFileSync(f, "utf8"));
+  const heads = ["desktop/renderer/news.js", "web/src/lib/pets/news.ts", "desktop/renderer/market.js", "web/src/lib/pets/market.ts"].map((f) => readFileSync(join(ROOT, ...f.split("/")), "utf8").split(/\r?\n/)[0]);
+  const adrIndex = readFileSync(join(ROOT, "docs", "adr", "README.md"), "utf8");
+  const adrTitle = (n) => (readdirSync(join(ROOT, "docs", "adr")).find((f) => f.startsWith(`${n}-`)) || "");
+  const title = (n) => (readFileSync(join(ROOT, "docs", "adr", adrTitle(n)), "utf8").match(/^# \d{4}\. (.+)$/m) || [])[1] || "";
+  const adr19 = readFileSync(join(ROOT, "docs", "adr", adrTitle("0019")), "utf8");
+  const words = {
+    settings: settings.includes("<label>House server address</label>") && settings.includes('"Asking the house server…"') && !/Talking to the backend|<label>Backend URL|house backend|under Backend URL/.test(settings),
+    dialog: dialog.includes('form.addRow("House server address", self.backend)') && dialog.includes('"Asking the house server…"') && !/Talking to the backend|"Backend URL"|house backend|under Backend URL/.test(dialog),
+    errors: !/Backend URL/.test(plainErrJs) && !/Backend URL/.test(plainErrPy) && plainErrJs.includes("Check the house server address.") && plainErrPy.includes("Check the house server address."),
+    admin: !/showError\(err, "[^"]*failed\."\)/.test(admin) && adminFallbacks.length === 3 && adminFallbacks.every((s) => /^[A-Z][^.]+\. Try again in a moment\.$/.test(s) && !/failed/i.test(s)) && !/failure\(res, "[^"]*failed\."\)/.test(adminApi),
+    fallbacks: netFiles.every((src) => src.includes('"the license website"') && src.includes('"the download website"') && !/"the (license|bundle) host"/.test(src)),
+    docComments: heads.every((h) => !/rejects|late body|RSS read refuses|unread/.test(h) && h.includes("thrown away")) && !/CoinGecko/.test(heads[0] + heads[1]) && !/Google News|Wikipedia/.test(heads[2] + heads[3]),
+    adr: ["0036", "0037"].every((n) => title(n) && adrIndex.includes(`| ${title(n)} |`) && !/network address|host|hash/.test(title(n))) && /\*\*Plain words \(2026-09-27\):\*\* "device fingerprint"/.test(adr19),
+  };
+  const unplain = Object.entries(words).filter(([, v]) => !v).map(([k]) => k);
+  if (unplain.length) bad.push(`plain words: ${unplain.join(", ")}`);
+  const roadmap = readFileSync(join(ROOT, "docs", "ROADMAP.md"), "utf8");
+  const updated = (roadmap.match(/Last Updated[^0-9]*(\d{4}-\d{2}-\d{2})/) || [])[1] || "";
+  if (updated < "2026-09-27") bad.push(`ROADMAP Last Updated is ${updated}`);
+  if (bad.length) return fail(bad.join("; "), { guardRun, parity, wired, checkjs, words });
+  return ok("the web desk loop logs a throwing trick once and sends the pet back to idle; trick calls are typed; desktop checkJs is down to 3; house-server, admin, license, and ADR words are plain", { guardRun, parity, wired, checkjs, words, updated }, [
+    "web_loop=schedule_first+guarded",
+    "fault=injected_trick_throws",
+    "log=once_per_error+pet_key",
+    "reset=safe_idle",
+    "share=overlay_frame_guard_rules",
+    "types=no_as_never",
+    "checkjs=3+electron_types",
+    "words=house_server+admin+license_website+adr",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -1388,6 +1509,7 @@ const COMMANDS = {
   consent_plain: consentPlain,
   consent_types_plain: consentTypesPlain,
   loop_guard_unlock_plain: loopGuardUnlockPlain,
+  desk_guard_plain: deskGuardPlain,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

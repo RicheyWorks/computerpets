@@ -98,3 +98,55 @@ test("the desktop checkJs pass is wired with a whole-number baseline", () => {
     assert.match(fs.readFileSync(path.join(root, "scripts", runner), "utf8"), /checkjs-baseline\.mjs/, runner);
   }
 });
+
+test("pet.js keeps the chirp context and the visit timer in variables, not on functions", () => {
+  const src = read("pet.js");
+  assert.doesNotMatch(src, /playSound\.ctx|startVisit\.timer/);
+  assert.match(src, /let soundCtx = null;/);
+  assert.match(src, /let visitTimer = 0;/);
+  assert.match(src, /const ac = soundCtx \|\| \(soundCtx = new Ctor\(\)\);/);
+  assert.match(src, /window\.clearTimeout\(visitTimer\);\s*visitTimer = window\.setTimeout\(startVisit,/);
+  // Both sit near the top, before any function that uses them can run.
+  assert.ok(src.indexOf("let soundCtx = null;") < src.indexOf("function playSound("));
+  assert.ok(src.indexOf("let visitTimer = 0;") < src.indexOf("function startVisit("));
+});
+
+test("pet.js looks elements up as HTML elements and types the plant pointer handler", () => {
+  const src = read("pet.js");
+  assert.match(src, /function htmlAll\(root, sel\) \{\s*return \/\*\* @type \{HTMLElement\[\]\} \*\/ \(Array\.from\(root\.querySelectorAll\(sel\)\)\);/);
+  assert.match(src, /function htmlOne\(root, sel\) \{\s*return \/\*\* @type \{HTMLElement \| null\} \*\/ \(root\.querySelector\(sel\)\);/);
+  assert.match(src, /const kids = htmlAll\(plantsRoot, "\[data-plant\]"\);/);
+  assert.match(src, /node\.addEventListener\("pointerdown", \(\/\*\* @type \{PointerEvent\} \*\/ e\) => \{/);
+  assert.match(src, /items\.indexOf\(\/\*\* @type \{HTMLElement\} \*\/ \(document\.activeElement\)\)/);
+  // Rui's radio block is left as it was.
+  assert.match(src, /hudRadioQ/);
+});
+
+test("the contract double serves the bundle bytes as a plain Uint8Array copy", async () => {
+  const { createContractTestDouble } = require("../license/contract-test-double.cjs");
+  const bytes = Buffer.from("PK\u0003\u0004pet-bytes");
+  const dbl = createContractTestDouble({ cdnBytes: bytes });
+  const res = await dbl.fetchImpl("https://cdn.enterprisepet.example/p.zip");
+  assert.equal(res.status, 200);
+  assert.deepEqual(Buffer.from(await res.arrayBuffer()), bytes);
+  const plain = await createContractTestDouble({}).fetchImpl("https://cdn.enterprisepet.example/p.zip");
+  assert.equal(Buffer.from(await plain.arrayBuffer()).toString("latin1"), "PK\u0003\u0004fake-zip");
+});
+
+test("checkJs also reads Electron's own types when desktop/node_modules has Electron", () => {
+  const root = path.join(here, "..", "..");
+  const cfg = JSON.parse(fs.readFileSync(path.join(root, "desktop", "tsconfig.checkjs-electron.json"), "utf8"));
+  assert.equal(cfg.extends, "./tsconfig.checkjs.json");
+  assert.deepEqual(cfg.compilerOptions.paths.electron, ["./node_modules/electron/electron.d.ts"]);
+  const script = fs.readFileSync(path.join(root, "scripts", "checkjs-baseline.mjs"), "utf8");
+  assert.match(script, /tsconfig\.checkjs-electron\.json/);
+  assert.match(script, /more than with the stand-in\. FAIL/);
+  const stub = fs.readFileSync(path.join(root, "desktop", "types", "electron.d.ts"), "utf8");
+  assert.match(stub, /export type MenuItemConstructorOptions = any;/);
+  const main = fs.readFileSync(path.join(root, "desktop", "main.cjs"), "utf8");
+  assert.match(main, /@typedef \{import\("electron"\)\.MenuItemConstructorOptions\} MenuRow/);
+  for (const fn of ["companionMenu", "deskPickMenu", "careMenu", "gpuPathRows", "refusedTrayTemplate", "trayTemplate", "macAppMenu", "desktopFollowRows"]) {
+    assert.match(main, new RegExp(`@returns \\{MenuRow\\[\\]\\}\\s*\\*/\\s*function ${fn}\\(`), fn);
+  }
+  assert.equal(Number(fs.readFileSync(path.join(root, "desktop", "checkjs-baseline.txt"), "utf8").trim()) <= 3, true);
+});

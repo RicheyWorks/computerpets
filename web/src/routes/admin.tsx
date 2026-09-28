@@ -4,6 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
+  ADMIN_FALLBACK,
   ADMIN_KEY_REJECTED,
   AdminApiError,
   clearAdminSession,
@@ -128,7 +129,7 @@ export function AdminPage() {
       setRows([]);
       // A rejected key must not stay in this tab, or every reload retries it and shows the same refusal.
       if (err instanceof AdminApiError && err.status === 401) clearAdminSession();
-      showError(err, "Unlock failed.");
+      showError(err, ADMIN_FALLBACK.unlock);
       keyInput.current?.focus();
     } finally {
       setBusy(false);
@@ -154,7 +155,7 @@ export function AdminPage() {
         lock(ADMIN_KEY_REJECTED);
         return;
       }
-      showError(err, "Lookup failed.");
+      showError(err, ADMIN_FALLBACK.lookup);
     } finally {
       setBusy(false);
     }
@@ -190,7 +191,7 @@ export function AdminPage() {
         lock(ADMIN_KEY_REJECTED);
         return;
       }
-      showError(err, "Revoke failed.");
+      showError(err, ADMIN_FALLBACK.revoke);
       return;
     }
     // The ledger confirmed the revoke. From here on only the list can fail, and it must not read as a failed revoke.

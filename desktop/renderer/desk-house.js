@@ -149,7 +149,7 @@
     if (!body) return;
     const tabs = $("weather-tabs");
     if (tabs) {
-      tabs.querySelectorAll("[data-weather-tab]").forEach((btn) => {
+      tabs.querySelectorAll("[data-weather-tab]").forEach((/** @type {HTMLElement} */ btn) => {
         const on = btn.getAttribute("data-weather-tab") === tab;
         btn.setAttribute("aria-selected", on ? "true" : "false");
         btn.tabIndex = on ? 0 : -1;
@@ -234,7 +234,7 @@
     const source = N.sourceLine(topic, tab);
     const tabs = $("news-tabs");
     if (tabs) {
-      tabs.querySelectorAll("[data-news-tab]").forEach((btn) => {
+      tabs.querySelectorAll("[data-news-tab]").forEach((/** @type {HTMLElement} */ btn) => {
         const on = btn.getAttribute("data-news-tab") === tab;
         btn.setAttribute("aria-selected", on ? "true" : "false");
         btn.tabIndex = on ? 0 : -1;

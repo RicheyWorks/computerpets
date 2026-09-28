@@ -54,12 +54,12 @@ test("a confirmed revoke says it worked; only the list refresh can fail after th
   const page = src("src/routes/admin.tsx");
   const body = page.slice(page.indexOf("async function confirmRevoke"), page.indexOf("function lock("));
   const revokeAt = body.indexOf("await revokeLicense(");
-  const failAt = body.indexOf('showError(err, "Revoke failed.")');
+  const failAt = body.indexOf("showError(err, ADMIN_FALLBACK.revoke)");
   const doneAt = body.indexOf("setPendingJti(null)");
   const listAt = body.indexOf("await lookupLicenses(");
   assert.ok(revokeAt > 0 && revokeAt < failAt && failAt < doneAt && doneAt < listAt, "revoke, its failure, then the list");
   const listCatch = body.slice(listAt);
-  assert.doesNotMatch(listCatch, /Revoke failed/);
+  assert.doesNotMatch(listCatch, /Revoke failed|ADMIN_FALLBACK\.revoke/);
   assert.match(listCatch, /setNote\(REVOKED_NOTE\);/);
   assert.match(listCatch, /setRows\(\(was\) => markRevoked\(was, jti\)\);/);
   assert.match(listCatch, /setNote\(revokedListStale\(plainMessage\(err, "Try again in a moment\."\)\)\);/);

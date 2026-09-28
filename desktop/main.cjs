@@ -251,6 +251,10 @@ function currentName() {
   return roster.find((r) => r.key === currentKey)?.name ?? "Companion";
 }
 
+/** One row of a tray, pet, or app menu (Electron's own type when desktop/node_modules has Electron). */
+/** @typedef {import("electron").MenuItemConstructorOptions} MenuRow */
+
+/** @returns {MenuRow} */
 function guestRadio(r) {
   return {
     label: `${r.name} — ${r.speciesLabel}`,
@@ -264,11 +268,15 @@ function guestRadio(r) {
   };
 }
 
+/** @returns {MenuRow[]} */
 function companionMenu() {
   return roster.map(guestRadio);
 }
 
-/** Rui, Sip, and the grid ten sit first. The rest of the house stays under Companions. */
+/**
+ * Rui, Sip, and the grid ten sit first. The rest of the house stays under Companions.
+ * @returns {MenuRow[]}
+ */
 function deskPickMenu() {
   return Desk.deskPicks()
     .map((key) => roster.find((r) => r.key === key))
@@ -284,6 +292,7 @@ function openKeeperCardFromMenu() {
   win.webContents.send("command", { type: "open-card" });
 }
 
+/** @returns {MenuRow[]} */
 function careMenu() {
   return [
     { label: "Feed", click: () => win?.webContents.send("command", "feed") },
@@ -315,9 +324,10 @@ function requireHardwareCompositing() {
   app.quit();
 }
 
+/** @returns {MenuRow[]} */
 function gpuPathRows() {
   if (!gpuGate || !gpuGate.open) return [];
-  /** @type {Array<Record<string, any>>} */
+  /** @type {MenuRow[]} */
   const rows = [{ label: gpuGate.label, enabled: false }];
   if (gpuGate.path === "software") {
     rows.push({ label: "Require hardware compositing", click: () => requireHardwareCompositing() });
@@ -326,8 +336,9 @@ function gpuPathRows() {
   return rows;
 }
 
+/** @returns {MenuRow[]} */
 function refusedTrayTemplate() {
-  /** @type {Array<Record<string, any>>} */
+  /** @type {MenuRow[]} */
   const rows = [
     { label: gpuGate.label, enabled: false },
     { type: "separator" },
@@ -346,6 +357,7 @@ function statusLabel() {
   return bits.join(" · ");
 }
 
+/** @returns {MenuRow[]} */
 function trayTemplate() {
   return [
     ...gpuPathRows(),
@@ -373,6 +385,7 @@ function trayTemplate() {
   ];
 }
 
+/** @returns {MenuRow[]} */
 function macAppMenu() {
   return [
     { role: "appMenu" },
@@ -406,6 +419,7 @@ function refreshMenus() {
     Menu.setApplicationMenu(Menu.buildFromTemplate(macAppMenu()));
     return;
   }
+  /** @type {MenuRow[]} */
   const mac = [
     { label: gpuGate.label, enabled: false },
     { label: "Quit", click: () => app.quit() },
@@ -546,7 +560,7 @@ function createTray() {
 
 function popupPetMenu(x, y) {
   if (!win) return;
-  Menu.buildFromTemplate([
+  Menu.buildFromTemplate(/** @type {MenuRow[]} */ ([
     { label: statusLabel(), enabled: false },
     { type: "separator" },
     { label: "On the desk", submenu: deskPickMenu() },
@@ -560,7 +574,7 @@ function popupPetMenu(x, y) {
     { type: "separator" },
     { label: "Hide the window", click: () => win?.hide() },
     { label: "Quit", click: () => app.quit() },
-  ]).popup({ window: win, x: Math.round(x), y: Math.round(y) });
+  ])).popup({ window: win, x: Math.round(x), y: Math.round(y) });
 }
 
 let guiHarnessDone = false;
@@ -793,6 +807,7 @@ function stopDesktopFollow() {
   vdeskProbe = null;
 }
 
+/** @returns {MenuRow[]} */
 function desktopFollowRows() {
   if (!Desk.desktopFollow(process.platform)) return [];
   return [

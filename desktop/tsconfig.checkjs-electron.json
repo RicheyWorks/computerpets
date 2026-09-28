@@ -1,0 +1,7 @@
+{
+  "//": "The same checkJs pass with Electron's own types instead of types/electron.d.ts. scripts/checkjs-baseline.mjs runs it only when desktop/node_modules has Electron installed; it may not find more errors than the stub pass.",
+  "extends": "./tsconfig.checkjs.json",
+  "compilerOptions": {
+    "paths": { "electron": ["./node_modules/electron/electron.d.ts"] }
+  }
+}

@@ -1,9 +1,9 @@
 /** Unlock and a bound download say the license website's name before the code made from this computer's ID is sent there. An unbound download says that name before it asks; it sends no such code. Downloading your pet's files says the download website's name before it asks for them. Each line names the website in plain words, with the same address sentence as the weather, news, and quote plates (`plainNetLine`). A loopback host stays on this computer. */
 (function (root) {
-  const LICENSE_HOST_NAME = "the license host";
+  const LICENSE_HOST_NAME = "the license website";
   const LOCAL_STAYS = "Unlocking stays on this computer. The code made from this computer's ID does not leave.";
   const DOWNLOAD_LOCAL = "This download stays on this computer. It talks to this computer. It does not send the code made from this computer's ID.";
-  const BUNDLE_HOST_NAME = "the bundle host";
+  const BUNDLE_HOST_NAME = "the download website";
   const BUNDLE_IDLE = "Your pet's files are not downloaded until this line names the website.";
   const BUNDLE_LOCAL = "This download stays on this computer. Your pet's files come from this computer.";
 
