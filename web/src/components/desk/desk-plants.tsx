@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { guardedLoop, makeGuestGuard } from "@/lib/pets/frame-guard";
 import { livingByKey } from "@/lib/pets/living";
 import {
   DEST_PX,
@@ -28,6 +29,7 @@ export function DeskPlants({ windOn }: { windOn?: boolean }) {
   const wind = useRef(!!windOn);
   wind.current = !!windOn;
   const press = useRef<{ key: string; x: number; y: number } | null>(null);
+  const [guard] = useState(() => makeGuestGuard({ outcome: "The plants stand upright and the wind keeps going." }));
 
   useEffect(() => {
     setPlants(loadPlants(window.innerWidth, window.innerHeight));
@@ -37,18 +39,24 @@ export function DeskPlants({ windOn }: { windOn?: boolean }) {
     let last = performance.now();
     let age = 0;
     let raf = 0;
-    const tick = (now: number) => {
+    // Safe state for a lean that threw: the plants stand upright; the loop keeps running.
+    guard.onReset(() => setLean(0));
+    const step = (now: number) => {
       const dt = Math.min(0.08, (now - last) / 1000);
       last = now;
       age += dt;
       const selected = plantsRef.current.some((p) => p.selected);
       const still = plantsRef.current.every((p) => p.mode === "still");
       setLean(still ? 0 : windLean(age, wind.current, selected));
-      raf = window.requestAnimationFrame(tick);
     };
+    const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, () => "plants");
     raf = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(raf);
-  }, []);
+    return () => {
+      tick.stop();
+      guard.onReset(null);
+      window.cancelAnimationFrame(raf);
+    };
+  }, [guard]);
 
   function persist(next: DeskPlant[]) {
     setPlants(savePlants(next));

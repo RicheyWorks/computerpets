@@ -218,7 +218,14 @@ test("desktop overlay: #hud-house-music is outside #hud-music; Rui's overlay blo
 test("docs match the app: TS error count, deploy-sh PyYAML hint; the NFT floor says couldn't load with Try again", () => {
   const contributing = read(repo, "docs/CONTRIBUTING.md");
   assert.doesNotMatch(contributing, /about 1,500 known TypeScript errors/);
-  assert.match(contributing, /1,593 known TypeScript errors at last count; `web\/tsc-baseline\.txt` always holds the current number/);
+  // The count in CONTRIBUTING is the one in web/tsc-baseline.txt (read here, not written into the test).
+  const tscBaseline = read(repo, "web/tsc-baseline.txt").trim();
+  assert.match(tscBaseline, /^\d+$/);
+  const quoted = Number(tscBaseline).toLocaleString("en-US");
+  assert.ok(
+    contributing.includes(`\`web\` has ${quoted} known TypeScript errors at last count; \`web/tsc-baseline.txt\` always holds the current number`),
+    `CONTRIBUTING quotes ${quoted} web TypeScript errors, as web/tsc-baseline.txt holds`,
+  );
   const sh = read(repo, "scripts/test-all.sh");
   const ps = read(repo, "scripts/test-all.ps1");
   assert.match(ps, /python3 with PyYAML is not available to bash \(see 'deploy-sh on Windows' in docs\/CONTRIBUTING\.md\)/);

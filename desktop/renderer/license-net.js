@@ -1,9 +1,7 @@
 /** Unlock and a bound download say the license website's name before the code made from this computer's ID is sent there. An unbound download says that name before it asks; it sends no such code. Downloading your pet's files says the download website's name before it asks for them. Each line names the website in plain words, with the same address sentence as the weather, news, and quote plates (`plainNetLine`). A loopback host stays on this computer. */
 (function (root) {
-  const LICENSE_HOST_NAME = "the license website";
   const LOCAL_STAYS = "Unlocking stays on this computer. The code made from this computer's ID does not leave.";
   const DOWNLOAD_LOCAL = "This download stays on this computer. It talks to this computer. It does not send the code made from this computer's ID.";
-  const BUNDLE_HOST_NAME = "the download website";
   const BUNDLE_IDLE = "Your pet's files are not downloaded until this line names the website.";
   const BUNDLE_LOCAL = "This download stays on this computer. Your pet's files come from this computer.";
 
@@ -29,7 +27,7 @@
   function licenseTarget(backendUrl) {
     const host = licenseHostName(backendUrl);
     if (!host) return null;
-    return { local: isLoopbackHost(host), label: host || LICENSE_HOST_NAME };
+    return { local: isLoopbackHost(host), label: host };
   }
 
   function licenseHonesty(backendUrl) {
@@ -102,7 +100,7 @@
     if (!url || url.protocol === "file:") return { local: true, label: "" };
     const host = url.hostname.replace(/^\[|\]$/g, "");
     if (!host || isLoopbackHost(host)) return { local: true, label: host };
-    return { local: false, label: host || BUNDLE_HOST_NAME };
+    return { local: false, label: host };
   }
 
   function bundleHonesty(downloadUrl) {
@@ -129,10 +127,8 @@
   }
 
   const api = {
-    LICENSE_HOST_NAME,
     LOCAL_STAYS,
     DOWNLOAD_LOCAL,
-    BUNDLE_HOST_NAME,
     BUNDLE_IDLE,
     BUNDLE_LOCAL,
     licenseHostName,

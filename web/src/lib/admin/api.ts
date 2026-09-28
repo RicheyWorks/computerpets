@@ -57,6 +57,10 @@ export const ADMIN_FALLBACK = {
 export const ADMIN_KEY_REJECTED =
   "The license service did not accept this admin key. Check the key and this computer's clock, then try again.";
 
+/** When the license service does not answer at all (wrong address, not running, or no network). */
+export const ADMIN_UNREACHABLE =
+  "Couldn't reach the license service. Check that its address is right and that it is running, then try again.";
+
 /** The plain line for a failed license-service answer. */
 export function adminStatusLine(status: number, fallback: string): string {
   if (status === 429) return PLAIN_LINES.busy;
@@ -171,7 +175,7 @@ async function adminFetch(apiBase: string, adminKey: string, path: string, init?
     });
   } catch (err) {
     console.error("[admin] license service unreachable:", err);
-    throw new AdminApiError(0, "Cannot reach the license service. Check the API URL.");
+    throw new AdminApiError(0, ADMIN_UNREACHABLE);
   }
   if (res.status === 401) {
     throw await failure(res, ADMIN_KEY_REJECTED);

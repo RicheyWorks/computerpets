@@ -31,15 +31,19 @@
   <body>
     <main>
       <h1 id="mindsSection">Minds</h1>
-      <p class="lead">Plug any AI into the overlay. A plugin key is not written in plain text in mind.json. When this computer has a secret store, the key is sealed there.</p>
+      <p class="lead" id="mindsIntro">Pets talk without an AI. Adding one is optional.</p>
       <label>Plugin</label>
       <select id="plugin"></select>
+      <p class="lead" id="mindHouse">House lines need nothing else. Your pets answer with their own words.</p>
+      <div id="mindFields">
+      <p class="lead" id="mindAbout">Plug any AI into the overlay. A plugin key is not written in plain text in mind.json. When this computer has a secret store, the key is sealed there.</p>
       <label>Model</label>
       <input id="model" />
       <label>Base URL</label>
       <input id="base" />
       <label>API key</label>
       <input id="key" type="password" autocomplete="off" />
+      </div>
       <p class="ok" id="keyStore"></p>
       <button id="save" type="button">Save house default</button>
       <p class="ok" id="ok"></p>
@@ -68,7 +72,7 @@
       <select id="petType"></select>
       <div>
         <button id="unlock" type="button">Unlock</button>
-        <button id="redownload" class="ghost" type="button">Signed download</button>
+        <button id="redownload" class="ghost" type="button">Download my pet</button>
         <button id="lock" class="ghost" type="button">Clear</button>
         <button id="weakMark" class="ghost" type="button" hidden>Use the computer name, or a random id if there is no name</button>
       </div>
@@ -103,12 +107,22 @@
         o.textContent = p.name;
         plugin.appendChild(o);
       });
+      // House lines (the first choice) need no model, address, or key, so those boxes stay out of the way.
+      const mindFields = document.getElementById("mindFields");
+      const mindHouse = document.getElementById("mindHouse");
+      function showFields() {
+        const p = window.PetMind.preset(plugin.value);
+        const house = !p || p.kind === "local";
+        if (mindFields) mindFields.hidden = house;
+        if (mindHouse) mindHouse.hidden = !house;
+      }
       function fill(id) {
         const p = window.PetMind.preset(id);
         plugin.value = id;
         model.value = s.default.model || p.model || "";
         base.value = s.default.baseUrl || p.base || "";
         key.value = s.default.apiKey || "";
+        showFields();
       }
       fill(s.default.plugin || "local");
       plugin.addEventListener("change", () => {
@@ -116,6 +130,7 @@
         const p = window.PetMind.preset(plugin.value);
         model.value = p.model || "";
         base.value = p.base || "";
+        showFields();
       });
       const okLine = document.getElementById("ok");
       const mindErr = document.getElementById("mindErr");

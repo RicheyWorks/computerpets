@@ -1,4 +1,5 @@
 ﻿import { useEffect, useRef, useState, type RefObject } from "react";
+import { guardedLoop, makeGuestGuard } from "@/lib/pets/frame-guard";
 import { livingByKey } from "@/lib/pets/living";
 import {
   ROBIN_KEY,
@@ -40,6 +41,8 @@ export function RobinFlyer({
   sleepRef.current = hostSleeping;
   keyRef.current = hostKey;
   songRef.current = onSong;
+  // One guard for every flight, so a broken flight that comes back is logged once, not once per visit.
+  const [guard] = useState(() => makeGuestGuard({ outcome: "The robin leaves the desk; the other pets keep moving." }));
 
   useEffect(() => {
     if (hidden || !startId) {
@@ -52,6 +55,7 @@ export function RobinFlyer({
     let frame = 0;
     let acc = 0;
     const first = destSrc(fly, guest.sprites);
+    if (canvas.current) canvas.current.style.visibility = "";
     setOn(true);
     onVisible?.(true);
     if (canvas.current && first) paintBrickFrame(canvas.current, first);
@@ -59,7 +63,21 @@ export function RobinFlyer({
     // Hidden tab: requestAnimationFrame does not fire, so the flight (and its calls) holds still, and the
     // 0.08 s dt cap resumes it in place instead of jumping. No timer of its own to pause.
     let raf = 0;
-    const tick = (now: number) => {
+    let gone = false;
+    const leave = () => {
+      if (gone) return;
+      gone = true;
+      setOn(false);
+      onVisible?.(false);
+    };
+    // Safe state for a flight that threw: the robin leaves now (hidden, loop stopped) instead of hanging
+    // mid-air. The next call flies again as usual.
+    guard.onReset(() => {
+      tick.stop();
+      if (canvas.current) canvas.current.style.visibility = "hidden";
+      leave();
+    });
+    const step = (now: number) => {
       const dt = Math.min(0.08, (now - last) / 1000);
       last = now;
       const pose = hostPoseRef?.current;
@@ -72,9 +90,8 @@ export function RobinFlyer({
         hostFacing: pose?.facing,
       })!;
       if (!stillVisible(fly)) {
-        setOn(false);
-        onVisible?.(false);
-        return;
+        leave();
+        return false;
       }
       if (shouldSing(fly)) {
         songRef.current?.(ROBIN_SONG);
@@ -92,11 +109,16 @@ export function RobinFlyer({
         paintBrickFrame(el, src);
         el.style.transform = `translate3d(${fly.x}px, ${-fly.lift}px, 0) rotate(${fly.rot}deg) scale(${fly.facing}, ${fly.flap || 1})`;
       }
-      raf = window.requestAnimationFrame(tick);
+      return true;
     };
+    const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, () => ROBIN_KEY);
     raf = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(raf);
-  }, [guest.sprites, hidden, hostPoseRef, onVisible, startId]);
+    return () => {
+      tick.stop();
+      guard.onReset(null);
+      window.cancelAnimationFrame(raf);
+    };
+  }, [guard, guest.sprites, hidden, hostPoseRef, onVisible, startId]);
 
   if (!on && !startId) return null;
   return (

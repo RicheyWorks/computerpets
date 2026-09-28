@@ -27,7 +27,7 @@ TOKEN_MEMORY_NOTE = (
     "This computer has no secret store, so the download sign-in is kept only until the app closes. "
     "Unlock again later to download."
 )
-TOKEN_GONE_NOTE = "The download sign-in was kept only until the app last closed. Unlock again before a Signed download."
+TOKEN_GONE_NOTE = "The download sign-in was kept only until the app last closed. Unlock again before you download your pet."
 
 
 def _has_stored_license(store: dict[str, Any] | None) -> bool:
