@@ -41,7 +41,8 @@ test("a folded plaque shows the name and kind, and opens to the rest on one tap"
 test("the desk room: on a phone the plaque waits while the hello is up, then shows folded", () => {
   const room = readFileSync(join(WEB, "src", "components", "desk", "companion-room.tsx"), "utf8");
   assert.match(room, /const \[hintUp, setHintUp\] = useState\(false\);\n\s+useEffect\(\(\) => setHintUp\(!firstHintSeen\(\)\), \[\]\);/);
-  assert.match(room, /\{hand && hintUp \? null : \(\n\s+<SpeciesPlaque speciesKey=\{kind\.key\} compact paper folded=\{hand\} /);
+  // A short desktop screen folds it too (deskFold, kennel-targets.test.mjs).
+  assert.match(room, /\{\(hand \|\| deskFold\) && hintUp \? null : \(\n\s+<SpeciesPlaque speciesKey=\{kind\.key\} compact paper folded=\{hand \|\| deskFold\} /);
   assert.match(room, /onDone=\{\(\) => \{\n\s+setHintUp\(false\);/);
 });
 
@@ -77,8 +78,9 @@ test("a one-line plaque on a short phone opens to the whole card on one tap", as
 test("the room wires the fit: aside and rail get the measured max height, the plaque goes to one line, bubbles on top", () => {
   const room = readFileSync(join(WEB, "src", "components", "desk", "companion-room.tsx"), "utf8");
   const living = readFileSync(join(WEB, "src", "components", "desk", "living-pet.tsx"), "utf8");
-  assert.match(room, /ref=\{asideRef\}\n\s+data-desk-aside\n\s+style=\{hand && fit \? \{ maxHeight: fit\.asideMax \} : undefined\}/);
-  assert.match(room, /ref=\{railRef\}\n\s+data-desk-rail\n\s+style=\{hand && fit \? \{ maxHeight: fit\.railMax \} : undefined\}/);
+  // At desktop sizes deskFit does the same (kennel-targets.test.mjs).
+  assert.match(room, /ref=\{asideRef\}\n\s+data-desk-aside\n\s+style=\{hand && fit \? \{ maxHeight: fit\.asideMax \} : !hand && !pad && deskFit \? \{ maxHeight: deskFit\.asideMax \} : undefined\}/);
+  assert.match(room, /ref=\{railRef\}\n\s+data-desk-rail\n\s+data-rail-fit=\{!hand && !pad && deskFit \? "" : undefined\}\n\s+style=\{hand && fit \? \{ maxHeight: fit\.railMax \} : !hand && !pad && deskFit \? \{ maxHeight: deskFit\.railMax \} : undefined\}/);
   assert.match(room, /ref=\{careRef\} data-desk-care/);
   assert.match(room, /careTop: care\.getBoundingClientRect\(\)\.top - top,/);
   assert.match(room, /if \(plaqueNeedsLine\(aside\.scrollHeight, aside\.clientHeight\)\) setPlaqueLine\(true\);/);

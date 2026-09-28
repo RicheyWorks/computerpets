@@ -36,10 +36,11 @@ test("every room page's field notes are the drawers, with each guide's words sti
   assert.equal(ROOMS.length, 18);
   for (const [room, guides] of ROOMS) {
     const s = src(`src/routes/${room}.tsx`);
-    assert.match(s, /import \{ FieldNotes \} from "@\/components\/desk\/field-notes"/, room);
-    for (const g of guides) assert.match(s, new RegExp(`<FieldNotes\\s+notes=\\{${g}\\}`), `${room} ${g}`);
+    assert.match(s, /import \{ FieldNotes(, type FieldNoteSet)? \} from "@\/components\/desk\/field-notes"/, room);
+    // The first guide is the FieldNotes' own notes; a second (/hive's bees and comb) rides under the same search.
+    guides.forEach((g, i) => assert.match(s, new RegExp(i ? `notes: ${g},` : `<FieldNotes\\s+notes=\\{${g}\\}`), `${room} ${g}`));
     assert.doesNotMatch(s, /_GUIDE\.map\(/, `${room} still lists its notes one after another`);
-    assert.equal((s.match(/<FieldNotes\b/g) || []).length, guides.length, room);
+    assert.equal((s.match(/<FieldNotes\b/g) || []).length, 1, room);
   }
 });
 
@@ -47,13 +48,13 @@ test("the field notes take a room's own kicker, words and example, and keep ever
   const s = src("src/components/desk/field-notes.tsx");
   assert.match(s, /kicker = "Field notes"/);
   assert.match(s, /intro\?: ReactNode/);
-  assert.match(s, /example \?\? \(notes\[notes\.length - 1\]\?\.species\.toLowerCase\(\)/);
+  assert.match(s, /example \?\? \(all\[all\.length - 1\]\?\.species\.toLowerCase\(\)/);
   assert.match(s, /data-note-tell/);
   // A closed drawer still holds its words: the notes are rendered whether open or not (hidden only by a search).
   assert.match(s, /hidden=\{!match\}/);
   assert.doesNotMatch(s, /isOpen \?\s*\(/);
   const hive = src("src/routes/hive.tsx");
-  assert.match(hive, /kicker="Bees and comb"/);
+  assert.match(hive, /kicker: "Bees and comb"/);
   assert.match(src("src/routes/grid.tsx"), /<FieldNotes[\s\S]*?intro=/);
 });
 
@@ -64,7 +65,7 @@ test("on a phone /demo docks its weather, news and market plates in the panel, o
   for (const k of ["weather", "news", "market"]) assert.match(plates, new RegExp(`usePlateChrome\\("${k}", docked\\)`), k);
   assert.equal((plates.match(/data-plate-docked=\{docked \? "" : undefined\}/g) || []).length, 3);
   const room = src("src/components/desk/companion-room.tsx");
-  assert.match(room, /<div data-demo-plates className="mt-5 max-w-sm space-y-2">/);
+  assert.match(room, /<div data-demo-plates role="group" aria-label="Weather, news, market" className="mt-5 max-w-sm scroll-mt-2 space-y-2">/);
   assert.match(room, /<DeskWeatherPlate docked /);
   assert.match(room, /<DeskNewsPlate docked \/>/);
   assert.match(room, /<DeskMarketPlate docked \/>/);

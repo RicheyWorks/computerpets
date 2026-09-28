@@ -655,6 +655,37 @@
     display: none;
   }
 
+  /* Desktop-size targets (WCAG 2.2 target size, 24 by 24 px at least): the rail's rooms and guests, the plaque's
+     "The mix-up, and where they live" and "The rest of the house", a room's own line links, the room links under the
+     care buttons and Send. They were 13 to 23 px tall at 1024 to 1440 px wide. The words stay the same size; only
+     the hit area grows. A phone floor has its own 44 px rules above and below. */
+  :is(.den-cabinet-room, .den-cabinet-guest):not([data-phone-floor] *) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 1.5rem;
+    min-width: 1.5rem;
+  }
+
+  :is([data-line-link], [data-room-links] a, [data-talk-send], [data-open-room]):not([data-phone-floor] *) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
+    min-width: 1.5rem;
+    vertical-align: middle;
+  }
+
+  /* A fitted desktop rail (deskFit) is one scroller: the guests' drawer no longer scrolls inside it. */
+  [data-rail-fit] .den-cabinet-drawer {
+    max-height: none;
+    overflow: visible;
+  }
+
+  [data-room-links] a:not([data-phone-floor] *) {
+    justify-content: center;
+    padding-inline: 0.125rem;
+  }
+
   /* A /demo plate docked in a phone's panel opens with a thumb-sized press. */
   [data-plate-docked] > button:first-child {
     min-height: 2.75rem;

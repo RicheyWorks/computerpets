@@ -40,7 +40,14 @@
     return v.trim().toLowerCase();
   }
 
-  function defaultSpot(key, width, height) {
+  /** The gap between a plate and the room chrome it keeps off, and between two stacked plates. */
+  const KEEP_GAP = 16;
+
+  /**
+   * Where a plate sits before anyone moves it. keepOff ({ left, right, top } px) is the web /demo room's panel, rail
+   * and header; the overlay passes none, so its spots are the same as ever. Same math as web desk-plates.ts.
+   */
+  function defaultSpot(key, width, height, keepOff) {
     const w = Math.max(320, width || 800);
     const h = Math.max(240, height || 480);
     const spots = {
@@ -48,6 +55,17 @@
       news: { x: clamp(w - PLATE_W - w * 0.08, 8, w - PLATE_W - 8), y: clamp(h * 0.08, 8, h - PLATE_H - 8) },
       market: { x: clamp(w * 0.04, 8, w - PLATE_W - 8), y: clamp(h * 0.38, 8, h - PLATE_H - 8) },
     };
+    if (keepOff) {
+      const left = Math.max(0, Number(keepOff.left) || 0);
+      const right = Math.max(0, Number(keepOff.right) || 0);
+      const top = Math.max(0, Number(keepOff.top) || 0);
+      const xMax = w - PLATE_W - 8;
+      const yMax = h - PLATE_H - 8;
+      for (const k of ["weather", "market"]) spots[k].x = clamp(Math.max(spots[k].x, left + KEEP_GAP), 8, xMax);
+      spots.news.x = clamp(Math.min(spots.news.x, w - right - PLATE_W - KEEP_GAP), 8, xMax);
+      for (const k of PLATE_KEYS) spots[k].y = clamp(Math.max(spots[k].y, top + KEEP_GAP / 2), 8, yMax);
+      if (spots.news.x < spots.weather.x + PLATE_W + KEEP_GAP) spots.news.y = clamp(spots.weather.y + PLATE_H + KEEP_GAP / 2, 8, yMax);
+    }
     const spot = spots[key] || spots.weather;
     return {
       key,
@@ -61,9 +79,9 @@
     };
   }
 
-  function parsePlate(raw, width, height, keyHint) {
+  function parsePlate(raw, width, height, keyHint, keepOff) {
     const key = raw && isPlateKey(raw.key) ? raw.key : isPlateKey(keyHint) ? keyHint : PLATE_KEYS[0];
-    const spot = defaultSpot(key, width, height);
+    const spot = defaultSpot(key, width, height, keepOff);
     if (!raw || typeof raw !== "object") return spot;
     if (Number.isFinite(Number(raw.x))) spot.x = clamp(Number(raw.x), 8, Math.max(8, (width || 800) - 40));
     if (Number.isFinite(Number(raw.y))) spot.y = clamp(Number(raw.y), 8, Math.max(8, (height || 480) - 40));
@@ -73,7 +91,7 @@
     return spot;
   }
 
-  function loadPlates(width, height, storage) {
+  function loadPlates(width, height, storage, keepOff) {
     const store = storage || (typeof localStorage !== "undefined" ? localStorage : null);
     let raw = null;
     try {
@@ -82,7 +100,7 @@
       raw = null;
     }
     const list = Array.isArray(raw) ? raw : [];
-    return PLATE_KEYS.map((key) => parsePlate(list.find((p) => p && p.key === key) || { key }, width, height, key));
+    return PLATE_KEYS.map((key) => parsePlate(list.find((p) => p && p.key === key) || { key }, width, height, key, keepOff));
   }
 
   function savePlates(plates, storage) {
@@ -189,6 +207,7 @@
     CLICK_PX,
     PLATE_W,
     PLATE_H,
+    KEEP_GAP,
     DEFAULT_COLORS,
     SWATCHES,
     isPlateKey,

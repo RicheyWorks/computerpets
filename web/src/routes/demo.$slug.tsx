@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { DemoStage } from "@/components/desk/demo-stage";
 import { livingBySlug } from "@/lib/pets/living";
 
@@ -6,6 +6,12 @@ const host = import.meta.env.VITE_PUBLIC_HOSTNAME;
 
 export const Route = createFileRoute("/demo/$slug")({
   component: DemoPage,
+  // A mistyped /demo/<name> answered 200 with its "No demo for that name." words; the server now says 404, like
+  // the site's not-found page, and the same words and tab title stay (notFoundComponent, head).
+  loader: ({ params }) => {
+    if (!livingBySlug(params.slug)) throw notFound();
+  },
+  notFoundComponent: DemoMissing,
   head: ({ params }) => {
     const kind = livingBySlug(params.slug);
     // A mistyped /demo/<name> used to say just "ComputerPets" in the tab,
@@ -41,16 +47,18 @@ function DemoPage() {
   const { slug } = Route.useParams();
   const kind = livingBySlug(slug);
 
-  if (!kind) {
-    return (
-      <main className="mx-auto max-w-lg space-y-3 px-6 py-20">
-        <h1 className="font-display text-3xl">No demo for that name.</h1>
-        <Link to="/meet" data-demo-missing className="inline-flex min-h-11 items-center text-sm text-primary">
-          See who is awake
-        </Link>
-      </main>
-    );
-  }
+  if (!kind) return <DemoMissing />;
 
   return <DemoStage kind={kind} />;
+}
+
+function DemoMissing() {
+  return (
+    <main className="mx-auto max-w-lg space-y-3 px-6 py-20" data-demo-none>
+      <h1 className="font-display text-3xl">No demo for that name.</h1>
+      <Link to="/meet" data-demo-missing className="inline-flex min-h-11 items-center text-sm text-primary">
+        See who is awake
+      </Link>
+    </main>
+  );
 }
