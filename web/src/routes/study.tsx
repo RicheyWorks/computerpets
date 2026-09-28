@@ -18,7 +18,7 @@ export const Route = createFileRoute("/study")({
   }),
 });
 
-export function StudyPage() {
+function StudyPage() {
   const [selected, setSelected] = useState(HOUSE_KEYS[0]!);
 
   return (

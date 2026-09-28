@@ -554,8 +554,10 @@
     justify-content: flex-end;
   }
 
+  /* A landscape phone (the sit) is short, not narrow: the care buttons take the width (two rows, not three or
+     four) so the panels keep some height above them. */
   [data-phone-orient="sit"] .blotter-care-phone {
-    max-width: 22rem;
+    max-width: min(40rem, calc(100vw - 2rem));
     justify-content: center;
   }
 
@@ -565,6 +567,47 @@
 
   [data-phone-floor] {
     padding-top: env(safe-area-inset-top);
+  }
+
+  /* The room rail on a phone: one scroller (the open drawer no longer scrolls inside it), every label one row of the
+     same height, and the rows snap to the top, so at rest no label is cut in half. The rail's height is a whole
+     number of rows (railRows in lib/pets/phone-desk.ts), so the bottom edge lands between rows too. */
+  [data-phone-floor] [data-desk-rail] {
+    --rail-row: 2rem;
+    scroll-snap-type: y mandatory;
+    scroll-padding: 0;
+  }
+
+  [data-phone-floor] [data-desk-rail] .den-cabinet-rooms,
+  [data-phone-floor] [data-desk-rail] .den-cabinet-drawer {
+    gap: 0;
+  }
+
+  [data-phone-floor] [data-desk-rail] .den-cabinet-drawer {
+    margin: 0;
+    max-height: none;
+    overflow: visible;
+  }
+
+  [data-phone-floor] [data-desk-rail] li {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: var(--rail-row);
+    max-width: 100%;
+    scroll-snap-align: start;
+    white-space: nowrap;
+  }
+
+  [data-phone-floor] [data-desk-rail] .den-cabinet-drawer > li:first-child {
+    border-top: 1px solid rgb(242 236 227 / 0.16);
+  }
+
+  [data-phone-floor] [data-desk-rail] li > * {
+    height: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .blotter-care-tablet {

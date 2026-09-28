@@ -271,6 +271,7 @@ export function CompanionRoom({
           asideTop: aside.getBoundingClientRect().top - top,
           railTop: rail.getBoundingClientRect().top - top,
           careTop: care.getBoundingClientRect().top - top,
+          railRow: rail.querySelector("li")?.getBoundingClientRect().height,
         });
         setFit((prev) => (samePhoneFit(prev, next) ? prev : next));
       });
@@ -943,7 +944,14 @@ export function CompanionRoom({
   return (
     <section
       ref={roomRef}
-      className="relative isolate h-dvh min-h-[520px] w-full overflow-hidden bg-elevated"
+      // A phone fits the room to the screen (the panels are measured against the care buttons). The 520 px floor
+      // is for a desk window; on a landscape phone it pushed the last row of care buttons off the screen, where the
+      // shell (h-dvh, overflow hidden) would not scroll to them.
+      className={
+        hand
+          ? "relative isolate h-dvh min-h-0 w-full overflow-hidden bg-elevated"
+          : "relative isolate h-dvh min-h-[520px] w-full overflow-hidden bg-elevated"
+      }
       aria-label={roomLabel(displayName)}
       data-tablet-floor={pad ? "" : undefined}
       data-tablet-orient={pad ? orient : undefined}
@@ -1192,7 +1200,7 @@ export function CompanionRoom({
         className={
           hand
             ? handOrient === "sit"
-              ? "absolute left-[max(0.75rem,env(safe-area-inset-left))] right-[max(6.75rem,calc(6rem+env(safe-area-inset-right)))] top-[calc(3.25rem+env(safe-area-inset-top))] z-20 max-w-[16rem] overflow-y-auto overscroll-contain"
+              ? "absolute left-[max(0.75rem,env(safe-area-inset-left))] right-[max(6.75rem,calc(6rem+env(safe-area-inset-right)))] top-[calc(4.25rem+env(safe-area-inset-top))] z-20 max-w-[16rem] overflow-y-auto overscroll-contain"
               : "absolute left-4 right-[max(6.75rem,calc(6rem+env(safe-area-inset-right)))] top-[calc(4.25rem+env(safe-area-inset-top))] z-20 max-w-[18rem] overflow-y-auto overscroll-contain"
             : pad
               ? orient === "sit"

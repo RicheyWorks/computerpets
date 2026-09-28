@@ -30,7 +30,7 @@ export const Route = createFileRoute("/admin")({
   }),
 });
 
-export function AdminPage() {
+function AdminPage() {
   const saved = loadAdminSession();
   const [apiBase, setApiBase] = useState(saved.apiBase || defaultApiBase());
   const [adminKey, setAdminKey] = useState(saved.adminKey);

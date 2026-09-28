@@ -2911,6 +2911,21 @@ def _web_rows() -> list[Affordance]:
                 "click-through decision is checked in the real window. npm run dev no longer rewrites the route tree."
             ),
         ),
+        Affordance(
+            "web.site_header_rail",
+            "web",
+            "Site header: one Menu (disclosure; Escape and a tap outside close it, focus back) fits 320 px to a laptop, nothing wraps; landscape phones fit the room so every care button is on screen; the rail snaps whole rows; no hydration mismatch, no code-split warnings, a titled sign-in page",
+            "web components/app-shell.tsx SiteMenu + components/desk/companion-room.tsx + styles.css + lib/pets/phone-desk.ts railRows + lib/auth/use-current-user.ts useHydrated + routes/*.tsx + routes/login.tsx + scripts/phone-desk-layout.test.mjs + scripts/site-header.test.mjs",
+            notes=(
+                "The header scrolled its 27 places sideways at every width: on a phone Den was cut in half and Sign in "
+                "wrapped, and on a laptop Log was cut. A Menu button now holds every place (aria-expanded, aria-controls, "
+                "a labelled nav of links; Escape, a tap outside or tabbing out closes it and Escape gives focus back). A "
+                "landscape phone kept the desk window's 520 px floor, so the last care row sat below the screen where the "
+                "shell would not scroll; the room now fits the phone. The room rail's rows snap and its height is whole "
+                "rows, so no label rests cut in half. The kennel, hatchery, nest and pet pages threw a hydration mismatch "
+                "on every hard load; npm run dev printed 22 code-split warnings; the sign-in tab had no title."
+            ),
+        ),
     ]
 
 
@@ -2964,6 +2979,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("no_repeat_signed_in", domain="web", action_id=aid)
     if local_id == "phone_layout_told_once":
         return _run_web_smoke("phone_layout_told_once", domain="web", action_id=aid)
+    if local_id == "site_header_rail":
+        return _run_web_smoke("site_header_rail", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []
