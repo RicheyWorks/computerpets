@@ -573,7 +573,7 @@
      same height, and the rows snap to the top, so at rest no label is cut in half. The rail's height is a whole
      number of rows (railRows in lib/pets/phone-desk.ts), so the bottom edge lands between rows too. */
   [data-phone-floor] [data-desk-rail] {
-    --rail-row: 2rem;
+    --rail-row: 2.75rem;
     scroll-snap-type: y mandatory;
     scroll-padding: 0;
   }
@@ -599,8 +599,26 @@
     white-space: nowrap;
   }
 
+  /* Thumb-sized: every rail row above is 44 px (2.75rem), and so are the room's own links under the care buttons
+     ("The house · The study · Phone") and Send. The text stays small; only the hit area grows. */
+  [data-phone-floor] [data-room-links] a,
+  [data-phone-floor] [data-talk-send] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    padding-inline: 0.25rem;
+    vertical-align: middle;
+  }
+
+  [data-phone-floor] [data-room-links] p {
+    margin: 0;
+  }
+
+  /* The drawer's top rule is drawn inside the row (a border took 1 px off the first row's 44 px tap target). */
   [data-phone-floor] [data-desk-rail] .den-cabinet-drawer > li:first-child {
-    border-top: 1px solid rgb(242 236 227 / 0.16);
+    box-shadow: inset 0 1px 0 rgb(242 236 227 / 0.16);
   }
 
   [data-phone-floor] [data-desk-rail] li > * {
@@ -806,6 +824,18 @@
 
   .keeper-heartbeat[data-heartbeat="UP"] {
     color: var(--color-uncommon);
+  }
+
+  /* Check: the keeper asks the optional house server once (the page does not ask on its own until it has answered here). */
+  .keeper-heartbeat-check {
+    padding: 0 0.25rem;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: var(--color-ink, inherit);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
   }
 
   /* Only a server that answered and then stopped is a warning. "OFF" (optional, never answered) stays muted. */

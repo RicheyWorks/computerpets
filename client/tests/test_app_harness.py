@@ -130,6 +130,7 @@ CROSS_DOMAIN = {
     "web.no_repeat_signed_in",
     "web.phone_layout_told_once",
     "web.site_header_rail",
+    "web.signin_return_quiet",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -553,6 +554,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.no_repeat_signed_in",
         "web.phone_layout_told_once",
         "web.site_header_rail",
+        "web.signin_return_quiet",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -991,6 +993,17 @@ def test_site_header_rail_row_menu_landscape_rail_snap_hydration_code_split():
     for group in ("header", "landscape", "rail", "audit"):
         assert all(sh.extras[group].values()), (group, sh.extras[group])
     assert sh.extras["loud"] == []
+
+
+def test_signin_return_quiet_row_same_site_return_quiet_heartbeat_taps_bubble_titles_signed_in_sweep():
+    """Sign-in returns to the gated page; the heartbeat is quiet until seen; 44 px taps; bubble under header; titles."""
+    sr = invoke("web.signin_return_quiet")
+    assert sr.ok, (sr.error, sr.detail)
+    for mark in ("signin=returns_same_site_only", "heartbeat=quiet_until_seen", "taps=44px_rail_and_links", "bubble=under_header",
+                 "titles=desk_and_pet", "sweep=signed_in_rooms", "login=unfinished_says_so"):
+        assert mark in sr.trace, (mark, sr.trace)
+    for group in ("signin", "quiet", "taps", "bubble", "titles", "signedIn", "audit"):
+        assert all(sr.extras[group].values()), (group, sr.extras[group])
 
 
 def test_pictures_gate_row_boots_real_main_with_pointers_and_opens_no_glass():

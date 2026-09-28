@@ -15,6 +15,7 @@ import {
   loadActiveKindKey,
   saveActiveKindKey,
 } from "@/lib/pets/living";
+import { pageTitle } from "@/lib/page-title";
 import { loadProblem } from "@/lib/plain-error";
 
 const searchSchema = z.object({
@@ -24,6 +25,7 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/")({
   validateSearch: searchSchema,
   component: DeskHome,
+  head: () => ({ meta: [{ title: pageTitle("The desk") }] }),
 });
 
 function useDeskKind() {

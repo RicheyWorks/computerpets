@@ -156,6 +156,24 @@ export function railRows(max: number, row: number | undefined): number {
   return Math.round(rows * row * 100) / 100;
 }
 
+/** Space kept between the site header and a speech bubble, in CSS px. */
+export const BUBBLE_HEADER_GAP = 6;
+
+/**
+ * How far a speech bubble may rise above its resting spot (restTop, its top before any lift, in viewport px) and
+ * still end below the site header (headerBottom). On a landscape phone a pet high on the ridge would otherwise push
+ * its bubble over the header. Unlimited when there is no header.
+ */
+export function bubbleRoom(restTop: number, headerBottom: number | null | undefined, gap = BUBBLE_HEADER_GAP): number {
+  if (headerBottom == null || !Number.isFinite(headerBottom) || !Number.isFinite(restTop)) return Number.POSITIVE_INFINITY;
+  return restTop - headerBottom - gap;
+}
+
+/** The bubble's lift: as high as the pet wants (want), capped by the room under the header (may go below rest). */
+export function bubbleLift(want: number, room: number): number {
+  return Math.min(want, room);
+}
+
 /** The same fit, or a new one only when a number moved (so a resize observer does not re-render for nothing). */
 export function samePhoneFit(a: PhoneFit | null, b: PhoneFit | null): boolean {
   return !!a && !!b && a.asideMax === b.asideMax && a.railMax === b.railMax;

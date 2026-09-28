@@ -16,13 +16,17 @@ import {
   type CompanionView,
 } from "@/lib/pets/actions";
 import { findSpecies } from "@/lib/pets/catalog";
+import { pageTitle, petTitle, useDocumentTitle } from "@/lib/page-title";
 import { moodWord, normalizeCare, type SanctuaryCare } from "@/lib/pets/care";
 import { livingByKey, saveActiveKindKey } from "@/lib/pets/living";
 import { departLine, originPhrase } from "@/lib/pets/nest";
 import { roomOf } from "@/lib/pets/rooms";
 import { RETRY_LABEL, petNotSaved, plainMessage, roomReportsCare, type PetNotSavedAct } from "@/lib/plain-error";
 
-export const Route = createFileRoute("/pets/$key")({ component: PetDetail });
+export const Route = createFileRoute("/pets/$key")({
+  component: PetDetail,
+  head: () => ({ meta: [{ title: pageTitle("Your pet") }] }),
+});
 
 function PetDetail() {
   const { key } = Route.useParams();
@@ -53,6 +57,9 @@ function PetDetail() {
         setPet(null);
       });
   }, [user, key]);
+
+  // "Mochi the Red Panda — ComputerPets" once the kennel says who this is.
+  useDocumentTitle(pet ? petTitle(pet.name, findSpecies(pet.species_key)?.displayName ?? livingByKey(pet.species_key).speciesLabel) : null);
 
   if (isPending) return <div className="h-dvh animate-pulse bg-surface" />;
   if (!user) return <RedirectToSignIn />;

@@ -1,24 +1,40 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { z } from "zod";
 import { GROK_PROVIDERS, authEnabled, signIn } from "@/lib/auth/client";
+import { safeReturnTo, signInHref } from "@/lib/auth/return-to";
 import { Button } from "@/components/ui/button";
 import { loadProblem } from "@/lib/plain-error";
 
+// `next` is where sign-in returns to: the gated page that sent the visitor here. It is read through
+// safeReturnTo (same-site paths only), so a link like /login?next=https://elsewhere lands on the desk.
+const searchSchema = z.object({
+  next: z.string().optional().catch(undefined),
+  // Better Auth comes back here with ?error=… when the provider round trip fails or is cancelled.
+  error: z.string().optional().catch(undefined),
+});
+
+/** A sign-in that came back with an error. It used to land on the desk with no word; now it says so here. */
+const SIGN_IN_UNFINISHED = "Sign-in did not finish. Try again.";
+
 export const Route = createFileRoute("/login")({
+  validateSearch: searchSchema,
   component: Login,
   // The tab said only "ComputerPets" here (and on every signed-in page a signed-out visitor is sent to).
   head: () => ({ meta: [{ title: "Sign in — ComputerPets" }, { name: "description", content: "Sign in to sit with the house." }] }),
 });
 
 function Login() {
-  const [problem, setProblem] = useState<string | null>(null);
+  const { next, error } = Route.useSearch();
+  const returnTo = safeReturnTo(next);
+  const [problem, setProblem] = useState<string | null>(error ? SIGN_IN_UNFINISHED : null);
   const [starting, setStarting] = useState<string | null>(null);
 
   async function start(providerId: string) {
     setProblem(null);
     setStarting(providerId);
     try {
-      await signIn(providerId, { callbackURL: "/" });
+      await signIn(providerId, { callbackURL: returnTo, errorCallbackURL: signInHref(returnTo) });
     } catch (err) {
       // A failed sign-in click says so in one plain sentence; the raw error goes to the console.
       setProblem(loadProblem("signin", err));

@@ -5,12 +5,20 @@
 // and its Menu opens, closes on Escape (focus back on Menu), on a tap outside and on tabbing out. The site pages a new
 // keeper meets (/meet, /catalog, /collection, /login, /hatch, /log, /pets/<key>) are checked at a phone and a laptop
 // size: the header fits, nothing scrolls sideways, and no page throws (a hydration mismatch included).
+// Also: rail rows, the room's own links and Send are at least 44 px tall on a phone; the speech bubble never sits
+// over the site header (sampled while the pet walks); a signed-out visit to a gated page lands on
+// /login?next=<that page> and the header's Sign in remembers the page; the desk sends no request to the optional
+// house server (127.0.0.1:8081) until it has answered on this browser, and its tab says who is on the desk; and the
+// signed-in rooms (the kennel, the hatchery, the nest) are checked at five phone sizes with a stand-in session: a
+// second dev server with auth off (the dev keeper on in-memory PGLite; no account, no database file).
 // Starts the Vite dev server in-process and drives the system Chrome or Edge (playwright-core, no downloaded
 // browser). Skips, and says why, when no browser is found.
 // PHONE_LAYOUT_URL=http://127.0.0.1:8097/ uses an already running dev server instead.
 import { after, test } from "node:test";
 import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { createServer as netServer } from "node:net";
 import { join } from "node:path";
 
 const WEB = join(import.meta.dirname, "..");
@@ -93,6 +101,7 @@ function measure() {
   const careButtons = careEl ? [...careEl.querySelectorAll("button")].map((el) => ({ name: (el.textContent || "").trim(), box: box(el) })).filter((c) => c.box) : [];
   const scroller = document.scrollingElement || document.documentElement;
   return {
+    header: box(document.querySelector("[data-site-header]") || document.querySelector("header")),
     phone: !!room,
     aside,
     rail,
@@ -148,6 +157,8 @@ export function layoutProblems(m, label) {
   if (m.pageScroll > 1) bad.push(`${label}: the desk page scrolls ${m.pageScroll}px`);
   for (const bubble of m.bubbles) {
     if (overlaps(bubble.box, m.care)) bad.push(`${label}: speech bubble "${bubble.text}" covers the care buttons`);
+    // A landscape phone is short: a bubble never rises over the site header (bubbleRoom in lib/pets/phone-desk.ts).
+    if (overlaps(bubble.box, m.header)) bad.push(`${label}: speech bubble "${bubble.text}" sits over the site header ${JSON.stringify([bubble.box, m.header])}`);
     for (const [name, onTop] of Object.entries(bubble.hits)) {
       if (name.endsWith("Top") || onTop) continue;
       bad.push(`${label}: speech bubble "${bubble.text}" is under the ${name} (${bubble.hits[`${name}Top`]})`);
@@ -353,6 +364,35 @@ async function railProblems(page, label) {
   return { bad, scrolls };
 }
 
+/** Thumb-sized on a phone: at least this tall (and the room links this wide), in CSS px. */
+export const TAP_MIN = 44;
+
+/** Runs in the page: tap targets on a phone room below 44 px (the room's own links, Send, every rail row). */
+function tapProblems(min) {
+  const bad = [];
+  const name = (el) => (el.textContent || el.getAttribute("aria-label") || el.tagName).trim().replace(/\s+/g, " ").slice(0, 30);
+  const seen = (el) => {
+    const b = el.getBoundingClientRect();
+    return b.width > 0 && b.height > 0;
+  };
+  const links = [...document.querySelectorAll("[data-phone-floor] [data-room-links] a, [data-phone-floor] [data-talk-send]")].filter(seen);
+  if (!links.length) bad.push("no room links under the care buttons");
+  for (const el of links) {
+    const b = el.getBoundingClientRect();
+    if (b.height < min - 0.5 || b.width < min - 0.5) bad.push(`"${name(el)}" is ${Math.round(b.width)}×${Math.round(b.height)} px, under ${min}`);
+  }
+  const rows = [...document.querySelectorAll("[data-phone-floor] [data-desk-rail] li > *")].filter(seen);
+  if (!rows.length) bad.push("no rail rows");
+  for (const el of rows) {
+    const b = el.getBoundingClientRect();
+    if (b.height < min - 0.5) bad.push(`rail row "${name(el)}" is ${Math.round(b.height)} px tall, under ${min}`);
+  }
+  return { bad, links: links.length, rows: rows.length };
+}
+
+/** The heartbeat probe's address (the optional house server): the desk asks it only after it has answered here. */
+const HOUSE_SERVER = /^https?:\/\/(127\.0\.0\.1|localhost):8081\//;
+
 const browserPath = findBrowser();
 const skip = browserPath ? false : "no Chrome or Edge found (set PHONE_LAYOUT_BROWSER)";
 
@@ -377,20 +417,78 @@ async function site() {
   return shared;
 }
 
-/** Closes the browser and the dev server; true when the dev server rewrote the route tree (and puts it back). */
+/** A free port on 127.0.0.1. */
+function freePort() {
+  return new Promise((resolve, reject) => {
+    const s = netServer();
+    s.once("error", reject);
+    s.listen(0, "127.0.0.1", () => {
+      const { port } = s.address();
+      s.close(() => resolve(port));
+    });
+  });
+}
+
+let standIn = null;
+
+/**
+ * The stand-in session for the signed-in rooms (the kennel, the hatchery, the nest): a second dev server with
+ * auth off (VITE_AUTH_ENABLED=false), so the page and the server both use the dev keeper ("dev-user") on the
+ * embedded in-memory PGLite. No account, no cookie, no database file; it all goes when the server stops.
+ * DATABASE_URL is cleared so it can never touch a real database. PHONE_LAYOUT_SIGNED_IN_URL uses a running one.
+ */
+async function standInSite() {
+  if (standIn) return standIn;
+  if (process.env.PHONE_LAYOUT_SIGNED_IN_URL) {
+    standIn = { url: process.env.PHONE_LAYOUT_SIGNED_IN_URL.replace(/\/$/, ""), child: null };
+    return standIn;
+  }
+  const port = await freePort();
+  const vite = join(WEB, "node_modules", "vite", "bin", "vite.js");
+  const child = spawn(process.execPath, [vite, "--host", "127.0.0.1", "--port", String(port), "--strictPort"], {
+    cwd: WEB,
+    env: { ...process.env, VITE_AUTH_ENABLED: "false", DATABASE_URL: "", BROWSER: "none" },
+    stdio: ["ignore", "pipe", "pipe"],
+    windowsHide: true,
+  });
+  let log = "";
+  child.stdout.on("data", (d) => (log += d));
+  child.stderr.on("data", (d) => (log += d));
+  standIn = { url: `http://127.0.0.1:${port}`, child };
+  const deadline = Date.now() + 120_000;
+  while (Date.now() < deadline) {
+    if (child.exitCode !== null) throw new Error(`the stand-in dev server stopped: ${log.slice(-400)}`);
+    const ok = await fetch(`${standIn.url}/login`).then((r) => r.ok, () => false);
+    if (ok) return standIn;
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  throw new Error(`the stand-in dev server did not start: ${log.slice(-400)}`);
+}
+
+async function closeStandIn() {
+  const child = standIn?.child;
+  if (!child || child.exitCode !== null) return;
+  const gone = new Promise((r) => child.once("exit", r));
+  child.kill();
+  await Promise.race([gone, new Promise((r) => setTimeout(r, 5_000))]);
+}
+
+/** Closes the browser and the dev servers; true when a dev server rewrote the route tree (and puts it back). */
 async function closeSite() {
+  await closeStandIn();
   if (!shared || shared.closed) return false;
   shared.closed = true;
   await shared.browser.close().catch(() => {});
   if (shared.server) await shared.server.close();
   const after = readFileSync(routeTree, "utf8");
-  const rewritten = !!shared.server && after.replace(/\r\n/g, "\n") !== shared.routeTreeBefore.replace(/\r\n/g, "\n");
+  const rewritten = (!!shared.server || !!standIn?.child) && after.replace(/\r\n/g, "\n") !== shared.routeTreeBefore.replace(/\r\n/g, "\n");
   if (after !== shared.routeTreeBefore) writeFileSync(routeTree, shared.routeTreeBefore);
   return rewritten;
 }
 
 after(async () => {
   await closeSite();
+  await closeStandIn();
 });
 
 test("the checked-in route tree is in the generator's order, so npm run dev leaves git status clean", () => {
@@ -411,6 +509,10 @@ test("phone desk: hello, plaque, rail, care buttons, speech bubbles and the head
   for (const size of PHONE_SIZES) {
     const label = `${size.w}×${size.h} ${size.name}`;
     const ctx = await browser.newContext({ viewport: { width: size.w, height: size.h }, isMobile: true, hasTouch: true, userAgent: size.ua });
+    const houseHits = [];
+    ctx.on("request", (req) => {
+      if (HOUSE_SERVER.test(req.url())) houseHits.push(req.url());
+    });
     const page = await ctx.newPage();
     try {
       await page.goto(`${url}/`, { waitUntil: "load", timeout: 120_000 });
@@ -439,6 +541,8 @@ test("phone desk: hello, plaque, rail, care buttons, speech bubbles and the head
       problems.push(...layoutProblems(after, `${label} (plaque)`));
       const rail = await railProblems(page, label);
       problems.push(...rail.bad);
+      const taps = await page.evaluate(tapProblems, TAP_MIN);
+      problems.push(...taps.bad.map((p) => `${label}: ${p}`));
       problems.push(...(await menuProblems(page, label)));
       // A spoken line: Talk answers with House lines and the bubble opens.
       await page.evaluate(() => [...document.querySelectorAll("[data-desk-care] button")].find((b) => b.textContent.trim() === "Talk")?.click());
@@ -447,6 +551,22 @@ test("phone desk: hello, plaque, rail, care buttons, speech bubbles and the head
       const talk = await page.evaluate(measure);
       if (!talk.bubbles.length) problems.push(`${label}: no speech bubble after Talk`);
       problems.push(...layoutProblems(talk, `${label} (talking)`));
+      // The pet keeps walking while it talks: the bubble stays under the header the whole time.
+      for (let i = 0; i < 6; i++) {
+        await page.waitForTimeout(250);
+        const m = await page.evaluate(measure);
+        for (const b of m.bubbles) if (overlaps(b.box, m.header)) problems.push(`${label}: speech bubble "${b.text}" rose over the site header ${JSON.stringify([b.box, m.header])}`);
+      }
+      // A long line (a guest's, or a late font) makes the bubble taller: it still ends below the header.
+      await page.evaluate(() => {
+        const el = document.querySelector('[data-speech="open"]');
+        const text = el?.querySelector("button, p");
+        if (text) text.textContent = "A long line from the pet, long enough to wrap onto four or five lines in the bubble on any phone, so its top climbs.";
+      });
+      await page.waitForTimeout(400);
+      const long = await page.evaluate(measure);
+      for (const b of long.bubbles) if (overlaps(b.box, long.header)) problems.push(`${label}: a long speech bubble sits over the site header ${JSON.stringify([b.box, long.header])}`);
+      if (houseHits.length) problems.push(`${label}: the desk asked the house server nobody ran (${houseHits.length}× ${houseHits[0]})`);
       seen.push({ label, plaque: await page.evaluate(() => document.querySelector("[data-plaque]")?.getAttribute("data-plaque")), bubbles: talk.bubbles.length, railScrolls: rail.scrolls });
     } catch (err) {
       problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
@@ -507,6 +627,152 @@ test("site pages: the header fits and its menu works at phone and laptop sizes, 
     }
   }
   assert.equal(visited, SITE_PAGES.length * SITE_SIZES.length + 2, problems.join("\n"));
+  assert.deepEqual(problems, [], problems.join("\n"));
+});
+
+/** Signed-out: each gated page sends the visitor to sign in, and sign-in remembers the page (safeReturnTo). */
+export const GATED_PAGES = [
+  ["/collection", "/login?next=%2Fcollection"],
+  ["/hatch", "/login?next=%2Fhatch"],
+  ["/nest", "/login?next=%2Fnest"],
+  ["/pets/rui", "/login?next=%2Fpets%2Frui"],
+];
+
+test("sign-in remembers the gated page it came from; the header's Sign in remembers the page too", { skip, timeout: 300_000 }, async () => {
+  const { url, browser } = await site();
+  const problems = [];
+  const ctx = await browser.newContext({ viewport: { width: 375, height: 667 }, isMobile: true, hasTouch: true, userAgent: IPHONE });
+  try {
+    const page = await ctx.newPage();
+    const thrown = [];
+    page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
+    for (const [from, want] of GATED_PAGES) {
+      await page.goto(`${url}${from}`, { waitUntil: "load", timeout: 120_000 });
+      const landed = await page
+        .waitForURL((u) => u.pathname === "/login", { timeout: 60_000 })
+        .then(() => new URL(page.url()), () => null);
+      if (!landed) problems.push(`${from}: never sent to sign in (${page.url()})`);
+      else if (`${landed.pathname}${landed.search}` !== want) problems.push(`${from}: sent to ${landed.pathname}${landed.search}, wanted ${want}`);
+    }
+    await page.goto(`${url}/meet`, { waitUntil: "load", timeout: 120_000 });
+    await page.waitForSelector("[data-site-menu-button]", { timeout: 60_000 });
+    await page.waitForTimeout(800);
+    const hrefs = await page.evaluate(() => [...document.querySelectorAll("header a")].filter((a) => /sign in/i.test(a.textContent || "")).map((a) => a.getAttribute("href")));
+    if (!hrefs.length || !hrefs.every((h) => h === "/login?next=%2Fmeet")) problems.push(`/meet: header Sign in goes to ${JSON.stringify(hrefs)}, wanted /login?next=%2Fmeet`);
+    // A hostile next= does not break the page (the value is refused in lib/auth/return-to.ts; signin-return.test.mjs).
+    for (const bad of ["https%3A%2F%2Fevil.example", "%2F%2Fevil.example", "javascript%3Aalert(1)"]) {
+      await page.goto(`${url}/login?next=${bad}`, { waitUntil: "load", timeout: 120_000 });
+      const ok = await page.waitForSelector("h1", { timeout: 60_000 }).then(() => true, () => false);
+      if (!ok) problems.push(`/login?next=${bad}: the sign-in page did not open`);
+    }
+    // Sign-in that came back with an error says so (Better Auth adds &error=… to errorCallbackURL).
+    await page.goto(`${url}/login?next=%2Fcollection&error=access_denied`, { waitUntil: "load", timeout: 120_000 });
+    await page.waitForSelector("h1", { timeout: 60_000 });
+    await page.waitForTimeout(800);
+    const alert = await page.evaluate(() => document.querySelector('[role="alert"]')?.textContent?.trim() || "");
+    if (alert !== "Sign-in did not finish. Try again." && (await page.evaluate(() => !!document.querySelector("main button")))) problems.push(`/login?error=: says "${alert}", not that sign-in did not finish`);
+    for (const t of thrown) problems.push(`the page threw: ${t}`);
+  } finally {
+    await ctx.close();
+  }
+  assert.deepEqual(problems, [], problems.join("\n"));
+});
+
+test("the desk stays quiet about the optional house server until it has answered here; the tab says who is on the desk", { skip, timeout: 300_000 }, async () => {
+  const { url, browser } = await site();
+  const problems = [];
+  for (const seenBefore of [false, true]) {
+    const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    if (seenBefore) await ctx.addInitScript(() => localStorage.setItem("computerpets.houseServer.seen", "1"));
+    const hits = [];
+    const refused = [];
+    ctx.on("request", (req) => {
+      if (HOUSE_SERVER.test(req.url())) hits.push(req.url());
+    });
+    try {
+      const page = await ctx.newPage();
+      page.on("console", (msg) => {
+        if (/ERR_CONNECTION_REFUSED|8081/.test(msg.text())) refused.push(msg.text().slice(0, 120));
+      });
+      await page.goto(`${url}/`, { waitUntil: "load", timeout: 120_000 });
+      await page.waitForSelector("[data-desk-care]", { timeout: 120_000 });
+      await page.waitForTimeout(6_000);
+      if (!seenBefore) {
+        if (hits.length) problems.push(`never answered here, yet the desk asked ${hits.length}× (${hits[0]})`);
+        if (refused.length) problems.push(`never answered here, yet the console says: ${refused[0]}`);
+        const title = await page.title();
+        if (title !== "Rui the Red Panda — ComputerPets") problems.push(`the desk's tab says "${title}"`);
+      } else if (!hits.length) problems.push("a house server that answered here before was never asked (the gate is shut for good)");
+    } finally {
+      await ctx.close();
+    }
+  }
+  assert.deepEqual(problems, [], problems.join("\n"));
+});
+
+/** Signed-in rooms, with the stand-in session (standInSite). */
+export const SIGNED_IN_PAGES = ["/collection", "/hatch", "/nest"];
+export const SIGNED_IN_SIZES = PHONE_SIZES.filter((s) => ["320×568", "375×667", "414×896", "667×375", "844×390"].includes(`${s.w}×${s.h}`));
+
+test("signed-in rooms (kennel, hatchery, nest) on phones: panels, rail, care buttons and header never overlap; thumb-sized links", { skip, timeout: 600_000 }, async () => {
+  const { browser } = await site();
+  const { url } = await standInSite();
+  const problems = [];
+  let visited = 0;
+  for (const size of SIGNED_IN_SIZES) {
+    const ctx = await browser.newContext({ viewport: { width: size.w, height: size.h }, isMobile: true, hasTouch: true, userAgent: size.ua });
+    const hits = [];
+    ctx.on("request", (req) => {
+      if (HOUSE_SERVER.test(req.url())) hits.push(req.url());
+    });
+    try {
+      for (const path of SIGNED_IN_PAGES) {
+        const label = `${path} ${size.w}×${size.h} (signed in)`;
+        const page = await ctx.newPage();
+        const thrown = [];
+        page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
+        try {
+          await page.goto(`${url}${path}`, { waitUntil: "load", timeout: 120_000 });
+          await page.waitForSelector("[data-phone-floor] [data-desk-care]", { timeout: 120_000 });
+          if (new URL(page.url()).pathname !== path) throw new Error(`sent to ${page.url()} (the stand-in session is not signed in)`);
+          await page
+            .waitForFunction(() => !!document.querySelector("[data-desk-aside]")?.style.maxHeight, null, { timeout: 8_000 })
+            .catch(() => problems.push(`${label}: the panels were never fitted above the care buttons`));
+          await page.waitForTimeout(600);
+          const signedIn = await page.evaluate(() => ({
+            signIn: [...document.querySelectorAll("header a")].some((a) => /sign in/i.test(a.textContent || "")),
+          }));
+          if (signedIn.signIn) problems.push(`${label}: the header still offers Sign in`);
+          problems.push(...layoutProblems(await page.evaluate(measure), label));
+          problems.push(...(await page.evaluate(headerProblems)).map((p) => `${label}: ${p}`));
+          const cuts = await page.evaluate(railCuts);
+          if (cuts.length) problems.push(`${label}: the rail rests with ${cuts.join(", ")} cut in half`);
+          const taps = await page.evaluate(tapProblems, TAP_MIN);
+          problems.push(...taps.bad.map((p) => `${label}: ${p}`));
+          for (const t of thrown) problems.push(`${label}: the page threw: ${t}`);
+          visited += 1;
+        } catch (err) {
+          problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
+        } finally {
+          await page.close();
+        }
+      }
+      // A pet page the kennel does not have: plain words and its own tab title.
+      if (size === SIGNED_IN_SIZES[0]) {
+        const page = await ctx.newPage();
+        await page.goto(`${url}/pets/not-a-pet`, { waitUntil: "load", timeout: 120_000 });
+        const h1 = await page.waitForSelector("h1", { timeout: 60_000 }).then((h) => h.textContent(), () => "");
+        if (!/not in your kennel|Couldn't open your kennel/.test(h1 || "")) problems.push(`/pets/not-a-pet: says "${h1}"`);
+        const title = await page.title();
+        if (title !== "Your pet — ComputerPets") problems.push(`/pets/not-a-pet: the tab says "${title}"`);
+        await page.close();
+      }
+      if (hits.length) problems.push(`${size.w}×${size.h}: the signed-in rooms asked the house server nobody ran (${hits.length}×)`);
+    } finally {
+      await ctx.close();
+    }
+  }
+  assert.equal(visited, SIGNED_IN_PAGES.length * SIGNED_IN_SIZES.length, problems.join("\n"));
   assert.deepEqual(problems, [], problems.join("\n"));
 });
 

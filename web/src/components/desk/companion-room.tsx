@@ -1443,6 +1443,7 @@ export function CompanionRoom({
             />
             <button
               type="submit"
+              data-talk-send
               className="blotter-ink text-[11px] uppercase tracking-[0.16em]"
               disabled={busy || !draft.trim()}
             >
@@ -1455,7 +1456,7 @@ export function CompanionRoom({
             {heardLine(heard)}
           </p>
         ) : null}
-        <div className="pointer-events-auto text-center text-[11px] uppercase tracking-[0.16em] text-subtle">
+        <div data-room-links className="pointer-events-auto text-center text-[11px] uppercase tracking-[0.16em] text-subtle">
           {footer ?? (
             <p>
               <Link
