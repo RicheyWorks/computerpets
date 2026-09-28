@@ -5154,9 +5154,21 @@ window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
       topInBubble: !!(top && bubble.contains(top)),
       cx: Math.round(cx),
       cy: Math.round(cy),
+      x: Math.round(r.left),
+      y: Math.round(r.top),
       w: Math.round(r.width),
       h: Math.round(r.height),
     };
+  }
+  /** A spot on the glass with nothing clickable under it (Chromium's own hit test), for the click-through check. */
+  function barePoint() {
+    for (let y = 24; y < window.innerHeight - 24; y += 37) {
+      for (let x = 24; x < window.innerWidth - 24; x += 41) {
+        const el = document.elementFromPoint(x, y);
+        if (!el || !el.closest("[data-hit]")) return { x, y };
+      }
+    }
+    return null;
   }
   window.PetGuiHarness = {
     snapshot,
@@ -5227,5 +5239,6 @@ window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
       return bubbleState();
     },
     bubbleState,
+    barePoint,
   };
 })();

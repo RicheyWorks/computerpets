@@ -116,3 +116,40 @@ export function homeLine(installed: boolean): string {
     ? "On the home screen. Tap the blotter for a treat."
     : "Add to Home Screen. Tap the blotter for a treat.";
 }
+
+/** Room kept between the panels and the care buttons on a phone desk, in CSS px. */
+export const PHONE_FIT_GAP = 8;
+/** A panel is never squeezed below this; it scrolls inside instead. */
+export const PHONE_FIT_MIN = 48;
+
+export type PhoneFitInput = {
+  /** Top of the left panel (name, hello, plaque), from the top of the room. */
+  asideTop: number;
+  /** Top of the room rail on the right, from the top of the room. */
+  railTop: number;
+  /** Top of the care buttons, from the top of the room. */
+  careTop: number;
+  gap?: number;
+};
+
+export type PhoneFit = { asideMax: number; railMax: number };
+
+/**
+ * On a phone the care buttons sit in the thumb and everything above them has to end before them: the left panel
+ * and the room rail each get the height down to the care buttons (less a small gap) and scroll inside past that.
+ */
+export function phoneFit(input: PhoneFitInput): PhoneFit {
+  const gap = input.gap ?? PHONE_FIT_GAP;
+  const room = (top: number) => Math.max(PHONE_FIT_MIN, Math.floor(input.careTop - top - gap));
+  return { asideMax: room(input.asideTop), railMax: room(input.railTop) };
+}
+
+/** The same fit, or a new one only when a number moved (so a resize observer does not re-render for nothing). */
+export function samePhoneFit(a: PhoneFit | null, b: PhoneFit | null): boolean {
+  return !!a && !!b && a.asideMax === b.asideMax && a.railMax === b.railMax;
+}
+
+/** The folded plaque still does not fit above the care buttons: show it as one line instead. */
+export function plaqueNeedsLine(scrollHeight: number, clientHeight: number): boolean {
+  return scrollHeight > clientHeight + 1;
+}

@@ -130,8 +130,9 @@ test("wired on every door: web guests and robin, overlay pet, guests and care li
   assert.match(robin, /const song = linePicker\.offer\(ROBIN_KEY, ROBIN_SONG\);/);
   assert.match(living, /return linePicker\.pick\(speaker, lines\);/);
   assert.doesNotMatch(living, /Math\.random\(\) \* lines\.length/);
-  // Why the guest lines repeated: every new approach to Rui clears `told`, so the tell fired again.
-  assert.equal((guests.match(/    told: false,/g) || []).length, 2);
+  // Why the guest lines repeated: every new approach to Rui cleared `told`. It no longer does (one tell a visit);
+  // the picker stays as the backstop (guest-told-once.test.mjs).
+  assert.equal((guests.match(/told: false,/g) || []).length, 0);
   const pet = readFileSync(join(RENDERER, "pet.js"), "utf8");
   const life = readFileSync(join(RENDERER, "life.js"), "utf8");
   const html = readFileSync(join(RENDERER, "index.html"), "utf8");

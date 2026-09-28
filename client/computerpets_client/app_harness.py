@@ -2896,6 +2896,21 @@ def _web_rows() -> list[Affordance]:
                 "check clicks the talk bubble closed. On a phone the first hello comes before the species plaque."
             ),
         ),
+        Affordance(
+            "web.phone_layout_told_once",
+            "web",
+            "Phone desk panels end above the care buttons (one-line plaque when short, bubbles on top; swept 320-414 wide, short, tall, landscape); a guest tells once per visit on web and overlay; GUI harness removes its temp folder (kept on failure); click-through decision checked; route tree in generator order",
+            "web lib/pets/phone-desk.ts phoneFit + components/desk/companion-room.tsx + species-plaque.tsx + living-pet.tsx + scripts/phone-desk-layout.test.mjs, web lib/pets/call-guests.ts + desktop renderer/call-guests.js, desktop gui-harness-data.cjs + gui-harness.cjs + main.cjs, web src/routeTree.gen.ts",
+            notes=(
+                "On small phones the hello and the species plaque ran under the care buttons, the room rail ran down over them, "
+                "the panel ran under the rail, and the speech bubble drew under the panels. The panel and the rail now end a "
+                "small gap above the care buttons (measured) and scroll inside; a short phone gets a one-line plaque; the "
+                "bubble paints on top. A real-browser sweep (system Chrome or Edge, Vite in-process) fails on any overlap. "
+                "A called guest tells its line once per visit (an approach no longer clears told) on web and overlay. The GUI "
+                "harness removes its temp folder at the end of a passing run and keeps it on failure, saying so. The "
+                "click-through decision is checked in the real window. npm run dev no longer rewrites the route tree."
+            ),
+        ),
     ]
 
 
@@ -2947,6 +2962,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("house_lines_talk", domain="web", action_id=aid)
     if local_id == "no_repeat_signed_in":
         return _run_web_smoke("no_repeat_signed_in", domain="web", action_id=aid)
+    if local_id == "phone_layout_told_once":
+        return _run_web_smoke("phone_layout_told_once", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []
@@ -3137,6 +3154,22 @@ def _gui_rows() -> list[Affordance]:
                 "Pass --gui to open the bubble with a House lines answer, send a real mouse down/up to its middle "
                 "(webContents.sendInputEvent: Chromium's own hit test), and assert it closes. "
                 "The OS click-through layer (setIgnoreMouseEvents) is not part of this path."
+            ),
+        ),
+        Affordance(
+            "gui.clickthrough_hits",
+            "gui",
+            "Click-through decision from the hit rects the real overlay sent",
+            "main.cjs guiClickThrough + Desk.cursorHits + pet.js hitRects/reportHits",
+            mode="gui",
+            fate="excluded",
+            exclude_reason=(
+                "Needs the real Electron overlay window. Default stays excluded. "
+                "Pass --gui: with the talk bubble open, the hit rects the renderer really sent (set-hits) must contain it, "
+                "Desk.cursorHits at its middle must be true (the window takes the click), a spot Chromium says is bare "
+                "must fall through, and the closed bubble's rect must be gone. A real OS cursor is not moved: Electron has "
+                "no API for OS input, a native input module would change desktop/package-lock.json, and synthetic OS "
+                "clicks would land on the keeper's real desktop whenever click-through works."
             ),
         ),
     ]
@@ -3442,7 +3475,7 @@ def _invoke_gui(local_id: str, **opts: Any) -> InvokeResult:
     if local_id in {"choice_close_exit", "gui.choice_close_exit"} or local_id == "choice_close_exit":
         return _run_node_smoke("choice_close_exit", domain="gui", action_id="gui.choice_close_exit")
     # Direct invoke of mode=gui rows (Buffffff --only under --gui, or programmatic).
-    if aid in {"gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.host_place", "gui.blotter_qt", "gui.bubble_click"}:
+    if aid in {"gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.host_place", "gui.blotter_qt", "gui.bubble_click", "gui.clickthrough_hits"}:
         return _invoke_gui_optin(aid)
     return InvokeResult(aid, "gui", False, error=f"unknown gui id {local_id!r}")
 

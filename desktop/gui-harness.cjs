@@ -73,6 +73,16 @@ function main() {
         stderr: stderr.slice(-2000),
       };
     }
+    // The app removes its temp userData at quit when the run passed; if Chromium still held it then, finish here
+    // (the app has exited). A failed run keeps it for debugging.
+    if (payload && payload.userData) {
+      const HarnessData = require("./gui-harness-data.cjs");
+      const done = fs.existsSync(payload.userData)
+        ? HarnessData.finishRun(fs, payload.userData, !!payload.ok)
+        : { dir: payload.userData, removed: true, kept: false };
+      process.stderr.write(HarnessData.finishWords(done) + "\n");
+      payload.userDataKept = done.kept || (!done.removed && fs.existsSync(payload.userData));
+    }
     process.stdout.write(JSON.stringify(payload) + "\n");
     process.exitCode = payload && payload.ok ? 0 : 1;
   });

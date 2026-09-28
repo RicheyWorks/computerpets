@@ -2444,6 +2444,96 @@ async function noRepeatSignedIn() {
   ]);
 }
 
+async function phoneLayoutToldOnce() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8").replace(/\r\n/g, "\n");
+  const importTs = (...parts) => import(pathToFileURL(join(ROOT, ...parts)).href);
+
+  // 1) Phone desk: panels end above the care buttons, a short phone gets a one-line plaque, bubbles paint on top;
+  //    the real-browser sweep covers widths 320 to 414, short and tall, and two landscape phones.
+  const P = await importTs("web", "src", "lib", "pets", "phone-desk.ts");
+  const room = read("web", "src", "components", "desk", "companion-room.tsx");
+  const living = read("web", "src", "components", "desk", "living-pet.tsx");
+  const plaque = read("web", "src", "components", "desk", "species-plaque.tsx");
+  const sweep = read("web", "scripts", "phone-desk-layout.test.mjs");
+  const sizes = [...sweep.matchAll(/\{ w: (\d+), h: (\d+),/g)].map((m) => [Number(m[1]), Number(m[2])]);
+  const widths = [...new Set(sizes.filter(([w, h]) => h > w).map(([w]) => w))].sort((a, b) => a - b);
+  const phone = {
+    fit: JSON.stringify(P.phoneFit({ asideTop: 68, railTop: 68, careTop: 384 })) === JSON.stringify({ asideMax: 308, railMax: 308 }) && P.PHONE_FIT_GAP === 8,
+    tight: P.plaqueNeedsLine(420, 308) === true && P.plaqueNeedsLine(308, 308) === false,
+    wired: room.includes("style={hand && fit ? { maxHeight: fit.asideMax } : undefined}") && room.includes("style={hand && fit ? { maxHeight: fit.railMax } : undefined}") && room.includes("line={hand && plaqueLine}"),
+    railWidth: room.includes("z-20 w-[5.5rem] overflow-y-auto overscroll-contain text-right"),
+    plaqueLine: plaque.includes('data-plaque="line"'),
+    bubbleOnTop: living.includes("absolute bottom-[214px] left-0 z-30 w-[min(220px,70vw)]"),
+    sweepWidths: JSON.stringify(widths) === JSON.stringify([320, 360, 375, 390, 414]),
+    sweepShortTall: sizes.some(([w, h]) => h > w && h <= 640) && sizes.some(([w, h]) => h > w && h >= 844) && sizes.filter(([w, h]) => w > h).length >= 2,
+    sweepChecks: ["aside\", \"rail", "plaque\", \"care", "covers the care buttons", "is under the", "Got it is covered"].every((s) => sweep.includes(s)),
+  };
+  if (!Object.values(phone).every(Boolean)) bad.push(`phone: ${JSON.stringify({ phone, widths })}`);
+
+  // 2) A called guest tells once per visit on web and overlay (an approach no longer clears told); same steps both.
+  const Call = await importTs("web", "src", "lib", "pets", "call-guests.ts");
+  const Overlay = require(join(ROOT, "desktop", "renderer", "call-guests.js"));
+  const HOST = { hostKey: "red_panda", hostX: 200, hostFacing: 1, hostLift: 0 };
+  const visit = (M, key) => {
+    const out = [];
+    let g = M.beginCalled(key, 800, 0, 1);
+    for (const [flags, n] of [[HOST, 16], [{ ...HOST, hidden: true }, 1], [HOST, 21]]) {
+      for (let i = 0; i < n; i += 1) {
+        g = M.stepCalled(g, 0.05, 800, flags);
+        if (M.shouldTell(g)) {
+          out.push(M.tellLine(g));
+          g = M.markTold(g);
+        }
+      }
+    }
+    return out;
+  };
+  const told = {
+    webDee: JSON.stringify(visit(Call, "chickadee")) === JSON.stringify([Call.DEE_RUI_LINE]),
+    webCat: JSON.stringify(visit(Call, "cat")) === JSON.stringify([Call.CAT_RUI_LINE]),
+    overlaySame: JSON.stringify(visit(Overlay, "chickadee")) === JSON.stringify(visit(Call, "chickadee")) && JSON.stringify(visit(Overlay, "cat")) === JSON.stringify(visit(Call, "cat")),
+    noReset: !/told: false/.test(read("web", "src", "lib", "pets", "call-guests.ts")) && !/told: false/.test(read("desktop", "renderer", "call-guests.js")),
+    pickerStays: read("web", "src", "components", "desk", "called-guests.tsx").includes("const line = linePicker.offer(next.key, tellLine(next));"),
+  };
+  if (!Object.values(told).every(Boolean)) bad.push(`told once: ${JSON.stringify(told)}`);
+
+  // 3) GUI harness temp folder: removed at the end of a passing run (a detached helper after exit when Chromium
+  //    still holds it), kept on failure and said so; 4) the click-through decision is checked in the real window.
+  const H = require(join(ROOT, "desktop", "gui-harness-data.cjs"));
+  const main = read("desktop", "main.cjs");
+  const runner = read("desktop", "gui-harness.cjs");
+  const harness = {
+    words: H.finishWords({ dir: "D", removed: false, kept: true }) === "gui-harness: run failed, kept temp userData for debugging: D" && H.finishWords({ dir: "D", removed: true, kept: false }) === "gui-harness: removed its temp userData D",
+    guard: H.AFTER_EXIT_CODE.includes("computerpets-gui-harness-") && H.removeAfterExit(() => { throw new Error("must not spawn"); }, "x", "/tmp/not-ours", 1) === false,
+    quit: main.includes("const done = HarnessData.finishRun(fs, harnessData, guiHarnessOk);") && main.includes("HarnessData.removeAfterExit(require(\"child_process\").spawn, process.execPath, harnessData, process.pid)"),
+    runner: runner.includes("HarnessData.finishRun(fs, payload.userData, !!payload.ok)"),
+    clickThrough: main.includes('payload.results["gui.clickthrough_hits"] = through;') && main.includes("const takesClick = Desk.cursorHits({ x: bubble.cx, y: bubble.cy }, hitsOpen);"),
+  };
+  if (!Object.values(harness).every(Boolean)) bad.push(`harness: ${JSON.stringify(harness)}`);
+
+  // 5) npm run dev leaves git status clean: the route tree is checked in the way the generator writes it.
+  const tree = read("web", "src", "routeTree.gen.ts");
+  const paths = [...tree.matchAll(/^import \{ Route as \w+ \} from '\.\/routes\/([^']+)'$/gm)].map((m) => m[1]);
+  const flat = paths.slice(2).filter((p) => !p.includes(".") && !p.includes("/") && !p.includes("$"));
+  const routeTree = paths[0] === "__root" && paths[1] === "index" && JSON.stringify(flat) === JSON.stringify([...flat].sort());
+  if (!routeTree) bad.push("route tree not in the generator's order");
+
+  const roadmap = read("docs", "ROADMAP.md");
+  if (!roadmap.includes("- [x] Small phones: the hello, the species plaque, the room rail and the care buttons never overlap")) bad.push("ROADMAP entry missing");
+  const extras = { phone, widths, sizes: sizes.length, told, harness, routeTree };
+  if (bad.length) return fail(bad.join("; "), extras);
+  return ok("Phone desk panels end above the care buttons (one-line plaque when short, bubbles on top; swept 320-414 wide, short, tall, landscape); a guest tells once per visit on web and overlay; GUI harness removes its temp folder (kept on failure); click-through decision checked; route tree in generator order", extras, [
+    "phone=no_overlap_sweep",
+    "plaque=folded_or_line",
+    "bubble=on_top",
+    "guest_tell=once_per_visit",
+    "gui_temp=removed_or_kept_on_failure",
+    "gui=clickthrough_hits",
+    "dev=route_tree_clean",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -2469,6 +2559,7 @@ const COMMANDS = {
   portraits_tray_minds: portraitsTrayMinds,
   house_lines_talk: houseLinesTalk,
   no_repeat_signed_in: noRepeatSignedIn,
+  phone_layout_told_once: phoneLayoutToldOnce,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,
