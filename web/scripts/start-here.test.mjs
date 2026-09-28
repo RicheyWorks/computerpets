@@ -274,3 +274,15 @@ test("START-HERE says how big the copy is, before the download and when it fails
   const mac = startSrc.slice(startSrc.indexOf("\n## Mac\n"), startSrc.indexOf("\n## Linux\n"));
   assert.match(mac, /The overlay says the same thing in a small window if you start it the other way below\./);
 });
+
+test("START-HERE offers the smaller --depth 1 copy with the sizes measured on Windows, and says updates still work", () => {
+  const ps = startSrc.slice(startSrc.indexOf("### Or: PowerShell"), startSrc.indexOf("## Step 4"));
+  assert.match(ps, /\*\*Smaller download \(optional\):\*\*/);
+  assert.match(ps, /^git clone --depth 1 https:\/\/github\.com\/RicheyWorks\/computerpets$/m);
+  assert.match(ps, /the plain copy downloaded about 3\.6 GB and used about 6\.5 GB of disk\. With `--depth 1` it downloaded about 1\.6 GB and used about 4\.4 GB\./);
+  assert.match(ps, /`git pull` in the `computerpets` folder still gets updates/);
+  assert.match(ps, /`git fetch --unshallow` brings them later/);
+  assert.match(ps, /GitHub Desktop always makes the plain copy\./);
+  // The plain copy stays the one taught first; the smaller one is optional.
+  assert.ok(ps.indexOf("git clone https://github.com/RicheyWorks/computerpets") < ps.indexOf("git clone --depth 1"));
+});

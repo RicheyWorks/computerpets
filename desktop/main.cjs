@@ -274,7 +274,7 @@ function currentName() {
 /** @returns {MenuRow} */
 function guestRadio(r) {
   return {
-    label: `${r.name} — ${r.speciesLabel}`,
+    label: Roster.choiceText(r),
     type: "radio",
     checked: r.key === currentKey,
     click: () => {
