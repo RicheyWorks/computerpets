@@ -103,6 +103,7 @@ CROSS_DOMAIN = {
     "card.first_run",
     "card.music",
     "card.mind",
+    "card.walk_rules",
     "gui.choice_close_exit",
     "web.guest_choice",
     "web.ethogram_tricks",
@@ -1222,6 +1223,17 @@ def test_first_run_rows_start_clean_and_show_the_hello_once():
     assert plates.extras["stations"] == 1
     assert any(t.startswith("weather=") and "Overcast" in t for t in plates.trace), plates.trace
     assert any(t.startswith("news=") and "_headlines" in t for t in plates.trace), plates.trace
+
+
+def test_card_walk_rules_row_drives_keeper_js():
+    """card.walk_rules: Feed reaches the food with the card open or after a play; the card holds; off the plates."""
+    row = invoke("card.walk_rules")
+    assert row.ok, (row.error, row.detail)
+    for mark in ("open_card=keeps_order_walk", "play_end=resumes_order_walk", "fold=never_unread+8000ms_after_press",
+                 "walk=card_holds_still", "plates=card_at_400_not_177", "tap=card_takes_keyboard"):
+        assert mark in row.trace, (mark, row.trace)
+    assert row.extras["x"] == 400
+    assert row.extras["resumes"] >= 3
 
 
 def test_blotter_pure_surfaces():
