@@ -85,6 +85,7 @@ export function SpeciesPlaque({
       ) : (
         <button
           type="button"
+          data-line-link
           className="mt-3 text-left text-xs text-subtle underline-offset-2 hover:text-fg hover:underline"
           onClick={() => setOpen(true)}
         >
@@ -96,6 +97,7 @@ export function SpeciesPlaque({
           <Link
             to="/demo/$slug"
             params={{ slug: guide.slug }}
+            data-line-link
             className="text-sm text-fg no-underline hover:text-primary"
           >
             Watch {guide.name} {classroom.verb}
@@ -103,7 +105,8 @@ export function SpeciesPlaque({
         </p>
       ) : (
         <p className="mt-3">
-          <Link to={classroom.to} className="text-sm text-fg no-underline hover:text-primary">
+          {/* data-line-link: 44 px tall on a phone floor (styles.css), like the room's own line links. */}
+          <Link to={classroom.to} data-line-link className="text-sm text-fg no-underline hover:text-primary">
             {classroom.label}
           </Link>
         </p>

@@ -42,7 +42,8 @@ export function PetCard({ pet }: { pet: CompanionView }) {
         />
       </div>
       <div className="min-w-0 flex-1 space-y-1 py-2 pr-3">
-        <div className="flex items-start justify-between gap-2">
+        {/* flex-wrap: on a narrow card (the kennel on a phone) the badges go under the name instead of squeezing it. */}
+        <div className="flex flex-wrap items-start justify-between gap-x-2 gap-y-1">
           <div className="min-w-0">
             <p className="truncate font-display text-lg leading-tight text-fg">{pet.name}</p>
             <p className="mt-0.5 text-[11px] text-subtle">{species?.displayName ?? pet.species_key}</p>
@@ -55,8 +56,9 @@ export function PetCard({ pet }: { pet: CompanionView }) {
         <p className="text-xs text-muted">
           {pet.stage} · {pet.origin === "nest" ? "from the nest" : "drawn"}
         </p>
-        <p className="text-sm text-muted">The kennel guest is a room. {lookHint(pet)}.</p>
-        <p className="text-xs text-subtle">{species?.temperament} · {moodWord(pet)}</p>
+        {/* data-card-more: the long lines; the kennel on a phone leaves them to the pet's own page (styles.css). */}
+        <p data-card-more className="text-sm text-muted">The kennel guest is a room. {lookHint(pet)}.</p>
+        <p data-card-more className="text-xs text-subtle">{species?.temperament} · {moodWord(pet)}</p>
         <Meter label="Bond" value={score} />
       </div>
     </Link>

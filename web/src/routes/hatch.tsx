@@ -82,7 +82,7 @@ function Hatchery() {
         line={
           <p className="mt-3 max-w-sm text-sm text-muted">
             The hatch is a room. The draw is the act.{" "}
-            <Link to="/nest" className="text-fg no-underline hover:text-primary">
+            <Link to="/nest" data-line-link className="text-fg no-underline hover:text-primary">
               Or pair two you already keep.
             </Link>
           </p>
