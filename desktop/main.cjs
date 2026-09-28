@@ -21,6 +21,7 @@ const MindSecret = require("./mind-secret.cjs");
 const PetCard = require("./renderer/card.js");
 const VDesk = require("./vdesk-win.cjs");
 const Pictures = require("./renderer/pictures.js");
+const OverlayGate = require("./overlay-gate.cjs");
 
 /** Buffffff opt-in: COMPUTERPETS_GUI_HARNESS=1 runs Electron smokes then quits. */
 const GUI_HARNESS = process.env.COMPUTERPETS_GUI_HARNESS === "1";
@@ -119,6 +120,13 @@ let gpuGate = null;
  * @type {ReturnType<typeof Pictures.words> | null}
  */
 let picturesGate = null;
+/**
+ * Set while the pet window stays closed on purpose: the GPU gate refused it (gpuGate.reason), or a Linux desktop has
+ * no compositor ("no-compositor"), where the see-through window would cover the screen in black. The tray said so
+ * only in its menu, and many Linux desktops show no tray, so a message box says it too (overlay-gate.cjs).
+ * @type {{ why: string, words: ReturnType<typeof OverlayGate.closedWords> } | null}
+ */
+let closedGate = null;
 /** @type {BrowserWindow | null} */
 let win = null;
 /** @type {BrowserWindow | null} */
@@ -387,6 +395,58 @@ function showPicturesMessage() {
     .catch(() => {});
 }
 
+/** Why the pet window stayed closed, in a message box: the tray may not show on Linux. The buttons do what they say. */
+function showClosedMessage() {
+  if (!closedGate) return;
+  const shown = closedGate;
+  const w = shown.words;
+  dialog
+    .showMessageBox({
+      type: "info",
+      title: "ComputerPets",
+      message: w.message,
+      detail: w.detail,
+      buttons: w.buttons,
+      defaultId: 0,
+      cancelId: w.buttons.length - 1,
+      noLink: true,
+    })
+    .then((r) => closedAction(w.actions[r.response] || "none"))
+    .catch(() => {});
+}
+
+/** @param {string} action */
+function closedAction(action) {
+  if (action === "quit") app.quit();
+  else if (action === "allow-software") acceptSoftwareCompositing();
+  else if (action === "recheck") recheckCompositor();
+}
+
+/** Check again: a compositor turned on since opens the pet window now; none yet says so again. */
+async function recheckCompositor() {
+  if (!closedGate || closedGate.why !== "no-compositor") return;
+  const seen = await OverlayGate.readCompositor({ platform: process.platform, env: process.env });
+  if (!closedGate || closedGate.why !== "no-compositor") return;
+  if (!OverlayGate.overlayMayOpen(seen)) {
+    showClosedMessage();
+    return;
+  }
+  closedGate = null;
+  startOverlay();
+  refreshMenus();
+}
+
+/** @returns {MenuRow[]} */
+function compositorTrayTemplate() {
+  return [
+    { label: closedGate ? closedGate.words.tray : "", enabled: false },
+    { type: "separator" },
+    { label: "Check again", click: () => recheckCompositor() },
+    { label: "Why the pets are not on the screen", click: () => showClosedMessage() },
+    { label: "Quit", click: () => app.quit() },
+  ];
+}
+
 /** @returns {MenuRow[]} */
 function picturesTrayTemplate() {
   if (!picturesGate) return [];
@@ -412,6 +472,7 @@ function refusedTrayTemplate() {
   if (gpuGate.reason === "software-refused") {
     rows.push({ label: "Allow software compositing", click: () => acceptSoftwareCompositing() });
   }
+  rows.push({ label: "Why the pets are not on the screen", click: () => showClosedMessage() });
   rows.push({ label: "Quit", click: () => app.quit() });
   return rows;
 }
@@ -481,6 +542,11 @@ function refreshMenus() {
     tray?.setContextMenu(Menu.buildFromTemplate(rows));
     tray?.setToolTip(picturesGate.tray + " — ComputerPets");
     if (Desk.appMenu(process.platform)) Menu.setApplicationMenu(Menu.buildFromTemplate(rows));
+    return;
+  }
+  if (closedGate && closedGate.why === "no-compositor") {
+    tray?.setContextMenu(Menu.buildFromTemplate(compositorTrayTemplate()));
+    tray?.setToolTip(closedGate.words.tray + " — ComputerPets");
     return;
   }
   const refused = gpuGate && !gpuGate.open;
@@ -894,30 +960,52 @@ function bootDesk() {
         return;
       }
       createTray();
+      closedGate = { why: gpuGate.reason, words: OverlayGate.closedWords(gpuGate.reason) };
+      showClosedMessage();
       return;
     }
-    createWindow();
-    if (!GUI_HARNESS) {
+    // Linux: no compositor, no see-through window (it would be solid black over the whole screen).
+    const compositor = await OverlayGate.readCompositor({ platform: process.platform, env: process.env });
+    if (!OverlayGate.overlayMayOpen(compositor)) {
+      closedGate = { why: "no-compositor", words: OverlayGate.closedWords("no-compositor") };
+      if (GUI_HARNESS) {
+        writeGuiHarnessResult({ ok: false, error: "no-compositor", results: { "gui.compositor": { ok: false, detail: closedGate.words.message } } });
+        app.quit();
+        return;
+      }
       createTray();
-      startHitForward();
-      startWindowTick();
-      startGpuTick();
-      startDesktopFollow();
-      screen.on("display-metrics-changed", fitWorkArea);
-      screen.on("display-added", fitWorkArea);
-      screen.on("display-removed", fitWorkArea);
-      powerMonitor.on("suspend", () => win?.webContents.send("command", "rest"));
-      powerMonitor.on("resume", fitWorkArea);
-      powerMonitor.on("lock-screen", () => win?.webContents.send("command", "rest"));
-    } else {
-      setTimeout(() => {
-        if (!guiHarnessDone) {
-          writeGuiHarnessResult({ ok: false, error: "gui harness timed out", results: {} });
-          app.quit();
-        }
-      }, 45000);
+      showClosedMessage();
+      return;
     }
+    startOverlay();
   });
+}
+
+/** The pet window and everything that runs with it; after the gates, or when Check again finds a compositor. */
+function startOverlay() {
+  createWindow();
+  if (!GUI_HARNESS) {
+    // Check again finds the tray already made (it carried the no-compositor words); it gets the full menu.
+    if (!tray) createTray();
+    else refreshMenus();
+    startHitForward();
+    startWindowTick();
+    startGpuTick();
+    startDesktopFollow();
+    screen.on("display-metrics-changed", fitWorkArea);
+    screen.on("display-added", fitWorkArea);
+    screen.on("display-removed", fitWorkArea);
+    powerMonitor.on("suspend", () => win?.webContents.send("command", "rest"));
+    powerMonitor.on("resume", fitWorkArea);
+    powerMonitor.on("lock-screen", () => win?.webContents.send("command", "rest"));
+  } else {
+    setTimeout(() => {
+      if (!guiHarnessDone) {
+        writeGuiHarnessResult({ ok: false, error: "gui harness timed out", results: {} });
+        app.quit();
+      }
+    }, 45000);
+  }
 }
 
 if (GUI_HARNESS) {
@@ -930,6 +1018,10 @@ if (GUI_HARNESS) {
     app.on("second-instance", () => {
       if (picturesGate) {
         showPicturesMessage();
+        return;
+      }
+      if (closedGate) {
+        showClosedMessage();
         return;
       }
       win?.showInactive();

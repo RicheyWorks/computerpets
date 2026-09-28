@@ -163,6 +163,11 @@
    * rule in care.ts decayStats (REST_WAKE_ENERGY there); desk-audit-1557.test.cjs holds the two together.
    */
   const REST_WAKE_ENERGY = 100;
+  /**
+   * Energy one Rest gives: +34, the web's number (care.ts REST_ENERGY_GAIN). The desktop gave +32 for the same button;
+   * linux-drive.test.cjs and web scripts/rest-wake.test.mjs hold the two together.
+   */
+  const REST_ENERGY_GAIN = 34;
 
   function decay(life, trait, now = Date.now(), key) {
     const dt = Math.max(0, now - (life.lastTick || now));
@@ -349,7 +354,7 @@
     if (action === "rest") {
       life.hunger = clamp(life.hunger - 3);
       life.mood = clamp(life.mood + 4);
-      life.energy = clamp(life.energy + 32);
+      life.energy = clamp(life.energy + REST_ENERGY_GAIN);
       holdSleep(life);
       bondUp(life, 1);
       return { life, line: null, cmd: "sleep", notify: null, useRoster: "rest" };
@@ -524,6 +529,7 @@
     bootCmd,
     holdSleep,
     REST_WAKE_ENERGY,
+    REST_ENERGY_GAIN,
     sleepHolds,
     wanderWhileAsleep,
     SLEEP_WAKES,

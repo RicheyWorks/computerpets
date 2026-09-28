@@ -28,6 +28,23 @@ test("the web and the desktop share one number for fully rested", () => {
   assert.equal(Life.REST_WAKE_ENERGY, C.REST_WAKE_ENERGY);
 });
 
+test("Rest gives the same energy on the web and the desktop (it was +34 and +32)", () => {
+  assert.equal(C.REST_ENERGY_GAIN, 34);
+  assert.equal(Life.REST_ENERGY_GAIN, C.REST_ENERGY_GAIN);
+  for (const energy of [0, 40, 50, 66, 80]) {
+    const start = { energy, hunger: 70, mood: 60, hygiene: 80, health: 90 };
+    const web = C.applyRest(start);
+    const life = { ...Life.blank(DAY), ...start, lastTick: DAY };
+    const desk = Life.act(life, TRAIT, "rest", DAY, "fox").life;
+    assert.equal(web.energy, Math.min(100, energy + 34), `web from ${energy}`);
+    assert.equal(desk.energy, web.energy, `desktop from ${energy}`);
+    assert.equal(desk.hunger, web.hunger, `hunger from ${energy}`);
+    assert.equal(desk.mood, web.mood, `mood from ${energy}`);
+    assert.equal(desk.asleep, true);
+    assert.equal(web.asleep, true);
+  }
+});
+
 test("a fully rested pet wakes by itself; a tired one sleeps on; a hungry one wakes, on both", () => {
   const cases = [
     { energy: 100, hunger: 70, ms: 5_600, asleep: false, why: "fully rested wakes" },

@@ -1393,6 +1393,23 @@ def _desk_rows() -> list[Affordance]:
             ),
         ),
         Affordance(
+            "desk.overlay_gate",
+            "desk",
+            "A pet window kept closed on purpose says why in a message box too: software compositing, and a Linux desktop with no compositor",
+            "main.cjs bootDesk + overlay-gate.cjs readCompositor / closedWords + dialog.showMessageBox + tray",
+            notes=(
+                "Loads the real desktop/main.cjs under the stand-in Electron. The GPU gate refusing software compositing: "
+                "no window, the words in a message box (Allow software compositing, Quit, OK) as well as the tray, which "
+                "gains Why the pets are not on the screen; Allow writes software and restarts. A Linux desktop with no "
+                "compositor (overlay-gate.cjs read \"no\"): no window and no ticks, a message box and a tray (Check again, "
+                "Why the pets are not on the screen, Quit); Check again with none says it again, with one running opens the "
+                "glass with the full tray. A second start says it again. With a compositor, or an answer that could not be "
+                "read, the glass opens and nothing is said. Found driving the desktop on Linux under Xvfb: without a "
+                "compositor the see-through window covered the screen in solid black, and the refusal was said only in a "
+                "tray that many Linux desktops do not show."
+            ),
+        ),
+        Affordance(
             "desk.market.search",
             "desk",
             "Quotes look-up through main market-search",
@@ -1609,14 +1626,24 @@ def _desk_rows() -> list[Affordance]:
 LAUNCH_PIECES = ("ready", "missing", "unfinished", "changed")
 
 
-def launch_next(pieces: str, pictures: str, script: str) -> str:
-    """The plain next step check mode prints last: what to type, for the pictures first, then the pieces."""
+LAUNCH_NO_SCREEN = (
+    "next: There is no desktop screen here for the pets: DISPLAY and WAYLAND_DISPLAY are empty, as in a Terminal over "
+    "SSH or on a text console. Open a Terminal on your desktop, go to the computerpets folder, type sh desktop.sh and "
+    "press Enter."
+)
+
+
+def launch_next(pieces: str, pictures: str, script: str, display: str = "ok") -> str:
+    """The plain next step check mode prints last: what to type, for the pictures first, then the screen (desktop.sh
+    on Linux prints display: none with no DISPLAY or WAYLAND_DISPLAY), then the pieces."""
     run = r".\desktop.ps1" if script == "desktop.ps1" else "sh desktop.sh"
     if pictures != "ready":
         return (
             "next: The pet pictures are not here yet. Install Git LFS from https://git-lfs.com, then in the computerpets "
             f"folder type git lfs install and then git lfs pull. Then type {run} and press Enter."
         )
+    if script == "desktop.sh" and display == "none":
+        return LAUNCH_NO_SCREEN
     return {
         "missing": f"next: Type {run} and press Enter. It gets the pieces (a few minutes the first time), then the pets come on.",
         "unfinished": f"next: Type {run} and press Enter. It finishes getting the pieces, then the pets come on.",
@@ -1664,6 +1691,7 @@ def _launch_check(aid: str) -> InvokeResult:
     out = f"{proc.stdout or ''}{proc.stderr or ''}"
     pieces = re.search(r"^pieces: (\w+)\s*$", out, re.M)
     pictures = re.search(r"^pictures: ([\w-]+)\s*$", out, re.M)
+    display = re.search(r"^display: (\w+)\s*$", out, re.M)
     real_pictures = launch_pictures_state(root)
     fails: list[str] = []
     if not node:
@@ -1689,7 +1717,7 @@ def _launch_check(aid: str) -> InvokeResult:
         if not pictures or pictures.group(1) != real_pictures:
             fails.append(f"{script} check said pictures {pictures.group(1) if pictures else 'nothing'}, the file says {real_pictures}")
         if pieces and pictures:
-            want = launch_next(pieces.group(1), pictures.group(1), script)
+            want = launch_next(pieces.group(1), pictures.group(1), script, display.group(1) if display else "ok")
             lines = [ln.strip() for ln in out.splitlines() if ln.strip()]
             if not lines or lines[-1] != want:
                 fails.append(f"{script} check's last line is {lines[-1] if lines else 'nothing'!r}, wanted {want!r}")
@@ -1829,6 +1857,8 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("quit_desk", domain="desk", action_id=aid)
     if local_id == "pictures_gate":
         return _run_node_smoke("pictures_gate", domain="desk", action_id=aid)
+    if local_id == "overlay_gate":
+        return _run_node_smoke("overlay_gate", domain="desk", action_id=aid)
     if local_id == "market.search":
         return _run_node_smoke("market_search", domain="desk", action_id=aid)
     if local_id == "settings.window":
@@ -2001,7 +2031,7 @@ def _card_rows() -> list[Affordance]:
                 "the talk pose ends when the pet's own line does (house chatter held it 13-30 s); a window play keeps "
                 "the pet and a carried ribbon on the screen (x = -109 before); Minds Save tests the key through the "
                 "overlay and a refused key reads the web's mindProblem words (the House window keeps connect-src "
-                "'none'); the volume slider says Volume for this pet on the desktop and the web; at the right edge the "
+                "'none'), and Test this mind asks again without saving; the volume slider says Volume for this pet on the desktop and the web; at the right edge the "
                 "card stays by the pet and is made shorter under the news plate (it stood 323 px away). "
                 "Driven for real by gui.first_run_drive under --gui."
             ),
@@ -3390,12 +3420,20 @@ def _gui_rows() -> list[Affordance]:
                 "leash of the pet and over no plate at the right edge, Rest at 99 waking by itself, the talk pose ending "
                 "with the pet's line while house chatter keeps the bubble up, a window play and a carried ribbon on the "
                 "screen, Minds Save showing the refused key in the web's words (asked with the House window's line in "
-                "view), the volume slider saying it is this pet's. `--scale 1.25` / `1.5` adds "
+                "view), the volume slider saying it is this pet's, and Test this mind (its own button next to Save, asking "
+                "the saved mind again; with an unsaved change it says Save first and asks nothing). On Linux (driven on "
+                "the box under Xvfb): a GPU drawing in software gets the app's own Allow software compositing pressed "
+                "(gate_software_says_so, then a restart), and a desktop with no compositor ends the drive at its message "
+                "(gate_no_compositor_says_so; the drive reports gated, not ok). With no secret store (no keyring), "
+                "settings_survive_restart accepts the key not kept when the Minds page said it was not written to disk. "
+                "A start that shows neither window nor message is closed and killed, not waited on forever. "
+                "`--scale 1.25` / `1.5` adds "
                 "--force-device-scale-factor. Menus are recorded, "
                 "not popped up, and input goes through Chromium (CDP), never the OS mouse or keyboard. "
                 "Offline pins: desktop/renderer/first-run-fit.test.cjs, desktop/renderer/first-run-drive.test.cjs, "
                 "desktop/renderer/card-rules.test.cjs, desktop/renderer/desk-drive-long.test.cjs, "
-                "desktop/renderer/desk-audit-1557.test.cjs, card.walk_rules, card.long_walk_talk, and card.audit_1557."
+                "desktop/renderer/desk-audit-1557.test.cjs, desktop/renderer/linux-drive.test.cjs, card.walk_rules, "
+                "card.long_walk_talk, card.audit_1557, and desk.overlay_gate."
             ),
         ),
     ]

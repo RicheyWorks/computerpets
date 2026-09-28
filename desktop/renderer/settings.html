@@ -52,7 +52,7 @@
       </div>
       <p class="ok" id="keyStore"></p>
       <p class="hint" id="mindNet" hidden></p>
-      <button id="save" type="button">Use for all pets</button>
+      <button id="save" type="button">Use for all pets</button><button id="testMind" class="ghost" type="button">Test this mind</button>
       <p class="ok" id="ok"></p>
       <p class="ok" id="mindTest"></p>
       <p class="err" id="mindErr"></p>
@@ -186,8 +186,11 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
       const okLine = document.getElementById("ok");
       const mindErr = document.getElementById("mindErr");
       const mindTest = document.getElementById("mindTest");
-      /** After a save: one talk to the saved mind, the answer (or the plain reason it did not answer) under Save. */
-      async function testSaved() {
+      /**
+       * One talk to the saved mind, the answer (or the plain reason it did not answer) under Save: after a save, and
+       * from Test this mind (`fromButton`), which asks again without saving, like the web's button.
+       */
+      async function testSaved(fromButton) {
         const p = window.PetMind.preset(plugin.value);
         if (!p || p.kind === "local" || !window.desk?.mindTest || !window.PetMind.mindTestLine) return;
         // The line for the mind as saved (the address as the settings file keeps it), which is what the test asks.
@@ -198,7 +201,7 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
         if (!netInView() && mindNet.scrollIntoView) mindNet.scrollIntoView({ block: "nearest" });
         await new Promise((r) => (typeof requestAnimationFrame === "function" ? requestAnimationFrame(() => r(null)) : setTimeout(r, 0)));
         if (!netInView()) {
-          mindTest.textContent = window.PetMind.MIND_UNTESTED;
+          mindTest.textContent = fromButton && window.PetMind.MIND_NOT_ASKED ? window.PetMind.MIND_NOT_ASKED : window.PetMind.MIND_UNTESTED;
           return;
         }
         mindTest.className = "ok";
@@ -234,7 +237,30 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
         s.keyKept = kept;
         paintKey(kept);
         okLine.textContent = kept === "none" || kept === "plain" ? "Saved the mind. The key was not written to disk." : "Saved. Talk to them again.";
-        await testSaved();
+        await testSaved(false);
+      });
+      // Test this mind: the saved mind again, without saving. Unsaved changes, or house lines, are said instead.
+      const testMindButton = document.getElementById("testMind");
+      testMindButton.addEventListener("click", async () => {
+        if (testMindButton.disabled) return;
+        okLine.textContent = "";
+        mindErr.textContent = "";
+        mindTest.className = "ok";
+        mindTest.textContent = "";
+        const saved = (window.PetMind.load() || {}).default || {};
+        const gate = window.PetMind.mindTestGate
+          ? window.PetMind.mindTestGate(saved, { plugin: plugin.value, model: model.value, baseUrl: base.value, apiKey: key.value })
+          : "";
+        if (gate) {
+          mindTest.textContent = gate;
+          return;
+        }
+        testMindButton.disabled = true;
+        try {
+          await testSaved(true);
+        } finally {
+          testMindButton.disabled = false;
+        }
       });
 
       const backend = document.getElementById("backend");

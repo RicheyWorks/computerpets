@@ -168,9 +168,9 @@ test("Minds Save tests the key the way the web's Test this mind does, in the web
 
 test("the House window asks through main; the overlay asks the mind; the House window still has no fetch", () => {
   assert.match(settingsSrc, /connect-src 'none'/, "the House window stays without a fetch of its own");
-  assert.match(settingsSrc, /<p class="hint" id="mindNet" hidden><\/p>\n\s+<button id="save" type="button">Use for all pets<\/button>\n\s+<p class="ok" id="ok"><\/p>\n\s+<p class="ok" id="mindTest"><\/p>/);
-  assert.match(settingsSrc, /okLine\.textContent = kept === "none"[^\n]*\n\s+await testSaved\(\);/);
-  const t = settingsSrc.slice(settingsSrc.indexOf("async function testSaved()"), settingsSrc.indexOf('document.getElementById("save").addEventListener'));
+  assert.match(settingsSrc, /<p class="hint" id="mindNet" hidden><\/p>\n\s+<button id="save" type="button">Use for all pets<\/button>(<button id="testMind" class="ghost" type="button">Test this mind<\/button>)?\n\s+<p class="ok" id="ok"><\/p>\n\s+<p class="ok" id="mindTest"><\/p>/);
+  assert.match(settingsSrc, /okLine\.textContent = kept === "none"[^\n]*\n\s+await testSaved\((false)?\);/);
+  const t = settingsSrc.slice(settingsSrc.indexOf("async function testSaved("), settingsSrc.indexOf('document.getElementById("save").addEventListener'));
   assert.ok(t.indexOf("netInView()") < t.indexOf("window.desk.mindTest("), "the line is in view before the test is asked");
   assert.match(t, /window\.desk\.mindTest\(mindNet\.textContent \|\| ""\)/);
   assert.match(t, /window\.PetMind\.mindTestLine\(reply, p\.name\)/);
