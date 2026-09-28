@@ -70,7 +70,7 @@ Clicks on empty glass pass through to your windows. The floor is the work area, 
 
 ### Mac
 
-Same helpers. Then in Terminal, inside the `computerpets` folder:
+Same helpers, plus [Git LFS](https://git-lfs.com) for the pet pictures (`brew install git-lfs`, then `git lfs install` once, before you copy the pets). Then in Terminal, inside the `computerpets` folder:
 
 ```bash
 sh desktop.sh
@@ -80,13 +80,15 @@ The extra control sits in the menu bar.
 
 ### Linux
 
-Same helpers. Then:
+Same helpers, plus Git LFS for the pet pictures (`sudo apt install git-lfs` on Ubuntu or Debian, then `git lfs install` once). Then:
 
 ```bash
 sh desktop.sh
 ```
 
 The mark sits in the panel.
+
+If `sh desktop.sh` says the pet pictures did not download, type `git lfs pull` in the `computerpets` folder and start again.
 
 More in [desktop/README.md](desktop/README.md).
 

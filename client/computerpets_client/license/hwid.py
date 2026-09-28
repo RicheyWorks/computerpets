@@ -57,7 +57,7 @@ MACHINE_MARKS: tuple[dict[str, str], ...] = (
         "platform": "random",
         "source": "random",
         "kind": "uuid",
-        "where": "a local random id",
+        "where": "a local random ID",
         "why": "Used only after that same yes, when there is no computer name. Not stable if hwid.txt is deleted.",
     },
 )
@@ -65,8 +65,8 @@ MACHINE_MARKS: tuple[dict[str, str], ...] = (
 # Shown when Unlock would otherwise mint a computer-name or random mark.
 WEAK_FALLBACK_MESSAGE = (
     "This computer has no stable operating-system id. Unlock waits until you say yes before it hashes the computer name. "
-    "If this computer has no name, that yes hashes a random id. A rename changes the computer-name hash. "
-    "Deleting hwid.txt makes a random id a different mark."
+    "If this computer has no name, that yes hashes a random ID. A rename changes the computer-name hash. "
+    "Deleting hwid.txt makes a random ID a different mark."
 )
 
 
@@ -199,7 +199,7 @@ def _read_machine_source(
 
 
 def _weak_material(hostname: str | None, fallback_id: str | None) -> tuple[str, str]:
-    """Computer name, then a caller fallback, then a random id. Only after a yes.
+    """Computer name, then a caller fallback, then a random ID. Only after a yes.
 
     An explicit empty hostname means this computer has no name.
     """
@@ -237,7 +237,7 @@ def resolve_hwid_detail(
     The digest recipe is unchanged: sha256("computerpets:" + platform token + ":" + raw).
     The platform token is plat, or platform.system().lower() when plat is omitted.
     That token is "windows" here and "win32" in the overlay. Each client keeps its own file.
-    A missing named id does not hash the computer name or a random id until allow_weak_fallback.
+    A missing named id does not hash the computer name or a random ID until allow_weak_fallback.
     An injected write_file owns its storage: no real folder is made unless mkdir is also passed.
     """
     stored = peek_hwid(user_data_dir=user_data_dir, read_file=read_file)

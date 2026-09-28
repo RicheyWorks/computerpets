@@ -166,6 +166,24 @@ test("settings: Backend URL and license fields are a labeled optional section", 
   const folded = html.slice(detailsStart, detailsEnd);
   assert.doesNotMatch(folded, /id="licenseNet"|id="bundleNet"/);
 });
+test("settings: each Unlock field has a plain label and one true helper line", () => {
+  const optional = html.slice(fieldsetStart, fieldsetEnd);
+  const fields = [
+    ["provider", "Where you own the game", "Only Steam works here for now. Other stores cannot unlock from this window yet."],
+    ["steamId", "Your Steam ID", "Your Steam account number: 17 digits that start with 7656. Steam shows it under Account details."],
+    ["appId", "Steam App ID", "The game's number on Steam. Ask whoever runs the house server. ComputerPets has no Steam page yet."],
+  ];
+  for (const [id, label, help] of fields) {
+    assert.match(optional, new RegExp(`<label for="${id}">${label}</label>`), `${id} label`);
+    assert.equal(paragraph(`${id}Help`), help);
+    assert.match(help, /^[A-Z][^]*\.$/, `${id} helper is whole sentences`);
+    assert.ok(words(help).length <= 20, `${id} helper is one short line`);
+  }
+  // Only Steam is offered, and the helper says so.
+  assert.match(optional, /<select id="provider"><option value="steam">Steam<\/option><\/select>/);
+  assert.doesNotMatch(optional, /<label>(Provider|Steam ID|App ID)<\/label>/);
+});
+
 test("settings: Minds says first that pets talk without an AI, and House lines hide the AI boxes", () => {
   const mindsStart = html.indexOf('<h1 id="mindsSection">Minds</h1>');
   const pluginAt = html.indexOf('<select id="plugin"></select>');
