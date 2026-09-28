@@ -52,6 +52,36 @@ app.commandLine.appendSwitch("enable-transparent-visuals");
 app.commandLine.appendSwitch("disable-renderer-backgrounding");
 app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
 
+// Linux Minds key: Chromium picks the Secret Service only on desktops it knows by name, so on sway, i3 and the rest
+// the key was written nowhere even with a keyring running. Ask for it by name there (overlay-gate.cjs).
+{
+  const given = app.commandLine.getSwitchValue("password-store");
+  const store = OverlayGate.passwordStoreFor({
+    platform: process.platform,
+    env: process.env,
+    given,
+    secretService: () => OverlayGate.secretServiceRunning({ env: process.env }),
+  });
+  if (store) app.commandLine.appendSwitch("password-store", store);
+}
+
+/**
+ * Started as a native Wayland app (--ozone-platform=wayland, or ELECTRON_OZONE_PLATFORM_HINT on a Wayland session).
+ * Electron crashed there at boot (SIGSEGV in screen.getCursorScreenPoint), and a Wayland app cannot see the mouse
+ * outside its window, so bootDesk starts the pets again on XWayland, or says why they stay off (overlay-gate.cjs).
+ */
+const NATIVE_WAYLAND = OverlayGate.nativeWayland({
+  platform: process.platform,
+  env: process.env,
+  ozone: app.commandLine.getSwitchValue("ozone-platform"),
+  hint: app.commandLine.getSwitchValue("ozone-platform-hint"),
+});
+/**
+ * Whether the tray icon can be seen: "yes", "no" (GNOME without AppIndicator, a bare X server), "unknown", or "n/a"
+ * (Windows and the Mac). With "no" the pet's own menu, the hello and Hide the window say how to get around it.
+ */
+let trayHost = "unknown";
+
 /** @type {ReturnType<typeof createLicenseSession> | null} */
 let licenseSession = null;
 
@@ -378,12 +408,14 @@ function gpuPathRows() {
 function showPicturesMessage() {
   if (!picturesGate) return;
   const w = picturesGate;
+  // No tray to see: this message is the only way to reach the app, so closing it quits (and it says so).
+  const noTray = trayHost === "no";
   dialog
     .showMessageBox({
       type: "info",
       title: "ComputerPets",
       message: w.message,
-      detail: w.detail,
+      detail: noTray ? `${w.detail} ${OverlayGate.NO_TRAY_GATE}` : w.detail,
       buttons: ["Open git-lfs.com", "OK"],
       defaultId: 1,
       cancelId: 1,
@@ -391,6 +423,7 @@ function showPicturesMessage() {
     })
     .then((r) => {
       if (r.response === 0) openWebPage(w.link);
+      if (noTray) app.quit();
     })
     .catch(() => {});
 }
@@ -399,7 +432,8 @@ function showPicturesMessage() {
 function showClosedMessage() {
   if (!closedGate) return;
   const shown = closedGate;
-  const w = shown.words;
+  // No tray to see: OK quits too, since nothing else could reach the app afterwards.
+  const w = OverlayGate.gateWithoutTray(shown.words, trayHost);
   dialog
     .showMessageBox({
       type: "info",
@@ -571,7 +605,8 @@ function refreshMenus() {
 
 /** The Mac floor sits under the menu bar and above the dock, on the desk under the cursor. */
 function floorOf() {
-  if (Desk.followCursorDisplay(process.platform)) {
+  // A native Wayland app has no cursor position to ask for (Electron crashed asking before a window was up).
+  if (Desk.followCursorDisplay(process.platform) && !NATIVE_WAYLAND) {
     return screen.getDisplayNearestPoint(screen.getCursorScreenPoint()).workArea;
   }
   return screen.getPrimaryDisplay().workArea;
@@ -710,10 +745,42 @@ function popupPetMenu(x, y) {
     { label: "Keeper card", click: () => openKeeperCardFromMenu() },
     { label: "Unlock…", click: () => openSettings("unlock") },
     { label: "Minds…", click: () => openSettings("minds") },
+    // Everything the tray has, so a desktop with no tray to see (trayHost "no") leaves nothing out of reach.
+    ...(gpuGate && gpuGate.open && gpuGate.path === "software" ? [{ label: "Require hardware compositing", click: () => requireHardwareCompositing() }] : []),
+    ...desktopFollowRows(),
     { type: "separator" },
-    { label: "Hide the window", click: () => win?.hide() },
+    { label: "Hide the window", click: () => hideWindowFromPetMenu() },
     { label: "Quit", click: () => app.quit() },
   ])).popup({ window: win, x: Math.round(x), y: Math.round(y) });
+}
+
+/** Hide from the pet's menu. With no tray to see, the tray's Show is gone, so it asks first and says what is. */
+function hideWindowFromPetMenu() {
+  if (!win) return;
+  if (trayHost !== "no") {
+    win.hide();
+    return;
+  }
+  const w = OverlayGate.hideWords(process.platform);
+  dialog
+    .showMessageBox({ type: "question", title: "ComputerPets", message: w.message, detail: w.detail, buttons: w.buttons, defaultId: 0, cancelId: w.buttons.length - 1, noLink: true })
+    .then((r) => {
+      if (w.actions[r.response] === "hide") win?.hide();
+    })
+    .catch(() => {});
+}
+
+/**
+ * Asks once the tray is up whether it can be seen, and tells the overlay (its hello names the tray or not). A gate
+ * asks before its message, so OK there quits where no tray could reach the app afterwards.
+ */
+async function learnTrayHost() {
+  try {
+    trayHost = await OverlayGate.readTrayHost({ platform: process.platform, env: process.env, nativeWayland: NATIVE_WAYLAND });
+  } catch {
+    trayHost = "unknown";
+  }
+  if (win && !win.isDestroyed()) win.webContents.send("tray-host", trayHost);
 }
 
 let guiHarnessDone = false;
@@ -927,6 +994,26 @@ function bootDesk() {
   app.whenReady().then(async () => {
     loadRoster();
     if (process.platform === "darwin") app.dock?.hide();
+    // A native Wayland start: again on XWayland (once), or closed with the reason when there is none.
+    const wayland = OverlayGate.waylandPlan({ native: NATIVE_WAYLAND, env: process.env });
+    if (wayland === "relaunch-x11") {
+      process.env.COMPUTERPETS_X11_TRIED = "1";
+      app.relaunch({ args: OverlayGate.x11Args(process.argv.slice(1)) });
+      app.quit();
+      return;
+    }
+    if (wayland === "closed") {
+      closedGate = { why: "wayland-native", words: OverlayGate.closedWords("wayland-native") };
+      if (GUI_HARNESS) {
+        writeGuiHarnessResult({ ok: false, error: "wayland-native", results: { "gui.wayland": { ok: false, detail: closedGate.words.message } } });
+        app.quit();
+        return;
+      }
+      createTray();
+      await learnTrayHost();
+      showClosedMessage();
+      return;
+    }
     // Git LFS pictures first: without them every pet would be invisible, so say so plainly.
     const pictures = Pictures.picturesState(path.join(__dirname, "renderer"), fs, path.join);
     if (pictures !== "ready") {
@@ -941,6 +1028,7 @@ function bootDesk() {
         return;
       }
       createTray();
+      await learnTrayHost();
       showPicturesMessage();
       return;
     }
@@ -961,6 +1049,7 @@ function bootDesk() {
       }
       createTray();
       closedGate = { why: gpuGate.reason, words: OverlayGate.closedWords(gpuGate.reason) };
+      await learnTrayHost();
       showClosedMessage();
       return;
     }
@@ -974,6 +1063,7 @@ function bootDesk() {
         return;
       }
       createTray();
+      await learnTrayHost();
       showClosedMessage();
       return;
     }
@@ -988,6 +1078,7 @@ function startOverlay() {
     // Check again finds the tray already made (it carried the no-compositor words); it gets the full menu.
     if (!tray) createTray();
     else refreshMenus();
+    learnTrayHost();
     startHitForward();
     startWindowTick();
     startGpuTick();
@@ -1024,8 +1115,9 @@ if (GUI_HARNESS) {
         showClosedMessage();
         return;
       }
-      win?.showInactive();
-      win?.setAlwaysOnTop(true, "screen-saver");
+      // Starting again is the way back from Hide the window where no tray can be seen: the pets come back with
+      // their keeper card open (and the keyboard on it), which reaches Minds, care and Turn off without a click.
+      openKeeperCardFromMenu();
     });
     bootDesk();
   }
@@ -1115,6 +1207,7 @@ function startHitForward() {
   }, 50);
 }
 
+
 ipcMain.on("set-hits", (_e, rects) => {
   hitRects = Array.isArray(rects) ? rects : [];
 });
@@ -1134,6 +1227,10 @@ ipcMain.on("set-focusable", (_e, focusable) => {
   }
   win.setFocusable(want);
   if (want) win.focus();
+});
+
+ipcMain.on("tray-host-get", (e) => {
+  e.returnValue = trayHost;
 });
 
 ipcMain.on("pet-menu", (_e, pos) => {

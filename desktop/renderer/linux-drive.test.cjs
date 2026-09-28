@@ -93,7 +93,7 @@ test("main.cjs: the refusal and the missing compositor come up in a message box,
   const main = read(DESKTOP, "main.cjs");
   assert.match(main, /const OverlayGate = require\("\.\/overlay-gate\.cjs"\);/);
   // The GPU refusal: a tray (where there is one) and the message box.
-  assert.match(main, /createTray\(\);\n\s+closedGate = \{ why: gpuGate\.reason, words: OverlayGate\.closedWords\(gpuGate\.reason\) \};\n\s+showClosedMessage\(\);\n\s+return;/);
+  assert.match(main, /createTray\(\);\n\s+closedGate = \{ why: gpuGate\.reason, words: OverlayGate\.closedWords\(gpuGate\.reason\) \};\n\s+await learnTrayHost\(\);\n\s+showClosedMessage\(\);\n\s+return;/);
   // The compositor is asked after the GPU gate and before the window; "no" keeps it closed.
   const gpu = main.indexOf("gpuGate = await GpuPath.gate(app, fs);");
   const comp = main.indexOf("const compositor = await OverlayGate.readCompositor(");

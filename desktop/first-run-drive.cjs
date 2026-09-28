@@ -39,6 +39,7 @@ function gateOf(box) {
   const b = (box && box.buttons) || [];
   if (/not compositing windows/.test(m) && b.includes("Check again")) return "no-compositor";
   if (/without its graphics card/.test(m) && b.includes("Allow software compositing")) return "software-refused";
+  if (/started as a Wayland app/.test(m)) return "wayland-native";
   if (/^The pets are not on the screen/.test(m)) return "closed";
   return "other";
 }
@@ -72,6 +73,20 @@ function duplicateLabels(items) {
 /** Every label in a menu and its submenus. */
 function allLabels(items) {
   return (items || []).flatMap((it) => [...(it.label ? [it.label] : []), ...allLabels(it.submenu)]);
+}
+
+/** Where the hook writes what app.relaunch was asked for (in the throwaway userData), for the drive to follow. */
+const RELAUNCH_FILE = "drive-relaunch.json";
+
+/** The --ozone-platform the app asked to be started with again, from its app.relaunch args ("" for none). */
+function ozoneOf(args) {
+  const a = (Array.isArray(args) ? args : []).map(String).find((x) => /^--ozone-platform=/.test(x));
+  return a ? a.slice("--ozone-platform=".length) : "";
+}
+
+/** `--wayland` from the command line: start Electron as a native Wayland app (--ozone-platform=wayland). */
+function waylandArg(argv) {
+  return Array.isArray(argv) && argv.includes("--wayland");
 }
 
 /** A stand-in xAI key for the Minds checks; api.x.ai never sees it (the drive answers every request itself). */
@@ -122,6 +137,12 @@ async function removeDir(dir) {
 
 async function drive(opts = {}) {
   const scale = opts && opts.scale ? opts.scale : null;
+  /** --wayland: the first start is a native Wayland one; later starts use what the app asked for (XWayland). */
+  const wayland = !!(opts && opts.wayland);
+  /** Extra switches for the next start, from the app's own app.relaunch (the hook records them). */
+  let nextArgs = wayland ? ["--ozone-platform=wayland"] : [];
+  /** Environment the app set for its own relaunch (COMPUTERPETS_X11_TRIED), carried to the next start. */
+  let nextEnv = {};
   const t0 = Date.now();
   /** @type {{ id: string, ok: boolean, detail: string }[]} */
   const checks = [];
@@ -166,14 +187,26 @@ async function drive(opts = {}) {
   }
 
   /** The app started, its userData checked and its menus recorded; no window waited for yet. */
-  async function start() {
-    const app = await pw._electron.launch({
-      executablePath: exe,
-      args: ["-r", HOOK, DESKTOP, `--user-data-dir=${ud}`, ...(scale ? [`--force-device-scale-factor=${scale}`] : [])],
-      cwd: DESKTOP,
-      env: { ...process.env, COMPUTERPETS_GUI_HARNESS: "" },
-      timeout: 90_000,
-    });
+  async function start(env = {}) {
+    try {
+      fs.rmSync(path.join(ud, RELAUNCH_FILE), { force: true });
+    } catch {
+      /* none */
+    }
+    let app;
+    try {
+      app = await pw._electron.launch({
+        executablePath: exe,
+        args: ["-r", HOOK, DESKTOP, `--user-data-dir=${ud}`, ...(scale ? [`--force-device-scale-factor=${scale}`] : []), ...nextArgs],
+        cwd: DESKTOP,
+        env: { ...process.env, COMPUTERPETS_GUI_HARNESS: "", ...nextEnv, ...env },
+        timeout: 90_000,
+      });
+    } catch (e) {
+      // A native Wayland start asks to start again on XWayland and quits before Playwright has finished meeting it.
+      if (relaunchAsked()) return /** @type {any} */ ({ relaunched: true });
+      throw e;
+    }
     // The Electron process, kept while it can still be asked (app.process() throws once the app has closed).
     try {
       app.__proc = app.process();
@@ -185,6 +218,8 @@ async function drive(opts = {}) {
       got = await firstAsk(app, () => app.evaluate(({ app: a }) => a.getPath("userData")));
     } catch (e) {
       await stop(app);
+      // A native Wayland start asks to be started again on XWayland and quits at once: that is its answer.
+      if (relaunchAsked()) return /** @type {any} */ ({ relaunched: true });
       throw new Error(`the app ended as it started (${String(e && e.message ? e.message : e).split("\n")[0]})`);
     }
     if (path.resolve(got).toLowerCase() !== path.resolve(ud).toLowerCase()) {
@@ -208,6 +243,15 @@ async function drive(opts = {}) {
       };
     }));
     return app;
+  }
+
+  /** What the app asked app.relaunch for, as the hook wrote it (null when it did not ask). */
+  function relaunchAsked() {
+    try {
+      return JSON.parse(fs.readFileSync(path.join(ud, RELAUNCH_FILE), "utf8"));
+    } catch {
+      return null;
+    }
   }
 
   /** The app's message boxes so far (first-run-drive-hook.cjs), words and buttons. */
@@ -248,9 +292,13 @@ async function drive(opts = {}) {
    * gpu-path.json itself and asks to restart (recorded), and the drive starts it again. A desktop without a
    * compositor ends the drive there, with that message checked.
    */
-  async function launch() {
+  async function launch(env = {}) {
     for (let round = 0; round < 3; round += 1) {
-      const app = await start();
+      const app = await start(env);
+      if (app && app.relaunched) {
+        if (followRelaunch()) continue;
+        throw new Error("the app asked to start again without saying how");
+      }
       try {
         const got = await meet(app);
         if (got === "again") continue;
@@ -262,6 +310,27 @@ async function drive(opts = {}) {
       }
     }
     throw new Error("the overlay stayed closed after Allow software compositing");
+  }
+
+  /**
+   * The app quit asking to be started again (a native Wayland start asks for XWayland): check what it asked for and
+   * start it that way next. True when it asked for X11.
+   */
+  function followRelaunch() {
+    const asked = relaunchAsked();
+    if (!asked) return false;
+    const ozone = ozoneOf(asked.args);
+    const wasWayland = nextArgs.includes("--ozone-platform=wayland");
+    if (wasWayland) {
+      check(
+        "gate_wayland_restarts_on_x11",
+        ozone === "x11" && asked.env && asked.env.COMPUTERPETS_X11_TRIED === "1",
+        `a native Wayland start asked to start again with --ozone-platform=${ozone || "unset"} (XWayland at DISPLAY ${process.env.DISPLAY || "none"}), X11 tried ${asked.env ? asked.env.COMPUTERPETS_X11_TRIED : "unset"}`,
+      );
+    }
+    nextArgs = ozone ? [`--ozone-platform=${ozone}`] : [];
+    nextEnv = asked.env && asked.env.COMPUTERPETS_X11_TRIED ? { COMPUTERPETS_X11_TRIED: String(asked.env.COMPUTERPETS_X11_TRIED) } : {};
+    return ozone === "x11";
   }
 
   /**
@@ -278,8 +347,14 @@ async function drive(opts = {}) {
     while (!page && !box && Date.now() < until) {
       page = app.windows()[0] || (await app.waitForEvent("window", { timeout: 1000 }).catch(() => null));
       if (!page) box = (await boxes(app)).find((b) => !b.answered && gateOf(b) !== "other") || null;
+      if (!page && !box && relaunchAsked()) break;
     }
     if (page) return { app, page: await attach(page) };
+    if (!box && relaunchAsked()) {
+      await stop(app);
+      if (followRelaunch()) return "again";
+      throw new Error("the app asked to start again without saying how");
+    }
     if (!box) {
       await stop(app);
       throw new Error(`no overlay window and no message saying why in ${Math.round(windowMs / 1000)} s`);
@@ -302,6 +377,18 @@ async function drive(opts = {}) {
       );
       await stop(app);
       return "again";
+    }
+    if (gate === "wayland-native") {
+      const pressed = await pressBox(app, "Quit");
+      const closed = await app.waitForEvent("close", { timeout: 20_000 }).then(() => true, () => false);
+      check(
+        "gate_wayland_says_so",
+        noWindow && pressed && closed,
+        `"${box.message}" [${box.buttons.join(" | ")}]; DISPLAY ${process.env.DISPLAY || "none"} (no XWayland to start on); no window ${noWindow}; Quit ended the app ${closed}`,
+      );
+      await stop(app);
+      gated = "wayland-native";
+      return { app: null, page: null };
     }
     if (gate === "no-compositor") {
       const OverlayGate = require("./overlay-gate.cjs");
@@ -1082,13 +1169,18 @@ async function drive(opts = {}) {
     }, firstKey);
     check("volume_is_this_pets", vol.label === "Volume for this pet" && vol.first === 35 && vol.shown !== null && vol.shown !== 35, `label "${vol.label}"; the first pet keeps ${vol.first}, the slider shows ${vol.shown} for ${switchedKey}`);
 
-    // 8. Hide the window, tray Show.
+    // 8. Hide the window, tray Show. Where no tray can be seen (Linux under Xvfb) Hide asks first: say Hide.
     await petMenu();
     await clickItem(app, "Hide the window");
     await page.waitForTimeout(700);
+    const hideBox = (await boxes(app)).find((b) => !b.answered && /no tray icon on this desktop/.test(b.message));
+    if (hideBox) {
+      await pressBox(app, "Hide");
+      await page.waitForTimeout(700);
+    }
     const visible = () => app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().filter((w) => w.isVisible()).length);
     const hidden = await visible();
-    check("hide_window", hidden === 0, `${hidden} windows visible`);
+    check("hide_window", hidden === 0, `${hidden} windows visible${hideBox ? " (asked first: no tray to see here)" : ""}`);
     const tray = await menuItems(app, "tray");
     await clickItem(app, "Show", "tray");
     await page.waitForTimeout(700);
@@ -1122,11 +1214,91 @@ async function drive(opts = {}) {
     // A computer with no secret store (Linux with no keyring, as on a bare X server) cannot keep the key across a
     // restart: the key is not written to disk at all, and the Minds page said so at Save. That is the honest answer.
     const noStore = /no secret store, so the key was not written to disk/.test(keyLine);
+    // A keyring on the session bus (gnome-keyring, KeePassXC) is a secret store: the key must be kept then, whatever
+    // the desktop is called (Chromium chose the Secret Service only on desktops it knew by name).
+    const keyring = process.platform === "linux" && require("./overlay-gate.cjs").secretServiceRunning({ env: process.env });
     check(
       "settings_survive_restart",
-      !!switchedKey && kept.key === switchedKey && kept.talk && kept.vol === 35 && kept.plugin === "xai" && (kept.keyKept || noStore),
-      `pet ${kept.key} (chosen ${switchedKey}); talk muted ${kept.talk}; ${firstKey} volume ${kept.vol}; mind ${kept.plugin}, key kept ${kept.keyKept}${noStore ? " (no secret store here; the Minds page said the key was not written to disk)" : ""}`,
+      !!switchedKey && kept.key === switchedKey && kept.talk && kept.vol === 35 && kept.plugin === "xai" && (kept.keyKept || (noStore && !keyring)),
+      `pet ${kept.key} (chosen ${switchedKey}); talk muted ${kept.talk}; ${firstKey} volume ${kept.vol}; mind ${kept.plugin}, key kept ${kept.keyKept}${keyring ? " (a Secret Service is on the session bus)" : ""}${noStore ? ` (${keyring ? "yet " : "no secret store here; "}the Minds page said the key was not written to disk)` : ""}`,
     );
+    await stop(app);
+    app = null;
+
+    // 11. No tray to see (GNOME without AppIndicator, a bare X server): every tray-only thing has another way. On
+    //     Linux the app's own answer is used (Xvfb has no tray host); elsewhere COMPUTERPETS_TRAY=none says so.
+    //     The hello comes back once for this (card.json firstHintSeen false) to check its words.
+    try {
+      const cj = path.join(ud, "card.json");
+      const c = JSON.parse(fs.readFileSync(cj, "utf8"));
+      c.firstHintSeen = false;
+      fs.writeFileSync(cj, JSON.stringify(c));
+    } catch {
+      /* the check below says so */
+    }
+    const forced = process.platform !== "linux";
+    ({ app, page } = await launch(forced ? { COMPUTERPETS_TRAY: "none" } : {}));
+    await page.waitForTimeout(3500);
+    const nt = await page.evaluate(() => ({
+      host: typeof trayHost !== "undefined" ? trayHost : "?",
+      name: typeof kind !== "undefined" && kind ? kind.name : "",
+      hint: !document.getElementById("first-hint")?.hidden,
+      lines: [...document.querySelectorAll("#first-hint-lines li")].map((li) => (li.textContent || "").trim()),
+      off: (document.getElementById("hud-off-truth")?.textContent || "").trim(),
+    }));
+    const helloNoTray = nt.lines.join(" ");
+    check(
+      "no_tray_hello",
+      nt.host === "no" && nt.hint && !/That is the tray icon/.test(helloNoTray) && new RegExp(`Right-click ${nt.name} and pick Companions`).test(helloNoTray) && /pick Quit/.test(helloNoTray),
+      `tray host ${nt.host}${forced ? " (COMPUTERPETS_TRAY=none)" : " (the app's own check)"}; hello ${nt.hint}: "${nt.lines[2] || ""}"`,
+    );
+    const wantOff = process.platform === "win32" ? /type \.\\desktop\.ps1 again/ : /type sh desktop\.sh again/;
+    check("turn_off_words", wantOff.test(nt.off), `Turn off says "${nt.off}"`);
+    // Every row the tray has is in the pet's own menu too, but the tray's status line and Show (the window is up).
+    const petRows = await petMenu();
+    const trayRows = await app.evaluate(() => {
+      const g = /** @type {any} */ (globalThis);
+      const m = [...g.__built].reverse().find((x) => x.items.some((i) => i.label === "Show"));
+      return m ? m.items.filter((i) => i.type !== "separator" && i.enabled !== false).map((i) => i.label) : null;
+    });
+    const petLabels = new Set((petRows || []).map((r) => r.label));
+    const trayOnly = (trayRows || []).filter((l) => l !== "Show" && !petLabels.has(l));
+    check("no_tray_pet_menu", !!trayRows && !!petRows && !trayOnly.length, `pet menu ${(petRows || []).length} rows; tray-only rows: ${trayOnly.join(", ") || "none"}`);
+    // Hide the window asks first where no tray can be seen, and Cancel keeps the pets.
+    await clickItem(app, "Hide the window");
+    await page.waitForTimeout(700);
+    const ask = (await boxes(app)).find((b) => !b.answered && /no tray icon on this desktop/.test(b.message));
+    await pressBox(app, "Cancel");
+    await page.waitForTimeout(500);
+    const keptUp = await visible();
+    await petMenu();
+    await clickItem(app, "Hide the window");
+    await page.waitForTimeout(700);
+    await pressBox(app, "Hide");
+    await page.waitForTimeout(700);
+    const goneNow = await visible();
+    check(
+      "no_tray_hide_asks",
+      !!ask && ask.buttons.join("|") === "Hide|Cancel" && keptUp >= 1 && goneNow === 0,
+      ask ? `"${ask.message}" "${ask.detail}"; Cancel kept ${keptUp} window(s); Hide left ${goneNow}` : "Hide the window did not ask",
+    );
+    // Starting again brings them back, with the keeper card open: a second copy tells the first and quits.
+    const { spawn } = require("node:child_process");
+    const second = spawn(exe, [DESKTOP, `--user-data-dir=${ud}`, ...nextArgs], { cwd: DESKTOP, env: { ...process.env, ...nextEnv, COMPUTERPETS_GUI_HARNESS: "" }, stdio: "ignore" });
+    const secondEnd = await new Promise((resolve) => {
+      const t = setTimeout(() => {
+        second.kill();
+        resolve("killed after 20 s");
+      }, 20_000);
+      second.on("exit", (code) => {
+        clearTimeout(t);
+        resolve(`exited ${code}`);
+      });
+    });
+    await page.waitForTimeout(1500);
+    const back = await visible();
+    s = await state();
+    check("no_tray_second_start", back >= 1 && s.open, `the second copy ${secondEnd}; ${back} window(s) visible, keeper card open ${s.open}`);
     check("no_page_errors", !errors.length, errors.length ? errors.slice(0, 4).join(" | ") : "none");
   } catch (e) {
     // A closed pet window that said why is the honest end of the drive there, not a crash.
@@ -1144,10 +1316,10 @@ async function drive(opts = {}) {
   return { ok: !gated && checks.every((c) => c.ok), ...(gated ? { gated } : {}), checks, ms: Date.now() - t0, userData: ud, scale };
 }
 
-module.exports = { overlaps, onScreen, duplicateLabels, allLabels, throwawayOk, scaleArg, sideGap, gateOf, STANDIN_KEY, WORK, HOOK, drive };
+module.exports = { overlaps, onScreen, duplicateLabels, allLabels, throwawayOk, scaleArg, waylandArg, ozoneOf, sideGap, gateOf, STANDIN_KEY, WORK, HOOK, RELAUNCH_FILE, drive };
 
 if (require.main === module) {
-  drive({ scale: scaleArg(process.argv.slice(2)) }).then(
+  drive({ scale: scaleArg(process.argv.slice(2)), wayland: waylandArg(process.argv.slice(2)) }).then(
     (r) => {
       process.stdout.write(`${JSON.stringify(r)}\n`);
       process.exitCode = r.ok ? 0 : r.skipped ? 2 : 1;

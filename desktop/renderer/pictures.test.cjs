@@ -79,7 +79,7 @@ test("main.cjs checks the pictures before it opens the overlay window, and shows
   assert.ok(check > 0 && open > check, "the picture check runs before createWindow");
   const gate = boot.slice(check, open);
   assert.match(gate, /if \(pictures !== "ready"\)/);
-  assert.match(gate, /createTray\(\);\s*showPicturesMessage\(\);\s*return;/);
+  assert.match(gate, /createTray\(\);\s*await learnTrayHost\(\);\s*showPicturesMessage\(\);\s*return;/);
   assert.match(main, /dialog\s*\.showMessageBox\(\{[\s\S]*?message: w\.message,\s*detail: w\.detail,/);
   assert.match(main, /if \(picturesGate\) \{\s*showPicturesMessage\(\);\s*return;\s*\}/, "a second start shows the words again");
   assert.match(main, /function openWebPage\(url\) \{\s*return OpenLink\.openLink\(url, linkDeps\);/, "git-lfs.com goes through the link gate");
