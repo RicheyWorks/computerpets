@@ -959,12 +959,23 @@ function ruiSleepBout() {
   return false;
 }
 
+/** Brick leaves the glass: no flight left and no canvas left behind (flight end, hide, or a broken frame). */
+function dropRobin() {
+  robinFly = null;
+  if (robinEl) robinEl.classList.remove("show");
+}
+
+/** Sip leaves the glass the same way. */
+function dropBird() {
+  birdFly = null;
+  if (birdEl) birdEl.classList.remove("show");
+}
+
 function callRobin() {
   const R = window.PetRobinFly;
   if (!R || !robinEl) return;
   if (kind && kind.key === R.ROBIN_KEY) {
-    robinFly = null;
-    robinEl.classList.remove("show");
+    dropRobin();
     return;
   }
   if (life && life.hidden) return;
@@ -982,8 +993,7 @@ function tickRobin(dt) {
   const R = window.PetRobinFly;
   if (!R || !robinEl) return;
   if (kind && kind.key === R.ROBIN_KEY) {
-    robinFly = null;
-    robinEl.classList.remove("show");
+    dropRobin();
     return;
   }
   if (!robinFly) return;
@@ -996,8 +1006,7 @@ function tickRobin(dt) {
     hostFacing: sim.facing,
   });
   if (!R.stillVisible(robinFly)) {
-    robinFly = null;
-    robinEl.classList.remove("show");
+    dropRobin();
     return;
   }
   if (R.shouldSing(robinFly)) {
@@ -1145,8 +1154,7 @@ function callSip() {
   if (H) H.playVoice("hummingbird", card);
   if (!F || !birdEl) return;
   if (kind && kind.key === F.FLY_BIRD_KEY) {
-    birdFly = null;
-    birdEl.classList.remove("show");
+    dropBird();
     return;
   }
   if (life && life.hidden) return;
@@ -1318,8 +1326,7 @@ function tickBird(dt) {
   const F = window.PetBirdFly;
   if (!F || !birdEl) return;
   if (kind && kind.key === F.FLY_BIRD_KEY) {
-    birdFly = null;
-    birdEl.classList.remove("show");
+    dropBird();
     return;
   }
   const ruiSleep = ruiSleepBout();
@@ -1338,8 +1345,7 @@ function tickBird(dt) {
     hostFacing: sim.facing,
   });
   if (!F.stillVisible(birdFly)) {
-    birdFly = null;
-    birdEl.classList.remove("show");
+    dropBird();
     return;
   }
   if (F.shouldCall(birdFly)) {
@@ -3614,7 +3620,11 @@ function tickFrame(now) {
 
 // A frame error puts the host pet back to a safe idle (no trick, no thank-you, no window play).
 // Guests, plants, and the visit only log: their next frame starts fresh.
+/** A broken frame puts that pet at idle. A broken guest leaves the glass instead of freezing mid-air. */
 function resetAfterFrameError(petKey) {
+  if (petKey === "robin") dropRobin();
+  if (petKey === "bird") dropBird();
+  if (petKey === "visit guest") endVisit();
   if (kind && petKey === kind.key) window.PetFrameGuard.safeIdle(sim);
 }
 const frameGuard = window.PetFrameGuard.makeGuard({ reset: resetAfterFrameError });

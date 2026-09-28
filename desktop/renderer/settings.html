@@ -33,18 +33,19 @@
     <main>
       <h1 id="mindsSection">Minds</h1>
       <p class="lead" id="mindsIntro">Pets talk without an AI. Adding one is optional.</p>
-      <label>Plugin</label>
+      <label for="plugin">Which AI</label>
       <select id="plugin"></select>
       <p class="lead" id="mindHouse">House lines need nothing else. Your pets answer with their own words.</p>
       <div id="mindFields">
-      <p class="lead" id="mindAbout">Plug any AI into the overlay. A plugin key is not written in plain text in mind.json. When this computer has a secret store, the key is sealed there.</p>
-      <label>Model</label>
+      <p class="lead" id="mindAbout">Your key stays on this computer. It is never saved as plain words in the pets' settings file. When this computer has a secret store, the key is locked there.</p>
+      <label for="model">AI model name</label>
       <input id="model" />
+      <p class="hint" id="modelHelp">Which version of that AI answers. Picking an AI fills this in, so most people leave it alone.</p>
       <label for="base">AI website address</label>
       <input id="base" />
       <p class="hint" id="baseHelp">Where that AI answers. Picking an AI fills this in, so most people leave it alone.</p>
       <label for="key">Your key for that AI website</label>
-      <input id="key" type="password" autocomplete="off" />
+      <input id="key" type="password" autocomplete="off" placeholder="Paste your key here" />
       <p class="hint" id="keyHelp">A secret code from that AI website's own page. Keep it secret, like a password.</p>
       </div>
       <p class="ok" id="keyStore"></p>
@@ -95,13 +96,14 @@
       const key = document.getElementById("key");
       const keyStore = document.getElementById("keyStore");
 
+      // The settings file is mind.json in the app's data folder; the words on screen just say "settings file".
       function paintKey(kept) {
-        if (kept === "os") keyStore.textContent = "The plugin key is in the OS secret store. mind.json does not keep it in plain text.";
+        if (kept === "os") keyStore.textContent = "Your key is locked in this computer's secret store. The settings file does not keep it as plain words.";
         else if (kept === "none") keyStore.textContent = "This computer has no secret store, so the key was not written to disk.";
-        else if (kept === "locked") keyStore.textContent = "The secret store did not open. The seal stays in mind.json. The key is not shown.";
-        else if (kept === "plain") keyStore.textContent = "The key is still plain text in mind.json because that file could not be rewritten.";
-        else if (kept === "browser") keyStore.textContent = "This page is not the overlay. A plugin key is not written in plain text in mind.json.";
-        else keyStore.textContent = "No plugin key is stored in mind.json.";
+        else if (kept === "locked") keyStore.textContent = "This computer's secret store did not open. Your key stays locked in the settings file. It is not shown.";
+        else if (kept === "plain") keyStore.textContent = "Your key is still saved as plain words in the settings file, because that file could not be rewritten.";
+        else if (kept === "browser") keyStore.textContent = "This page is not the overlay. Your key is not saved as plain words in the settings file.";
+        else keyStore.textContent = "No key is saved yet.";
       }
       paintKey(s.keyKept);
       window.PetMind.PRESETS.forEach((p) => {
@@ -152,7 +154,7 @@
         if (result && result.saved === false) {
           // The key line keeps what it said, unless an old plain key is still sitting in mind.json.
           if (kept === "plain") paintKey("plain");
-          mindErr.textContent = "Not saved. mind.json could not be written, so the pets keep the mind they had. Close other copies of the app and try again.";
+          mindErr.textContent = "Not saved. The settings file could not be written, so the pets keep the mind they had. Close other copies of the app and try again.";
           return;
         }
         s.keyKept = kept;

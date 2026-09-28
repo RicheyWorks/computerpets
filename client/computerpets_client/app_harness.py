@@ -1984,8 +1984,9 @@ def _card_rows() -> list[Affordance]:
             "minds.py + app.py minds_label / --check, web mind-words.ts + routes/mind.tsx, overlay settings.html + mind.js",
             notes=(
                 "Offline: minds.py holds the Minds intro, the House lines note, and the plain address and key labels "
-                "with their helper lines, word for word the same as web mind-words.ts and overlay settings.html. "
-                "House lines (and anything unknown) shows no box; every real AI shows Model, AI website address, and "
+                "with their helper lines, plus Which AI, the AI model name box and its helper line, and the key box "
+                "placeholder, word for word the same as web mind-words.ts and overlay settings.html. "
+                "House lines (and anything unknown) shows no box; every real AI shows AI model name, AI website address, and "
                 "Your key for that AI website. The blotter window shows the intro and House lines note under the "
                 "listener line and --check fails if an AI box or a Base URL / API key label appears. The web /mind "
                 "page and the overlay hide the boxes for House lines too."
@@ -2257,11 +2258,15 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
         blotter_src = _read("client/computerpets_client/app.py")
         words = {
             "intro": minds.MINDS_INTRO,
+            "which": minds.WHICH_LABEL,
             "house": minds.HOUSE_NOTE,
+            "model": minds.MODEL_LABEL,
+            "modelHelp": minds.MODEL_HELP,
             "address": minds.ADDRESS_LABEL,
             "addressHelp": minds.ADDRESS_HELP,
             "key": minds.KEY_LABEL,
             "keyHelp": minds.KEY_HELP,
+            "keyPlaceholder": minds.KEY_PLACEHOLDER,
         }
         refusals = re.findall(
             r'return "([^"]*)";',
@@ -2273,7 +2278,7 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
             "overlay_same": all(v in settings for v in words.values()),
             "house_no_boxes": minds.mind_fields("local") == [] and minds.mind_fields("nope") == [],
             "ai_three_boxes": all(
-                [f["label"] for f in minds.mind_fields(pid)] == ["Model", minds.ADDRESS_LABEL, minds.KEY_LABEL] for pid in real
+                [f["label"] for f in minds.mind_fields(pid)] == [minds.MODEL_LABEL, minds.ADDRESS_LABEL, minds.KEY_LABEL] for pid in real
             ),
             "blotter_note": (
                 "self.minds_label = QLabel(blotter_minds_text())" in blotter_src
@@ -2750,6 +2755,22 @@ def _web_rows() -> list[Affordance]:
                 "with plain words and keep the technical detail."
             ),
         ),
+        Affordance(
+            "web.overlay_birds_plain",
+            "web",
+            "Overlay robin and bird never stay on the glass; Which AI / AI model name / key placeholder the same on all three doors; kid-plain /mind with builder words folded; short START-HERE detail",
+            "desktop pet.js dropRobin / dropBird / resetAfterFrameError + overlay-birds.test.cjs, overlay settings.html, web mind-words.ts + catalog.ts + routes/mind.tsx, client minds.py, docs START-HERE",
+            notes=(
+                "Runs overlay-birds.test.cjs: the real pet.js robin and bird functions fly a whole visit, get hidden mid-flight, "
+                "and hit a broken paint inside the real frame guard; each time the canvas loses its show class and the flight "
+                "is gone (before, a broken frame left them frozen mid-air and failing every frame). A broken visit guest ends "
+                "its visit. Which AI, AI model name with its helper line, and the key placeholder are word for word the same in "
+                "mind-words.ts, settings.html, and minds.py; the overlay Minds words never say plugin key or mind.json. The web "
+                "/mind top has no builder words; Plugin bus, the fourteen-plugins line, the server key name, and the Write a "
+                "plugin sample sit in a closed For builders fold. AI cards use plain blurbs and tags. START-HERE's More detail "
+                "and Step 6 tray lines are 18 words or fewer per sentence and keep every fact."
+            ),
+        ),
     ]
 
 
@@ -2787,6 +2808,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("guest_loops_mount", domain="web", action_id=aid)
     if local_id == "minds_flight_plain":
         return _run_web_smoke("minds_flight_plain", domain="web", action_id=aid)
+    if local_id == "overlay_birds_plain":
+        return _run_web_smoke("overlay_birds_plain", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []
