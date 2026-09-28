@@ -3,6 +3,8 @@
 // - .ts and .tsx under web/src are turned into plain JS with the TypeScript that is already installed.
 // - A named function in a named file can be wrapped so a test can make it throw: the wrapper calls
 //   globalThis.__mountFaults[name](...args) first when the test has set one.
+// - A test may stand in a module by its import name (`stubs`: "@tanstack/react-start" -> a file), so a page
+//   can run with a stand-in server runtime or session and no real network, key or database.
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
@@ -10,10 +12,12 @@ import ts from "typescript";
 
 let SRC = "";
 let FAULTS = {};
+let STUBS = {};
 
 export async function initialize(data) {
   SRC = data.src;
   FAULTS = data.faults || {};
+  STUBS = data.stubs || {};
 }
 
 /** Is `file` inside web/src? Windows paths compare without case (C: and c: are the same drive). */
@@ -38,6 +42,7 @@ function findTs(base) {
 }
 
 export async function resolve(specifier, context, next) {
+  if (Object.prototype.hasOwnProperty.call(STUBS, specifier)) return { url: pathToFileURL(STUBS[specifier]).href, shortCircuit: true };
   if (specifier.startsWith("@/")) {
     const hit = findTs(path.join(SRC, specifier.slice(2)));
     if (hit) return { url: pathToFileURL(hit).href, shortCircuit: true };

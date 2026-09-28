@@ -1,5 +1,6 @@
 import type { CareStats } from "./care";
 import { bondScore } from "./care";
+import { linePicker } from "./line-picker";
 
 export const RED_PANDA_KEY = "red_panda";
 export const RED_PANDA_NAME = "Rui";
@@ -99,7 +100,7 @@ const LISTEN = [
 ];
 
 function pick(lines: string[]) {
-  return lines[Math.floor(Math.random() * lines.length)] ?? lines[0]!;
+  return linePicker.pick("red_panda", lines);
 }
 
 export function ambientLine(stats: CareStats) {

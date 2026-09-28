@@ -262,7 +262,7 @@ def apply_special(state: CareState, species: Species | None = None) -> CareResul
     kind = species or species_by_key(None)
     trait = trait_for(kind.key)
     if state.hidden:
-        return CareResult(state, hide_line(kind.key, pick_line(kind.hide)), "idle", "idle")
+        return CareResult(state, hide_line(kind.key, pick_line(kind.hide, kind.key)), "idle", "idle")
 
     next_state = replace(state, bond=clamp(state.bond + 2))
     special = trait.special

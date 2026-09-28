@@ -65,7 +65,10 @@
     if (start < end) return h >= start && h < end;
     return h >= start || h < end;
   }
-  function pick(list) {
+  // Care lines go through the shared no-recent-repeat picker (line-picker.js) when it is loaded.
+  function pick(list, key) {
+    const Lines = root.PetLines;
+    if (Lines && Lines.pick) return Lines.pick(key || "pet", list);
     return list[Math.floor(Math.random() * list.length)] ?? list[0];
   }
 
@@ -284,7 +287,7 @@
   function actBody(life, trait, action, now = Date.now(), key) {
     const extra = trait.extra || {};
     if (life.hidden && action !== "call" && action !== "talk") {
-      return { life, line: pick(extra.hide || ["..."]), cmd: "idle", notify: null };
+      return { life, line: pick(extra.hide || ["..."], key), cmd: "idle", notify: null };
     }
 
     if (action === "feed") {
@@ -311,14 +314,14 @@
     }
     if (action === "shed") {
       const due = now - (life.shedAt || 0) >= 8 * 60 * 60 * 1000;
-      if (!due) return { life, line: pick(extra.shedWait || ["The coat is still good."]), cmd: "sit", notify: null };
+      if (!due) return { life, line: pick(extra.shedWait || ["The coat is still good."], key), cmd: "sit", notify: null };
       life.hygiene = clamp(life.hygiene + 28);
       life.mood = clamp(life.mood + 12);
       life.health = clamp(life.health + 8);
       life.shedAt = now;
       if (life.gifts.length < 3) life.gifts.push({ id: `shed-${now}`, x: 0.2 + Math.random() * 0.55, kind: "shed" });
       bondUp(life, 3);
-      return { life, line: pick(extra.shed || ["I left a copy."]), cmd: "sit", notify: "shed" };
+      return { life, line: pick(extra.shed || ["I left a copy."], key), cmd: "sit", notify: "shed" };
     }
     if (action === "play") {
       wake(life);
@@ -326,7 +329,7 @@
       if (trait.startle && Math.random() < 0.18) {
         life.startledUntil = now + 4000;
         life.mood = clamp(life.mood - 3);
-        return { life, line: pick(extra.special || ["Thump."]), cmd: "wander", notify: null };
+        return { life, line: pick(extra.special || ["Thump."], key), cmd: "wander", notify: null };
       }
       life.hunger = clamp(life.hunger - 8);
       life.mood = clamp(life.mood + 24);
@@ -351,7 +354,7 @@
       life.mood = clamp(life.mood + 8);
       life.lastClean = now;
       bondUp(life, 2);
-      return { life, line: pick(extra.clean || ["Clean."]), cmd: "sit", notify: null };
+      return { life, line: pick(extra.clean || ["Clean."], key), cmd: "sit", notify: null };
     }
     if (action === "bath") {
       life.hygiene = clamp(life.hygiene + 48);
@@ -360,7 +363,7 @@
       life.mess = [];
       if (trait.special === "bath") bondUp(life, 4);
       else bondUp(life, 1);
-      return { life, line: pick(extra.bath || ["Water. Then dignity."]), cmd: "sit", notify: null };
+      return { life, line: pick(extra.bath || ["Water. Then dignity."], key), cmd: "sit", notify: null };
     }
     if (action === "medicine") {
       if (!life.sick && life.health > 70) return { life, line: "I am not a project.", cmd: "idle", notify: null };
@@ -368,12 +371,12 @@
       life.health = clamp(life.health + 28);
       life.mood = clamp(life.mood - 2);
       bondUp(life, 3);
-      return { life, line: pick(extra.medicine || ["Bitter. Fine."]), cmd: "sit", notify: null };
+      return { life, line: pick(extra.medicine || ["Bitter. Fine."], key), cmd: "sit", notify: null };
     }
     if (action === "praise") {
       life.mood = clamp(life.mood + 12);
       bondUp(life, 2);
-      return { life, line: pick(extra.praise || ["I heard that."]), cmd: "talk", notify: null };
+      return { life, line: pick(extra.praise || ["I heard that."], key), cmd: "talk", notify: null };
     }
     if (action === "call") {
       wake(life);
@@ -391,7 +394,7 @@
     if (action === "talk") {
       wake(life);
       bondUp(life, 1);
-      if (life.sick) return { life, line: pick(extra.sick || ["Unwell."]), cmd: "talk", notify: null };
+      if (life.sick) return { life, line: pick(extra.sick || ["Unwell."], key), cmd: "talk", notify: null };
       if (life.hunger < 24) return { life, line: null, cmd: "talk", notify: null, useRoster: "hungry" };
       if (life.energy < 22) return { life, line: null, cmd: "talk", notify: null, useRoster: "tired" };
       return { life, line: null, cmd: "talk", notify: null, useRoster: "ambient" };

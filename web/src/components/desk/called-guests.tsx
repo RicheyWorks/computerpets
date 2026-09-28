@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { guardedLoop, makeGuestGuard } from "@/lib/pets/frame-guard";
 import { livingByKey } from "@/lib/pets/living";
+import { linePicker } from "@/lib/pets/line-picker";
 import {
   beginCalled,
   dismissCalled,
@@ -141,10 +142,12 @@ export function CalledGuests({
         guard.step((row: CalledWalker) => {
           let next = stepCalled(row, dt, w, flags);
           if (shouldSing(next)) {
-            songRef.current?.(ROBIN_SONG);
+            const song = linePicker.offer(next.key, ROBIN_SONG);
+            if (song) songRef.current?.(song);
             next = markSung(next);
           } else if (shouldTell(next)) {
-            const line = tellLine(next);
+            // A guest's tell is optional: said once, then quiet if the same words came in the last 60 s.
+            const line = linePicker.offer(next.key, tellLine(next));
             if (line) songRef.current?.(line);
             next = markTold(next);
           }
