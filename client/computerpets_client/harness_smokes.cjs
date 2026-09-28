@@ -1260,6 +1260,7 @@ const COMMANDS = {
   quit_desk: MainHarness.quit_desk,
   pictures_gate: MainHarness.pictures_gate,
   overlay_gate: MainHarness.overlay_gate,
+  no_tray: MainHarness.no_tray,
   market_search: MainHarness.market_search,
   mind_get_set: MainHarness.mind_get_set,
   saved_lines: MainHarness.saved_lines,

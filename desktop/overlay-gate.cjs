@@ -14,10 +14,22 @@
  *    (GNOME without the AppIndicator extension, a bare X server) show no tray at all, so the app looked like it did
  *    nothing. The same words now come up in a message box too.
  *
- * This module holds the words and the check; main.cjs shows them. It does not read settings or talk to the network.
+ * 3. No tray to see (Linux). Electron's tray shows through a StatusNotifier host on the session bus or an X system
+ *    tray (XEmbed, _NET_SYSTEM_TRAY_S<screen>); GNOME without the AppIndicator extension and a bare X server have
+ *    neither, and the icon is simply not there. readTrayHost asks both, so the pet's own menu, the hello, and Hide
+ *    the window can say how to get around without it. COMPUTERPETS_TRAY=none treats the tray as absent anywhere.
+ * 4. A native Wayland start (--ozone-platform=wayland, or ELECTRON_OZONE_PLATFORM_HINT=auto|wayland on a Wayland
+ *    session). Electron 35 crashed there (SIGSEGV in screen.getCursorScreenPoint at boot, seen under sway), and a
+ *    Wayland app cannot see the mouse outside its window or keep a window on top anyway. waylandPlan starts it
+ *    again on XWayland when there is one, and says so plainly when there is not.
+ * 5. The Minds key store (Linux). Chromium picks the Secret Service only on desktops it recognises by name (GNOME,
+ *    KDE, Xfce, ...); on sway, i3 or any other it wrote the key nowhere even with a keyring running and unlocked.
+ *    passwordStoreFor asks for the Secret Service by hand there when one is on the session bus.
+ *
+ * This module holds the words and the checks; main.cjs shows them. It does not read settings or talk to the network.
  */
 
-const { spawn } = require("child_process");
+const { spawn, spawnSync } = require("child_process");
 
 const TIMEOUT_MS = 4000;
 
@@ -72,7 +84,8 @@ def main():
     if not conn or xcb.xcb_connection_has_error(conn):
         return "unknown"
     try:
-        name = ("_NET_WM_CM_S%d" % screen.value).encode("ascii")
+        # The compositor's selection by default; the tray's (_NET_SYSTEM_TRAY_S) when asked by name.
+        name = (("_NET_WM_CM_S%d" if len(sys.argv) < 2 else sys.argv[1] + "%d") % screen.value).encode("ascii")
         got = xcb.xcb_intern_atom_reply(conn, xcb.xcb_intern_atom(conn, 0, len(name), name), None)
         if not got:
             return "unknown"
@@ -156,6 +169,156 @@ function readCompositor(opts) {
   });
 }
 
+/**
+ * One child process, its output, and how it ended; never throws, never waits past `timeoutMs`.
+ * @returns {Promise<{ out: string, code: number | null, missing: boolean, timedOut: boolean }>}
+ */
+function runOne(spawnFn, cmd, args, env, timeoutMs) {
+  return new Promise((resolve) => {
+    let out = "";
+    let done = false;
+    let child = null;
+    const finish = (r) => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      resolve({ out, code: null, missing: false, timedOut: false, ...r });
+    };
+    const timer = setTimeout(() => {
+      try {
+        child && child.kill();
+      } catch {
+        /* gone */
+      }
+      finish({ timedOut: true });
+    }, timeoutMs);
+    try {
+      child = spawnFn(cmd, args, { windowsHide: true, env, stdio: ["ignore", "pipe", "ignore"] });
+    } catch {
+      finish({ missing: true });
+      return;
+    }
+    if (child.stdout) {
+      child.stdout.setEncoding("utf8");
+      child.stdout.on("data", (chunk) => {
+        out += String(chunk);
+      });
+    }
+    child.on("error", (e) => finish({ missing: !!(e && /ENOENT/.test(String(e.code || e.message))) }));
+    child.on("close", (code) => finish({ code: typeof code === "number" ? code : null }));
+  });
+}
+
+/** Asks the session bus whether a StatusNotifier host is there (KDE, a GNOME AppIndicator extension, swaybar). */
+const SNI_ARGS = [
+  "--session",
+  "--print-reply",
+  "--dest=org.kde.StatusNotifierWatcher",
+  "/StatusNotifierWatcher",
+  "org.freedesktop.DBus.Properties.Get",
+  "string:org.kde.StatusNotifierWatcher",
+  "string:IsStatusNotifierHostRegistered",
+];
+
+/**
+ * Whether the tray icon can be seen: "yes", "no", "unknown" (could not tell), or "n/a" (Windows and the Mac always
+ * have one). COMPUTERPETS_TRAY=none answers "no" anywhere.
+ * @param {{ platform?: string, env?: Record<string, string | undefined>, spawn?: typeof spawn, timeoutMs?: number, nativeWayland?: boolean }} [opts]
+ * @returns {Promise<"yes" | "no" | "unknown" | "n/a">}
+ */
+async function readTrayHost(opts) {
+  const platform = (opts && opts.platform) || process.platform;
+  const env = (opts && opts.env) || process.env;
+  if (String(env.COMPUTERPETS_TRAY || "").trim().toLowerCase() === "none") return "no";
+  if (!isLinux(platform)) return "n/a";
+  const spawnFn = (opts && opts.spawn) || spawn;
+  const timeoutMs = (opts && opts.timeoutMs) || TIMEOUT_MS;
+  const sniRun = await runOne(spawnFn, "dbus-send", SNI_ARGS, env, timeoutMs);
+  // A reply "boolean true" is a host; an error reply (no watcher, no session bus) is none; no dbus-send cannot tell.
+  const sni = sniRun.missing || sniRun.timedOut ? "unknown" : /boolean true/.test(sniRun.out) ? "yes" : "no";
+  if (sni === "yes") return "yes";
+  let xembed = "no";
+  if (env.DISPLAY && !(opts && opts.nativeWayland)) {
+    const x = await runOne(spawnFn, "python3", ["-c", COMPOSITOR_SCRIPT, "_NET_SYSTEM_TRAY_S"], env, timeoutMs);
+    xembed = x.missing || x.timedOut ? "unknown" : compositorWord(x.out);
+  }
+  if (xembed === "yes") return "yes";
+  return sni === "no" && xembed === "no" ? "no" : "unknown";
+}
+
+/**
+ * A native Wayland start. Electron 35 runs on X11 (XWayland on a Wayland session) unless told otherwise, by
+ * --ozone-platform=wayland, or by --ozone-platform-hint / ELECTRON_OZONE_PLATFORM_HINT (auto or wayland) on a
+ * Wayland session. Some setups export that variable for every Electron app.
+ * @param {{ platform?: string, env?: Record<string, string | undefined>, ozone?: string, hint?: string }} o
+ */
+function nativeWayland(o) {
+  const platform = (o && o.platform) || process.platform;
+  const env = (o && o.env) || {};
+  if (!isLinux(platform)) return false;
+  const ozone = String((o && o.ozone) || "").toLowerCase();
+  if (ozone) return ozone === "wayland";
+  const hint = String((o && o.hint) || env.ELECTRON_OZONE_PLATFORM_HINT || "").toLowerCase();
+  return (hint === "wayland" || hint === "auto") && !!env.WAYLAND_DISPLAY;
+}
+
+/**
+ * What to do at a native Wayland start: "none" (not one), "relaunch-x11" (start again on XWayland, once), or
+ * "closed" (no XWayland here, or it was tried already: the window stays closed and the message says why).
+ * @param {{ native: boolean, env?: Record<string, string | undefined> }} o
+ * @returns {"none" | "relaunch-x11" | "closed"}
+ */
+function waylandPlan(o) {
+  if (!o || !o.native) return "none";
+  const env = o.env || {};
+  if (env.DISPLAY && env.COMPUTERPETS_X11_TRIED !== "1") return "relaunch-x11";
+  return "closed";
+}
+
+/** The start's own arguments with the Wayland choice replaced by X11. */
+function x11Args(argv) {
+  const rest = (Array.isArray(argv) ? argv : []).filter((a) => !/^--ozone-platform(-hint)?=/.test(String(a)));
+  return [...rest, "--ozone-platform=x11"];
+}
+
+/** Desktops Chromium already gives a key store by name (XDG_CURRENT_DESKTOP / DESKTOP_SESSION). */
+const KNOWN_KEY_DESKTOPS = /(^|:)(gnome|unity|xfce|cinnamon|pantheon|deepin|ukui|kde)(:|$)/i;
+
+/**
+ * The --password-store to ask for: "gnome-libsecret" on a Linux desktop Chromium does not know by name when a
+ * Secret Service is running on the session bus, else "" (leave Chromium's own choice, and any switch given).
+ * `secretService` may be a function, asked only when it matters (it runs dbus-send before the app is ready).
+ * @param {{ platform?: string, env?: Record<string, string | undefined>, given?: string, secretService?: boolean | (() => boolean) }} o
+ */
+function passwordStoreFor(o) {
+  const platform = (o && o.platform) || process.platform;
+  const env = (o && o.env) || {};
+  if (!isLinux(platform) || (o && o.given)) return "";
+  const desk = `${env.XDG_CURRENT_DESKTOP || ""}:${env.DESKTOP_SESSION || ""}`.replace(/^:|:$/g, "");
+  if (desk && KNOWN_KEY_DESKTOPS.test(desk)) return "";
+  const has = o && typeof o.secretService === "function" ? o.secretService() : !!(o && o.secretService);
+  return has ? "gnome-libsecret" : "";
+}
+
+/**
+ * Whether a Secret Service (gnome-keyring, KeePassXC, kwallet's bridge) is running on the session bus now. Asked
+ * before the app is ready, so it waits at most `timeoutMs`; a keyring that is only activatable is not started.
+ */
+function secretServiceRunning(opts) {
+  const env = (opts && opts.env) || process.env;
+  const run = (opts && opts.spawnSync) || spawnSync;
+  try {
+    const r = run(
+      "dbus-send",
+      ["--session", "--print-reply", "--dest=org.freedesktop.DBus", "/org/freedesktop/DBus", "org.freedesktop.DBus.NameHasOwner", "string:org.freedesktop.secrets"],
+      { env, encoding: "utf8", timeout: (opts && opts.timeoutMs) || 1500, windowsHide: true, stdio: ["ignore", "pipe", "ignore"] },
+    );
+    return !!(r && r.status === 0 && /boolean true/.test(String(r.stdout || "")));
+  } catch {
+    return false;
+  }
+}
+
 /** Only a plain "no" keeps the window closed; "unknown" opens it as before. */
 function overlayMayOpen(state) {
   return state !== "no";
@@ -177,6 +340,17 @@ function closedWords(why) {
         "Turn on compositing in your desktop's settings (in Xfce: Window Manager Tweaks, then Compositor), or start a compositor such as picom, then press Check again.",
       buttons: ["Check again", "Quit", "OK"],
       actions: ["recheck", "quit", "none"],
+    };
+  }
+  if (why === "wayland-native") {
+    return {
+      tray: "Wayland start. Overlay closed.",
+      message: "The pets are not on the screen: they were started as a Wayland app, and there is no XWayland here to start them on instead.",
+      detail:
+        "On Wayland an app cannot see where the mouse is outside its own window or keep a window on top, so the pets could not be clicked. " +
+        "Start them with sh desktop.sh, without --ozone-platform=wayland or ELECTRON_OZONE_PLATFORM_HINT, on a desktop that has XWayland (GNOME, KDE and sway have it).",
+      buttons: ["Quit", "OK"],
+      actions: ["quit", "none"],
     };
   }
   if (why === "software-refused") {
@@ -208,4 +382,53 @@ function closedWords(why) {
   };
 }
 
-module.exports = { COMPOSITOR_SCRIPT, TIMEOUT_MS, isLinux, waylandSession, compositorWord, readCompositor, overlayMayOpen, closedWords };
+/** Said on a gate's message where no tray icon can be seen: that message is the only way to reach the app. */
+const NO_TRAY_GATE = "There is no tray icon on this desktop to find the pets from, so OK quits too. Start ComputerPets again to see this message.";
+
+/**
+ * A gate's message box where no tray can be seen (`trayHost` "no"): OK would leave the app running with nothing on
+ * the screen and no tray to reach it from, so OK quits too, and the message says so. Otherwise the words as given.
+ * @template {{ detail: string, actions: string[] }} W
+ * @param {W} words
+ * @param {string} trayHost
+ * @returns {W}
+ */
+function gateWithoutTray(words, trayHost) {
+  if (trayHost !== "no") return words;
+  return { ...words, detail: `${words.detail} ${NO_TRAY_GATE}`, actions: words.actions.map((a) => (a === "none" ? "quit" : a)) };
+}
+
+/**
+ * The pet menu's Hide the window when no tray can be seen: the tray's Show was the way back, so say what is.
+ * @param {string} platform
+ */
+function hideWords(platform) {
+  const again = isLinux(platform) || /^darwin|^Mac/i.test(String(platform || "")) ? "sh desktop.sh" : ".\\desktop.ps1";
+  return {
+    message: "Hide the pets? There is no tray icon on this desktop to bring them back from.",
+    detail: `To bring them back, start ComputerPets again (type ${again}, just like the first time). The pets come back with their keeper card open.`,
+    buttons: ["Hide", "Cancel"],
+    actions: ["hide", "none"],
+  };
+}
+
+module.exports = {
+  COMPOSITOR_SCRIPT,
+  TIMEOUT_MS,
+  SNI_ARGS,
+  isLinux,
+  waylandSession,
+  compositorWord,
+  readCompositor,
+  readTrayHost,
+  nativeWayland,
+  waylandPlan,
+  x11Args,
+  passwordStoreFor,
+  secretServiceRunning,
+  overlayMayOpen,
+  closedWords,
+  hideWords,
+  NO_TRAY_GATE,
+  gateWithoutTray,
+};
