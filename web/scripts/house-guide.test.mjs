@@ -130,7 +130,7 @@ test("the study page is a field guide, not a portrait catalog", () => {
 test("the den stays the snake classroom", () => {
   assert.match(denSrc, /createFileRoute\("\/snakes"\)/);
   assert.match(denSrc, /SnakeDen/);
-  assert.match(denSrc, /SNAKE_GUIDE\.map/);
+  assert.match(denSrc, /<FieldNotes\s+notes=\{SNAKE_GUIDE\}/);
   assert.doesNotMatch(denSrc, /HOUSE_GUIDE/);
 });
 

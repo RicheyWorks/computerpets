@@ -43,10 +43,21 @@ pictures() {
 seen=$(pictures)
 
 # --check says what the start sees and changes nothing: no install, no overlay.
+# The last line says what to type next, in plain words (the pictures first: the start stops there).
 if [ "${1:-}" = "--check" ]; then
   echo "ok: node $version"
   echo "pieces: $state"
   echo "pictures: $seen"
+  if [ "$seen" != ready ]; then
+    echo "next: The pet pictures are not here yet. Install Git LFS from https://git-lfs.com, then in the computerpets folder type git lfs install and then git lfs pull. Then type sh desktop.sh and press Enter."
+  else
+    case "$state" in
+      missing) echo "next: Type sh desktop.sh and press Enter. It gets the pieces (a few minutes the first time), then the pets come on." ;;
+      unfinished) echo "next: Type sh desktop.sh and press Enter. It finishes getting the pieces, then the pets come on." ;;
+      changed) echo "next: Type sh desktop.sh and press Enter. It gets the new pieces, then the pets come on." ;;
+      *) echo "next: Type sh desktop.sh and press Enter to turn the pets on." ;;
+    esac
+  fi
   exit 0
 fi
 
