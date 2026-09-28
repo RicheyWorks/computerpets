@@ -88,19 +88,22 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
       <input id="backend" placeholder="http://127.0.0.1:8081" />
       <p class="lead" id="licenseNet">Unlocking stays on this computer. The code made from this computer's ID does not leave.</p>
       <p class="lead" id="bundleNet">Your pet's files are not downloaded until this line names the website.</p>
-      <label>Provider</label>
+      <label for="provider">Where you own the game</label>
       <select id="provider"><option value="steam">Steam</option></select>
-      <label>Steam ID</label>
+      <p class="hint" id="providerHelp">Only Steam works here for now. Other stores cannot unlock from this window yet.</p>
+      <label for="steamId">Your Steam ID</label>
       <input id="steamId" placeholder="76561198000000000" autocomplete="off" />
-      <label>App ID</label>
+      <p class="hint" id="steamIdHelp">Your Steam account number: 17 digits that start with 7656. Steam shows it under Account details.</p>
+      <label for="appId">Steam App ID</label>
       <input id="appId" placeholder="123456" autocomplete="off" />
+      <p class="hint" id="appIdHelp">The game's number on Steam. Ask whoever runs the house server. ComputerPets has no Steam page yet.</p>
       <label>Pet</label>
       <select id="petType"></select>
       <div>
         <button id="unlock" type="button">Unlock</button>
         <button id="redownload" class="ghost" type="button">Download my pet</button>
         <button id="lock" class="ghost" type="button">Clear</button>
-        <button id="weakMark" class="ghost" type="button" hidden>Use the computer name, or a random id if there is no name</button>
+        <button id="weakMark" class="ghost" type="button" hidden>Use the computer name, or a random ID if there is no name</button>
       </div>
       </fieldset>
       <p class="ok" id="licenseOk"></p>
@@ -334,7 +337,8 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
           if (!row || !row.key) return;
           const o = document.createElement("option");
           o.value = row.key;
-          o.textContent = row.name ? `${row.name} — ${row.key}` : row.key;
+          // The pet's name and kind, like the blotter's Pet list ("Rui · Red Panda"); the key stays the value.
+          o.textContent = row.name ? (row.speciesLabel ? `${row.name} · ${row.speciesLabel}` : row.name) : row.key;
           petType.appendChild(o);
         });
         if (!petType.value) petType.value = "red_panda";

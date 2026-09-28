@@ -39,7 +39,20 @@ from .license.license_net import (
 )
 from .species import CATALOG_KEYS, SPECIES
 
-WEAK_FALLBACK_YES = "Use the computer name, or a random id if there is no name"
+WEAK_FALLBACK_YES = "Use the computer name, or a random ID if there is no name"
+
+# The Unlock fields: a plain label and one helper line each, word for word the same as the overlay
+# Settings window (desktop/renderer/settings.html). Only Steam is wired into these windows; the web
+# desk has no Unlock form.
+PROVIDER_LABEL = "Where you own the game"
+PROVIDER_HELP = "Only Steam works here for now. Other stores cannot unlock from this window yet."
+STEAM_ID_LABEL = "Your Steam ID"
+STEAM_ID_HELP = "Your Steam account number: 17 digits that start with 7656. Steam shows it under Account details."
+APP_ID_LABEL = "Steam App ID"
+# The Pet list shows the pet's name and kind, the same as the overlay ("Rui · Red Panda"); the key stays the value.
+PET_LABEL = "Pet"
+WEAK_ASK_TITLE = "Could not read this computer's ID"
+APP_ID_HELP = "The game's number on Steam. Ask whoever runs the house server. ComputerPets has no Steam page yet."
 
 # The short first line. The privacy detail folds under Details, in whole sentences.
 UNLOCK_INTRO = "Pets work without unlocking. Unlocking is optional."
@@ -49,7 +62,7 @@ DETAILS_LABEL = "Details"
 # Each sentence is checked against license/hwid.py and license/session.py:
 # the three named sources, sha256("computerpets:" + platform + ":" + raw), hwid.txt in the
 # blotter data folder, a stored hash reused and not rewritten, and the weak fallback that
-# waits for a yes (computer name, else a random id).
+# waits for a yes (computer name, else a random ID).
 # One short sentence per line, like START-HERE and the overlay Details (the label keeps the breaks).
 MARK_UNREAD_TEXT = "\n".join(
     (
@@ -91,6 +104,11 @@ MARK_STORED_TEXT = "\n".join(
 
 
 _LOG = logging.getLogger("computerpets.license")
+
+
+def pet_choice_text(name: str, kind: str) -> str:
+    """One Pet list line: the pet's name and kind, never the catalog key (overlay settings.html does the same)."""
+    return f"{name} · {kind}" if kind else name
 
 
 def license_error_text(err: object, host: str = "") -> str:
@@ -177,7 +195,7 @@ class UnlockDialog(QDialog):
         self.pet_type.setEditable(True)
         for key in CATALOG_KEYS:
             spec = SPECIES[key]
-            self.pet_type.addItem(f"{key} — {spec.name} · {spec.label}", key)
+            self.pet_type.addItem(pet_choice_text(spec.name, spec.label), key)
         current = (status.get("fields") or {}).get("petType") or "red_panda"
         idx = self.pet_type.findData(current)
         if idx >= 0:
@@ -189,10 +207,13 @@ class UnlockDialog(QDialog):
         form.addRow("House server address", self.backend)
         form.addRow("", self.net)
         form.addRow("", self.bundle)
-        form.addRow("Provider", QLabel("steam"))
-        form.addRow("Steam ID", self.steam_id)
-        form.addRow("App ID", self.app_id)
-        form.addRow("Pet", self.pet_type)
+        form.addRow(PROVIDER_LABEL, QLabel("Steam"))
+        form.addRow("", self._helper(PROVIDER_HELP, "providerHelp"))
+        form.addRow(STEAM_ID_LABEL, self.steam_id)
+        form.addRow("", self._helper(STEAM_ID_HELP, "steamIdHelp"))
+        form.addRow(APP_ID_LABEL, self.app_id)
+        form.addRow("", self._helper(APP_ID_HELP, "appIdHelp"))
+        form.addRow(PET_LABEL, self.pet_type)
 
         self.ok = QLabel()
         self.ok.setWordWrap(True)
@@ -227,6 +248,14 @@ class UnlockDialog(QDialog):
         layout.addWidget(self.ok)
         layout.addWidget(self.err)
         layout.addWidget(buttons)
+
+    @staticmethod
+    def _helper(text: str, name: str) -> QLabel:
+        """One small helper line under an Unlock field (same words as the overlay's p.hint)."""
+        line = QLabel(text)
+        line.setObjectName(name)
+        line.setWordWrap(True)
+        return line
 
     def _mark_text(self, status: dict[str, Any]) -> str:
         mark = status.get("hwidMark") if isinstance(status, dict) else None
@@ -355,12 +384,17 @@ class UnlockDialog(QDialog):
         text = self.pet_type.currentText().strip()
         if " — " in text:
             text = text.split(" — ", 1)[0].strip()
+        # A typed name or "Name · Kind" finds its key; anything else is sent as typed (the old behavior).
+        for key in CATALOG_KEYS:
+            spec = SPECIES[key]
+            if text in (spec.name, pet_choice_text(spec.name, spec.label)):
+                return key
         return text or "red_panda"
 
     def _ask_weak(self, message: str) -> bool:
         answer = QMessageBox.question(
             self,
-            "No stable operating-system id",
+            WEAK_ASK_TITLE,
             (message or WEAK_FALLBACK_MESSAGE) + "\n\n" + WEAK_FALLBACK_YES + "?",
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No,

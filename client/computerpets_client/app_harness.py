@@ -1349,7 +1349,9 @@ def _desk_rows() -> list[Affordance]:
             notes=(
                 "Runs the real start script in check mode, which changes nothing. With Node 22 or newer "
                 "and npm on PATH it must print ok: node <the same version node -v prints> and a pieces "
-                "state (ready, missing, unfinished, or changed). With no Node, an older Node, or no npm "
+                "state (ready, missing, unfinished, or changed), and a pictures state that matches the file: "
+                "ready, missing, or lfs-pointers (a Git without LFS copied text pointers, so every pet would be "
+                "invisible; the real start stops with plain Git LFS words). With no Node, an older Node, or no npm "
                 "it must stop with plain words. The install stamp must not change. npm install and the "
                 "overlay are never run."
             ),
@@ -1592,6 +1594,18 @@ def _desk_rows() -> list[Affordance]:
 
 
 LAUNCH_PIECES = ("ready", "missing", "unfinished", "changed")
+LAUNCH_PICTURES = ("ready", "missing", "lfs-pointers")
+LAUNCH_PICTURE = ("desktop", "renderer", "sprites", "crow", "idle", "1.png")
+
+
+def launch_pictures_state(root: Path) -> str:
+    """What the start script should say about the overlay pictures: a Git without LFS leaves text pointers."""
+    picture = root.joinpath(*LAUNCH_PICTURE)
+    if not picture.is_file():
+        return "missing"
+    with picture.open("rb") as fh:
+        head = fh.read(23)
+    return "lfs-pointers" if head == b"version https://git-lfs" else "ready"
 LAUNCH_NODE_MAJOR = 22
 
 
@@ -1621,6 +1635,8 @@ def _launch_check(aid: str) -> InvokeResult:
     after = stamp.stat().st_mtime_ns if stamp.exists() else None
     out = f"{proc.stdout or ''}{proc.stderr or ''}"
     pieces = re.search(r"^pieces: (\w+)\s*$", out, re.M)
+    pictures = re.search(r"^pictures: ([\w-]+)\s*$", out, re.M)
+    real_pictures = launch_pictures_state(root)
     fails: list[str] = []
     if not node:
         expect = "no node"
@@ -1642,20 +1658,23 @@ def _launch_check(aid: str) -> InvokeResult:
             fails.append(f"{script} check did not print ok: node {version}")
         if not pieces or pieces.group(1) not in LAUNCH_PIECES:
             fails.append(f"{script} check printed no pieces state")
+        if not pictures or pictures.group(1) != real_pictures:
+            fails.append(f"{script} check said pictures {pictures.group(1) if pictures else 'nothing'}, the file says {real_pictures}")
     if before != after:
         fails.append("check mode changed the install stamp")
     for word in ("npm install", "Getting the pieces"):
         if word in out:
             fails.append(f"check mode must not install ({word!r} printed)")
     state = pieces.group(1) if pieces else "none"
+    seen = pictures.group(1) if pictures else "none"
     ok = not fails
     return InvokeResult(
         aid,
         "desk",
         ok,
-        detail=f"{script}: node {version or 'none'}; pieces {state}; exit {proc.returncode}",
-        extras={"script": script, "node": version, "npm": bool(npm), "exit": proc.returncode, "pieces": state, "expect": expect},
-        trace=[f"script={script}", f"node={version or 'none'}", f"expect={expect}", f"exit={proc.returncode}", f"pieces={state}"],
+        detail=f"{script}: node {version or 'none'}; pieces {state}; pictures {seen}; exit {proc.returncode}",
+        extras={"script": script, "node": version, "npm": bool(npm), "exit": proc.returncode, "pieces": state, "pictures": seen, "picturesReal": real_pictures, "expect": expect},
+        trace=[f"script={script}", f"node={version or 'none'}", f"expect={expect}", f"exit={proc.returncode}", f"pieces={state}", f"pictures={seen}"],
         error=None if ok else "; ".join(fails),
     )
 
@@ -2790,6 +2809,20 @@ def _web_rows() -> list[Affordance]:
                 "starts with the /mind intro."
             ),
         ),
+        Affordance(
+            "web.unlock_plain_lfs",
+            "web",
+            "Plain Unlock fields with one helper each on the overlay and the blotter; random ID; START-HERE cry list in room groups; the start stops with plain Git LFS words when the pictures are pointers",
+            "overlay settings.html, client unlock_dialog.py, desktop.sh + desktop.ps1 pictures check, desktop/renderer/sprites-real.test.cjs, .gitattributes, docs START-HERE + README",
+            notes=(
+                "Where you own the game, Your Steam ID, and Steam App ID carry the same label and one true helper line on the "
+                "overlay and the blotter (only Steam works here; 17 digits that start with 7656; no Steam page yet). The Pet list "
+                "shows name and kind, not the catalog key. No user-facing file says random id. The START-HERE cry fold has ten "
+                "room headings over 109 pets. The overlay pictures are Git LFS files; a Git without LFS copied text pointers and "
+                "every pet was invisible. Both start scripts print pictures: in check mode and stop before npm install with "
+                "plain Git LFS words; the Mac and Linux steps say git lfs install and git lfs pull."
+            ),
+        ),
     ]
 
 
@@ -2831,6 +2864,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("overlay_birds_plain", domain="web", action_id=aid)
     if local_id == "flake_house_plain":
         return _run_web_smoke("flake_house_plain", domain="web", action_id=aid)
+    if local_id == "unlock_plain_lfs":
+        return _run_web_smoke("unlock_plain_lfs", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

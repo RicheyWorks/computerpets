@@ -260,7 +260,7 @@ describe("hwid (CLIENT-CONTRACT §5)", () => {
       assert.match(src, /If the app cannot read that ID/);
       assert.match(src, /allowWeakFallback/);
       assert.match(src, /hwid_needs_fallback_yes/);
-      assert.match(src, /Use the computer name, or a random id if there is no name/);
+      assert.match(src, /Use the computer name, or a random ID if there is no name/);
     }
     // Both windows fold this detail under "Details" in whole sentences; the main
     // process and the blotter session still send WEAK_FALLBACK_MESSAGE as the error.

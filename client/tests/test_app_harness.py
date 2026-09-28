@@ -1,5 +1,9 @@
 """App inspect harness: catalog + run_all across house domains. Care stays 18/18."""
 
+import os
+
+import pytest
+
 from computerpets_client.app_harness import (
     DOMAINS,
     accounting,
@@ -118,6 +122,7 @@ CROSS_DOMAIN = {
     "web.minds_flight_plain",
     "web.overlay_birds_plain",
     "web.flake_house_plain",
+    "web.unlock_plain_lfs",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -323,11 +328,55 @@ def test_start_script_checks_node_and_pieces_without_installing():
     if result.extras["expect"] == "ready to start":
         assert result.extras["exit"] == 0
         assert result.extras["pieces"] in {"ready", "missing", "unfinished", "changed"}
+        # The pictures line matches the file: a Git without LFS leaves text pointers.
+        assert result.extras["pictures"] in {"ready", "missing", "lfs-pointers"}
+        assert result.extras["pictures"] == result.extras["picturesReal"]
         assert result.extras["node"] and result.extras["node"].startswith("v")
     else:
         # No Node, an older Node, or no npm: the start stops with plain words.
         assert result.extras["exit"] != 0
     assert shutil.which("node") is None or result.extras["node"]
+
+
+@pytest.mark.skipif(
+    os.name == "nt",
+    reason="Windows runs desktop.ps1, and this test would copy a start script into a temp folder (antivirus flags "
+    "temporary scripts there). The PowerShell twin is held by web/scripts/start-here.test.mjs.",
+)
+def test_start_script_stops_on_git_lfs_pointers_before_installing(tmp_path):
+    """A Git without LFS copies text pointers for the pet pictures. sh desktop.sh says so and stops early."""
+    import shutil
+    import subprocess
+
+    from computerpets_client.app_harness import LAUNCH_PICTURE, launch_pictures_state, repo_root
+
+    node, npm, sh = shutil.which("node"), shutil.which("npm"), shutil.which("sh")
+    if not (node and npm and sh):
+        pytest.skip("needs node, npm, and sh on PATH to reach the pictures check")
+    major = subprocess.run([node, "-v"], capture_output=True, text=True, timeout=60).stdout.strip()
+    if not major.startswith("v") or int(major[1:].split(".")[0]) < 22:
+        pytest.skip(f"needs Node 22 or newer to reach the pictures check (this is {major})")
+    shutil.copy(repo_root() / "desktop.sh", tmp_path / "desktop.sh")
+    (tmp_path / "desktop").mkdir()
+    (tmp_path / "desktop" / "package.json").write_text("{}", encoding="utf-8")
+    picture = tmp_path.joinpath(*LAUNCH_PICTURE)
+    picture.parent.mkdir(parents=True)
+    picture.write_text("version https://git-lfs.github.com/spec/v1\noid sha256:0\nsize 1\n", encoding="utf-8")
+
+    def run(*args: str) -> subprocess.CompletedProcess:
+        return subprocess.run([sh, str(tmp_path / "desktop.sh"), *args], capture_output=True, text=True, timeout=120)
+
+    assert launch_pictures_state(tmp_path) == "lfs-pointers"
+    check = run("--check")
+    assert check.returncode == 0 and "pictures: lfs-pointers" in check.stdout
+    start = run()
+    assert start.returncode == 1
+    assert "The pet pictures did not download. They come through Git LFS" in start.stdout
+    assert "git lfs pull" in start.stdout
+    assert "Getting the pieces" not in start.stdout and not (tmp_path / "desktop" / "node_modules").exists()
+    picture.write_bytes(b"\x89PNG\r\n\x1a\n" + b"\0" * 32)
+    assert launch_pictures_state(tmp_path) == "ready"
+    assert "pictures: ready" in run("--check").stdout
 
 
 def test_main_rows_drive_the_real_main_process_offline():
@@ -488,6 +537,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.minds_flight_plain",
         "web.overlay_birds_plain",
         "web.flake_house_plain",
+        "web.unlock_plain_lfs",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -810,6 +860,19 @@ def test_flake_house_plain_row_passes_every_seed_and_keeps_words_plain():
         assert all(fh.extras[group].values()), (group, fh.extras[group])
     assert fh.extras["unlock"]["overlayLongest"] <= 18 and fh.extras["unlock"]["blotterLongest"] <= 18
     assert fh.extras["sounds"]["pets"] == 109
+
+
+def test_unlock_plain_lfs_row_keeps_unlock_words_plain_and_names_git_lfs():
+    """Plain Unlock fields on both doors, random ID, room-grouped cry list, and the Git LFS stop in both start scripts."""
+    ul = invoke("web.unlock_plain_lfs")
+    assert ul.ok, (ul.error, ul.detail)
+    for mark in ("unlock_fields=plain_labels+helpers_same", "pet_list=name_and_kind", "random_id=capital_ID_everywhere",
+                 "start_here=cry_list_room_groups", "lfs=start_scripts_stop_on_pointers", "lfs=mac_linux_docs"):
+        assert mark in ul.trace, (mark, ul.trace)
+    for group in ("fields", "honest", "lfs"):
+        assert all(ul.extras[group].values()), (group, ul.extras[group])
+    assert ul.extras["randomId"]["lower"] == []
+    assert ul.extras["sounds"]["pets"] == 109 and len(ul.extras["sounds"]["heads"]) == 10
 
 
 def test_first_run_rows_start_clean_and_show_the_hello_once():
