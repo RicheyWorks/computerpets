@@ -89,8 +89,9 @@ test("the hive page is a field guide, not a portrait catalog", () => {
   assert.match(denSrc, /createFileRoute\("\/hive"\)/);
   assert.match(denSrc, /HiveDen/);
   assert.match(denSrc, /SpeciesPlaque/);
-  assert.match(denSrc, /\/demo\/\$slug/);
-  assert.match(denSrc, /INSECT_GUIDE\.map/);
+  // The notes render through the shared drawers (components/desk/field-notes.tsx), each with its /demo/<slug> link.
+  assert.match(readFileSync(join(root, "src/components/desk/field-notes.tsx"), "utf8"), /\/demo\/\$slug/);
+  assert.match(denSrc, /<FieldNotes\s+notes=\{INSECT_GUIDE\}/);
 });
 
 test("the catalog and living roster include the ten insect keys", () => {

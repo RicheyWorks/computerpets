@@ -86,7 +86,8 @@ test("/demo Miso sits a window sill bound as furniture", () => {
   miso = stepUntil(G, miso, flags, "bound", 40);
   assert.equal(miso.phase, "bound");
   assert.equal(G.tellLine(miso), G.CAT_SILL_LINE);
-  assert.match(roomSrc, /windows=\{demoWindow \? deskWindows : \[\]\}/);
+  // The drawn window (and so the sill) stays on bigger screens; on a phone the plates dock in the panel instead.
+  assert.match(roomSrc, /windows=\{demoWindow && !hand \? deskWindows : \[\]\}/);
 });
 
 test("/demo hide, click, and robin from 470 still hold", () => {

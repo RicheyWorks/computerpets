@@ -8,11 +8,13 @@ export const Route = createFileRoute("/demo/$slug")({
   component: DemoPage,
   head: ({ params }) => {
     const kind = livingBySlug(params.slug);
-    const title = kind ? `${kind.name} is already walking` : "ComputerPets";
-    const pageTitle = kind ? `${kind.name} — ComputerPets` : "ComputerPets";
+    // A mistyped /demo/<name> used to say just "ComputerPets" in the tab,
+    // so a new keeper with a few tabs open could not tell it was a dead end.
+    const title = kind ? `${kind.name} is already walking` : "No demo here";
+    const pageTitle = kind ? `${kind.name} — ComputerPets` : "No demo here — ComputerPets";
     const description = kind
       ? `${kind.name}. ${kind.tagline} The demo is a room.`
-      : "A living desk companion.";
+      : "No demo for that name. See who is awake instead.";
     const image = host
       ? `https://${host}${kind ? `/pets/${kind.key}.jpg` : "/og.jpg"}`
       : undefined;
@@ -43,7 +45,7 @@ function DemoPage() {
     return (
       <main className="mx-auto max-w-lg space-y-3 px-6 py-20">
         <h1 className="font-display text-3xl">No demo for that name.</h1>
-        <Link to="/meet" className="text-sm text-primary">
+        <Link to="/meet" data-demo-missing className="inline-flex min-h-11 items-center text-sm text-primary">
           See who is awake
         </Link>
       </main>

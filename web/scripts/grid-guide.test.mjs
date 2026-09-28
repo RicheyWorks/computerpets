@@ -149,8 +149,9 @@ test("the grid page is a field guide, not a costume party", () => {
   assert.match(denSrc, /createFileRoute\("\/grid"\)/);
   assert.match(denSrc, /GridDen/);
   assert.match(denSrc, /SpeciesPlaque/);
-  assert.match(denSrc, /\/demo\/\$slug/);
-  assert.match(denSrc, /GRID_GUIDE\.map/);
+  // The notes render through the shared drawers (components/desk/field-notes.tsx), each with its /demo/<slug> link.
+  assert.match(readFileSync(join(root, "src/components/desk/field-notes.tsx"), "utf8"), /\/demo\/\$slug/);
+  assert.match(denSrc, /<FieldNotes\s+notes=\{GRID_GUIDE\}/);
   assert.match(denSrc, /a grid dragon is not a mantel dragon/i);
   assert.match(denSrc, /Arc is not Vesper/);
   assert.match(denSrc, /Volt is not Arc/);
