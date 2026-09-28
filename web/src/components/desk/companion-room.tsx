@@ -1045,8 +1045,13 @@ export function CompanionRoom({
   const hour = isBlue(stats, kind.key) ? "Blue" : dayPartLabel(dayPart());
   const sky = weatherLabel(skyNow());
   const caller = todaysVisitor(kind.key).name;
+  // On a phone on its side the speech bubble rises beside the panel's top; it dodged the docked plates but painted
+  // over the kicker (at 844×390 and 568×320) and could the name. living-pet.tsx keeps it off [data-bubble-avoid].
+  // The care buttons carry it too there, so stepping off the name never lands the bubble on them (below the name
+  // it sat over the care bar at 667×375 and 844×390 with the hello up).
+  const bubbleAvoid = hand && handOrient === "sit" ? "" : undefined;
   const kicker = (
-    <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
+    <p data-bubble-avoid={bubbleAvoid} className="text-[11px] uppercase tracking-[0.2em] text-subtle">
       {hive ? `${colonyWord(hive)} · Brood · ${hive.brood} · Stores · ${hive.stores} · ` : ""}
       {hour} · {sky} · {caller} may call
       {detail ? ` · ${detail}` : ""}
@@ -1342,12 +1347,12 @@ export function CompanionRoom({
         {landJump ? (
           // A phone on its side has a 140 px panel above the care bar (at 667×375): under the tagline the jump started
           // at the panel's end, so it took a scroll to reach. Beside the name it shows; a long name wraps it under.
-          <div data-name-row className={asideFirst ? "flex flex-wrap items-center gap-x-3" : "mt-2 flex flex-wrap items-center gap-x-3"}>
+          <div data-name-row data-bubble-avoid={bubbleAvoid} className={asideFirst ? "flex flex-wrap items-center gap-x-3" : "mt-2 flex flex-wrap items-center gap-x-3"}>
             <h1 className="font-display text-4xl leading-none">{displayName}</h1>
             {platesJump}
           </div>
         ) : (
-          <h1 className={hand ? (asideFirst ? "font-display text-4xl leading-none" : "mt-2 font-display text-4xl leading-none") : "mt-2 font-display text-5xl leading-none sm:text-6xl"}>
+          <h1 data-bubble-avoid={bubbleAvoid} className={hand ? (asideFirst ? "font-display text-4xl leading-none" : "mt-2 font-display text-4xl leading-none") : "mt-2 font-display text-5xl leading-none sm:text-6xl"}>
             {displayName}
           </h1>
         )}
@@ -1511,7 +1516,7 @@ export function CompanionRoom({
               : "pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-3 px-4 pb-5 pt-16 sm:px-8"
         }
       >
-        <div className="pointer-events-auto" ref={careRef} data-desk-care>
+        <div className="pointer-events-auto" ref={careRef} data-desk-care data-bubble-avoid={bubbleAvoid}>
           <p id="hud-talk-net" className="keeper-truth" hidden={!talkAsked || !talkLine}>
             {talkAsked ? talkLine : ""}
           </p>

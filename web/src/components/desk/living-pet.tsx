@@ -332,7 +332,8 @@ export function LivingPet({
       bubbleRoomRef.current = bubbleRoom(restTop, head.getBoundingClientRect().bottom);
     };
     // The weather, news and market plates (floating on a desktop, docked in the panel on a phone): the part of each
-    // that shows, in the bubble's frame. The bubble never crosses one (bubbleDodge in the frame loop).
+    // that shows, in the bubble's frame. The bubble never crosses one (bubbleDodge in the frame loop). On a phone on
+    // its side the panel's own kicker and name are marked data-bubble-avoid and kept clear the same way.
     const readPlates = () => {
       const parent = el.offsetParent as HTMLElement | null;
       if (!parent || !speech) {
@@ -341,7 +342,7 @@ export function LivingPet({
       }
       const pb = parent.getBoundingClientRect();
       const plates: BubbleBox[] = [];
-      for (const plate of document.querySelectorAll<HTMLElement>("[data-desk-plate]")) {
+      for (const plate of document.querySelectorAll<HTMLElement>("[data-desk-plate], [data-bubble-avoid]")) {
         const r = plate.getBoundingClientRect();
         let b = { left: r.left, top: r.top, right: r.right, bottom: r.bottom };
         for (let up = plate.parentElement; up && up !== document.body; up = up.parentElement) {

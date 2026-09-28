@@ -126,6 +126,24 @@
     return !(card && card.firstHintSeen === true);
   }
 
+  /**
+   * Where the pet's speech bubble goes when the keeper card may be open: over the pet (bubbleX) when that misses the
+   * card, else beside the card, on its left when there is room and on its right when not. clear says the bubble
+   * misses the card, so it can sit at the pet's head; clear false only when no side has room (then pet.js lifts it
+   * as before). cardW 0 means the card is shut.
+   * @param {{ bubbleX: number, bubbleW: number, cardX: number, cardW: number, width: number, gap?: number, edge?: number }} o
+   * @returns {{ x: number, clear: boolean }}
+   */
+  function bubbleBesideCard({ bubbleX, bubbleW, cardX, cardW, width, gap = 8, edge = 10 }) {
+    if (!cardW) return { x: bubbleX, clear: true };
+    if (bubbleX + bubbleW <= cardX - gap || bubbleX >= cardX + cardW + gap) return { x: bubbleX, clear: true };
+    const left = cardX - gap - bubbleW;
+    if (left >= edge) return { x: left, clear: true };
+    const right = cardX + cardW + gap;
+    if (right + bubbleW <= width - edge) return { x: right, clear: true };
+    return { x: bubbleX, clear: false };
+  }
+
   function careDoorRefusal(verb) {
     const path = ADVERTISED_CARE[verb] || "";
     return {
@@ -231,6 +249,7 @@
     FIRST_HINT_OK,
     firstHint,
     firstHintShows,
+    bubbleBesideCard,
     ADVERTISED_CARE,
     CARE_DOOR_STATUS,
     KEEPER_CARE,
