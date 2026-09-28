@@ -123,6 +123,7 @@ test("LivingPet with the robin: a broken flight sends the robin away, the pet ke
 
   await m.frames(1, 16); // the fifth step throws
   assert.equal(robin.style.visibility, "hidden", "the robin leaves the desk instead of hanging mid-air");
+  assert.equal(!!s.container.querySelector("[data-robin]"), false, "and its canvas is taken off the page");
   assert.deepEqual(seen, [true, false], "the desk is told the robin is gone");
   assert.deepEqual(newLogs(logs0), ["desk frame error (robin): Error: injected flight fault. The robin leaves the desk; the other pets keep moving."]);
 
@@ -132,11 +133,13 @@ test("LivingPet with the robin: a broken flight sends the robin away, the pet ke
   assert.notEqual(hit.style.transform, petBefore, "the pet keeps moving");
 
   await s.render(view(2)); // call the robin again
-  assert.notEqual(robin.style.visibility, "hidden", "a new call shows the robin again");
+  const robin2 = s.container.querySelector("[data-robin]");
+  assert.ok(robin2, "a new call puts the robin back on the page");
+  assert.notEqual(robin2.style.visibility, "hidden", "a new call shows the robin again");
   await m.frames(3, 16);
-  const a = robin.style.transform;
+  const a = robin2.style.transform;
   await m.frames(3, 16);
-  assert.notEqual(robin.style.transform, a, "and it flies");
+  assert.notEqual(robin2.style.transform, a, "and it flies");
   assert.deepEqual(seen, [true, false, true]);
   assert.equal(newLogs(logs0).length, 1);
   m.fault("stepRobinFly", null);
@@ -157,19 +160,72 @@ test("BirdFlyer: a broken flight sends the bird away and the next call flies", a
   assert.match(bird.style.transform, /translate3d/);
   await m.frames(1, 16);
   assert.equal(bird.style.visibility, "hidden");
+  assert.equal(!!s.container.querySelector("[data-bird]"), false, "its canvas is taken off the page");
   assert.deepEqual(seen, [true, false]);
   assert.match(newLogs(logs0)[0], /^desk frame error \(hummingbird\): Error: injected bird fault\. The bird leaves the desk/);
   await m.frames(10, 16);
   assert.equal(fly.calls, 4, "that flight's loop has stopped");
   await s.render(m.h(BirdFlyer, { startId: 2, onVisible }));
+  const bird2 = s.container.querySelector("[data-bird]");
+  assert.ok(bird2, "a new call puts the bird back on the page");
   await m.frames(3, 16);
-  const a = bird.style.transform;
+  const a = bird2.style.transform;
   await m.frames(3, 16);
-  assert.notEqual(bird.style.visibility, "hidden");
-  assert.notEqual(bird.style.transform, a);
+  assert.notEqual(bird2.style.visibility, "hidden");
+  assert.notEqual(bird2.style.transform, a);
   assert.equal(newLogs(logs0).length, 1);
   m.fault("stepFly", null);
   await s.unmount();
+});
+
+test("RobinFlyer and BirdFlyer: after a normal flight the canvas leaves the page and no frame loop keeps running", async () => {
+  const { RobinFlyer } = await m.load("components/desk/robin-fly.tsx");
+  const { BirdFlyer } = await m.load("components/desk/bird-fly.tsx");
+  const logs0 = m.logs.length;
+  for (const [Flyer, attr] of [[RobinFlyer, "data-robin"], [BirdFlyer, "data-bird"]]) {
+    const seen = [];
+    const onVisible = (on) => seen.push(on);
+    const s = m.stage();
+    assert.equal(m.pending(), 0, "no loop is running before the call");
+    await s.render(m.h(Flyer, { startId: 1, onVisible }));
+    assert.ok(s.container.querySelector(`[${attr}]`), `${attr}: on the page while it flies`);
+    assert.ok(m.pending() >= 1, `${attr}: its loop asks for frames`);
+    let ms = 0;
+    while (!seen.includes(false) && ms < 120000) {
+      await m.frames(60, 16);
+      ms += 960;
+    }
+    assert.deepEqual(seen, [true, false], `${attr}: the flight ended on its own within two minutes`);
+    assert.equal(!!s.container.querySelector(`[${attr}]`), false, `${attr}: no canvas is left offscreen`);
+    assert.equal(m.document.querySelectorAll("canvas").length, 0, `${attr}: no canvas anywhere on the page`);
+    assert.equal(m.pending(), 0, `${attr}: no frame loop keeps running`);
+    await m.frames(30, 16);
+    assert.equal(m.pending(), 0, `${attr}: and none starts again by itself`);
+    await s.render(m.h(Flyer, { startId: 2, onVisible }));
+    assert.ok(s.container.querySelector(`[${attr}]`), `${attr}: the next call flies again`);
+    await s.unmount();
+    assert.equal(m.pending(), 0, `${attr}: leaving the desk cancels its loop`);
+  }
+  assert.equal(m.logs.length, logs0, "a normal flight logs nothing");
+});
+
+test("RobinFlyer and BirdFlyer: hiding the desk mid-flight takes the bird off the page instead of freezing it in the air", async () => {
+  const { RobinFlyer } = await m.load("components/desk/robin-fly.tsx");
+  const { BirdFlyer } = await m.load("components/desk/bird-fly.tsx");
+  for (const [Flyer, attr] of [[RobinFlyer, "data-robin"], [BirdFlyer, "data-bird"]]) {
+    const seen = [];
+    const onVisible = (on) => seen.push(on);
+    const s = m.stage();
+    await s.render(m.h(Flyer, { startId: 1, onVisible }));
+    await m.frames(40, 16);
+    const el = s.container.querySelector(`[${attr}]`);
+    assert.ok(el && /translate3d/.test(el.style.transform), `${attr}: flying on screen`);
+    await s.render(m.h(Flyer, { startId: 1, onVisible, hidden: true })); // the pet hides or leaves
+    assert.deepEqual(seen, [true, false], `${attr}: the desk is told it is gone`);
+    assert.equal(!!s.container.querySelector(`[${attr}]`), false, `${attr}: no frozen picture left on the desk`);
+    assert.equal(m.pending(), 0, `${attr}: its loop is cancelled`);
+    await s.unmount();
+  }
 });
 
 test("CalledGuests: one guest that throws leaves; the other keeps walking", async () => {
