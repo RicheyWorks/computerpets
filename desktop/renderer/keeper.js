@@ -162,6 +162,15 @@
     return target != null && !asleep && !cardStopsWalk(cmd);
   }
 
+  /**
+   * Whether the pet is on a Hide or Call back walk the keeper asked for, which the idle chooser must leave alone. It
+   * skipped Feed's walk but not these: a Hide walk longer than the pet's line was swapped for a wander on the next
+   * 5.6 s tick and the pet never hid (leaving stayed set); a Call back walk was cut short the same way.
+   */
+  function keeperWalkOn({ cmd, target }) {
+    return (cmd === "leave" || cmd === "enter") && target != null;
+  }
+
   /** How long the open card stays up after the keeper's last press on it, even when the pet walks off. */
   const CARD_PRESS_HOLD_MS = 8000;
 
@@ -207,12 +216,44 @@
    * Where the open card stands while the pet walks: where it stood when the walk began (x and lift held), and back
    * on the pet once it stands still. It followed the pet every frame, so with the card up during a walk (a care
    * press, the hello unread) its buttons slid out from under the pointer. `held` is the last result's `held`.
-   * @param {{ open: boolean, walking: boolean, held: { x: number, lift: number } | null, x: number, lift: number }} o
+   * On a long walk the held card is on a leash (CARD_LEASH_PX): once the pet is more than that far past the card's
+   * near edge the card is pulled along at that distance and held there, so the card never stands a screen away
+   * from the pet it belongs to (it stayed where it was however far the pet walked). `petLeft`/`petRight` are the
+   * pet's box, `w` the card's width and `width` the screen; without them the card simply holds.
+   * @param {{ open: boolean, walking: boolean, held: { x: number, lift: number } | null, x: number, lift: number,
+   *   petLeft?: number, petRight?: number, w?: number, width?: number, reach?: number }} o
    */
-  function cardHeldSpot({ open, walking, held, x, lift }) {
+  function cardHeldSpot({ open, walking, held, x, lift, petLeft, petRight, w, width, reach }) {
     if (!open || !walking) return { x, lift, held: null };
-    const h = held || { x, lift };
+    let h = held || { x, lift };
+    if ([petLeft, petRight, w].every((n) => typeof n === "number" && isFinite(n))) {
+      const r = typeof reach === "number" && reach >= 0 ? reach : CARD_LEASH_PX;
+      let hx = Math.min(Math.max(h.x, petLeft - r - w), petRight + r);
+      if (typeof width === "number" && width > 0) hx = Math.min(Math.max(hx, 8), Math.max(8, width - w - 8));
+      if (hx !== h.x) h = { x: hx, lift: h.lift };
+    }
     return { x: h.x, lift: h.lift, held: h };
+  }
+
+  /** How far (px) the held card may stand from the pet's box on a walk before it is pulled along. */
+  const CARD_LEASH_PX = 160;
+
+  /**
+   * True when a line on the card can really be seen: it has a box (the card is open, the line not hidden) and that
+   * box overlaps the card's own visible box (the card scrolls) and the screen. Used before a talk leaves for a mind
+   * on the internet: the line naming the website must be in view, not merely present in a folded card.
+   * @param {{ left: number, top: number, right: number, bottom: number } | null} line
+   * @param {{ left: number, top: number, right: number, bottom: number } | null} box
+   */
+  function lineShows(line, box, width, height) {
+    if (!line || !box) return false;
+    if (!(line.right > line.left && line.bottom > line.top)) return false;
+    if (!(box.right > box.left && box.bottom > box.top)) return false;
+    const left = Math.max(line.left, box.left, 0);
+    const right = Math.min(line.right, box.right, typeof width === "number" ? width : Infinity);
+    const top = Math.max(line.top, box.top, 0);
+    const bottom = Math.min(line.bottom, box.bottom, typeof height === "number" ? height : Infinity);
+    return right - left >= 1 && bottom - top >= 1;
   }
 
   function careDoorRefusal(verb) {
@@ -327,6 +368,9 @@
     cardFoldsOnWalk,
     cardClearOfPlates,
     cardHeldSpot,
+    keeperWalkOn,
+    CARD_LEASH_PX,
+    lineShows,
     ADVERTISED_CARE,
     CARE_DOOR_STATUS,
     KEEPER_CARE,
