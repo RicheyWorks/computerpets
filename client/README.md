@@ -17,7 +17,11 @@ Pets walk without a license — same as the overlay. Unlock is fail-closed. Ther
 Python 3.10+ (3.12 recommended). An older Python stops at start with a plain
 "needs Python 3.10 or newer" line. On Linux, Qt also needs the usual EGL/GL
 packages (`libegl1`, `libgl1`, `libxcb-cursor0`, …) — GitHub Actions installs
-them in the `pyqt-client` job.
+them in the `pyqt-client` job. A plain desktop can still miss the X11 pieces
+Qt's window needs (`libxcb-cursor0`, `libxcb-keysyms1`, `libxkbcommon-x11-0`).
+Qt itself only names the first one and then aborts. The blotter checks first:
+it says how many pieces are missing, prints the exact `sudo apt install` line,
+and exits 1 instead of crashing.
 
 The house server address and the license key are optional. The blotter pets walk without
 them. You only need them to press **Unlock** against a running house server.

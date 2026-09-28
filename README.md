@@ -88,7 +88,7 @@ sh desktop.sh
 
 The mark sits in the panel.
 
-If `sh desktop.sh` says the pet pictures did not download, type `git lfs pull` in the `computerpets` folder and start again.
+If `sh desktop.sh` says the pet pictures did not download, or that some pets are still missing their pictures, type `git lfs pull` in the `computerpets` folder and start again. Node must be 22 or newer; the `nodejs` from `apt` is often older.
 
 More in [desktop/README.md](desktop/README.md).
 

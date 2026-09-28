@@ -81,6 +81,12 @@ const NATIVE_WAYLAND = OverlayGate.nativeWayland({
  * (Windows and the Mac). With "no" the pet's own menu, the hello and Hide the window say how to get around it.
  */
 let trayHost = "unknown";
+/** Whether the overlay has been told trayHost yet; then it is told only when the answer changes. */
+let trayHostTold = false;
+/** The ask-again timer (watchTrayHost) and whether one ask is still out. */
+/** @type {ReturnType<typeof setInterval> | null} */
+let trayWatch = null;
+let trayRechecking = false;
 
 /** @type {ReturnType<typeof createLicenseSession> | null} */
 let licenseSession = null;
@@ -772,15 +778,56 @@ function hideWindowFromPetMenu() {
 
 /**
  * Asks once the tray is up whether it can be seen, and tells the overlay (its hello names the tray or not). A gate
- * asks before its message, so OK there quits where no tray could reach the app afterwards.
+ * asks before its message, so OK there quits where no tray could reach the app afterwards. The overlay is told the
+ * first time and then only when the answer changes. Returns the answer before this ask.
  */
 async function learnTrayHost() {
+  const before = trayHost;
   try {
     trayHost = await OverlayGate.readTrayHost({ platform: process.platform, env: process.env, nativeWayland: NATIVE_WAYLAND });
   } catch {
     trayHost = "unknown";
   }
-  if (win && !win.isDestroyed()) win.webContents.send("tray-host", trayHost);
+  if ((!trayHostTold || trayHost !== before) && win && !win.isDestroyed()) {
+    trayHostTold = true;
+    win.webContents.send("tray-host", trayHost);
+  }
+  return before;
+}
+
+/** A Linux start asks again this often whether a tray can be seen: a panel or tray host can start after the pets. */
+const TRAY_RECHECK_MS = 10_000;
+
+/**
+ * Keeps asking whether a tray can be seen, where that can change (Linux: "n/a" elsewhere, where there always is one;
+ * not when COMPUTERPETS_TRAY=none says there is none). Started once the first answer is in.
+ */
+function watchTrayHost() {
+  if (trayWatch || trayHost === "n/a") return;
+  if (String(process.env.COMPUTERPETS_TRAY || "").trim().toLowerCase() === "none") return;
+  trayWatch = setInterval(() => {
+    recheckTrayHost();
+  }, TRAY_RECHECK_MS);
+}
+
+/**
+ * One ask again. A tray host that showed up after the start: the tray icon is made again so it docks there (the one
+ * made before had no host to go to), and the overlay is told, so the no-tray words in the hello, the Hide question,
+ * and OK-quits in a gate message turn off. A host that went away turns them back on.
+ */
+async function recheckTrayHost() {
+  if (trayRechecking) return;
+  trayRechecking = true;
+  try {
+    const before = await learnTrayHost();
+    if (before !== "yes" && trayHost === "yes" && tray) {
+      tray.destroy();
+      tray = null;
+      createTray();
+    }
+  } finally {
+    trayRechecking = false;
+  }
 }
 
 let guiHarnessDone = false;
@@ -1014,10 +1061,12 @@ function bootDesk() {
       showClosedMessage();
       return;
     }
-    // Git LFS pictures first: without them every pet would be invisible, so say so plainly.
-    const pictures = Pictures.picturesState(path.join(__dirname, "renderer"), fs, path.join);
+    // Git LFS pictures first: without them every pet would be invisible, so say so plainly. Every pet's folder is
+    // looked at, not only the crow's: a pull that stopped partway left the crow real and other pets invisible.
+    const survey = Pictures.picturesSurvey(path.join(__dirname, "renderer"), fs, path.join);
+    const pictures = survey.state;
     if (pictures !== "ready") {
-      picturesGate = Pictures.words(pictures);
+      picturesGate = Pictures.words(pictures, survey);
       if (GUI_HARNESS) {
         writeGuiHarnessResult({
           ok: false,
@@ -1078,7 +1127,7 @@ function startOverlay() {
     // Check again finds the tray already made (it carried the no-compositor words); it gets the full menu.
     if (!tray) createTray();
     else refreshMenus();
-    learnTrayHost();
+    learnTrayHost().then(watchTrayHost);
     startHitForward();
     startWindowTick();
     startGpuTick();
