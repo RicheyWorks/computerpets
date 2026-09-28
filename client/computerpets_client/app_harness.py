@@ -2882,6 +2882,20 @@ def _web_rows() -> list[Affordance]:
                 "guest's line waits instead of covering it. Python 3.10 is the written floor and an older one stops in one line."
             ),
         ),
+        Affordance(
+            "web.no_repeat_signed_in",
+            "web",
+            "One no-recent-repeat line picker on web, overlay and blotter (same seeded picks; a guest's line waits 60 s); signed-in keeper gets the house AI by default and keeps a pick; real bubble click check; phone desk hello first",
+            "web lib/pets/line-picker.ts + living.ts + red-panda.ts + components/desk/called-guests.tsx + robin-fly.tsx, desktop renderer/line-picker.js + pet.js + life.js + index.html + main.cjs, client line_picker.py + life.py, web lib/ai/settings.ts effectiveDefault + scripts/signed-in-mind.test.mjs, components/desk/companion-room.tsx + species-plaque.tsx",
+            notes=(
+                "Pet lines used to be drawn with no memory, and a called guest re-told its line every time it walked back "
+                "to the pet (Dee at 0.1 s and 7.6 s). One picker now remembers each speaker's last lines: not one of the "
+                "last 3, and not one said in the last 60 s unless the pool is too small; a guest's one-off line stays quiet "
+                "for 60 s. Web, overlay and Python pick the same lines from the same rolls; no words changed. The signed-in "
+                "path is proved on the mounted /mind page with a stand-in house key and AI website. The real overlay window "
+                "check clicks the talk bubble closed. On a phone the first hello comes before the species plaque."
+            ),
+        ),
     ]
 
 
@@ -2931,6 +2945,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("portraits_tray_minds", domain="web", action_id=aid)
     if local_id == "house_lines_talk":
         return _run_web_smoke("house_lines_talk", domain="web", action_id=aid)
+    if local_id == "no_repeat_signed_in":
+        return _run_web_smoke("no_repeat_signed_in", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []
@@ -3107,6 +3123,20 @@ def _gui_rows() -> list[Affordance]:
                 "Needs Electron overlay host pet hit-target. Default stays excluded. "
                 "Pass --gui to placeHostAt coords and assert data-hit bounds (not freehand drag physics). "
                 "OS window perch stays driven offline as desk.windows.perch."
+            ),
+        ),
+        Affordance(
+            "gui.bubble_click",
+            "gui",
+            "Click the talk bubble closed in the real overlay",
+            "pet.js PetGuiHarness.talkForClick + bubble click listener",
+            mode="gui",
+            fate="excluded",
+            exclude_reason=(
+                "Needs the real Electron overlay window. Default stays excluded. "
+                "Pass --gui to open the bubble with a House lines answer, send a real mouse down/up to its middle "
+                "(webContents.sendInputEvent: Chromium's own hit test), and assert it closes. "
+                "The OS click-through layer (setIgnoreMouseEvents) is not part of this path."
             ),
         ),
     ]
@@ -3412,7 +3442,7 @@ def _invoke_gui(local_id: str, **opts: Any) -> InvokeResult:
     if local_id in {"choice_close_exit", "gui.choice_close_exit"} or local_id == "choice_close_exit":
         return _run_node_smoke("choice_close_exit", domain="gui", action_id="gui.choice_close_exit")
     # Direct invoke of mode=gui rows (Buffffff --only under --gui, or programmatic).
-    if aid in {"gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.host_place", "gui.blotter_qt"}:
+    if aid in {"gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.host_place", "gui.blotter_qt", "gui.bubble_click"}:
         return _invoke_gui_optin(aid)
     return InvokeResult(aid, "gui", False, error=f"unknown gui id {local_id!r}")
 

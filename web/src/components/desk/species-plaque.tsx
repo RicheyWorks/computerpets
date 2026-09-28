@@ -8,12 +8,15 @@ export function SpeciesPlaque({
   compact = false,
   paper = false,
   showDemoLink = true,
+  folded = false,
   className,
 }: {
   speciesKey: string;
   compact?: boolean;
   paper?: boolean;
   showDemoLink?: boolean;
+  /** Phone desk: name and kind only until opened, so the plaque does not run under the care buttons. */
+  folded?: boolean;
   className?: string;
 }) {
   const guide = plaqueFor(speciesKey);
@@ -36,7 +39,7 @@ export function SpeciesPlaque({
       <h2 className="mt-2 font-display text-2xl leading-none">{guide.name}</h2>
       <p className="mt-1 text-sm text-muted">{guide.species}</p>
       <p className="mt-0.5 font-mono text-[11px] italic text-subtle">{guide.latin}</p>
-      <p className="mt-3 text-sm leading-snug text-fg">{guide.tell}</p>
+      {folded && !open ? null : <p className="mt-3 text-sm leading-snug text-fg">{guide.tell}</p>}
       {open ? (
         <>
           <p className="mt-4 text-[11px] uppercase tracking-[0.16em] text-subtle">A common mix-up</p>
@@ -60,7 +63,7 @@ export function SpeciesPlaque({
           className="mt-3 text-left text-xs text-subtle underline-offset-2 hover:text-fg hover:underline"
           onClick={() => setOpen(true)}
         >
-          The mix-up, and where they live
+          {folded ? `About the ${guide.species}` : "The mix-up, and where they live"}
         </button>
       )}
       {showDemoLink ? (

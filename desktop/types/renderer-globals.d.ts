@@ -24,6 +24,7 @@ interface Window {
   PetHouseSounds: typeof import("../renderer/house-sounds.js");
   PetKeeper: typeof import("../renderer/keeper.js");
   PetLife: typeof import("../renderer/life.js");
+  PetLines: typeof import("../renderer/line-picker.js");
   PetListener: typeof import("../renderer/listener.js");
   PetMarket: typeof import("../renderer/market.js");
   PetNews: typeof import("../renderer/news.js");

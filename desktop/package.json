@@ -6,7 +6,7 @@
   "main": "main.cjs",
   "scripts": {
     "start": "electron .",
-    "test": "node --test license/*.test.cjs renderer/*.test.cjs presence/*.test.cjs gpu-sense.test.cjs gpu-path.test.cjs vdesk-win.test.cjs house-server.test.cjs",
+    "test": "node --test license/*.test.cjs renderer/*.test.cjs presence/*.test.cjs gpu-sense.test.cjs gpu-path.test.cjs vdesk-win.test.cjs house-server.test.cjs gui-harness-data.test.cjs",
     "dist": "electron-builder --win --mac --linux",
     "dist:win": "electron-builder --win",
     "dist:mac": "electron-builder --mac",
@@ -28,6 +28,7 @@
       "windows-enum.cjs",
       "vdesk-win.cjs",
       "house-server.cjs",
+      "gui-harness-data.cjs",
       "gpu-sense.cjs",
       "gpu-path.cjs",
       "gpu-probe.ps1",

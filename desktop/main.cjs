@@ -27,7 +27,10 @@ const GUI_HARNESS = process.env.COMPUTERPETS_GUI_HARNESS === "1";
 const GUI_HARNESS_OUT = process.env.COMPUTERPETS_GUI_HARNESS_OUT || "";
 if (GUI_HARNESS) {
   const os = require("os");
-  const harnessData = path.join(os.tmpdir(), `computerpets-gui-harness-${process.pid}`);
+  const HarnessData = require("./gui-harness-data.cjs");
+  // Earlier runs left their temp userData behind (Chromium holds it until exit); clear the ones whose process is gone.
+  HarnessData.pruneStale(fs, path, os.tmpdir(), process.pid);
+  const harnessData = HarnessData.harnessDir(os.tmpdir(), process.pid, path.join);
   fs.mkdirSync(harnessData, { recursive: true });
   app.setPath("userData", harnessData);
   app.commandLine.appendSwitch("disable-gpu-sandbox");
@@ -750,9 +753,54 @@ async function runGuiHarnessSmokes(target) {
     const ok = Object.values(results).every((r) => r && r.ok);
     return { ok, results, error: ok ? null : "one or more gui smokes failed" };
   })()`;
-  const payload = await target.webContents.executeJavaScript(script, true);
-  writeGuiHarnessResult(payload || { ok: false, error: "empty harness payload", results: {} });
+  const payload = (await target.webContents.executeJavaScript(script, true)) || { ok: false, error: "empty harness payload", results: {} };
+  try {
+    const bubble = await guiBubbleClick(target);
+    payload.results = payload.results || {};
+    payload.results["gui.bubble_click"] = bubble;
+    if (!bubble.ok) {
+      payload.ok = false;
+      payload.error = payload.error || "bubble click failed";
+    }
+  } catch (err) {
+    payload.ok = false;
+    payload.error = payload.error || `bubble click: ${err && err.message}`;
+  }
+  writeGuiHarnessResult(payload);
   setTimeout(() => app.quit(), 200);
+}
+
+/**
+ * A real click on the talk bubble in the real overlay window: a House lines answer opens it, then Chromium gets a
+ * mouse down and up at the bubble's middle (webContents.sendInputEvent, so its own hit test picks the element), and
+ * the bubble must close. The OS click-through layer (setIgnoreMouseEvents) is not part of this path.
+ */
+async function guiBubbleClick(target) {
+  const wc = target.webContents;
+  const before = await wc.executeJavaScript("window.PetGuiHarness && window.PetGuiHarness.talkForClick ? window.PetGuiHarness.talkForClick() : null", true);
+  if (!before || before.skipped) return { ok: false, detail: (before && before.skipped) || "talkForClick missing", extras: before };
+  const x = before.cx;
+  const y = before.cy;
+  wc.sendInputEvent({ type: "mouseMove", x, y });
+  wc.sendInputEvent({ type: "mouseDown", x, y, button: "left", clickCount: 1 });
+  wc.sendInputEvent({ type: "mouseUp", x, y, button: "left", clickCount: 1 });
+  await new Promise((r) => setTimeout(r, 300));
+  const after = await wc.executeJavaScript("window.PetGuiHarness.bubbleState()", true);
+  const opened = !!(before.open && before.text && before.pointer === "auto" && before.hit && before.topInBubble);
+  const longEnough = before.holdMs >= 3500;
+  const closed = !after.open && after.pointer === "none";
+  return {
+    ok: opened && longEnough && closed,
+    detail: `open=${opened} hold=${before.holdMs}ms closed_by_click=${closed}`,
+    trace: [
+      "open=" + opened,
+      "top=" + before.top,
+      "hold_ms=" + before.holdMs,
+      "click=" + x + "," + y,
+      "closed=" + closed,
+    ],
+    extras: { before, after },
+  };
 }
 
 function bootDesk() {

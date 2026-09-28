@@ -8,9 +8,9 @@ import { installDom } from "./mount-dom.mjs";
 const here = path.dirname(fileURLToPath(import.meta.url));
 export const SRC = path.resolve(here, "..", "src") + path.sep;
 
-export async function mountSetup({ faults = {}, width, height } = {}) {
+export async function mountSetup({ faults = {}, stubs = {}, width, height } = {}) {
   const dom = installDom({ width, height });
-  register(pathToFileURL(path.join(here, "mount-hooks.mjs")).href, { data: { src: SRC, faults } });
+  register(pathToFileURL(path.join(here, "mount-hooks.mjs")).href, { data: { src: SRC, faults, stubs } });
   globalThis.__mountFaults = {};
   const React = await import("react");
   const { createRoot } = await import("react-dom/client");

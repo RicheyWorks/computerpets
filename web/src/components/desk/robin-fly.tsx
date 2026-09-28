@@ -1,6 +1,7 @@
 ﻿import { useEffect, useRef, useState, type RefObject } from "react";
 import { guardedLoop, makeGuestGuard } from "@/lib/pets/frame-guard";
 import { livingByKey } from "@/lib/pets/living";
+import { linePicker } from "@/lib/pets/line-picker";
 import {
   ROBIN_KEY,
   ROBIN_NAME,
@@ -94,7 +95,8 @@ export function RobinFlyer({
         return false;
       }
       if (shouldSing(fly)) {
-        songRef.current?.(ROBIN_SONG);
+        const song = linePicker.offer(ROBIN_KEY, ROBIN_SONG);
+        if (song) songRef.current?.(song);
         fly = markSung(fly);
       }
       acc += dt;

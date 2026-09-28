@@ -2342,6 +2342,108 @@ async function houseLinesTalk() {
   ]);
 }
 
+async function noRepeatSignedIn() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8").replace(/\r\n/g, "\n");
+  const importTs = (...parts) => import(pathToFileURL(join(ROOT, ...parts)).href);
+
+  // 1) One no-recent-repeat picker: web and overlay pick the same lines from the same seeded rolls; Python keeps the same numbers.
+  const W = await importTs("web", "src", "lib", "pets", "line-picker.ts");
+  const O = require(join(ROOT, "desktop", "renderer", "line-picker.js"));
+  const ROLLS = [0.9, 0.1, 0.5, 0.7, 0.3, 0.99, 0, 0.45, 0.62, 0.2, 0.8, 0.05];
+  const run = (make, pool, stepMs, n) => {
+    let i = 0;
+    let t = 0;
+    const p = make({ random: () => ROLLS[i++ % ROLLS.length], now: () => t });
+    const out = [];
+    for (let k = 0; k < n; k += 1) {
+      out.push(p.pick("rui", pool));
+      t += stepMs;
+    }
+    return out;
+  };
+  const five = ["a", "b", "c", "d", "e"];
+  const seq = {
+    web5: run(W.createLinePicker, five, 4000, 12),
+    overlay5: run(O.createLinePicker, five, 4000, 12),
+    web2: run(W.createLinePicker, ["x", "y"], 1000, 6),
+    overlay2: run(O.createLinePicker, ["x", "y"], 1000, 6),
+  };
+  const noCloseRepeat = (s) => s.every((line, k) => !s.slice(Math.max(0, k - 3), k).includes(line));
+  let clock = 0;
+  const offerer = W.createLinePicker({ random: () => 0, now: () => clock });
+  const offers = [];
+  for (const at of [100, 7600, 59_000, 60_200]) {
+    clock = at;
+    offers.push(offerer.offer("dee", "Dee-dee."));
+  }
+  const py = read("client", "computerpets_client", "line_picker.py");
+  const picker = {
+    sameWebOverlay: JSON.stringify(seq.web5) === JSON.stringify(seq.overlay5) && JSON.stringify(seq.web2) === JSON.stringify(seq.overlay2),
+    noCloseRepeat: noCloseRepeat(seq.web5),
+    smallPoolAnswers: seq.web2.every((l) => l === "x" || l === "y") && seq.web2.length === 6,
+    numbers: W.RECENT_LINES === 3 && W.RECENT_WITHIN_MS === 60_000 && O.RECENT_LINES === 3 && O.RECENT_WITHIN_MS === 60_000 && py.includes("RECENT_LINES = 3") && py.includes("RECENT_WITHIN_MS = 60_000"),
+    guestTellQuiet: JSON.stringify(offers) === JSON.stringify(["Dee-dee.", "", "", "Dee-dee."]),
+  };
+  if (!Object.values(picker).every(Boolean)) bad.push(`picker: ${JSON.stringify({ picker, seq, offers })}`);
+
+  // 2) Every door picks through it; the words are not touched.
+  const html = read("desktop", "renderer", "index.html");
+  const wires = {
+    webLiving: read("web", "src", "lib", "pets", "living.ts").includes("return linePicker.pick(speaker, lines);"),
+    webRui: read("web", "src", "lib", "pets", "red-panda.ts").includes('return linePicker.pick("red_panda", lines);'),
+    webGuests: read("web", "src", "components", "desk", "called-guests.tsx").includes("const line = linePicker.offer(next.key, tellLine(next));"),
+    webRobin: read("web", "src", "components", "desk", "robin-fly.tsx").includes("const song = linePicker.offer(ROBIN_KEY, ROBIN_SONG);"),
+    overlayLoads: html.indexOf('<script src="line-picker.js"></script>') > 0 && html.indexOf('<script src="line-picker.js"></script>') < html.indexOf('<script src="call-guests.js"></script>'),
+    overlayPet: read("desktop", "renderer", "pet.js").includes('if (Lines && Lines.pick) return Lines.pick(kind?.key || "pet", list);'),
+    overlayLife: read("desktop", "renderer", "life.js").includes('if (Lines && Lines.pick) return Lines.pick(key || "pet", list);'),
+    python: read("client", "computerpets_client", "life.py").includes("return _lines.line_picker.pick(speaker, lines) if lines else \"\""),
+    catLineKept: read("web", "src", "lib", "pets", "call-guests.ts").includes('export const CAT_RUI_LINE = "I sat. You were already here.";') && read("desktop", "renderer", "call-guests.js").includes('const CAT_RUI_LINE = "I sat. You were already here.";'),
+  };
+  if (!Object.values(wires).every(Boolean)) bad.push(`wires: ${JSON.stringify(wires)}`);
+
+  // 3) Signed-in keeper: the house key gives xAI Grok by default, a pick is kept; the mounted /mind test uses doubles only.
+  const S = await importTs("web", "src", "lib", "ai", "settings.ts");
+  const none = { picked: false, default: { plugin: "local", model: "house-lines" }, voice: "browser", pets: {} };
+  const openai = { picked: true, default: { plugin: "openai", model: "gpt-5" }, voice: "browser", pets: {} };
+  const mountTest = read("web", "scripts", "signed-in-mind.test.mjs");
+  const signedIn = {
+    defaultWithKey: S.effectiveDefault(none, true, true).plugin === "xai",
+    noKeyHouse: S.effectiveDefault(none, true, false).plugin === "local",
+    pickKept: S.effectiveDefault(openai, true, true).plugin === "openai",
+    guestHouse: S.effectiveDefault(none, false, true).plugin === "local",
+    doublesOnly: mountTest.includes('"test-double-xai-key"') && mountTest.includes('"test-double-openai-key"') && !/xai-[A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}/.test(mountTest),
+    realPage: mountTest.includes("Route.options.component") && mountTest.includes("converseWithPet"),
+  };
+  if (!Object.values(signedIn).every(Boolean)) bad.push(`signed in: ${JSON.stringify(signedIn)}`);
+
+  // 4) The real-window bubble click check and the phone desk fix.
+  const main = read("desktop", "main.cjs");
+  const room = read("web", "src", "components", "desk", "companion-room.tsx");
+  const plaque = read("web", "src", "components", "desk", "species-plaque.tsx");
+  const more = {
+    bubbleClick: main.includes('payload.results["gui.bubble_click"] = bubble;') && main.includes('wc.sendInputEvent({ type: "mouseDown", x, y, button: "left", clickCount: 1 });'),
+    harnessTempPruned: main.includes("HarnessData.pruneStale(fs, path, os.tmpdir(), process.pid);"),
+    phoneHintFirst: room.includes("{hand && hintUp ? null : (") && room.includes("folded={hand}"),
+    plaqueFolds: plaque.includes("folded") && plaque.includes("About the "),
+  };
+  if (!Object.values(more).every(Boolean)) bad.push(`more: ${JSON.stringify(more)}`);
+
+  const roadmap = read("docs", "ROADMAP.md");
+  if (!roadmap.includes("- [x] No close repeats: one line picker for web, overlay and blotter")) bad.push("ROADMAP entry missing");
+  const extras = { picker, seq, offers, wires, signedIn, more };
+  if (bad.length) return fail(bad.join("; "), extras);
+  return ok("One no-recent-repeat line picker on web, overlay and blotter (same seeded picks; a guest's line waits 60 s); signed-in keeper gets the house AI by default and keeps a pick; real bubble click check; phone desk hello first", extras, [
+    "picker=same_web_overlay_python",
+    "repeat=not_last_3_or_60s",
+    "guest_tell=quiet_60s",
+    "words=unchanged",
+    "signed_in=house_key_default+pick_kept",
+    "gui=bubble_click",
+    "phone=hint_then_folded_plaque",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -2366,6 +2468,7 @@ const COMMANDS = {
   pictures_start_names: picturesStartNames,
   portraits_tray_minds: portraitsTrayMinds,
   house_lines_talk: houseLinesTalk,
+  no_repeat_signed_in: noRepeatSignedIn,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,
