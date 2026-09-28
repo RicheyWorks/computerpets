@@ -3096,7 +3096,7 @@ async function kennelScroll() {
   };
   if (!Object.values(bubble).every(Boolean)) bad.push(`bubble: ${JSON.stringify(bubble)}`);
   const jump = {
-    wired: room.includes('const landJump = demoWindow && hand && handOrient === "sit";') && room.includes("<div data-name-row className=") && room.includes("{landJump ? null : platesJump}"),
+    wired: room.includes('const landJump = demoWindow && hand && handOrient === "sit";') && room.includes("<div data-name-row data-bubble-avoid={bubbleAvoid} className=") && room.includes("{landJump ? null : platesJump}"),
     sweep: sweep.includes("the plates jump takes a scroll to reach"),
   };
   if (!Object.values(jump).every(Boolean)) bad.push(`jump: ${JSON.stringify(jump)}`);

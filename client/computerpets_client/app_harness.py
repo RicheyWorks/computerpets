@@ -3312,6 +3312,25 @@ def _gui_rows() -> list[Affordance]:
                 "clicks would land on the keeper's real desktop whenever click-through works."
             ),
         ),
+        Affordance(
+            "gui.first_run_drive",
+            "gui",
+            "The desktop app's first run, driven in real Electron",
+            "desktop/first-run-drive.cjs (Playwright _electron, throwaway --user-data-dir)",
+            mode="gui",
+            fate="excluded",
+            exclude_reason=(
+                "Opens real windows on the keeper's screen for about a minute. Default stays excluded. "
+                "Pass --gui on BLACKBEARD to launch desktop Electron with a throwaway --user-data-dir under "
+                "target/first-run-drive (removed after; it stops if userData is anything else) and walk the first run: "
+                "the hello on an open keeper card that fits the screen, Got it at least 24 px, the pet on screen, the "
+                "pet's line never over the open card, the care menu with no row twice and the card's trick word, Feed "
+                "raising hunger, Got it kept in card.json, the card at the right edge, the House window (Minds, Unlock, "
+                "close), Hide the window and tray Show, Quit, and a second start without the hello. Menus are recorded, "
+                "not popped up, and input goes through Chromium (CDP), never the OS mouse or keyboard. "
+                "Offline pins: desktop/renderer/first-run-fit.test.cjs and desktop/renderer/first-run-drive.test.cjs."
+            ),
+        ),
     ]
 
 
@@ -3587,10 +3606,59 @@ def _run_electron_gui_bundle() -> dict[str, Any]:
     return _gui_electron_bundle
 
 
+def _run_first_run_drive() -> InvokeResult:
+    """--gui only: node desktop/first-run-drive.cjs (real Electron, throwaway user data); one JSON line back."""
+    import json
+    import os
+    import shutil
+    import subprocess
+
+    aid = "gui.first_run_drive"
+    node = shutil.which("node")
+    script = repo_root() / "desktop" / "first-run-drive.cjs"
+    if not node or not script.is_file():
+        err = "node not on PATH" if not node else f"missing {script}"
+        return InvokeResult(aid, "gui", False, error=err, detail=err, trace=[f"gui.first_run.error={err}"])
+    env = dict(os.environ)
+    env.pop("PYTHONPATH", None)
+    env.pop("COMPUTERPETS_GUI_HARNESS", None)
+    try:
+        proc = subprocess.run(
+            [node, str(script)], capture_output=True, text=True, encoding="utf-8", errors="replace",
+            cwd=str(repo_root()), timeout=240, check=False, env=env,
+        )
+    except Exception as exc:  # noqa: BLE001
+        err = f"{type(exc).__name__}: {exc}"
+        return InvokeResult(aid, "gui", False, error=err, detail=err, trace=[f"gui.first_run.error={err}"])
+    lines = (proc.stdout or "").strip().splitlines()
+    try:
+        payload = json.loads(lines[-1]) if lines else {}
+    except json.JSONDecodeError:
+        payload = {}
+    if not isinstance(payload, dict) or "checks" not in payload:
+        err = f"bad first-run-drive JSON: {((lines[-1] if lines else '') or proc.stderr or '')[:240]}"
+        return InvokeResult(aid, "gui", False, error=err, detail=err, trace=[f"gui.first_run.error={err}"])
+    checks = [c for c in payload.get("checks") or [] if isinstance(c, dict)]
+    trace = [f"{'ok' if c.get('ok') else 'FAIL'} {c.get('id')}: {c.get('detail')}" for c in checks]
+    failed = [c for c in checks if not c.get("ok")]
+    if payload.get("skipped"):
+        err = f"first-run drive skipped: {payload['skipped']}"
+        return InvokeResult(aid, "gui", False, error=err, detail=err, trace=trace or [err])
+    ok = bool(payload.get("ok")) and not failed and bool(checks)
+    detail = f"{len(checks) - len(failed)}/{len(checks)} first-run checks in {payload.get('ms')} ms"
+    return InvokeResult(
+        aid, "gui", ok, detail=detail, trace=trace or [detail],
+        extras={"gui_optin": True, "checks": checks},
+        error=None if ok else "; ".join(f"{c.get('id')}: {c.get('detail')}" for c in failed) or detail,
+    )
+
+
 def _invoke_gui_optin(action_id: str) -> InvokeResult:
     """Opt-in --gui: real Electron/Qt smokes. Not part of default run_all."""
     if action_id == "gui.blotter_qt":
         return _run_blotter_qt_check()
+    if action_id == "gui.first_run_drive":
+        return _run_first_run_drive()
     bundle = _run_electron_gui_bundle()
     row = (bundle.get("results") or {}).get(action_id)
     if not isinstance(row, dict):
@@ -3615,7 +3683,7 @@ def _invoke_gui(local_id: str, **opts: Any) -> InvokeResult:
     if local_id in {"choice_close_exit", "gui.choice_close_exit"} or local_id == "choice_close_exit":
         return _run_node_smoke("choice_close_exit", domain="gui", action_id="gui.choice_close_exit")
     # Direct invoke of mode=gui rows (Buffffff --only under --gui, or programmatic).
-    if aid in {"gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.host_place", "gui.blotter_qt", "gui.bubble_click", "gui.clickthrough_hits"}:
+    if aid in {"gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.host_place", "gui.blotter_qt", "gui.bubble_click", "gui.clickthrough_hits", "gui.first_run_drive"}:
         return _invoke_gui_optin(aid)
     return InvokeResult(aid, "gui", False, error=f"unknown gui id {local_id!r}")
 

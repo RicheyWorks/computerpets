@@ -118,7 +118,7 @@ test("the rail's scroll-into-view effect, the one-scroller rules (in the utiliti
   assert.match(room, /\}, \[railRoom, kind\.key, hand, pad, fit, deskFit\]\);/);
   assert.match(room, /data-aside-fit=\{!hand && !pad && deskFit \? "" : undefined\}/);
   assert.match(room, /const landJump = demoWindow && hand && handOrient === "sit";/);
-  assert.match(room, /<div data-name-row className=/);
+  assert.match(room, /<div data-name-row data-bubble-avoid=\{bubbleAvoid\} className=/);
   assert.match(room, /\{landJump \? null : platesJump\}/);
   for (const p of ["src/routes/collection.tsx", "src/routes/catalog.tsx", "src/routes/nest.tsx"]) assert.match(src(p), /data-aside-list/, p);
   const css = src("src/styles.css");
@@ -131,5 +131,5 @@ test("the rail's scroll-into-view effect, the one-scroller rules (in the utiliti
   assert.doesNotMatch(components, /\[data-phone-floor\] \[data-kennel\] \{/);
   const pet = src("src/components/desk/living-pet.tsx");
   assert.match(pet, /import \{[^}]*\bbubbleDodge\b[^}]*\} from "@\/lib\/pets\/phone-desk";/);
-  assert.match(pet, /querySelectorAll<HTMLElement>\("\[data-desk-plate\]"\)/);
+  assert.match(pet, /querySelectorAll<HTMLElement>\("\[data-desk-plate\], \[data-bubble-avoid\]"\)/);
 });
