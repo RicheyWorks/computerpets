@@ -65,6 +65,7 @@ import { FirstHint } from "@/components/desk/first-hint";
 import { firstHintSeen } from "@/lib/pets/first-run";
 import { DemoWindowPlate } from "@/components/desk/demo-window-plate";
 import type { DeskWindow } from "@/lib/pets/windows";
+import { DEMO_WINDOW_B_ID, DEMO_WINDOW_ID, swapWindows } from "@/lib/pets/windows";
 import { roomOf } from "@/lib/pets/rooms";
 import { playClaim } from "@/lib/pets/play";
 import { colonyOf, colonyWord, isHivePlace, stampColony } from "@/lib/pets/hive";
@@ -126,6 +127,7 @@ export function CompanionRoom({
   extraCare,
   extraMarks,
   aside,
+  asideFirst = false,
   footer,
   demoWindow = false,
 }: {
@@ -148,6 +150,11 @@ export function CompanionRoom({
   extraCare?: { label: string; action: DeskCare }[];
   extraMarks?: CareMark[];
   aside?: ReactNode;
+  /**
+   * On a phone, `aside` comes right under the name, before the tagline, the hello and the keeper card: the kennel
+   * puts its cards there so a keeper sees them without scrolling the panel. Wider screens keep `aside` last.
+   */
+  asideFirst?: boolean;
   footer?: ReactNode;
   /** /demo draws a window plate. Overlay uses real window rects. */
   demoWindow?: boolean;
@@ -208,7 +215,15 @@ export function CompanionRoom({
   const [choiceOpen, setChoiceOpen] = useState(false);
   const [deskOff, setDeskOff] = useState(() => loadCard().off);
   const [deskWindows, setDeskWindows] = useState<DeskWindow[]>([]);
-  const [weatherWin, setWeatherWin] = useState<DeskWindow | null>(null);
+  /* Steady hands for the /demo plates: a fresh arrow each render re-ran their measure effect, and each
+     report set a new array, so /demo looped ("Maximum update depth exceeded") and never took the phone
+     floor. swapWindows keeps the old array when nothing moved. */
+  const onDemoBounds = useCallback((wins: DeskWindow[]) => {
+    setDeskWindows((prev) => swapWindows(prev, [DEMO_WINDOW_ID, DEMO_WINDOW_B_ID], wins, true));
+  }, []);
+  const onWeatherBounds = useCallback((win: DeskWindow | null) => {
+    setDeskWindows((prev) => swapWindows(prev, [WEATHER_ID], win ? [win] : []));
+  }, []);
   const [liveSky, setLiveSky] = useState<LiveSky | null>(null);
   const [birdCall, setBirdCall] = useState(1);
   const [birdOn, setBirdOn] = useState(false);
@@ -938,6 +953,13 @@ export function CompanionRoom({
   const hour = isBlue(stats, kind.key) ? "Blue" : dayPartLabel(dayPart());
   const sky = weatherLabel(skyNow());
   const caller = todaysVisitor(kind.key).name;
+  const kicker = (
+    <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
+      {hive ? `${colonyWord(hive)} · Brood · ${hive.brood} · Stores · ${hive.stores} · ` : ""}
+      {hour} · {sky} · {caller} may call
+      {detail ? ` · ${detail}` : ""}
+    </p>
+  );
   const busyOrHidden = busy || stats.hidden;
   const age = stage ?? stageOf(stats);
 
@@ -969,21 +991,11 @@ export function CompanionRoom({
       <RoomWash room={room.id} />
       <DeskGrain />
       {demoWindow ? (
-        <DemoWindowPlate
-          onBounds={(wins) => {
-            setDeskWindows(weatherWin ? [...wins, weatherWin] : wins);
-          }}
-        />
+        <DemoWindowPlate onBounds={onDemoBounds} />
       ) : null}
       {demoWindow ? (
         <DeskWeatherPlate
-          onBounds={(win) => {
-            setWeatherWin(win);
-            setDeskWindows((prev) => {
-              const others = prev.filter((w) => w.id !== WEATHER_ID);
-              return win ? [...others, win] : others;
-            });
-          }}
+          onBounds={onWeatherBounds}
           onSky={setLiveSky}
         />
       ) : null}
@@ -1209,14 +1221,17 @@ export function CompanionRoom({
               : "absolute left-4 top-20 z-20 max-w-[min(100%-2rem,20rem)] sm:left-8 sm:top-24"
         }
       >
-        <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
-          {hive ? `${colonyWord(hive)} · Brood · ${hive.brood} · Stores · ${hive.stores} · ` : ""}
-          {hour} · {sky} · {caller} may call
-          {detail ? ` · ${detail}` : ""}
-        </p>
-        <h1 className={hand ? "mt-2 font-display text-4xl leading-none" : "mt-2 font-display text-5xl leading-none sm:text-6xl"}>
+        {hand && asideFirst ? null : kicker}
+        <h1 className={hand ? (asideFirst ? "font-display text-4xl leading-none" : "mt-2 font-display text-4xl leading-none") : "mt-2 font-display text-5xl leading-none sm:text-6xl"}>
           {displayName}
         </h1>
+        {/* asideFirst on a phone: the name, the kennel's cards, then the hour and the weather, then the rest. */}
+        {hand && asideFirst ? (
+          <>
+            {aside}
+            <div className="mt-3">{kicker}</div>
+          </>
+        ) : null}
         <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>
         {line}
         {careProblem ? (
@@ -1331,7 +1346,7 @@ export function CompanionRoom({
             Sit again
           </button>
         ) : null}
-        {aside}
+        {hand && asideFirst ? null : aside}
       </aside>
 
       <div

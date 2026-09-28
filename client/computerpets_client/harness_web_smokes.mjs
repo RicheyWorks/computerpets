@@ -2757,9 +2757,9 @@ async function meetIndexForget() {
   // 3) /login fits a landscape phone.
   const login = read("web", "src", "routes", "login.tsx");
   const landscape = {
-    login: login.includes("<main data-login ") && login.includes("[@media(max-height:480px)]:min-h-0") && login.includes("[@media(max-height:480px)]:p-5"),
+    login: login.includes("<main data-login ") && login.includes("[@media(max-height:480px)]:min-h-0") && login.includes("[@media(max-height:480px)]:p-4"),
     shell: read("web", "src", "components", "app-shell.tsx").includes("[@media(max-height:480px)]:py-3"),
-    sweep: sweep.includes("for (const [w, h] of [[667, 375], [844, 390]])") && sweep.includes(": the page scrolls by"),
+    sweep: sweep.includes("for (const [w, h] of [[568, 320], [667, 375], [844, 390]])") && sweep.includes(": the page scrolls by"),
   };
   if (!Object.values(landscape).every(Boolean)) bad.push(`landscape: ${JSON.stringify(landscape)}`);
 
@@ -2831,6 +2831,84 @@ async function meetIndexForget() {
   ]);
 }
 
+/** The next new-keeper slice (#1550 audit): the kennel first on a phone, 44 px line links and /login's way back,
+ * /study and /log as field-note indexes, /login still at 568×320, the not-found title from the server, and /demo no
+ * longer looping on a phone. Source and pure-function checks; the browser side is phone-desk-layout.test.mjs. */
+async function kennelFirstNotes() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8").replace(/\r\n/g, "\n");
+  const importTs = (...parts) => import(pathToFileURL(join(ROOT, ...parts)).href);
+  const sweep = read("web", "scripts", "phone-desk-layout.test.mjs");
+  const css = read("web", "src", "styles.css");
+  const room = read("web", "src", "components", "desk", "companion-room.tsx");
+
+  // 1) /collection on a phone: the kennel right under the name, short cards, nothing boxed inside the panel.
+  const kennel = {
+    aside: room.includes("asideFirst?: boolean") && room.includes("{hand && asideFirst ? null : kicker}") && room.includes("{hand && asideFirst ? null : aside}"),
+    wired: read("web", "src", "routes", "collection.tsx").includes("asideFirst") && read("web", "src", "routes", "collection.tsx").includes("data-kennel"),
+    short: css.includes("[data-phone-floor] [data-kennel] [data-card-more] {") && read("web", "src", "components", "pet-card.tsx").includes("data-card-more"),
+    sweep: sweep.includes("export const KENNEL_WHOLE_CARD") && sweep.includes("the first kennel card's name is not on the screen"),
+  };
+  if (!Object.values(kennel).every(Boolean)) bad.push(`kennel: ${JSON.stringify(kennel)}`);
+
+  // 2) 44 px: the room line links (hatchery, kennel, nest, the plaque) and /login's "Go to the desk".
+  const taps = {
+    css: /\[data-phone-floor\] \[data-line-link\] \{[^}]*min-height: 2\.75rem;/.test(css),
+    lines: [["routes", "hatch.tsx"], ["routes", "nest.tsx"], ["routes", "collection.tsx"], ["components", "desk", "species-plaque.tsx"]].every((p) => read("web", "src", ...p).includes("data-line-link")),
+    login: read("web", "src", "routes", "login.tsx").includes('data-login-desk className="inline-flex min-h-11 items-center'),
+    sweep: sweep.includes("panel link") && sweep.includes("(sign-in off): \"Go to the desk\" is"),
+  };
+  if (!Object.values(taps).every(Boolean)) bad.push(`taps: ${JSON.stringify(taps)}`);
+
+  // 3) /study and /log: field notes as closed drawers with a search, #note-<slug> opens one.
+  const M = await importTs("web", "src", "lib", "pets", "meet-index.ts");
+  const fn = read("web", "src", "components", "desk", "field-notes.tsx");
+  const notes = {
+    hash: M.noteFromHash("#note-rui", ["rui", "pip"]) === "rui" && M.noteFromHash("#note-attic", ["rui"]) === null && M.noteAnchor("pip") === "note-pip",
+    words: M.notesLine(20, 20, "", "fox") === "20 field notes. Open one, or type a name." && M.notesLine(0, 10, "zz", "millipede") === "No guest by that name here. Try a kind, like millipede." && M.notesLine(1, 20, "fox", "fox") === "1 note matches.",
+    wired: read("web", "src", "routes", "study.tsx").includes("<FieldNotes notes={HOUSE_GUIDE}") && read("web", "src", "routes", "log.tsx").includes("<FieldNotes notes={LOG_GUIDE}"),
+    drawers: ["<details", "data-notes-search", "data-notes-all", "data-note-tell", "hashchange", "/demo/$slug"].every((s) => fn.includes(s)),
+    sweep: sweep.includes('["/study", 5_500, 20, "fox"]') && sweep.includes('["/log", 4_500, 10, "millipede"]') && sweep.includes("did not open that note"),
+  };
+  if (!Object.values(notes).every(Boolean)) bad.push(`notes: ${JSON.stringify(notes)}`);
+
+  // 4) /login at 568×320 and 5) the not-found title in the first server HTML.
+  const login = read("web", "src", "routes", "login.tsx");
+  const root = read("web", "src", "routes", "__root.tsx");
+  const edges = {
+    login: login.includes("[@media(max-height:480px)]:p-4") && login.includes('[@media(max-height:340px)]:hidden">Keeper desk'),
+    title: root.includes("title: notFoundHere(matches) ? NOT_FOUND_TITLE : APP_NAME") && read("web", "src", "lib", "not-found.tsx").includes('matches.every((m) => m.routeId === "__root__")'),
+    sweep: sweep.includes("[[568, 320], [667, 375], [844, 390]]") && sweep.includes("the server's first tab title is"),
+  };
+  if (!Object.values(edges).every(Boolean)) bad.push(`edges: ${JSON.stringify(edges)}`);
+
+  // 6) Audit fix: /demo looped on a phone ("Maximum update depth exceeded") and never took the phone layout.
+  const W = await importTs("web", "src", "lib", "pets", "windows.ts");
+  const a = { id: W.DEMO_WINDOW_ID, x: 1, y: 2, width: 90, height: 80 };
+  const list = W.swapWindows([], [a.id], [a], true);
+  const demo = {
+    same: W.swapWindows(list, [a.id], [{ ...a, x: 1.2 }], true) === list,
+    moved: W.swapWindows(list, [a.id], [{ ...a, x: 30 }], true) !== list,
+    steady: room.includes("const onDemoBounds = useCallback(") && room.includes("<DemoWindowPlate onBounds={onDemoBounds} />") && !room.includes("onBounds={("),
+    sit: read("web", "src", "components", "desk", "demo-stage.tsx").includes("data-demo-stage") && css.includes("[data-demo-stage]:has([data-phone-floor])"),
+    sweep: sweep.includes("the demo never took the phone layout") && sweep.includes("Maximum update depth"),
+  };
+  if (!Object.values(demo).every(Boolean)) bad.push(`demo: ${JSON.stringify(demo)}`);
+
+  const roadmap = read("docs", "ROADMAP.md");
+  if (!roadmap.includes("- [x] The kennel first on a phone")) bad.push("ROADMAP entry missing");
+  const extras = { kennel, taps, notes, edges, demo };
+  if (bad.length) return fail(bad.join("; "), extras);
+  return ok("/collection shows the kennel first on a phone; 44 px line links and /login way back; /study and /log are field-note indexes; /login fits 568x320; the not-found title comes from the server; /demo stops looping on a phone", extras, [
+    "kennel=first_card_on_screen",
+    "taps=line_links_and_login_desk_44px",
+    "notes=study_log_drawers_search",
+    "login=fits_568x320",
+    "title=not_found_from_server",
+    "demo=no_update_loop_phone_floor",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -2860,6 +2938,7 @@ const COMMANDS = {
   site_header_rail: siteHeaderRail,
   signin_return_quiet: signinReturnQuiet,
   meet_index_forget: meetIndexForget,
+  kennel_first_notes: kennelFirstNotes,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

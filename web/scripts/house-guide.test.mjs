@@ -121,8 +121,9 @@ test("the study page is a field guide, not a portrait catalog", () => {
   assert.match(studySrc, /createFileRoute\("\/study"\)/);
   assert.match(studySrc, /HouseStudy/);
   assert.match(studySrc, /SpeciesPlaque/);
-  assert.match(studySrc, /\/demo\/\$slug/);
-  assert.match(studySrc, /HOUSE_GUIDE\.map/);
+  // The notes render through the shared drawers (components/desk/field-notes.tsx), each with its /demo/<slug> link.
+  assert.match(studySrc, /<FieldNotes notes=\{HOUSE_GUIDE\}/);
+  assert.match(readFileSync(join(root, "src/components/desk/field-notes.tsx"), "utf8"), /\/demo\/\$slug/);
   assert.match(studySrc, /\/snakes/);
 });
 

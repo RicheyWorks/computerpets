@@ -237,6 +237,32 @@ export function takeRects(
 export const DEMO_WINDOW_ID = "demo-window";
 export const DEMO_WINDOW_B_ID = "demo-window-b";
 
+/** Same windows, same order, to the half pixel. */
+export function sameWindows(a: DeskWindow[], b: DeskWindow[]) {
+  if (a.length !== b.length) return false;
+  return a.every((w, i) => {
+    const o = b[i];
+    return (
+      w.id === o.id &&
+      Math.abs(w.x - o.x) < 0.5 &&
+      Math.abs(w.y - o.y) < 0.5 &&
+      Math.abs(w.width - o.width) < 0.5 &&
+      Math.abs(w.height - o.height) < 0.5
+    );
+  });
+}
+
+/**
+ * Swap one /demo plate's windows (by id) into the list and keep the rest. Hands back `prev` itself when
+ * nothing moved, so a plate that reports on every render cannot set state again and loop
+ * ("Maximum update depth exceeded" on /demo phones, found in the kennel-first pass).
+ */
+export function swapWindows(prev: DeskWindow[], ids: string[], next: DeskWindow[], first = false): DeskWindow[] {
+  const others = prev.filter((w) => !ids.includes(w.id));
+  const out = first ? [...next, ...others] : [...others, ...next];
+  return sameWindows(prev, out) ? prev : out;
+}
+
 export function demoWindowPlate(stage: { width: number; height: number }): DeskWindow {
   const width = Math.min(stage.width * 0.46, 420);
   const height = stage.height * 0.42;

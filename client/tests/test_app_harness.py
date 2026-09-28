@@ -132,6 +132,7 @@ CROSS_DOMAIN = {
     "web.site_header_rail",
     "web.signin_return_quiet",
     "web.meet_index_forget",
+    "web.kennel_first_notes",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -557,6 +558,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.site_header_rail",
         "web.signin_return_quiet",
         "web.meet_index_forget",
+        "web.kennel_first_notes",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -1017,6 +1019,17 @@ def test_meet_index_forget_row_meet_index_taps_landscape_login_forget_seed_not_f
         assert mark in mi.trace, (mark, mi.trace)
     for group in ("meet", "taps", "landscape", "forget", "seed", "audit"):
         assert all(mi.extras[group].values()), (group, mi.extras[group])
+
+
+def test_kennel_first_notes_row_kennel_taps_field_notes_login_title_demo():
+    """Kennel first on a phone; 44 px line links and /login way back; /study and /log drawers; 568x320; server title; /demo."""
+    kf = invoke("web.kennel_first_notes")
+    assert kf.ok, (kf.error, kf.detail)
+    for mark in ("kennel=first_card_on_screen", "taps=line_links_and_login_desk_44px", "notes=study_log_drawers_search",
+                 "login=fits_568x320", "title=not_found_from_server", "demo=no_update_loop_phone_floor"):
+        assert mark in kf.trace, (mark, kf.trace)
+    for group in ("kennel", "taps", "notes", "edges", "demo"):
+        assert all(kf.extras[group].values()), (group, kf.extras[group])
 
 
 def test_pictures_gate_row_boots_real_main_with_pointers_and_opens_no_glass():

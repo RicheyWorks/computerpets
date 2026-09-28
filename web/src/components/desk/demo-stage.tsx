@@ -9,7 +9,8 @@ import type { LivingKind } from "@/lib/pets/living";
 
 export function DemoStage({ kind }: { kind: LivingKind }) {
   return (
-    <div className="relative">
+    // data-demo-stage: on a phone floor only the phone sit shows (styles.css).
+    <div data-demo-stage className="relative">
       <MacDeskExtra name={kind.name} />
       <LinuxDeskExtra name={kind.name} />
       <WindowsDeskSit name={kind.name} />
