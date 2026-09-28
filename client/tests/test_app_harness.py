@@ -78,6 +78,7 @@ CROSS_DOMAIN = {
     "desk.tray.switch",
     "desk.quit",
     "desk.pictures_gate",
+    "desk.overlay_gate",
     "desk.market.search",
     "desk.settings.window",
     "desk.license.offline",
@@ -427,8 +428,11 @@ def test_start_script_check_says_what_to_type_next_for_each_state(tmp_path):
     picture = tmp_path.joinpath(*LAUNCH_PICTURE)
     picture.parent.mkdir(parents=True)
 
+    # A desktop session (the no-screen line has its own test below).
+    env = {**os.environ, "DISPLAY": os.environ.get("DISPLAY") or ":0"}
+
     def last() -> tuple[str, str]:
-        out = subprocess.run([sh, str(tmp_path / "desktop.sh"), "--check"], capture_output=True, text=True, timeout=120)
+        out = subprocess.run([sh, str(tmp_path / "desktop.sh"), "--check"], capture_output=True, text=True, timeout=120, env=env)
         assert out.returncode == 0, out.stdout + out.stderr
         lines = [ln for ln in out.stdout.splitlines() if ln.strip()]
         state = next(ln.split(": ", 1)[1] for ln in lines if ln.startswith("pieces: "))
@@ -462,6 +466,48 @@ def test_start_script_check_says_what_to_type_next_for_each_state(tmp_path):
     assert seen == ["missing", "unfinished", "changed", "ready"]
     # Check mode never installs.
     assert not (desk / "node_modules" / ".package-lock.json").exists()
+
+
+@pytest.mark.skipif(
+    os.name == "nt",
+    reason="Windows runs desktop.ps1, and this test would copy a start script into a temp folder (antivirus flags "
+    "temporary scripts there). renderer/linux-drive.test.cjs holds the same lines in desktop.sh's source.",
+)
+def test_start_script_says_plainly_when_there_is_no_screen(tmp_path):
+    """Linux over SSH or on a text console: no DISPLAY, no WAYLAND_DISPLAY. Electron stopped with "Missing X server
+    or $DISPLAY" and a SIGSEGV; sh desktop.sh now says so in words, in check mode and before installing anything."""
+    import shutil
+    import subprocess
+
+    from computerpets_client.app_harness import LAUNCH_NO_SCREEN, LAUNCH_PICTURE, launch_next, repo_root
+
+    node, npm, sh = shutil.which("node"), shutil.which("npm"), shutil.which("sh")
+    if not (node and npm and sh):
+        pytest.skip("needs node, npm, and sh on PATH to reach check mode")
+    if subprocess.run(["uname", "-s"], capture_output=True, text=True, timeout=30).stdout.strip() != "Linux":
+        pytest.skip("the screen check is for Linux (a Mac always has a screen)")
+    major = subprocess.run([node, "-v"], capture_output=True, text=True, timeout=60).stdout.strip()
+    if not major.startswith("v") or int(major[1:].split(".")[0]) < 22:
+        pytest.skip(f"needs Node 22 or newer to reach check mode (this is {major})")
+    shutil.copy(repo_root() / "desktop.sh", tmp_path / "desktop.sh")
+    desk = tmp_path / "desktop"
+    desk.mkdir()
+    (desk / "package.json").write_text("{}", encoding="utf-8")
+    picture = tmp_path.joinpath(*LAUNCH_PICTURE)
+    picture.parent.mkdir(parents=True)
+    picture.write_bytes(b"\x89PNG\r\n\x1a\n" + b"\0" * 32)
+    bare = {k: v for k, v in os.environ.items() if k not in ("DISPLAY", "WAYLAND_DISPLAY")}
+    check = subprocess.run([sh, str(tmp_path / "desktop.sh"), "--check"], capture_output=True, text=True, timeout=120, env=bare)
+    lines = [ln for ln in check.stdout.splitlines() if ln.strip()]
+    assert check.returncode == 0 and "display: none" in lines
+    assert lines[-1] == launch_next("missing", "ready", "desktop.sh", "none") == LAUNCH_NO_SCREEN
+    start = subprocess.run([sh, str(tmp_path / "desktop.sh")], capture_output=True, text=True, timeout=120, env=bare)
+    assert start.returncode == 1 and LAUNCH_NO_SCREEN[len("next: "):] in start.stdout
+    assert "Getting the pieces" not in start.stdout and not (desk / "node_modules").exists()
+    x11 = subprocess.run([sh, str(tmp_path / "desktop.sh"), "--check"], capture_output=True, text=True, timeout=120, env={**bare, "DISPLAY": ":0"})
+    assert "display: x11" in x11.stdout and LAUNCH_NO_SCREEN not in x11.stdout
+    way = subprocess.run([sh, str(tmp_path / "desktop.sh"), "--check"], capture_output=True, text=True, timeout=120, env={**bare, "WAYLAND_DISPLAY": "wayland-0"})
+    assert "display: wayland" in way.stdout
 
 
 def test_main_rows_drive_the_real_main_process_offline():
@@ -1188,6 +1234,21 @@ def test_pictures_gate_row_boots_real_main_with_pointers_and_opens_no_glass():
         assert "git lfs install and then git lfs pull, and start ComputerPets again." in row["detail"]
     assert pg.extras["ready"] == {"windows": 1, "dialogs": 0}
 
+def test_overlay_gate_row_boots_real_main_and_says_why_in_a_message_box():
+    """The real main.cjs with the GPU refusing software compositing, then no compositor: no window, a message box, a tray."""
+    og = invoke("desk.overlay_gate")
+    assert og.ok, (og.error, og.detail)
+    for mark in ("software=message_box+allow_restarts", "no_compositor=no_glass+message_box",
+                 "check_again=opens_when_composited", "second_start=words_again", "composited=glass_opens"):
+        assert mark in og.trace, (mark, og.trace)
+    assert og.extras["software"]["windows"] == 0
+    assert og.extras["software"]["buttons"] == "Allow software compositing|Quit|OK"
+    assert og.extras["compositor"]["message"] == "The pets are not on the screen: this desktop is not compositing windows."
+    assert og.extras["compositor"]["windows"] == 0 and og.extras["compositor"]["ticks"] == 0
+    assert og.extras["recheck"]["windows"] == 1 and og.extras["recheck"]["trays"] == 1
+    assert og.extras["yes"] == og.extras["unknown"] == {"windows": 1, "dialogs": 0}
+
+
 def test_python_blotter_draws_its_own_pets_and_loads_no_picture_files():
     """The Git LFS picture check is for the overlay and the site; the blotter paints its pets, so it has none to check."""
     from pathlib import Path
@@ -1253,7 +1314,7 @@ def test_card_audit_1557_row_drives_life_keeper_and_mind_js():
     """card.audit_1557: rest wakes when full, talk pose ends with the line, on screen, Save tests the key, volume, right edge."""
     row = invoke("card.audit_1557")
     assert row.ok, (row.error, row.detail)
-    for mark in ("rest_wake=100", "talk_pose=own_line", "on_screen=-109->0", "save_test=refused_plain", "volume=this_pet", "right_edge=near_pet_under_plate"):
+    for mark in ("rest_wake=100", "talk_pose=own_line", "on_screen=-109->0", "save_test=refused_plain", "test_button=asks_saved_mind", "volume=this_pet", "right_edge=near_pet_under_plate"):
         assert mark in row.trace, (mark, row.trace)
     assert row.extras["said"] == "The mind did not answer. The AI website did not accept your key. Check your key for that AI website. House lines will."
     assert row.extras["spot"] == {"x": 2238, "maxH": 786}
