@@ -1092,7 +1092,7 @@ export function LivingPet({
       <div
         ref={bubbleRef}
         data-speech={speech ? "open" : "closed"}
-        className={`absolute bottom-[214px] left-0 z-10 w-[min(220px,70vw)] transition-opacity duration-200 ${speech && onSpeechClose ? "pointer-events-auto" : "pointer-events-none"}`}
+        className={`absolute bottom-[214px] left-0 z-30 w-[min(220px,70vw)] transition-opacity duration-200 ${speech && onSpeechClose ? "pointer-events-auto" : "pointer-events-none"}`}
         style={{ willChange: "transform", opacity: speech ? 1 : 0 }}
       >
         {speech && onSpeechClose ? (
