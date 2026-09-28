@@ -1,4 +1,18 @@
-import surface from "../../../../desktop/renderer/sprite-surface.js";
+import type { SpriteSurfaceModule } from "../../../../desktop/renderer/sprite-surface.js";
+import "../../../../desktop/renderer/sprite-surface.js";
+
+/**
+ * The overlay file is a plain script, not an ES module: it hangs its api on `window.PetSpriteSurface` (and on
+ * `module.exports` under Node). A default import only worked through a bundler's CommonJS shim, so `npm run dev`
+ * (Vite serves the file as-is) stopped the whole web app from starting. Import it for its side effect and read
+ * the global, which is the same object in the dev server, the built site, and the Node tests.
+ */
+function sharedSurface(): SpriteSurfaceModule | null {
+  const g = globalThis as { PetSpriteSurface?: SpriteSurfaceModule; window?: { PetSpriteSurface?: SpriteSurfaceModule } };
+  return g.PetSpriteSurface ?? g.window?.PetSpriteSurface ?? null;
+}
+
+const surface = sharedSurface();
 
 /** Catalog frames on the shared Chromium sprite surface. A closed canvas stays blank. */
 function paintBox(canvas: HTMLCanvasElement | null, src: string, css: number) {

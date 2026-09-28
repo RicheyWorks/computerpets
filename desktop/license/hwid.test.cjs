@@ -1,6 +1,6 @@
 "use strict";
 
-const { describe, it } = require("node:test");
+const { describe, it, after } = require("node:test");
 const assert = require("node:assert/strict");
 const os = require("os");
 const path = require("path");
@@ -9,9 +9,20 @@ const { readFileSync } = require("node:fs");
 const { resolveHwid, resolveHwidDetail, peekHwid, describeMachineMarks, assertHwid, MAX_HWID_LENGTH, WEAK_FALLBACK_MESSAGE } = require("./hwid.cjs");
 const { LicenseError } = require("./errors.cjs");
 
+// Every temp folder a test makes is removed after the file runs (they used to pile up in the OS temp folder).
+const madeDirs = [];
+function tempDir(prefix) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), prefix));
+  madeDirs.push(dir);
+  return dir;
+}
+after(() => {
+  for (const dir of madeDirs) fs.rmSync(dir, { recursive: true, force: true });
+});
+
 describe("hwid (CLIENT-CONTRACT §5)", () => {
   it("is at most 128 characters and stable across calls when persisted", () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cp-hwid-"));
+    const dir = tempDir("cp-hwid-");
     const files = new Map();
     const readFile = (p) => {
       if (!files.has(p)) {
@@ -57,7 +68,7 @@ describe("hwid (CLIENT-CONTRACT §5)", () => {
   });
 
   it("hashes linux machine-id and does not return the raw id", () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cp-hwid-"));
+    const dir = tempDir("cp-hwid-");
     const seen = [];
     const detail = resolveHwidDetail({
       userDataDir: dir,
@@ -88,7 +99,7 @@ describe("hwid (CLIENT-CONTRACT §5)", () => {
   });
 
   it("reuses a stored mark and does not read the OS id again", () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cp-hwid-"));
+    const dir = tempDir("cp-hwid-");
     const file = path.join(dir, "hwid.txt");
     fs.writeFileSync(file, "legacy-device\n");
     let osReads = 0;
@@ -111,7 +122,7 @@ describe("hwid (CLIENT-CONTRACT §5)", () => {
   });
 
   it("peek does not read machine-id", () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cp-hwid-"));
+    const dir = tempDir("cp-hwid-");
     const peeked = peekHwid({
       userDataDir: dir,
       readFile: (p) => {
@@ -136,7 +147,7 @@ describe("hwid (CLIENT-CONTRACT §5)", () => {
   });
 
   it("refuses a computer-name or random mark until the keeper says yes", () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cp-hwid-"));
+    const dir = tempDir("cp-hwid-");
     const file = path.join(dir, "hwid.txt");
     let writes = 0;
     const miss = {
@@ -194,7 +205,7 @@ describe("hwid (CLIENT-CONTRACT §5)", () => {
     assert.equal(again.read, "stored");
     assert.equal(again.id, detail.id);
 
-    const randomDir = fs.mkdtempSync(path.join(os.tmpdir(), "cp-hwid-"));
+    const randomDir = tempDir("cp-hwid-");
     assert.throws(
       () =>
         resolveHwidDetail({

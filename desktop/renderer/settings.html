@@ -113,6 +113,7 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
     <script src="license-net.js"></script>
     <script src="presence.js"></script>
     <script src="mind.js"></script>
+    <script src="roster-load.js"></script>
     <script>
       const s = window.PetMind.load();
       const plugin = document.getElementById("plugin");
@@ -337,8 +338,8 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
           if (!row || !row.key) return;
           const o = document.createElement("option");
           o.value = row.key;
-          // The pet's name and kind, like the blotter's Pet list ("Rui · Red Panda"); the key stays the value.
-          o.textContent = row.name ? (row.speciesLabel ? `${row.name} · ${row.speciesLabel}` : row.name) : row.key;
+          // The pet's name and kind, like the tray and the blotter's Pet list ("Rui · Red Panda"); the key stays the value.
+          o.textContent = window.PetRoster.choiceText(row);
           petType.appendChild(o);
         });
         if (!petType.value) petType.value = "red_panda";

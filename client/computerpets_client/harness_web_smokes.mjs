@@ -1988,7 +1988,7 @@ async function unlockPlainLfs() {
     steamIdShape: /17 digits that start with 7656/.test(pyWord("STEAM_ID_HELP") || ""),
     noSteamPage: /ComputerPets has no Steam page yet\./.test(pyWord("APP_ID_HELP") || ""),
     oldLabelsGone: !/<label>(Provider|Steam ID|App ID)<\/label>/.test(settings) && !/form\.addRow\("(Provider|Steam ID|App ID)"/.test(dialogPy),
-    petList: settings.includes("`${row.name} · ${row.speciesLabel}`") && dialogPy.includes('return f"{name} · {kind}" if kind else name'),
+    petList: settings.includes("o.textContent = window.PetRoster.choiceText(row);") && read("desktop", "renderer", "roster-load.js").includes("return kind ? `${name} · ${kind}` : name;") && dialogPy.includes('return f"{name} · {kind}" if kind else name'),
     askTitle: pyWord("WEAK_ASK_TITLE") === "Could not read this computer's ID" && !/operating-system id/.test(dialogPy),
   };
   if (!Object.values(fields).every(Boolean) || !Object.values(honest).every(Boolean)) bad.push(`Unlock fields: ${JSON.stringify({ fields, honest })}`);
@@ -2146,6 +2146,103 @@ async function picturesStartNames() {
   ]);
 }
 
+async function portraitsTrayMinds() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8").replace(/\r\n/g, "\n");
+  const importTs = (...parts) => import(pathToFileURL(join(ROOT, ...parts)).href);
+
+  // 1) Web portraits: a portrait that cannot be drawn becomes a name-and-kind tile; the page shows one note.
+  const S = await importTs("web", "src", "lib", "pets", "portrait-state.ts");
+  const steps = (await importTs("web", "scripts", "pictures-check.mjs")).STEPS;
+  S.resetPortraitState();
+  let tells = 0;
+  const off = S.subscribePortraits(() => tells++);
+  for (const k of ["crow", "raven", "crow", "barn_owl"]) S.markPortraitFailed(k);
+  const shownAfterBreaks = S.portraitNoteShown();
+  S.dismissPortraitNote();
+  S.markPortraitFailed("heron");
+  const portraitState = { failed: S.failedPortraits().length, tells, shownAfterBreaks, shownAfterGotIt: S.portraitNoteShown() };
+  off();
+  S.resetPortraitState();
+  const comp = read("web", "src", "components", "pet-portrait.tsx");
+  const shell = read("web", "src", "components", "app-shell.tsx");
+  const card = read("web", "src", "components", "pet-card.tsx");
+  const meet = read("web", "src", "routes", "meet.tsx");
+  const portraits = {
+    oneNoteForMany: portraitState.failed === 4 && portraitState.tells === 2 && portraitState.shownAfterBreaks && !portraitState.shownAfterGotIt,
+    sameSteps: S.PORTRAIT_STEPS === steps && S.PORTRAIT_NOTE.includes(steps),
+    tile: comp.includes("data-portrait-fallback") && comp.includes("onError={fail}") && /naturalWidth === 0/.test(comp),
+    noteOnce: (shell.match(/<PortraitNote \/>/g) || []).length === 1,
+    cardNames: card.includes("name={pet.name}") && card.includes("kind={species?.displayName}"),
+    meetTile: meet.includes("<PetPortrait") && !/<img[^>]*portraitSrc/.test(meet),
+  };
+  if (!Object.values(portraits).every(Boolean)) bad.push(`portraits: ${JSON.stringify({ portraits, portraitState })}`);
+
+  // 2) Audit bug: the overlay sprite surface is a plain script; a default import stopped npm run dev from starting.
+  const surfaceSrc = read("desktop", "renderer", "sprite-surface.js");
+  const had = globalThis.PetSpriteSurface;
+  delete globalThis.PetSpriteSurface;
+  const ns = await import("data:text/javascript;base64," + Buffer.from(surfaceSrc).toString("base64"));
+  const esm = { noDefault: !("default" in ns), setsGlobal: typeof globalThis.PetSpriteSurface?.paintHeld === "function" };
+  if (had) globalThis.PetSpriteSurface = had;
+  const desk = read("web", "src", "lib", "pets", "desk-sprite-surface.ts");
+  const walk = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((d) => (d.isDirectory() ? walk(join(dir, d.name)) : /\.tsx?$/.test(d.name) ? [join(dir, d.name)] : []));
+  const valueImports = walk(join(WEB, "src")).filter((f) => /^\s*import\s+(?!type\b)[^"';]+?\s+from\s+["'][^"']*desktop\/renderer\//m.test(readFileSync(f, "utf8")));
+  const dev = { ...esm, sideEffect: /^import "\.\.\/\.\.\/\.\.\/\.\.\/desktop\/renderer\/sprite-surface\.js";$/m.test(desk), valueImports: valueImports.length };
+  if (!dev.noDefault || !dev.setsGlobal || !dev.sideEffect || dev.valueImports) bad.push(`dev server surface: ${JSON.stringify(dev)}`);
+
+  // 3) One pet line everywhere: tray, house window, card Call list, Unlock and the Python blotter say Name · Kind.
+  const Roster = require(join(RENDERER, "roster-load.js"));
+  const rows = JSON.parse(read("desktop", "renderer", "roster.json"));
+  const wrong = rows.filter((r) => Roster.choiceText(r) !== `${r.name} · ${r.speciesLabel}`).map((r) => r.key);
+  const main = read("desktop", "main.cjs");
+  const settings = read("desktop", "renderer", "settings.html");
+  const pet = read("desktop", "renderer", "pet.js");
+  const py = read("client", "computerpets_client", "unlock_dialog.py");
+  const tray = {
+    rows: rows.length,
+    wrong,
+    trayUses: /label: Roster\.choiceText\(r\),/.test(main),
+    houseWindow: settings.includes('<script src="roster-load.js"></script>') && settings.includes("o.textContent = window.PetRoster.choiceText(row);"),
+    cardCall: pet.includes("opt.textContent = window.PetRoster.choiceText(row);"),
+    python: py.includes('return f"{name} · {kind}" if kind else name'),
+    nameOnly: Roster.choiceText({ key: "x", name: "Ada" }) === "Ada" && Roster.choiceText({ key: "x" }) === "x",
+  };
+  if (tray.rows !== 221 || wrong.length || !tray.trayUses || !tray.houseWindow || !tray.cardCall || !tray.python || !tray.nameOnly) bad.push(`pet lines: ${JSON.stringify(tray)}`);
+
+  // 4) Audit: Test this mind says who answered in plain words, not the raw source.
+  const T = await importTs("web", "src", "lib", "ai", "test-line.ts");
+  const mindPage = read("web", "src", "routes", "mind.tsx");
+  const guest = T.mindTestLine({ source: "local", text: "Hi." }, { name: "xAI Grok", local: false }, false);
+  const minds = {
+    guest,
+    plainGuest: guest === "House lines answered: “Hi.” xAI Grok only answers for a signed-in keeper, so pets use house lines until you sign in.",
+    wired: mindPage.includes("setTestLine(mindTestLine(res,") && !mindPage.includes("${res.source}: ${res.text}"),
+  };
+  if (!minds.plainGuest || !minds.wired) bad.push(`mind test line: ${JSON.stringify(minds)}`);
+
+  // 5) START-HERE: the smaller copy, with sizes measured on Windows.
+  const start = read("docs", "START-HERE.md");
+  const depth = {
+    command: /^git clone --depth 1 https:\/\/github\.com\/RicheyWorks\/computerpets$/m.test(start),
+    sizes: start.includes("the plain copy downloaded about 3.6 GB and used about 6.5 GB of disk. With `--depth 1` it downloaded about 1.6 GB and used about 4.4 GB."),
+    updates: start.includes("`git pull` in the `computerpets` folder still gets updates"),
+  };
+  if (!Object.values(depth).every(Boolean)) bad.push(`START-HERE smaller copy: ${JSON.stringify(depth)}`);
+
+  const roadmap = read("docs", "ROADMAP.md");
+  if (!roadmap.includes("- [x] Web portraits that did not download show a name tile and one Git LFS note")) bad.push("ROADMAP entry missing");
+  const extras = { portraits, dev, tray: { ...tray, wrong: wrong.length }, minds, depth };
+  if (bad.length) return fail(bad.join("; "), extras);
+  return ok("Broken web portraits show a name tile and one Git LFS note; npm run dev starts again; every pet list says Name · Kind; Test this mind says who answered; START-HERE offers the smaller copy", extras, [
+    "portraits=tile_and_one_note",
+    "dev_server=surface_global",
+    "pet_line=name_kind_221",
+    "mind_test=plain_source",
+    "start_here=depth_1",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -2168,6 +2265,7 @@ const COMMANDS = {
   flake_house_plain: flakeHousePlain,
   unlock_plain_lfs: unlockPlainLfs,
   pictures_start_names: picturesStartNames,
+  portraits_tray_minds: portraitsTrayMinds,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,
