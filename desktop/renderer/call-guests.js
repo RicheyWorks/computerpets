@@ -538,7 +538,6 @@
       toX: hold.x,
       toLift: hold.lift,
       facing: hold.x >= guest.x ? 1 : -1,
-      told: false,
     };
   }
 
@@ -555,7 +554,6 @@
       toX: hold.x,
       toLift: hold.lift,
       facing: hold.x >= guest.x ? 1 : -1,
-      told: false,
       boundKind: hold.kind,
     };
   }

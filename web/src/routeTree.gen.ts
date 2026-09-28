@@ -11,33 +11,33 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as CanopyRouteImport } from './routes/canopy'
 import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as CellarRouteImport } from './routes/cellar'
 import { Route as CollectionRouteImport } from './routes/collection'
 import { Route as CornerRouteImport } from './routes/corner'
+import { Route as CreekRouteImport } from './routes/creek'
 import { Route as FarRouteImport } from './routes/far'
-import { Route as GridRouteImport } from './routes/grid'
 import { Route as GardenRouteImport } from './routes/garden'
+import { Route as GridRouteImport } from './routes/grid'
 import { Route as HatchRouteImport } from './routes/hatch'
 import { Route as HiveRouteImport } from './routes/hive'
 import { Route as LiveRouteImport } from './routes/live'
 import { Route as LogRouteImport } from './routes/log'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as CanopyRouteImport } from './routes/canopy'
-import { Route as ReefRouteImport } from './routes/reef'
 import { Route as MeadowRouteImport } from './routes/meadow'
-import { Route as ShoreRouteImport } from './routes/shore'
 import { Route as MeetRouteImport } from './routes/meet'
 import { Route as MindRouteImport } from './routes/mind'
 import { Route as NestRouteImport } from './routes/nest'
 import { Route as PondRouteImport } from './routes/pond'
+import { Route as ReefRouteImport } from './routes/reef'
 import { Route as RoostRouteImport } from './routes/roost'
 import { Route as SeaRouteImport } from './routes/sea'
+import { Route as ShoreRouteImport } from './routes/shore'
 import { Route as SnakesRouteImport } from './routes/snakes'
+import { Route as StoneRouteImport } from './routes/stone'
 import { Route as StudyRouteImport } from './routes/study'
 import { Route as WellRouteImport } from './routes/well'
-import { Route as CreekRouteImport } from './routes/creek'
-import { Route as StoneRouteImport } from './routes/stone'
 import { Route as WoodRouteImport } from './routes/wood'
 import { Route as DemoSlugRouteImport } from './routes/demo.$slug'
 import { Route as PetsKeyRouteImport } from './routes/pets.$key'
@@ -51,6 +51,11 @@ const IndexRoute = IndexRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CanopyRoute = CanopyRouteImport.update({
+  id: '/canopy',
+  path: '/canopy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CatalogRoute = CatalogRouteImport.update({
@@ -68,14 +73,14 @@ const CollectionRoute = CollectionRouteImport.update({
   path: '/collection',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CreekRoute = CreekRouteImport.update({
-  id: '/creek',
-  path: '/creek',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CornerRoute = CornerRouteImport.update({
   id: '/corner',
   path: '/corner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreekRoute = CreekRouteImport.update({
+  id: '/creek',
+  path: '/creek',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FarRoute = FarRouteImport.update({
@@ -83,14 +88,14 @@ const FarRoute = FarRouteImport.update({
   path: '/far',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GridRoute = GridRouteImport.update({
-  id: '/grid',
-  path: '/grid',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const GardenRoute = GardenRouteImport.update({
   id: '/garden',
   path: '/garden',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GridRoute = GridRouteImport.update({
+  id: '/grid',
+  path: '/grid',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HatchRoute = HatchRouteImport.update({
@@ -113,29 +118,14 @@ const LogRoute = LogRouteImport.update({
   path: '/log',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CanopyRoute = CanopyRouteImport.update({
-  id: '/canopy',
-  path: '/canopy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReefRoute = ReefRouteImport.update({
-  id: '/reef',
-  path: '/reef',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeadowRoute = MeadowRouteImport.update({
   id: '/meadow',
   path: '/meadow',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ShoreRoute = ShoreRouteImport.update({
-  id: '/shore',
-  path: '/shore',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeetRoute = MeetRouteImport.update({
@@ -158,6 +148,11 @@ const PondRoute = PondRouteImport.update({
   path: '/pond',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReefRoute = ReefRouteImport.update({
+  id: '/reef',
+  path: '/reef',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RoostRoute = RoostRouteImport.update({
   id: '/roost',
   path: '/roost',
@@ -166,6 +161,11 @@ const RoostRoute = RoostRouteImport.update({
 const SeaRoute = SeaRouteImport.update({
   id: '/sea',
   path: '/sea',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShoreRoute = ShoreRouteImport.update({
+  id: '/shore',
+  path: '/shore',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SnakesRoute = SnakesRouteImport.update({
@@ -212,29 +212,29 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/canopy': typeof CanopyRoute
   '/catalog': typeof CatalogRoute
   '/cellar': typeof CellarRoute
   '/collection': typeof CollectionRoute
   '/corner': typeof CornerRoute
   '/creek': typeof CreekRoute
   '/far': typeof FarRoute
-  '/grid': typeof GridRoute
   '/garden': typeof GardenRoute
+  '/grid': typeof GridRoute
   '/hatch': typeof HatchRoute
   '/hive': typeof HiveRoute
   '/live': typeof LiveRoute
   '/log': typeof LogRoute
-  '/canopy': typeof CanopyRoute
-  '/reef': typeof ReefRoute
-  '/meadow': typeof MeadowRoute
-  '/shore': typeof ShoreRoute
   '/login': typeof LoginRoute
+  '/meadow': typeof MeadowRoute
   '/meet': typeof MeetRoute
   '/mind': typeof MindRoute
   '/nest': typeof NestRoute
   '/pond': typeof PondRoute
+  '/reef': typeof ReefRoute
   '/roost': typeof RoostRoute
   '/sea': typeof SeaRoute
+  '/shore': typeof ShoreRoute
   '/snakes': typeof SnakesRoute
   '/stone': typeof StoneRoute
   '/study': typeof StudyRoute
@@ -247,29 +247,29 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/canopy': typeof CanopyRoute
   '/catalog': typeof CatalogRoute
   '/cellar': typeof CellarRoute
   '/collection': typeof CollectionRoute
   '/corner': typeof CornerRoute
   '/creek': typeof CreekRoute
   '/far': typeof FarRoute
-  '/grid': typeof GridRoute
   '/garden': typeof GardenRoute
+  '/grid': typeof GridRoute
   '/hatch': typeof HatchRoute
   '/hive': typeof HiveRoute
   '/live': typeof LiveRoute
   '/log': typeof LogRoute
-  '/canopy': typeof CanopyRoute
-  '/reef': typeof ReefRoute
-  '/meadow': typeof MeadowRoute
-  '/shore': typeof ShoreRoute
   '/login': typeof LoginRoute
+  '/meadow': typeof MeadowRoute
   '/meet': typeof MeetRoute
   '/mind': typeof MindRoute
   '/nest': typeof NestRoute
   '/pond': typeof PondRoute
+  '/reef': typeof ReefRoute
   '/roost': typeof RoostRoute
   '/sea': typeof SeaRoute
+  '/shore': typeof ShoreRoute
   '/snakes': typeof SnakesRoute
   '/stone': typeof StoneRoute
   '/study': typeof StudyRoute
@@ -283,29 +283,29 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/canopy': typeof CanopyRoute
   '/catalog': typeof CatalogRoute
   '/cellar': typeof CellarRoute
   '/collection': typeof CollectionRoute
   '/corner': typeof CornerRoute
   '/creek': typeof CreekRoute
   '/far': typeof FarRoute
-  '/grid': typeof GridRoute
   '/garden': typeof GardenRoute
+  '/grid': typeof GridRoute
   '/hatch': typeof HatchRoute
   '/hive': typeof HiveRoute
   '/live': typeof LiveRoute
   '/log': typeof LogRoute
-  '/canopy': typeof CanopyRoute
-  '/reef': typeof ReefRoute
-  '/meadow': typeof MeadowRoute
-  '/shore': typeof ShoreRoute
   '/login': typeof LoginRoute
+  '/meadow': typeof MeadowRoute
   '/meet': typeof MeetRoute
   '/mind': typeof MindRoute
   '/nest': typeof NestRoute
   '/pond': typeof PondRoute
+  '/reef': typeof ReefRoute
   '/roost': typeof RoostRoute
   '/sea': typeof SeaRoute
+  '/shore': typeof ShoreRoute
   '/snakes': typeof SnakesRoute
   '/stone': typeof StoneRoute
   '/study': typeof StudyRoute
@@ -320,29 +320,29 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/canopy'
     | '/catalog'
     | '/cellar'
     | '/collection'
     | '/corner'
     | '/creek'
     | '/far'
-    | '/grid'
     | '/garden'
+    | '/grid'
     | '/hatch'
     | '/hive'
     | '/live'
     | '/log'
-    | '/canopy'
-    | '/reef'
-    | '/meadow'
-    | '/shore'
     | '/login'
+    | '/meadow'
     | '/meet'
     | '/mind'
     | '/nest'
     | '/pond'
+    | '/reef'
     | '/roost'
     | '/sea'
+    | '/shore'
     | '/snakes'
     | '/stone'
     | '/study'
@@ -355,29 +355,29 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/canopy'
     | '/catalog'
     | '/cellar'
     | '/collection'
     | '/corner'
     | '/creek'
     | '/far'
-    | '/grid'
     | '/garden'
+    | '/grid'
     | '/hatch'
     | '/hive'
     | '/live'
     | '/log'
-    | '/canopy'
-    | '/reef'
-    | '/meadow'
-    | '/shore'
     | '/login'
+    | '/meadow'
     | '/meet'
     | '/mind'
     | '/nest'
     | '/pond'
+    | '/reef'
     | '/roost'
     | '/sea'
+    | '/shore'
     | '/snakes'
     | '/stone'
     | '/study'
@@ -390,29 +390,29 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/canopy'
     | '/catalog'
     | '/cellar'
     | '/collection'
     | '/corner'
     | '/creek'
     | '/far'
-    | '/grid'
     | '/garden'
+    | '/grid'
     | '/hatch'
     | '/hive'
     | '/live'
     | '/log'
-    | '/canopy'
-    | '/reef'
-    | '/meadow'
-    | '/shore'
     | '/login'
+    | '/meadow'
     | '/meet'
     | '/mind'
     | '/nest'
     | '/pond'
+    | '/reef'
     | '/roost'
     | '/sea'
+    | '/shore'
     | '/snakes'
     | '/stone'
     | '/study'
@@ -426,29 +426,29 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
+  CanopyRoute: typeof CanopyRoute
   CatalogRoute: typeof CatalogRoute
   CellarRoute: typeof CellarRoute
   CollectionRoute: typeof CollectionRoute
   CornerRoute: typeof CornerRoute
   CreekRoute: typeof CreekRoute
   FarRoute: typeof FarRoute
-  GridRoute: typeof GridRoute
   GardenRoute: typeof GardenRoute
+  GridRoute: typeof GridRoute
   HatchRoute: typeof HatchRoute
   HiveRoute: typeof HiveRoute
   LiveRoute: typeof LiveRoute
   LogRoute: typeof LogRoute
-  CanopyRoute: typeof CanopyRoute
-  ReefRoute: typeof ReefRoute
-  MeadowRoute: typeof MeadowRoute
-  ShoreRoute: typeof ShoreRoute
   LoginRoute: typeof LoginRoute
+  MeadowRoute: typeof MeadowRoute
   MeetRoute: typeof MeetRoute
   MindRoute: typeof MindRoute
   NestRoute: typeof NestRoute
   PondRoute: typeof PondRoute
+  ReefRoute: typeof ReefRoute
   RoostRoute: typeof RoostRoute
   SeaRoute: typeof SeaRoute
+  ShoreRoute: typeof ShoreRoute
   SnakesRoute: typeof SnakesRoute
   StoneRoute: typeof StoneRoute
   StudyRoute: typeof StudyRoute
@@ -473,6 +473,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/canopy': {
+      id: '/canopy'
+      path: '/canopy'
+      fullPath: '/canopy'
+      preLoaderRoute: typeof CanopyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catalog': {
@@ -517,18 +524,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FarRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/grid': {
-      id: '/grid'
-      path: '/grid'
-      fullPath: '/grid'
-      preLoaderRoute: typeof GridRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/garden': {
       id: '/garden'
       path: '/garden'
       fullPath: '/garden'
       preLoaderRoute: typeof GardenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grid': {
+      id: '/grid'
+      path: '/grid'
+      fullPath: '/grid'
+      preLoaderRoute: typeof GridRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hatch': {
@@ -559,18 +566,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LogRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/canopy': {
-      id: '/canopy'
-      path: '/canopy'
-      fullPath: '/canopy'
-      preLoaderRoute: typeof CanopyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reef': {
-      id: '/reef'
-      path: '/reef'
-      fullPath: '/reef'
-      preLoaderRoute: typeof ReefRouteImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meadow': {
@@ -578,20 +578,6 @@ declare module '@tanstack/react-router' {
       path: '/meadow'
       fullPath: '/meadow'
       preLoaderRoute: typeof MeadowRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/shore': {
-      id: '/shore'
-      path: '/shore'
-      fullPath: '/shore'
-      preLoaderRoute: typeof ShoreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meet': {
@@ -622,6 +608,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PondRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reef': {
+      id: '/reef'
+      path: '/reef'
+      fullPath: '/reef'
+      preLoaderRoute: typeof ReefRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/roost': {
       id: '/roost'
       path: '/roost'
@@ -634,6 +627,13 @@ declare module '@tanstack/react-router' {
       path: '/sea'
       fullPath: '/sea'
       preLoaderRoute: typeof SeaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shore': {
+      id: '/shore'
+      path: '/shore'
+      fullPath: '/shore'
+      preLoaderRoute: typeof ShoreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/snakes': {
@@ -698,29 +698,29 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
+  CanopyRoute: CanopyRoute,
   CatalogRoute: CatalogRoute,
   CellarRoute: CellarRoute,
   CollectionRoute: CollectionRoute,
   CornerRoute: CornerRoute,
   CreekRoute: CreekRoute,
   FarRoute: FarRoute,
-  GridRoute: GridRoute,
   GardenRoute: GardenRoute,
+  GridRoute: GridRoute,
   HatchRoute: HatchRoute,
   HiveRoute: HiveRoute,
   LiveRoute: LiveRoute,
   LogRoute: LogRoute,
-  CanopyRoute: CanopyRoute,
-  ReefRoute: ReefRoute,
-  MeadowRoute: MeadowRoute,
-  ShoreRoute: ShoreRoute,
   LoginRoute: LoginRoute,
+  MeadowRoute: MeadowRoute,
   MeetRoute: MeetRoute,
   MindRoute: MindRoute,
   NestRoute: NestRoute,
   PondRoute: PondRoute,
+  ReefRoute: ReefRoute,
   RoostRoute: RoostRoute,
   SeaRoute: SeaRoute,
+  ShoreRoute: ShoreRoute,
   SnakesRoute: SnakesRoute,
   StoneRoute: StoneRoute,
   StudyRoute: StudyRoute,

@@ -9,6 +9,7 @@ export function SpeciesPlaque({
   paper = false,
   showDemoLink = true,
   folded = false,
+  line = false,
   className,
 }: {
   speciesKey: string;
@@ -17,6 +18,8 @@ export function SpeciesPlaque({
   showDemoLink?: boolean;
   /** Phone desk: name and kind only until opened, so the plaque does not run under the care buttons. */
   folded?: boolean;
+  /** Short phone: even folded it would not fit above the care buttons, so it is one line until opened. */
+  line?: boolean;
   className?: string;
 }) {
   const guide = plaqueFor(speciesKey);
@@ -27,8 +30,30 @@ export function SpeciesPlaque({
   }, [speciesKey, compact]);
   if (!guide) return null;
 
+  if (line && !open) {
+    return (
+      <article
+        data-plaque="line"
+        className={cn(
+          "rounded-[var(--radius-md)] border border-border bg-bg/80 px-3 py-2 backdrop-blur-sm",
+          paper && "paper-card backdrop-blur-none",
+          className,
+        )}
+      >
+        <button
+          type="button"
+          className="block w-full text-left text-sm text-fg underline-offset-2 hover:underline"
+          onClick={() => setOpen(true)}
+        >
+          <span className="text-[11px] uppercase tracking-[0.16em] text-subtle">Species plaque</span> · About the {guide.species}
+        </button>
+      </article>
+    );
+  }
+
   return (
     <article
+      data-plaque={folded && !open ? "folded" : open ? "open" : "closed"}
       className={cn(
         "rounded-[var(--radius-lg)] border border-border bg-bg/80 p-4 backdrop-blur-sm",
         paper && "paper-card backdrop-blur-none",
