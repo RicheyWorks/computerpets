@@ -37,7 +37,8 @@ export function RoomHero({
               Watch {def.watchName}
             </Link>
           </Button>
-          <Link to="/meet" className="text-sm text-muted no-underline hover:text-fg">
+          {/* 44 px tall, so a thumb can hit it (it was 20 px of text on a phone). */}
+          <Link to="/meet" data-hero-house className="inline-flex min-h-11 items-center text-sm text-muted no-underline hover:text-fg">
             The house
           </Link>
         </div>

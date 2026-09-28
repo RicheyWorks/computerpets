@@ -244,6 +244,38 @@ async function ensureKeeper(userId: string) {
   `;
 }
 
+const devSeeding = globalThis as typeof globalThis & { __devKennelSeed__?: Map<string, Promise<void>> };
+
+/**
+ * Dev only (lib/pets/dev-seed.server.ts): with sign-in off, in-memory PGLite and COMPUTERPETS_DEV_SEED=kennel, the
+ * dev keeper's first sanctuary read hatches a small kennel, once, so the phone check sees cards and a pet page.
+ * Anywhere else devSeedPets answers [] and this does nothing.
+ */
+async function seedDevKennelOnce(userId: string) {
+  const runs = (devSeeding.__devKennelSeed__ ??= new Map());
+  let run = runs.get(userId);
+  if (!run) {
+    run = (async () => {
+      const { devSeedPets } = await import("./dev-seed.server");
+      const plan = await devSeedPets(userId);
+      for (const [i, pet] of plan.entries()) {
+        await mintCompanion({
+          userId,
+          speciesKey: pet.key,
+          name: pet.name,
+          rarity: findSpecies(pet.key)?.rarity ?? "COMMON",
+          genotype: rollCatalogGenotype(pet.key),
+          origin: "hatch",
+          makeActive: i === 0,
+        });
+      }
+    })();
+    runs.set(userId, run);
+    run.catch(() => runs.delete(userId));
+  }
+  await run;
+}
+
 async function mintCompanion(opts: {
   userId: string;
   speciesKey: string;
@@ -341,6 +373,7 @@ export const getSanctuary = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async ({ context }) => {
     await ensureKeeper(context.userId);
+    await seedDevKennelOnce(context.userId);
     await resolveDueClutches(context.userId);
     const sql = await getSql();
     const keepers = await sql<{ ember: number; hatches: number }>`

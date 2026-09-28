@@ -2657,7 +2657,7 @@ async function signinReturnQuiet() {
     noRequest: quietReads === 0 && quietTimers === 0,
     words: unchecked === "House server not checked (optional)",
     check: reads === 1,
-    gated: keeper.includes("export const heartbeatPoll = createHeartbeatPoll({ gate: () => houseServerSeen(), onAnswer: () => rememberHouseServer(), backoff: true });"),
+    gated: /export const heartbeatPoll = createHeartbeatPoll\(\{\n\s+gate: \(\) => houseServerSeen\(\),\n\s+onAnswer: \(\) => rememberHouseServer\(\),\n\s+onMiss: \(\) => houseServerMissed\(\),\n\s+backoff: true,/.test(keeper),
     backoff: K.HEARTBEAT_BACKOFF_MAX_SKIPS === 31,
     button: card.includes("data-heartbeat-check") && card.includes("void heartbeatPoll.check();"),
     sweep: sweep.includes("the desk asked the house server nobody ran") && sweep.includes("the gate is shut for good"),
@@ -2726,6 +2726,111 @@ async function signinReturnQuiet() {
   ]);
 }
 
+async function meetIndexForget() {
+  const bad = [];
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8").replace(/\r\n/g, "\n");
+  const importTs = (...parts) => import(pathToFileURL(join(ROOT, ...parts)).href);
+  const sweep = read("web", "scripts", "phone-desk-layout.test.mjs");
+
+  // 1) /meet on a phone: a room index, closed room drawers and a guest search instead of ~135,000 px of cards.
+  const M = await importTs("web", "src", "lib", "pets", "meet-index.ts");
+  const meetSrc = read("web", "src", "routes", "meet.tsx");
+  const rui = { key: "red_panda", slug: "rui", name: "Rui", speciesLabel: "Red Panda" };
+  const meet = {
+    hash: M.roomFromHash("#room-snakes", ["house", "snakes"]) === "snakes" && M.roomFromHash("#room-attic", ["house", "snakes"]) === null && M.meetRoomAnchor("tide") === "room-tide",
+    search: M.guestMatches(rui, "rui") && M.guestMatches(rui, "RED panda") && !M.guestMatches(rui, "rui fox") && M.guestMatches(rui, ""),
+    words: M.matchLine(0, 221, "zz", 20) === "No guest by that name. Try a kind, like fox or owl." && M.matchLine(221, 221, "", 20) === "221 guests in 20 rooms. Open a room, or type a name.",
+    wired: ["<MeetShelves />", "data-meet-index", "data-meet-search", "data-meet-room", "data-meet-guest", "hashchange", "LIVING_KINDS"].every((s) => meetSrc.includes(s)),
+    sweep: sweep.includes("export const MEET_PHONE_MAX_HEIGHT = 12_000;") && sweep.includes("export const MEET_GUESTS = 221;") && sweep.includes("the rooms reach") && sweep.includes("/meet#room-snakes did not open"),
+  };
+  if (!Object.values(meet).every(Boolean)) bad.push(`meet: ${JSON.stringify(meet)}`);
+
+  // 2) 44 px on phones: The house under a room's title (every room hero), the keeper card's Check.
+  const css = read("web", "src", "styles.css");
+  const taps = {
+    house: read("web", "src", "components", "desk", "room-hero.tsx").includes('data-hero-house className="inline-flex min-h-11 items-center'),
+    check: /@media \(pointer: coarse\), \(max-width: 639px\) \{\s*\.keeper-heartbeat-check \{[^}]*min-height: 2\.75rem;/.test(css),
+    sweep: sweep.includes('"The house" is') && sweep.includes("the keeper card's Check is"),
+  };
+  if (!Object.values(taps).every(Boolean)) bad.push(`taps: ${JSON.stringify(taps)}`);
+
+  // 3) /login fits a landscape phone.
+  const login = read("web", "src", "routes", "login.tsx");
+  const landscape = {
+    login: login.includes("<main data-login ") && login.includes("[@media(max-height:480px)]:min-h-0") && login.includes("[@media(max-height:480px)]:p-5"),
+    shell: read("web", "src", "components", "app-shell.tsx").includes("[@media(max-height:480px)]:py-3"),
+    sweep: sweep.includes("for (const [w, h] of [[667, 375], [844, 390]])") && sweep.includes(": the page scrolls by"),
+  };
+  if (!Object.values(landscape).every(Boolean)) bad.push(`landscape: ${JSON.stringify(landscape)}`);
+
+  // 4) The browser forgets a house server that stayed silent: three visits with no answer, or three days.
+  const K = await importTs("web", "src", "lib", "pets", "keeper.ts");
+  const box = new Map();
+  const store = { getItem: (k) => (box.has(k) ? box.get(k) : null), setItem: (k, v) => box.set(k, String(v)), removeItem: (k) => box.delete(k) };
+  K.rememberHouseServer(store, 0);
+  const silent = [];
+  for (let i = 1; i <= 4; i++) {
+    const open = K.houseServerSeen(store, i);
+    silent.push(open);
+    if (open) K.houseServerMissed(store, i);
+  }
+  const gone = box.size === 0;
+  K.rememberHouseServer(store, 10);
+  K.houseServerMissed(store, 11);
+  K.houseServerMissed(store, 12);
+  K.rememberHouseServer(store, 13);
+  const afterAnswer = K.readHouseServerSeen(store, 14);
+  const DAY = 24 * 60 * 60 * 1000;
+  const forget = {
+    rule: K.HOUSE_SERVER_FORGET_VISITS === 3 && K.HOUSE_SERVER_FORGET_MS === 3 * DAY,
+    visits: JSON.stringify(silent) === "[true,true,true,false]" && gone,
+    reset: afterAnswer?.missed === 0,
+    days: K.houseServerSeen(store, 13 + 3 * DAY - 1) === true && K.houseServerSeen(store, 13 + 3 * DAY) === false,
+    legacy: (() => {
+      const s = new Map([["computerpets.houseServer.seen", "1"]]);
+      return K.houseServerSeen({ getItem: (k) => s.get(k) ?? null, setItem: (k, v) => s.set(k, v) }, 5) === true;
+    })(),
+    sweep: sweep.includes("silent for three visits is still asked") && sweep.includes("missed: 3"),
+  };
+  if (!Object.values(forget).every(Boolean)) bad.push(`forget: ${JSON.stringify(forget)}`);
+
+  // 5) The stand-in session sees a kennel: a dev-only seed on in-memory PGLite (sign-in off, the dev keeper only).
+  const S = await importTs("web", "src", "lib", "pets", "dev-seed.ts");
+  const C = await importTs("web", "src", "lib", "pets", "catalog.ts");
+  const g = { env: { COMPUTERPETS_DEV_SEED: "kennel" }, dbSource: "pglite", authConfigured: false, userId: "dev-user", devUserId: "dev-user" };
+  const actions = read("web", "src", "lib", "pets", "actions.ts");
+  const seed = {
+    allowed: S.devSeedAllowed(g),
+    refused: [{ env: {} }, { dbSource: "neon" }, { authConfigured: true }, { userId: "someone" }, { env: { COMPUTERPETS_DEV_SEED: "kennel", DATABASE_URL: "postgres://x" } }].every((o) => !S.devSeedAllowed({ ...g, ...o })),
+    catalog: S.DEV_SEED_PETS.length === 6 && S.DEV_SEED_PETS.every((p) => !!C.SPECIES_BY_KEY[p.key]),
+    once: /await ensureKeeper\(context\.userId\);\s*await seedDevKennelOnce\(context\.userId\);/.test(actions) && actions.includes('await import("./dev-seed.server")'),
+    sweep: sweep.includes('COMPUTERPETS_DEV_SEED: "kennel"') && sweep.includes("export const DEV_KENNEL_SIZE = 6;") && sweep.includes("a kennel pet's page was checked"),
+  };
+  if (!Object.values(seed).every(Boolean)) bad.push(`seed: ${JSON.stringify(seed)}`);
+
+  // 6) New-visitor audit: a mistyped link gets words, a tab title and ways on (it was a bare "Not Found").
+  const nf = read("web", "src", "lib", "not-found.tsx");
+  const audit = {
+    router: read("web", "src", "router.tsx").includes("defaultNotFoundComponent: AppNotFound"),
+    page: nf.includes('pageTitle("No room here")') && nf.includes('to="/meet"') && nf.includes("min-h-11"),
+    sweep: sweep.includes("/no-such-room"),
+  };
+  if (!Object.values(audit).every(Boolean)) bad.push(`audit: ${JSON.stringify(audit)}`);
+
+  const roadmap = read("docs", "ROADMAP.md");
+  if (!roadmap.includes("- [x] A way through /meet on a phone")) bad.push("ROADMAP entry missing");
+  const extras = { meet, taps, landscape, forget, seed, audit };
+  if (bad.length) return fail(bad.join("; "), extras);
+  return ok("/meet on a phone: room index, closed drawers, guest search, all 221 reachable; 44 px house links and Check; /login fits a landscape phone; the browser forgets a house server silent for three visits or three days; the stand-in session sees a seeded kennel and a pet page; a mistyped link gets ways on", extras, [
+    "meet=index_drawers_search",
+    "taps=house_link_and_check_44px",
+    "login=fits_landscape",
+    "heartbeat=forgets_silent_server",
+    "sweep=seeded_kennel_and_pet_page",
+    "audit=not_found_ways_on",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -2754,6 +2859,7 @@ const COMMANDS = {
   phone_layout_told_once: phoneLayoutToldOnce,
   site_header_rail: siteHeaderRail,
   signin_return_quiet: signinReturnQuiet,
+  meet_index_forget: meetIndexForget,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,
