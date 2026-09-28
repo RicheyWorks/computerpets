@@ -23,7 +23,7 @@ export const Route = createFileRoute("/meet")({
   }),
 });
 
-export function MeetPage() {
+function MeetPage() {
   return (
     <main className="bg-bg text-fg">
       <section className="relative isolate min-h-[92dvh] overflow-hidden">

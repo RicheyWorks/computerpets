@@ -19,7 +19,7 @@ export const Route = createFileRoute("/corner")({
   }),
 });
 
-export function CornerPage() {
+function CornerPage() {
   const [selected, setSelected] = useState(CORNER_KEYS[0]!);
 
   return (

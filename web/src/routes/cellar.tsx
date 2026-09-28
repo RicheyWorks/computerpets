@@ -19,7 +19,7 @@ export const Route = createFileRoute("/cellar")({
   }),
 });
 
-export function CellarPage() {
+function CellarPage() {
   const [selected, setSelected] = useState(FUNGI_KEYS[0]!);
 
   return (

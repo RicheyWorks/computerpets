@@ -19,7 +19,7 @@ export const Route = createFileRoute("/garden")({
   }),
 });
 
-export function GardenPage() {
+function GardenPage() {
   const [selected, setSelected] = useState(GARDEN_KEYS[0]!);
 
   return (

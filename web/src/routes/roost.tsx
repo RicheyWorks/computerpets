@@ -19,7 +19,7 @@ export const Route = createFileRoute("/roost")({
   }),
 });
 
-export function RoostPage() {
+function RoostPage() {
   const [selected, setSelected] = useState(ROOST_KEYS[0]!);
 
   return (

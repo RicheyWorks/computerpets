@@ -19,7 +19,7 @@ export const Route = createFileRoute("/pond")({
   }),
 });
 
-export function PondPage() {
+function PondPage() {
   const [selected, setSelected] = useState(POND_KEYS[0]!);
 
   return (

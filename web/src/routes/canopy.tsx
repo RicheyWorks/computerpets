@@ -19,7 +19,7 @@ export const Route = createFileRoute("/canopy")({
   }),
 });
 
-export function CanopyPage() {
+function CanopyPage() {
   const [selected, setSelected] = useState(CANOPY_KEYS[0]!);
 
   return (

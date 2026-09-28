@@ -19,7 +19,7 @@ export const Route = createFileRoute("/wood")({
   }),
 });
 
-export function WoodPage() {
+function WoodPage() {
   const [selected, setSelected] = useState(WOOD_KEYS[0]!);
 
   return (
