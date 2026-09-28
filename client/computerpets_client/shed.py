@@ -81,7 +81,7 @@ def apply_shed(
     kind = species or species_by_key(None)
     stamp = now if now is not None else now_ms()
     if state.hidden:
-        return CareResult(state, pick_line(kind.hide), "idle", "idle")
+        return CareResult(state, pick_line(kind.hide, kind.key), "idle", "idle")
     if not is_snake(kind.key) or not is_blue(state, kind.key, stamp):
         line = shed_wait_line(kind.key) if is_snake(kind.key) else "The coat is still good."
         next_state = replace(state, last_line=line, anim="sit")

@@ -205,6 +205,20 @@ class Element extends Node {
   get id() {
     return this.getAttribute("id") ?? "";
   }
+  /** A <select>'s <option> list: react-dom marks each one `selected` to match the select's value. */
+  get options() {
+    return this.localName === "select" ? this.querySelectorAll("option") : undefined;
+  }
+  /** An <option> with no value attribute reads its text, as in a browser. */
+  get value() {
+    if (this._value !== undefined) return this._value;
+    const attr = this.getAttribute("value");
+    if (attr != null) return attr;
+    return this.localName === "option" ? this.textContent : "";
+  }
+  set value(v) {
+    this._value = String(v);
+  }
   getBoundingClientRect() {
     const w = this.ownerDocument.defaultView.innerWidth;
     const h = this.ownerDocument.defaultView.innerHeight;

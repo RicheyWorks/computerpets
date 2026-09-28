@@ -9,6 +9,7 @@ from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from . import line_picker as _lines
 from .hive import colony_of, colony_word, is_hive_place, stamp_colony
 from .hours import call_line, hide_line, is_resting_hour, snack_line
 from .paths import default_user_data_dir
@@ -47,8 +48,9 @@ def clamp(n: float, lo: float = 0, hi: float = 100) -> int:
     return int(max(lo, min(hi, round(n))))
 
 
-def pick_line(lines: tuple[str, ...]) -> str:
-    return random.choice(lines) if lines else ""
+def pick_line(lines: tuple[str, ...], speaker: str = "pet") -> str:
+    """One of the pet's own lines, without a close repeat (``line_picker.py``); the words stay as written."""
+    return _lines.line_picker.pick(speaker, lines) if lines else ""
 
 
 def keep_hive(state: CareState, species: Species | None = None, key: str | None = None) -> CareState:
@@ -126,7 +128,7 @@ class CareResult:
 def apply_feed(state: CareState, species: Species | None = None) -> CareResult:
     kind = species or species_by_key(None)
     if state.hidden:
-        return CareResult(state, hide_line(kind.key, pick_line(kind.hide)), "idle", "idle")
+        return CareResult(state, hide_line(kind.key, pick_line(kind.hide, kind.key)), "idle", "idle")
     next_state = keep_hive(
         replace(
             state,
@@ -134,7 +136,7 @@ def apply_feed(state: CareState, species: Species | None = None) -> CareResult:
             mood=clamp(state.mood + 6),
             energy=clamp(state.energy - 6),
             bond=clamp(state.bond + 2),
-            last_line=pick_line(kind.feed),
+            last_line=pick_line(kind.feed, kind.key),
             anim="eat",
         ),
         kind,
@@ -145,8 +147,8 @@ def apply_feed(state: CareState, species: Species | None = None) -> CareResult:
 def apply_treat(state: CareState, species: Species | None = None) -> CareResult:
     kind = species or species_by_key(None)
     if state.hidden:
-        return CareResult(state, hide_line(kind.key, pick_line(kind.hide)), "idle", "idle")
-    line = snack_line(kind.key, pick_line(kind.treat_lines))
+        return CareResult(state, hide_line(kind.key, pick_line(kind.hide, kind.key)), "idle", "idle")
+    line = snack_line(kind.key, pick_line(kind.treat_lines, kind.key))
     next_state = keep_hive(
         replace(
             state,
@@ -164,8 +166,8 @@ def apply_treat(state: CareState, species: Species | None = None) -> CareResult:
 def apply_play(state: CareState, species: Species | None = None) -> CareResult:
     kind = species or species_by_key(None)
     if state.hidden:
-        return CareResult(state, hide_line(kind.key, pick_line(kind.hide)), "idle", "idle")
-    line = pick_line(kind.ambient) or pick_line(kind.greet)
+        return CareResult(state, hide_line(kind.key, pick_line(kind.hide, kind.key)), "idle", "idle")
+    line = pick_line(kind.ambient, kind.key) or pick_line(kind.greet, kind.key)
     next_state = keep_hive(
         replace(
             state,
@@ -183,7 +185,7 @@ def apply_play(state: CareState, species: Species | None = None) -> CareResult:
 
 def apply_hide(state: CareState, species: Species | None = None) -> CareResult:
     kind = species or species_by_key(None)
-    line = hide_line(kind.key, pick_line(kind.hide))
+    line = hide_line(kind.key, pick_line(kind.hide, kind.key))
     if state.hidden:
         return CareResult(keep_hive(state, kind), line, "idle", "idle")
     next_state = keep_hive(replace(state, hidden=True, last_line=line, anim="walk"), kind)
@@ -241,7 +243,7 @@ def apply_medicine(state: CareState, species: Species | None = None) -> CareResu
 
 def apply_rest(state: CareState, species: Species | None = None) -> CareResult:
     kind = species or species_by_key(None)
-    line = pick_line(kind.ambient) or "I sat."
+    line = pick_line(kind.ambient, kind.key) or "I sat."
     next_state = keep_hive(
         replace(
             state,
@@ -367,10 +369,10 @@ def decay(
 
 def ambient_line(state: CareState, species: Species) -> str:
     if state.hidden:
-        return hide_line(species.key, pick_line(species.hide))
+        return hide_line(species.key, pick_line(species.hide, species.key))
     if state.hunger < 28:
-        return pick_line(species.hungry)
-    return pick_line(species.ambient)
+        return pick_line(species.hungry, species.key)
+    return pick_line(species.ambient, species.key)
 
 
 def _now_ms() -> int:

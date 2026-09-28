@@ -127,6 +127,7 @@ CROSS_DOMAIN = {
     "web.pictures_start_names",
     "web.portraits_tray_minds",
     "web.house_lines_talk",
+    "web.no_repeat_signed_in",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -223,6 +224,7 @@ def test_gaps_are_honest_and_accounted():
     assert "gui.card_hud_paint" in hole_ids
     assert "gui.gift_drag_place" in hole_ids
     assert "gui.host_place" in hole_ids
+    assert "gui.bubble_click" in hole_ids
     assert "gui.blotter_qt" in hole_ids
     assert "ethogram.tricks.red_panda" in hole_ids
     assert "blotter.plaque" in hole_ids
@@ -545,6 +547,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.pictures_start_names",
         "web.portraits_tray_minds",
         "web.house_lines_talk",
+        "web.no_repeat_signed_in",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -568,6 +571,7 @@ def test_gui_mode_rows_stay_excluded_by_default_and_document_gui_flag():
         "gui.card_hud_paint",
         "gui.gift_drag_place",
         "gui.host_place",
+        "gui.bubble_click",
         "gui.blotter_qt",
         "blotter.plaque",
         "blotter.frames_paint",
@@ -924,6 +928,38 @@ def test_house_lines_talk_row_default_mind_in_use_talk_hold_and_python_floor():
     assert hl.extras["talk"]["holds"] == [4000, 4300, 6400, 12000]
     assert hl.extras["talk"]["same"] and hl.extras["talk"]["overlayClose"] and hl.extras["talk"]["guestWaits"]
     assert all(hl.extras["py"].values()), hl.extras["py"]
+
+
+def test_no_repeat_signed_in_row_same_picks_everywhere_signed_in_path_bubble_click_phone():
+    """One picker on every door (Python picks the same seeded lines), guest line quiet 60 s, signed-in path, bubble click."""
+    from computerpets_client.line_picker import LinePicker
+
+    nr = invoke("web.no_repeat_signed_in")
+    assert nr.ok, (nr.error, nr.detail)
+    for mark in ("picker=same_web_overlay_python", "repeat=not_last_3_or_60s", "guest_tell=quiet_60s", "words=unchanged",
+                 "signed_in=house_key_default+pick_kept", "gui=bubble_click", "phone=hint_then_folded_plaque"):
+        assert mark in nr.trace, (mark, nr.trace)
+    for group in ("picker", "wires", "signedIn", "more"):
+        assert all(nr.extras[group].values()), (group, nr.extras[group])
+    rolls = [0.9, 0.1, 0.5, 0.7, 0.3, 0.99, 0, 0.45, 0.62, 0.2, 0.8, 0.05]
+
+    def run(pool, step_ms, n):
+        state = {"i": 0, "t": 0.0}
+
+        def roll():
+            state["i"] += 1
+            return rolls[(state["i"] - 1) % len(rolls)]
+
+        picker = LinePicker(random=roll, now=lambda: state["t"])
+        out = []
+        for _ in range(n):
+            out.append(picker.pick("rui", pool))
+            state["t"] += step_ms
+        return out
+
+    assert run(["a", "b", "c", "d", "e"], 4000, 12) == nr.extras["seq"]["web5"]
+    assert run(["x", "y"], 1000, 6) == nr.extras["seq"]["web2"]
+    assert nr.extras["offers"] == ["Dee-dee.", "", "", "Dee-dee."]
 
 
 def test_pictures_gate_row_boots_real_main_with_pointers_and_opens_no_glass():
