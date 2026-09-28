@@ -691,7 +691,8 @@
    * mindProblem; test-line.ts). A refused key said "Saved. Talk to them again." and nothing else, so a key that
    * never worked looked saved and working until the first talk.
    */
-  const MIND_UNTESTED = "Saved. The mind was not asked yet, so house lines answer until it does.";
+  const MIND_NOT_ASKED = "The mind was not asked yet, so house lines answer until it does.";
+  const MIND_UNTESTED = `Saved. ${MIND_NOT_ASKED}`;
   function mindTestLine(reply, name) {
     const r = reply && typeof reply === "object" ? reply : {};
     if (r.problem) {
@@ -700,6 +701,27 @@
     }
     if (r.source && r.source !== "local" && r.text) return `${name || "The mind"}: \u201c${clip(r.text)}\u201d`;
     return MIND_UNTESTED;
+  }
+
+  /**
+   * The House window's own Test this mind button, like the web's /mind: it asks the mind as saved (the web saves as
+   * you type; here Save does), so first it says plainly when the boxes hold changes Save has not kept, or when the
+   * saved mind is house lines and there is no AI to ask. "" means ask. `saved` is load().default, `fields` the boxes.
+   * The key box is compared only when the saved mind hands its key back (a computer with no secret store does not).
+   */
+  const MIND_TEST_UNSAVED = "Save first. Test this mind asks the saved mind, and the changes above are not saved yet.";
+  const MIND_TEST_HOUSE = "House lines answer, so there is no AI to test. Pick an AI above and save it to test it.";
+  function mindTestGate(saved, fields) {
+    const s = saved && typeof saved === "object" ? saved : {};
+    const f = fields && typeof fields === "object" ? fields : {};
+    const same = (a, b) => String(a == null ? "" : a).trim() === String(b == null ? "" : b).trim();
+    const id = s.plugin || "local";
+    if (!same(id, f.plugin || "local")) return MIND_TEST_UNSAVED;
+    const p = preset(id);
+    if (!p || p.kind === "local") return MIND_TEST_HOUSE;
+    if (!same(s.model || p.model || "", f.model) || !same(s.baseUrl || p.base || "", f.baseUrl)) return MIND_TEST_UNSAVED;
+    if (typeof s.apiKey === "string" && s.apiKey.trim() && !same(s.apiKey, f.apiKey)) return MIND_TEST_UNSAVED;
+    return "";
   }
 
   async function run(ctx) {
@@ -837,6 +859,10 @@
     TALK_TIMEOUT_MS,
     mindTestLine,
     MIND_UNTESTED,
+    MIND_NOT_ASKED,
+    mindTestGate,
+    MIND_TEST_UNSAVED,
+    MIND_TEST_HOUSE,
     TalkTimeout,
     isTalkTimeout,
     talkHostName,

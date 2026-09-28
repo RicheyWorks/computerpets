@@ -26,6 +26,22 @@ const fs = require("node:fs");
 const ROOT = path.resolve(__dirname, "..");
 const DESKTOP = __dirname;
 const WORK = path.join(ROOT, "target", "first-run-drive");
+/** Loaded before main.cjs: message boxes and app.relaunch are recorded, not shown or run. */
+const HOOK = path.join(DESKTOP, "first-run-drive-hook.cjs");
+
+/**
+ * Which gate a message box from the app is: the words overlay-gate.cjs closedWords gives the GPU refusal and the
+ * missing Linux compositor. Anything else is "other".
+ * @param {{ message?: string, buttons?: string[] } | null | undefined} box
+ */
+function gateOf(box) {
+  const m = String((box && box.message) || "");
+  const b = (box && box.buttons) || [];
+  if (/not compositing windows/.test(m) && b.includes("Check again")) return "no-compositor";
+  if (/without its graphics card/.test(m) && b.includes("Allow software compositing")) return "software-refused";
+  if (/^The pets are not on the screen/.test(m)) return "closed";
+  return "other";
+}
 
 /** Two boxes [left, top, right, bottom] share more than a pixel. */
 function overlaps(a, b) {
@@ -110,10 +126,14 @@ async function drive(opts = {}) {
   /** @type {{ id: string, ok: boolean, detail: string }[]} */
   const checks = [];
   const check = (id, ok, detail) => checks.push({ id, ok: !!ok, detail: String(detail) });
-  const pw = playwright();
+  // opts.pw / opts.exe / opts.windowMs: a stand-in Playwright for renderer/linux-drive.test.cjs.
+  const pw = opts.pw || playwright();
   if (!pw) return { ok: false, skipped: "playwright-core not found under desktop/ or web/node_modules", checks, ms: 0 };
-  const exe = path.join(DESKTOP, "node_modules", "electron", "dist", process.platform === "win32" ? "electron.exe" : "electron");
+  const exe = opts.exe || path.join(DESKTOP, "node_modules", "electron", "dist", process.platform === "win32" ? "electron.exe" : "electron");
   if (!fs.existsSync(exe)) return { ok: false, skipped: `no Electron at ${exe} (npm install in desktop)`, checks, ms: 0 };
+  const windowMs = opts.windowMs || 60_000;
+  /** Set when the app kept its pet window closed on purpose and said why; the rest of the drive cannot run then. */
+  let gated = "";
   const ud = path.join(WORK, `ud-${process.pid}-${Date.now()}`);
   if (!throwawayOk(ud)) throw new Error(`refusing user data ${ud}`);
   fs.mkdirSync(ud, { recursive: true });
@@ -123,20 +143,55 @@ async function drive(opts = {}) {
   /** The House window while Minds is open, so a request to api.x.ai can be checked against its line in view. */
   let housePage = null;
 
-  async function launch() {
+  /**
+   * The first questions to a just-started app. On Linux, Playwright's first evaluate now and then comes back with
+   * "Resulting promise was garbage collected" while the app is fine and its window opens (seen on the box, about one
+   * start in three, once the window opens a moment later than before). The question is asked again then, up to
+   * three times; any other error is thrown as it came.
+   * @template T
+   * @param {any} app
+   * @param {() => Promise<T>} ask
+   * @returns {Promise<T>}
+   */
+  async function firstAsk(app, ask) {
+    for (let i = 0; ; i += 1) {
+      try {
+        return await ask();
+      } catch (e) {
+        const gc = /garbage collected/i.test(String(e && e.message ? e.message : e));
+        if (!gc || i >= 2) throw e;
+        await new Promise((r) => setTimeout(r, 250));
+      }
+    }
+  }
+
+  /** The app started, its userData checked and its menus recorded; no window waited for yet. */
+  async function start() {
     const app = await pw._electron.launch({
       executablePath: exe,
-      args: [DESKTOP, `--user-data-dir=${ud}`, ...(scale ? [`--force-device-scale-factor=${scale}`] : [])],
+      args: ["-r", HOOK, DESKTOP, `--user-data-dir=${ud}`, ...(scale ? [`--force-device-scale-factor=${scale}`] : [])],
       cwd: DESKTOP,
       env: { ...process.env, COMPUTERPETS_GUI_HARNESS: "" },
       timeout: 90_000,
     });
-    const got = await app.evaluate(({ app: a }) => a.getPath("userData"));
+    // The Electron process, kept while it can still be asked (app.process() throws once the app has closed).
+    try {
+      app.__proc = app.process();
+    } catch {
+      app.__proc = null;
+    }
+    let got = "";
+    try {
+      got = await firstAsk(app, () => app.evaluate(({ app: a }) => a.getPath("userData")));
+    } catch (e) {
+      await stop(app);
+      throw new Error(`the app ended as it started (${String(e && e.message ? e.message : e).split("\n")[0]})`);
+    }
     if (path.resolve(got).toLowerCase() !== path.resolve(ud).toLowerCase()) {
-      await app.close().catch(() => {});
+      await stop(app);
       throw new Error(`userData is ${got}, not the throwaway folder; stopped before touching it`);
     }
-    await app.evaluate(({ Menu }) => {
+    await firstAsk(app, () => app.evaluate(({ Menu }) => {
       const g = /** @type {any} */ (globalThis);
       g.__built = [];
       const build = Menu.buildFromTemplate.bind(Menu);
@@ -151,13 +206,126 @@ async function drive(opts = {}) {
         g.__popups.push(this);
         this.__at = o && typeof o.x === "number" ? { x: o.x, y: o.y } : null;
       };
-    });
-    const page = await app.firstWindow({ timeout: 60_000 });
+    }));
+    return app;
+  }
+
+  /** The app's message boxes so far (first-run-drive-hook.cjs), words and buttons. */
+  const boxes = (app) =>
+    app
+      .evaluate(() => ((/** @type {any} */ (globalThis)).__dialogs || []).map((d) => ({ message: d.message, detail: d.detail, buttons: d.buttons, answered: d.answered })))
+      .catch(() => []);
+  /** Press button `label` on the app's latest unanswered message box. */
+  const pressBox = (app, label) =>
+    app
+      .evaluate((_e, label) => {
+        const d = [...((/** @type {any} */ (globalThis)).__dialogs || [])].reverse().find((x) => !x.answered);
+        const i = d ? d.buttons.indexOf(label) : -1;
+        if (i < 0) return false;
+        d.answer(i);
+        return true;
+      }, label)
+      .catch(() => false);
+  /** Close an app that never showed its window, so the drive ends instead of waiting on it forever. */
+  async function stop(app) {
+    const proc = app.__proc || null;
+    await app.close().catch(() => {});
+    // Gone for real before the next start: a copy still quitting holds the single-instance lock, and the next start
+    // then quits at once (seen on Linux right after Quit and after Allow software compositing).
+    const exited = () => !proc || proc.exitCode != null || proc.signalCode != null;
+    for (let i = 0; i < 50 && !exited(); i += 1) await new Promise((r) => setTimeout(r, 100));
+    try {
+      if (!exited()) proc.kill();
+    } catch {
+      /* gone */
+    }
+    for (let i = 0; i < 30 && !exited(); i += 1) await new Promise((r) => setTimeout(r, 100));
+  }
+
+  /**
+   * The overlay window, or the message box saying why it stayed closed, whichever comes first. A GPU that draws in
+   * software (a virtual machine, Xvfb) gets the app's own Allow software compositing button pressed: the app writes
+   * gpu-path.json itself and asks to restart (recorded), and the drive starts it again. A desktop without a
+   * compositor ends the drive there, with that message checked.
+   */
+  async function launch() {
+    for (let round = 0; round < 3; round += 1) {
+      const app = await start();
+      try {
+        const got = await meet(app);
+        if (got === "again") continue;
+        return got;
+      } catch (e) {
+        // Whatever went wrong, the app this round started is closed: it kept the drive waiting forever before.
+        await stop(app);
+        throw e;
+      }
+    }
+    throw new Error("the overlay stayed closed after Allow software compositing");
+  }
+
+  /**
+   * One start: the overlay window (with the page ready), "again" after Allow software compositing, or the end of the
+   * drive at a desktop without a compositor.
+   * @returns {Promise<{ app: any, page: any } | "again">}
+   */
+  async function meet(app) {
+    /** @type {any} */
+    let page = null;
+    /** @type {{ message: string, detail: string, buttons: string[] } | null} */
+    let box = null;
+    const until = Date.now() + windowMs;
+    while (!page && !box && Date.now() < until) {
+      page = app.windows()[0] || (await app.waitForEvent("window", { timeout: 1000 }).catch(() => null));
+      if (!page) box = (await boxes(app)).find((b) => !b.answered && gateOf(b) !== "other") || null;
+    }
+    if (page) return { app, page: await attach(page) };
+    if (!box) {
+      await stop(app);
+      throw new Error(`no overlay window and no message saying why in ${Math.round(windowMs / 1000)} s`);
+    }
+    const gate = gateOf(box);
+    const noWindow = app.windows().length === 0;
+    if (gate === "software-refused") {
+      const pressed = await pressBox(app, "Allow software compositing");
+      const closed = await app.waitForEvent("close", { timeout: 20_000 }).then(() => true, () => false);
+      let expect = "";
+      try {
+        expect = JSON.parse(fs.readFileSync(path.join(ud, "gpu-path.json"), "utf8")).expect;
+      } catch {
+        /* missing */
+      }
+      check(
+        "gate_software_says_so",
+        noWindow && pressed && closed && expect === "software",
+        `"${box.message}" [${box.buttons.join(" | ")}]; no window ${noWindow}; Allow pressed ${pressed}, app closed to restart ${closed}, gpu-path.json expect ${expect || "unset"}`,
+      );
+      await stop(app);
+      return "again";
+    }
+    if (gate === "no-compositor") {
+      const OverlayGate = require("./overlay-gate.cjs");
+      const seen = await OverlayGate.readCompositor();
+      const pressed = await pressBox(app, "Quit");
+      const closed = await app.waitForEvent("close", { timeout: 20_000 }).then(() => true, () => false);
+      check("gate_no_compositor_says_so", seen === "no" && noWindow && pressed && closed, `"${box.message}" [${box.buttons.join(" | ")}]; compositor ${seen}; no window ${noWindow}; Quit ended the app ${closed}`);
+      await stop(app);
+      gated = "no-compositor";
+      return { app: null, page: null };
+    }
+    await stop(app);
+    throw new Error(`the overlay stayed closed: "${box.message}"`);
+  }
+
+  /** Listeners and the api.x.ai stand-in on the overlay page. */
+  async function attach(page) {
     await page.waitForLoadState("load");
     page.on("pageerror", (e) => errors.push(`overlay: ${String(e).slice(0, 160)}`));
     page.on("console", (m) => {
       // The drive's own 401 for api.x.ai shows as a failed load; that one is the stand-in key being refused.
-      if (m.type() === "error" && !(cloud.length && /status of 401/.test(m.text()))) errors.push(`overlay console: ${m.text().slice(0, 160)}`);
+      // A file that did not load names itself (a missing picture said only "Failed to load resource").
+      const where = /Failed to load resource/.test(m.text()) && m.location && m.location().url ? ` ${m.location().url.replace(/^.*\/renderer\//, "")}` : "";
+      if (m.type() === "error" && !(cloud.length && /status of 401/.test(m.text()))) errors.push(`overlay console: ${m.text().slice(0, 160)}${where}`);
     });
     await page.route("https://api.x.ai/**", async (route) => {
       const inView = await page
@@ -184,7 +352,7 @@ async function drive(opts = {}) {
       cloud.push({ at: Date.now(), inView, houseInView });
       await route.fulfill({ status: 401, contentType: "application/json", body: JSON.stringify({ error: "Incorrect API key provided" }) });
     });
-    return { app, page };
+    return page;
   }
 
   const menuItems = (app, which) =>
@@ -208,9 +376,12 @@ async function drive(opts = {}) {
   /** The first pet and the one chosen from Companions, for the restart check. */
   let firstKey = null;
   let switchedKey = null;
+  /** What the Minds page said about where the key is kept, at Save. */
+  let keyLine = "";
   try {
     let page;
     ({ app, page } = await launch());
+    if (gated) throw new Error(`gated: ${gated}`);
     check("user_data_throwaway", true, ud);
     await page.waitForTimeout(3500);
     const state = () =>
@@ -798,6 +969,7 @@ async function drive(opts = {}) {
       await minds.click("#save");
       await minds.waitForTimeout(900);
       const savedLine = await minds.evaluate(() => (document.getElementById("ok")?.textContent || "").trim());
+      keyLine = await minds.evaluate(() => (document.getElementById("keyStore")?.textContent || "").trim());
       let raw = "";
       try {
         raw = fs.readFileSync(path.join(ud, "mind.json"), "utf8");
@@ -816,6 +988,31 @@ async function drive(opts = {}) {
       const fromHouse = cloud.filter((c) => c.houseInView);
       const refusedLine = "The mind did not answer. The AI website did not accept your key. Check your key for that AI website. House lines will.";
       check("minds_save_tests_key", tested === refusedLine && fromHouse.length >= 1, `under Save: "${tested || "nothing"}"; ${fromHouse.length} request(s) to api.x.ai with the House window's line in view`);
+      // Test this mind, its own button like the web's: the saved mind again without saving (one more request, the
+      // line in view again); with a box changed and not saved it says so and asks nothing.
+      const mindLine = () =>
+        minds
+          .waitForFunction(() => {
+            const t = (document.getElementById("mindTest")?.textContent || "").trim();
+            return !!t && !/^Asking /.test(t);
+          }, null, { timeout: 16_000, polling: 200 })
+          .then(() => minds.evaluate(() => (document.getElementById("mindTest")?.textContent || "").trim()), () => "");
+      const asked = cloud.filter((c) => c.houseInView).length;
+      await minds.click("#testMind");
+      const retested = await mindLine();
+      const askedAgain = cloud.filter((c) => c.houseInView).length - asked;
+      const savedModel = await minds.inputValue("#model");
+      await minds.fill("#model", `${savedModel}-not-saved`);
+      const beforeUnsaved = cloud.length;
+      await minds.click("#testMind");
+      const unsaved = await mindLine();
+      const askedUnsaved = cloud.length - beforeUnsaved;
+      await minds.fill("#model", savedModel);
+      check(
+        "minds_test_button",
+        retested === refusedLine && askedAgain === 1 && /^Save first\./.test(unsaved) && askedUnsaved === 0,
+        `Test this mind: "${retested || "nothing"}" (${askedAgain} more request(s) with the line in view); with the model box changed: "${unsaved || "nothing"}" (${askedUnsaved} request(s))`,
+      );
       await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().find((w) => /House/.test(w.getTitle()))?.close());
       housePage = null;
       await page.waitForTimeout(700);
@@ -906,7 +1103,7 @@ async function drive(opts = {}) {
     );
     await clickItem(app, "Quit").catch(() => {});
     check("quit", await closed, "app exited");
-    await app.close().catch(() => {});
+    await stop(app);
     app = null;
 
     // 10. A second start: the hello stays gone.
@@ -922,24 +1119,20 @@ async function drive(opts = {}) {
       const bind = M && k ? M.binding(k) : {};
       return { key: k, talk: !!(c.mutes && c.mutes.talk), vol: c.pets && first && c.pets[first] ? c.pets[first].volume : null, plugin: bind.plugin, keyKept: !!bind.apiKey };
     }, firstKey);
+    // A computer with no secret store (Linux with no keyring, as on a bare X server) cannot keep the key across a
+    // restart: the key is not written to disk at all, and the Minds page said so at Save. That is the honest answer.
+    const noStore = /no secret store, so the key was not written to disk/.test(keyLine);
     check(
       "settings_survive_restart",
-      !!switchedKey && kept.key === switchedKey && kept.talk && kept.vol === 35 && kept.plugin === "xai" && kept.keyKept,
-      `pet ${kept.key} (chosen ${switchedKey}); talk muted ${kept.talk}; ${firstKey} volume ${kept.vol}; mind ${kept.plugin}, key kept ${kept.keyKept}`,
+      !!switchedKey && kept.key === switchedKey && kept.talk && kept.vol === 35 && kept.plugin === "xai" && (kept.keyKept || noStore),
+      `pet ${kept.key} (chosen ${switchedKey}); talk muted ${kept.talk}; ${firstKey} volume ${kept.vol}; mind ${kept.plugin}, key kept ${kept.keyKept}${noStore ? " (no secret store here; the Minds page said the key was not written to disk)" : ""}`,
     );
     check("no_page_errors", !errors.length, errors.length ? errors.slice(0, 4).join(" | ") : "none");
   } catch (e) {
-    check("drive", false, String(e && e.stack ? e.stack.split("\n")[0] : e));
+    // A closed pet window that said why is the honest end of the drive there, not a crash.
+    if (!gated) check("drive", false, String(e && e.stack ? e.stack.split("\n")[0] : e));
   } finally {
-    if (app) {
-      const proc = app.process();
-      await app.close().catch(() => {});
-      try {
-        if (proc && proc.exitCode === null) proc.kill();
-      } catch {
-        /* gone */
-      }
-    }
+    if (app) await stop(app);
   }
   const removed = await removeDir(ud);
   check("throwaway_removed", removed, removed ? "removed" : `still at ${ud}`);
@@ -948,10 +1141,10 @@ async function drive(opts = {}) {
   } catch {
     /* another run */
   }
-  return { ok: checks.every((c) => c.ok), checks, ms: Date.now() - t0, userData: ud, scale };
+  return { ok: !gated && checks.every((c) => c.ok), ...(gated ? { gated } : {}), checks, ms: Date.now() - t0, userData: ud, scale };
 }
 
-module.exports = { overlaps, onScreen, duplicateLabels, allLabels, throwawayOk, scaleArg, sideGap, STANDIN_KEY, WORK, drive };
+module.exports = { overlaps, onScreen, duplicateLabels, allLabels, throwawayOk, scaleArg, sideGap, gateOf, STANDIN_KEY, WORK, HOOK, drive };
 
 if (require.main === module) {
   drive({ scale: scaleArg(process.argv.slice(2)) }).then(

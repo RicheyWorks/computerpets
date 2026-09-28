@@ -642,7 +642,9 @@ async function trayGate(kind) {
     refused: { open: false, reason: "software-refused", label: "GPU path · software refused (harness)" },
     blocked: { open: false, reason: "no-adapter", label: "GPU path · no adapter (harness)" },
   };
-  const ctx = await Main.bootMain({ gate: gates[kind] });
+  // A closed window also says why in a message box now (overlay-gate.cjs); OK (the last button) answers it here, so
+  // the tray's own Allow and Quit are what this row counts.
+  const ctx = await Main.bootMain({ gate: gates[kind], dialogAnswer: kind === "refused" ? 2 : 1 });
   try {
     const t = ctx.tray();
     const out = { kind, shape: shape(t), disabled: t.filter((r) => r.enabled === false).map((r) => r.label), tip: ctx.tips[ctx.tips.length - 1], windows: ctx.windows.length };
@@ -789,7 +791,7 @@ async function trayMenu() {
     const refused = runGate("refused");
     if (refused.error) fails.push(`refused gate: ${refused.error}`);
     else {
-      if (JSON.stringify(refused.shape) !== JSON.stringify(["GPU path · software refused (harness)", "---", "Allow software compositing", "Quit"])) fails.push(`refused tray is ${refused.shape.join(" | ")}`);
+      if (JSON.stringify(refused.shape) !== JSON.stringify(["GPU path · software refused (harness)", "---", "Allow software compositing", "Why the pets are not on the screen", "Quit"])) fails.push(`refused tray is ${refused.shape.join(" | ")}`);
       if (JSON.stringify(refused.disabled) !== JSON.stringify(["GPU path · software refused (harness)"])) fails.push("refused tray gate line is not disabled");
       if (refused.tip !== "GPU path · software refused (harness)") fails.push(`refused tooltip ${refused.tip}`);
       if (refused.windows !== 0) fails.push("a refused GPU gate still made the overlay window");
@@ -800,7 +802,7 @@ async function trayMenu() {
     }
     const blocked = runGate("blocked");
     if (blocked.error) fails.push(`blocked gate: ${blocked.error}`);
-    else if (JSON.stringify(blocked.shape) !== JSON.stringify(["GPU path · no adapter (harness)", "---", "Quit"]) || blocked.quit !== 1) fails.push(`blocked tray is ${blocked.shape.join(" | ")}`);
+    else if (JSON.stringify(blocked.shape) !== JSON.stringify(["GPU path · no adapter (harness)", "---", "Why the pets are not on the screen", "Quit"]) || blocked.quit !== 1) fails.push(`blocked tray is ${blocked.shape.join(" | ")}`);
     else trace.push("blocked=quit_only");
 
     return fails.length

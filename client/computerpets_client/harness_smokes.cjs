@@ -334,10 +334,23 @@ async function cardAudit1557() {
   const bind = { plugin: "xai", apiKey: "stand-in-not-real" };
   const reply = await M.run({ bind, species: "red_panda", fallback: "", message: "Hello. Who are you?", shown: M.talkHonesty(bind) });
   const said = M.mindTestLine ? M.mindTestLine(reply, "xAI") : "";
-  if (said !== `The mind did not answer. ${M.MIND_LINES.key} House lines will.` || !/await testSaved\(\);/.test(settings) || !/connect-src 'none'/.test(settings)) {
+  if (said !== `The mind did not answer. ${M.MIND_LINES.key} House lines will.` || !/await testSaved\(false\);/.test(settings) || !/connect-src 'none'/.test(settings)) {
     return fail("Minds Save does not test the key in the web's words", { said });
   }
   trace.push("save_test=refused_plain");
+  // Test this mind: its own button next to Save, like the web's; an unsaved change says Save first and asks nothing.
+  const px = M.preset("xai");
+  const typed = { plugin: "xai", model: px.model, baseUrl: px.base, apiKey: "stand-in-not-real" };
+  if (
+    !M.mindTestGate ||
+    M.mindTestGate(typed, { ...typed, model: "another-model" }) !== M.MIND_TEST_UNSAVED ||
+    M.mindTestGate(typed, typed) !== "" ||
+    !settings.includes('<button id="testMind" class="ghost" type="button">Test this mind</button>') ||
+    !/await testSaved\(true\);/.test(settings)
+  ) {
+    return fail("Minds has no Test this mind button of its own");
+  }
+  trace.push("test_button=asks_saved_mind");
   if (!/<label class="keeper-volume" data-hit>\n\s+Volume for this pet\n/.test(html)) return fail("the volume slider does not say it is this pet's");
   trace.push("volume=this_pet");
   const spot = K.cardSpotNearPet ? K.cardSpotNearPet({ x: 2238, w: 314, h: 900, bottom: 1214, plates: [{ left: 2067, top: 111, right: 2355, bottom: 420 }], width: 2560, petLeft: 2382, petRight: 2530 }) : null;
@@ -1246,6 +1259,7 @@ const COMMANDS = {
   tray_on_the_desk: MainHarness.tray_on_the_desk,
   quit_desk: MainHarness.quit_desk,
   pictures_gate: MainHarness.pictures_gate,
+  overlay_gate: MainHarness.overlay_gate,
   market_search: MainHarness.market_search,
   mind_get_set: MainHarness.mind_get_set,
   saved_lines: MainHarness.saved_lines,

@@ -10,6 +10,11 @@ export const NIGHT_ENERGY_PER_MS = 18 / 3_600_000;
  * number and rule as the desktop's life.js decay (REST_WAKE_ENERGY); scripts/rest-wake.test.mjs runs both.
  */
 export const REST_WAKE_ENERGY = 100;
+/**
+ * Energy one Rest gives. The web gave +34 and the desktop's life.js +32 for the same button; one number now, on both
+ * (life.js REST_ENERGY_GAIN; scripts/rest-wake.test.mjs presses Rest on both and compares every stat).
+ */
+export const REST_ENERGY_GAIN = 34;
 
 /** Tend rail the living desk already keeps. /demo uses the same marks. */
 export const DESK_TEND = [
@@ -426,7 +431,7 @@ export function applyRest(stats: Partial<CareStats>): CareStats {
     asleep: true,
     hunger: clampStat(s.hunger - 3),
     mood: clampStat(s.mood + 4),
-    energy: clampStat(s.energy + 34),
+    energy: clampStat(s.energy + REST_ENERGY_GAIN),
     bond: clampStat(s.bond + 1),
   };
 }
