@@ -207,3 +207,21 @@ def test_wrappers_are_the_only_request_and_a_miss_does_not_call_it():
     read = session[session.index("def _read_bundle") : session.index("def unlock")]
     assert read.index("def fetch") < read.index('client["fetch_bundle"]') < read.index("get_signed_bundle")
     assert "bundle_may_fetch" not in read
+
+
+def test_every_miss_names_the_real_host_and_no_dead_fallback_name_is_left():
+    """A miss needs a named host (no host never leaves), so there is no stand-in name to fall back to."""
+    import computerpets_client.license.license_net as net
+
+    assert not hasattr(net, "LICENSE_HOST_NAME") and not hasattr(net, "BUNDLE_HOST_NAME")
+    assert net.license_target("") is None and net.bundle_target("") is None
+    assert net.license_target("https://license.example.test/a?x=1") == {"local": False, "label": "license.example.test"}
+    assert net.bundle_target("https://cdn.example.test/p.zip?sig=1") == {"local": False, "label": "cdn.example.test"}
+    with pytest.raises(LicenseError) as hit:
+        post_license_hash("", "https://license.example.test/a", lambda: 1)
+    assert str(hit.value) == "Nothing was sent to license.example.test. This page has to name the license website first."
+    with pytest.raises(LicenseError) as held:
+        get_signed_bundle("", "https://cdn.example.test/p.zip", lambda: 1, strict=True)
+    assert str(held.value) == (
+        "Your pet's files were not downloaded from cdn.example.test. This page has to name the download website first."
+    )

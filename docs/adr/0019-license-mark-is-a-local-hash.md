@@ -1,4 +1,4 @@
-# 0019. A license mark is a local hash of a named machine id
+# 0019. The license code is a scrambled code made on this computer from its ID
 
 - **Status:** Accepted (the silent computer-name and random fallback is superseded by [0030](0030-missing-os-id-waits-for-a-yes.md))
 - **Date:** 2026-09-22

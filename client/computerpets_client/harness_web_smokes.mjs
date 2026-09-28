@@ -1312,7 +1312,12 @@ async function loopGuardUnlockPlain() {
     thankYouRepeats: repeats.length,
     ignoreGuard: WP.playFor("cat") !== WP.IGNORE && /if \(kind === IGNORE\) return null;/.test(wpSrc),
   };
-  if (!/^\d+$/.test(baselineJs) || Number(baselineJs) > 58) bad.push(`desktop checkJs baseline is ${baselineJs}, above 58`);
+  // The line is desktop/checkjs-baseline.txt itself (scripts/checkjs-baseline.mjs fails the run above it), so
+  // this row writes no number of its own: it checks the file holds one whole number and CONTRIBUTING quotes it.
+  const contributingDoc = readFileSync(join(ROOT, "docs", "CONTRIBUTING.md"), "utf8");
+  checkjs.docCount = (contributingDoc.match(/`desktop\/checkjs-baseline\.txt` \((\d+) at last count/) || [])[1] || "";
+  if (!/^\d+$/.test(baselineJs)) bad.push(`desktop/checkjs-baseline.txt should hold one whole number, not "${baselineJs}"`);
+  else if (checkjs.docCount !== baselineJs) bad.push(`CONTRIBUTING says ${checkjs.docCount || "no"} checkJs errors at last count; desktop/checkjs-baseline.txt holds ${baselineJs}`);
   if (!checkjs.wired) bad.push("checkjs is not in test-all.ps1 and test-all.sh");
   if (checkjs.apiDuplicates) bad.push(`window-play api has ${checkjs.apiDuplicates} duplicate key(s)`);
   if (repeats.length) bad.push(`a thank-you repeats itself: ${repeats.slice(0, 5).join(", ")}`);
@@ -1472,7 +1477,7 @@ async function deskGuardPlain() {
     dialog: dialog.includes('form.addRow("House server address", self.backend)') && dialog.includes('"Asking the house server…"') && !/Talking to the backend|"Backend URL"|house backend|under Backend URL/.test(dialog),
     errors: !/Backend URL/.test(plainErrJs) && !/Backend URL/.test(plainErrPy) && plainErrJs.includes("Check the house server address.") && plainErrPy.includes("Check the house server address."),
     admin: !/showError\(err, "[^"]*failed\."\)/.test(admin) && adminFallbacks.length === 3 && adminFallbacks.every((s) => /^[A-Z][^.]+\. Try again in a moment\.$/.test(s) && !/failed/i.test(s)) && !/failure\(res, "[^"]*failed\."\)/.test(adminApi),
-    fallbacks: netFiles.every((src) => src.includes('"the license website"') && src.includes('"the download website"') && !/"the (license|bundle) host"/.test(src)),
+    fallbacks: netFiles.every((src) => !/HOST_NAME/.test(src) && /label: host \}|"label": host\}/.test(src) && !/"the (license|bundle) host"/.test(src)),
     docComments: heads.every((h) => !/rejects|late body|RSS read refuses|unread/.test(h) && h.includes("thrown away")) && !/CoinGecko/.test(heads[0] + heads[1]) && !/Google News|Wikipedia/.test(heads[2] + heads[3]),
     adr: ["0036", "0037"].every((n) => title(n) && adrIndex.includes(`| ${title(n)} |`) && !/network address|host|hash/.test(title(n))) && /\*\*Plain words \(2026-09-27\):\*\* "device fingerprint"/.test(adr19),
   };
@@ -1494,6 +1499,140 @@ async function deskGuardPlain() {
   ]);
 }
 
+async function guestLoopsMount() {
+  const bad = [];
+  const lib = (rel) => import(pathToFileURL(join(WEB, "src", "lib", ...rel.split("/"))).href);
+  const FG = await lib("pets/frame-guard.ts");
+  const Overlay = require(join(RENDERER, "frame-guard.js"));
+  const DESK = join(WEB, "src", "components", "desk");
+  const read = (...parts) => readFileSync(join(ROOT, ...parts), "utf8");
+
+  // 1) Each guest loop shape, driven with a step that throws once: a guest that leaves stops its own loop,
+  // plants and the carried lure keep stepping, and one error across visits is logged once.
+  const drive = (leaves) => {
+    const logs = [];
+    const guard = FG.makeGuestGuard({ log: (t) => logs.push(t), outcome: "x" });
+    let queue = [];
+    let steps = 0;
+    let resets = 0;
+    for (let visit = 0; visit < 2; visit += 1) {
+      let n = 0;
+      const loop = FG.guardedLoop(() => {
+        n += 1;
+        steps += 1;
+        if (n === 3) throw new Error("injected guest fault");
+        return true;
+      }, (fn) => queue.push(fn), guard, () => "guest");
+      guard.onReset(() => {
+        resets += 1;
+        if (leaves) loop.stop();
+      });
+      queue.push(loop);
+      for (let i = 0; i < 20 && queue.length; i += 1) {
+        const due = queue;
+        queue = [];
+        for (const fn of due) fn(i * 16);
+      }
+      if (leaves && (n !== 3 || queue.length)) bad.push(`a guest that leaves kept its loop: ${n} steps, ${queue.length} queued`);
+      if (!leaves && n !== 20) bad.push(`a guest that stays stopped after a throw: ${n} steps`);
+      queue = [];
+      guard.onReset(null);
+    }
+    return { steps, resets, logs: logs.length, caught: guard.caught() };
+  };
+  const shapes = { leaves: drive(true), stays: drive(false) };
+  for (const [k, r] of Object.entries(shapes)) if (r.logs !== 1 || r.resets !== 2 || r.caught !== 2) bad.push(`${k}: ${JSON.stringify(r)}`);
+
+  // 2) The five components run their loops through that guard, schedule first, and clean up.
+  const guests = { "robin-fly.tsx": "() => ROBIN_KEY", "bird-fly.tsx": "() => FLY_BIRD_KEY", "called-guests.tsx": "() => ALL_CALLED", "desk-plants.tsx": '() => "plants"', "blotter.tsx": '() => "carried lure"' };
+  const wired = {};
+  for (const [file, key] of Object.entries(guests)) {
+    const src = readFileSync(join(DESK, file), "utf8");
+    wired[file] =
+      src.includes(`const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, ${key});`) &&
+      /const \[guard\] = useState\(\(\) => makeGuestGuard\(\{ outcome: "[^"]+" \}\)\);/.test(src) &&
+      /guard\.onReset\(/.test(src) &&
+      /tick\.stop\(\);\s*guard\.onReset\(null\);\s*window\.cancelAnimationFrame\(raf\);/.test(src) &&
+      !/raf = window\.requestAnimationFrame\(tick\);\s*\};/.test(src);
+  }
+  const unwired = Object.entries(wired).filter(([, v]) => !v).map(([k]) => k);
+  if (unwired.length) bad.push(`guest loops not guarded: ${unwired.join(", ")}`);
+
+  // 3) The real components mounted with React in a small DOM, a step made to throw in each (web/scripts/desk-mount.test.mjs).
+  const { spawnSync } = require("node:child_process");
+  const run = spawnSync(process.execPath, ["--experimental-strip-types", "--no-warnings", "--test", "--test-reporter=tap", join("scripts", "desk-mount.test.mjs")], { cwd: WEB, encoding: "utf8", timeout: 40000 });
+  const tap = `${run.stdout || ""}`;
+  const count = (label) => Number((tap.match(new RegExp(`^# ${label} (\\d+)$`, "m")) || [])[1] || -1);
+  const mount = { status: run.status, pass: count("pass"), fail: count("fail"), tests: [...tap.matchAll(/^ok \d+ - (.+)$/gm)].map((m) => m[1].split(":")[0]) };
+  if (run.status !== 0 || mount.pass !== 6 || mount.fail !== 0) bad.push(`mount tests: ${JSON.stringify({ ...mount, err: (run.stderr || "").slice(0, 200) })}`);
+
+  // 4) Music waits out the backoff after a broken dance (web and overlay), and the thank-you call is typed.
+  const music = [FG, Overlay].map((M) => {
+    const p = M.safeIdle({ trick: null, happy: null, play: null, act: null, actMotion: null, pendingPose: null, poseHold: 0, anim: "play", hop: 0, land: 0, trickWait: 0 });
+    let held = 0;
+    while (!M.musicMayDance(p, 0.5) && held < 100) held += 1;
+    return held;
+  });
+  if (music.some((h) => h !== 16)) bad.push(`music did not wait the backoff: ${music.join(",")}`);
+  const living = readFileSync(join(DESK, "living-pet.tsx"), "utf8");
+  const petJs = read("desktop", "renderer", "pet.js");
+  const ground = readFileSync(join(WEB, "src", "lib", "pets", "ground-tricks.ts"), "utf8");
+  const typed = {
+    webMusic: /const musicWantsDance = musicMayDance\(s, dt\) && musicRef\.current/.test(living),
+    overlayMusic: /const musicWantsDance = window\.PetFrameGuard\.musicMayDance\(sim, dt\) && musicOn\(\)/.test(petJs),
+    thankYou: /const mod: ThankYouStarter = T;\s*return mod\.startThankYou\(key \?\? undefined, lastKind, x, facing, flags\) \?\? null;/.test(ground) && !/as never/.test(ground),
+  };
+  if (!Object.values(typed).every(Boolean)) bad.push(`music / typed calls: ${JSON.stringify(typed)}`);
+
+  // 5) No dead stand-in host names in the three license files, and a miss names the real host.
+  const Main = require(join(ROOT, "desktop", "license", "license-net.cjs"));
+  const netSrc = [read("desktop", "license", "license-net.cjs"), read("desktop", "renderer", "license-net.js"), read("client", "computerpets_client", "license", "license_net.py")];
+  let missLine = "";
+  try {
+    await Main.postLicenseHash("", "https://license.example.test/a", () => 1);
+  } catch (err) {
+    missLine = err.message;
+  }
+  const license = {
+    noStandIn: netSrc.every((s) => !/HOST_NAME/.test(s)),
+    miss: missLine === "Nothing was sent to license.example.test. This page has to name the license website first.",
+    label: JSON.stringify(Main.bundleTarget("https://cdn.example.test/p.zip")) === JSON.stringify({ local: false, label: "cdn.example.test" }),
+  };
+  if (!Object.values(license).every(Boolean)) bad.push(`license fallbacks: ${JSON.stringify(license)}`);
+
+  // 6) Plain words: READMEs, the admin unreachable line, ADR titles, CONTRIBUTING counts, and Settings Minds.
+  const adrDir = join(ROOT, "docs", "adr");
+  const adrFile = (n) => readdirSync(adrDir).find((f) => f.startsWith(`${n}-`)) || "";
+  const adrTitle = (n) => (readFileSync(join(adrDir, adrFile(n)), "utf8").match(/^# \d{4}\. (.+?)\r?$/m) || [])[1] || "";
+  const adrIndex = read("docs", "adr", "README.md");
+  const contributing = read("docs", "CONTRIBUTING.md");
+  const settings = read("desktop", "renderer", "settings.html");
+  const words = {
+    readmes: [read("client", "README.md"), read("desktop", "README.md")].every((s) => !/house backend|backend URL|backend host|Backend origin/i.test(s)),
+    admin: /export const ADMIN_UNREACHABLE =\s*"Couldn't reach the license service\. Check that its address is right and that it is running, then try again\.";/.test(read("web", "src", "lib", "admin", "api.ts")) && !/API URL/.test(read("web", "src", "lib", "admin", "api.ts")),
+    adr: ["0019", "0032", "0033", "0034", "0035"].every((n) => adrTitle(n) && adrIndex.includes(`[${n}](${adrFile(n)}) | ${adrTitle(n)} |`) && !/network address|\bhash\b|geocode|machine id/.test(adrTitle(n))),
+    counts: contributing.includes(`\`web\` has ${Number(read("web", "tsc-baseline.txt").trim()).toLocaleString("en-US")} known TypeScript errors at last count`) && contributing.includes(`\`desktop/checkjs-baseline.txt\` (${read("desktop", "checkjs-baseline.txt").trim()} at last count`),
+    minds: settings.includes('<p class="lead" id="mindsIntro">Pets talk without an AI. Adding one is optional.</p>') && settings.includes('<div id="mindFields">') && settings.includes(">Download my pet</button>") && !/>Signed download</.test(settings),
+  };
+  const unplain = Object.entries(words).filter(([, v]) => !v).map(([k]) => k);
+  if (unplain.length) bad.push(`plain words: ${unplain.join(", ")}`);
+  const roadmap = read("docs", "ROADMAP.md");
+  const updated = (roadmap.match(/Last Updated[^0-9]*(\d{4}-\d{2}-\d{2})/) || [])[1] || "";
+  if (updated < "2026-09-27") bad.push(`ROADMAP Last Updated is ${updated}`);
+  if (bad.length) return fail(bad.join("; "), { shapes, wired, mount, music, typed, license, words });
+  return ok("every web desk guest loop survives a throwing step; LivingPet and each guest mounted with React show the reset on screen; music waits after a broken dance; no dead license stand-ins; plain README, admin, ADR, and Settings words", { shapes, wired, mount, music, typed, license, words, updated }, [
+    "guests=robin+bird+called+plants+lure",
+    "loop=schedule_first+guest_guard",
+    "log=once_per_error+key",
+    "reset=leave_or_rest",
+    "mount=living_pet+5_guests_react_dom",
+    "music=backoff_after_broken_dance",
+    "types=typed_thank_you",
+    "license=no_dead_stand_in",
+    "words=readme+admin+adr+minds",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
@@ -1510,6 +1649,7 @@ const COMMANDS = {
   consent_types_plain: consentTypesPlain,
   loop_guard_unlock_plain: loopGuardUnlockPlain,
   desk_guard_plain: deskGuardPlain,
+  guest_loops_mount: guestLoopsMount,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
   speak_opts: speakOpts,

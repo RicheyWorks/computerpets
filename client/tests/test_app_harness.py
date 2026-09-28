@@ -113,6 +113,7 @@ CROSS_DOMAIN = {
     "web.consent_types_plain",
     "web.loop_guard_unlock_plain",
     "web.desk_guard_plain",
+    "web.guest_loops_mount",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -356,7 +357,7 @@ def test_house_window_unlock_and_tray_rows_run_offline_with_plain_words():
     """The House window, Unlock offline, and the whole tray menu, through the real main.cjs."""
     window = invoke("desk.settings.window")
     assert window.ok, window.error
-    for mark in ("plugins=14", "pets=221", "unlock_opens=unlock", "base_url_refused=4", "save=sealed",
+    for mark in ("plugins=14", "pets=221", "unlock_opens=unlock", "minds=house_lines_need_nothing", "base_url_refused=4", "save=sealed",
                  "disk_plain_key=0", "unwritable=not_saved", "no_store=not_written", "details=folded_toggles",
                  "mark=stored", "unlock_refused=plain"):
         assert mark in window.trace, (mark, window.trace)
@@ -478,6 +479,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.consent_types_plain",
         "web.loop_guard_unlock_plain",
         "web.desk_guard_plain",
+        "web.guest_loops_mount",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -691,7 +693,11 @@ def test_loop_guard_row_keeps_the_overlay_moving_and_the_unlock_words_plain():
     assert run["caught"] >= 2 and run["resets"] == run["caught"]
     assert "(cat)" in run["log"]
     assert all(lg.extras["wired"].values()), lg.extras["wired"]
-    assert int(lg.extras["checkjs"]["baseline"]) <= 58
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[2]
+    baseline = (root / "desktop" / "checkjs-baseline.txt").read_text(encoding="utf-8").strip()
+    assert lg.extras["checkjs"]["baseline"] == baseline and lg.extras["checkjs"]["docCount"] == baseline
     assert lg.extras["checkjs"]["apiDuplicates"] == 0 and lg.extras["checkjs"]["thankYouRepeats"] == 0
     assert all(lg.extras["unlock"].values()), lg.extras["unlock"]
     assert lg.extras["gates"]["messages"][0] == (
@@ -716,6 +722,25 @@ def test_desk_guard_row_keeps_the_web_desk_moving_and_the_house_words_plain():
     assert int(dg.extras["checkjs"]["baseline"]) <= 3
     assert all(v for k, v in dg.extras["checkjs"].items() if k != "baseline"), dg.extras["checkjs"]
     assert all(dg.extras["words"].values()), dg.extras["words"]
+
+
+def test_guest_loops_row_keeps_every_desk_guest_moving_and_mounts_the_real_pets():
+    """Each web desk guest loop survives a throw; LivingPet and each guest mounted with React show the reset."""
+    gl = invoke("web.guest_loops_mount")
+    assert gl.ok, (gl.error, gl.detail)
+    for mark in ("guests=robin+bird+called+plants+lure", "loop=schedule_first+guest_guard", "log=once_per_error+key",
+                 "reset=leave_or_rest", "mount=living_pet+5_guests_react_dom", "music=backoff_after_broken_dance",
+                 "types=typed_thank_you", "license=no_dead_stand_in", "words=readme+admin+adr+minds"):
+        assert mark in gl.trace, (mark, gl.trace)
+    assert all(gl.extras["wired"].values()), gl.extras["wired"]
+    for shape in gl.extras["shapes"].values():
+        assert shape["logs"] == 1 and shape["resets"] == 2 and shape["caught"] == 2
+    mount = gl.extras["mount"]
+    assert mount["pass"] == 6 and mount["fail"] == 0
+    assert mount["tests"][:2] == ["LivingPet", "LivingPet with the robin"]
+    assert gl.extras["music"] == [16, 16]
+    assert all(gl.extras["typed"].values()) and all(gl.extras["license"].values())
+    assert all(gl.extras["words"].values()), gl.extras["words"]
 
 
 def test_first_run_rows_start_clean_and_show_the_hello_once():

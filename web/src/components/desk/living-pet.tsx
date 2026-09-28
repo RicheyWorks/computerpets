@@ -16,7 +16,7 @@ import {
   type GroundTrickKind,
 } from "@/lib/pets/ground-tricks";
 import { paintDemoFrame } from "@/lib/pets/desk-sprite-surface";
-import { guardedLoop, makeGuard, safeIdle } from "@/lib/pets/frame-guard";
+import { guardedLoop, makeGuard, musicMayDance, safeIdle } from "@/lib/pets/frame-guard";
 import {
   actPose,
   afterSettleWait,
@@ -160,6 +160,7 @@ type Sim = {
   playWait: number;
   trick: GroundTrick | null;
   trickWait: number;
+  brokeWait: number;
   lastTrick: GroundTrickKind | null;
   happy: GroundHappy | null;
   lastHappy: GroundHappyKind | null;
@@ -260,6 +261,7 @@ export function LivingPet({
     playWait: 6 + Math.random() * 5,
     trick: null,
     trickWait: 3 + Math.random() * 3,
+    brokeWait: 0,
     lastTrick: null,
     happy: null,
     lastHappy: null,
@@ -687,7 +689,7 @@ export function LivingPet({
           })
         ) {
           s.trickWait -= dt;
-          const musicWantsDance = musicRef.current && !s.trick && !s.happy;
+          const musicWantsDance = musicMayDance(s, dt) && musicRef.current && !s.trick && !s.happy;
           if (s.trickWait <= 0 || musicWantsDance) {
             s.trick = beginPickedTrick(GT, musicRef.current, s.lastTrick, s.x, s.facing);
             if (s.trick) {

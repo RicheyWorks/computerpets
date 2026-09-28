@@ -16,10 +16,8 @@ from urllib.parse import urlparse
 
 from .errors import LicenseError
 
-LICENSE_HOST_NAME = "the license website"
 LOCAL_STAYS = "Unlocking stays on this computer. The code made from this computer's ID does not leave."
 DOWNLOAD_LOCAL = "This download stays on this computer. It talks to this computer. It does not send the code made from this computer's ID."
-BUNDLE_HOST_NAME = "the download website"
 BUNDLE_IDLE = "Your pet's files are not downloaded until this line names the website."
 BUNDLE_LOCAL = "This download stays on this computer. Your pet's files come from this computer."
 _LOOPBACK = frozenset({"127.0.0.1", "localhost", "::1"})
@@ -56,7 +54,7 @@ def license_target(backend_url: object) -> dict[str, object] | None:
     host = license_host_name(backend_url)
     if not host:
         return None
-    return {"local": _loopback(host), "label": host or LICENSE_HOST_NAME}
+    return {"local": _loopback(host), "label": host}
 
 
 def license_honesty(backend_url: object) -> str:
@@ -96,7 +94,7 @@ def bundle_target(download_url: object) -> dict[str, object] | None:
     host = (parsed.hostname or "").strip("[]")
     if not host or _loopback(host):
         return {"local": True, "label": host}
-    return {"local": False, "label": host or BUNDLE_HOST_NAME}
+    return {"local": False, "label": host}
 
 
 def bundle_honesty(download_url: object) -> str:
@@ -127,7 +125,8 @@ def post_license_hash(shown: object, backend_url: object, request: Callable[[], 
     or write ``hwid.txt`` inside that request. A loopback backend still calls ``request``.
     """
     if not license_may_send(backend_url, shown):
-        host = license_host_name(backend_url) or LICENSE_HOST_NAME
+        # A miss needs a named host (no host never leaves), so the error always names it.
+        host = license_host_name(backend_url)
         raise LicenseError(
             "license_net_unnamed",
             f"Nothing was sent to {host}. This page has to name the license website first.",
@@ -173,7 +172,7 @@ def post_unbound_download(shown: object, backend_url: object, request: Callable[
     That POST has no hash and does not read an OS id. A loopback backend still calls ``request``.
     """
     if not download_may_post(backend_url, shown):
-        host = license_host_name(backend_url) or LICENSE_HOST_NAME
+        host = license_host_name(backend_url)
         raise LicenseError(
             "download_net_unnamed",
             f"Nothing was sent to {host}. This page has to name the license website first.",
@@ -191,7 +190,7 @@ def get_signed_bundle(
     """
     if not bundle_may_fetch(download_url, shown):
         if strict:
-            host = bundle_host_name(download_url) or BUNDLE_HOST_NAME
+            host = bundle_host_name(download_url)
             raise LicenseError(
                 "cdn_net_unnamed",
                 f"Your pet's files were not downloaded from {host}. This page has to name the download website first.",

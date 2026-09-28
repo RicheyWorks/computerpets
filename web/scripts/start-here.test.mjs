@@ -198,9 +198,10 @@ test("START-HERE teaches the blotter as an optional side door in PowerShell", ()
   assert.match(clientApp, /setWindowTitle\("ComputerPets — blotter"\)/);
 });
 
-test("client README runs in bash and PowerShell, and says backend and key are optional", () => {
+test("client README runs in bash and PowerShell, and says the house server address and key are optional", () => {
   const run = sectionOf(clientReadmeSrc, "Run");
-  assert.match(run, /The backend URL and the license key are optional\./);
+  assert.match(run, /The house server address and the license key are optional\./);
+  assert.doesNotMatch(clientReadmeSrc, /house backend|backend URL/i);
   assert.match(run, /The blotter pets walk\s+without\s+them\./);
   const bash = fences(run, "bash").flat().join("\n");
   const ps = fences(run, "powershell").flat().join("\n");

@@ -449,6 +449,11 @@ async function settingsWindow() {
     if ($("licenseOk").textContent !== "Locked. Pets on the desk still work.") fails.push(`license line on open: ${$("licenseOk").textContent}`);
     if ($("licenseErr").textContent !== "") fails.push(`an error on open: ${$("licenseErr").textContent}`);
     trace.push(`plugins=${pluginIds.length}`, `pets=${$("petType").options.length}`);
+    // A new keeper opening Minds reads that talk works without an AI; House lines hide the model, address, and key boxes.
+    const intro = $("mindsIntro");
+    if (!intro || intro.textContent !== "Pets talk without an AI. Adding one is optional.") fails.push(`Minds intro is ${intro ? intro.textContent : "missing"}`);
+    if (!$("mindFields") || $("mindFields").hidden !== true || !$("mindHouse") || $("mindHouse").hidden === true) fails.push("House lines still show the model, address, and key boxes");
+    if (!$("redownload") || $("redownload").textContent !== "Download my pet") fails.push(`download button says ${$("redownload") ? $("redownload").textContent : "nothing"}`);
 
     // Tray Unlock… on the open window: no second window, it scrolls to Unlock.
     find("Unlock…").click();
@@ -464,6 +469,8 @@ async function settingsWindow() {
     const xaiModel = $("model").value;
     const xaiBase = $("base").value;
     if (!/^https:\/\/api\.x\.ai\//.test(xaiBase) || !xaiModel) fails.push(`xai filled ${xaiModel} ${xaiBase}`);
+    if ($("mindFields").hidden !== false || $("mindHouse").hidden !== true) fails.push("choosing xai did not show the model, address, and key boxes");
+    else trace.push("minds=house_lines_need_nothing");
 
     // Validation: each bad Base URL is named and nothing is saved.
     const bad = [
