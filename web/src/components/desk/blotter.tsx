@@ -78,7 +78,7 @@ export function BlotterMarks({
       const pose = poseRef.current;
       if (el && pose) el.style.left = `${carryX(mark, pose.x, pose.facing)}px`;
     };
-    const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, () => "carried lure");
+    const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, () => "carried lure", () => window.cancelAnimationFrame(raf));
     raf = window.requestAnimationFrame(tick);
     return () => {
       tick.stop();

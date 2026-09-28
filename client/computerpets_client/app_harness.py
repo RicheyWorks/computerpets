@@ -2259,6 +2259,8 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
         words = {
             "intro": minds.MINDS_INTRO,
             "which": minds.WHICH_LABEL,
+            "allPets": minds.ALL_PETS_LABEL,
+            "sameAsAll": minds.SAME_AS_ALL_LABEL,
             "house": minds.HOUSE_NOTE,
             "model": minds.MODEL_LABEL,
             "modelHelp": minds.MODEL_HELP,
@@ -2275,7 +2277,8 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
         real = [row["id"] for row in PRESETS if row["kind"] != "local"]
         checks = {
             "web_same": all(f'  {k}: "{v.replace(chr(34), chr(92) + chr(34))}",' in web_words for k, v in words.items()),
-            "overlay_same": all(v in settings for v in words.values()),
+            # The overlay has one AI for all pets and no per-animal box, so "Same as all pets" is web-only there.
+            "overlay_same": all(v in settings for k, v in words.items() if k != "sameAsAll"),
             "house_no_boxes": minds.mind_fields("local") == [] and minds.mind_fields("nope") == [],
             "ai_three_boxes": all(
                 [f["label"] for f in minds.mind_fields(pid)] == [minds.MODEL_LABEL, minds.ADDRESS_LABEL, minds.KEY_LABEL] for pid in real
@@ -2771,6 +2774,22 @@ def _web_rows() -> list[Affordance]:
                 "and Step 6 tray lines are 18 words or fewer per sentence and keep every fact."
             ),
         ),
+        Affordance(
+            "web.flake_house_plain",
+            "web",
+            "desk-mount passes under every seed (a stopped guest loop cancels its queued frame); Use for all pets on all three doors; plain AI cards; short Unlock Details lines; START-HERE cry list one pet per line",
+            "web frame-guard.ts + desktop frame-guard.js guardedLoop cancel, desk-mount.test.mjs + mount-dom.mjs seed, mind-words.ts + routes/mind.tsx, overlay settings.html, client minds.py + unlock_dialog.py, docs START-HERE + README",
+            notes=(
+                "Runs desk-mount.test.mjs under three COMPUTERPETS_MOUNT_SEED values; each must pass 9/9, including the test that "
+                "ends robin and bird flights on every frame of a 60-frame batch. The flake: guardedLoop asks for the next frame "
+                "first, so a flight that ended left one stale frame queued, and a random flight length ended on a batch edge about "
+                "one run in 60. A stopped loop now cancels that frame, and all five desk guests pass cancelAnimationFrame. Use for "
+                "all pets and Same as all pets match in mind-words.ts, the overlay save button, and minds.py. AI cards hold only "
+                "the tag, name, and blurb; the model ids sit in For builders. Unlock Details (overlay and blotter) is one sentence "
+                "of 18 words or fewer per line. The START-HERE cry fold lists 109 pets one per line. The docs README Minds line "
+                "starts with the /mind intro."
+            ),
+        ),
     ]
 
 
@@ -2810,6 +2829,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("minds_flight_plain", domain="web", action_id=aid)
     if local_id == "overlay_birds_plain":
         return _run_web_smoke("overlay_birds_plain", domain="web", action_id=aid)
+    if local_id == "flake_house_plain":
+        return _run_web_smoke("flake_house_plain", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []
