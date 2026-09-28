@@ -14,6 +14,8 @@ from .listener import PRESETS
 MINDS_INTRO = "Pets talk without an AI. Adding one is optional."
 HOUSE_NOTE = "House lines need nothing else. Your pets answer with their own words."
 WHICH_LABEL = "Which AI"
+ALL_PETS_LABEL = "Use for all pets"
+SAME_AS_ALL_LABEL = "Same as all pets"
 MODEL_LABEL = "AI model name"
 MODEL_HELP = "Which version of that AI answers. Picking an AI fills this in, so most people leave it alone."
 ADDRESS_LABEL = "AI website address"

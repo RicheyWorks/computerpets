@@ -25,6 +25,8 @@
       details.fold { margin: -10px 0 16px; color: #9a9288; font-size: 13px; }
       details.fold summary { cursor: pointer; color: #c4a574; width: max-content; }
       details.fold p { margin: 8px 0 0; }
+      /* One short sentence per line, like START-HERE. */
+      #licenseMark { white-space: pre-line; }
       fieldset.optional { border: 1px solid #2a2621; border-radius: 10px; margin: 0; padding: 2px 14px 16px; }
       fieldset.optional legend { padding: 0 6px; font-size: 12px; color: #9a9288; }
     </style>
@@ -49,7 +51,7 @@
       <p class="hint" id="keyHelp">A secret code from that AI website's own page. Keep it secret, like a password.</p>
       </div>
       <p class="ok" id="keyStore"></p>
-      <button id="save" type="button">Save house default</button>
+      <button id="save" type="button">Use for all pets</button>
       <p class="ok" id="ok"></p>
       <p class="err" id="mindErr"></p>
       <hr />
@@ -58,7 +60,27 @@
       <details class="fold" id="unlockDetails">
         <summary>Details</summary>
         <p id="unlockAbout">Unlocking checks that you own the game on Steam by asking the house server named under House server address. The pets on your desk keep working whether or not you unlock.</p>
-        <p id="licenseMark">Opening this window did not look at this computer's ID. Unlock, or downloading a pet whose license belongs to this computer, looks at the ID only when no code is saved yet: the machine-id file on Linux, MachineGuid on Windows, or the platform UUID on a Mac. The app mixes that ID with its own name and the kind of computer, scrambles the result with SHA-256 into a code, and saves only that code in hwid.txt in its data folder. Later unlocks use the saved code again, so your license keeps working on this computer. The ID itself is never sent. Only the code goes to the license website, and only when you unlock or download a pet whose license belongs to this computer. The code still works like a fingerprint for this computer, because this computer always makes the same code. The line under the house server address names the website before the code is sent. If the house server is on this computer, the code stays on this computer. If the app cannot read that ID, Unlock stops and asks you first. It uses the computer's name only after you press the button that says so, and it uses a random ID instead if this computer has no name. Renaming the computer changes a code made from its name. If the code came from a random ID, deleting hwid.txt gives this computer a different code.</p>
+        <p id="licenseMark">Opening this window did not look at this computer's ID.
+Unlock looks at the ID only when no code is saved yet.
+So does downloading a pet whose license belongs to this computer.
+The ID is the machine-id file on Linux, MachineGuid on Windows, or the platform UUID on a Mac.
+The app mixes that ID with its own name and the kind of computer.
+It scrambles the result with SHA-256 into a code.
+It saves only that code in hwid.txt in its data folder.
+Later unlocks use the saved code again.
+So your license keeps working on this computer.
+The ID itself is never sent.
+Only the code goes to the license website.
+It goes only when you unlock or download a pet whose license belongs to this computer.
+The code still works like a fingerprint for this computer.
+That is because this computer always makes the same code.
+The line under the house server address names the website before the code is sent.
+If the house server is on this computer, the code stays on this computer.
+If the app cannot read that ID, Unlock stops and asks you first.
+It uses the computer's name only after you press the button that says so.
+It uses a random ID instead if this computer has no name.
+Renaming the computer changes a code made from its name.
+If the code came from a random ID, deleting hwid.txt gives this computer a different code.</p>
       </details>
       <fieldset class="optional" id="unlockOptional">
       <legend>Optional: only needed to unlock</legend>
@@ -348,7 +370,8 @@
         const mark = status && status.hwidMark;
         const node = document.getElementById("licenseMark");
         if (!node || !mark) return;
-        node.textContent = mark.read === "stored" ? storedMarkText : firstMarkText;
+        // One sentence per line in both wordings (the box keeps line breaks: white-space pre-line).
+        node.textContent = mark.read === "stored" ? storedMarkText.split(/(?<=\.) (?=[A-Z])/).join("\n") : firstMarkText;
       }
 
       function showWeakYes(which) {

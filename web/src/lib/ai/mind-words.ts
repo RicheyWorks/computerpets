@@ -6,6 +6,8 @@
 export const MIND_WORDS = {
   intro: "Pets talk without an AI. Adding one is optional.",
   which: "Which AI",
+  allPets: "Use for all pets",
+  sameAsAll: "Same as all pets",
   house: "House lines need nothing else. Your pets answer with their own words.",
   model: "AI model name",
   modelHelp: "Which version of that AI answers. Picking an AI fills this in, so most people leave it alone.",

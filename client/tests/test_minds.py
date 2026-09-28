@@ -31,6 +31,8 @@ def test_the_same_words_on_the_web_desk_the_overlay_and_the_blotter():
     pairs = {
         "intro": minds.MINDS_INTRO,
         "which": minds.WHICH_LABEL,
+        "allPets": minds.ALL_PETS_LABEL,
+        "sameAsAll": minds.SAME_AS_ALL_LABEL,
         "house": minds.HOUSE_NOTE,
         "model": minds.MODEL_LABEL,
         "modelHelp": minds.MODEL_HELP,
@@ -49,6 +51,8 @@ def test_the_same_words_on_the_web_desk_the_overlay_and_the_blotter():
     assert f'<label for="key">{minds.KEY_LABEL}</label>' in SETTINGS
     assert f'<p class="hint" id="keyHelp">{minds.KEY_HELP}</p>' in SETTINGS
     assert f'<label for="plugin">{minds.WHICH_LABEL}</label>' in SETTINGS
+    assert f'<button id="save" type="button">{minds.ALL_PETS_LABEL}</button>' in SETTINGS
+    assert "house default" not in SETTINGS.lower()
     assert f'<label for="model">{minds.MODEL_LABEL}</label>' in SETTINGS
     assert f'<p class="hint" id="modelHelp">{minds.MODEL_HELP}</p>' in SETTINGS
     assert f'placeholder="{minds.KEY_PLACEHOLDER}"' in SETTINGS

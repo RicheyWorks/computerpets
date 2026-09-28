@@ -547,10 +547,16 @@ async function settingsWindow() {
     if (details.open) fails.push("the Details summary did not fold it again");
     if (!inside) fails.push("the machine-id wording is not inside Details");
     if (!/did not look at this computer's ID/.test(firstMark)) fails.push("the first mark line changed");
+    // Unlock Details is short lines like START-HERE: one sentence per line, none long.
+    const markLines = firstMark.split("\n").map((l) => l.trim()).filter(Boolean);
+    const longLine = markLines.find((l) => l.split(/\s+/).length > 18);
+    if (markLines.length < 15 || longLine) fails.push(`the Details lines are not short (${markLines.length} lines${longLine ? `, "${longLine.slice(0, 40)}"` : ""})`);
+    else trace.push(`mark_lines=${markLines.length}`);
     fs.writeFileSync(path.join(ctx.userData, "hwid.txt"), HWID);
     await $("lock").click();
     await settle(4);
     if (!/^A code is already saved in hwid\.txt\./.test(at.textContent)) fails.push(`with hwid.txt the mark line says "${at.textContent.slice(0, 60)}"`);
+    else if (at.textContent.split("\n").length < 4) fails.push("the saved-code Details wording is not one sentence per line");
     else trace.push("details=folded_toggles", "mark=stored");
 
     // Unlock with no Steam ID, then against a refused connection: plain words only.
