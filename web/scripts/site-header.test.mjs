@@ -75,7 +75,7 @@ test("a landscape phone fits the room to the screen, the care buttons take the w
 
 test("the phone rail snaps whole rows: one scroller, one row height, snap to the top", () => {
   const css = read("styles.css");
-  assert.match(css, /\[data-phone-floor\] \[data-desk-rail\] \{\n\s+--rail-row: 2rem;\n\s+scroll-snap-type: y mandatory;/);
+  assert.match(css, /\[data-phone-floor\] \[data-desk-rail\] \{\n\s+--rail-row: 2\.75rem;\n\s+scroll-snap-type: y mandatory;/);
   assert.match(css, /\[data-phone-floor\] \[data-desk-rail\] \.den-cabinet-drawer \{\n\s+margin: 0;\n\s+max-height: none;\n\s+overflow: visible;/);
   assert.match(css, /\[data-phone-floor\] \[data-desk-rail\] li \{[^}]*height: var\(--rail-row\);[^}]*scroll-snap-align: start;[^}]*white-space: nowrap;/);
 });
