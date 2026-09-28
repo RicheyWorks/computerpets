@@ -387,6 +387,8 @@ The pet is on your desk. Now you can care for it.
 **Talk** from Rui plays his warm house cry (`red_panda.wav`).
 Every other pet here plays its own cry the same way:
 
+**Birds**
+
 - Soot prefers `crow.wav`
 - Wedge prefers `raven.wav`
 - Heart prefers `barn_owl.wav`
@@ -397,6 +399,9 @@ Every other pet here plays its own cry the same way:
 - Vee prefers `canada_goose.wav`
 - Drum prefers `pileated.wav`
 - Sip prefers `hummingbird.wav`
+
+**House pets**
+
 - Echo prefers `budgie.wav`
 - Peck prefers `penguin.wav`
 - Quill prefers `parrot.wav`
@@ -415,6 +420,9 @@ Every other pet here plays its own cry the same way:
 - Floss prefers `chinchilla.wav`
 - Bloom prefers `axolotl.wav`
 - Vesper prefers `dragon.wav`
+
+**Snakes**
+
 - Nori prefers `ball_python.wav`
 - Saffron prefers `corn_snake.wav`
 - Bandit prefers `kingsnake.wav`
@@ -425,6 +433,9 @@ Every other pet here plays its own cry the same way:
 - Coral prefers `milk_snake.wav`
 - Blush prefers `rosy_boa.wav`
 - Atlas prefers `carpet_python.wav`
+
+**Sea life**
+
 - Cup prefers `octopus.wav`
 - Sepia prefers `cuttlefish.wav`
 - Chamber prefers `nautilus.wav`
@@ -435,6 +446,9 @@ Every other pet here plays its own cry the same way:
 - Anchor prefers `seahorse.wav`
 - Kite prefers `manta.wav`
 - Door prefers `moray.wav`
+
+**Plants**
+
 - Felt prefers `moss.wav`
 - Vein prefers `maidenhair.wav`
 - Fan prefers `ginkgo.wav`
@@ -445,6 +459,9 @@ Every other pet here plays its own cry the same way:
 - Snap prefers `venus_flytrap.wav`
 - Well prefers `pitcher.wav`
 - Dew prefers `sundew.wav`
+
+**Insects**
+
 - Comb prefers `honeybee.wav`
 - Milk prefers `monarch.wav`
 - Ghost prefers `luna.wav`
@@ -456,6 +473,9 @@ Every other pet here plays its own cry the same way:
 - Fold prefers `mantis.wav`
 - Brood prefers `cicada.wav`
 - Wax prefers `honeycomb.wav`
+
+**Mushrooms and other fungi**
+
 - Frill prefers `oyster.wav`
 - Cap prefers `fly_agaric.wav`
 - Lattice prefers `morel.wav`
@@ -466,6 +486,9 @@ Every other pet here plays its own cry the same way:
 - Flame prefers `chicken_of_woods.wav`
 - Starter prefers `yeast.wav`
 - Pact prefers `lichen.wav`
+
+**Far-off made-up life**
+
 - Gleam prefers `photovore.wav`
 - Choir prefers `choir.wav`
 - Drift prefers `nimbus.wav`
@@ -476,6 +499,9 @@ Every other pet here plays its own cry the same way:
 - Beacon prefers `magneton.wav`
 - Hush prefers `umbral.wav`
 - Arca prefers `cyst.wav`
+
+**Pond animals**
+
 - Reed prefers `frog.wav`
 - Pebble prefers `toad.wav`
 - Eft prefers `newt.wav`
@@ -486,6 +512,9 @@ Every other pet here plays its own cry the same way:
 - Hinge prefers `mussel.wav`
 - Latch prefers `leech.wav`
 - Prickle prefers `stickleback.wav`
+
+**Tiny life**
+
 - Boot prefers `paramecium.wav`
 - Reach prefers `amoeba.wav`
 - Spot prefers `euglena.wav`
@@ -602,9 +631,10 @@ That is the whole next visit.
 Same idea. Same two helpers. This leftover is Windows first. Keep this short.
 
 1. Install Git from [https://git-scm.com/downloads](https://git-scm.com/downloads), or install [GitHub Desktop](https://desktop.github.com).
-2. Install Node from [https://nodejs.org](https://nodejs.org). Click **LTS**. Version 22 or newer.
-3. Close Terminal. Open a **new** Terminal. Type `node -v`.
-4. Copy the pets:
+2. Install Git LFS from [https://git-lfs.com](https://git-lfs.com) (or `brew install git-lfs`). Then type `git lfs install` once. The pet pictures come through it. GitHub Desktop already has it.
+3. Install Node from [https://nodejs.org](https://nodejs.org). Click **LTS**. Version 22 or newer.
+4. Close Terminal. Open a **new** Terminal. Type `node -v`.
+5. Copy the pets:
 
 ```bash
 mkdir -p ~/projects
@@ -613,11 +643,13 @@ git clone https://github.com/RicheyWorks/computerpets
 cd computerpets
 ```
 
-5. Start the desktop pet:
+6. Start the desktop pet:
 
 ```bash
 sh desktop.sh
 ```
+
+If it says the pet pictures did not download, install Git LFS (step 2). Then type `git lfs pull` in the `computerpets` folder.
 
 Or:
 
@@ -633,11 +665,15 @@ The extra control sits in the **menu bar** (the thin strip at the top of the scr
 
 ## Linux
 
-Same helpers. Then in a terminal, inside your `computerpets` folder:
+Same helpers, plus Git LFS for the pet pictures. On Ubuntu or Debian that is `sudo apt install git-lfs`. Then type `git lfs install` once, before you copy the pets.
+
+Then in a terminal, inside your `computerpets` folder:
 
 ```bash
 sh desktop.sh
 ```
+
+If it says the pet pictures did not download, type `git lfs pull` in that folder, then `sh desktop.sh` again.
 
 The mark sits in the **panel**. A click opens care. First click is a sit. Drag is a carry. A right-click tends.
 

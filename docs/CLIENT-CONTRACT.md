@@ -287,8 +287,8 @@ server still does not hash, and it still requires an exact match.
   Windows reads `HKLM\SOFTWARE\Microsoft\Cryptography\MachineGuid`.
   Mac reads `IOPlatformUUID`. If that read fails, the client does not
   mint a mark until the keeper says yes. That yes hashes the computer
-  name. A computer with no name gets a random id. A rename changes the
-  computer-name hash. Deleting `hwid.txt` makes a random id a different
+  name. A computer with no name gets a random ID. A rename changes the
+  computer-name hash. Deleting `hwid.txt` makes a random ID a different
   mark. A file that is already stored is sent as-is.
 - The stored and sent string is the hex SHA-256 of
   `computerpets:` + platform token + `:` + that id. The raw id is not

@@ -67,14 +67,14 @@ const MACHINE_MARKS = Object.freeze([
     platform: "random",
     source: "random",
     kind: "uuid",
-    where: "a local random id",
+    where: "a local random ID",
     why: "Used only after that same yes, when there is no computer name. Not stable if hwid.txt is deleted.",
   }),
 ]);
 
 /** Shown when Unlock would otherwise mint a computer-name or random mark. */
 const WEAK_FALLBACK_MESSAGE =
-  "This computer has no stable operating-system id. Unlock waits until you say yes before it hashes the computer name. If this computer has no name, that yes hashes a random id. A rename changes the computer-name hash. Deleting hwid.txt makes a random id a different mark.";
+  "This computer has no stable operating-system id. Unlock waits until you say yes before it hashes the computer name. If this computer has no name, that yes hashes a random ID. A rename changes the computer-name hash. Deleting hwid.txt makes a random ID a different mark.";
 
 /**
  * @param {unknown} hwid
@@ -205,7 +205,7 @@ function readMachineSource(opts) {
 }
 
 /**
- * Computer name, then a caller fallback, then a random id.
+ * Computer name, then a caller fallback, then a random ID.
  * Called only after the keeper says yes.
  * An explicit empty hostname means this computer has no name.
  * @returns {{ raw: string, source: string }}

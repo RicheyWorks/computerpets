@@ -398,7 +398,7 @@ def test_missing_os_id_does_not_mint_until_yes(tmp_path, monkeypatch):
         )
     assert caught.value.code == "hwid_needs_fallback_yes"
     assert "computer name" in str(caught.value)
-    assert "random id" in str(caught.value)
+    assert "random ID" in str(caught.value)
     assert backend["calls"] == []
     assert not any(path.endswith("hwid.txt") for path in files)
 
@@ -942,6 +942,90 @@ def test_unlock_dialog_folds_the_privacy_detail_under_details():
         assert window.mark.isHidden()
         window._paint_status({**status, "hwidMark": {"read": "stored"}})
         assert window.mark.text() == dialog.MARK_STORED_TEXT
+    finally:
+        window.deleteLater()
+        app.processEvents()
+
+
+def test_unlock_fields_have_plain_labels_and_one_helper_each_same_as_the_overlay():
+    """Where you own the game / Your Steam ID / Steam App ID, each with one true helper line, word for word
+    the same in the blotter dialog and the overlay Settings window. The web desk has no Unlock form."""
+    import os
+    import re
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PyQt6.QtWidgets import QApplication, QLabel
+
+    from computerpets_client import unlock_dialog as dialog
+
+    repo = Path(__file__).resolve().parents[2]
+    settings = (repo / "desktop" / "renderer" / "settings.html").read_text(encoding="utf-8")
+    fields = [
+        ("provider", dialog.PROVIDER_LABEL, dialog.PROVIDER_HELP),
+        ("steamId", dialog.STEAM_ID_LABEL, dialog.STEAM_ID_HELP),
+        ("appId", dialog.APP_ID_LABEL, dialog.APP_ID_HELP),
+    ]
+    assert [label for _, label, _ in fields] == ["Where you own the game", "Your Steam ID", "Steam App ID"]
+    for field_id, label, helper in fields:
+        assert f'<label for="{field_id}">{label}</label>' in settings, label
+        assert f'<p class="hint" id="{field_id}Help">{helper}</p>' in settings, helper
+        assert len(helper.split()) <= 20, helper
+    # Honest: only Steam is wired in, the Steam ID shape is the real one, and there is no Steam page yet.
+    assert "Only Steam works here for now." in dialog.PROVIDER_HELP
+    assert '<select id="provider"><option value="steam">Steam</option></select>' in settings
+    assert "17 digits that start with 7656" in dialog.STEAM_ID_HELP and "Account details" in dialog.STEAM_ID_HELP
+    assert "ComputerPets has no Steam page yet." in dialog.APP_ID_HELP
+    # The old bare labels are gone; the error lines still name the Steam ID and the App ID, which the labels say.
+    assert not re.search(r"<label>(Provider|Steam ID|App ID)</label>", settings)
+    assert not list((repo / "web" / "src").rglob("*unlock*.tsx")), "a web Unlock form would need the same words"
+
+    app = QApplication.instance() or QApplication([])
+    status = {"backendUrl": "", "fields": {}, "hwidMark": {"read": "unread"}, "unlocked": False}
+    window = dialog.UnlockDialog({"status": lambda: status})
+    try:
+        texts = [w.text() for w in window.findChildren(QLabel)]
+        for field_id, label, helper in fields:
+            assert label in texts, label
+            line = window.findChild(QLabel, f"{field_id}Help")
+            assert line is not None and line.text() == helper and line.wordWrap()
+        assert "Steam" in texts and "steam" not in texts
+    finally:
+        window.deleteLater()
+        app.processEvents()
+
+
+def test_unlock_pet_list_shows_name_and_kind_not_the_key_and_the_ask_title_is_plain():
+    """The Pet list reads "Rui · Red Panda" on the blotter and the overlay; the key is still what is sent."""
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PyQt6.QtWidgets import QApplication
+
+    from computerpets_client import unlock_dialog as dialog
+    from computerpets_client.species import CATALOG_KEYS
+
+    repo = Path(__file__).resolve().parents[2]
+    settings = (repo / "desktop" / "renderer" / "settings.html").read_text(encoding="utf-8")
+    assert "o.textContent = row.name ? (row.speciesLabel ? `${row.name} · ${row.speciesLabel}` : row.name) : row.key;" in settings
+    assert dialog.pet_choice_text("Rui", "Red Panda") == "Rui · Red Panda"
+    assert dialog.WEAK_ASK_TITLE == "Could not read this computer's ID"
+    source = Path(dialog.__file__).read_text(encoding="utf-8")
+    assert "operating-system id" not in source
+
+    app = QApplication.instance() or QApplication([])
+    status = {"backendUrl": "", "fields": {"petType": "dog"}, "hwidMark": {"read": "unread"}, "unlocked": False}
+    window = dialog.UnlockDialog({"status": lambda: status})
+    try:
+        combo = window.pet_type
+        assert combo.count() == len(CATALOG_KEYS) == 221
+        assert combo.itemText(0) == "Rui · Red Panda" and combo.itemData(0) == "red_panda"
+        assert not [combo.itemText(i) for i in range(combo.count()) if "_" in combo.itemText(i) or " — " in combo.itemText(i)]
+        assert window._pet_key() == "dog"
+        combo.setCurrentIndex(-1)
+        combo.setEditText("Pip")
+        assert window._pet_key() == "dog"
+        combo.setEditText("Rui · Red Panda")
+        assert window._pet_key() == "red_panda"
     finally:
         window.deleteLater()
         app.processEvents()
