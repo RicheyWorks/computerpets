@@ -4,8 +4,11 @@
  * hello on the keeper card, the pet, its care menu, the House window (Minds, Unlock), hiding and showing the window,
  * Quit, and a second start; then past the first minute: every care word from the card and the menu (the stats move the
  * right way and the pet comes back to normal), the held card on a long walk, Minds (House lines first, then xAI with a
- * stand-in key: sealed, and a Talk that fails honestly), sounds, another pet, and all of it after a restart. Every
- * request to api.x.ai is answered 401 inside the drive (page.route), so nothing leaves for the internet. `--scale 1.25`
+ * stand-in key: sealed, Save testing it and saying plainly it was refused, and a Talk that fails honestly), sounds,
+ * another pet, and all of it after a restart; and the #1557 audit: a rested pet wakes by itself, the talk pose ends
+ * with the pet's own line while house chatter goes on, a play stays on the screen with a carried ribbon, the
+ * volume slider is this pet's, and at the right edge the card stays by its pet off the plates. Every request to
+ * api.x.ai is answered 401 inside the drive (page.route), so nothing leaves for the internet. `--scale 1.25`
  * (or 1.5) starts Electron with --force-device-scale-factor to check the same fit at display scaling. Playwright's _electron (playwright-core from web/node_modules or desktop/node_modules;
  * nothing is downloaded) launches desktop/node_modules/electron with --user-data-dir set to a throwaway folder under
  * the gitignored target\first-run-drive, so the keeper's own settings and pets (%APPDATA%\computerpets-desktop) are
@@ -117,6 +120,8 @@ async function drive(opts = {}) {
   const errors = [];
   /** Every request the overlay made to api.x.ai, and whether the line naming it was in view on the card then. */
   const cloud = [];
+  /** The House window while Minds is open, so a request to api.x.ai can be checked against its line in view. */
+  let housePage = null;
 
   async function launch() {
     const app = await pw._electron.launch({
@@ -166,7 +171,17 @@ async function drive(opts = {}) {
           return a.bottom > b.top + 1 && a.top < b.bottom - 1 && a.top >= 0 && a.bottom <= innerHeight;
         })
         .catch(() => false);
-      cloud.push({ at: Date.now(), inView });
+      const houseInView = housePage
+        ? await housePage
+            .evaluate(() => {
+              const e = document.getElementById("mindNet");
+              if (!e || e.hidden || !(e.textContent || "").trim()) return false;
+              const r = e.getBoundingClientRect();
+              return r.height > 0 && r.top >= 0 && r.bottom <= innerHeight;
+            })
+            .catch(() => false)
+        : false;
+      cloud.push({ at: Date.now(), inView, houseInView });
       await route.fulfill({ status: 401, contentType: "application/json", body: JSON.stringify({ error: "Incorrect API key provided" }) });
     });
     return { app, page };
@@ -485,6 +500,13 @@ async function drive(opts = {}) {
     s = await state();
     const nearRight = s.pet && s.pet[2] > s.w - 300;
     check("card_fits_at_right_edge", nearRight && s.open && s.card && onScreen(s.card, s.w, s.h), `pet ${s.pet}, card ${s.card} on ${s.w}x${s.h}`);
+    // The #1557 audit: the news plate pushed the card to 1745..2059 with the pet at 2382..2530 (323 px away). Now it
+    // stays within the leash of the pet and covers no plate (made shorter under the plate, it scrolls).
+    await page.waitForTimeout(500);
+    s = await state();
+    const edgeGap = s.card && s.pet ? sideGap(s.card, s.pet) : -1;
+    const edgeOver = s.card ? s.plates.filter((p) => overlaps(s.card, p.box)).map((p) => `${p.id} ${p.box}`) : [];
+    check("card_by_pet_at_right_edge", nearRight && s.open && edgeGap >= 0 && edgeGap <= 160 && !edgeOver.length, `card ${s.card}, pet ${s.pet}: gap ${edgeGap} px (leash 160); plates ${s.plates.map((p) => `${p.id} ${p.box}`).join("; ") || "none"}; covered ${edgeOver.join("; ") || "none"}`);
     const bRight = await sampleBubble(2400);
     check("bubble_clear_at_right_edge", bRight.over === 0, `${bRight.over} of ${bRight.shown} samples over the card${bRight.worst ? `; ${bRight.worst}` : ""}`);
 
@@ -601,6 +623,79 @@ async function drive(opts = {}) {
       );
     }
 
+    // 6b2. The #1557 audit, driven. A pet put to bed at 99 energy is fully rested after Rest and wakes by itself on
+    // the next life tick (it slept on at 100 until something woke it).
+    await settle(20_000);
+    await page.evaluate(() => Object.assign(/** @type {any} */ (life), { energy: 99, hunger: 70, sick: false }));
+    const restT = Date.now();
+    const restPressed = await press("menu", "Rest");
+    const slept = await page.waitForFunction(() => !!(/** @type {any} */ (life).asleep), null, { timeout: 8000, polling: 200 }).then(() => true, () => false);
+    const wokeSelf = await page
+      .waitForFunction(() => !(/** @type {any} */ (life).asleep) && /** @type {any} */ (sim).anim !== "sleep", null, { timeout: 20_000, polling: 250 })
+      .then(() => true, () => false);
+    const afterRest = await lifeNow();
+    check("rest_wakes_when_rested", restPressed && slept && wokeSelf, `Rest at 99: asleep ${slept}; woke by itself ${wokeSelf} in ${((Date.now() - restT) / 1000).toFixed(1)} s; energy ${afterRest.energy}, ${afterRest.cmd}/${afterRest.anim}`);
+
+    // The talk pose ends with the pet's own line. A Talk from the card; a second later the house chatters (the
+    // same say() a robin's song or a guest's line uses) and keeps the bubble up for 15 s. The pose held with it.
+    await settle(30_000);
+    const talkPressed = await press("card", "talk");
+    const ownLine = await page
+      .waitForFunction(() => /** @type {any} */ (sim).cmd === "talk" && !!document.getElementById("bubble")?.classList.contains("open") && performance.now() < speechUntil, null, { timeout: 8000, polling: 100 })
+      .then(() => page.evaluate(() => speechUntil), () => 0);
+    await page.waitForTimeout(1000);
+    await page.evaluate(() => say("The house hums along: a robin somewhere sings a long, bright song.", 15_000));
+    const poseEnd = await page
+      .waitForFunction(() => /** @type {any} */ (sim).cmd !== "talk", null, { timeout: 25_000, polling: 100 })
+      .then(() => page.evaluate(() => ({ at: performance.now(), bubble: !!document.getElementById("bubble")?.classList.contains("open") })), () => null);
+    const lateBy = poseEnd && ownLine ? Math.round(poseEnd.at - ownLine) : -1;
+    check("talk_pose_ends_with_own_line", talkPressed && ownLine > 0 && !!poseEnd && lateBy <= 1200 && poseEnd.bubble, `the pet's line ended; the talk pose ended ${lateBy} ms after it${poseEnd ? `, with the house chatter still up ${poseEnd.bubble}` : " (never, in 25 s)"}`);
+    await page.evaluate(() => {
+      speechUntil = 0;
+      bubble.classList.remove("open");
+    });
+
+    // On the screen through a window play with the ribbon carried. A play on a window past the left edge put the pet
+    // at x = -109; the drive stands in one play step that walks there (the real window-play step, then x = -109),
+    // since it moves no real app window, and samples the pet and the ribbon it carries for 1.5 s.
+    await settle(20_000);
+    await page.evaluate(() => {
+      const WP = /** @type {any} */ (window).PetWindowPlay;
+      /** @type {any} */ (window).__realStepPlay = WP.stepPlay;
+      WP.stepPlay = (p) => ({ ...p, x: -109, facing: -1, anim: "walk", phase: "walk", lift: 0, rot: 0 });
+      mark = { kind: "lure", x: 0, hops: 0, carried: true };
+      lureEl.classList.add("show");
+      /** @type {any} */ (sim).play = { x: 20, facing: -1, anim: "walk", phase: "walk", lift: 0, rot: 0 };
+    });
+    let offN = 0;
+    let offSamples = 0;
+    let worstOff = "";
+    let lastOn = { simX: 0, pet: /** @type {number[] | null} */ (null), lure: [0, 0] };
+    for (let t = 0; t < 1500; t += 150) {
+      const o = await page.evaluate(() => {
+        const r = lureEl.getBoundingClientRect();
+        const p = document.getElementById("pet")?.getBoundingClientRect();
+        return { simX: Math.round(/** @type {any} */ (sim).x), play: !!(/** @type {any} */ (sim).play), lure: [Math.round(r.left), Math.round(r.right)], pet: p ? [Math.round(p.left), Math.round(p.right)] : null, w: innerWidth };
+      });
+      if (o.play) {
+        offSamples += 1;
+        lastOn = o;
+        if (o.simX < 0 || o.lure[0] < 0 || o.lure[1] > o.w) {
+          offN += 1;
+          worstOff = `pet x ${o.simX}, ribbon ${o.lure}`;
+        }
+      }
+      await page.waitForTimeout(150);
+    }
+    await page.evaluate(() => {
+      const WP = /** @type {any} */ (window).PetWindowPlay;
+      WP.stepPlay = /** @type {any} */ (window).__realStepPlay;
+      /** @type {any} */ (sim).play = null;
+      mark = null;
+      lureEl.classList.remove("show");
+    });
+    check("play_stays_on_screen", offSamples >= 5 && offN === 0, `${offN} of ${offSamples} samples off the screen${worstOff ? `; ${worstOff}` : ""}; last: pet x ${lastOn.simX} (box ${lastOn.pet}), ribbon ${lastOn.lure}`);
+
     // 6c. The held card on a long walk stays within a leash of the pet (it stood where the walk began). The pet is
     // put at 60% of the screen and its food at the far left (the one Feed press is made with Math.random pinned, since
     // the food lands at random), so the card, which opens over the pet's right side, is left behind; it is sampled
@@ -690,6 +785,7 @@ async function drive(opts = {}) {
     await clickItem(app, "Minds…");
     const minds = await mindsP;
     if (minds) {
+      housePage = minds;
       await minds.waitForLoadState("load");
       await minds.waitForTimeout(900);
       const m0 = await minds.evaluate(() => ({
@@ -709,7 +805,19 @@ async function drive(opts = {}) {
         /* missing */
       }
       check("minds_key_sealed", /Saved/.test(savedLine) && /"xai"/.test(raw) && !raw.includes(STANDIN_KEY), `"${savedLine}"; mind.json names xai ${/"xai"/.test(raw)}, plain key in it ${raw.includes(STANDIN_KEY)}`);
+      // Save tests the key, the way the web's Test this mind does: one talk, through the overlay (the House window
+      // has no fetch of its own), only with the line naming xAI in view; the drive's 401 reads as a refused key.
+      const tested = await minds
+        .waitForFunction(() => {
+          const t = (document.getElementById("mindTest")?.textContent || "").trim();
+          return !!t && !/^Asking /.test(t);
+        }, null, { timeout: 16_000, polling: 200 })
+        .then(() => minds.evaluate(() => (document.getElementById("mindTest")?.textContent || "").trim()), () => "");
+      const fromHouse = cloud.filter((c) => c.houseInView);
+      const refusedLine = "The mind did not answer. The AI website did not accept your key. Check your key for that AI website. House lines will.";
+      check("minds_save_tests_key", tested === refusedLine && fromHouse.length >= 1, `under Save: "${tested || "nothing"}"; ${fromHouse.length} request(s) to api.x.ai with the House window's line in view`);
       await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().find((w) => /House/.test(w.getTitle()))?.close());
+      housePage = null;
       await page.waitForTimeout(700);
     } else {
       check("minds_house_default", false, "no House window opened");
@@ -767,6 +875,15 @@ async function drive(opts = {}) {
     await page.waitForTimeout(1800);
     switchedKey = await page.evaluate(() => (typeof kind !== "undefined" && kind ? kind.key : null));
     check("pet_switch", !!nextPet && !!switchedKey && switchedKey !== firstKey, `Companions "${nextPet}": ${firstKey} -> ${switchedKey}`);
+    // The volume slider is this pet's, and says so: the next pet has its own (not the 35 set for the first).
+    await openCard();
+    const vol = await page.evaluate((first) => {
+      const v = /** @type {HTMLInputElement | null} */ (document.getElementById("hud-volume"));
+      const label = v && v.closest("label") ? (v.closest("label")?.textContent || "").trim() : "";
+      const c = /** @type {any} */ (typeof card !== "undefined" ? card : {});
+      return { label, shown: v ? Number(v.value) : null, first: c.pets && first && c.pets[first] ? c.pets[first].volume : null };
+    }, firstKey);
+    check("volume_is_this_pets", vol.label === "Volume for this pet" && vol.first === 35 && vol.shown !== null && vol.shown !== 35, `label "${vol.label}"; the first pet keeps ${vol.first}, the slider shows ${vol.shown} for ${switchedKey}`);
 
     // 8. Hide the window, tray Show.
     await petMenu();

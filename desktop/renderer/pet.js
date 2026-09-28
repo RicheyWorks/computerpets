@@ -255,6 +255,8 @@ const sim = {
 let deskWindows = [];
 
 let speechUntil = 0;
+/** When the talk pose ends: the end of the pet's own line, not of house chatter after it (PetKeeper.talkPoseOver). */
+let talkPoseUntil = 0;
 let clickable = false;
 let hudUntil = 0;
 let mark = null;
@@ -1454,6 +1456,13 @@ function paintLure() {
   const R = window.PetRibbon;
   let x = mark.x;
   if (R && mark.carried) x = R.carryX(mark, sim.x, sim.facing);
+  // A carried ribbon stays on the screen with the pet (the pet at the left edge facing left put it at x = -38). It
+  // is drawn tilted (styles.css), which reaches a few px past its box, so the drawn box is what stays on.
+  if (mark.carried && window.PetKeeper?.keepOnScreen) {
+    const r = lureEl.getBoundingClientRect();
+    const reach = r.width ? (parseFloat(lureEl.style.left) || 0) - r.left : 0;
+    x = window.PetKeeper.keepOnScreen({ x: x - reach, w: r.width || lureEl.offsetWidth || 24, width: window.innerWidth }) + reach;
+  }
   mark.x = x;
   lureEl.style.left = `${x}px`;
   lureEl.style.transform = "";
@@ -1684,6 +1693,10 @@ function playHouseLine(line) {
 function issue(cmd) {
   sim.order += 1;
   sim.cmd = cmd;
+  // The pet's own line was just said (say() comes first), so the talk pose ends with it. A guest's or a robin's
+  // line after it keeps the bubble up but not the pose.
+  const now = performance.now();
+  talkPoseUntil = cmd !== "talk" ? 0 : speechUntil > now ? speechUntil : now + 4200;
 }
 
 function lineFrom(result) {
@@ -3029,6 +3042,8 @@ function handle(cmd) {
 async function askMind(result) {
   const fallback = lineFrom(result) || pick(kind.lines.ambient);
   issue("talk");
+  // The pose waits for the mind's answer (at most the talk timeout), then lasts as long as that line.
+  talkPoseUntil = performance.now() + (window.PetMind?.TALK_TIMEOUT_MS ?? 12_000) + 1000;
   paintHud();
   if (!window.PetMind) {
     say(fallback);
@@ -3047,9 +3062,11 @@ async function askMind(result) {
       shown: talkShown(),
     });
     say(reply.text, replyHold(reply.text));
+    if (sim.cmd === "talk") talkPoseUntil = speechUntil;
     paintTalkWhy(reply && reply.problem && window.PetMind.talkProblemLine ? window.PetMind.talkProblemLine(reply.problem) : "");
   } catch {
     say(fallback, replyHold(fallback));
+    if (sim.cmd === "talk") talkPoseUntil = speechUntil;
     paintTalkWhy(window.PetMind.talkProblemLine ? window.PetMind.talkProblemLine("unknown") : "");
   }
   hudUntil = performance.now() + 5000;
@@ -3341,6 +3358,7 @@ function tickFrame(now) {
   const scale = window.PetLife.sizeScale(life, trait);
 
   if (now > speechUntil) bubble.classList.remove("open");
+  if (window.PetKeeper?.talkPoseOver?.({ cmd: sim.cmd, now, until: talkPoseUntil })) issue("idle");
   pet.classList.toggle("sick", !!life.sick);
   pet.classList.toggle("blue", !!(kind && window.PetLife.isBlue(life, kind.key)));
   pet.classList.toggle("hidden", !!life.hidden);
@@ -3420,7 +3438,9 @@ function tickFrame(now) {
       }
     } else if (sim.play && window.PetWindowPlay) {
       sim.play = window.PetWindowPlay.stepPlay(sim.play, dt, { x: sim.x, lift: sim.play.lift }, wins, work, BASE, playFlags);
-      sim.x = sim.play.x;
+      // On the screen, whatever window it plays on: a window past the left edge took the pet (and a carried
+      // ribbon) to x = -109 (PetKeeper.keepOnScreen). The play itself goes on as it did.
+      sim.x = window.PetKeeper?.keepOnScreen ? window.PetKeeper.keepOnScreen({ x: sim.play.x, w: BASE, width }) : sim.play.x;
       sim.facing = sim.play.facing;
       if (!life?.asleep) sim.anim = sim.play.anim;
       if (sim.play.phase === "done") {
@@ -3684,10 +3704,18 @@ function tickFrame(now) {
   const choiceW = choiceOpen && choiceEl ? Math.min(168, choiceEl.offsetWidth || 168) : 0;
   let choiceX = clamp(drawX - choiceW - 12, 8, Math.max(8, width - choiceW - 8));
   let cardX = clamp(drawX + BASE * 0.55, 8, Math.max(8, width - (hudW + 8)));
-  // Off the house plates: the first-run card sat over the weather and Quotes plates (PetKeeper.cardClearOfPlates).
-  if (hudW && window.PetKeeper?.cardClearOfPlates) {
+  // The card's whole height before any cap below (scrollHeight is the content and padding, plus the 2 of border),
+  // no taller than the stylesheet lets it be.
+  const cardFullH = hudW ? Math.min((hud.scrollHeight || hud.offsetHeight || 0) + 2, window.innerHeight - 196) : 0;
+  let cardMaxH = 0;
+  // Off the house plates: the first-run card sat over the weather and Quotes plates. Near its pet too: at the
+  // right edge the news plate pushed it 323 px away; now it stays by the pet and is made shorter under the plate
+  // (PetKeeper.cardSpotNearPet).
+  if (hudW && window.PetKeeper?.cardSpotNearPet) {
     const cardBottom = window.innerHeight - 178 - lift;
-    cardX = window.PetKeeper.cardClearOfPlates({ x: cardX, w: hudW, top: cardBottom - (hud.offsetHeight || 0), bottom: cardBottom, plates: plateBoxes(), width });
+    const spot = window.PetKeeper.cardSpotNearPet({ x: cardX, w: hudW, h: cardFullH, bottom: cardBottom, plates: plateBoxes(), width, petLeft: drawX, petRight: drawX + BASE });
+    cardX = spot.x;
+    cardMaxH = spot.maxH;
   }
   // The open card holds still while the pet walks (PetKeeper.cardHeldSpot): it stays up through a care walk now,
   // and following the pet slid its buttons out from under the pointer.
@@ -3709,9 +3737,11 @@ function tickFrame(now) {
     cardHeld = held.held;
     cardX = held.x;
     cardLiftPx = held.lift;
-    if (cardHeld && hudW && window.PetKeeper.cardClearOfPlates) {
+    if (cardHeld && hudW && window.PetKeeper.cardSpotNearPet) {
       const heldBottom = window.innerHeight - 178 - cardLiftPx;
-      cardX = window.PetKeeper.cardClearOfPlates({ x: cardX, w: hudW, top: heldBottom - (hud.offsetHeight || 0), bottom: heldBottom, plates: plateBoxes(), width });
+      const spot = window.PetKeeper.cardSpotNearPet({ x: cardX, w: hudW, h: cardFullH, bottom: heldBottom, plates: plateBoxes(), width, petLeft: drawX, petRight: drawX + BASE });
+      cardX = spot.x;
+      cardMaxH = spot.maxH;
     }
   }
   if (!card.collapsed && choiceOpen && hudW && cardX < choiceX + choiceW + 8) {
@@ -3727,6 +3757,9 @@ function tickFrame(now) {
   const cardLift = card.collapsed || spot.clear ? 0 : Math.min((hud.offsetHeight || 0) + 16, 220);
   bubble.style.transform = `translate3d(${spot.x}px, ${-lift - 10 - cardLift}px, 0)`;
   hud.style.transform = `translate3d(${cardX}px, ${-cardLiftPx}px, 0)`;
+  // A card made shorter under a plate scrolls; the 31 of padding and border come off the whole height.
+  const cardCap = cardMaxH ? `${Math.max(0, cardMaxH - 31)}px` : "";
+  if (hud.style.maxHeight !== cardCap) hud.style.maxHeight = cardCap;
   if (tongueEl) {
     const flick = p.crawl && sim.actMotion === "tongue" ? window.PetEthogram.tongueFlick(sim.actT, sim.actHold) : 0;
     tongueEl.style.opacity = String(flick);
@@ -5135,6 +5168,26 @@ window.desk?.onCommand((cmd) => {
   handle(cmd);
 });
 window.desk?.onSwitch((key) => switchTo(key));
+// Minds Save on the House window tests the mind it saved (the web's Test this mind): one talk, asked here because
+// the House window has no fetch of its own. It leaves only if `line`, painted in view there, names the website
+// (PetMind.run's talkMayLeave). The pet says nothing; the House window shows the answer.
+window.desk?.onMindTest?.(async (line) => {
+  const M = window.PetMind;
+  if (!M || !kind || !life) return { source: "local", text: "" };
+  const bind = (M.load() || {}).default || { plugin: "local" };
+  return M.run({
+    bind,
+    name: kind.name,
+    species: kind.key,
+    system: `You are ${kind.name}, a ${kind.speciesLabel}. Speak in 1-2 short sentences, under 32 words. Never mention being an AI.`,
+    hunger: life.hunger,
+    mood: life.mood,
+    energy: life.energy,
+    message: "Hello. Who are you?",
+    fallback: "",
+    shown: line,
+  });
+});
 window.desk?.onWindows((list) => {
   deskWindows = Array.isArray(list) ? list : [];
 });

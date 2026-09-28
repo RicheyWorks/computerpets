@@ -78,7 +78,8 @@ test("the open card stands off the house plates", () => {
   assert.equal(K.cardClearOfPlates({ x: 177, w: 314, top: 600, bottom: 1214, plates, width: 2560 }), 177, "plates above the card do not count");
   assert.equal(K.cardClearOfPlates({ x: 8, w: 314, top: 0, bottom: 900, plates: [{ left: 0, top: 10, right: 330, bottom: 60 }], width: 340 }), 8, "no room: stays");
   assert.equal(K.cardClearOfPlates({ x: 2000, w: 314, top: 0, bottom: 900, plates: [{ left: 1900, top: 10, right: 2552, bottom: 60 }], width: 2560 }), 1578, "left side when the right is off screen");
-  assert.match(petSrc, /cardX = window\.PetKeeper\.cardClearOfPlates\(\{ x: cardX, w: hudW, top: cardBottom - \(hud\.offsetHeight \|\| 0\), bottom: cardBottom, plates: plateBoxes\(\), width \}\);/);
+  // The layout goes through cardSpotNearPet now, which starts from cardClearOfPlates (desk-audit-1557.test.cjs).
+  assert.match(petSrc, /const spot = window\.PetKeeper\.cardSpotNearPet\(\{ x: cardX, w: hudW, h: cardFullH, bottom: cardBottom, plates: plateBoxes\(\), width, petLeft: drawX, petRight: drawX \+ BASE \}\);/);
 });
 
 test("a click on the pet hands the card the keyboard, so Escape reaches it", () => {
