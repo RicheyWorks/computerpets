@@ -131,6 +131,7 @@ CROSS_DOMAIN = {
     "web.phone_layout_told_once",
     "web.site_header_rail",
     "web.signin_return_quiet",
+    "web.meet_index_forget",
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
@@ -555,6 +556,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.phone_layout_told_once",
         "web.site_header_rail",
         "web.signin_return_quiet",
+        "web.meet_index_forget",
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
@@ -1004,6 +1006,17 @@ def test_signin_return_quiet_row_same_site_return_quiet_heartbeat_taps_bubble_ti
         assert mark in sr.trace, (mark, sr.trace)
     for group in ("signin", "quiet", "taps", "bubble", "titles", "signedIn", "audit"):
         assert all(sr.extras[group].values()), (group, sr.extras[group])
+
+
+def test_meet_index_forget_row_meet_index_taps_landscape_login_forget_seed_not_found():
+    """/meet index and search; 44 px house link and Check; landscape /login; forget a silent house server; seeded kennel."""
+    mi = invoke("web.meet_index_forget")
+    assert mi.ok, (mi.error, mi.detail)
+    for mark in ("meet=index_drawers_search", "taps=house_link_and_check_44px", "login=fits_landscape",
+                 "heartbeat=forgets_silent_server", "sweep=seeded_kennel_and_pet_page", "audit=not_found_ways_on"):
+        assert mark in mi.trace, (mark, mi.trace)
+    for group in ("meet", "taps", "landscape", "forget", "seed", "audit"):
+        assert all(mi.extras[group].values()), (group, mi.extras[group])
 
 
 def test_pictures_gate_row_boots_real_main_with_pointers_and_opens_no_glass():

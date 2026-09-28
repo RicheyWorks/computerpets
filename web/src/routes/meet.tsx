@@ -1,3 +1,4 @@
+import { useEffect, useId, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { DayWash } from "@/components/desk/blotter";
@@ -5,7 +6,9 @@ import { DenCabinet } from "@/components/desk/den-cabinet";
 import { HouseFloor } from "@/components/desk/house-floor";
 import { DeskGrain, RoomWash } from "@/components/desk/room-wash";
 import { PetPortrait } from "@/components/pet-portrait";
-import { guestsIn, ROOMS } from "@/lib/pets/rooms";
+import { LIVING_KINDS, type LivingKind } from "@/lib/pets/living";
+import { guestMatches, matchLine, meetRoomAnchor, roomFromHash } from "@/lib/pets/meet-index";
+import { guestsIn, roomOf, ROOMS, type RoomId } from "@/lib/pets/rooms";
 import { MeetKeeperCard } from "@/components/desk/keeper-card";
 import { traitFor } from "@/lib/pets/traits";
 
@@ -52,7 +55,7 @@ function MeetPage() {
                 Watch Rui
               </Link>
             </Button>
-            <Link to="/" className="text-sm text-muted no-underline hover:text-fg">
+            <Link to="/" className="inline-flex min-h-11 items-center text-sm text-muted no-underline hover:text-fg">
               Open the desk
             </Link>
           </div>
@@ -67,50 +70,7 @@ function MeetPage() {
           Open a room. Or pick a name. They will be walking when the page opens.
         </p>
 
-        <div className="mt-12 space-y-14">
-          {ROOMS.map((room) => (
-            <div key={room.id}>
-              <div className="flex items-end justify-between gap-4">
-                <div>
-                  <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">{room.kicker}</p>
-                  <h3 className="mt-1 font-display text-2xl sm:text-3xl">{room.label}</h3>
-                  <p className="mt-1 max-w-md text-sm text-muted">{room.line}</p>
-                </div>
-                <Link to={room.path} className="text-sm text-muted no-underline hover:text-fg">
-                  Open the room
-                </Link>
-              </div>
-              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {guestsIn(room).map((kind) => (
-                  <Link
-                    key={kind.key}
-                    to="/demo/$slug"
-                    params={{ slug: kind.slug }}
-                    className="group overflow-hidden rounded-[var(--radius-xl)] border border-border bg-surface no-underline transition-colors duration-200 hover:border-border-strong"
-                  >
-                    <div className="aspect-[4/5] overflow-hidden bg-elevated">
-                      <PetPortrait
-                        speciesKey={kind.key}
-                        alt=""
-                        name={kind.name}
-                        kind={kind.speciesLabel}
-                        className="transition-transform duration-400 ease-out group-hover:scale-[1.03]"
-                      />
-                    </div>
-                    <div className="space-y-2 p-5">
-                      <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">
-                        {kind.speciesLabel}
-                      </p>
-                      <p className="font-display text-2xl leading-none">{kind.name}</p>
-                      <p className="text-sm text-muted">{kind.tagline}</p>
-                      <p className="text-xs text-subtle">{traitFor(kind.key).verb}</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+        <MeetShelves />
       </section>
 
       <section className="border-t border-border">
@@ -151,5 +111,161 @@ function MeetPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+/** One guest on the shelf: a portrait and a name, two to a row on a phone. */
+function GuestCard({ kind, room }: { kind: LivingKind; room?: string }) {
+  return (
+    <Link
+      to="/demo/$slug"
+      params={{ slug: kind.slug }}
+      data-meet-guest={kind.key}
+      className="group overflow-hidden rounded-[var(--radius-xl)] border border-border bg-surface no-underline transition-colors duration-200 hover:border-border-strong"
+    >
+      <div className="aspect-square overflow-hidden bg-elevated sm:aspect-[4/5]">
+        <PetPortrait
+          speciesKey={kind.key}
+          alt=""
+          name={kind.name}
+          kind={kind.speciesLabel}
+          className="transition-transform duration-400 ease-out group-hover:scale-[1.03]"
+        />
+      </div>
+      <div className="space-y-1 p-3 sm:space-y-2 sm:p-5">
+        <p className="text-[10px] uppercase tracking-[0.16em] text-subtle sm:text-[11px]">
+          {room ? `${kind.speciesLabel} · ${room}` : kind.speciesLabel}
+        </p>
+        <p className="font-display text-lg leading-none sm:text-2xl">{kind.name}</p>
+        <p className="hidden text-sm text-muted sm:block">{kind.tagline}</p>
+        <p className="hidden text-xs text-subtle sm:block">{traitFor(kind.key).verb}</p>
+      </div>
+    </Link>
+  );
+}
+
+/**
+ * The catalog on /meet: a room index, "Find a guest", and one drawer per room (closed at first). It used to be all
+ * two hundred twenty-one cards in a row, about 135,000 px on a phone. A closed drawer still holds its cards, and
+ * /meet#room-<id> (or a room link) opens that drawer, so every guest stays reachable.
+ */
+function MeetShelves() {
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState<ReadonlySet<RoomId>>(() => new Set());
+  const searchId = useId();
+  const ids = useMemo(() => ROOMS.map((r) => r.id as string), []);
+  const found = useMemo(() => LIVING_KINDS.filter((k) => guestMatches(k, query)), [query]);
+  const searching = query.trim().length > 0;
+
+  const openRoom = (id: RoomId, on = true) =>
+    setOpen((prev) => {
+      const next = new Set(prev);
+      if (on) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+
+  // /meet#room-snakes opens the snakes' drawer (a shared link, or the back button).
+  useEffect(() => {
+    const fromHash = () => {
+      const id = roomFromHash(window.location.hash, ids);
+      if (id) openRoom(id as RoomId);
+    };
+    fromHash();
+    window.addEventListener("hashchange", fromHash);
+    return () => window.removeEventListener("hashchange", fromHash);
+  }, [ids]);
+
+  return (
+    <div className="mt-8" data-meet-shelves>
+      <nav aria-label="Jump to a room" data-meet-index className="flex flex-wrap gap-2">
+        {ROOMS.map((room) => (
+          <a
+            key={room.id}
+            href={`#${meetRoomAnchor(room.id)}`}
+            onClick={() => {
+              setQuery("");
+              openRoom(room.id);
+            }}
+            className="inline-flex min-h-11 items-center rounded-full border border-border px-3 text-sm text-muted no-underline hover:border-border-strong hover:text-fg"
+          >
+            {room.label}
+            <span className="ml-1.5 text-xs text-subtle">{guestsIn(room).length}</span>
+          </a>
+        ))}
+      </nav>
+
+      <div className="mt-6 max-w-md">
+        <label htmlFor={searchId} className="text-[11px] uppercase tracking-[0.16em] text-subtle">
+          Find a guest
+        </label>
+        <input
+          id={searchId}
+          type="search"
+          data-meet-search
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="A name or a kind: Rui, fox, owl"
+          autoComplete="off"
+          className="mt-1 h-11 w-full rounded-[var(--radius-sm)] border border-border bg-surface px-3 text-base text-fg outline-none placeholder:text-subtle focus:ring-2 focus:ring-primary/30"
+        />
+        <p className="mt-2 text-sm text-muted" aria-live="polite" data-meet-count>
+          {matchLine(found.length, LIVING_KINDS.length, query, ROOMS.length)}
+        </p>
+      </div>
+
+      {searching ? (
+        <div data-meet-found className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          {found.map((kind) => (
+            <GuestCard key={kind.key} kind={kind} room={roomOf(kind.key).label} />
+          ))}
+        </div>
+      ) : null}
+
+      <div className={searching ? "hidden" : "mt-10 space-y-3"}>
+        {ROOMS.map((room) => {
+          const guests = guestsIn(room);
+          return (
+            <details
+              key={room.id}
+              id={meetRoomAnchor(room.id)}
+              data-meet-room={room.id}
+              open={open.has(room.id)}
+              onToggle={(e) => {
+                const now = e.currentTarget.open;
+                if (now !== open.has(room.id)) openRoom(room.id, now);
+              }}
+              className="group scroll-mt-20 rounded-[var(--radius-lg)] border border-border bg-surface/40"
+            >
+              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 px-4 py-3 sm:px-5">
+                <span>
+                  <span className="block text-[11px] uppercase tracking-[0.16em] text-subtle">{room.kicker}</span>
+                  <span className="mt-0.5 block font-display text-2xl sm:text-3xl">{room.label}</span>
+                  <span className="mt-0.5 block max-w-md text-sm text-muted">{room.line}</span>
+                </span>
+                <span className="flex shrink-0 items-center gap-2 text-sm text-muted">
+                  {guests.length} {guests.length === 1 ? "guest" : "guests"}
+                  <span aria-hidden className="inline-block transition-transform duration-150 group-open:rotate-90">
+                    ›
+                  </span>
+                </span>
+              </summary>
+              <div className="px-4 pb-5 sm:px-5">
+                <p>
+                  <Link to={room.path} className="inline-flex min-h-11 items-center text-sm text-muted no-underline hover:text-fg">
+                    Open the room
+                  </Link>
+                </p>
+                <div className="mt-2 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+                  {guests.map((kind) => (
+                    <GuestCard key={kind.key} kind={kind} />
+                  ))}
+                </div>
+              </div>
+            </details>
+          );
+        })}
+      </div>
+    </div>
   );
 }
