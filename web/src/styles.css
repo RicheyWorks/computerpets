@@ -838,6 +838,18 @@
     cursor: pointer;
   }
 
+  /* On a phone (a touch screen, or a narrow one) Check is thumb-sized: 44 px, the text stays small. */
+  @media (pointer: coarse), (max-width: 639px) {
+    .keeper-heartbeat-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.75rem;
+      min-width: 2.75rem;
+      vertical-align: middle;
+    }
+  }
+
   /* Only a server that answered and then stopped is a warning. "OFF" (optional, never answered) stays muted. */
   .keeper-heartbeat[data-heartbeat="DOWN"] {
     color: var(--color-warn);

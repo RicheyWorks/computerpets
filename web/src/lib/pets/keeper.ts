@@ -99,7 +99,42 @@ export const HEARTBEAT_BACKOFF_MAX_SKIPS = 31;
 /** This browser has seen a house server answer (so the page may ask on its own). */
 export const HOUSE_SERVER_SEEN_KEY = "computerpets.houseServer.seen";
 
-type SeenStore = { getItem: (k: string) => string | null; setItem: (k: string, v: string) => void };
+/**
+ * The browser forgets a house server that has stopped answering: after this many visits in a row where it never
+ * answered, or this long since it last answered, the page stops asking on its own (Check still asks).
+ */
+export const HOUSE_SERVER_FORGET_VISITS = 3;
+export const HOUSE_SERVER_FORGET_MS = 3 * 24 * 60 * 60 * 1000;
+
+type SeenStore = { getItem: (k: string) => string | null; setItem: (k: string, v: string) => void; removeItem?: (k: string) => void };
+
+/** What the browser remembers: when the house server last answered, and visits since with no answer. */
+export type HouseServerSeen = { at: number; missed: number };
+
+/** Read the record; the first cut stored "1" (seen, time unknown), which reads as seen just now. */
+export function readHouseServerSeen(store: SeenStore | null = seenStore(), now = Date.now()): HouseServerSeen | null {
+  try {
+    const raw = store?.getItem(HOUSE_SERVER_SEEN_KEY);
+    if (!raw) return null;
+    if (raw === "1") return { at: now, missed: 0 };
+    const v = JSON.parse(raw) as Partial<HouseServerSeen> | null;
+    const at = Number(v?.at);
+    const missed = Number(v?.missed ?? 0);
+    if (!Number.isFinite(at) || !Number.isFinite(missed) || missed < 0) return null;
+    return { at, missed: Math.floor(missed) };
+  } catch {
+    return null;
+  }
+}
+
+function forgetHouseServer(store: SeenStore | null) {
+  try {
+    if (store?.removeItem) store.removeItem(HOUSE_SERVER_SEEN_KEY);
+    else store?.setItem(HOUSE_SERVER_SEEN_KEY, "");
+  } catch {
+    /* nothing to forget */
+  }
+}
 
 function seenStore(): SeenStore | null {
   try {
@@ -109,21 +144,38 @@ function seenStore(): SeenStore | null {
   }
 }
 
-/** A sign a house server runs for this browser: it has answered here before. */
-export function houseServerSeen(store: SeenStore | null = seenStore()): boolean {
-  try {
-    return store?.getItem(HOUSE_SERVER_SEEN_KEY) === "1";
-  } catch {
+/**
+ * A sign a house server runs for this browser: it has answered here, not too long ago, and has not stayed silent for
+ * HOUSE_SERVER_FORGET_VISITS visits in a row. A server that stopped for good is forgotten (the record is removed),
+ * so a keeper who no longer runs it gets no more refused requests.
+ */
+export function houseServerSeen(store: SeenStore | null = seenStore(), now = Date.now()): boolean {
+  const seen = readHouseServerSeen(store, now);
+  if (!seen) return false;
+  if (seen.missed >= HOUSE_SERVER_FORGET_VISITS || now - seen.at >= HOUSE_SERVER_FORGET_MS) {
+    forgetHouseServer(store);
     return false;
+  }
+  return true;
+}
+
+/** Remember that a house server answered here (now), so later visits ask on their own. */
+export function rememberHouseServer(store: SeenStore | null = seenStore(), now = Date.now()): void {
+  try {
+    store?.setItem(HOUSE_SERVER_SEEN_KEY, JSON.stringify({ at: now, missed: 0 } satisfies HouseServerSeen));
+  } catch {
+    /* private mode: the keeper presses Check again next time */
   }
 }
 
-/** Remember that a house server answered here, so later visits ask on their own. */
-export function rememberHouseServer(store: SeenStore | null = seenStore()): void {
+/** One more visit where the house server never answered (the poll calls it once per page, on its first miss). */
+export function houseServerMissed(store: SeenStore | null = seenStore(), now = Date.now()): void {
+  const seen = readHouseServerSeen(store, now);
+  if (!seen) return;
   try {
-    store?.setItem(HOUSE_SERVER_SEEN_KEY, "1");
+    store?.setItem(HOUSE_SERVER_SEEN_KEY, JSON.stringify({ at: seen.at, missed: seen.missed + 1 } satisfies HouseServerSeen));
   } catch {
-    /* private mode: the keeper presses Check again next time */
+    /* private mode */
   }
 }
 
@@ -223,6 +275,8 @@ export function createHeartbeatPoll(opts: {
   gate?: () => boolean;
   /** Called when the server answers (the page remembers it for the next visit). */
   onAnswer?: () => void;
+  /** Called once per poll (once per page), on the first read that got no answer, if none has answered yet. */
+  onMiss?: () => void;
   /** Ask a known server that stopped answering less often (doubling, up to HEARTBEAT_BACKOFF_MAX_SKIPS ticks). */
   backoff?: boolean;
   /** Clock for the resubscribe guard (a card that remounts does not ask again within one interval). */
@@ -238,6 +292,7 @@ export function createHeartbeatPoll(opts: {
   let seen = false;
   let stopPoll: (() => void) | null = null;
   let misses = 0;
+  let missTold = false;
   const now = opts.now ?? (() => Date.now());
   let lastRead = Number.NEGATIVE_INFINITY;
 
@@ -252,6 +307,10 @@ export function createHeartbeatPoll(opts: {
     } catch {
       beat = { ...UNREAD_HEARTBEAT };
       misses += 1;
+      if (!seen && !missTold) {
+        missTold = true;
+        opts.onMiss?.();
+      }
     }
     for (const fn of subs) fn(beat);
     return beat;
@@ -442,7 +501,12 @@ export function visibleTimeline(
  * when a house server answered on this browser before; otherwise nothing is asked until the keeper presses
  * Check, so a keeper who never ran the optional house server sees no refused requests in the console.
  */
-export const heartbeatPoll = createHeartbeatPoll({ gate: () => houseServerSeen(), onAnswer: () => rememberHouseServer(), backoff: true });
+export const heartbeatPoll = createHeartbeatPoll({
+  gate: () => houseServerSeen(),
+  onAnswer: () => rememberHouseServer(),
+  onMiss: () => houseServerMissed(),
+  backoff: true,
+});
 
 export function formatUptime(seconds: number | null) {
   if (seconds == null) return "";

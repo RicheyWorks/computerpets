@@ -8,9 +8,13 @@
 // Also: rail rows, the room's own links and Send are at least 44 px tall on a phone; the speech bubble never sits
 // over the site header (sampled while the pet walks); a signed-out visit to a gated page lands on
 // /login?next=<that page> and the header's Sign in remembers the page; the desk sends no request to the optional
-// house server (127.0.0.1:8081) until it has answered on this browser, and its tab says who is on the desk; and the
-// signed-in rooms (the kennel, the hatchery, the nest) are checked at five phone sizes with a stand-in session: a
-// second dev server with auth off (the dev keeper on in-memory PGLite; no account, no database file).
+// house server (127.0.0.1:8081) until it has answered on this browser (and stops again once it has been silent for
+// three visits), and its tab says who is on the desk; /meet on a phone stays under 12,000 px, its jump index opens
+// every room and together they reach all 221 guests, a search finds a guest, #room-<id> opens that room; "The house"
+// on /log and /study and the keeper card's Check are 44 px on a phone; /login fits a landscape phone with its
+// buttons on screen; a mistyped link gets words, a tab title and ways on; and the signed-in rooms (the kennel, the hatchery, the nest) and a kennel pet's page are
+// checked at five phone sizes with a stand-in session: a second dev server with auth off (the dev keeper on
+// in-memory PGLite, seeded with a six-guest kennel; no account, no database file).
 // Starts the Vite dev server in-process and drives the system Chrome or Edge (playwright-core, no downloaded
 // browser). Skips, and says why, when no browser is found.
 // PHONE_LAYOUT_URL=http://127.0.0.1:8097/ uses an already running dev server instead.
@@ -435,7 +439,10 @@ let standIn = null;
  * The stand-in session for the signed-in rooms (the kennel, the hatchery, the nest): a second dev server with
  * auth off (VITE_AUTH_ENABLED=false), so the page and the server both use the dev keeper ("dev-user") on the
  * embedded in-memory PGLite. No account, no cookie, no database file; it all goes when the server stops.
- * DATABASE_URL is cleared so it can never touch a real database. PHONE_LAYOUT_SIGNED_IN_URL uses a running one.
+ * DATABASE_URL is cleared so it can never touch a real database. COMPUTERPETS_DEV_SEED=kennel hatches a small kennel
+ * for the dev keeper on its first sanctuary read (lib/pets/dev-seed.server.ts; dev keeper, PGLite and sign-in off
+ * only), so the rooms are checked full of cards and a pet page opens in its "in your kennel" state.
+ * PHONE_LAYOUT_SIGNED_IN_URL uses a running one (start it with the same three variables).
  */
 async function standInSite() {
   if (standIn) return standIn;
@@ -447,7 +454,7 @@ async function standInSite() {
   const vite = join(WEB, "node_modules", "vite", "bin", "vite.js");
   const child = spawn(process.execPath, [vite, "--host", "127.0.0.1", "--port", String(port), "--strictPort"], {
     cwd: WEB,
-    env: { ...process.env, VITE_AUTH_ENABLED: "false", DATABASE_URL: "", BROWSER: "none" },
+    env: { ...process.env, VITE_AUTH_ENABLED: "false", DATABASE_URL: "", COMPUTERPETS_DEV_SEED: "kennel", BROWSER: "none" },
     stdio: ["ignore", "pipe", "pipe"],
     windowsHide: true,
   });
@@ -630,6 +637,150 @@ test("site pages: the header fits and its menu works at phone and laptop sizes, 
   assert.deepEqual(problems, [], problems.join("\n"));
 });
 
+/** /meet on a phone: a page a visitor can get through (it was ~135,000 px tall at 375×667 before the room index). */
+export const MEET_PHONE_MAX_HEIGHT = 12_000;
+export const MEET_GUESTS = 221;
+
+test("/meet on a phone: short enough to get through, a jump index opens each room, search finds a guest, all 221 guests reachable; thumb-sized house links; /login fits a landscape phone; a mistyped link gets ways on", { skip, timeout: 420_000 }, async () => {
+  const { url, browser } = await site();
+  const problems = [];
+  const phone = (w, h) => browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true, userAgent: IPHONE });
+  const visible = (sel) => [...document.querySelectorAll(sel)].filter((e) => e.getBoundingClientRect().height > 0).map((e) => e.getAttribute("data-meet-guest"));
+  const size = (sel) => {
+    const e = document.querySelector(sel);
+    if (!e) return null;
+    const b = e.getBoundingClientRect();
+    return { w: Math.round(b.width), h: Math.round(b.height), top: Math.round(b.top), bottom: Math.round(b.bottom) };
+  };
+  for (const [w, h] of [[375, 667], [320, 568]]) {
+    const ctx = await phone(w, h);
+    const label = `/meet ${w}×${h}`;
+    try {
+      const page = await ctx.newPage();
+      const thrown = [];
+      page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
+      await page.goto(`${url}/meet`, { waitUntil: "load", timeout: 120_000 });
+      await page.waitForSelector("[data-meet-index] a", { timeout: 60_000 });
+      await page.waitForTimeout(1_200);
+      const first = await page.evaluate(() => ({
+        height: document.documentElement.scrollHeight,
+        guests: [...new Set([...document.querySelectorAll("[data-meet-guest]")].map((e) => e.getAttribute("data-meet-guest")))],
+        rooms: [...document.querySelectorAll("[data-meet-room]")].map((d) => ({ id: d.id, open: d.open })),
+        chips: [...document.querySelectorAll("[data-meet-index] a")].map((a) => ({ href: a.getAttribute("href"), h: Math.round(a.getBoundingClientRect().height) })),
+      }));
+      if (first.height > MEET_PHONE_MAX_HEIGHT) problems.push(`${label}: the page is ${first.height}px tall (over ${MEET_PHONE_MAX_HEIGHT})`);
+      if (first.guests.length !== MEET_GUESTS) problems.push(`${label}: ${first.guests.length} distinct guests on the page, wanted ${MEET_GUESTS}`);
+      if (first.rooms.some((r) => r.open)) problems.push(`${label}: a room opens before anyone asks`);
+      if (first.chips.length !== first.rooms.length) problems.push(`${label}: ${first.chips.length} jump links for ${first.rooms.length} rooms`);
+      for (const c of first.chips) if (c.h < TAP_MIN) problems.push(`${label}: jump link ${c.href} is ${c.h}px tall`);
+      // Every guest is reachable: tap each room's jump link; the room opens and its cards are on the page.
+      const reached = new Set();
+      if (w === 375) {
+        for (const c of first.chips) {
+          await page.locator(`[data-meet-index] a[href="${c.href}"]`).tap();
+          await page.waitForTimeout(150);
+          const room = await page.evaluate(({ href, sel }) => {
+            const d = document.querySelector(href);
+            const top = d ? Math.round(d.getBoundingClientRect().top) : null;
+            return { open: !!d?.open, top, cards: d ? [...d.querySelectorAll(sel)].filter((e) => e.getBoundingClientRect().height > 0).map((e) => e.getAttribute("data-meet-guest")) : [] };
+          }, { href: c.href, sel: "[data-meet-guest]" });
+          if (!room.open) problems.push(`${label}: ${c.href} did not open its room`);
+          else if (!room.cards.length) problems.push(`${label}: ${c.href} opened with no guest on the page`);
+          if (room.top === null || room.top < -2 || room.top > h) problems.push(`${label}: ${c.href} left its room off the screen (top ${room.top})`);
+          for (const k of room.cards) reached.add(k);
+        }
+        if (reached.size !== MEET_GUESTS) problems.push(`${label}: the rooms reach ${reached.size} guests, wanted ${MEET_GUESTS}`);
+        // Search: a name finds its card (and says so); a miss says so in words.
+        await page.fill("[data-meet-search]", "rui");
+        await page.waitForTimeout(300);
+        const found = await page.evaluate(visible, "[data-meet-found] [data-meet-guest]");
+        const line = await page.evaluate(() => document.querySelector("[data-meet-count]")?.textContent || "");
+        if (!found.includes("red_panda")) problems.push(`${label}: searching "rui" shows ${JSON.stringify(found)}`);
+        if (!/1 guest matches/.test(line)) problems.push(`${label}: searching "rui" says "${line}"`);
+        await page.fill("[data-meet-search]", "qqqzz");
+        await page.waitForTimeout(300);
+        const miss = await page.evaluate(() => document.querySelector("[data-meet-count]")?.textContent || "");
+        if (!/No guest by that name/.test(miss)) problems.push(`${label}: a search with no match says "${miss}"`);
+        const keeperCheck = await page.evaluate(size, "[data-heartbeat-check]");
+        if (keeperCheck && (keeperCheck.h < TAP_MIN || keeperCheck.w < TAP_MIN)) problems.push(`${label}: the keeper card's Check is ${keeperCheck.w}×${keeperCheck.h}`);
+      }
+      for (const t of thrown) problems.push(`${label}: the page threw: ${t}`);
+      await page.close();
+      // A room link opens that room on arrival.
+      const deep = await ctx.newPage();
+      await deep.goto(`${url}/meet#room-snakes`, { waitUntil: "load", timeout: 120_000 });
+      await deep.waitForSelector("[data-meet-index] a", { timeout: 60_000 });
+      const snakes = await deep
+        .waitForFunction(() => document.querySelector("#room-snakes")?.open === true, null, { timeout: 8_000 })
+        .then(() => true, () => false);
+      if (!snakes) problems.push(`${label}: /meet#room-snakes did not open the snakes room`);
+      await deep.close();
+    } catch (err) {
+      problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
+    }
+    try {
+      // "The house" under a room's title is a thumb-sized link.
+      for (const path of ["/log", "/study"]) {
+        const p = await ctx.newPage();
+        await p.goto(`${url}${path}`, { waitUntil: "load", timeout: 120_000 });
+        const house = await p.waitForSelector("[data-hero-house]", { timeout: 60_000 }).then(() => p.evaluate(size, "[data-hero-house]"), () => null);
+        if (!house) problems.push(`${path} ${w}×${h}: no "The house" link`);
+        else if (house.h < TAP_MIN) problems.push(`${path} ${w}×${h}: "The house" is ${house.w}×${house.h}`);
+        await p.close();
+      }
+    } catch (err) {
+      problems.push(`/log, /study ${w}×${h}: ${String(err?.message || err).split("\n")[0]}`);
+    } finally {
+      await ctx.close();
+    }
+  }
+  // /login on a landscape phone: the page does not scroll and the sign-in buttons (or, sign-in off, the way back) are on the screen.
+  for (const [w, h] of [[667, 375], [844, 390]]) {
+    const ctx = await phone(w, h);
+    try {
+      const page = await ctx.newPage();
+      await page.goto(`${url}/login?next=%2Fcollection`, { waitUntil: "load", timeout: 120_000 });
+      await page.waitForSelector("h1", { timeout: 60_000 });
+      await page.waitForTimeout(800);
+      const fit = await page.evaluate(() => ({
+        over: document.documentElement.scrollHeight - innerHeight,
+        off: [...document.querySelectorAll("[data-login] button, [data-login] a")].filter((b) => b.getBoundingClientRect().bottom > innerHeight + 1 || b.getBoundingClientRect().top < 0).map((b) => b.textContent.trim()),
+      }));
+      if (!(await page.$("[data-login]"))) problems.push(`/login ${w}×${h}: no sign-in card ([data-login])`);
+      if (fit.over > 1) problems.push(`/login ${w}×${h}: the page scrolls by ${fit.over}px`);
+      if (fit.off.length) problems.push(`/login ${w}×${h}: ${fit.off.join(", ")} off the screen`);
+    } catch (err) {
+      problems.push(`/login ${w}×${h}: ${String(err?.message || err).split("\n")[0]}`);
+    } finally {
+      await ctx.close();
+    }
+  }
+  // A mistyped link: words, a tab title and thumb-sized ways on (it was a bare "Not Found").
+  {
+    const ctx = await phone(375, 667);
+    try {
+      const page = await ctx.newPage();
+      await page.goto(`${url}/no-such-room`, { waitUntil: "load", timeout: 120_000 });
+      await page.waitForSelector("[data-not-found] h1", { timeout: 60_000 });
+      await page.waitForFunction(() => document.title === "No room here — ComputerPets", null, { timeout: 8_000 }).catch(() => {});
+      const nf = await page.evaluate(() => ({
+        h1: document.querySelector("[data-not-found] h1")?.textContent || "",
+        title: document.title,
+        links: [...document.querySelectorAll("[data-not-found] a")].map((a) => ({ href: a.getAttribute("href"), h: Math.round(a.getBoundingClientRect().height) })),
+      }));
+      if (nf.h1 !== "No room by that name.") problems.push(`/no-such-room: says "${nf.h1}"`);
+      if (nf.title !== "No room here — ComputerPets") problems.push(`/no-such-room: the tab says "${nf.title}"`);
+      if (JSON.stringify(nf.links.map((l) => l.href)) !== JSON.stringify(["/", "/meet", "/collection"])) problems.push(`/no-such-room: ways on ${JSON.stringify(nf.links)}`);
+      for (const l of nf.links) if (l.h < TAP_MIN) problems.push(`/no-such-room: ${l.href} is ${l.h}px tall`);
+    } catch (err) {
+      problems.push(`/no-such-room: ${String(err?.message || err).split("\n")[0]}`);
+    } finally {
+      await ctx.close();
+    }
+  }
+  assert.deepEqual(problems, [], problems.join("\n"));
+});
+
 /** Signed-out: each gated page sends the visitor to sign in, and sign-in remembers the page (safeReturnTo). */
 export const GATED_PAGES = [
   ["/collection", "/login?next=%2Fcollection"],
@@ -681,9 +832,12 @@ test("sign-in remembers the gated page it came from; the header's Sign in rememb
 test("the desk stays quiet about the optional house server until it has answered here; the tab says who is on the desk", { skip, timeout: 300_000 }, async () => {
   const { url, browser } = await site();
   const problems = [];
-  for (const seenBefore of [false, true]) {
+  // seenBefore: answered here (a fresh record); "forgotten": answered once, then silent on three visits (keeper.ts
+  // HOUSE_SERVER_FORGET_VISITS), so the desk stops asking and says nothing, like a browser it never answered.
+  for (const seenBefore of [false, true, "forgotten"]) {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
-    if (seenBefore) await ctx.addInitScript(() => localStorage.setItem("computerpets.houseServer.seen", "1"));
+    if (seenBefore === true) await ctx.addInitScript(() => localStorage.setItem("computerpets.houseServer.seen", JSON.stringify({ at: Date.now(), missed: 0 })));
+    if (seenBefore === "forgotten") await ctx.addInitScript(() => localStorage.setItem("computerpets.houseServer.seen", JSON.stringify({ at: Date.now(), missed: 3 })));
     const hits = [];
     const refused = [];
     ctx.on("request", (req) => {
@@ -702,6 +856,10 @@ test("the desk stays quiet about the optional house server until it has answered
         if (refused.length) problems.push(`never answered here, yet the console says: ${refused[0]}`);
         const title = await page.title();
         if (title !== "Rui the Red Panda — ComputerPets") problems.push(`the desk's tab says "${title}"`);
+      } else if (seenBefore === "forgotten") {
+        if (hits.length) problems.push(`a house server silent for three visits is still asked ${hits.length}× (${hits[0]})`);
+        const left = await page.evaluate(() => localStorage.getItem("computerpets.houseServer.seen"));
+        if (left !== null) problems.push(`a house server silent for three visits is still remembered (${left})`);
       } else if (!hits.length) problems.push("a house server that answered here before was never asked (the gate is shut for good)");
     } finally {
       await ctx.close();
@@ -710,15 +868,21 @@ test("the desk stays quiet about the optional house server until it has answered
   assert.deepEqual(problems, [], problems.join("\n"));
 });
 
+/** The stand-in kennel (lib/pets/dev-seed.server.ts DEV_SEED_PETS): six guests, and their tab titles. */
+export const DEV_KENNEL_SIZE = 6;
+export const DEV_KENNEL_TITLES = ["Mochi the Red Panda", "Pepper the Cat", "Juniper the Fox", "Bloop the Axolotl", "Tamsin the Raccoon", "Kiwi the Budgie"].map((t) => `${t} — ComputerPets`);
+
 /** Signed-in rooms, with the stand-in session (standInSite). */
 export const SIGNED_IN_PAGES = ["/collection", "/hatch", "/nest"];
 export const SIGNED_IN_SIZES = PHONE_SIZES.filter((s) => ["320×568", "375×667", "414×896", "667×375", "844×390"].includes(`${s.w}×${s.h}`));
 
-test("signed-in rooms (kennel, hatchery, nest) on phones: panels, rail, care buttons and header never overlap; thumb-sized links", { skip, timeout: 600_000 }, async () => {
+test("signed-in rooms (kennel, hatchery, nest) and a kennel pet's page on phones: panels, rail, care buttons and header never overlap; thumb-sized links", { skip, timeout: 600_000 }, async () => {
   const { browser } = await site();
   const { url } = await standInSite();
   const problems = [];
   let visited = 0;
+  let petVisits = 0;
+  let petPage = null;
   for (const size of SIGNED_IN_SIZES) {
     const ctx = await browser.newContext({ viewport: { width: size.w, height: size.h }, isMobile: true, hasTouch: true, userAgent: size.ua });
     const hits = [];
@@ -745,12 +909,45 @@ test("signed-in rooms (kennel, hatchery, nest) on phones: panels, rail, care but
           if (signedIn.signIn) problems.push(`${label}: the header still offers Sign in`);
           problems.push(...layoutProblems(await page.evaluate(measure), label));
           problems.push(...(await page.evaluate(headerProblems)).map((p) => `${label}: ${p}`));
+          if (path === "/collection") {
+            // The seeded kennel: every stand-in guest has a card with a link to its own page.
+            const cards = await page.evaluate(() => [...new Set([...document.querySelectorAll('a[href^="/pets/"]')].map((a) => a.getAttribute("href")))]);
+            if (cards.length < DEV_KENNEL_SIZE) problems.push(`${label}: the kennel shows ${cards.length} pet links, wanted ${DEV_KENNEL_SIZE} (the dev seed did not run?)`);
+            if (!petPage && cards.length) petPage = cards[0];
+          }
           const cuts = await page.evaluate(railCuts);
           if (cuts.length) problems.push(`${label}: the rail rests with ${cuts.join(", ")} cut in half`);
           const taps = await page.evaluate(tapProblems, TAP_MIN);
           problems.push(...taps.bad.map((p) => `${label}: ${p}`));
           for (const t of thrown) problems.push(`${label}: the page threw: ${t}`);
           visited += 1;
+        } catch (err) {
+          problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
+        } finally {
+          await page.close();
+        }
+      }
+      // A pet the kennel has: its own page, "in your kennel" (the keeper's name and species in the tab), laid out.
+      if (petPage) {
+        const label = `${petPage.slice(0, 14)}… ${size.w}×${size.h} (signed in)`;
+        const page = await ctx.newPage();
+        const thrown = [];
+        page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
+        try {
+          await page.goto(`${url}${petPage}`, { waitUntil: "load", timeout: 120_000 });
+          await page.waitForSelector("[data-phone-floor] [data-desk-care]", { timeout: 120_000 });
+          await page.waitForFunction(() => / the .+ — ComputerPets$/.test(document.title), null, { timeout: 15_000 }).catch(() => {});
+          const title = await page.title();
+          if (!DEV_KENNEL_TITLES.includes(title)) problems.push(`${label}: the tab says "${title}", not a kennel pet's name`);
+          const missing = await page.evaluate(() => /not in your kennel|Couldn't open your kennel/.test(document.body.innerText));
+          if (missing) problems.push(`${label}: says the pet is not in the kennel`);
+          await page.waitForTimeout(600);
+          problems.push(...layoutProblems(await page.evaluate(measure), label));
+          problems.push(...(await page.evaluate(headerProblems)).map((p) => `${label}: ${p}`));
+          const taps = await page.evaluate(tapProblems, TAP_MIN);
+          problems.push(...taps.bad.map((p) => `${label}: ${p}`));
+          for (const t of thrown) problems.push(`${label}: the page threw: ${t}`);
+          petVisits += 1;
         } catch (err) {
           problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
         } finally {
@@ -773,6 +970,7 @@ test("signed-in rooms (kennel, hatchery, nest) on phones: panels, rail, care but
     }
   }
   assert.equal(visited, SIGNED_IN_PAGES.length * SIGNED_IN_SIZES.length, problems.join("\n"));
+  assert.equal(petVisits, SIGNED_IN_SIZES.length, `a kennel pet's page was checked at ${petVisits} sizes\n${problems.join("\n")}`);
   assert.deepEqual(problems, [], problems.join("\n"));
 });
 

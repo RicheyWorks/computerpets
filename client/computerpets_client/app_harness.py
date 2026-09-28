@@ -2944,6 +2944,22 @@ def _web_rows() -> list[Affordance]:
                 "so on /login instead of dropping the visitor on the desk."
             ),
         ),
+        Affordance(
+            "web.meet_index_forget",
+            "web",
+            "/meet on a phone: room index, closed drawers, guest search, all 221 reachable; 44 px house links and Check; /login fits a landscape phone; the browser forgets a house server silent for three visits or three days; the stand-in session sees a seeded kennel and a pet page; a mistyped link gets ways on",
+            "web lib/pets/meet-index.ts + routes/meet.tsx + components/desk/room-hero.tsx + styles.css + routes/login.tsx + components/app-shell.tsx + lib/pets/keeper.ts houseServerSeen + lib/pets/dev-seed.ts + lib/pets/dev-seed.server.ts + lib/pets/actions.ts + lib/not-found.tsx + router.tsx + scripts/phone-desk-layout.test.mjs + scripts/meet-index.test.mjs + scripts/house-server-forget.test.mjs",
+            notes=(
+                "/meet listed all 221 guests as tall cards, about 135,000 px on a 375 px phone; it now opens on a row of "
+                "room links, a guest search and twenty closed room drawers (5,509 px), and the sweep taps every room and "
+                "reaches all 221. The keeper card's Check (43x17) and The house under every room's title (65x20) were "
+                "small taps on a phone. /login scrolled 45 px on a 667x375 phone and put its second button below a 568x320 "
+                "screen. A browser that had once seen the house "
+                "server asked it for good; it now forgets after three silent visits or three days. The stand-in session's "
+                "kennel was empty; a dev-only seed (sign-in off, in-memory PGLite, the dev keeper) fills it. A mistyped link "
+                "got a bare Not Found with a generic tab."
+            ),
+        ),
     ]
 
 
@@ -3001,6 +3017,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("site_header_rail", domain="web", action_id=aid)
     if local_id == "signin_return_quiet":
         return _run_web_smoke("signin_return_quiet", domain="web", action_id=aid)
+    if local_id == "meet_index_forget":
+        return _run_web_smoke("meet_index_forget", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []
