@@ -19,7 +19,7 @@ export const Route = createFileRoute("/shore")({
   }),
 });
 
-export function ShorePage() {
+function ShorePage() {
   const [selected, setSelected] = useState(SHORE_KEYS[0]!);
 
   return (

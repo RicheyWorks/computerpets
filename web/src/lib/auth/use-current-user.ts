@@ -1,3 +1,4 @@
+import { useSyncExternalStore } from "react";
 import { authClient, authEnabled } from "./client";
 
 /** Normalized user shape used across the app, auth on or off. */
@@ -54,10 +55,25 @@ export type CurrentUserState = {
  * `authEnabled` is a module-level constant fixed at load, so the guarded hook
  * call keeps a stable hook order across every render of a given component.
  */
+const noSubscribe = () => () => {};
+
+/**
+ * False on the server and during hydration, true after. The server renders every page with the session still
+ * loading; the first client render has to match it, or React throws a hydration mismatch and rebuilds the page
+ * (the kennel, the hatchery, the nest and a pet page did, on every hard load, because the browser already knew
+ * the visitor was signed out).
+ */
+export function useHydrated(): boolean {
+  return useSyncExternalStore(noSubscribe, () => true, () => false);
+}
+
 export function useCurrentUserState(): CurrentUserState {
   if (!authEnabled) return { user: DEV_USER, isPending: false };
   // eslint-disable-next-line react-hooks/rules-of-hooks -- authEnabled is constant for the app's lifetime
+  const hydrated = useHydrated();
+  // eslint-disable-next-line react-hooks/rules-of-hooks -- authEnabled is constant for the app's lifetime
   const { data, isPending } = authClient.useSession();
+  if (!hydrated) return { user: null, isPending: true };
   const user = data?.user;
   return {
     user: user

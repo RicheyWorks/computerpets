@@ -19,7 +19,7 @@ export const Route = createFileRoute("/sea")({
   }),
 });
 
-export function SeaPage() {
+function SeaPage() {
   const [selected, setSelected] = useState(SEA_KEYS[0]!);
 
   return (

@@ -130,6 +130,8 @@ export type PhoneFitInput = {
   /** Top of the care buttons, from the top of the room. */
   careTop: number;
   gap?: number;
+  /** Height of one row of the room rail (every label is one row on a phone); the rail ends on a whole row. */
+  railRow?: number;
 };
 
 export type PhoneFit = { asideMax: number; railMax: number };
@@ -141,7 +143,17 @@ export type PhoneFit = { asideMax: number; railMax: number };
 export function phoneFit(input: PhoneFitInput): PhoneFit {
   const gap = input.gap ?? PHONE_FIT_GAP;
   const room = (top: number) => Math.max(PHONE_FIT_MIN, Math.floor(input.careTop - top - gap));
-  return { asideMax: room(input.asideTop), railMax: room(input.railTop) };
+  return { asideMax: room(input.asideTop), railMax: railRows(room(input.railTop), input.railRow) };
+}
+
+/**
+ * The rail's height cut down to whole rows, so with its rows snapping to the top no label rests cut in half at
+ * the bottom either. Never less than one row; unchanged when the row height is unknown.
+ */
+export function railRows(max: number, row: number | undefined): number {
+  if (!row || !(row > 0) || !Number.isFinite(row)) return max;
+  const rows = Math.max(1, Math.floor((max + 0.5) / row));
+  return Math.round(rows * row * 100) / 100;
 }
 
 /** The same fit, or a new one only when a number moved (so a resize observer does not re-render for nothing). */

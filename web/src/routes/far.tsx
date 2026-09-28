@@ -19,7 +19,7 @@ export const Route = createFileRoute("/far")({
   }),
 });
 
-export function FarPage() {
+function FarPage() {
   const [selected, setSelected] = useState(FAR_KEYS[0]!);
 
   return (

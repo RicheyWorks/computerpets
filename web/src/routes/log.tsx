@@ -19,7 +19,7 @@ export const Route = createFileRoute("/log")({
   }),
 });
 
-export function LogPage() {
+function LogPage() {
   const [selected, setSelected] = useState(LOG_KEYS[0]!);
 
   return (
