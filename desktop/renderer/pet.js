@@ -231,6 +231,7 @@ const sim = {
   playWait: 6 + Math.random() * 5,
   trick: null,
   trickWait: 3 + Math.random() * 3,
+  brokeWait: 0,
   lastTrick: null,
   happy: null,
   lastHappy: null,
@@ -3363,7 +3364,7 @@ function tickFrame(now) {
       })
     ) {
       sim.trickWait -= dt;
-      const musicWantsDance = musicOn() && !sim.trick && !sim.happy;
+      const musicWantsDance = window.PetFrameGuard.musicMayDance(sim, dt) && musicOn() && !sim.trick && !sim.happy;
       if (sim.trickWait <= 0 || musicWantsDance) {
         sim.trick = T.beginTrick(T.pickTrick(undefined, musicOn(), sim.lastTrick), sim.x, sim.facing);
         if (sim.trick) {

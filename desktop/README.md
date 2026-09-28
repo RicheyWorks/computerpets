@@ -52,25 +52,25 @@ Windows toasts use the tray identity `works.richey.computerpets.desk`. The overl
 
 ## Unlock (client contract)
 
-The overlay pets already live on the desk without a license. Unlock talks to a running house backend using the published [client contract](../docs/CLIENT-CONTRACT.md): `POST /api/verify/steam` signed with `LICENSE_SECRET_KEY` (`X-ComputerPets-Timestamp`, `X-ComputerPets-Nonce`, `X-ComputerPets-Signature`, 300s skew, single-use nonce), AES-256-GCM decrypt (no KDF), device `hwid` on verify and download, then `POST /api/download/{pet}` with the license JWT and GET of the HMAC-signed URL (`petKey|owner|jti|exp`). The bearer carries `jti` and can mint one URL; a second mint is 409. Download does not send the machine HMAC and does not add a separate jti field.
+The overlay pets already live on the desk without a license. Unlock talks to a running house server using the published [client contract](../docs/CLIENT-CONTRACT.md): `POST /api/verify/steam` signed with `LICENSE_SECRET_KEY` (`X-ComputerPets-Timestamp`, `X-ComputerPets-Nonce`, `X-ComputerPets-Signature`, 300s skew, single-use nonce), AES-256-GCM decrypt (no KDF), device `hwid` on verify and download, then `POST /api/download/{pet}` with the license JWT and GET of the HMAC-signed URL (`petKey|owner|jti|exp`). The bearer carries `jti` and can mint one URL; a second mint is 409. Download does not send the machine HMAC and does not add a separate jti field.
 
-The first Unlock reads Linux `machine-id`, Windows `MachineGuid`, or the Mac platform UUID, hashes it, and stores the hash in `hwid.txt`. A hash already stored is reused, so an existing license stays bound. The raw id is not sent. The house receives only the hash, and only for unlock or a bound download. Opening the house window does not read the id. That hash is still a device fingerprint. Unlock and a bound download name the backend host before that hash leaves. The line says this computer's network address goes with the https request to that host, as any client. A backend on this computer does not send the hash off the machine. A signed bundle GET names the CDN host before it leaves. The license hash is not on that GET. A CDN on this computer, or a local file, does not leave. Opening the house does not fetch it. If that named read fails, Unlock waits until you say yes before it hashes the computer name. If this computer has no name, that yes hashes a random id. A rename changes the computer-name hash. Deleting `hwid.txt` makes a random id a different mark.
+The first Unlock reads Linux `machine-id`, Windows `MachineGuid`, or the Mac platform UUID, hashes it, and stores the hash in `hwid.txt`. A hash already stored is reused, so an existing license stays bound. The raw id is not sent. The house receives only the hash, and only for unlock or a bound download. Opening the house window does not read the id. That hash is still a device fingerprint. Unlock and a bound download name the house server before that hash leaves. The line says this computer's network address goes with the https request to that website, as any client. A house server on this computer does not send the hash off the machine. A signed bundle GET names the CDN host before it leaves. The license hash is not on that GET. A CDN on this computer, or a local file, does not leave. Opening the house does not fetch it. If that named read fails, Unlock waits until you say yes before it hashes the computer name. If this computer has no name, that yes hashes a random id. A rename changes the computer-name hash. Deleting `hwid.txt` makes a random id a different mark.
 
-There is no “always licensed” stub. Bad ciphertext, an expired payload, a revoked `jti`, a hardware mismatch, or a missing backend all fail closed.
+There is no “always licensed” stub. Bad ciphertext, an expired payload, a revoked `jti`, a hardware mismatch, or a missing house server all fail closed.
 
 Tray / Extra / Mark / House window → **Unlock…**. Steam is the first real provider shape (`steamId`, `appId`, `petType`, `hwid`).
 
 | Variable | Required | Meaning |
 |----------|----------|---------|
-| `COMPUTERPETS_BACKEND_URL` | yes* | Backend origin, no trailing slash. Default `http://127.0.0.1:8081` if unset. |
-| `LICENSE_SECRET_KEY` | yes | Same 32-byte standard Base64 key the backend uses. Signs `POST /api/verify` and decrypts the issued license. |
-| `BUNDLE_SIGNING_KEY` | no | If set, the overlay also checks the CDN URL HMAC. Download still works without it — the backend already signed the URL. |
+| `COMPUTERPETS_BACKEND_URL` | yes* | House server address, no trailing slash. Default `http://127.0.0.1:8081` if unset. |
+| `LICENSE_SECRET_KEY` | yes | Same 32-byte standard Base64 key the house server uses. Signs `POST /api/verify` and decrypts the issued license. |
+| `BUNDLE_SIGNING_KEY` | no | If set, the overlay also checks the CDN URL HMAC. Download still works without it — the house server already signed the link. |
 
-`ENTERPRISEPET_BACKEND_URL` is accepted as an alias for the backend origin.
+`ENTERPRISEPET_BACKEND_URL` is accepted as another name for the house server address.
 
 ```bash
 export COMPUTERPETS_BACKEND_URL=http://127.0.0.1:8081
-export LICENSE_SECRET_KEY=   # same value as the backend process
+export LICENSE_SECRET_KEY=   # same value the house server uses
 cd desktop
 npm install
 npm start
@@ -80,7 +80,7 @@ npm start
 npm test
 ```
 
-\* If the default origin is down, unlock fails closed (unreachable backend). Do not invent a live NFT collection address; this overlay does not add Solana. The PyQt blotter is a separate tree (`client/`) and speaks the same contract.
+\* If the default origin is down, unlock fails closed (the house server cannot be reached). Do not invent a live NFT collection address; this overlay does not add Solana. The PyQt blotter is a separate tree (`client/`) and speaks the same contract.
 
 ## Package
 

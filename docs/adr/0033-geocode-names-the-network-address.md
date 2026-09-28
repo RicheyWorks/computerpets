@@ -1,4 +1,4 @@
-# 0033. A geocode look-up names the network address
+# 0033. Looking up a place says this computer's internet address goes to the place look-up website
 
 - **Status:** Accepted
 - **Date:** 2026-09-22

@@ -121,3 +121,42 @@ test("pet.js runs its frame through the guard and no longer schedules at the end
   const petAt = html.indexOf('<script src="pet.js"></script>');
   assert.ok(guardAt > 0 && guardAt < petAt, "frame-guard.js loads before pet.js");
 });
+
+test("a frame that returns false ends the loop, and stop() ends it from outside", () => {
+  const raf = fakeRaf();
+  const guard = FG.makeGuard({ log: () => {} });
+  let ran = 0;
+  const loop = FG.guardedLoop(() => {
+    ran += 1;
+    return ran < 3;
+  }, raf.schedule, guard, () => "robin");
+  raf.schedule(loop);
+  raf.runFrames(10);
+  assert.equal(ran, 3, "the third frame said it was done");
+  assert.equal(loop.stopped(), true);
+  assert.equal(raf.pending(), 0, "nothing is asked for after the loop stopped");
+
+  const raf2 = fakeRaf();
+  let ran2 = 0;
+  const guard2 = FG.makeGuard({ log: () => {}, reset: () => loop2.stop() });
+  const loop2 = FG.guardedLoop(() => {
+    ran2 += 1;
+    if (ran2 === 2) throw new Error("broken flight");
+  }, raf2.schedule, guard2, () => "robin");
+  raf2.schedule(loop2);
+  raf2.runFrames(10);
+  assert.equal(ran2, 2, "a reset that calls stop() ends that guest's loop");
+  assert.equal(raf2.pending(), 0);
+});
+
+test("music waits out brokeWait after a broken trick before it starts a dance again", () => {
+  const sim = { trickWait: 0, brokeWait: 0 };
+  assert.equal(FG.musicMayDance(sim, 0.016), true, "no broken trick: music may dance");
+  FG.safeIdle(sim);
+  assert.equal(sim.brokeWait, FG.TRICK_BACKOFF);
+  let frames = 0;
+  while (!FG.musicMayDance(sim, 0.5)) frames += 1;
+  assert.equal(frames, FG.TRICK_BACKOFF / 0.5, "held for the whole backoff");
+  const src = fs.readFileSync(path.join(__dirname, "pet.js"), "utf8");
+  assert.match(src, /const musicWantsDance = window\.PetFrameGuard\.musicMayDance\(sim, dt\) && musicOn\(\)/);
+});

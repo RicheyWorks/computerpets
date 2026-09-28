@@ -30,7 +30,20 @@
     sim.hop = 0;
     sim.land = 0;
     sim.trickWait = Math.max(Number(sim.trickWait) || 0, TRICK_BACKOFF);
+    sim.brokeWait = TRICK_BACKOFF;
     return sim;
+  }
+
+  /**
+   * Music starts a dance as soon as the pet is free, without waiting for `trickWait`. After a trick broke,
+   * this holds that off for `brokeWait` seconds too, so a broken dance is not restarted every other frame.
+   * Counts `brokeWait` down by `dt` and says whether music may start a dance now.
+   */
+  function musicMayDance(sim, dt) {
+    const left = Number(sim && sim.brokeWait) || 0;
+    if (left <= 0) return true;
+    sim.brokeWait = Math.max(0, left - Math.max(0, Number(dt) || 0));
+    return false;
   }
 
   function errorText(err) {
@@ -81,16 +94,27 @@
   /**
    * The frame loop: schedule the next frame first, then run the frame through the guard.
    * `schedule` is requestAnimationFrame; `frame(now)` is the old tick body; `keyOf()` names the host pet.
+   * A frame that returns `false` is done: the loop stops there. `loop.stop()` ends it from outside
+   * (a reset for a guest that should leave). Same rules as the web desk's `frame-guard.ts`.
    */
   function guardedLoop(frame, schedule, guard, keyOf) {
-    function loop(now) {
-      schedule(loop);
-      guard.step(frame, now, typeof keyOf === "function" ? keyOf() : "");
+    let stopped = false;
+    function run(now) {
+      if (frame(now) === false) stopped = true;
     }
+    function loop(now) {
+      if (stopped) return;
+      schedule(loop);
+      guard.step(run, now, typeof keyOf === "function" ? keyOf() : "");
+    }
+    loop.stop = () => {
+      stopped = true;
+    };
+    loop.stopped = () => stopped;
     return loop;
   }
 
-  const api = { safeIdle, makeGuard, guardedLoop, errorText, LOG_LIMIT, TRICK_BACKOFF };
+  const api = { safeIdle, musicMayDance, makeGuard, guardedLoop, errorText, LOG_LIMIT, TRICK_BACKOFF };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetFrameGuard = api;
 })(typeof window !== "undefined" ? window : globalThis);

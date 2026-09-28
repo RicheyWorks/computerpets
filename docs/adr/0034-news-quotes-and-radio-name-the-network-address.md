@@ -1,4 +1,4 @@
-# 0034. News, quotes, and Radio Find name the network address
+# 0034. News, quotes, and Radio Find say this computer's internet address goes to that website
 
 - **Status:** Accepted
 - **Date:** 2026-09-22

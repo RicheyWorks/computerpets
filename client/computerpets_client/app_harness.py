@@ -2615,8 +2615,9 @@ def _web_rows() -> list[Affordance]:
                 "The real frame guard runs 1,200 frames with a real trick module whose step throws: the next frame is "
                 "always queued first, the error is logged once with the pet key, and the pet goes back to a safe idle "
                 "each time; pet.js runs tickFrame through that loop and guards the visit guest, bird, robin, plants, and "
-                "called guests one by one. The desktop checkJs pass is in test-all.ps1 and test-all.sh with a baseline "
-                "of 58 or less; window-play's api has no duplicate keys and no thank-you repeats itself. The Settings "
+                "called guests one by one. The desktop checkJs pass is in test-all.ps1 and test-all.sh; its line is "
+                "whatever desktop/checkjs-baseline.txt holds (read from the file, and CONTRIBUTING quotes the same "
+                "number); window-play's api has no duplicate keys and no thank-you repeats itself. The Settings "
                 "and blotter Unlock details say 'this computer's ID', 'a code', and 'like a fingerprint for this "
                 "computer' with no hash / raw id / host words, the harness pin matches, the license gates' own errors "
                 "say 'Nothing was sent to <host>. This page has to name the license website first.', and ROADMAP is dated."
@@ -2636,9 +2637,28 @@ def _web_rows() -> list[Affordance]:
                 "desktop checkJs baseline is 3 or less (Rui's radio lines), pet.js keeps no state on functions, looks "
                 "elements up through htmlAll / htmlOne, and types its pointer handler; Electron's own types are checked "
                 "when installed. Settings and the blotter say 'House server address' and 'Asking the house server…', the "
-                "admin buttons' fallbacks are whole sentences, the license fallbacks say 'the license website' and 'the "
-                "download website', the news and quotes headers are plain and name the right websites, ADR 0036 and 0037 "
+                "admin buttons' fallbacks are whole sentences, the license lines keep no dead stand-in host name (every "
+                "miss names the real host), the news and quotes headers are plain and name the right websites, ADR 0036 and 0037 "
                 "titles match their index rows, 0019 has a plain-words note, and ROADMAP is dated."
+            ),
+        ),
+        Affordance(
+            "web.guest_loops_mount",
+            "web",
+            "Every web desk guest loop survives a throwing step; LivingPet and the guests mounted with React show the reset; music waits after a broken dance; plain README, admin, ADR, and Settings words",
+            "web frame-guard.ts guest guard + robin-fly / bird-fly / called-guests / desk-plants / blotter loops, desk-mount.test.mjs (living-pet.tsx and each guest in a small DOM), overlay frame-guard.js + pet.js music, ground-tricks.ts thank-you, license-net fallbacks, client/desktop READMEs, admin api.ts, ADR 0019/0032-0035, settings.html Minds",
+            notes=(
+                "Each guest loop shape runs with a step that throws: the robin, the bird, and a called guest leave "
+                "(their own loop stops), the plants stand upright and the carried lure stays put while their loops keep "
+                "stepping, and one error across two visits is logged once. The five components run guardedLoop with a "
+                "guest guard, schedule first, and stop on cleanup. web/scripts/desk-mount.test.mjs mounts the real "
+                "LivingPet, RobinFlyer, BirdFlyer, CalledGuests, DeskPlants, and BlotterMarks with React into a small DOM, "
+                "makes a step inside each throw, and reads the screen: the pet back on an idle frame on the floor, a "
+                "broken guest hidden, every other loop still moving. Music waits eight seconds after a broken dance on "
+                "the web desk and the overlay, the thank-you call is typed, the license files keep no dead stand-in host "
+                "name, the READMEs say house server, the admin line is plain, ADR 0019 and 0032-0035 titles are plain and "
+                "match the index, CONTRIBUTING quotes both baseline files, Settings says pets talk without an AI and "
+                "hides the AI boxes for House lines, and ROADMAP is dated."
             ),
         ),
     ]
@@ -2674,6 +2694,8 @@ def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
         return _run_web_smoke("loop_guard_unlock_plain", domain="web", action_id=aid)
     if local_id == "desk_guard_plain":
         return _run_web_smoke("desk_guard_plain", domain="web", action_id=aid)
+    if local_id == "guest_loops_mount":
+        return _run_web_smoke("guest_loops_mount", domain="web", action_id=aid)
     if local_id == "ethogram_tricks":
         eth_keys = _ethogram_ts_keys()
         missing_eth: list[str] = []

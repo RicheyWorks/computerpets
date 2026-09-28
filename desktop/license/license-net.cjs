@@ -11,10 +11,8 @@
 const { plainNetLine } = require("../renderer/weather-areas.js");
 const { LicenseError } = require("./errors.cjs");
 
-const LICENSE_HOST_NAME = "the license website";
 const LOCAL_STAYS = "Unlocking stays on this computer. The code made from this computer's ID does not leave.";
 const DOWNLOAD_LOCAL = "This download stays on this computer. It talks to this computer. It does not send the code made from this computer's ID.";
-const BUNDLE_HOST_NAME = "the download website";
 const BUNDLE_IDLE = "Your pet's files are not downloaded until this line names the website.";
 const BUNDLE_LOCAL = "This download stays on this computer. Your pet's files come from this computer.";
 
@@ -38,7 +36,7 @@ function isLoopbackHost(host) {
 function licenseTarget(backendUrl) {
   const host = licenseHostName(backendUrl);
   if (!host) return null;
-  return { local: isLoopbackHost(host), label: host || LICENSE_HOST_NAME };
+  return { local: isLoopbackHost(host), label: host };
 }
 
 /** Empty when this unlock does not leave the computer, or the shared sentence is missing. */
@@ -78,7 +76,8 @@ function licenseMaySend(backendUrl, shown) {
  */
 function postLicenseHash(shown, backendUrl, request) {
   if (!licenseMaySend(backendUrl, shown)) {
-    const host = licenseHostName(backendUrl) || LICENSE_HOST_NAME;
+    // A miss needs a named host (no host never leaves), so the error always names it.
+    const host = licenseHostName(backendUrl);
     return Promise.reject(
       new LicenseError(
         "license_net_unnamed",
@@ -127,7 +126,7 @@ function downloadMayPost(backendUrl, shown) {
  */
 function postUnboundDownload(shown, backendUrl, request) {
   if (!downloadMayPost(backendUrl, shown)) {
-    const host = licenseHostName(backendUrl) || LICENSE_HOST_NAME;
+    const host = licenseHostName(backendUrl);
     return Promise.reject(
       new LicenseError(
         "download_net_unnamed",
@@ -162,7 +161,7 @@ function bundleTarget(downloadUrl) {
   if (!url || url.protocol === "file:") return { local: true, label: "" };
   const host = url.hostname.replace(/^\[|\]$/g, "");
   if (!host || isLoopbackHost(host)) return { local: true, label: host };
-  return { local: false, label: host || BUNDLE_HOST_NAME };
+  return { local: false, label: host };
 }
 
 /** Empty when this download does not leave the computer, or the shared sentence is missing. */
@@ -203,7 +202,7 @@ function bundleMayFetch(downloadUrl, shown) {
 function getSignedBundle(shown, downloadUrl, request, strict) {
   if (!bundleMayFetch(downloadUrl, shown)) {
     if (strict) {
-      const host = bundleHostName(downloadUrl) || BUNDLE_HOST_NAME;
+      const host = bundleHostName(downloadUrl);
       return Promise.reject(
         new LicenseError(
           "cdn_net_unnamed",
@@ -217,10 +216,8 @@ function getSignedBundle(shown, downloadUrl, request, strict) {
 }
 
 module.exports = {
-  LICENSE_HOST_NAME,
   LOCAL_STAYS,
   DOWNLOAD_LOCAL,
-  BUNDLE_HOST_NAME,
   BUNDLE_IDLE,
   BUNDLE_LOCAL,
   licenseHostName,

@@ -462,16 +462,32 @@ export function wantsThankYou(key: string | undefined | null) {
   return !!(T && T.wantsThankYou(key ?? undefined));
 }
 
+/**
+ * What every guest's trick module offers after a meal: its own thank-you (or none, for a guest that does
+ * not say one). Each module names its own last thank-you kinds; the desk only ever hands back the kind the
+ * same module gave, so a plain string is enough here and the call needs no cast.
+ */
+type ThankYouStarter = {
+  startThankYou(
+    key: string | undefined,
+    lastKind: string | null | undefined,
+    x: number,
+    facing: 1 | -1,
+    flags?: GroundStepFlags | null,
+  ): GroundThankYou | null | undefined;
+};
+
 export function startThankYou(
   key: string | undefined | null,
   lastKind: string | null | undefined,
   x: number,
   facing: 1 | -1,
-  flags?: Rui.TrickFlags,
-) {
+  flags?: GroundStepFlags | null,
+): GroundThankYou | null {
   const T = tricksFor(key ?? undefined);
   if (!T) return null;
-  return T.startThankYou(key ?? undefined, lastKind as never, x, facing, flags);
+  const mod: ThankYouStarter = T;
+  return mod.startThankYou(key ?? undefined, lastKind, x, facing, flags) ?? null;
 }
 
 /** What every guest's trick module offers: its own pick feeds its own begin. */
@@ -493,7 +509,7 @@ export type GroundStepFlags = {
 /**
  * What every guest's trick module offers for a running trick or thank-you: its own step takes what its
  * own begin made. The desk keeps `s.trick` and `s.happy` from the module `tricksFor` gave for that pet,
- * so the pair always matches; this type says so without an `as never` at each call. Some modules also
+ * so the pair always matches; this type says so without a cast at each call. Some modules also
  * take (and hand back) no trick at all, so the step may say `null` or `undefined`.
  */
 type TrickStepper = {
