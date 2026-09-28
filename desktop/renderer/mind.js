@@ -686,8 +686,25 @@
     return `${TALK_MIND_LINE} ${MIND_LINES[kind]}`;
   }
 
+  /**
+   * The House window's line after Save tests the mind, in the web's words for Test this mind (plain-error.ts
+   * mindProblem; test-line.ts). A refused key said "Saved. Talk to them again." and nothing else, so a key that
+   * never worked looked saved and working until the first talk.
+   */
+  const MIND_UNTESTED = "Saved. The mind was not asked yet, so house lines answer until it does.";
+  function mindTestLine(reply, name) {
+    const r = reply && typeof reply === "object" ? reply : {};
+    if (r.problem) {
+      const kind = Object.prototype.hasOwnProperty.call(MIND_LINES, r.problem) ? r.problem : "unknown";
+      return `The mind did not answer. ${MIND_LINES[kind]} House lines will.`;
+    }
+    if (r.source && r.source !== "local" && r.text) return `${name || "The mind"}: \u201c${clip(r.text)}\u201d`;
+    return MIND_UNTESTED;
+  }
+
   async function run(ctx) {
-    const bind = binding(ctx.species);
+    // The House window's Save tests the mind it just saved (ctx.bind); a talk asks the pet's own binding.
+    const bind = ctx && ctx.bind && typeof ctx.bind === "object" ? ctx.bind : binding(ctx.species);
     const p = preset(bind.plugin);
     const base = safeUrl(bind.baseUrl || p.base || "", p.id);
     const model = sanitizeModel(bind.model, p.model);
@@ -818,6 +835,8 @@
     run,
     TALK_HOST_NAME,
     TALK_TIMEOUT_MS,
+    mindTestLine,
+    MIND_UNTESTED,
     TalkTimeout,
     isTalkTimeout,
     talkHostName,

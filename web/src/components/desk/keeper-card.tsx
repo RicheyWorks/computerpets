@@ -426,7 +426,7 @@ export function KeeperCard({
             ))}
           </div>
           <label className="keeper-volume">
-            Voice
+            Volume for this pet
             <input
               type="range"
               min={0}

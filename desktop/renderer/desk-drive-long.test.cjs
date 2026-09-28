@@ -105,7 +105,7 @@ test("the desktop's talk failure words are the web's own", () => {
   assert.equal(M.TALK_MIND_LINE, mind[1]);
   // The card shows it under the talk line, and a good answer clears it.
   assert.match(htmlSrc, /<p id="hud-talk-net" class="keeper-truth" hidden><\/p>\n\s+<p id="hud-talk-why" class="keeper-truth" role="status" hidden><\/p>/);
-  assert.match(petSrc, /say\(reply\.text, replyHold\(reply\.text\)\);\n\s+paintTalkWhy\(reply && reply\.problem && window\.PetMind\.talkProblemLine \? window\.PetMind\.talkProblemLine\(reply\.problem\) : ""\);/);
+  assert.match(petSrc, /say\(reply\.text, replyHold\(reply\.text\)\);\n(?:\s+if \(sim\.cmd === "talk"\) talkPoseUntil = speechUntil;\n)?\s+paintTalkWhy\(reply && reply\.problem && window\.PetMind\.talkProblemLine \? window\.PetMind\.talkProblemLine\(reply\.problem\) : ""\);/);
 });
 
 test("a talk leaves for the website only while its line is really in view", () => {
@@ -163,5 +163,5 @@ test("the held card is on a leash: a long walk pulls it along instead of leaving
   assert.ok(edge.x <= 2560 - w - 8 && edge.x >= 8, "never off the screen");
   assert.ok(K.CARD_LEASH_PX >= 80 && K.CARD_LEASH_PX <= 240);
   assert.match(petSrc, /petLeft: drawX,\n\s+petRight: drawX \+ BASE,\n\s+w: hudW,\n\s+width,\n\s+\}\);/);
-  assert.match(petSrc, /if \(cardHeld && hudW && window\.PetKeeper\.cardClearOfPlates\) \{/);
+  assert.match(petSrc, /if \(cardHeld && hudW && window\.PetKeeper\.cardSpotNearPet\) \{/);
 });

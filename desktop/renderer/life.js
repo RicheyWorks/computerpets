@@ -157,6 +157,13 @@
     return inWindow(h, trait.sleepStart, trait.sleepEnd);
   }
 
+  /**
+   * A rest sleep (Rest, or a night sleep held into the day) ends once the pet is fully rested. It held forever while
+   * the pet was fed, so a pet put to bed at noon slept at energy 100 until someone woke it. The web keeps the same
+   * rule in care.ts decayStats (REST_WAKE_ENERGY there); desk-audit-1557.test.cjs holds the two together.
+   */
+  const REST_WAKE_ENERGY = 100;
+
   function decay(life, trait, now = Date.now(), key) {
     const dt = Math.max(0, now - (life.lastTick || now));
     const hours = dt / 3600000;
@@ -178,9 +185,9 @@
         life.sleepHeld = true;
         if (key === "red_panda") life.nightSat = true;
       }
-    } else if (life.sleepHeld && !life.sick && !life.hidden && life.hunger >= 12) {
+    } else if (life.sleepHeld && !life.sick && !life.hidden && life.hunger >= 12 && life.energy < REST_WAKE_ENERGY) {
       life.asleep = true;
-    } else if (life.sick || life.hidden || life.hunger < 12) {
+    } else if (life.sick || life.hidden || life.hunger < 12 || life.energy >= REST_WAKE_ENERGY) {
       life.asleep = false;
       life.sleepHeld = false;
       life.nightSat = false;
@@ -516,6 +523,7 @@
     revealOnBoot,
     bootCmd,
     holdSleep,
+    REST_WAKE_ENERGY,
     sleepHolds,
     wanderWhileAsleep,
     SLEEP_WAKES,

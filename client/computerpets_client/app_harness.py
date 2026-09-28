@@ -1991,6 +1991,22 @@ def _card_rows() -> list[Affordance]:
             ),
         ),
         Affordance(
+            "card.audit_1557",
+            "card",
+            "The #1557 audit: rest ends when rested, the talk pose ends with the pet's line, plays stay on screen, Save tests the key, volume is this pet's, the card by its pet at the right edge",
+            "life.js REST_WAKE_ENERGY + web care.ts + keeper.js talkPoseOver / keepOnScreen / cardSpotNearPet + mind.js mindTestLine + settings.html testSaved",
+            notes=(
+                "Source smoke via harness_smokes (card_audit_1557): a pet put to bed wakes by itself once fully rested "
+                "(REST_WAKE_ENERGY 100, the same number and rule as the web's care.ts decayStats; both slept on at 100); "
+                "the talk pose ends when the pet's own line does (house chatter held it 13-30 s); a window play keeps "
+                "the pet and a carried ribbon on the screen (x = -109 before); Minds Save tests the key through the "
+                "overlay and a refused key reads the web's mindProblem words (the House window keeps connect-src "
+                "'none'); the volume slider says Volume for this pet on the desktop and the web; at the right edge the "
+                "card stays by the pet and is made shorter under the news plate (it stood 323 px away). "
+                "Driven for real by gui.first_run_drive under --gui."
+            ),
+        ),
+        Affordance(
             "card.notify_open",
             "card",
             "Notif deep-link opens pet card on need",
@@ -2194,6 +2210,8 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("card_walk_rules", domain="card", action_id=aid)
     if local_id == "long_walk_talk":
         return _run_node_smoke("card_long_walk_talk", domain="card", action_id=aid)
+    if local_id == "audit_1557":
+        return _run_node_smoke("card_audit_1557", domain="card", action_id=aid)
     main_rows = {
         "alarm": "alarm_clock",
         "timer": "timer_clock",
@@ -3368,12 +3386,16 @@ def _gui_rows() -> list[Affordance]:
                 "held card within a leash of the pet on a long walk, Minds (House lines first; xAI with a stand-in key "
                 "sealed; a Talk from the menu opening the card and leaving only with its line in view; the refused key "
                 "saying why; every api.x.ai request answered 401 inside the drive), the talk sound muted and volume 35, "
-                "another pet from Companions, and all of it after the restart. `--scale 1.25` / `1.5` adds "
+                "another pet from Companions, and all of it after the restart. The #1557 audit: the card within the "
+                "leash of the pet and over no plate at the right edge, Rest at 99 waking by itself, the talk pose ending "
+                "with the pet's line while house chatter keeps the bubble up, a window play and a carried ribbon on the "
+                "screen, Minds Save showing the refused key in the web's words (asked with the House window's line in "
+                "view), the volume slider saying it is this pet's. `--scale 1.25` / `1.5` adds "
                 "--force-device-scale-factor. Menus are recorded, "
                 "not popped up, and input goes through Chromium (CDP), never the OS mouse or keyboard. "
                 "Offline pins: desktop/renderer/first-run-fit.test.cjs, desktop/renderer/first-run-drive.test.cjs, "
-                "desktop/renderer/card-rules.test.cjs, desktop/renderer/desk-drive-long.test.cjs, card.walk_rules, "
-                "and card.long_walk_talk."
+                "desktop/renderer/card-rules.test.cjs, desktop/renderer/desk-drive-long.test.cjs, "
+                "desktop/renderer/desk-audit-1557.test.cjs, card.walk_rules, card.long_walk_talk, and card.audit_1557."
             ),
         ),
     ]
