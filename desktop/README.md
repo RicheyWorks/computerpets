@@ -67,6 +67,7 @@ Tray / Extra / Mark / House window → **Unlock…**. Steam is the first real pr
 | `COMPUTERPETS_BACKEND_URL` | yes* | House server address, no trailing slash. Default `http://127.0.0.1:8081` if unset. |
 | `LICENSE_SECRET_KEY` | yes | Same 32-byte standard Base64 key the house server uses. Signs `POST /api/verify` and decrypts the issued license. |
 | `BUNDLE_SIGNING_KEY` | no | If set, the overlay also checks the CDN URL HMAC. Download still works without it — the house server already signed the link. |
+| `COMPUTERPETS_STEAM_APP_ID` | no | The Steam App ID this copy unlocks with (digits). ComputerPets has no Steam page, so the House window hides its App ID box unless this is set, a `steam_appid.txt` sits beside the program, or a past unlock saved one. |
 
 `ENTERPRISEPET_BACKEND_URL` is accepted as another name for the house server address.
 

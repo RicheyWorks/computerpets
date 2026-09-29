@@ -118,7 +118,7 @@ test("the desktop room fits its panel and rail to the screen, scrolls inside the
   assert.match(room, /!hand && !pad && deskFit \? \{ maxHeight: deskFit\.asideMax \}/);
   assert.match(room, /data-rail-fit=\{!hand && !pad && deskFit \? "" : undefined\}/);
   assert.match(room, /!hand && !pad && deskFit \? \{ maxHeight: deskFit\.railMax \}/);
-  assert.match(room, /\{\(hand \|\| deskFold\) && hintUp \? null : \(/);
+  assert.match(room, /\{\(hand \|\| deskFold\) && hintUp && !stats\.hidden \? null : \(/);
   assert.match(room, /folded=\{hand \|\| deskFold\}/);
   assert.match(room, /plaqueNeedsLine\(aside\.scrollHeight, aside\.clientHeight\)/);
 });
