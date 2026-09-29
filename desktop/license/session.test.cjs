@@ -932,3 +932,44 @@ describe("license session", () => {
     assert.equal(fs.existsSync(dir), false);
   });
 });
+
+describe("an Unlock that cannot go reads no computer ID", () => {
+  const UNLOCK = { steamId: "76561198000000000", appId: "123456", petType: "red_panda", provider: "steam" };
+  for (const [name, extraEnv, input, code, message] of [
+    ["no license key", { LICENSE_SECRET_KEY: "" }, UNLOCK, "missing_secret", null],
+    ["a blank Steam ID", {}, { ...UNLOCK, steamId: " " }, "fields_missing", FIELDS_MISSING_MESSAGE],
+    ["no App ID anywhere", {}, { ...UNLOCK, appId: "" }, "fields_missing", NO_APP_ID_MESSAGE],
+  ]) {
+    it(`${name}: no machine-id read, no hwid.txt, nothing sent`, async () => {
+      const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
+      const disk = memoryFs();
+      const reads = [];
+      const execs = [];
+      const dir = path.join(os.tmpdir(), "cp-license-no-read");
+      const session = createLicenseSession({
+        userDataDir: dir,
+        platform: "linux",
+        env: { LICENSE_SECRET_KEY: SECRET, COMPUTERPETS_BACKEND_URL: "http://127.0.0.1:8080", ...extraEnv },
+        fetchImpl: backend.fetchImpl,
+        exec: (...args) => {
+          execs.push(args);
+          throw new Error("no exec in this test");
+        },
+        readFile: (p) => {
+          reads.push(String(p));
+          return disk.readFile(p);
+        },
+        writeFile: disk.writeFile,
+        mkdir: disk.mkdir,
+      });
+      await assert.rejects(
+        () => session.unlock(input),
+        (err) => err instanceof LicenseError && err.code === code && (message === null || err.message === message),
+      );
+      assert.deepEqual(reads.filter((p) => p.includes("machine-id")), []);
+      assert.equal([...disk.files.keys()].some((p) => p.endsWith("hwid.txt")), false);
+      assert.deepEqual(execs, []);
+      assert.deepEqual(backend.calls, []);
+    });
+  }
+});
