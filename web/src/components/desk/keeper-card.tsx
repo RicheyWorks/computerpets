@@ -922,15 +922,17 @@ function Meter({ label, value }: { label: string; value: number }) {
     <div>
       <dt>{label}</dt>
       <dd>{value}</dd>
-      <i
-        role="meter"
-        aria-label={label}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={value}
-        aria-valuetext={`${value} of 100`}
-        style={{ ["--w" as string]: `${value}%` }}
-      />
+      <dd className="keeper-meter-bar">
+        <i
+          role="meter"
+          aria-label={label}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={value}
+          aria-valuetext={`${value} of 100`}
+          style={{ ["--w" as string]: `${value}%` }}
+        />
+      </dd>
     </div>
   );
 }

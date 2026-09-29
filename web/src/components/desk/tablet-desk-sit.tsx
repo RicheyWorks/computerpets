@@ -4,7 +4,7 @@ import { CARE_VERBS } from "@/lib/pets/mac-desk";
  * bottom right (at 42rem they crossed on any screen under about 1,210 px); --demo-strip-room is in styles.css. */
 export function TabletDeskSit({ name }: { name: string }) {
   return (
-    <nav
+    <div
       data-tablet-sit
       className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex justify-center px-3 pb-[max(0.65rem,env(safe-area-inset-bottom))] pt-2"
     >
@@ -13,6 +13,6 @@ export function TabletDeskSit({ name }: { name: string }) {
         <p className="shrink-0">{name} · on a tablet</p>
         <p className="hidden min-w-0 truncate sm:block">{CARE_VERBS.join(" · ")}</p>
       </div>
-    </nav>
+    </div>
   );
 }

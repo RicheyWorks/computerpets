@@ -11,7 +11,7 @@ const TRAY_NAMES = ["Rui", ...GRID_LIVE.map((guest) => guest.name)];
  */
 export function WindowsDeskSit({ name }: { name: string }) {
   return (
-    <aside
+    <div
       data-windows-sit
       className="pointer-events-none absolute bottom-[max(0.65rem,env(safe-area-inset-bottom))] left-3 z-30 flex max-w-[calc(50%-max(4.5rem,min(21rem,50%-var(--demo-strip-room,36rem)/2))-1.25rem)] items-center gap-2 rounded-sm border border-border/40 bg-bg/55 px-2 py-1.5 text-[10px] uppercase tracking-[0.16em] text-subtle backdrop-blur-[2px]"
     >
@@ -19,6 +19,6 @@ export function WindowsDeskSit({ name }: { name: string }) {
       <p className="min-w-0 truncate">
         Tray: On the desk · {TRAY_NAMES.join(" · ")} · Clicks pass the glass
       </p>
-    </aside>
+    </div>
   );
 }
