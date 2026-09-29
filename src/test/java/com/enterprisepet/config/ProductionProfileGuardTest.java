@@ -9,7 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -646,5 +648,47 @@ class ProductionProfileGuardTest {
 
         env.setProperty("METRICS_SCRAPE_TOKEN_FILE", "/run/secrets/metrics_scrape_token");
         assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("prod refuses ADMIN_ALLOWED_ORIGINS=* and wildcard-host patterns")
+    void wildcardAdminOrigins_failClosed() {
+        for (String value : List.of("*", "https://pets.example.test, *", "https://*", "http://*:[*]")) {
+            MockEnvironment env = new MockEnvironment();
+            env.setProperty("ADMIN_ALLOWED_ORIGINS", value);
+            ProductionProfileGuard g = guard(
+                    false,
+                    "redis",
+                    "jdbc:postgresql://db:5432/computerpets",
+                    "",
+                    "external-secrets",
+                    "false",
+                    env);
+            assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                    .as(value)
+                    .isInstanceOf(IllegalStateException.class)
+                    .hasMessageContaining("ADMIN_ALLOWED_ORIGINS");
+        }
+    }
+
+    @Test
+    @DisplayName("prod accepts unset (same-origin) or named ADMIN_ALLOWED_ORIGINS")
+    void namedOrUnsetAdminOrigins_pass() {
+        for (String value : List.of("", "https://pets.example.test", "https://*.example.test,https://admin.example.test/")) {
+            MockEnvironment env = new MockEnvironment();
+            env.setProperty("admin.allowed-origins", value);
+            ProductionProfileGuard g = guard(
+                    false,
+                    "redis",
+                    "jdbc:postgresql://db:5432/computerpets",
+                    "",
+                    "external-secrets",
+                    "false",
+                    env);
+            assertThatCode(g::rejectUnsafeProductionSettings).as(value).doesNotThrowAnyException();
+        }
+        assertThat(ProductionProfileGuard.isAnyOrigin("http://[::1]:[*]")).isFalse();
+        assertThat(ProductionProfileGuard.isAnyOrigin("http://localhost:[*]")).isFalse();
+        assertThat(ProductionProfileGuard.isAnyOrigin("*")).isTrue();
     }
 }

@@ -70,25 +70,26 @@ public class SecurityConfig {
     /**
      * The origin patterns allowed to call {@code /api/admin/**} from a browser, from
      * {@code admin.allowed-origins} (env {@code ADMIN_ALLOWED_ORIGINS}): comma-separated,
-     * blanks dropped, trailing slashes trimmed. Empty means {@code "*"} (the old behavior).
+     * blanks dropped, trailing slashes trimmed. Empty means no other web site may call
+     * (same-origin pages still work; CORS only applies across origins). The {@code dev}
+     * profile allows loopback pages; {@code prod} refuses {@code "*"} (ProductionProfileGuard).
      */
     static List<String> adminOriginPatterns(String raw) {
-        List<String> origins = raw == null ? List.of() : Arrays.stream(raw.split(","))
+        return raw == null ? List.of() : Arrays.stream(raw.split(","))
                 .map(String::trim)
                 .map(o -> o.replaceAll("/+$", ""))
                 .filter(o -> !o.isEmpty())
                 .toList();
-        return origins.isEmpty() ? List.of("*") : origins;
     }
 
     /**
      * Browser house {@code /admin} calls these endpoints from another origin
      * with the admin request HMAC headers. CORS only unblocks the preflight.
-     * {@code admin.allowed-origins} narrows which web sites may do so (default any).
+     * {@code admin.allowed-origins} lists which web sites may do so (default none).
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource(
-            @Value("${admin.allowed-origins:*}") String adminAllowedOrigins) {
+            @Value("${admin.allowed-origins:}") String adminAllowedOrigins) {
         CorsConfiguration admin = new CorsConfiguration();
         admin.setAllowedOriginPatterns(adminOriginPatterns(adminAllowedOrigins));
         admin.setAllowedMethods(List.of("GET", "POST", "OPTIONS"));
