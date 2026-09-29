@@ -275,30 +275,35 @@ function createLicenseSession(opts) {
     const provider = typeof input.provider === "string" && input.provider ? input.provider : "steam";
     const allowWeak = input.allowWeakFallback === true;
     const opened = await postLicenseHash(shownLicenseLine(input), backendUrl, async () => {
-      const deviceId = deviceMark(true, allowWeak).id;
+      // Everything that can stop this Unlock is checked before the computer's ID is read, so pressing Unlock on a
+      // copy with no license key or a blank box does not read the ID or write hwid.txt (the blotter does the same).
       const secret = licenseSecret(env);
       if (!secret) {
         throw new LicenseError("missing_secret", "LICENSE_SECRET_KEY is missing; cannot decrypt the issued license");
       }
+      let appId = "";
+      if (provider === "steam") {
+        // The App ID box is hidden when this copy has none set up; the configured one stands in for an empty box.
+        appId = String(input.appId || "").trim() || configuredSteamAppId(env, opts.steamDirs || [], readFile);
+        if (!String(input.steamId || "").trim()) {
+          throw new LicenseError("fields_missing", FIELDS_MISSING_MESSAGE);
+        }
+        if (!appId) throw new LicenseError("fields_missing", NO_APP_ID_MESSAGE);
+      } else if (!(input.fields && typeof input.fields === "object")) {
+        throw new LicenseError("denied", `unsupported provider ${provider}`);
+      }
+      const deviceId = deviceMark(true, allowWeak).id;
 
       const fields = {
         petType: typeof input.petType === "string" && input.petType ? input.petType : "red_panda",
         hwid: deviceId,
       };
       if (provider === "steam") {
-        // The App ID box is hidden when this copy has none set up; the configured one stands in for an empty box.
-        const appId = String(input.appId || "").trim() || configuredSteamAppId(env, opts.steamDirs || [], readFile);
-        if (!String(input.steamId || "").trim()) {
-          throw new LicenseError("fields_missing", FIELDS_MISSING_MESSAGE);
-        }
-        if (!appId) throw new LicenseError("fields_missing", NO_APP_ID_MESSAGE);
         fields.steamId = String(input.steamId);
         fields.appId = appId;
-      } else if (input.fields && typeof input.fields === "object") {
+      } else {
         Object.assign(fields, input.fields);
         fields.hwid = deviceId;
-      } else {
-        throw new LicenseError("denied", `unsupported provider ${provider}`);
       }
 
       const verified = await client.verify({ backendUrl, provider, fields, licenseSecret: secret });

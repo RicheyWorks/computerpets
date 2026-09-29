@@ -446,7 +446,7 @@ async function settingsWindow() {
     if ($("keyStore").textContent !== "No key is saved yet.") fails.push(`key line on open: ${$("keyStore").textContent}`);
     const roster = JSON.parse(fs.readFileSync(path.join(RENDERER, "roster.json"), "utf8"));
     if ($("petType").options.length !== roster.length || $("petType").value !== "red_panda") fails.push(`Pet lists ${$("petType").options.length} of ${roster.length}, picked ${$("petType").value}`);
-    if ($("licenseOk").textContent !== "Locked. Pets on the desk still work.") fails.push(`license line on open: ${$("licenseOk").textContent}`);
+    if ($("licenseOk").textContent !== "Locked. Pets still work without unlocking.") fails.push(`license line on open: ${$("licenseOk").textContent}`);
     if ($("licenseErr").textContent !== "") fails.push(`an error on open: ${$("licenseErr").textContent}`);
     trace.push(`plugins=${pluginIds.length}`, `pets=${$("petType").options.length}`);
     // The Pet list reads like the blotter's: name and kind, never the catalog key.
@@ -595,7 +595,7 @@ async function settingsWindow() {
     const said = $("licenseErr").textContent;
     if (said !== `Couldn't reach the house server at ${HOST}. ${PETS_STILL}`) fails.push(`refused unlock said "${said}"`);
     else if (RAW.test(said)) fails.push("raw text reached the House window");
-    else if ($("licenseOk").textContent !== "Locked. Pets on the desk still work.") fails.push(`refused unlock licenseOk "${$("licenseOk").textContent}"`);
+    else if ($("licenseOk").textContent !== "Locked. Pets still work without unlocking.") fails.push(`refused unlock licenseOk "${$("licenseOk").textContent}"`);
     else trace.push("unlock_refused=plain");
     if (!warn.lines.some((l) => /ECONNREFUSED/.test(l))) fails.push("the refused connection is not in the log");
     // The page has no fetch of its own (connect-src 'none'); every call went through main.

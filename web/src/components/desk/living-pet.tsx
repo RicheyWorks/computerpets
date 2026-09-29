@@ -336,7 +336,8 @@ export function LivingPet({
     };
     // The weather, news and market plates (floating on a desktop, docked in the panel on a phone): the part of each
     // that shows, in the bubble's frame. The bubble never crosses one (bubbleDodge in the frame loop). On a phone on
-    // its side the panel's own kicker and name are marked data-bubble-avoid and kept clear the same way.
+    // its side the panel's own kicker and name are marked data-bubble-avoid and kept clear the same way, and on a laptop or
+    // wider so is the species plaque ([data-plaque]).
     const readPlates = () => {
       const parent = el.offsetParent as HTMLElement | null;
       if (!parent || !speech) {
@@ -345,7 +346,11 @@ export function LivingPet({
       }
       const pb = parent.getBoundingClientRect();
       const plates: BubbleBox[] = [];
-      for (const plate of document.querySelectorAll<HTMLElement>("[data-desk-plate], [data-bubble-avoid]")) {
+      // On a laptop or wider the species plaque is kept clear the same way (after Hide the line showed over its top
+      // corner at 1366×768). A phone keeps its list: there the bubble has to stay off the care buttons, which a
+      // step around the plaque pushed it onto at 375×812.
+      const plaques = window.innerWidth >= 1024 ? Array.from(document.querySelectorAll<HTMLElement>("[data-plaque]")) : [];
+      for (const plate of [...Array.from(document.querySelectorAll<HTMLElement>("[data-desk-plate], [data-bubble-avoid]")), ...plaques]) {
         const r = plate.getBoundingClientRect();
         let b = { left: r.left, top: r.top, right: r.right, bottom: r.bottom };
         for (let up = plate.parentElement; up && up !== document.body; up = up.parentElement) {
@@ -385,10 +390,25 @@ export function LivingPet({
     grow?.observe(el);
     const stage = el.offsetParent;
     if (stage) grow?.observe(stage);
+    // The species plaque can open or fold while a line shows (Hide, then the pet's card): the plates are re-read on
+    // the next frame, not up to 400 ms later, so the bubble does not sit over the new plaque meanwhile.
+    let soon = 0;
+    const plaqueMoved =
+      speech && typeof MutationObserver === "function"
+        ? new MutationObserver(() => {
+            if (!soon) soon = requestAnimationFrame(() => {
+              soon = 0;
+              refresh();
+            });
+          })
+        : null;
+    plaqueMoved?.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["data-plaque"] });
     return () => {
       window.removeEventListener("resize", refresh);
       if (every) window.clearInterval(every);
       grow?.disconnect();
+      plaqueMoved?.disconnect();
+      if (soon) cancelAnimationFrame(soon);
     };
   }, [speech]);
 
