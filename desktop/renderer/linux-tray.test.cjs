@@ -188,13 +188,13 @@ test("a native Wayland start goes again on XWayland once, or stays closed and sa
   assert.equal(w.message, "The pets are not on the screen: they were started as a Wayland app, and there is no XWayland here to start them on instead.");
   assert.deepEqual(w.buttons, ["Quit", "OK"]);
   assert.deepEqual(w.actions, ["quit", "none"]);
-  assert.match(w.detail, /Start them with sh desktop\.sh, without --ozone-platform=wayland or ELECTRON_OZONE_PLATFORM_HINT/);
+  assert.match(w.detail, /The pets need XWayland, which lets Wayland desktops run X11 apps\. .*sudo apt install xwayland\. Then start them again with sh desktop\.sh\./);
   const boot = body("bootDesk");
   const plan = boot.indexOf("OverlayGate.waylandPlan({ native: NATIVE_WAYLAND, env: process.env })");
   assert.ok(plan > 0 && plan < boot.indexOf("Pictures.picturesSurvey"), "before anything else is made");
   assert.match(boot, /process\.env\.COMPUTERPETS_X11_TRIED = "1";\n\s+app\.relaunch\(\{ args: OverlayGate\.x11Args\(process\.argv\.slice\(1\)\) \}\);\n\s+app\.quit\(\);\n\s+return;/);
   assert.match(boot, /closedGate = \{ why: "wayland-native", words: OverlayGate\.closedWords\("wayland-native"\) \};/);
-  assert.match(main, /const NATIVE_WAYLAND = OverlayGate\.nativeWayland\(\{\n\s+platform: process\.platform,\n\s+env: process\.env,\n\s+ozone: app\.commandLine\.getSwitchValue\("ozone-platform"\),\n\s+hint: app\.commandLine\.getSwitchValue\("ozone-platform-hint"\),\n\}\);/);
+  assert.match(main, /const NATIVE_WAYLAND = OverlayGate\.nativeWayland\(\{\n\s+platform: process\.platform,\n\s+env: process\.env,\n\s+ozone: app\.commandLine\.getSwitchValue\("ozone-platform"\),\n\s+hint: app\.commandLine\.getSwitchValue\("ozone-platform-hint"\),\n\s+electron: process\.versions\.electron,\n\}\);/);
 });
 
 test("the boot never asks for the cursor on a native Wayland start (it crashed Electron there)", () => {

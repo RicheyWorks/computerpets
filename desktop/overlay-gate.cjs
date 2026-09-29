@@ -18,10 +18,13 @@
  *    tray (XEmbed, _NET_SYSTEM_TRAY_S<screen>); GNOME without the AppIndicator extension and a bare X server have
  *    neither, and the icon is simply not there. readTrayHost asks both, so the pet's own menu, the hello, and Hide
  *    the window can say how to get around without it. COMPUTERPETS_TRAY=none treats the tray as absent anywhere.
- * 4. A native Wayland start (--ozone-platform=wayland, or ELECTRON_OZONE_PLATFORM_HINT=auto|wayland on a Wayland
- *    session). Electron 35 crashed there (SIGSEGV in screen.getCursorScreenPoint at boot, seen under sway), and a
- *    Wayland app cannot see the mouse outside its window or keep a window on top anyway. waylandPlan starts it
- *    again on XWayland when there is one, and says so plainly when there is not.
+ * 4. A native Wayland start. Since Electron 38 that is the default on any Wayland session (XDG_SESSION_TYPE=wayland,
+ *    the default on Ubuntu's GNOME): no switch is needed. Before, it took --ozone-platform=wayland or
+ *    ELECTRON_OZONE_PLATFORM_HINT. Electron 44 writes the platform it picked into its own command line before
+ *    main.cjs loads (seen under sway: --ozone-platform reads "wayland" with no switch given), so the switch still
+ *    decides; the session is the fallback when it is empty. Electron 35 crashed there (SIGSEGV in screen.getCursorScreenPoint at boot, seen
+ *    under sway), and a Wayland app cannot see the mouse outside its window or keep a window on top anyway.
+ *    waylandPlan starts it again on XWayland when there is one, and says so plainly when there is not.
  * 5. The Minds key store (Linux). Chromium picks the Secret Service only on desktops it recognises by name (GNOME,
  *    KDE, Xfce, ...); on sway, i3 or any other it wrote the key nowhere even with a keyring running and unlocked.
  *    passwordStoreFor asks for the Secret Service by hand there when one is on the session bus.
@@ -246,20 +249,34 @@ async function readTrayHost(opts) {
   return sni === "no" && xembed === "no" ? "no" : "unknown";
 }
 
+/** Electron's major version from a version string like "44.4.5" (0 when it cannot be read). */
+function electronMajor(version) {
+  const m = /^v?(\d+)\./.exec(String(version || ""));
+  return m ? Number(m[1]) : 0;
+}
+
 /**
- * A native Wayland start. Electron 35 runs on X11 (XWayland on a Wayland session) unless told otherwise, by
- * --ozone-platform=wayland, or by --ozone-platform-hint / ELECTRON_OZONE_PLATFORM_HINT (auto or wayland) on a
- * Wayland session. Some setups export that variable for every Electron app.
- * @param {{ platform?: string, env?: Record<string, string | undefined>, ozone?: string, hint?: string }} o
+ * A native Wayland start. --ozone-platform decides when it is given. Without it, Electron 38 and newer start as a
+ * Wayland app on any Wayland session by themselves (their --ozone-platform defaults to auto: XDG_SESSION_TYPE=wayland
+ * with a WAYLAND_DISPLAY), and ELECTRON_OZONE_PLATFORM_HINT is gone. Electron 37 and older run on X11 (XWayland on a
+ * Wayland session) unless told otherwise, by --ozone-platform-hint / ELECTRON_OZONE_PLATFORM_HINT (auto or wayland).
+ * `electron` is the running Electron's version (process.versions.electron); none counts as the old default.
+ * @param {{ platform?: string, env?: Record<string, string | undefined>, ozone?: string, hint?: string, electron?: string }} o
  */
 function nativeWayland(o) {
   const platform = (o && o.platform) || process.platform;
   const env = (o && o.env) || {};
   if (!isLinux(platform)) return false;
-  const ozone = String((o && o.ozone) || "").toLowerCase();
+  const low = (v) => String(v || "").toLowerCase();
+  const ozone = low(o && o.ozone);
+  const modern = electronMajor(o && o.electron) >= 38;
+  const session = low(env.XDG_SESSION_TYPE) === "wayland" && !!env.WAYLAND_DISPLAY;
+  if (ozone === "auto") return session;
   if (ozone) return ozone === "wayland";
-  const hint = String((o && o.hint) || env.ELECTRON_OZONE_PLATFORM_HINT || "").toLowerCase();
-  return (hint === "wayland" || hint === "auto") && !!env.WAYLAND_DISPLAY;
+  const hint = low((o && o.hint) || (modern ? "" : env.ELECTRON_OZONE_PLATFORM_HINT));
+  if (hint === "wayland") return !!env.WAYLAND_DISPLAY;
+  if (hint === "auto") return modern ? session : !!env.WAYLAND_DISPLAY;
+  return modern && session;
 }
 
 /**
@@ -348,7 +365,7 @@ function closedWords(why) {
       message: "The pets are not on the screen: they were started as a Wayland app, and there is no XWayland here to start them on instead.",
       detail:
         "On Wayland an app cannot see where the mouse is outside its own window or keep a window on top, so the pets could not be clicked. " +
-        "Start them with sh desktop.sh, without --ozone-platform=wayland or ELECTRON_OZONE_PLATFORM_HINT, on a desktop that has XWayland (GNOME, KDE and sway have it).",
+        "The pets need XWayland, which lets Wayland desktops run X11 apps. GNOME, KDE and sway have it; on Ubuntu or Debian type sudo apt install xwayland. Then start them again with sh desktop.sh.",
       buttons: ["Quit", "OK"],
       actions: ["quit", "none"],
     };
@@ -422,6 +439,7 @@ module.exports = {
   readCompositor,
   readTrayHost,
   nativeWayland,
+  electronMajor,
   waylandPlan,
   x11Args,
   passwordStoreFor,

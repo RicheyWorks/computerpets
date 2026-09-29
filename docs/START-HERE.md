@@ -338,7 +338,7 @@ The desktop pet lives in the `desktop/` folder. It does **not** need the web app
 The helper script `desktop.ps1` does three honest jobs:
 
 1. It checks that Node is installed and is version 22 or newer. If not, it says so in plain words and stops.
-2. If the pieces are missing, half-finished, or out of date after an update, it runs `npm install` (that means "get the pieces")
+2. If the pieces are missing, half-finished, or out of date after an update, it runs `npm install` (that means "get the pieces"), then gets Electron itself, the overlay piece (about 100 MB)
 3. Then it runs `npm start` (that means "turn the pets on"). `npm start` is `electron .`. That is the overlay.
 
 In the PowerShell that is already inside `computerpets`, type this and press Enter:
@@ -366,7 +366,8 @@ That is the same start the grown-up docs already use.
 **The first time:**
 
 - Lots of words scroll by. Names. Numbers. Progress. That is `npm install` getting the pieces. It can take several minutes. You need the internet. Wait.
-- It may say some pieces have `vulnerabilities` and tell you to type `npm audit fix --force`. Do not type that. It swaps in a different Electron and can stop the pets from starting. The grown-ups update Electron on purpose.
+- Then it says `Getting Electron, the overlay piece (about 100 MB). Leave this window open.` Wait for that too.
+- It should say `found 0 vulnerabilities`. Some day it may say some pieces have `vulnerabilities` and tell you to type `npm audit fix --force`. Do not type that. It swaps in a different Electron and can stop the pets from starting. The grown-ups update Electron on purpose.
 - Then more words, and a pet appears **on your real desktop**.
 - Look near the clock (the bottom-right corner). A small ComputerPets tray icon should sit there.
 - Look for the **keeper card** next to the pet. Name. Stage. Bond word. Hunger, Rest, Bond. Feed, Play, Rest.
@@ -598,7 +599,7 @@ Read the last few lines.
 
 - If it talks about `npm` or `install`, the pieces did not finish downloading. Check the internet. Stay in the `computerpets` folder (or `desktop` if you used the three-line start). Run `npm install` again, then `npm start`.
 - If you closed the window while words were still scrolling, open a new one and run `.\desktop.ps1` again. It sees the pieces are half-finished and gets the pieces again.
-- To see what the start sees without turning anything on, type `.\desktop.ps1 -Check`. It prints your Node version, whether the pieces are `ready`, `missing`, `unfinished`, or `changed`, and whether the pet pictures are all there. Its last line says what to type next.
+- To see what the start sees without turning anything on, type `.\desktop.ps1 -Check`. It prints your Node version, whether the pieces are `ready`, `missing`, `unfinished`, or `changed`, and whether the pet pictures are all there. Its last line says what to type next. After the three-line start (`cd desktop`, `npm install`, `npm start`) worked once, it says `ready` too.
 - If it says some pets are still missing their pictures, Git LFS stopped before it fetched them all. In the `computerpets` folder type `git lfs pull`, then `.\desktop.ps1` again.
 
 ### A window flashed and vanished
