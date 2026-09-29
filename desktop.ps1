@@ -27,14 +27,24 @@ try {
   }
 
   # 2. The pieces. node_modules alone is not enough: a get-the-pieces run that was closed halfway
-  #    leaves the folder without Electron. The stamp is written only after npm install finishes,
-  #    and a newer package.json (after a pull) asks for the pieces again.
+  #    leaves it unfinished. npm writes node_modules\.package-lock.json last, when an install finishes
+  #    (this script's stamp says the same), so a plain npm install counts too; a newer package.json
+  #    (after a pull) asks for the pieces again. Electron 42 and newer do not download Electron itself
+  #    during npm install: it comes the first time Electron runs (the first npm start), so the pieces
+  #    are ready only once node_modules\electron\path.txt names an Electron that is really there.
   $electron = "node_modules\electron\path.txt"
+  $finished = "node_modules\.package-lock.json"
   $stamp = "node_modules\.computerpets-installed"
+  function Test-Electron {
+    if (-not (Test-Path $electron)) { return $false }
+    return (Test-Path (Join-Path "node_modules\electron\dist" (Get-Content $electron -Raw).Trim()))
+  }
   function Get-Pieces {
-    if (-not (Test-Path $electron)) { return "missing" }
-    if (-not (Test-Path $stamp)) { return "unfinished" }
-    if ((Get-Item "package.json").LastWriteTimeUtc -gt (Get-Item $stamp).LastWriteTimeUtc) { return "changed" }
+    if (-not (Test-Path "node_modules\electron\package.json")) { return "missing" }
+    $done = @($finished, $stamp) | Where-Object { Test-Path $_ } | ForEach-Object { (Get-Item $_).LastWriteTimeUtc } | Sort-Object -Descending | Select-Object -First 1
+    if (-not $done) { return "unfinished" }
+    if ((Get-Item "package.json").LastWriteTimeUtc -gt $done) { return "changed" }
+    if (-not (Test-Electron)) { return "unfinished" }
     return "ready"
   }
   $pieces = Get-Pieces
@@ -108,8 +118,11 @@ try {
     if ($LASTEXITCODE -ne 0) {
       Stop-Start "npm install did not finish. Check the internet, then run .\desktop.ps1 again. It gets the pieces again."
     }
-    if (-not (Test-Path $electron)) { & npm rebuild electron }
-    if (-not (Test-Path $electron)) {
+    if (-not (Test-Electron)) {
+      Write-Host "Getting Electron, the overlay piece (about 100 MB). Leave this window open."
+      & node node_modules\electron\install.js
+    }
+    if (-not (Test-Electron)) {
       Stop-Start "The overlay piece (Electron) did not download. Check the internet, delete the desktop\node_modules folder, and run .\desktop.ps1 again."
     }
     Set-Content -Path $stamp -Value (Get-Date -Format o) -Encoding ASCII

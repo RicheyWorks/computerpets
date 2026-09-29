@@ -4,7 +4,7 @@ const path = require("path");
 const FILE = "gpu-path.json";
 const TIMEOUT_MS = 8000;
 
-/** Electron 35 `gpu_compositing` values that mean hardware acceleration. */
+/** Chromium `gpu_compositing` values (app.getGPUFeatureStatus, the same strings from Electron 35 through 44) that mean hardware acceleration. */
 const HARDWARE_COMPOSITING = new Set([
   "enabled",
   "enabled_on",
@@ -13,7 +13,7 @@ const HARDWARE_COMPOSITING = new Set([
   "enabled_readback",
 ]);
 
-/** Electron 35 values that mean the compositor fell back to software. */
+/** Chromium values (Electron 35 through 44) that mean the compositor fell back to software. */
 const SOFTWARE_COMPOSITING = new Set(["disabled_software", "unavailable_software"]);
 
 const LABEL = {

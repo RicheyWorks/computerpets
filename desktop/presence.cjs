@@ -13,14 +13,14 @@ const HOUSE_FILES = Object.freeze(["card.json", "mind.json"]);
 
 /**
  * Geolocation is not a standing grant. It opens only for one weather-button
- * locate, then closes. Electron 35's PermissionManager::ResetPermission is
+ * locate, then closes. Electron 44's PermissionManager::ResetPermission is
  * empty, so a grant Chromium already cached in the renderer cannot be
  * revoked mid-session. This flag is the live check: false once the locate
  * ends or WEATHER_LOCATE_MS passes. Callers do not watch and do not re-query.
  * An IP place service is not a fallback when that fix is missing.
  * maximumAge 0 does not flush a permission grant. Chromium can still
  * answer getCurrentPosition from an origin grant it already cached,
- * without a new browser prompt. Electron 35 cannot revoke that cache.
+ * without a new browser prompt. Electron 44 cannot revoke that cache.
  * An in-app yes is not a revoke. Callers arm only after that yes, and
  * only when no typed area is saved. A saved typed area does not arm this grant.
  * One yes covers one read. After that locate, or after Don't send, the next

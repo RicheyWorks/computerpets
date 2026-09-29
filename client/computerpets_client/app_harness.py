@@ -1349,13 +1349,16 @@ def _desk_rows() -> list[Affordance]:
             notes=(
                 "Runs the real start script in check mode, which changes nothing. With Node 22 or newer "
                 "and npm on PATH it must print ok: node <the same version node -v prints> and a pieces "
-                "state (ready, missing, unfinished, or changed), and a pictures state that matches the file: "
+                "state (ready, missing, unfinished, or changed) that matches the files: npm's own finished record "
+                "(node_modules/.package-lock.json) or the start script's stamp, and Electron itself really downloaded "
+                "(path.txt names a file under node_modules/electron/dist; since Electron 42 npm install leaves that for "
+                "Electron's first run), so the three-line start (cd desktop; npm install; npm start) reads ready, and a pictures state that matches the file: "
                 "ready, missing, lfs-pointers (a Git without LFS copied text pointers, so every pet would be "
                 "invisible; the real start stops with plain Git LFS words), or partial (a git lfs pull that stopped "
                 "partway: every pet folder is scanned for PNGs under 1 KB that start like a pointer, and the next line "
                 "says how many pets are still missing their pictures and to run git lfs pull). With no Node, an older Node, or no npm "
-                "it must stop with plain words. The install stamp must not change. npm install and the "
-                "overlay are never run."
+                "it must stop with plain words. The install stamp and npm's record must not change. npm install, "
+                "the Electron download, and the overlay are never run."
             ),
         ),
         Affordance(
@@ -1727,6 +1730,30 @@ def _launch_holds_pointer(pet: Path) -> bool:
     return False
 
 
+def launch_pieces_here(root: Path) -> str:
+    """The pieces state read from the files, the same way desktop.ps1 and desktop.sh read it.
+
+    missing: no Electron package. unfinished: no finished install (npm writes node_modules/.package-lock.json last;
+    the start script writes its own stamp), or Electron itself not downloaded yet (since Electron 42 npm install
+    leaves it for Electron's first run). changed: package.json newer than every finished-install record.
+    """
+    mods = root / "desktop" / "node_modules"
+    if not (mods / "electron" / "package.json").exists():
+        return "missing"
+    records = [f for f in (mods / ".package-lock.json", mods / ".computerpets-installed") if f.exists()]
+    if not records:
+        return "unfinished"
+    if all((root / "desktop" / "package.json").stat().st_mtime > f.stat().st_mtime for f in records):
+        return "changed"
+    path_txt = mods / "electron" / "path.txt"
+    if not path_txt.exists():
+        return "unfinished"
+    name = path_txt.read_text(encoding="utf-8").strip()
+    if not name or not (mods / "electron" / "dist" / name).exists():
+        return "unfinished"
+    return "ready"
+
+
 def launch_pictures_survey(root: Path) -> tuple[str, int, int]:
     """(state, gone, pets): what the start script should say about the overlay pictures. A Git without LFS leaves text
     pointers for every pet (lfs-pointers); a pull that stopped partway leaves some (partial, gone of pets)."""
@@ -1767,10 +1794,12 @@ def _launch_check(aid: str) -> InvokeResult:
         version = subprocess.run([node, "-v"], capture_output=True, text=True, timeout=60).stdout.strip()
     match = re.match(r"v(\d+)\.", version)
     major = int(match.group(1)) if match else 0
-    stamp = root / "desktop" / "node_modules" / ".computerpets-installed"
-    before = stamp.stat().st_mtime_ns if stamp.exists() else None
+    mods = root / "desktop" / "node_modules"
+    records = (mods / ".computerpets-installed", mods / ".package-lock.json")
+    before = [f.stat().st_mtime_ns if f.exists() else None for f in records]
+    real_pieces = launch_pieces_here(root)
     proc = subprocess.run(cmd, capture_output=True, text=True, timeout=120, cwd=str(root))
-    after = stamp.stat().st_mtime_ns if stamp.exists() else None
+    after = [f.stat().st_mtime_ns if f.exists() else None for f in records]
     out = f"{proc.stdout or ''}{proc.stderr or ''}"
     pieces = re.search(r"^pieces: (\w+)\s*$", out, re.M)
     pictures = re.search(r"^pictures: ([\w-]+)\s*$", out, re.M)
@@ -1797,6 +1826,8 @@ def _launch_check(aid: str) -> InvokeResult:
             fails.append(f"{script} check did not print ok: node {version}")
         if not pieces or pieces.group(1) not in LAUNCH_PIECES:
             fails.append(f"{script} check printed no pieces state")
+        elif pieces.group(1) != real_pieces:
+            fails.append(f"{script} check said pieces {pieces.group(1)}, the files say {real_pieces}")
         if not pictures or pictures.group(1) != real_pictures:
             fails.append(f"{script} check said pictures {pictures.group(1) if pictures else 'nothing'}, the file says {real_pictures}")
         if pieces and pictures:
@@ -1807,8 +1838,8 @@ def _launch_check(aid: str) -> InvokeResult:
             if not lines or lines[-1] != want:
                 fails.append(f"{script} check's last line is {lines[-1] if lines else 'nothing'!r}, wanted {want!r}")
     if before != after:
-        fails.append("check mode changed the install stamp")
-    for word in ("npm install", "Getting the pieces"):
+        fails.append("check mode changed the install stamp or npm's install record")
+    for word in ("npm install", "Getting the pieces", "Getting Electron"):
         if word in out:
             fails.append(f"check mode must not install ({word!r} printed)")
     state = pieces.group(1) if pieces else "none"
@@ -1821,7 +1852,7 @@ def _launch_check(aid: str) -> InvokeResult:
         "desk",
         ok,
         detail=f"{script}: node {version or 'none'}; pieces {state}; pictures {seen}; exit {proc.returncode}",
-        extras={"script": script, "node": version, "npm": bool(npm), "exit": proc.returncode, "pieces": state, "pictures": seen, "picturesReal": real_pictures, "expect": expect, "next": next_line},
+        extras={"script": script, "node": version, "npm": bool(npm), "exit": proc.returncode, "pieces": state, "piecesReal": real_pieces, "pictures": seen, "picturesReal": real_pictures, "expect": expect, "next": next_line},
         trace=[f"script={script}", f"node={version or 'none'}", f"expect={expect}", f"exit={proc.returncode}", f"pieces={state}", f"pictures={seen}", f"next={'plain' if next_ok else 'missing'}"],
         error=None if ok else "; ".join(fails),
     )
@@ -3519,9 +3550,16 @@ def _gui_rows() -> list[Affordance]:
                 "window asks and Cancel keeps the pets (no_tray_hide_asks), a second copy brings them back with the card "
                 "open (no_tray_second_start), and Turn off names this computer's start (turn_off_words). `--wayland` "
                 "starts natively on Wayland: with XWayland the app asks to start again on X11 (gate_wayland_restarts_on_x11) "
-                "and the drive follows; with none it checks the message (gate_wayland_says_so). "
+                "and the drive follows; with none it checks the message (gate_wayland_says_so). On a Wayland session "
+                "(XDG_SESSION_TYPE=wayland) Electron 38 and newer start natively with no switch at all, so there the "
+                "first start must also ask for XWayland, and an overlay that opened as a Wayland window fails "
+                "gate_wayland_restarts_on_x11. A missing Electron binary (Electron 42+ downloads it on first run) is "
+                "fetched with node_modules/electron/install.js first, and the result names the Electron version. "
                 "On Linux X11 with stalonetray installed, tray_appears_later starts a tray after the pets and needs "
                 "the overlay to hear yes, the hello to name the tray, one icon docked, and Hide to stop asking. "
+                "With a session bus that has no StatusNotifierWatcher yet and python3-gi, tray_appears_later_sni "
+                "does the same with desktop/sni-watcher.py (a small StatusNotifier watcher and host): the overlay "
+                "hears no, then yes, exactly one item registers with the watcher, and Hide hides at once. "
                 "A start that shows neither window nor message is closed and killed, not waited on forever. "
                 "`--scale 1.25` / `1.5` adds "
                 "--force-device-scale-factor. Menus are recorded, "

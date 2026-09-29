@@ -84,6 +84,27 @@ function ozoneOf(args) {
   return a ? a.slice("--ozone-platform=".length) : "";
 }
 
+/**
+ * Electron 38 and newer start as a native Wayland app by themselves on a Wayland session (their --ozone-platform
+ * defaults to auto: XDG_SESSION_TYPE=wayland with a WAYLAND_DISPLAY), with no switch at all. Read here on its own,
+ * not from overlay-gate.cjs, so the drive can catch the app missing it.
+ * @param {string} platform
+ * @param {Record<string, string | undefined>} env
+ * @param {number} major Electron's major version
+ */
+function autoWaylandStart(platform, env, major) {
+  return platform === "linux" && major >= 38 && String(env.XDG_SESSION_TYPE || "").toLowerCase() === "wayland" && !!env.WAYLAND_DISPLAY;
+}
+
+/** The installed Electron's version (node_modules/electron/package.json), or "" when it cannot be read. */
+function electronVersion() {
+  try {
+    return String(JSON.parse(fs.readFileSync(path.join(DESKTOP, "node_modules", "electron", "package.json"), "utf8")).version || "");
+  } catch {
+    return "";
+  }
+}
+
 /** `--wayland` from the command line: start Electron as a native Wayland app (--ozone-platform=wayland). */
 function waylandArg(argv) {
   return Array.isArray(argv) && argv.includes("--wayland");
@@ -151,8 +172,20 @@ async function drive(opts = {}) {
   const pw = opts.pw || playwright();
   if (!pw) return { ok: false, skipped: "playwright-core not found under desktop/ or web/node_modules", checks, ms: 0 };
   const exe = opts.exe || path.join(DESKTOP, "node_modules", "electron", "dist", process.platform === "win32" ? "electron.exe" : "electron");
+  // Electron 42 and newer download Electron itself the first time it runs, not during npm install (the three-line
+  // start's first npm start does it). The drive starts the binary directly, so it gets it the same way first.
+  const installJs = path.join(DESKTOP, "node_modules", "electron", "install.js");
+  if (!opts.exe && !fs.existsSync(exe) && fs.existsSync(installJs)) {
+    require("node:child_process").spawnSync(process.execPath, [installJs], { cwd: DESKTOP, stdio: ["ignore", 2, 2], timeout: 600_000 });
+  }
   if (!fs.existsSync(exe)) return { ok: false, skipped: `no Electron at ${exe} (npm install in desktop)`, checks, ms: 0 };
   const windowMs = opts.windowMs || 60_000;
+  const electron = opts.electron != null ? String(opts.electron) : electronVersion();
+  const major = Number((/^(\d+)\./.exec(electron) || [])[1] || 0);
+  /** A Wayland session with Electron 38+: the first start is a native Wayland one even with no switch. */
+  const autoWayland = !wayland && autoWaylandStart(opts.platform || process.platform, process.env, major);
+  /** Whether the next start is still the first one (the only one Electron picks Wayland for by itself). */
+  let firstStart = true;
   /** Set when the app kept its pet window closed on purpose and said why; the rest of the drive cannot run then. */
   let gated = "";
   const ud = path.join(WORK, `ud-${process.pid}-${Date.now()}`);
@@ -320,12 +353,13 @@ async function drive(opts = {}) {
     const asked = relaunchAsked();
     if (!asked) return false;
     const ozone = ozoneOf(asked.args);
-    const wasWayland = nextArgs.includes("--ozone-platform=wayland");
+    const wasWayland = nextArgs.includes("--ozone-platform=wayland") || (autoWayland && firstStart);
+    firstStart = false;
     if (wasWayland) {
       check(
         "gate_wayland_restarts_on_x11",
         ozone === "x11" && asked.env && asked.env.COMPUTERPETS_X11_TRIED === "1",
-        `a native Wayland start asked to start again with --ozone-platform=${ozone || "unset"} (XWayland at DISPLAY ${process.env.DISPLAY || "none"}), X11 tried ${asked.env ? asked.env.COMPUTERPETS_X11_TRIED : "unset"}`,
+        `a native Wayland start${autoWayland ? ` (Electron ${electron} on XDG_SESSION_TYPE=wayland, no switch)` : ""} asked to start again with --ozone-platform=${ozone || "unset"} (XWayland at DISPLAY ${process.env.DISPLAY || "none"}), X11 tried ${asked.env ? asked.env.COMPUTERPETS_X11_TRIED : "unset"}`,
       );
     }
     nextArgs = ozone ? [`--ozone-platform=${ozone}`] : [];
@@ -468,6 +502,17 @@ async function drive(opts = {}) {
   try {
     let page;
     ({ app, page } = await launch());
+    if (autoWayland && firstStart) {
+      // Opened with no relaunch: the overlay is a native Wayland window (no cursor outside it, no keep-on-top), so
+      // click-through and always-on-top quietly stop working. The drive's own CDP input would never notice.
+      firstStart = false;
+      check(
+        "gate_wayland_restarts_on_x11",
+        false,
+        `Electron ${electron} started as a native Wayland app by itself (XDG_SESSION_TYPE=wayland, WAYLAND_DISPLAY ${process.env.WAYLAND_DISPLAY}), and the app opened its overlay there instead of starting again on XWayland`,
+      );
+    }
+    firstStart = false;
     if (gated) throw new Error(`gated: ${gated}`);
     check("user_data_throwaway", true, ud);
     await page.waitForTimeout(3500);
@@ -1331,6 +1376,52 @@ async function drive(opts = {}) {
         st.kill();
       }
     }
+    // 13. The same with a StatusNotifier tray host (KDE, GNOME's AppIndicator, waybar and most panels today) that
+    //     starts after the pets: desktop/sni-watcher.py takes org.kde.StatusNotifierWatcher on the session bus. The
+    //     overlay must hear "yes", the icon made again must register with it exactly once (the one from before
+    //     dropped), and Hide the window must hide at once. Needs a session bus with no watcher on it and python3-gi.
+    const sni = !forced && !waylandArg(nextArgs) && sniReady();
+    if (sni) {
+      if (lateTray) {
+        // Back to no tray first: the window out again from the tray menu, stalonetray gone, the app's ask-again.
+        await clickItem(app, "Show", "tray");
+        await page.waitForTimeout(600);
+      }
+      let seenNo = "";
+      for (let i = 0; i < 30 && seenNo !== "no"; i += 1) {
+        seenNo = await page.evaluate(() => (typeof trayHost !== "undefined" ? trayHost : "?"));
+        if (seenNo !== "no") await page.waitForTimeout(1000);
+      }
+      const list = path.join(ud, "sni-items.json");
+      const w = spawn("python3", [path.join(DESKTOP, "sni-watcher.py"), list], { env: process.env, stdio: "ignore" });
+      try {
+        let seenYes = "";
+        for (let i = 0; i < 30 && seenYes !== "yes"; i += 1) {
+          await page.waitForTimeout(1000);
+          seenYes = await page.evaluate(() => (typeof trayHost !== "undefined" ? trayHost : "?"));
+        }
+        await page.waitForTimeout(2000);
+        let items = [];
+        try {
+          items = JSON.parse(fs.readFileSync(list, "utf8"));
+        } catch {
+          /* none written */
+        }
+        const shownBefore = await visible();
+        await petMenu();
+        await clickItem(app, "Hide the window");
+        await page.waitForTimeout(900);
+        const asked = (await boxes(app)).some((b) => !b.answered && /no tray icon on this desktop/.test(b.message));
+        const hiddenNow = await visible();
+        check(
+          "tray_appears_later_sni",
+          seenNo === "no" && seenYes === "yes" && items.length === 1 && shownBefore >= 1 && !asked && hiddenNow === 0,
+          `a StatusNotifier watcher started after the pets (the overlay heard ${seenNo} before it): overlay heard ${seenYes}; ${items.length} item(s) registered with it${items.length ? ` (${items.join(", ")})` : ""}; Hide the window ${asked ? "still asked" : "hid at once"} (${shownBefore} -> ${hiddenNow} visible)`,
+        );
+      } finally {
+        w.kill();
+      }
+    }
     check("no_page_errors", !errors.length, errors.length ? errors.slice(0, 4).join(" | ") : "none");
   } catch (e) {
     // A closed pet window that said why is the honest end of the drive there, not a crash.
@@ -1345,7 +1436,7 @@ async function drive(opts = {}) {
   } catch {
     /* another run */
   }
-  return { ok: !gated && checks.every((c) => c.ok), ...(gated ? { gated } : {}), checks, ms: Date.now() - t0, userData: ud, scale };
+  return { ok: !gated && checks.every((c) => c.ok), ...(gated ? { gated } : {}), checks, ms: Date.now() - t0, userData: ud, scale, electron };
 }
 
 /** The full path of a program on PATH, or "" (Linux/Mac: the drive's optional helpers such as stalonetray). */
@@ -1360,6 +1451,23 @@ function whichSync(name) {
     }
   }
   return "";
+}
+
+/**
+ * Whether the StatusNotifier check can run here: Linux, a session bus with no StatusNotifierWatcher on it yet (a real
+ * panel's would already be the tray), dbus-send, and python3 with PyGObject for desktop/sni-watcher.py.
+ */
+function sniReady() {
+  if (process.platform !== "linux" || !process.env.DBUS_SESSION_BUS_ADDRESS || !whichSync("dbus-send") || !whichSync("python3")) return false;
+  const { spawnSync } = require("node:child_process");
+  const gi = spawnSync("python3", ["-c", "import gi; gi.require_version('Gio', '2.0'); from gi.repository import Gio"], { timeout: 10_000 });
+  if (gi.status !== 0) return false;
+  const owner = spawnSync(
+    "dbus-send",
+    ["--session", "--print-reply", "--dest=org.freedesktop.DBus", "/org/freedesktop/DBus", "org.freedesktop.DBus.NameHasOwner", "string:org.kde.StatusNotifierWatcher"],
+    { encoding: "utf8", timeout: 5000 },
+  );
+  return owner.status === 0 && /boolean false/.test(owner.stdout || "");
 }
 
 /**
@@ -1378,7 +1486,7 @@ function trayIcons() {
   return lines.filter((l) => indent(l) === top && !/\s1x1\+/.test(l)).length;
 }
 
-module.exports = { overlaps, onScreen, duplicateLabels, allLabels, throwawayOk, scaleArg, waylandArg, ozoneOf, sideGap, gateOf, STANDIN_KEY, WORK, HOOK, RELAUNCH_FILE, drive };
+module.exports = { overlaps, onScreen, duplicateLabels, allLabels, throwawayOk, scaleArg, waylandArg, autoWaylandStart, ozoneOf, sideGap, gateOf, STANDIN_KEY, WORK, HOOK, RELAUNCH_FILE, drive };
 
 if (require.main === module) {
   drive({ scale: scaleArg(process.argv.slice(2)), wayland: waylandArg(process.argv.slice(2)) }).then(

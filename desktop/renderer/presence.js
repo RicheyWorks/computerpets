@@ -131,7 +131,7 @@
    * session does not call getCurrentPosition until that yes is noted again.
    * maximumAge is 0, so a cached position is not a silent re-read.
    * A prior browser allow can still satisfy the fresh yes without a new OS or browser prompt.
-   * This cannot revoke that grant. Electron 35 ResetPermission is empty.
+   * This cannot revoke that grant. Electron 44 ResetPermission is empty.
    * A timer or a panel reopen does not note the yes.
    */
   function readWeatherHere(geo, hooks) {
