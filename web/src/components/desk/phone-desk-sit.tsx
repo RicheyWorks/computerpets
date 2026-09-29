@@ -8,7 +8,8 @@ export function PhoneDeskSit({ name }: { name: string }) {
       className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex justify-end px-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] pe-[max(0.75rem,env(safe-area-inset-right))] pt-2"
     >
       <div className="phone-sit-rail flex max-w-[min(100%,16rem)] items-center gap-2 rounded-full border border-border/40 bg-bg/60 px-3 py-1.5 text-[10px] uppercase tracking-[0.16em] text-subtle backdrop-blur-[2px]">
-        <p className="shrink-0">{name} · the sit</p>
+        {/* Plain words: which desk this strip stands for. It said "the extra / the mark / the sit", words only the code used. */}
+        <p className="shrink-0">{name} · on a phone</p>
         <p className="hidden min-w-0 truncate sm:block">{CARE_VERBS.join(" · ")}</p>
       </div>
     </nav>

@@ -42,7 +42,7 @@ test("the desk room: on a phone the plaque waits while the hello is up, then sho
   const room = readFileSync(join(WEB, "src", "components", "desk", "companion-room.tsx"), "utf8");
   assert.match(room, /const \[hintUp, setHintUp\] = useState\(false\);\n\s+useEffect\(\(\) => setHintUp\(!firstHintSeen\(\)\), \[\]\);/);
   // A short desktop screen folds it too (deskFold, kennel-targets.test.mjs).
-  assert.match(room, /\{\(hand \|\| deskFold\) && hintUp \? null : \(\n\s+<SpeciesPlaque speciesKey=\{kind\.key\} compact paper folded=\{hand \|\| deskFold\} /);
+  assert.match(room, /\{\(hand \|\| deskFold\) && hintUp && !stats\.hidden \? null : \(\n\s+<SpeciesPlaque speciesKey=\{kind\.key\} compact paper folded=\{hand \|\| deskFold\} /);
   assert.match(room, /onDone=\{\(\) => \{\n\s+setHintUp\(false\);/);
 });
 

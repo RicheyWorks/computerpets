@@ -2424,7 +2424,7 @@ async function noRepeatSignedIn() {
   const more = {
     bubbleClick: main.includes('payload.results["gui.bubble_click"] = bubble;') && main.includes('wc.sendInputEvent({ type: "mouseDown", x, y, button: "left", clickCount: 1 });'),
     harnessTempPruned: main.includes("HarnessData.pruneStale(fs, path, os.tmpdir(), process.pid);"),
-    phoneHintFirst: room.includes("{(hand || deskFold) && hintUp ? null : (") && room.includes("folded={hand || deskFold}"),
+    phoneHintFirst: room.includes("{(hand || deskFold) && hintUp && !stats.hidden ? null : (") && room.includes("folded={hand || deskFold}"),
     plaqueFolds: plaque.includes("folded") && plaque.includes("About the "),
   };
   if (!Object.values(more).every(Boolean)) bad.push(`more: ${JSON.stringify(more)}`);
@@ -2998,7 +2998,7 @@ async function kennelTargets() {
   const targets = {
     css: css.includes(":is(.den-cabinet-room, .den-cabinet-guest):not([data-phone-floor] *) {") && css.includes(":is([data-line-link], [data-room-links] a, [data-talk-send], [data-open-room]):not([data-phone-floor] *) {"),
     fit: fit.asideMax === 472 && fit.railMax === 652 && room.includes("maxHeight: deskFit.asideMax") && room.includes("maxHeight: deskFit.railMax"),
-    helloFirst: room.includes("{(hand || deskFold) && hintUp ? null : ("),
+    helloFirst: room.includes("{(hand || deskFold) && hintUp && !stats.hidden ? null : ("),
     sweep: sweep.includes("export const DESK_TARGET_MIN = 24;") && sweep.includes("function deskTargetProblems(") && sweep.includes('export const DESK_PAGES = ["/", "/catalog", "/demo/rui"];'),
   };
   if (!Object.values(targets).every(Boolean)) bad.push(`targets: ${JSON.stringify(targets)}`);

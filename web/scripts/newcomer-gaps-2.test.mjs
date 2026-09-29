@@ -51,8 +51,8 @@ test("phone rail names and the keeper card's keyboard open are thumb-sized", () 
 
 test("the catalog's shelf headings are kept clear of the speech bubble", () => {
   const cat = read(root, "src/routes/catalog.tsx");
-  assert.match(cat, /<p data-bubble-avoid="" className="[^"]*">Shelf<\/p>/);
-  assert.match(cat, /<h2 data-bubble-avoid="" className="mt-1 font-display text-2xl">The two hundred twenty-one\.<\/h2>/);
+  // The whole Shelf card is kept clear now (newcomer-gaps-4: the bubble sat on its sentence under the heading).
+  assert.match(cat, /<aside data-bubble-avoid="" className="paper-card[^"]*">\s*<p className="[^"]*">Shelf<\/p>\s*<h2 className="mt-1 font-display text-2xl">The two hundred twenty-one\.<\/h2>/);
   assert.match(cat, /<h2 data-bubble-avoid="" className="mt-1 font-display text-2xl">\{room\.label\}<\/h2>/);
   // The bubble reads every [data-bubble-avoid] in the page, not only the desk's.
   assert.match(read(root, "src/components/desk/living-pet.tsx"), /document\.querySelectorAll<HTMLElement>\("\[data-desk-plate\], \[data-bubble-avoid\]"\)/);

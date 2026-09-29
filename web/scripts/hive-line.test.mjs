@@ -240,11 +240,13 @@ test("the hive den is a living comb, not only ten sprites", () => {
   assert.match(denSrc, /Tend/);
   assert.match(denSrc, /lift=\{seat\.lift\}/);
   assert.match(livingSrc, /lift\?: number/);
-  assert.match(pageSrc, /The comb sits\. The line stays/);
-  assert.match(pageSrc, /Neglect can go quiet/);
-  assert.match(pageSrc, /The nest still keeps one/);
+  // Plain words for a newcomer: what the comb is, and a sentence each for Nectar (feed: Stores) and Tend (rest).
+  assert.match(pageSrc, /The honeycomb in the middle is the hive itself/);
+  assert.match(pageSrc, /Nectar<\/strong> feeds the\s+hive and fills its Stores/);
+  assert.match(pageSrc, /Tend<\/strong> lets the bees rest/);
+  assert.doesNotMatch(pageSrc, /The line stays|Neglect can go quiet|Tend the brood/);
   assert.match(pageSrc, /It is not a shop/);
-  assert.match(roomsSrc, /The hive keeps a line/);
+  assert.match(roomsSrc, /the hive goes quiet/);
   assert.match(nestSrc, /Neglect can close a line/);
   assert.match(careSrc, /stampHiveLine/);
   assert.match(hiveSrc, /companion_pets\.line/);

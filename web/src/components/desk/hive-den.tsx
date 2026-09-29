@@ -213,8 +213,8 @@ export function HiveDen({
       <div className="absolute bottom-4 left-5 max-w-[18rem] space-y-2">
         <p className="text-[11px] uppercase tracking-[0.18em] text-subtle">
           {colony.quiet
-            ? "The comb went quiet. Nectar can still lift a cell."
-            : "The comb sits. Comb, Keep, and Hum keep it. The line is the brood."}
+            ? "The hive went quiet. Nectar or Tend brings it back."
+            : "The honeycomb. Comb, Keep, and Hum sit on it."}
         </p>
         <p className="font-display text-xl leading-none text-fg">{colonyWord(colony)}</p>
         <p className="font-mono text-[11px] text-subtle">

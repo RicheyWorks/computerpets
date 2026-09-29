@@ -1404,11 +1404,12 @@ export function CompanionRoom({
         {latestNote ? <p className="mt-2 max-w-sm text-xs text-subtle">{latestNote}</p> : null}
         {/* On a phone the hello comes first; the plaque waits for Got it and then sits folded above the care buttons.
             A short desktop screen does the same (deskFold): the hello and its Got it stay above Feed and Play. */}
-        {(hand || deskFold) && hintUp ? null : (
+        {(hand || deskFold) && hintUp && !stats.hidden ? null : (
           <SpeciesPlaque speciesKey={kind.key} compact paper folded={hand || deskFold} line={hand && plaqueLine} className="mt-5 max-w-sm" showDemoLink={false} />
         )}
         <FirstHint
           name={displayName}
+          wait={stats.hidden}
           onDone={() => {
             setHintUp(false);
             // Got it is gone; keyboard focus lands on the keeper card's open (or name) button, not nowhere.

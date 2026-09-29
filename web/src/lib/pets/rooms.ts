@@ -86,7 +86,7 @@ export const ROOMS: readonly Room[] = [
     watchSlug: "comb",
     watchName: "Comb",
     keys: [...INSECT_KEYS, ...BEE_KEYS],
-    line: "The hive keeps a line. Brood, stores, a quiet if neglected.",
+    line: "A honeycomb and its bees. Keep the stores up, or the hive goes quiet.",
   },
   {
     id: "pond",

@@ -5,11 +5,38 @@ type Kind = SoundKind | "step" | "voice" | "call" | "music" | "radio";
 
 let ctx: AudioContext | null = null;
 
+/**
+ * Sound waits for the visitor's first tap, click or key. /demo's pet walks and hops on its own, and each hop made
+ * (or resumed) an AudioContext before any gesture: the browser refused it and logged an autoplay warning, four
+ * before the first tap. The browser's own sticky activation answers where it has one; the capture listeners
+ * below answer where it has not. Volumes are untouched.
+ */
+let gestured = false;
+
+function heardGesture() {
+  if (gestured) return true;
+  const activation = (navigator as Navigator & { userActivation?: { hasBeenActive?: boolean } }).userActivation;
+  if (activation?.hasBeenActive) gestured = true;
+  return gestured;
+}
+
+if (typeof window !== "undefined") {
+  const GESTURES = ["pointerdown", "keydown", "touchend", "click"] as const;
+  // Only a real gesture: the room's own element.click() and dispatched keys are untrusted and do not count.
+  const mark = (event: Event) => {
+    if (!event.isTrusted) return;
+    gestured = true;
+    for (const type of GESTURES) window.removeEventListener(type, mark, true);
+  };
+  for (const type of GESTURES) window.addEventListener(type, mark, true);
+}
+
 function context() {
+  if (typeof window === "undefined" || !heardGesture()) return null;
   const Ctor = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
   if (!Ctor) return null;
   if (!ctx) ctx = new Ctor();
-  void ctx.resume();
+  if (ctx.state === "suspended") void ctx.resume();
   return ctx;
 }
 
@@ -20,6 +47,8 @@ export function unlockDeskAudio() {
 export function playClip(src: string, guestKey = "red_panda", kind: Kind = "chirp"): Promise<boolean> {
   const card = loadCard();
   if (!src || isMuted(card.mutes, kind)) return Promise.resolve(false);
+  // Before a gesture the browser refuses play() anyway (false, as before), and logs it; this skips the try.
+  if (typeof window === "undefined" || !heardGesture()) return Promise.resolve(false);
   try {
     const audio = new Audio(src);
     audio.volume = Math.max(0, Math.min(1, guestOf(card, guestKey).volume / 100));
