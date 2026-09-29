@@ -66,7 +66,8 @@ app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
 }
 
 /**
- * Started as a native Wayland app (--ozone-platform=wayland, or ELECTRON_OZONE_PLATFORM_HINT on a Wayland session).
+ * Started as a native Wayland app: on any Wayland session with this Electron (44; since 38 --ozone-platform defaults
+ * to auto, and Electron writes the platform it picked into app.commandLine), or with --ozone-platform=wayland.
  * Electron crashed there at boot (SIGSEGV in screen.getCursorScreenPoint), and a Wayland app cannot see the mouse
  * outside its window, so bootDesk starts the pets again on XWayland, or says why they stay off (overlay-gate.cjs).
  */
@@ -75,6 +76,7 @@ const NATIVE_WAYLAND = OverlayGate.nativeWayland({
   env: process.env,
   ozone: app.commandLine.getSwitchValue("ozone-platform"),
   hint: app.commandLine.getSwitchValue("ozone-platform-hint"),
+  electron: process.versions.electron,
 });
 /**
  * Whether the tray icon can be seen: "yes", "no" (GNOME without AppIndicator, a bare X server), "unknown", or "n/a"
@@ -668,6 +670,9 @@ function createWindow() {
     transparent: true,
     backgroundColor: "#00000000",
     hasShadow: false,
+    // Electron 43 rounds the corners of frameless windows on Linux (Windows 11 and the Mac did already); the glass
+    // covers the whole work area, so rounded corners would clip a pet walking into a screen corner.
+    roundedCorners: false,
     resizable: false,
     maximizable: false,
     fullscreenable: false,

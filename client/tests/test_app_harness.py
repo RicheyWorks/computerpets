@@ -514,26 +514,37 @@ def test_start_script_check_says_what_to_type_next_for_each_state(tmp_path):
     state, line = last()
     seen.append(state)
     assert state == "missing" and line == "next: Type sh desktop.sh and press Enter. It gets the pieces (a few minutes the first time), then the pets come on."
-    (desk / "node_modules" / "electron").mkdir(parents=True)
-    (desk / "node_modules" / "electron" / "path.txt").write_text("electron", encoding="utf-8")
+    electron = desk / "node_modules" / "electron"
+    electron.mkdir(parents=True)
+    (electron / "package.json").write_text("{}", encoding="utf-8")
     state, line = last()
     seen.append(state)
     assert state == "unfinished" and line == "next: Type sh desktop.sh and press Enter. It finishes getting the pieces, then the pets come on."
-    stamp = desk / "node_modules" / ".computerpets-installed"
-    stamp.write_text("done", encoding="utf-8")
+    # npm writes node_modules/.package-lock.json last, when an install finishes (the three-line start has no stamp).
+    finished = desk / "node_modules" / ".package-lock.json"
+    finished.write_text("{}", encoding="utf-8")
     old = time.time() - 60
-    os.utime(stamp, (old, old))
+    os.utime(finished, (old, old))
     state, line = last()
     seen.append(state)
     assert state == "changed" and line == "next: Type sh desktop.sh and press Enter. It gets the new pieces, then the pets come on."
-    os.utime(stamp, None)
+    os.utime(finished, None)
     os.utime(desk / "package.json", (old, old))
+    # Since Electron 42, npm install leaves Electron itself for its first run: not ready until it is really there.
+    state, line = last()
+    seen.append(state)
+    assert state == "unfinished"
+    (electron / "path.txt").write_text("electron", encoding="utf-8")
+    (electron / "dist").mkdir()
+    (electron / "dist" / "electron").write_bytes(b"")
+    # The three-line start (cd desktop; npm install; npm start) is complete: ready, not "unfinished".
     state, line = last()
     seen.append(state)
     assert state == "ready" and line == "next: Type sh desktop.sh and press Enter to turn the pets on."
-    assert seen == ["missing", "unfinished", "changed", "ready"]
+    assert seen == ["missing", "unfinished", "changed", "unfinished", "ready"]
     # Check mode never installs.
-    assert not (desk / "node_modules" / ".package-lock.json").exists()
+    assert finished.read_text(encoding="utf-8") == "{}"
+    assert not (desk / "node_modules" / ".computerpets-installed").exists()
 
 
 @pytest.mark.skipif(
