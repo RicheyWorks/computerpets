@@ -324,7 +324,8 @@ test("the demo room shows the Windows walk the way it shows the Mac and Linux wa
 
   assert.match(demoSrc, /WindowsDeskSit/);
   assert.match(windowsSitSrc, /data-windows-sit/);
-  assert.match(windowsSitSrc, /\{name\} · on Windows · tray: On the desk/);
+  assert.match(windowsSitSrc, /\{name\} · on Windows<\/p>/);
+  assert.match(windowsSitSrc, /Tray: On the desk · \{TRAY_NAMES\.join/);
   assert.match(windowsSitSrc, /On the desk/);
   assert.match(windowsSitSrc, /Clicks pass the glass/);
   assert.match(windowsSitSrc, /\["Rui"/);

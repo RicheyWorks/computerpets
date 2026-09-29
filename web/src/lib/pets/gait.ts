@@ -85,6 +85,33 @@ export function hideTuck(x: number, width: number, sprite = SPRITE, pad = 16) {
   const right = Math.max(pad, width - sprite - pad);
   return x + sprite / 2 < width / 2 ? left : right;
 }
+
+/** A stretch of the floor, in stage x, that a tucked pet must not sit behind: the web room's panel or rail. */
+export type TuckBlock = { left: number; right: number };
+
+/**
+ * hideTuck, stepped out from behind the room's panel and rail. On the web desk the nearest edge is under the left
+ * panel, so a hidden pet sat behind the plaque with its tail peeking out while the hello said "Tap Rui". It now sits
+ * just past the panel (or the rail), faded and whole. The other side is tried when one side has no room; with no room
+ * anywhere it keeps the plain tuck. Placement only: the pet's art and poses are untouched.
+ */
+export function hideTuckClear(x: number, width: number, blocks: readonly TuckBlock[], sprite = SPRITE, pad = 16) {
+  const hit = (at: number) => blocks.find((b) => at < b.right && at + sprite > b.left);
+  const edge = hideTuck(x, width, sprite, pad);
+  const maxX = width - sprite - pad;
+  const from = (fromLeft: boolean) => {
+    let at = fromLeft ? pad : Math.max(pad, maxX);
+    for (let step = 0; step <= blocks.length; step++) {
+      const b = hit(at);
+      if (!b) return at >= 0 && at <= Math.max(pad, maxX) ? at : null;
+      at = fromLeft ? b.right + pad : b.left - sprite - pad;
+    }
+    return null;
+  };
+  const first = edge === pad;
+  return from(first) ?? from(!first) ?? edge;
+}
+
 /** Come back from off-stage. Same sit as the desk enter. */
 export function enterSpawn(width: number, sprite = SPRITE, pad = 20, left?: boolean) {
   const max = width - sprite - pad;

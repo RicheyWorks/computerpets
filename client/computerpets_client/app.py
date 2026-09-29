@@ -115,6 +115,16 @@ SCENE_W = 960
 SCENE_H = 540
 
 
+def steam_dirs() -> list[str]:
+    """Where a Steam build keeps steam_appid.txt: beside the program (a packaged build) and the client
+    folder. The Unlock window shows its App ID box only when one is there or COMPUTERPETS_STEAM_APP_ID is set."""
+    dirs: list[str] = []
+    if getattr(sys, "frozen", False):
+        dirs.append(os.path.dirname(os.path.abspath(sys.executable)))
+    dirs.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    return dirs
+
+
 class BlotterView(QGraphicsView):
     def __init__(self, scene: QGraphicsScene):
         super().__init__(scene)
@@ -180,7 +190,9 @@ class DeskWindow(QMainWindow):
         super().__init__()
         self._user_data_dir = user_data_dir if user_data_dir is not None else default_user_data_dir()
         # The download sign-in is sealed by the OS secret store (DPAPI / optional keyring), or kept in memory only.
-        self.session = session or create_license_session(user_data_dir=self._user_data_dir, codec=default_token_codec)
+        self.session = session or create_license_session(
+            user_data_dir=self._user_data_dir, codec=default_token_codec, steam_dirs=steam_dirs()
+        )
         self.species: Species = species_by_key(DEFAULT_SPECIES_KEY)
         self.care = keep_hive(
             load_care(user_data_dir=self._user_data_dir, key=DEFAULT_SPECIES_KEY),
@@ -262,6 +274,11 @@ class DeskWindow(QMainWindow):
             gait = "crawl" if spec.gait == "crawl" else "walk"
             self.kind_box.addItem(f"{spec.name} · {spec.label} ({gait})", key)
         self.kind_box.setCurrentIndex(0)
+        # The longest name ("Bandit · California Kingsnake (crawl)") no longer sets the window's width: the box
+        # keeps a short minimum and its open list is as wide as the longest name.
+        self.kind_box.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
+        self.kind_box.setMinimumContentsLength(18)
+        self.kind_box.view().setMinimumWidth(self.kind_box.view().sizeHintForColumn(0) + 32)
         self.rail = SpeciesRail()
         self.rail.set_active(self.species.key)
         self.plaque = SpeciesPlaque()
@@ -308,16 +325,21 @@ class DeskWindow(QMainWindow):
         bar.addWidget(self.talk_btn)
         bar.addWidget(self.special_btn)
         bar.addWidget(self.shed_btn)
-        bar.addWidget(self.prev_btn)
-        bar.addWidget(self.kind_box, 1)
-        bar.addWidget(self.next_btn)
         bar.addStretch()
-        bar.addWidget(self.unlock_btn)
+        # The companion picker and Unlock get their own row, so the window fits a 1280 or 1024 wide laptop
+        # screen (one row of both asked for about 1,340 pixels and could not shrink).
+        picker = QHBoxLayout()
+        picker.addWidget(self.prev_btn)
+        picker.addWidget(self.kind_box, 1)
+        picker.addWidget(self.next_btn)
+        picker.addStretch()
+        picker.addWidget(self.unlock_btn)
 
         root = QWidget()
         layout = QVBoxLayout(root)
         layout.setContentsMargins(10, 10, 10, 8)
         layout.addLayout(bar)
+        layout.addLayout(picker)
         layout.addWidget(self.rail)
         layout.addWidget(self.license_label)
         layout.addWidget(self.view, 1)
@@ -869,6 +891,18 @@ class DeskWindow(QMainWindow):
         if is_resting_hour(self.species.key) and self.care.energy < 88:
             self.pet.issue("sleep")
 
+    def fit_screen(self) -> None:
+        """Start no bigger than the screen: 1000 by 860 ran off the bottom of a 768-tall laptop screen."""
+        screen = self.screen() or QApplication.primaryScreen()
+        if screen is None:
+            return
+        room = screen.availableGeometry()
+        least = self.minimumSizeHint()
+        # Leave room for the title bar and the window frame the system draws around it.
+        width = min(self.width(), max(least.width(), room.width() - 16))
+        height = min(self.height(), max(least.height(), room.height() - 48))
+        self.resize(width, height)
+
     def _unlock(self) -> None:
         dialog = UnlockDialog(self.session, self)
         dialog.exec()
@@ -940,6 +974,7 @@ def main(argv: list[str] | None = None) -> int:
     app.setOrganizationName("RicheyWorks")
 
     window = DeskWindow()
+    window.fit_screen()
     window.show()
     if not args.check:
         window.start_gpu_sense()

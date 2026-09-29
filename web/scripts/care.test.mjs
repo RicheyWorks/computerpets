@@ -225,7 +225,7 @@ test("sanctuary persists health and the floor stretch; kennel and nest show the 
   assert.match(actionsSrc, /applySanctuaryCare/);
   assert.doesNotMatch(actionsSrc, /0x[a-fA-F0-9]{40}/);
   assert.match(kennelSrc, /left\.join/);
-  assert.match(kennelSrc, /Neglect can close a line/);
+  assert.match(kennelSrc, /A pet left without care too long goes away\./);
   assert.match(cardSrc, /pet\.stage/);
   assert.match(nestSrc, /pet\.stage/);
   assert.match(nestSrc, /A hatchling cannot pair/);

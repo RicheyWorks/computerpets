@@ -1138,6 +1138,23 @@
     display: none;
   }
 
+  /* /demo's bottom band: Windows at the left, the tablet in the middle, the phone at the right, none over another,
+     over the care row or over the room rail. From 1024 px wide the rail runs to the bottom, so the phone strip stops
+     before it (it sat on the rail's last rooms) and the tablet strip leaves it the room (--demo-strip-room). */
+  [data-demo-stage] {
+    --demo-strip-room: 36rem;
+  }
+
+  @media (min-width: 64rem) {
+    [data-demo-stage] {
+      --demo-strip-room: 48rem;
+    }
+
+    [data-demo-stage]:not(:has([data-phone-floor])) [data-phone-sit] {
+      padding-inline-end: 7.5rem;
+    }
+  }
+
   /* A room's list in the panel (the kennel, the catalog's rooms, the nest's pairs) has a scroll box of its own
      (max-h, overflow-y-auto) for a panel that does not scroll. A panel that scrolls (a phone's, or a desktop's fitted
      to the screen) is the one scroller. These sat in the components layer, where the list's own utility classes won:

@@ -779,12 +779,14 @@ Type these lines, one at a time, and press Enter after each:
 cd client
 py -3 -m venv .venv
 .\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
 python -m pip install -e .
 python -m computerpets_client
 ```
 
 - `py -3 -m venv .venv` makes a little box for the blotter's pieces. It lives in `client\.venv`.
 - `Activate.ps1` steps into that box. The line before your cursor starts with `(.venv)`.
+- `pip install --upgrade pip` gets a newer pip first. The pip that comes with Python 3.10 stops the next line with "editable mode currently requires a setuptools-based build".
 - `pip install` means "get the pieces." It can take a few minutes the first time.
 - `python -m computerpets_client` turns the blotter on.
 
@@ -798,6 +800,7 @@ Open a **new** PowerShell in the `computerpets` folder. Type these lines instead
 
 ```powershell
 cd client
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
 .\.venv\Scripts\python.exe -m pip install -e .
 .\.venv\Scripts\python.exe -m computerpets_client
 ```
@@ -826,6 +829,7 @@ This is the same optional blotter, for a Mac or Linux Terminal. Python 3.10 or n
 cd client
 python3 -m venv .venv
 . .venv/bin/activate
+python -m pip install --upgrade pip
 python -m pip install -e .
 python -m computerpets_client
 ```
