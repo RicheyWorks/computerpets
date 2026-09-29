@@ -70,7 +70,7 @@ Git and Node are the two helpers that make that start work. Install [Git](https:
 - **Drag** is a carry.
 - **Feed / Play / Rest** sit on the keeper card.
 - **Right-click** the pet, or the little tray icon by the clock: **On the desk**, feed, play, rest, clean, medicine, hide.
-- **Call** uses a species cry when the wav exists.
+- **Talk** plays the pet's own cry when it has one, then the words show in a bubble. **Call back** brings a hidden pet back; what it says starts with the same cry.
 
 Clicks on empty glass pass through to your windows. The floor is the work area, above the taskbar. Pets climb real windows on Windows — **Rui** sets the quality bar; the rest follow that feel. More window tricks live in [docs/GUESTS.md](docs/GUESTS.md) and [desktop/README.md](desktop/README.md).
 

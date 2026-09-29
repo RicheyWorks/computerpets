@@ -1408,12 +1408,14 @@ export function CompanionRoom({
             roomRef.current?.querySelector<HTMLElement>('[data-card="open"], [data-card="collapse"]')?.focus();
           }}
         />
+        {/* Hidden until the keyboard reaches it (the card is a tap on the pet). Once it shows it is 44 px each way,
+            like the rest of the phone rules; it was 16 px tall. */}
         {cardOpen ? null : (
           <button
             type="button"
             data-card="open"
             aria-expanded="false"
-            className="sr-only mt-4 text-[11px] uppercase tracking-[0.14em] text-muted focus:not-sr-only focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            className="sr-only mt-4 text-[11px] uppercase tracking-[0.14em] text-muted focus:not-sr-only focus:inline-flex focus:min-h-11 focus:min-w-11 focus:items-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             onClick={openCardByKeys}
           >
             Open {displayName}&apos;s keeper card

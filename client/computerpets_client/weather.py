@@ -110,7 +110,7 @@ def weather_line(key: str, w: Weather) -> str | None:
     if w == "rain":
         if key in _RAIN_LINE_KEYS:
             return "Proper weather. At last."
-        return "The blotter is honest about rain."
+        return "It is raining outside. I will stay in, thanks."
     if w == "wind":
         if key in _WIND_KEYS:
             return "The air has opinions."

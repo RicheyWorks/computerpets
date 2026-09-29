@@ -28,7 +28,24 @@ export function useDocumentTitle(title: string | null | undefined) {
     if (!title || typeof document === "undefined") return;
     const before = document.title;
     document.title = title;
+    // The router writes the route's head() <title> again when it finishes hydrating or re-renders the head. When that
+    // landed after this effect, the tab said "The desk" instead of "Rui the Red Panda", depending on load timing (it
+    // looked like a phone-versus-laptop difference). Only that same route title is put back; any other title is the
+    // next page's (a navigation), and this one steps aside.
+    const keep: MutationObserver | null =
+      typeof MutationObserver === "function"
+        ? new MutationObserver(() => {
+            if (document.title === title) return;
+            if (document.title !== before) {
+              keep?.disconnect();
+              return;
+            }
+            document.title = title;
+          })
+        : null;
+    keep?.observe(document.head, { childList: true, subtree: true, characterData: true });
     return () => {
+      keep?.disconnect();
       // Only if nothing else set a title since (the next route's head() title wins on navigation).
       if (document.title === title) document.title = before;
     };

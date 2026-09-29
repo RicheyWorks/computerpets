@@ -9,8 +9,23 @@ try {
   # Plain words, then stop. A keeper should never have to read a PowerShell error to know what to do.
   function Stop-Start([string]$Words) {
     Write-Host $Words
+    if ($blocked) { Write-Host $bypassNote }
     exit 1
   }
+
+  # Windows' default policy (Restricted) blocks .\desktop.ps1, so a keeper there started this with
+  # powershell -ExecutionPolicy Bypass -File .\desktop.ps1 (START-HERE). Every "type .\desktop.ps1" below would be
+  # blocked again for them, so say the line that works. The policy is read without this window's own -ExecutionPolicy.
+  function Test-ScriptsBlocked {
+    foreach ($scope in "MachinePolicy", "UserPolicy", "CurrentUser", "LocalMachine") {
+      $policy = "$(Get-ExecutionPolicy -Scope $scope)"
+      if ($policy -ne "Undefined") { return ($policy -eq "Restricted" -or $policy -eq "AllSigned") }
+    }
+    return $true
+  }
+  $blocked = $false
+  if ($env:OS -eq "Windows_NT") { $blocked = Test-ScriptsBlocked }
+  $bypassNote = "Windows blocks scripts on this computer, so wherever these words say .\desktop.ps1, type powershell -ExecutionPolicy Bypass -File .\desktop.ps1 instead."
 
   # 1. Node runs the overlay. Check it is here and new enough before anything else.
   if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
@@ -89,6 +104,7 @@ try {
     Write-Host "ok: node $version"
     Write-Host "pieces: $pieces"
     Write-Host "pictures: $seen"
+    if ($blocked) { Write-Host "note: $bypassNote" }
     if ($seen -eq "partial") {
       Write-Host "next: $($still): Git LFS stopped before it fetched them all. In the computerpets folder type git lfs pull. Then type .\desktop.ps1 and press Enter."
     } elseif ($seen -ne "ready") {

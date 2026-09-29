@@ -172,7 +172,8 @@ test("tab titles: the desk and a pet page say who is there", async () => {
   assert.equal(T.petTitle("", "Axolotl"), "Axolotl — ComputerPets");
   assert.equal(T.petTitle("Pip", ""), "Pip — ComputerPets");
   const desk = src("src/routes/index.tsx");
-  assert.match(desk, /head: \(\) => \(\{ meta: \[\{ title: pageTitle\("The desk"\) \}\] \}\)/);
+  // One title at every size: the server names the ?pet= guest (or Rui) too, not "The desk" until hydration.
+  assert.match(desk, /return \{ meta: \[\{ title: petTitle\(kind\.name, kind\.speciesLabel\) \}\] \};/);
   const stage = src("src/components/desk/desk-stage.tsx");
   assert.match(stage, /useDocumentTitle\(petTitle\(name \?\? kind\.name, kind\.speciesLabel\)\);/);
   const pet = src("src/routes/pets.$key.tsx");
