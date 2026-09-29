@@ -29,3 +29,9 @@ test("the real-browser sweep checks the kicker and name on the sideways phones",
   assert.match(layout, /\{ w: 844, h: 390, phone: true \}, \{ w: 568, h: 320, phone: true \}\]\) \{/);
   assert.match(layout, /if \(size\.phone && size\.w > size\.h\) for \(const o of \(await page\.evaluate\(bubbleOverNames\)\) \|\| \[\]\) seen\.add\(o\);/);
 });
+
+test("the hello's Got it is always marked for the bubble to avoid, so the pet's line never takes its tap", () => {
+  // At 414×896 the hello line sat over Got it and won the tap (phone-desk-layout: "Got it is covered").
+  const hint = readFileSync(new URL("../src/components/desk/first-hint.tsx", import.meta.url), "utf8");
+  assert.match(hint, /data-first-hint-ok\n\s+data-bubble-avoid=""/);
+});

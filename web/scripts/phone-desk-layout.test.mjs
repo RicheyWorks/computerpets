@@ -610,6 +610,22 @@ test("the checked-in route tree is in the generator's order, so npm run dev leav
   assert.ok(paths.slice(firstNested).every((p) => p.includes(".") || p.includes("/")), "nested routes come after the flat ones");
 });
 
+test("the speech bubble's room under the header is re-read before a new line paints and when its stage resizes", () => {
+  // The landscape flake: the stage shrank after hydration with no window resize, and a new line (taller than the
+  // blank bubble) painted one frame with the old room, over the header. The room is now read in a layout effect,
+  // capped before the paint, on the stage's own resize, and on the 400 ms tick.
+  const src = readFileSync(join(WEB, "src", "components", "desk", "living-pet.tsx"), "utf8");
+  const at = src.indexOf("The bubble never rises over the site header");
+  assert.ok(at > 0);
+  const effect = src.slice(at, src.indexOf("}, [speech]);", at));
+  assert.match(effect, /useLayoutEffect\(\(\) => \{/);
+  assert.match(effect, /if \(at && at\.lift > bubbleRoomRef\.current\)/);
+  assert.match(effect, /window\.setInterval\(refresh, 400\)/);
+  assert.match(effect, /new ResizeObserver\(refresh\)/);
+  assert.match(effect, /const stage = el\.offsetParent;\n\s+if \(stage\) grow\?\.observe\(stage\);/);
+  assert.match(src, /bubbleAtRef\.current = \{ x: bx, lift \};/);
+});
+
 test("phone desk: hello, plaque, rail, care buttons, speech bubbles and the header never overlap; the rail rests on whole rows; the menu works", { skip, timeout: 420_000 }, async () => {
   const { url, browser } = await site();
   const problems = [];
