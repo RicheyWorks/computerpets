@@ -247,7 +247,7 @@ test("the hive den is a living comb, not only ten sprites", () => {
   assert.doesNotMatch(pageSrc, /The line stays|Neglect can go quiet|Tend the brood/);
   assert.match(pageSrc, /It is not a shop/);
   assert.match(roomsSrc, /the hive goes quiet/);
-  assert.match(nestSrc, /Neglect can close a line/);
+  assert.match(nestSrc, /A pet left without care too long goes away\./);
   assert.match(careSrc, /stampHiveLine/);
   assert.match(hiveSrc, /companion_pets\.line/);
   assert.match(hiveSrc, /not a shop/);

@@ -4943,16 +4943,19 @@ def _blotter_unlock_offline(aid: str) -> InvokeResult:
         "denied": plain_license_error(
             LicenseError("denied", "ops runbook 7"), "house.example")["message"],
     }
-    try:
-        session(backend, Disk(), Codec())["unlock"]({**unlock, "appId": ""})
-        words["fields"] = ""
-    except LicenseError as err:
-        words["fields"] = plain_license_error(err)["message"]
+    # A blank Steam ID, then a blank App ID with none set up for this copy (the box is hidden then).
+    for key, blank in (("fields", {"steamId": ""}), ("no_app_id", {"appId": ""})):
+        try:
+            session(backend, Disk(), Codec())["unlock"]({**unlock, **blank})
+            words[key] = ""
+        except LicenseError as err:
+            words[key] = plain_license_error(err)["message"]
     expect = {
         "refused": "Couldn't reach the house server at house.example.",
         "server": "The house server at house.example had a problem (error 500).",
         "denied": "The house server at house.example did not confirm that you own the game.",
         "fields": "Fill in the Steam ID and the App ID first.",
+        "no_app_id": "This copy has no Steam App ID set, so Steam cannot unlock it yet.",
     }
     for key, start in expect.items():
         got = words[key]

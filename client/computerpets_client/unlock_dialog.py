@@ -190,7 +190,16 @@ class UnlockDialog(QDialog):
         self.steam_id = QLineEdit((status.get("fields") or {}).get("steamId") or "")
         self.steam_id.setPlaceholderText("76561198000000000")
         self.app_id = QLineEdit((status.get("fields") or {}).get("appId") or "")
+        self.app_id.setObjectName("appId")
         self.app_id.setPlaceholderText("123456")
+        # ComputerPets has no Steam page, so the App ID row shows only when this copy has one set up
+        # (COMPUTERPETS_STEAM_APP_ID or a steam_appid.txt) or a past unlock saved one: the overlay's rule
+        # (desktop/renderer/settings.html #appIdRow). With none, Unlock says so in one plain line
+        # (license/session.py NO_APP_ID_MESSAGE) and nothing is sent.
+        self.app_id_label = QLabel(APP_ID_LABEL)
+        self.app_id_label.setObjectName("appIdLabel")
+        self.app_id_label.setBuddy(self.app_id)
+        self.app_id_help = self._helper(APP_ID_HELP, "appIdHelp")
         self.pet_type = QComboBox()
         self.pet_type.setEditable(True)
         for key in CATALOG_KEYS:
@@ -211,8 +220,8 @@ class UnlockDialog(QDialog):
         form.addRow("", self._helper(PROVIDER_HELP, "providerHelp"))
         form.addRow(STEAM_ID_LABEL, self.steam_id)
         form.addRow("", self._helper(STEAM_ID_HELP, "steamIdHelp"))
-        form.addRow(APP_ID_LABEL, self.app_id)
-        form.addRow("", self._helper(APP_ID_HELP, "appIdHelp"))
+        form.addRow(self.app_id_label, self.app_id)
+        form.addRow("", self.app_id_help)
         form.addRow(PET_LABEL, self.pet_type)
 
         self.ok = QLabel()
@@ -248,6 +257,8 @@ class UnlockDialog(QDialog):
         layout.addWidget(self.ok)
         layout.addWidget(self.err)
         layout.addWidget(buttons)
+        # After the layout owns the row, so showing a part never opens it as its own window.
+        self._paint_app_id(status)
 
     @staticmethod
     def _helper(text: str, name: str) -> QLabel:
@@ -256,6 +267,21 @@ class UnlockDialog(QDialog):
         line.setObjectName(name)
         line.setWordWrap(True)
         return line
+
+    def app_id_shown(self) -> bool:
+        """True when the App ID row is showing (set up for this copy, saved before, or typed)."""
+        return not self.app_id.isHidden()
+
+    def _paint_app_id(self, status: dict[str, Any]) -> None:
+        configured = status.get("steamAppId") if isinstance(status.get("steamAppId"), str) else ""
+        saved = str((status.get("fields") or {}).get("appId") or "") if isinstance(status.get("fields"), dict) else ""
+        if saved and not self.app_id.text():
+            self.app_id.setText(saved)
+        if configured and not self.app_id.text():
+            self.app_id.setText(configured)
+        shown = bool(configured or saved or self.app_id.text().strip())
+        for part in (self.app_id_label, self.app_id, self.app_id_help):
+            part.setVisible(shown)
 
     def _mark_text(self, status: dict[str, Any]) -> str:
         mark = status.get("hwidMark") if isinstance(status, dict) else None
@@ -438,6 +464,7 @@ class UnlockDialog(QDialog):
     def _on_ok(self, status: object) -> None:
         if isinstance(status, dict):
             self._paint_status(status)
+            self._paint_app_id(status)
             self._fetch_if_held(status)
             self.accept()
 
