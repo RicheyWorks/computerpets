@@ -42,6 +42,15 @@ test("the audited dependency floor stays past the fixed high and critical findin
   for (const [prop, want] of [["tomcat.version", [10, 1, 58]], ["netty.version", [4, 1, 137]], ["postgresql.version", [42, 7, 12]], ["jackson-bom.version", [2, 21, 6]]]) {
     assert.ok(atLeast(patch(prop), want), `${prop} at or past ${want.join(".")}`);
   }
+  // Two medium findings closed in the newcomer-gaps pass, same major line each.
+  for (const [prop, want] of [["commons-lang3.version", [3, 18, 0]], ["log4j2.version", [2, 25, 5]]]) {
+    assert.ok(atLeast(patch(prop), want), `${prop} at or past ${want.join(".")}`);
+    assert.equal(patch(prop)[0], want[0], `${prop} stays on major ${want[0]}`);
+  }
+  // OpenTelemetry 1.62's OTLP sender needs OkHttp 5 (okhttp-jvm) while web3j brings OkHttp 4 in the same
+  // okhttp3 package, so it is not overridden until a Boot or web3j update lines them up.
+  assert.equal(patch("opentelemetry.version"), undefined, "no OpenTelemetry override beside web3j's OkHttp 4");
+  assert.match(pom, /<web3j\.version>4\.12\.0<\/web3j\.version>/);
 });
 
 test("SETUP says how to run the audit with and without an NVD key", () => {

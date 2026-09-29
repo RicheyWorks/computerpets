@@ -328,7 +328,7 @@ mvn -B -Paudit -DskipTests -Ddependency-check.skip=true verify
 osv-scanner scan source -L target/bom.json
 ```
 
-Without a key, dependency-check stops with "Invalid API Key" before it scans, so use the SBOM and OSV-Scanner path. The last run (2026-09-28, OSV-Scanner 2.6.0 on Spring Boot 3.5.16 with the patch overrides in `pom.xml`) found no high or critical findings and 4 medium ones: commons-lang3 3.17.0 (fixed in 3.18.0), log4j-api 2.24.3 (fixed in 2.25.5), and opentelemetry-api and its trace propagators 1.49.0 (fixed in 1.62.0). They follow Boot's managed versions and are left for a Boot update. Keep the key out of the repo (pass it on the command line or through a `nvdApiServerId` entry in `~/.m2/settings.xml`).
+Without a key, dependency-check stops with "Invalid API Key" before it scans, so use the SBOM and OSV-Scanner path. The last run (2026-09-28, OSV-Scanner 2.6.0 on Spring Boot 3.5.16 with the overrides in `pom.xml`, commons-lang3 3.18.0 and log4j 2.25.5 included) found no high or critical findings and 2 medium ones: opentelemetry-api and its trace propagators 1.49.0 (GHSA-rcgg-9c38-7xpx, fixed in 1.62.0). They follow Boot's managed version. OpenTelemetry 1.62.0's OTLP sender needs OkHttp 5 while web3j brings OkHttp 4 in the same `okhttp3` package, so they are left for a Boot or web3j update. Keep the key out of the repo (pass it on the command line or through a `nvdApiServerId` entry in `~/.m2/settings.xml`).
 
 ## Environment Variables Reference
 

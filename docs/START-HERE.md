@@ -102,7 +102,7 @@ You can skip this part for now. Come back after Rui is walking.
 
 **The server line (you do not need a server)**
 
-- The card has no server line until you name a house server (the house server address in Settings).
+- The card has no server line until you name a house server. Its address goes in **Unlock…** on the tray menu, under **House server address**.
 - Then it says `House server running` or `House server stopped answering (optional). Pets still work.`
 - Maybe the server you named has not answered once since the pets started.
 - Then it says `House server not running (optional)` instead. That is calm, because you do not need one.
@@ -168,7 +168,7 @@ Pick **one** path. The picture app is easier if you have never typed a command.
 5. **Next** is okay. Leave the choices as they are.
 6. When it says you are done, you can close the installer.
 
-**What you should see:** an app called GitHub Desktop. It may ask you to sign in. You can sign in, or you can click through and still copy the pets with a URL in a later step.
+**What you should see:** an app called GitHub Desktop. It asks you to sign in. Sign in with the GitHub account the owner invited. The pets live in a private GitHub house for now, so the copy needs that account.
 
 ### Or: Git itself
 
@@ -234,6 +234,8 @@ If you see `v20` or smaller, go back to [https://nodejs.org](https://nodejs.org)
 
 Now you copy this house: [https://github.com/RicheyWorks/computerpets](https://github.com/RicheyWorks/computerpets)
 
+The house is private for now. The copy works only for a GitHub account the owner has invited. When Git or GitHub Desktop asks you to sign in, use that account.
+
 Pick **one** path. Do not use someone else's folder. Do not use a path like `C:\Users\730ri\...`. That folder belongs to another person. Use **your** home.
 
 ### Easier: GitHub Desktop
@@ -289,6 +291,7 @@ You will also see a long pile of files with odd names that start with `_`. Those
 
 **If clone fails:**
 
+- If it says `Repository not found`, or keeps asking you to sign in, that GitHub account has no invite yet. Ask the owner to invite it, then try again
 - Check the internet
 - Check Git is installed: type `git --version` and press Enter. You should see a number. If Git is missing, go back to Step 1 and open a new PowerShell after the install
 
@@ -351,15 +354,23 @@ In the PowerShell that is already inside `computerpets`, type this and press Ent
 
 ### If Windows says it will not run scripts
 
-Do not panic. Type these three lines, one at a time, and press Enter after each:
+Do not panic. Windows often says `running scripts is disabled on this system` the first time. Type this instead and press Enter:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\desktop.ps1
+```
+
+That lets this one start run the script. It changes nothing for good. Use the same line next time too.
+
+Or start without the script. Type these three lines, one at a time, and press Enter after each:
 
 ```powershell
 cd desktop
-npm install
-npm start
+npm.cmd install
+npm.cmd start
 ```
 
-That is the same start the grown-up docs already use.
+Type `npm.cmd`, not `npm`. Plain `npm` is a script too, so Windows stops it the same way. `npm.cmd` is the same npm. It is the same start the grown-up docs use.
 
 ### What you should see
 
@@ -387,10 +398,10 @@ Leave the PowerShell window open. If you close it, the pet usually goes away.
 
 The pet is on your desk. Now you can care for it.
 
-- **First click** on the pet is a sit. They pause.
+- **Click** the pet. They stop, and the keeper card opens with a small row of choices next to them (Walk or Sit, Feed, Talk, Hide…). The first click counts. It does not only wake the window.
 - **Drag** the pet. That is a carry. Put them somewhere else on the screen.
 - **Talk** plays the pet's own sound when it has one (Rui's is `red_panda.wav`), and its words show in a bubble.
-- **Click the animal** to open the keeper card. **Feed / Play / Rest** are the daily care. Scroll the card if it runs long. Collapse hides the card completely — their spoken words stay readable. **Turn off** quits the overlay.
+- On the keeper card, **Feed / Play / Rest** are the daily care. Scroll the card if it runs long. Collapse hides the card completely — their spoken words stay readable. **Turn off** quits the overlay.
 - **Right-click** the pet for the longer care list.
 - Or **right-click the tray icon** by the clock.
 
@@ -597,7 +608,7 @@ You are in the wrong folder.
 
 Read the last few lines.
 
-- If it talks about `npm` or `install`, the pieces did not finish downloading. Check the internet. Stay in the `computerpets` folder (or `desktop` if you used the three-line start). Run `npm install` again, then `npm start`.
+- If it talks about `npm` or `install`, the pieces did not finish downloading. Check the internet. In the `computerpets` folder, run `.\desktop.ps1` again: it sees the pieces are missing and gets them again. If you used the three-line start, stay in the `desktop` folder and run `npm.cmd install` again, then `npm.cmd start`. (`npm install` in the `computerpets` folder itself does not work. The pieces list lives in `desktop`.)
 - If you closed the window while words were still scrolling, open a new one and run `.\desktop.ps1` again. It sees the pieces are half-finished and gets the pieces again.
 - To see what the start sees without turning anything on, type `.\desktop.ps1 -Check`. It prints your Node version, whether the pieces are `ready`, `missing`, `unfinished`, or `changed`, and whether the pet pictures are all there. Its last line says what to type next. After the three-line start (`cd desktop`, `npm install`, `npm start`) worked once, it says `ready` too.
 - If it says some pets are still missing their pictures, Git LFS stopped before it fetched them all. In the `computerpets` folder type `git lfs pull`, then `.\desktop.ps1` again.
@@ -615,6 +626,7 @@ You started the pets, then closed the PowerShell. Open PowerShell in the `comput
 
 ### `git clone` failed
 
+- If it says `Repository not found`, or keeps asking you to sign in, the house is private and that GitHub account has no invite yet. Ask the owner to invite it, then try again.
 - Check the internet.
 - Check the computer has about 8 GB of free space. A full disk stops the copy partway.
 - Type `git --version`. If Git is missing, do Step 1, then open a new PowerShell.
@@ -634,7 +646,7 @@ To see Rui again:
 
 1. Open the `computerpets` folder.
 2. Open PowerShell there (Step 4).
-3. Type `.\desktop.ps1` and press Enter.
+3. Type `.\desktop.ps1` and press Enter. (If you needed the `powershell -ExecutionPolicy Bypass -File .\desktop.ps1` line the first time, type that line again.)
 4. Leave the window open.
 
 That is the whole next visit.
@@ -678,7 +690,7 @@ npm install
 npm start
 ```
 
-The extra control sits in the **menu bar** (the thin strip at the top of the screen). A click opens care. First click on the pet is a sit. Drag is a carry. Control-click tends.
+The extra control sits in the **menu bar** (the thin strip at the top of the screen). A click opens care. A click on the pet opens its keeper card and a row of choices. Drag is a carry. Control-click tends.
 
 ---
 
@@ -705,7 +717,7 @@ sh desktop.sh
 
 If it says the pet pictures did not download, type `git lfs pull` in that folder, then `sh desktop.sh` again. If it says some pets are still missing their pictures, Git LFS stopped partway; do the same thing. `sh desktop.sh --check` looks without turning anything on, and its last line says what to type next.
 
-The mark sits in the **panel**. A click opens care. First click is a sit. Drag is a carry. A right-click tends.
+The mark sits in the **panel**. A click opens care. A click on the pet opens its keeper card and a row of choices. Drag is a carry. A right-click tends.
 
 ---
 
@@ -724,7 +736,7 @@ npm install
 npm run dev
 ```
 
-3. `npm install` means "get the pieces" for the browser app. It can take a minute. This is a **different** pile of pieces than the desktop pet.
+3. `npm install` means "get the pieces" for the browser app. It can take a minute. This is a **different** pile of pieces than the desktop pet. If Windows says running scripts is disabled, type `npm.cmd install` and `npm.cmd run dev` instead.
 4. `npm run dev` means "turn the browser pets on."
 5. Leave that window open.
 6. Open Chrome or Edge. Click or type this exactly:

@@ -27,6 +27,13 @@
         <netty.version>4.1.138.Final</netty.version>
         <postgresql.version>42.7.12</postgresql.version>
         <jackson-bom.version>2.21.7</jackson-bom.version>
+        <!-- Two medium findings from that pass, closed with a newer minor release on the same line:
+             commons-lang3 GHSA-j288-q9x7-2f5v and log4j-api GHSA-qv9r-c865-cp47. OpenTelemetry stays on
+             Boot's 1.49.0 (GHSA-rcgg-9c38-7xpx is fixed in 1.62.0): that release's OTLP sender needs
+             OkHttp 5, and web3j brings OkHttp 4 in the same okhttp3 package, so both would sit on the
+             classpath. Leave it for a Boot or web3j update. -->
+        <commons-lang3.version>3.18.0</commons-lang3.version>
+        <log4j2.version>2.25.5</log4j2.version>
     </properties>
 
     <dependencies>
