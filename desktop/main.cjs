@@ -22,6 +22,7 @@ const PetCard = require("./renderer/card.js");
 const VDesk = require("./vdesk-win.cjs");
 const Pictures = require("./renderer/pictures.js");
 const OverlayGate = require("./overlay-gate.cjs");
+const CallGuests = require("./renderer/call-guests.js");
 
 /** Buffffff opt-in: COMPUTERPETS_GUI_HARNESS=1 runs Electron smokes then quits. */
 const GUI_HARNESS = process.env.COMPUTERPETS_GUI_HARNESS === "1";
@@ -344,9 +345,16 @@ function guestRadio(r) {
   };
 }
 
-/** @returns {MenuRow[]} */
+/**
+ * Companions, one submenu per den (House, Snakes, Tide… Grid): 20 rows instead of 221 in one list. The den with
+ * the pet on the desk is marked, so the checked guest is one hop away.
+ * @returns {MenuRow[]}
+ */
 function companionMenu() {
-  return roster.map(guestRadio);
+  return Roster.companionDens(roster, CallGuests.groups()).map((den) => ({
+    label: den.rows.some((r) => r.key === currentKey) ? `${den.label} •` : den.label,
+    submenu: den.rows.map(guestRadio),
+  }));
 }
 
 /**

@@ -66,7 +66,7 @@ def test_weather_lines_are_the_house_copy():
     assert weather_line("goldfish", "rain") == "Proper weather. At last."
     assert weather_line("mallard", "rain") == "Proper weather. At last."
     assert weather_line("canada_goose", "rain") == "Proper weather. At last."
-    assert weather_line("red_panda", "rain") == "The blotter is honest about rain."
+    assert weather_line("red_panda", "rain") == "It is raining outside. I will stay in, thanks."
     assert weather_line("budgie", "wind") == "The air has opinions."
     assert weather_line("pileated", "wind") == "The air has opinions."
     assert weather_line("robin", "wind") == "The air has opinions."

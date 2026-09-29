@@ -55,7 +55,30 @@
     return openRoster(await askHouseRoster(desk));
   }
 
+  /**
+   * The Companions menu, one submenu per den. It was one flat list of all 221, taller than any screen, and the
+   * pet's own menu (the only menu on a desktop with no tray to see) ran to 255 rows. Every guest stays reachable:
+   * a guest in no den (a roster newer than the dens) lands in a last "Others" den instead of being dropped.
+   * @param {{ key: string }[]} rows the roster, in house order
+   * @param {{ label: string, keys: string[] }[]} dens the house dens (PetCallGuests.groups())
+   * @returns {{ label: string, rows: { key: string }[] }[]}
+   */
+  function companionDens(rows, dens) {
+    const byKey = new Map((rows || []).map((r) => [r.key, r]));
+    const placed = new Set();
+    const out = [];
+    for (const den of dens || []) {
+      const inDen = den.keys.map((k) => byKey.get(k)).filter((r) => r && !placed.has(r.key));
+      for (const r of inDen) placed.add(r.key);
+      if (inDen.length) out.push({ label: `${den.label} (${inDen.length})`, rows: inDen });
+    }
+    const rest = (rows || []).filter((r) => !placed.has(r.key));
+    if (rest.length) out.push({ label: `Others (${rest.length})`, rows: rest });
+    return out;
+  }
+
   const api = {
+    companionDens,
     choiceText,
     takeRoster,
     foundRoster,

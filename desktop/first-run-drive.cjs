@@ -1256,7 +1256,9 @@ async function drive(opts = {}) {
     const nextPet = await app.evaluate(() => {
       const g = /** @type {any} */ (globalThis);
       const comp = g.__popups.at(-1)?.items.find((i) => i.label === "Companions");
-      const it = comp && comp.submenu ? comp.submenu.items.find((i) => i.type === "radio" && !i.checked && / · /.test(i.label || "") && !/Rui/.test(i.label || "")) : null;
+      // Companions is one submenu per den now (House, Snakes, …); the guests are one level further in.
+      const guests = comp && comp.submenu ? comp.submenu.items.flatMap((d) => (d.submenu ? d.submenu.items : [d])) : [];
+      const it = guests.find((i) => i.type === "radio" && !i.checked && / · /.test(i.label || "") && !/Rui/.test(i.label || "")) || null;
       if (!it) return null;
       it.click();
       return it.label;

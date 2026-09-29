@@ -2690,7 +2690,7 @@ async function signinReturnQuiet() {
   const T = await importTs("web", "src", "lib", "page-title.ts");
   const titles = {
     pet: T.petTitle("Rui", "Red Panda") === "Rui the Red Panda — ComputerPets" && T.pageTitle("The desk") === "The desk — ComputerPets",
-    desk: read("web", "src", "routes", "index.tsx").includes('head: () => ({ meta: [{ title: pageTitle("The desk") }] }),') && read("web", "src", "components", "desk", "desk-stage.tsx").includes("useDocumentTitle(petTitle(name ?? kind.name, kind.speciesLabel));"),
+    desk: read("web", "src", "routes", "index.tsx").includes("return { meta: [{ title: petTitle(kind.name, kind.speciesLabel) }] };") && read("web", "src", "components", "desk", "desk-stage.tsx").includes("useDocumentTitle(petTitle(name ?? kind.name, kind.speciesLabel));"),
     petPage: read("web", "src", "routes", "pets.$key.tsx").includes('head: () => ({ meta: [{ title: pageTitle("Your pet") }] }),'),
     sweep: sweep.includes("Rui the Red Panda — ComputerPets") && sweep.includes("Your pet — ComputerPets"),
   };

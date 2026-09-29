@@ -420,10 +420,12 @@ function gateWithoutTray(words, trayHost) {
  * @param {string} platform
  */
 function hideWords(platform) {
-  const again = isLinux(platform) || /^darwin|^Mac/i.test(String(platform || "")) ? "sh desktop.sh" : ".\\desktop.ps1";
+  const sh = isLinux(platform) || /^darwin|^Mac/i.test(String(platform || ""));
+  // Windows' default policy blocks .\desktop.ps1; the Bypass line is the start START-HERE gives for that.
+  const again = sh ? "type sh desktop.sh, just like the first time" : "type .\\desktop.ps1, just like the first time, or powershell -ExecutionPolicy Bypass -File .\\desktop.ps1 if Windows says running scripts is disabled";
   return {
     message: "Hide the pets? There is no tray icon on this desktop to bring them back from.",
-    detail: `To bring them back, start ComputerPets again (type ${again}, just like the first time). The pets come back with their keeper card open.`,
+    detail: `To bring them back, start ComputerPets again (${again}). The pets come back with their keeper card open.`,
     buttons: ["Hide", "Cancel"],
     actions: ["hide", "none"],
   };
