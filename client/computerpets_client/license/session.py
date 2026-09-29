@@ -258,6 +258,8 @@ def create_license_session(
 
         return {
             "unlocked": bool(payload),
+            # An issued license sits in license.json (even when this run cannot decrypt it), as the overlay says.
+            "held": _has_stored_license(store),
             "backendUrl": backend_url,
             "provider": store.get("provider") or "steam",
             "fields": store.get("fields") if isinstance(store.get("fields"), dict) else {},

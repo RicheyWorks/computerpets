@@ -201,3 +201,15 @@ test("settings: Minds says first that pets talk without an AI, and House lines h
   assert.match(html, /<button id="redownload" class="ghost" type="button">Download my pet<\/button>/);
   assert.doesNotMatch(html, />Signed download</);
 });
+
+test("settings: Download my pet waits, with a plain reason, until a license is saved", () => {
+  const optional = html.slice(fieldsetStart, fieldsetEnd);
+  assert.match(optional, /<p class="hint" id="downloadHelp" hidden>Download my pet works after an unlock on this computer\.<\/p>/);
+  // status.held is license.json holding an issued license (license/session.cjs hasStoredLicense).
+  assert.match(html, /const canDownload = status\.held === true \|\| Boolean\(status\.unlocked && status\.license\);/);
+  assert.match(html, /redownloadBtn\.disabled = !canDownload;\s*downloadHelp\.hidden = canDownload;/);
+  assert.match(html, /button:disabled \{ opacity: 0\.45; cursor: default; \}/);
+  // One locked sentence, the same as the blotter's (client/computerpets_client/unlock_dialog.py LOCKED_LINE).
+  assert.equal(html.split('licenseOk.textContent = "Locked. Pets still work without unlocking.";').length - 1, 2);
+  assert.doesNotMatch(html, /Pets on the desk still work/);
+});

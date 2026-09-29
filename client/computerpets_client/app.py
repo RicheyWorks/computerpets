@@ -10,8 +10,8 @@ import threading
 import time
 from typing import Any
 
-from PyQt6.QtCore import QLineF, QObject, QRectF, Qt, QTimer, pyqtSignal
-from PyQt6.QtGui import QColor, QFont, QPainter, QPen
+from PyQt6.QtCore import QLineF, QObject, QPointF, QRectF, QSize, Qt, QTimer, pyqtSignal, qInstallMessageHandler
+from PyQt6.QtGui import QColor, QFont, QIcon, QPainter, QPen, QPixmap, QPolygonF
 from PyQt6.QtWidgets import (
     QApplication,
     QComboBox,
@@ -88,7 +88,7 @@ from .license.token_store import default_token_codec
 from .paths import default_user_data_dir
 from .pet_item import GiftItem, LivingPetItem, LureItem, MessPileItem, ShedCoatItem, TreatItem
 from .play import BUG_LINE, CATCH_LINE, FLEE_MS, RIBBON_LINE, PlayChase, play_hop
-from .plaque import SpeciesPlaque
+from .plaque import PLAQUE_MAX_H, PLAQUE_MIN_H, SpeciesPlaque
 from .rail import SpeciesRail
 from .shed import apply_shed, is_blue
 from .specials import apply_special, trait_for
@@ -102,7 +102,8 @@ from .species import (
     prev_species_key,
     species_by_key,
 )
-from .unlock_dialog import UnlockDialog
+from .license.plain_error import host_of
+from .unlock_dialog import LOCKED_LINE, UnlockDialog, license_error_text
 from .visitor import (
     todays_visitor,
     visit_caption,
@@ -113,6 +114,50 @@ from .weather import weather_idle, weather_label, weather_line, weather_of
 
 SCENE_W = 960
 SCENE_H = 540
+
+
+ARROW_PX = 14
+VIEW_MIN_H = 260
+
+# Qt lines known to be harmless, dropped word for word and only on the offscreen and minimal platforms (--check and
+# CI): the offscreen plugin cannot pass a window's size hints on, and says so every time a window is shown. Every
+# other Qt message, and this one on a real screen, still goes to stderr.
+KNOWN_HARMLESS_QT = frozenset({"This plugin does not support propagateSizeHints()"})
+
+
+def quiet_known_qt_noise(platform: str | None = None) -> bool:
+    """Drop KNOWN_HARMLESS_QT on a headless platform. True when the filter is on."""
+    name = (platform if platform is not None else os.environ.get("QT_QPA_PLATFORM", "")).split(":", 1)[0].strip()
+    if name not in ("offscreen", "minimal"):
+        return False
+
+    def handler(_kind: Any, _context: Any, message: str | None) -> None:
+        if (message or "").strip() in KNOWN_HARMLESS_QT:
+            return
+        sys.stderr.write(f"{message}\n")
+
+    qInstallMessageHandler(handler)
+    return True
+
+
+def arrow_icon(left: bool, color: QColor, px: int = ARROW_PX) -> QIcon:
+    """A filled triangle for the companion picker's back and forward buttons, sharp at 1x, 1.25x and 2x."""
+    icon = QIcon()
+    for scale in (1.0, 1.25, 1.5, 2.0):
+        side = round(px * scale)
+        pix = QPixmap(side, side)
+        pix.setDevicePixelRatio(scale)
+        pix.fill(Qt.GlobalColor.transparent)
+        paint = QPainter(pix)
+        paint.setRenderHint(QPainter.RenderHint.Antialiasing)
+        paint.setPen(Qt.PenStyle.NoPen)
+        paint.setBrush(color)
+        a, b, mid = px * 0.22, px * 0.78, px / 2
+        points = [QPointF(b, a), QPointF(a, mid), QPointF(b, b)] if left else [QPointF(a, a), QPointF(b, mid), QPointF(a, b)]
+        paint.drawPolygon(QPolygonF(points))
+        paint.end()
+        icon.addPixmap(pix)
+    return icon
 
 
 def steam_dirs() -> list[str]:
@@ -242,6 +287,9 @@ class DeskWindow(QMainWindow):
         self.bubble.setTextWidth(360)
         self.bubble.setPos(300, 150)
         self.bubble.setZValue(6)
+        # The speech keeps its own size when the blotter is drawn smaller than 960×540 (a laptop screen):
+        # 12 pt on the screen, not 12 pt scaled down with the wood.
+        self.bubble.setFlag(QGraphicsTextItem.GraphicsItemFlag.ItemIgnoresTransformations, True)
         self.bubble.setVisible(False)
         self.scene.addItem(self.bubble)
 
@@ -262,12 +310,15 @@ class DeskWindow(QMainWindow):
         self.special_btn = QPushButton(trait_for(self.species.key).verb)
         self.shed_btn = QPushButton("Shed")
         self.unlock_btn = QPushButton("Unlock…")
-        self.prev_btn = QPushButton("◀")
-        self.next_btn = QPushButton("▶")
-        self.prev_btn.setFixedWidth(36)
-        self.next_btn.setFixedWidth(36)
-        self.prev_btn.setToolTip("Previous companion")
-        self.next_btn.setToolTip("Next companion")
+        # Drawn arrows, not the ◀ ▶ characters: Windows' button font draws those about 5 px wide.
+        self.prev_btn = QPushButton()
+        self.next_btn = QPushButton()
+        for btn, left, word in ((self.prev_btn, True, "Previous companion"), (self.next_btn, False, "Next companion")):
+            btn.setIcon(arrow_icon(left, btn.palette().buttonText().color()))
+            btn.setIconSize(QSize(ARROW_PX, ARROW_PX))
+            btn.setFixedWidth(36)
+            btn.setToolTip(word)
+            btn.setAccessibleName(word)
         self.kind_box = QComboBox()
         for key in CATALOG_KEYS:
             spec = SPECIES[key]
@@ -333,6 +384,8 @@ class DeskWindow(QMainWindow):
         picker.addWidget(self.kind_box, 1)
         picker.addWidget(self.next_btn)
         picker.addStretch()
+        # The locked or unlocked line sits beside Unlock instead of taking a row of its own above the blotter.
+        picker.addWidget(self.license_label)
         picker.addWidget(self.unlock_btn)
 
         root = QWidget()
@@ -341,7 +394,9 @@ class DeskWindow(QMainWindow):
         layout.addLayout(bar)
         layout.addLayout(picker)
         layout.addWidget(self.rail)
-        layout.addWidget(self.license_label)
+        # The blotter keeps a readable height on a laptop screen (1366×768, 1280×720): the plaque scrolls
+        # inside its own box before the blotter shrinks under VIEW_MIN_H.
+        self.view.setMinimumHeight(VIEW_MIN_H)
         layout.addWidget(self.view, 1)
         layout.addWidget(self.choice_bar)
         layout.addWidget(self.plaque)
@@ -359,13 +414,14 @@ class DeskWindow(QMainWindow):
         gpu_row_layout.setContentsMargins(0, 0, 0, 0)
         gpu_row_layout.setSpacing(8)
         gpu_row_layout.addWidget(self.gpu_label, 1)
-        gpu_row_layout.addWidget(self.gpu_spark, 0, Qt.AlignmentFlag.AlignVCenter)
-        self._apply_gpu(initial_sample())
-        layout.addWidget(gpu_row)
         self.listener_label = QLabel(listener_line({"door": "blotter"}))
         self.listener_label.setObjectName("listenerSense")
         self.listener_label.setStyleSheet("color: #9a9288; font-size: 11px;")
-        layout.addWidget(self.listener_label)
+        # On the GPU line, not a row of its own, so the blotter keeps the height.
+        gpu_row_layout.addWidget(self.listener_label, 0, Qt.AlignmentFlag.AlignVCenter)
+        gpu_row_layout.addWidget(self.gpu_spark, 0, Qt.AlignmentFlag.AlignVCenter)
+        self._apply_gpu(initial_sample())
+        layout.addWidget(gpu_row)
         # Minds, in the same words as the overlay Settings and the web desk. The blotter's pets always
         # use House lines, so there is nothing to set up and no AI box is shown.
         self.minds_label = QLabel(blotter_minds_text())
@@ -477,8 +533,11 @@ class DeskWindow(QMainWindow):
                     self.kind_box.setCurrentIndex(idx)
         else:
             err = status.get("error")
-            extra = f" ({err['message']})" if err else ""
-            self.license_label.setText(f"Locked. Pet still lives on the blotter.{extra}")
+            # The same locked sentence as the Unlock window; a stored license's own refusal in plain words, never
+            # the raw error text (that goes to the log).
+            self.license_label.setText(
+                f"Locked. {license_error_text(err, host_of(status.get('backendUrl')))}" if err else LOCKED_LINE
+            )
 
     def start_gpu_sense(self) -> None:
         """Poll the keeper machine. Tests that only construct the window do not spawn."""
@@ -903,6 +962,12 @@ class DeskWindow(QMainWindow):
         height = min(self.height(), max(least.height(), room.height() - 48))
         self.resize(width, height)
 
+    def resizeEvent(self, event) -> None:  # noqa: N802 — Qt's name
+        super().resizeEvent(event)
+        # A short window gives the plaque's height to the blotter first: about a fifth of the window, 112 to 220 px.
+        if hasattr(self, "plaque"):
+            self.plaque.setMaximumHeight(max(PLAQUE_MIN_H, min(PLAQUE_MAX_H, int(self.height() * 0.2))))
+
     def _unlock(self) -> None:
         dialog = UnlockDialog(self.session, self)
         dialog.exec()
@@ -969,6 +1034,7 @@ def main(argv: list[str] | None = None) -> int:
         print(missing, file=sys.stderr)
         return 1
 
+    quiet_known_qt_noise()
     app = QApplication.instance() or QApplication(sys.argv)
     app.setApplicationName("ComputerPets")
     app.setOrganizationName("RicheyWorks")

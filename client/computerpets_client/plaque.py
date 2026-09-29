@@ -9,6 +9,10 @@ from PyQt6.QtWidgets import QFrame, QLabel, QScrollArea, QVBoxLayout, QWidget
 from .guide import Classroom, FieldGuide, classroom_for, plaque_for
 
 
+PLAQUE_MIN_H = 112
+PLAQUE_MAX_H = 220
+
+
 class SpeciesPlaque(QFrame):
     """Paper card: tell, one mix-up, latin, house voice. Stays in the window."""
 
@@ -90,8 +94,10 @@ class SpeciesPlaque(QFrame):
         wrap = QVBoxLayout(self)
         wrap.setContentsMargins(0, 0, 0, 0)
         wrap.addWidget(scroll)
-        self.setMinimumHeight(168)
-        self.setMaximumHeight(220)
+        # It scrolls inside its own box: on a laptop-height window the blotter keeps the height and the plaque gives
+        # it up first (DeskWindow.resizeEvent lowers the cap; PLAQUE_MIN_H is the least it takes).
+        self.setMinimumHeight(PLAQUE_MIN_H)
+        self.setMaximumHeight(PLAQUE_MAX_H)
 
     def guide(self) -> FieldGuide | None:
         return self._guide

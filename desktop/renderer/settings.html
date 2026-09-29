@@ -18,6 +18,7 @@
       select, input { width: 100%; box-sizing: border-box; height: 40px; border: 1px solid #2a2621; background: #1f1c19; color: #f2ece3; border-radius: 8px; padding: 0 10px; }
       button { margin-top: 16px; height: 40px; padding: 0 14px; border: 0; border-radius: 8px; background: #c4a574; color: #161412; font-weight: 600; }
       button.ghost { background: transparent; color: #c4a574; border: 1px solid #2a2621; margin-left: 8px; }
+      button:disabled { opacity: 0.45; cursor: default; }
       p.hint { margin: 4px 0 0; color: #9a9288; font-size: 12px; }
       .ok { margin-top: 12px; color: #9a9288; font-size: 13px; }
       .err { margin-top: 12px; color: #d9a08a; font-size: 13px; }
@@ -111,6 +112,8 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
         <button id="lock" class="ghost" type="button" title="Forgets the saved unlock on this computer. The pets keep working.">Forget the unlock</button>
         <button id="weakMark" class="ghost" type="button" hidden>Use the computer name, or a random ID if there is no name</button>
       </div>
+      <!-- With no license saved on this computer, Download my pet has nothing to fetch: it waits, and says why. -->
+      <p class="hint" id="downloadHelp" hidden>Download my pet works after an unlock on this computer.</p>
       </fieldset>
       <p class="ok" id="licenseOk"></p>
       <p class="err" id="licenseErr"></p>
@@ -273,6 +276,8 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
       const appIdRow = document.getElementById("appIdRow");
       const petType = document.getElementById("petType");
       const licenseOk = document.getElementById("licenseOk");
+      const redownloadBtn = document.getElementById("redownload");
+      const downloadHelp = document.getElementById("downloadHelp");
       const licenseErr = document.getElementById("licenseErr");
       let licenseBackend = "";
       let licenseUnbound = false;
@@ -406,7 +411,7 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
           licenseErr.textContent = unboundDownload
             ? "Nothing was sent. This page has to name the license website first."
             : "Nothing was sent. This page has to name the license website first.";
-          licenseOk.textContent = "Locked. Pets on the desk still work.";
+          licenseOk.textContent = "Locked. Pets still work without unlocking.";
           return null;
         }
         if (!sent || sent.desk === false) return null;
@@ -490,6 +495,11 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
         }
         if (typeof status.steamAppId === "string" && status.steamAppId && !appId.value) appId.value = status.steamAppId;
         appIdRow.hidden = !(status.steamAppId || (status.fields && status.fields.appId) || appId.value);
+        if (Object.prototype.hasOwnProperty.call(status, "held") || Object.prototype.hasOwnProperty.call(status, "unlocked")) {
+          const canDownload = status.held === true || Boolean(status.unlocked && status.license);
+          redownloadBtn.disabled = !canDownload;
+          downloadHelp.hidden = canDownload;
+        }
         licenseErr.textContent = errorText(status.error, "");
         if (status.unlocked && status.license) {
           const bits = [status.license.pet, status.license.jti, "until " + status.license.validUntil];
@@ -500,7 +510,7 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
               : ". Signed URL issued.";
           }
         } else {
-          licenseOk.textContent = "Locked. Pets on the desk still work.";
+          licenseOk.textContent = "Locked. Pets still work without unlocking.";
         }
       }
 
