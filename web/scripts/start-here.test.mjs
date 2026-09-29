@@ -281,7 +281,7 @@ test("client README runs in bash and PowerShell, and says the house server addre
   assert.match(run, /`computerpets-client` is the same entry/);
   assert.match(clientPyproject, /requires-python = ">=3\.10"/);
   assert.match(run, /Python 3\.10\+/);
-  assert.match(clientPyproject, /dev = \["pytest>=8"\]/);
+  assert.match(clientPyproject, /dev = \["pytest>=9\.0\.3"\]/);
   assert.match(clientSession, /env\.get\("COMPUTERPETS_BACKEND_URL"\)/);
   assert.match(clientSession, /env\.get\("LICENSE_SECRET_KEY"\)/);
   assert.match(clientSession, /DEFAULT_BACKEND = "http:\/\/127\.0\.0\.1:8081"/);

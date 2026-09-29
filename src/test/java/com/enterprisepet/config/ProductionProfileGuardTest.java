@@ -571,4 +571,80 @@ class ProductionProfileGuardTest {
                 .hasMessageContaining("server.ssl")
                 .hasMessageContaining("ADR 0077");
     }
+
+    @Test
+    @DisplayName("prod keeps metrics closed when METRICS_SCRAPE_TOKEN is unset")
+    void metricsScrapeTokenUnset_passes() {
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                new MockEnvironment());
+
+        assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("prod refuses a short METRICS_SCRAPE_TOKEN without echoing it")
+    void shortMetricsScrapeToken_failsClosed() {
+        MockEnvironment env = new MockEnvironment();
+        env.setProperty("METRICS_SCRAPE_TOKEN", "short-fixture");
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                env);
+
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("METRICS_SCRAPE_TOKEN")
+                .hasMessageContaining("ADR 0133")
+                .hasMessageNotContaining("short-fixture");
+    }
+
+    @Test
+    @DisplayName("prod accepts a 32+ char METRICS_SCRAPE_TOKEN")
+    void longMetricsScrapeToken_passes() {
+        MockEnvironment env = new MockEnvironment();
+        env.setProperty("metrics.scrape-token", "plan-fixture-scrape-token-0123456789abcdefghijkl");
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "external-secrets",
+                "false",
+                env);
+
+        assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("prod file source requires METRICS_SCRAPE_TOKEN_FILE when a scrape token is set")
+    void fileSourceScrapeTokenWithoutFile_failsClosed() {
+        MockEnvironment env = envWithFileMounts();
+        env.setProperty("METRICS_SCRAPE_TOKEN", "plan-fixture-scrape-token-0123456789abcdefghijkl");
+        ProductionProfileGuard g = guard(
+                false,
+                "redis",
+                "jdbc:postgresql://db:5432/computerpets",
+                "",
+                "file",
+                "false",
+                env);
+
+        assertThatThrownBy(g::rejectUnsafeProductionSettings)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("METRICS_SCRAPE_TOKEN_FILE")
+                .hasMessageNotContaining("plan-fixture-scrape-token");
+
+        env.setProperty("METRICS_SCRAPE_TOKEN_FILE", "/run/secrets/metrics_scrape_token");
+        assertThatCode(g::rejectUnsafeProductionSettings).doesNotThrowAnyException();
+    }
 }

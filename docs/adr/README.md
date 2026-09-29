@@ -183,6 +183,7 @@ desk, the overlay, or the blotter:
 | [0130](0130-chromium-visitor-floor-hive-den-sprites.md) | The day's visitor, the house floor, the hive, and the den blotters draw on that same canvas (every `LivingPet` paints the canvas; the 0125 gate still opens the glass; a missing context stays blank) | Accepted |
 | [0131](0131-windows-virtual-desktop-follow.md) | The Windows overlay follows you across virtual desktops (a helper asks `IsWindowOnCurrentVirtualDesktop` about the overlay's own HWND only; the main process re-shows its own window; tray checkbox writes `vdesk.json`; Mac and Linux keep Electron's pin) | Accepted |
 | [0132](0132-electron-44.md) | The desktop app moves from Electron 35 to Electron 44 (`npm audit` 2 high to 0; the start scripts get Electron itself after `npm install`, since 42 no longer does; the pieces check counts npm's own finished record, so the three-line start reads ready; frameless Linux corners stay square; a Wayland session start still goes to XWayland, now drive-checked, with a late StatusNotifier tray host beside the XEmbed one) | Accepted |
+| [0133](0133-actuator-metrics-scrape-token.md) | House metrics need their own scrape token (`/actuator/prometheus` and `/actuator/info` want `METRICS_SCRAPE_TOKEN`, not a customer download JWT, which is now 403; other actuator paths closed; unset token = nobody scrapes; prod refuses a short token; health and probes unchanged) | Accepted |
 
 ## How to add one
 

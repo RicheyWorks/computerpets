@@ -276,6 +276,12 @@ trusted-proxies:
 # OTEL_EXPORTER_OTLP_ENDPOINT (base URL, e.g. http://localhost:4318) or
 # OTEL_EXPORTER_OTLP_TRACES_ENDPOINT (full /v1/traces URL) is set.
 # Local/dev starts without a collector.
+# /actuator/prometheus and /actuator/info need their own scrape bearer
+# (METRICS_SCRAPE_TOKEN or METRICS_SCRAPE_TOKEN_FILE, 32+ chars). A customer
+# download JWT is not enough. Unset = nobody scrapes; health stays open (ADR 0133).
+metrics:
+  scrape-token: ${METRICS_SCRAPE_TOKEN:}
+
 management:
   endpoints:
     web:
