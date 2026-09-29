@@ -29,6 +29,19 @@ test("a fresh web npm install leaves the tracked lock alone (lock matches packag
   assert.ok(lock.packages["node_modules/eslint/node_modules/ajv"], "eslint ajv nested");
 });
 
+test("npm ci works with npm 10 (Node 22, the README's floor) and npm 11 (Node 24)", () => {
+  // nitro's unstorage has an optional peer lru-cache ^11. With babel's lru-cache 5 hoisted, npm 10 wants a
+  // nested copy under nitro ("Missing: lru-cache@11.5.3 from lock file") and npm 11 prunes it, so no lock
+  // could satisfy both. lru-cache 11 as a dev dependency hoists 11 and nests babel's 5: both npm take it.
+  const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+  const lock = JSON.parse(readFileSync(join(root, "package-lock.json"), "utf8"));
+  assert.equal(pkg.devDependencies["lru-cache"], "^11.2.6");
+  assert.equal(lock.packages[""].devDependencies["lru-cache"], "^11.2.6");
+  assert.match(lock.packages["node_modules/lru-cache"].version, /^11\./);
+  assert.match(lock.packages["node_modules/@babel/helper-compilation-targets/node_modules/lru-cache"].version, /^5\./);
+  assert.equal(lock.packages["node_modules/nitro/node_modules/lru-cache"], undefined);
+});
+
 test("the Linux start copies the pets and checks Node before sh desktop.sh", () => {
   const linux = section(startSrc, "Linux");
   const clone = linux.indexOf("git clone https://github.com/RicheyWorks/computerpets");

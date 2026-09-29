@@ -26,9 +26,12 @@ export function FirstHint({ name, onDone }: { name: string; onDone?: () => void 
           <li key={line}>{line}</li>
         ))}
       </ul>
+      {/* The pet's speech bubble steps around Got it (living-pet.tsx reads [data-bubble-avoid]). On a tall phone
+          the hello line sat over the button and took the tap (414×896, the phone-desk-layout "Got it is covered"). */}
       <button
         type="button"
         data-first-hint-ok
+        data-bubble-avoid=""
         className="mt-3 rounded-full border border-border px-3 py-1 text-sm text-fg hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         onClick={() => {
           markFirstHintSeen();

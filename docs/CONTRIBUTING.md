@@ -174,7 +174,7 @@ When making architectural changes, remember to update the **"Last Updated"** dat
   | Suite | What runs | Needs |
   |---|---|---|
   | `desktop` | `npm test` in `desktop/` | Node |
-  | `web` | `npm test` in `web/` | `npm ci` in `web/` with npm 11 (Node 24; npm 10 says the lock is out of sync), and Python with Pillow and numpy for `walker-art.test.mjs` |
+  | `web` | `npm test` in `web/` | `npm ci` in `web/` (npm 10 on Node 22 and npm 11 on Node 24 both take the lock), and Python with Pillow and numpy for `walker-art.test.mjs` |
   | `tsc` | `node scripts/tsc-baseline.mjs` in `web/` | `web/node_modules` |
   | `checkjs` | `node scripts/checkjs-baseline.mjs` (tsc `checkJs` over `desktop/renderer`, `desktop/*.cjs`, `license/`, `presence/`) | `web/node_modules` (desktop uses web's TypeScript) |
   | `python` | pytest in `client/` | `client/.venv` (see above; the script prints the command when it is missing) |

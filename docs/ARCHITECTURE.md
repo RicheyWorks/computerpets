@@ -51,7 +51,7 @@ Keeping this document accurate reduces onboarding friction and prevents architec
 
 ## 1. Executive Summary
 
-EnterprisePet Backend is a secure, stateless Spring Boot 3.3 Java 21 REST service that serves as the trust anchor for a premium "desktop pets" digital collectibles platform. It enables users to prove ownership of entitlements across heterogeneous platforms (Steam game ownership, Ethereum ERC-721 NFTs, Microsoft Store products, itch.io download-key receipts, and Epic Games Store catalog items) and, in return, receive cryptographically sealed time-limited licenses plus short-lived JWTs that authorize the download of platform-specific pet asset bundles from an external CDN.
+EnterprisePet Backend is a secure, stateless Spring Boot 3.5 Java 21 REST service that serves as the trust anchor for a premium "desktop pets" digital collectibles platform. It enables users to prove ownership of entitlements across heterogeneous platforms (Steam game ownership, Ethereum ERC-721 NFTs, Microsoft Store products, itch.io download-key receipts, and Epic Games Store catalog items) and, in return, receive cryptographically sealed time-limited licenses plus short-lived JWTs that authorize the download of platform-specific pet asset bundles from an external CDN.
 
 The architecture deliberately keeps the master AES-256-GCM encryption key and signing material server-side only. The desktop client (out of scope for this repository; referenced as a future PyQt6/Python application) never holds long-term secrets and cannot forge valid licenses. A clean plugin SPI (`OwnershipProvider`) allows new storefronts or wallet types to be added with a single `@Service` class and no changes to controllers or security configuration. Rate limiting, defense-in-depth validation on download, and startup-time secret validation are first-class concerns.
 
@@ -205,9 +205,9 @@ flowchart TB
         LB[Load Balancer / Ingress<br/>nginx, Traefik, ALB, etc.<br/>TLS termination + routing]
 
         subgraph "Backend Deployment (3+ replicas, HPA, PDB minAvailable 2, soft hostname and zone spread)"
-            App1[EnterprisePet Pod<br/>Spring Boot 3.3 + Java 21<br/>Stateless]
-            App2[EnterprisePet Pod<br/>Spring Boot 3.3 + Java 21<br/>Stateless]
-            AppN[EnterprisePet Pod<br/>Spring Boot 3.3 + Java 21<br/>Stateless]
+            App1[EnterprisePet Pod<br/>Spring Boot 3.5 + Java 21<br/>Stateless]
+            App2[EnterprisePet Pod<br/>Spring Boot 3.5 + Java 21<br/>Stateless]
+            AppN[EnterprisePet Pod<br/>Spring Boot 3.5 + Java 21<br/>Stateless]
         end
 
         Redis[(Redis<br/>Distributed rate limits<br/>+ jti revocation cache)]
@@ -460,10 +460,10 @@ sequenceDiagram
 | Layer / Concern          | Technology                              | Version     | Rationale / Why Chosen |
 |--------------------------|-----------------------------------------|-------------|------------------------|
 | Language & Runtime       | Java 21                                 | 21          | Records, pattern matching, modern crypto APIs, long-term LTS support. |
-| Framework                | Spring Boot                             | 3.3.5       | Mature security model, excellent DI for plugin registry, battle-tested web stack, auto-configuration of filters/JPA. |
+| Framework                | Spring Boot                             | 3.5.16      | Mature security model, excellent DI for plugin registry, battle-tested web stack, auto-configuration of filters/JPA. |
 | Web / REST               | Spring Web (starter-web)                | —           | Declarative controllers, flexible error handling via `ProblemDetail`. |
 | Security                 | Spring Security + JJWT                  | 6.x / 0.12.6| Stateless JWT best practices; JJWT is the de-facto modern Java library with strong typing and algorithm whitelisting. |
-| Cryptography (Licenses)  | BouncyCastle (bcprov-jdk18on)           | 1.78.1      | Portable, explicit AES-GCM with AEAD; avoids JDK provider differences. |
+| Cryptography (Licenses)  | BouncyCastle (bcprov-jdk18on)           | 1.86        | Portable, explicit AES-GCM with AEAD; avoids JDK provider differences. |
 | Blockchain               | web3j core                              | 4.12.0      | Standard Java Ethereum client; supports `eth_call` for read-only ownership proofs without a full node. |
 | External HTTP            | Spring RestClient (new in 3.x) + Jackson| —           | Modern, fluent, no RestTemplate boilerplate. |
 | Rate Limiting            | Bucket4j + Lettuce Redis                | 8.10.1      | Same token-bucket math as the in-memory store; `bucket4j-redis` CAS so replicas share 10/min verify, 30/min download, 60/min discovery, and 60/min bundle catalog. Fail-closes with 503 if Redis is down. Redeem stays off the catalog bucket. |
@@ -857,7 +857,7 @@ flowchart LR
         HUD[Keeper HUD<br/>care + heartbeat + mind]
     end
 
-    subgraph House["Spring Boot 3.3 / Java 21 :8081"]
+    subgraph House["Spring Boot 3.5 / Java 21 :8081"]
         LIC[License / verify / download]
         ACT[Actuator heartbeat]
         CARE[Optional pet actions<br/>contract to grow into]
