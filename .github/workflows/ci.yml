@@ -73,7 +73,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # web/package-lock.json needs npm 11 (Node 24); npm 10 reports it out of sync.
+      # web/package-lock.json installs with npm 10 (Node 22) and npm 11 (Node 24) alike.
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:

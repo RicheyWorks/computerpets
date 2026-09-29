@@ -118,11 +118,16 @@ test("deploy: VITE_LICENSE_API_URL and ADMIN_ALLOWED_ORIGINS are documented plac
   assert.doesNotMatch(k8s, /^  ADMIN_ALLOWED_ORIGINS:/m, "not set live by this repo");
   const tf = read(repo, "deploy/terraform/configmap-managed.example.yaml");
   assert.match(tf, /^  # ADMIN_ALLOWED_ORIGINS: "https:\/\/replace-with-your-web-site\.example"$/m);
-  assert.match(read(repo, "docker-compose.yml"), /- ADMIN_ALLOWED_ORIGINS=\$\{ADMIN_ALLOWED_ORIGINS:-\*\}/);
-  assert.match(read(repo, "src/main/resources/application.yml"), /allowed-origins: "\$\{ADMIN_ALLOWED_ORIGINS:\*\}"/);
+  // Closed by default (same-origin only); loopback pages in dev and compose; prod refuses "*".
+  const compose = read(repo, "docker-compose.yml");
+  assert.match(compose, /- ADMIN_ALLOWED_ORIGINS=\$\{ADMIN_ALLOWED_ORIGINS:-http:\/\/localhost:\[\*\],http:\/\/127\.0\.0\.1:\[\*\]\}/);
+  assert.doesNotMatch(compose, /ADMIN_ALLOWED_ORIGINS:-\*/);
+  assert.match(read(repo, "src/main/resources/application.yml"), /allowed-origins: "\$\{ADMIN_ALLOWED_ORIGINS:\}"/);
+  assert.match(read(repo, "src/main/resources/application-dev.yml"), /allowed-origins: "\$\{ADMIN_ALLOWED_ORIGINS:http:\/\/localhost:\[\*\],/);
   const sec = read(repo, "src/main/java/com/enterprisepet/config/SecurityConfig.java");
   assert.match(sec, /admin\.setAllowedOriginPatterns\(adminOriginPatterns\(adminAllowedOrigins\)\);/);
-  assert.match(sec, /@Value\("\$\{admin\.allowed-origins:\*\}"\) String adminAllowedOrigins/);
+  assert.match(sec, /@Value\("\$\{admin\.allowed-origins:\}"\) String adminAllowedOrigins/);
+  assert.match(read(repo, "src/main/java/com/enterprisepet/config/ProductionProfileGuard.java"), /rejectAnyAdminOrigin\(\);/);
   const readme = read(repo, "deploy/k8s/README.md");
   assert.match(readme, /## Admin ledger from the web site/);
   assert.match(readme, /VITE_LICENSE_API_URL/);

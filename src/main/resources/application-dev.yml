@@ -19,3 +19,9 @@ microsoft:
 # TRUSTED_PROXY_CIDRS when a local reverse proxy sits in front.
 trusted-proxies:
   cidrs: ${TRUSTED_PROXY_CIDRS:127.0.0.1/32,::1/128}
+
+# The web /admin page on this computer (http://localhost:8080 from `npm run dev`) calls
+# /api/admin/** on :8081, another origin. Loopback pages on any port may do so here only.
+# The base default is closed; prod refuses "*" (ProductionProfileGuard). Every call is still HMAC-signed.
+admin:
+  allowed-origins: "${ADMIN_ALLOWED_ORIGINS:http://localhost:[*],http://127.0.0.1:[*],http://[::1]:[*]}"

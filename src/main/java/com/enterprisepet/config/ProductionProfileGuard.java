@@ -29,6 +29,7 @@ import java.util.Set;
  * plain env {@code Secret} injection without an External Secrets /
  * {@code *_FILE} / Vault-agent operator attestation
  * ([ADR 0064](../../docs/adr/0064-secret-operator-prod-refuses-plain-env.md)),
+ * a wildcard {@code ADMIN_ALLOWED_ORIGINS} ({@code *}),
  * or a stale optional {@code COMPUTERPETS_KEYS_ROTATED_AT} stamp
  * ([ADR 0065](../../docs/adr/0065-secret-rotation-cadence-and-hsm.md)).
  */
@@ -120,14 +121,16 @@ public class ProductionProfileGuard {
         rejectPlainEnvSecrets();
         rejectUnsafeRedisAuth();
         rejectUnsafeMetricsScrapeToken();
+        rejectAnyAdminOrigin();
         rejectStaleKeysRotatedAt();
         log.info(
-                "Production profile guard passed (Postgres ssl={}, API listener tls={}, Redis auth={}, ssl={}, metrics scrape={}, microsoft.dev-mode=false, secrets source={}).",
+                "Production profile guard passed (Postgres ssl={}, API listener tls={}, Redis auth={}, ssl={}, metrics scrape={}, admin origins={}, microsoft.dev-mode=false, secrets source={}).",
                 postgresSslLabel(),
                 apiListenerTlsRequired() ? "required" : "off",
                 redisAuthRequired() ? "required" : "off",
                 redisSsl() ? "on" : "off",
                 metricsScrapeToken().isBlank() ? "closed" : "token",
+                SecurityConfig.adminOriginPatterns(adminAllowedOrigins()).isEmpty() ? "same-origin" : "listed",
                 plainSecretAllowed() ? "plain-local-override" : secretsSource.toLowerCase(Locale.ROOT));
     }
 
@@ -271,6 +274,44 @@ public class ProductionProfileGuard {
                                 + "when a metrics scrape token is set. Mount the token and set the path (ADR 0133).");
             }
         }
+    }
+
+    /**
+     * Prod names the web sites whose {@code /admin} page may call {@code /api/admin/**}
+     * from a browser. {@code ADMIN_ALLOWED_ORIGINS=*} (or an entry whose host is only
+     * {@code *}, like {@code https://*}) would let any page try, so it refuses start.
+     * Unset is fine: then only same-origin pages can call. Every call is still HMAC-signed.
+     */
+    void rejectAnyAdminOrigin() {
+        for (String pattern : SecurityConfig.adminOriginPatterns(adminAllowedOrigins())) {
+            if (isAnyOrigin(pattern)) {
+                throw new IllegalStateException(
+                        "ADMIN_ALLOWED_ORIGINS on prod must name the web site origins that may call "
+                                + "/api/admin/** (got '" + pattern + "'). \"*\" allows any page. "
+                                + "Set it to https://<your web site>, or unset it for same-origin only.");
+            }
+        }
+    }
+
+    /** True for {@code *} and patterns whose host is only a wildcard ({@code https://*}, {@code http://*:[*]}). */
+    static boolean isAnyOrigin(String pattern) {
+        String rest = pattern.trim();
+        int scheme = rest.indexOf("://");
+        if (scheme >= 0) {
+            rest = rest.substring(scheme + 3);
+        }
+        int port = rest.startsWith("[") ? rest.indexOf("]:") + 1 : rest.indexOf(':');
+        String host = port > 0 ? rest.substring(0, port) : rest;
+        return host.replace("*", "").isEmpty();
+    }
+
+    private String adminAllowedOrigins() {
+        String fromBinding = environment.getProperty("admin.allowed-origins");
+        if (fromBinding != null && !fromBinding.isBlank()) {
+            return fromBinding;
+        }
+        String fromEnv = environment.getProperty("ADMIN_ALLOWED_ORIGINS");
+        return fromEnv == null ? "" : fromEnv;
     }
 
     private String metricsScrapeToken() {

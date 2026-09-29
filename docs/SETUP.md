@@ -316,6 +316,20 @@ The Electron overlay is still `cd desktop && npm start`.
 
 ---
 
+### Dependency audit (optional, needs the network)
+
+The normal build (`mvn verify`, `scripts/test-all`) stays offline and does not scan. The opt-in `audit` Maven profile writes a CycloneDX SBOM of the runtime dependencies to `target/bom.json` and runs OWASP dependency-check, failing on CVSS 7 or higher:
+
+```bash
+# Full run. dependency-check downloads the NVD data and needs a free NVD API key.
+mvn -B -Paudit -DskipTests -DnvdApiKey=<your key> verify
+# No key: SBOM only, then scan it with OSV-Scanner (https://google.github.io/osv-scanner/).
+mvn -B -Paudit -DskipTests -Ddependency-check.skip=true verify
+osv-scanner scan source -L target/bom.json
+```
+
+Without a key, dependency-check stops with "Invalid API Key" before it scans, so use the SBOM and OSV-Scanner path. The last run (2026-09-28, OSV-Scanner 2.6.0 on Spring Boot 3.5.16 with the patch overrides in `pom.xml`) found no high or critical findings and 4 medium ones: commons-lang3 3.17.0 (fixed in 3.18.0), log4j-api 2.24.3 (fixed in 2.25.5), and opentelemetry-api and its trace propagators 1.49.0 (fixed in 1.62.0). They follow Boot's managed versions and are left for a Boot update. Keep the key out of the repo (pass it on the command line or through a `nvdApiServerId` entry in `~/.m2/settings.xml`).
+
 ## Environment Variables Reference
 
 | Variable                  | Required | Default | Description |
@@ -324,6 +338,7 @@ The Electron overlay is still `cd desktop && npm start`.
 | `JWT_SECRET_KEY`          | Yes      | —       | JWT signing key (base64) |
 | `BUNDLE_SIGNING_KEY`      | Yes      | —       | CDN URL signing key (base64) |
 | `ADMIN_API_KEY`           | Yes      | —       | Admin HMAC key for `/api/admin/**` and the `/admin` ledger (ADR 0071) |
+| `ADMIN_ALLOWED_ORIGINS`   | No       | empty (closed); `dev` and compose: `http://localhost:[*]`, `http://127.0.0.1:[*]` | Web site origins whose `/admin` page may call `/api/admin/**` from a browser, comma-separated. Empty means same-origin pages only. `prod` refuses `*` |
 | `MICROSOFT_DEV_MODE`      | No       | false   | Bypasses real Microsoft verification (development only). House door still applies. |
 | `MICROSOFT_PRODUCT_ID`    | No       | empty   | House Microsoft Store product id / comma allowlist. Empty fails closed (do not invent one) |
 | `STEAM_API_KEY`           | No       | placeholder | Steam Web API key; placeholder or blank fails closed |

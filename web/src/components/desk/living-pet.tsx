@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import { ANIM_FPS, ONCE_ANIMS, RED_PANDA_SPRITES, type PetAnim } from "@/lib/pets/red-panda";
 import type { SpritePack } from "@/lib/pets/living";
 import { playDeskSound, playStep } from "@/lib/pets/desk-audio";
@@ -224,6 +224,8 @@ export function LivingPet({
   const bubbleRef = useRef<HTMLDivElement>(null);
   /* How far the bubble may rise and still end below the site header (bubbleRoom); read on open and on resize, not per frame. */
   const bubbleRoomRef = useRef(Number.POSITIVE_INFINITY);
+  /* Where the frame loop last put the bubble (x and lift), so a line that opens taller can be capped before it paints. */
+  const bubbleAtRef = useRef<{ x: number; lift: number } | null>(null);
   /* While a line shows: the bubble's resting top and size and the plates it steps around (bubbleDodge), in the
      bubble's own frame; read when the line opens, on resize and every 400 ms (a plate can be dragged or opened). */
   const bubblePlatesRef = useRef<{ restTop: number; w: number; h: number; floor: number; plates: BubbleBox[] } | null>(null);
@@ -317,8 +319,9 @@ export function LivingPet({
   tendRef.current = onTend;
 
   // The bubble never rises over the site header (a landscape phone is short): its room under the header is read
-  // when a line opens and on resize; the frame loop only caps the lift (bubbleLift).
-  useEffect(() => {
+  // when a line opens and on resize; the frame loop only caps the lift (bubbleLift). A layout effect, so a new line
+  // (taller than the blank bubble, so its resting top is higher) is measured and capped before it first paints.
+  useLayoutEffect(() => {
     const el = bubbleRef.current;
     if (!el || typeof window === "undefined") return;
     const read = () => {
@@ -363,14 +366,27 @@ export function LivingPet({
       read();
       readPlates();
     };
-    both();
-    window.addEventListener("resize", both);
-    const every = speech ? window.setInterval(readPlates, 400) : 0;
-    // A longer line (or a late web font) makes the bubble taller, and its resting top higher.
-    const grow = typeof ResizeObserver === "function" ? new ResizeObserver(both) : null;
+    // The frame loop may have set this frame's lift with the old room: cap it now, before the paint.
+    const refresh = () => {
+      both();
+      const at = bubbleAtRef.current;
+      if (at && at.lift > bubbleRoomRef.current) {
+        el.style.transform = `translate3d(${at.x}px, ${-bubbleRoomRef.current}px, 0)`;
+      }
+    };
+    refresh();
+    window.addEventListener("resize", refresh);
+    // The room under the header is re-read on the same tick as the plates (the header can settle late).
+    const every = speech ? window.setInterval(refresh, 400) : 0;
+    // A longer line (or a late web font) makes the bubble taller, and its resting top higher. The stage it rests in
+    // shrinks to the phone's height after hydration with no window resize; a room read before that let the first
+    // line rise over the header on a landscape phone (the phone-desk-layout flake, "hello up").
+    const grow = typeof ResizeObserver === "function" ? new ResizeObserver(refresh) : null;
     grow?.observe(el);
+    const stage = el.offsetParent;
+    if (stage) grow?.observe(stage);
     return () => {
-      window.removeEventListener("resize", both);
+      window.removeEventListener("resize", refresh);
       if (every) window.clearInterval(every);
       grow?.disconnect();
     };
@@ -1017,6 +1033,7 @@ export function LivingPet({
           lift = dodge.restTop - at.top;
         }
         bubbleRef.current.style.transform = `translate3d(${bx}px, ${-lift}px, 0)`;
+        bubbleAtRef.current = { x: bx, lift };
       }
       if (tongueRef.current) {
         const flick = p.crawl && s.actMotion === "tongue" && !reduced ? tongueFlick(s.actT, s.actHold) : 0;
