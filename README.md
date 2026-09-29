@@ -34,7 +34,7 @@ You do not need an account. You do not need a license. You do not need Java.
 
 Windows 10 and Windows 11 first. Most friends are on Windows. The [start-here page](docs/START-HERE.md) shows every button.
 
-There is no Steam, Itch, or Microsoft Store download yet. There is no live Store ID. There is no `.exe` waiting on a website. You copy the pets from [this GitHub page](https://github.com/RicheyWorks/computerpets) and turn them on yourself. That is the real way.
+There is no Steam, Itch, or Microsoft Store download yet. There is no live Store ID. There is no `.exe` waiting on a website. You copy the pets from [this GitHub page](https://github.com/RicheyWorks/computerpets) and turn them on yourself. That is the real way. The page is private for now: the copy works for a GitHub account the owner has invited, and Git or GitHub Desktop asks you to sign in to it.
 
 Today the overlay needs two free helpers — Git and Node — because the start is `.\desktop.ps1`, which runs `npm start`, which is `electron .`. You do not have to learn Node. You only install it once. Grown-ups can later build their own installer with electron-builder. We do not publish one.
 
@@ -48,19 +48,25 @@ A tiny preview:
 .\desktop.ps1
 ```
 
-Or, if the computer will not run that script:
+If PowerShell says running scripts is disabled on this system, type this instead. It lets this one start run the script. It changes nothing for good:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\desktop.ps1
+```
+
+Or start without the script. Type `npm.cmd`, not `npm`: plain `npm` is a script too, and Windows stops it the same way.
 
 ```powershell
 cd desktop
-npm install
-npm start
+npm.cmd install
+npm.cmd start
 ```
 
 The first time can take a few minutes. `npm install` means "get the pieces." Leave the window open. A pet should walk on your real desktop. The keeper card starts with a short hello, just once: press **Got it** and it goes away for good.
 
 Git and Node are the two helpers that make that start work. Install [Git](https://git-scm.com) (or [GitHub Desktop](https://desktop.github.com) if you like pictures more than typing) and [Node](https://nodejs.org) (the big **LTS** button, version 22 or newer) once, before you type the start. The start-here page shows those buttons.
 
-- **First click** is a sit.
+- **Click** the pet: they stop, and the keeper card opens with a small row of choices (Walk or Sit, Feed, Talk, Hide…). The first click counts; it does not only wake the window.
 - **Drag** is a carry.
 - **Feed / Play / Rest** sit on the keeper card.
 - **Right-click** the pet, or the little tray icon by the clock: **On the desk**, feed, play, rest, clean, medicine, hide.
@@ -125,6 +131,8 @@ cd web
 npm install
 npm run dev
 ```
+
+If PowerShell says running scripts is disabled, type `npm.cmd` in place of `npm`.
 
 Then open [http://localhost:8080](http://localhost:8080). Localhost means "this computer," not the internet. Rui is already there. No account.
 
