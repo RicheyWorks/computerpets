@@ -29,7 +29,7 @@ test("/demo's desk strips say which desk they stand for", () => {
   const strips = {
     "mac-desk-extra.tsx": "on a Mac",
     "linux-desk-extra.tsx": "on Linux",
-    "windows-desk-sit.tsx": "on Windows · tray: On the desk",
+    "windows-desk-sit.tsx": "on Windows",
     "tablet-desk-sit.tsx": "on a tablet",
     "phone-desk-sit.tsx": "on a phone",
   };

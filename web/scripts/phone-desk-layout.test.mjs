@@ -108,8 +108,21 @@ function measure() {
         if (!other) continue;
         const c = clip(b, other);
         if (!c) continue;
+        // Painted on top of the panel: this bubble, or another speech bubble crossing it (two speakers). A visiting
+        // guest's bubble has no close (pointer-events: none, so a tap goes to the panel under it) and elementFromPoint
+        // looked straight through it: "I froze. Then I was a pencil again." read as under the aside whenever the
+        // visitor spoke during the measure (about 9 to 13 s after load, so a loaded machine hit it). The probe turns
+        // pointer events on for the moment it asks, so it reads the paint order, then puts them back.
+        const saved = open.map((o) => [o, o.style.pointerEvents, o.firstElementChild, o.firstElementChild?.style.pointerEvents]);
+        for (const [o, , inner] of saved) {
+          o.style.pointerEvents = "auto";
+          if (inner) inner.style.pointerEvents = "auto";
+        }
         const top = document.elementFromPoint((c.l + c.r) / 2, (c.t + c.b) / 2);
-        // On top of the panel: this bubble, or another speech bubble crossing it (two speakers), wins the tap.
+        for (const [o, pe, inner, innerPe] of saved) {
+          o.style.pointerEvents = pe;
+          if (inner) inner.style.pointerEvents = innerPe ?? "";
+        }
         hits[name] = !!(top && open.some((b) => b.contains(top)));
         if (!hits[name]) hits[`${name}Top`] = top ? `${top.tagName}.${String(top.className).slice(0, 40)}` : "none";
       }

@@ -46,7 +46,7 @@ test("the nest page is a blotter card, not a sim dump", () => {
   assert.match(migration, /genotype/);
   assert.match(quiet, /floor_since/);
   assert.match(nestPage, /Grown and elder may sit/);
-  assert.match(nestPage, /Neglect can close a line/);
+  assert.match(nestPage, /A pet left without care too long goes away\./);
 });
 
 test("an immediate nest child takes the keeper to the guest room", () => {

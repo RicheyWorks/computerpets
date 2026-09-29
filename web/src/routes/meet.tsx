@@ -90,8 +90,8 @@ function MeetPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Phone and tablet</p>
               <h3 className="mt-2 font-display text-2xl">On the home screen</h3>
               <p className="mt-2 text-sm text-muted">
-                On a tablet a tap is a choice. A drag is a carry. A long-press tends. A phone works the same way
-                on its tall screen. Open Live, then Add to Home Screen. All two hundred twenty-one.
+                On a tablet, tap a pet to pick it, drag it to carry it, and press and hold it to reach its care buttons. A
+                phone works the same way on its tall screen. Open Live, then Add to Home Screen. All two hundred twenty-one.
               </p>
               <p className="mt-3">
                 <Link to="/live" data-line-link className="text-sm text-fg">

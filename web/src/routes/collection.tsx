@@ -125,7 +125,7 @@ function Collection() {
         }
         line={
           <p className="mt-3 max-w-sm text-sm text-muted">
-            The kennel is a room. The cards stay paper. Neglect can close a line.{" "}
+            The kennel is a room. The cards stay paper. A pet left without care too long goes away.{" "}
             <Link to="/hatch" data-line-link className="text-fg no-underline hover:text-primary">
               The hatchery is open.
             </Link>

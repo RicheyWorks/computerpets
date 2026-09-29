@@ -23,6 +23,9 @@ NO_TOKEN_MESSAGE = (
     "Unlock again, then download. Pets still work without it."
 )
 FIELDS_MISSING_MESSAGE = "Fill in the Steam ID and the App ID first. Pets still work without it."
+# Word for word the overlay's (desktop/license/session.cjs): no App ID typed, saved, or set up for this copy.
+NO_APP_ID_MESSAGE = "This copy has no Steam App ID set, so Steam cannot unlock it yet. Pets still work without it."
+STEAM_APPID_FILE = "steam_appid.txt"
 TOKEN_MEMORY_NOTE = (
     "This computer has no secret store, so the download sign-in is kept only until the app closes. "
     "Unlock again later to download."
@@ -60,6 +63,36 @@ def license_secret(env: dict[str, str] | None = None) -> str:
     return env.get("LICENSE_SECRET_KEY") or env.get("COMPUTERPETS_LICENSE_SECRET_KEY") or ""
 
 
+def configured_steam_app_id(
+    env: dict[str, str] | None,
+    dirs: list[str] | None,
+    read_file: Callable[[str], str],
+) -> str:
+    """The Steam App ID this copy was set up with, or "". The same rule as the overlay's configuredSteamAppId:
+    COMPUTERPETS_STEAM_APP_ID, or a steam_appid.txt (the file a Steam build keeps beside its program) in one
+    of dirs. Digits only (1 to 12); anything else counts as none. ComputerPets has no Steam page, so the
+    Unlock window hides its App ID box unless this finds one or a past unlock saved one.
+    """
+
+    def digits(raw: object) -> str:
+        text = str(raw if raw is not None else "").strip()
+        return text if text.isascii() and text.isdigit() and 1 <= len(text) <= 12 else ""
+
+    found = digits((env or {}).get("COMPUTERPETS_STEAM_APP_ID"))
+    if found:
+        return found
+    for folder in dirs or []:
+        if not folder:
+            continue
+        try:
+            found = digits(read_file(str(Path(folder) / STEAM_APPID_FILE)))
+        except (OSError, UnicodeDecodeError, ValueError):
+            continue
+        if found:
+            return found
+    return ""
+
+
 def _os_env() -> dict[str, str]:
     import os
 
@@ -77,6 +110,7 @@ def create_license_session(
     write_file: Callable[[str, str], None] | None = None,
     mkdir: Callable[[str], None] | None = None,
     codec: Any = None,
+    steam_dirs: list[str] | None = None,
 ) -> dict[str, Callable[..., Any]]:
     """``codec`` seals the download sign-in (see token_store.py): an object with
     ``encrypt``/``decrypt``, or a no-argument callable returning one (or None).
@@ -227,6 +261,9 @@ def create_license_session(
             "backendUrl": backend_url,
             "provider": store.get("provider") or "steam",
             "fields": store.get("fields") if isinstance(store.get("fields"), dict) else {},
+            # The App ID this copy was set up with (env or steam_appid.txt), "" when none: the Unlock window
+            # shows its App ID box only then, or when a past unlock saved one (unlock_dialog.py).
+            "steamAppId": configured_steam_app_id(env, steam_dirs, reader),
             "hwid": mark["id"],
             "hwidMark": {
                 "read": mark["read"],
@@ -396,24 +433,31 @@ def create_license_session(
         allow_weak = input_fields.get("allowWeakFallback") is True
 
         def open_hash() -> dict[str, Any]:
-            current_id = device_mark(True, allow_weak)["id"]
+            # Everything that can stop this Unlock is checked before the computer's ID is read, so pressing
+            # Unlock on a copy with no license key or a blank box does not read the ID or write hwid.txt.
             secret_key = license_secret(env)
             if not secret_key:
                 raise LicenseError("missing_secret", "LICENSE_SECRET_KEY is missing; cannot decrypt the issued license")
+            app_id = ""
+            if provider == "steam":
+                app_id = str(input_fields.get("appId") or "").strip() or configured_steam_app_id(env, steam_dirs, reader)
+                if not str(input_fields.get("steamId") or "").strip():
+                    raise LicenseError("fields_missing", FIELDS_MISSING_MESSAGE)
+                if not app_id:
+                    raise LicenseError("fields_missing", NO_APP_ID_MESSAGE)
+            elif not isinstance(input_fields.get("fields"), dict):
+                raise LicenseError("denied", f"unsupported provider {provider}")
+            current_id = device_mark(True, allow_weak)["id"]
             fields_out: dict[str, str] = {
                 "petType": input_fields["petType"] if isinstance(input_fields.get("petType"), str) and input_fields.get("petType") else "red_panda",
                 "hwid": current_id,
             }
             if provider == "steam":
-                if not str(input_fields.get("steamId") or "").strip() or not str(input_fields.get("appId") or "").strip():
-                    raise LicenseError("fields_missing", FIELDS_MISSING_MESSAGE)
                 fields_out["steamId"] = str(input_fields["steamId"])
-                fields_out["appId"] = str(input_fields["appId"])
-            elif isinstance(input_fields.get("fields"), dict):
+                fields_out["appId"] = app_id
+            else:
                 fields_out.update({k: str(v) for k, v in input_fields["fields"].items() if v is not None})
                 fields_out["hwid"] = current_id
-            else:
-                raise LicenseError("denied", f"unsupported provider {provider}")
             verified_body = client["verify"](
                 backend_url=backend_url,
                 provider=provider,
