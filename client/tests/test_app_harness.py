@@ -410,6 +410,69 @@ def test_start_script_stops_on_git_lfs_pointers_before_installing(tmp_path):
 @pytest.mark.skipif(
     os.name == "nt",
     reason="Windows runs desktop.ps1, and this test would copy a start script into a temp folder (antivirus flags "
+    "temporary scripts there). renderer/pictures.test.cjs runs desktop.ps1's own scan on a partial folder instead.",
+)
+def test_start_script_counts_pets_a_partial_git_lfs_pull_left_without_pictures(tmp_path):
+    """A git lfs pull that stopped partway left the crow real and other pets as text pointers. sh desktop.sh looked
+    only at the crow and called that ready (those pets were invisible); now it says how many pets are still missing
+    pictures, says to run git lfs pull, and stops before installing anything."""
+    import shutil
+    import subprocess
+
+    from computerpets_client.app_harness import launch_next, launch_pictures_survey, repo_root
+
+    node, npm, sh = shutil.which("node"), shutil.which("npm"), shutil.which("sh")
+    if not (node and npm and sh):
+        pytest.skip("needs node, npm, and sh on PATH to reach the pictures check")
+    major = subprocess.run([node, "-v"], capture_output=True, text=True, timeout=60).stdout.strip()
+    if not major.startswith("v") or int(major[1:].split(".")[0]) < 22:
+        pytest.skip(f"needs Node 22 or newer to reach the pictures check (this is {major})")
+    shutil.copy(repo_root() / "desktop.sh", tmp_path / "desktop.sh")
+    desk = tmp_path / "desktop"
+    desk.mkdir()
+    (desk / "package.json").write_text("{}", encoding="utf-8")
+    sprites = desk / "renderer" / "sprites"
+    png = b"\x89PNG\r\n\x1a\n" + b"\0" * 32
+    pointer = "version https://git-lfs.github.com/spec/v1\noid sha256:0\nsize 1\n"
+    for pet in ("crow", "owl", "fox", "yak"):
+        (sprites / pet / "idle").mkdir(parents=True)
+        (sprites / pet / "idle" / "1.png").write_bytes(png)
+        (sprites / pet / "walk").mkdir()
+        (sprites / pet / "walk" / "1.png").write_bytes(png)
+    (sprites / "fox" / "walk" / "1.png").write_text(pointer, encoding="utf-8")
+    env = {**os.environ, "DISPLAY": os.environ.get("DISPLAY") or ":0"}
+
+    def run(*args: str) -> subprocess.CompletedProcess:
+        return subprocess.run([sh, str(tmp_path / "desktop.sh"), *args], capture_output=True, text=True, timeout=120, env=env)
+
+    assert launch_pictures_survey(tmp_path) == ("partial", 1, 4)
+    check = run("--check")
+    lines = [ln for ln in check.stdout.splitlines() if ln.strip()]
+    assert check.returncode == 0 and "pictures: partial" in lines
+    assert lines[-1] == launch_next("missing", "partial", "desktop.sh", gone=1, pets=4)
+    assert lines[-1] == (
+        "next: 1 of 4 pets is still missing its pictures: Git LFS stopped before it fetched them all. In the "
+        "computerpets folder type git lfs pull. Then type sh desktop.sh and press Enter."
+    )
+    (sprites / "yak" / "idle" / "1.png").write_text(pointer, encoding="utf-8")
+    start = run()
+    assert start.returncode == 1
+    assert (
+        "2 of 4 pets are still missing their pictures. Git LFS stopped before it fetched them all. In the "
+        "computerpets folder run git lfs pull, and run sh desktop.sh again." in start.stdout
+    )
+    assert "Getting the pieces" not in start.stdout and not (desk / "node_modules").exists()
+    # The rest of the pull lands: ready again.
+    for pet in ("fox", "yak"):
+        for frame in (sprites / pet).rglob("*.png"):
+            frame.write_bytes(png)
+    assert launch_pictures_survey(tmp_path) == ("ready", 0, 4)
+    assert "pictures: ready" in run("--check").stdout
+
+
+@pytest.mark.skipif(
+    os.name == "nt",
+    reason="Windows runs desktop.ps1, and this test would copy a start script into a temp folder (antivirus flags "
     "temporary scripts there). desk.launch_check holds desktop.ps1's next line to the real folder on Windows.",
 )
 def test_start_script_check_says_what_to_type_next_for_each_state(tmp_path):
@@ -1237,6 +1300,16 @@ def test_pictures_gate_row_boots_real_main_with_pointers_and_opens_no_glass():
         assert row["windows"] == 0 and row["ticks"] == 0
         assert row["message"] == "The pet pictures did not download."
         assert "git lfs install and then git lfs pull, and start ComputerPets again." in row["detail"]
+    # A pull that stopped partway: how many pets are still missing pictures, and git lfs pull (no install).
+    assert "partial=no_glass+how_many_pets+git_lfs_pull" in pg.trace
+    part = pg.extras["partial"]
+    assert part["windows"] == 0 and part["ticks"] == 0
+    assert part["message"] == "Some pet pictures did not download."
+    assert part["detail"] == (
+        "12 of 221 pets are still missing their pictures: Git LFS stopped before it fetched them all. In the "
+        "computerpets folder run git lfs pull, and start ComputerPets again."
+    )
+    assert part["tray"].startswith("Some pet pictures did not download|How to fix…")
     assert pg.extras["ready"] == {"windows": 1, "dialogs": 0}
 
 def test_overlay_gate_row_boots_real_main_and_says_why_in_a_message_box():
@@ -1267,6 +1340,12 @@ def test_no_tray_row_keeps_every_tray_action_in_reach_and_wayland_says_why():
     assert ov["box"] == "Hide the pets? There is no tray icon on this desktop to bring them back from."
     assert ov["buttons"] == "Hide|Cancel" and ov["keptUp"] and ov["hidden"] and ov["back"] and ov["opened"]
     assert nt.extras["withTray"] == {"dialogs": 0, "hidden": True}
+    # A tray host that shows up after the start: asked again every 10 s, the tray made again, Hide stops asking.
+    assert "tray_appears=asked_again+tray_made_again+hide_stops_asking" in nt.trace
+    ap = nt.extras["appears"]
+    assert ap["watches"] == 1 and ap["stillNo"] == {"told": "no", "trays": 1}
+    assert ap["shows"] == {"told": "no|yes", "trays": 2, "oldGone": True, "get": "yes", "hideAsked": False, "hidden": True}
+    assert ap["gone"] == {"told": "no|yes|no", "trays": 2, "hideAsked": True}
     assert nt.extras["gate"] == {"dialogs": 1, "detailSaysSo": True, "quits": 1}
     assert nt.extras["waylandX"]["args"] == "--ozone-platform=x11" and nt.extras["waylandX"]["relaunches"] == 1
     assert nt.extras["waylandClosed"]["windows"] == 0 and nt.extras["waylandClosed"]["relaunches"] == 0

@@ -1299,6 +1299,38 @@ async function drive(opts = {}) {
     const back = await visible();
     s = await state();
     check("no_tray_second_start", back >= 1 && s.open, `the second copy ${secondEnd}; ${back} window(s) visible, keeper card open ${s.open}`);
+    // 12. A tray host that starts after the pets (a panel that comes up late). On Linux X11 with stalonetray here, a
+    //     real XEmbed tray is started now: within the app's 10 s ask-again the overlay hears "yes", the hello names the
+    //     tray again, the icon is made again and docks in it, and Hide the window no longer asks.
+    const lateTray = !forced && !!process.env.DISPLAY && !waylandArg(nextArgs) && whichSync("stalonetray");
+    if (lateTray) {
+      const st = spawn(lateTray, ["--geometry", "4x1+0+0", "--icon-size", "24"], { env: process.env, stdio: "ignore" });
+      try {
+        let seenYes = "";
+        for (let i = 0; i < 30 && seenYes !== "yes"; i += 1) {
+          await page.waitForTimeout(1000);
+          seenYes = await page.evaluate(() => (typeof trayHost !== "undefined" ? trayHost : "?"));
+        }
+        const hello = await page.evaluate(() => ({
+          shown: !document.getElementById("first-hint")?.hidden,
+          text: [...document.querySelectorAll("#first-hint-lines li")].map((li) => (li.textContent || "").trim()).join(" "),
+        }));
+        await page.waitForTimeout(1500);
+        const docked = trayIcons();
+        await petMenu();
+        await clickItem(app, "Hide the window");
+        await page.waitForTimeout(900);
+        const asked = (await boxes(app)).some((b) => !b.answered && /no tray icon on this desktop/.test(b.message));
+        const hiddenNow = await visible();
+        check(
+          "tray_appears_later",
+          seenYes === "yes" && (!hello.shown || /tray icon/.test(hello.text)) && docked === 1 && !asked && hiddenNow === 0,
+          `stalonetray started after the pets: overlay heard ${seenYes}; hello ${hello.shown ? `"${(hello.text.match(/[^.]*tray icon[^.]*\./) || [hello.text.slice(0, 120)])[0].trim()}"` : "already put away"}; ${docked} icon docked in the tray; Hide the window ${asked ? "still asked" : "hid at once"} (${hiddenNow} visible)`,
+        );
+      } finally {
+        st.kill();
+      }
+    }
     check("no_page_errors", !errors.length, errors.length ? errors.slice(0, 4).join(" | ") : "none");
   } catch (e) {
     // A closed pet window that said why is the honest end of the drive there, not a crash.
@@ -1314,6 +1346,36 @@ async function drive(opts = {}) {
     /* another run */
   }
   return { ok: !gated && checks.every((c) => c.ok), ...(gated ? { gated } : {}), checks, ms: Date.now() - t0, userData: ud, scale };
+}
+
+/** The full path of a program on PATH, or "" (Linux/Mac: the drive's optional helpers such as stalonetray). */
+function whichSync(name) {
+  for (const dir of String(process.env.PATH || "").split(path.delimiter)) {
+    const at = path.join(dir, name);
+    try {
+      fs.accessSync(at, fs.constants.X_OK);
+      return at;
+    } catch {
+      /* next */
+    }
+  }
+  return "";
+}
+
+/**
+ * How many icons are docked in stalonetray, read with xwininfo; 0 when it cannot tell. Its direct child windows are
+ * the icons plus one 1x1 window of its own, which is not counted.
+ */
+function trayIcons() {
+  const { spawnSync } = require("node:child_process");
+  const tree = spawnSync("xwininfo", ["-root", "-tree"], { encoding: "utf8", timeout: 5000 }).stdout || "";
+  const id = (tree.match(/^\s+(0x[0-9a-f]+) "stalonetray"/m) || [])[1];
+  if (!id) return 0;
+  const kids = spawnSync("xwininfo", ["-id", id, "-tree"], { encoding: "utf8", timeout: 5000 }).stdout || "";
+  const lines = kids.split("\n").filter((l) => /^\s+0x[0-9a-f]+ /.test(l));
+  const indent = (l) => l.length - l.trimStart().length;
+  const top = Math.min(...lines.map(indent));
+  return lines.filter((l) => indent(l) === top && !/\s1x1\+/.test(l)).length;
 }
 
 module.exports = { overlaps, onScreen, duplicateLabels, allLabels, throwawayOk, scaleArg, waylandArg, ozoneOf, sideGap, gateOf, STANDIN_KEY, WORK, HOOK, RELAUNCH_FILE, drive };

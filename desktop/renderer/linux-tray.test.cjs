@@ -120,7 +120,7 @@ test("no tray to see: the app learns it once the tray is made and tells the over
   const learn = body("learnTrayHost");
   assert.match(learn, /trayHost = await OverlayGate\.readTrayHost\(\{ platform: process\.platform, env: process\.env, nativeWayland: NATIVE_WAYLAND \}\);/);
   assert.match(learn, /win\.webContents\.send\("tray-host", trayHost\)/);
-  assert.match(body("startOverlay"), /else refreshMenus\(\);\n\s+learnTrayHost\(\);/);
+  assert.match(body("startOverlay"), /else refreshMenus\(\);\n\s+learnTrayHost\(\)\.then\(watchTrayHost\);/);
   assert.match(main, /ipcMain\.on\("tray-host-get", \(e\) => \{\n\s+e\.returnValue = trayHost;/);
   const pre = read(DESKTOP, "preload.cjs");
   assert.match(pre, /trayHost: \(\) => ipcRenderer\.sendSync\("tray-host-get"\),/);
@@ -191,7 +191,7 @@ test("a native Wayland start goes again on XWayland once, or stays closed and sa
   assert.match(w.detail, /Start them with sh desktop\.sh, without --ozone-platform=wayland or ELECTRON_OZONE_PLATFORM_HINT/);
   const boot = body("bootDesk");
   const plan = boot.indexOf("OverlayGate.waylandPlan({ native: NATIVE_WAYLAND, env: process.env })");
-  assert.ok(plan > 0 && plan < boot.indexOf("Pictures.picturesState"), "before anything else is made");
+  assert.ok(plan > 0 && plan < boot.indexOf("Pictures.picturesSurvey"), "before anything else is made");
   assert.match(boot, /process\.env\.COMPUTERPETS_X11_TRIED = "1";\n\s+app\.relaunch\(\{ args: OverlayGate\.x11Args\(process\.argv\.slice\(1\)\) \}\);\n\s+app\.quit\(\);\n\s+return;/);
   assert.match(boot, /closedGate = \{ why: "wayland-native", words: OverlayGate\.closedWords\("wayland-native"\) \};/);
   assert.match(main, /const NATIVE_WAYLAND = OverlayGate\.nativeWayland\(\{\n\s+platform: process\.platform,\n\s+env: process\.env,\n\s+ozone: app\.commandLine\.getSwitchValue\("ozone-platform"\),\n\s+hint: app\.commandLine\.getSwitchValue\("ozone-platform-hint"\),\n\}\);/);
