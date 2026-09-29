@@ -137,7 +137,7 @@ export const MIND_PRESETS: MindPreset[] = [
   {
     id: "custom",
     name: "Custom webhook",
-    blurb: "Your own AI address. For builders has the details.",
+    blurb: "Your own AI address. Details are under For builders, below.",
     kind: "custom",
     needsKey: false,
     defaultBaseUrl: "http://127.0.0.1:8787/mind",

@@ -1002,6 +1002,15 @@
     margin: 0.25rem 0 0;
   }
 
+  /* Every field on the card is a 24 px target at least (WCAG 2.2 target size): the volume slider, the text, time and
+     number fields, and the Call selects were 15 to 21 px tall. */
+  .keeper-card input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]),
+  .keeper-card select,
+  .keeper-card textarea {
+    min-height: 24px;
+    box-sizing: border-box;
+  }
+
   .keeper-colors,
   .keeper-voices,
   .keeper-mutes,

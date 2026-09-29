@@ -13,7 +13,7 @@ const require = createRequire(import.meta.url);
 test("Settings and the blotter call it the house server, in plain words", () => {
   const settings = read("desktop", "renderer", "settings.html");
   const dialog = read("client", "computerpets_client", "unlock_dialog.py");
-  assert.match(settings, /<label>House server address<\/label>/);
+  assert.match(settings, /<label for="backend">House server address<\/label>/);
   assert.match(settings, /licenseOk\.textContent = "Asking the house server…";/);
   assert.match(settings, /by asking the house server named under House server address\./);
   assert.match(dialog, /form\.addRow\("House server address", self\.backend\)/);

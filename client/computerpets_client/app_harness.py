@@ -3514,12 +3514,12 @@ def _gui_rows() -> list[Affordance]:
             "gui.first_run_drive",
             "gui",
             "The desktop app's first run, driven in real Electron",
-            "desktop/first-run-drive.cjs (Playwright _electron, throwaway --user-data-dir)",
+            "desktop/first-run-drive.cjs (Playwright _electron, throwaway COMPUTERPETS_SETTINGS_DIR)",
             mode="gui",
             fate="excluded",
             exclude_reason=(
                 "Opens real windows on the keeper's screen for about five minutes. Default stays excluded. "
-                "Pass --gui on BLACKBEARD to launch desktop Electron with a throwaway --user-data-dir under "
+                "Pass --gui on BLACKBEARD to launch desktop Electron with a throwaway COMPUTERPETS_SETTINGS_DIR under "
                 "target/first-run-drive (removed after; it stops if userData is anything else) and walk the first run: "
                 "the hello on an open keeper card that fits the screen, Got it at least 24 px, the pet on screen, the "
                 "house plates clear of the open card, rain falling the height of the screen, the pet's line never over "

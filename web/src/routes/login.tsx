@@ -3,7 +3,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
 import { GROK_PROVIDERS, authEnabled, signIn } from "@/lib/auth/client";
 import { safeReturnTo, signInHref } from "@/lib/auth/return-to";
-import { LOCAL_SIGN_IN_TRY, LOCAL_SIGN_IN_WORDS, isLoopbackHost } from "@/lib/auth/local-sign-in";
+import { LOCAL_SIGN_IN_TRY, LOCAL_SIGN_IN_WORDS, localSignInBlocked } from "@/lib/auth/local-sign-in";
+import { getSignInReach } from "@/lib/auth/sign-in-reach";
 import { Button } from "@/components/ui/button";
 import { loadProblem } from "@/lib/plain-error";
 
@@ -21,6 +22,8 @@ const SIGN_IN_UNFINISHED = "Sign-in did not finish. Try again.";
 export const Route = createFileRoute("/login")({
   validateSearch: searchSchema,
   component: Login,
+  // Whether this server has its own sign-in client (a yes or no, no secret). Without one, localhost cannot finish.
+  loader: () => getSignInReach().catch(() => ({ ownClient: false })),
   // The tab said only "ComputerPets" here (and on every signed-in page a signed-out visitor is sent to).
   head: () => ({ meta: [{ title: "Sign in — ComputerPets" }, { name: "description", content: "Sign in to sit with the house." }] }),
 });
@@ -30,9 +33,11 @@ function Login() {
   const returnTo = safeReturnTo(next);
   const [problem, setProblem] = useState<string | null>(error ? SIGN_IN_UNFINISHED : null);
   const [starting, setStarting] = useState<string | null>(null);
-  // Read after hydration (the server render keeps the buttons): on localhost the hosted sign-in cannot finish.
-  const [loopback, setLoopback] = useState(false);
-  useEffect(() => setLoopback(isLoopbackHost(window.location.hostname)), []);
+  const { ownClient } = Route.useLoaderData();
+  // Read after hydration (the server render keeps the buttons): on localhost with only the shared preview client,
+  // the hosted sign-in cannot finish. A local copy with its own sign-in client keeps the buttons.
+  const [blocked, setBlocked] = useState(false);
+  useEffect(() => setBlocked(localSignInBlocked(window.location.hostname, ownClient)), [ownClient]);
 
   async function start(providerId: string) {
     setProblem(null);
@@ -59,7 +64,7 @@ function Login() {
             Sign in to sit with the house. Hatch, nest, and keep a kennel.
           </p>
         </div>
-        {authEnabled && loopback ? (
+        {authEnabled && blocked ? (
           <div data-login-local className="space-y-3 [@media(max-height:480px)]:space-y-1">
             <p className="text-sm text-muted">{LOCAL_SIGN_IN_WORDS}</p>
             {/* On a landscape phone the page must not scroll: the how-to-try line (also in web/README.md) waits for a taller screen. */}
