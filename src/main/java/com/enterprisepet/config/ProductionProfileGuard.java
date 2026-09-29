@@ -1,5 +1,6 @@
 package com.enterprisepet.config;
 
+import com.enterprisepet.security.MetricsScrapeTokenFilter;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,13 +119,15 @@ public class ProductionProfileGuard {
         rejectUnsafeApiListenerTls();
         rejectPlainEnvSecrets();
         rejectUnsafeRedisAuth();
+        rejectUnsafeMetricsScrapeToken();
         rejectStaleKeysRotatedAt();
         log.info(
-                "Production profile guard passed (Postgres ssl={}, API listener tls={}, Redis auth={}, ssl={}, microsoft.dev-mode=false, secrets source={}).",
+                "Production profile guard passed (Postgres ssl={}, API listener tls={}, Redis auth={}, ssl={}, metrics scrape={}, microsoft.dev-mode=false, secrets source={}).",
                 postgresSslLabel(),
                 apiListenerTlsRequired() ? "required" : "off",
                 redisAuthRequired() ? "required" : "off",
                 redisSsl() ? "on" : "off",
+                metricsScrapeToken().isBlank() ? "closed" : "token",
                 plainSecretAllowed() ? "plain-local-override" : secretsSource.toLowerCase(Locale.ROOT));
     }
 
@@ -239,6 +242,44 @@ public class ProductionProfileGuard {
                                 + "Missing path refuses start — do not invent a token (ADR 0075).");
             }
         }
+    }
+
+    /**
+     * The metrics scrape bearer is optional (ADR 0133). Unset keeps
+     * {@code /actuator/prometheus} closed to everyone. If set on prod it must be
+     * at least {@link MetricsScrapeTokenFilter#MIN_TOKEN_LENGTH} characters, and
+     * file-source prod also requires {@code METRICS_SCRAPE_TOKEN_FILE}. The token
+     * value is never logged.
+     */
+    void rejectUnsafeMetricsScrapeToken() {
+        String token = metricsScrapeToken();
+        if (token.isBlank()) {
+            return;
+        }
+        if (!MetricsScrapeTokenFilter.usable(token)) {
+            throw new IllegalStateException(
+                    "METRICS_SCRAPE_TOKEN on prod must be at least "
+                            + MetricsScrapeTokenFilter.MIN_TOKEN_LENGTH + " characters (ADR 0133). "
+                            + "Generate one with: openssl rand -hex 32. "
+                            + "Unset it to keep /actuator/prometheus closed.");
+        }
+        if ("file".equals(secretsSource.toLowerCase(Locale.ROOT)) && !plainSecretAllowed()) {
+            String filePath = environment.getProperty("METRICS_SCRAPE_TOKEN_FILE");
+            if (filePath == null || filePath.isBlank()) {
+                throw new IllegalStateException(
+                        "COMPUTERPETS_SECRETS_SOURCE=file requires METRICS_SCRAPE_TOKEN_FILE on prod "
+                                + "when a metrics scrape token is set. Mount the token and set the path (ADR 0133).");
+            }
+        }
+    }
+
+    private String metricsScrapeToken() {
+        String fromBinding = environment.getProperty("metrics.scrape-token");
+        if (fromBinding != null && !fromBinding.isBlank()) {
+            return fromBinding;
+        }
+        String fromEnv = environment.getProperty("METRICS_SCRAPE_TOKEN");
+        return fromEnv == null ? "" : fromEnv;
     }
 
     private boolean redisAuthRequired() {

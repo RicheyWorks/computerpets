@@ -110,6 +110,7 @@ class SecretFileEnvironmentPostProcessorTest {
 
         assertThat(env.getProperty("REDIS_PASSWORD")).isEqualTo("plan-fixture-token");
         assertThat(SecretFileEnvironmentPostProcessor.SECRET_ENV_NAMES).contains("REDIS_PASSWORD");
+        assertThat(SecretFileEnvironmentPostProcessor.SECRET_ENV_NAMES).contains("METRICS_SCRAPE_TOKEN");
     }
 
     @Test

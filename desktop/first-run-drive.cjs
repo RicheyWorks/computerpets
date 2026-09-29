@@ -120,6 +120,36 @@ function scaleArg(argv) {
   return isFinite(n) && n >= 1 && n <= 3 ? n : null;
 }
 
+/** How many times the drive tries Got it, and how long each try waits for card.json. */
+const GOT_IT_TRIES = 3;
+const GOT_IT_WAIT_MS = 4000;
+
+/**
+ * Reads `get()` until `done(value)` holds or `ms` runs out, sleeping `step` between reads with `sleep`.
+ * Returns the last value read.
+ */
+async function pollFor(get, done, ms, step, sleep) {
+  const until = Date.now() + ms;
+  let v = await get();
+  while (!done(v) && Date.now() < until) {
+    await sleep(step);
+    v = await get();
+  }
+  return v;
+}
+
+/**
+ * The Got it judgement: the hello is gone and card.json says firstHintSeen. The words say how many presses it
+ * took, whether the card had to be opened again, and every failed press with what sat on the button.
+ */
+function gotItVerdict({ hint, seen, presses, reopened, errors }) {
+  const ok = !hint && seen === true;
+  const bits = [`hello ${hint ? "still shows" : "gone"}`, `card.json firstHintSeen ${seen === true}`, `${presses} press${presses === 1 ? "" : "es"}`];
+  if (reopened) bits.push(`card opened again ${reopened}x`);
+  if (errors && errors.length) bits.push(`press failed: ${errors.join(" / ")}`);
+  return { ok, detail: bits.join("; ") };
+}
+
 /** The biggest gap in px between two boxes [left, top, right, bottom] side by side (0 when they overlap in x). */
 function sideGap(a, b) {
   return Math.max(0, a[0] - b[2], b[0] - a[2]);
@@ -706,23 +736,53 @@ async function drive(opts = {}) {
     const h1 = await holds(3000);
     check("card_holds_after_press_hello_unread", h1.walked && h1.open === h1.n, `open in ${h1.open} of ${h1.n} samples; the pet walked ${h1.walked}`);
 
-    // 5. Got it: the hello goes and card.json keeps it gone.
-    s = await state();
-    if (!s.open) {
-      await petMenu();
-      await clickItem(app, "Keeper card");
-      await page.waitForTimeout(700);
-    }
-    await page.locator("#first-hint-ok").click({ timeout: 5000 }).catch(() => {});
-    await page.waitForTimeout(900);
+    // 5. Got it: the hello goes and card.json keeps it gone. The card can close between the look and the press
+    //    (the pet walked off after 4b's Play and the leash took the card down), which hides the button. So each
+    //    try opens the card when it is shut, waits for the button to show, presses it, then waits up to 4 s for
+    //    card.json. A press that fails is reported with what sat on the button, never swallowed.
+    const readCardJson = () => {
+      try {
+        return JSON.parse(fs.readFileSync(path.join(ud, "card.json"), "utf8"));
+      } catch {
+        return {};
+      }
+    };
+    const gotIt = { presses: 0, reopened: 0, errors: [], seen: false };
     let cardJson = {};
-    try {
-      cardJson = JSON.parse(fs.readFileSync(path.join(ud, "card.json"), "utf8"));
-    } catch {
-      /* missing */
+    for (let attempt = 1; attempt <= GOT_IT_TRIES && !gotIt.seen; attempt += 1) {
+      s = await state();
+      if (!s.open) {
+        gotIt.reopened += 1;
+        await petMenu();
+        await clickItem(app, "Keeper card");
+        await page.waitForTimeout(700);
+        s = await state();
+      }
+      if (s.hint) {
+        const ok = page.locator("#first-hint-ok");
+        try {
+          await ok.waitFor({ state: "visible", timeout: 5000 });
+          gotIt.presses += 1;
+          await ok.click({ timeout: 5000 });
+        } catch (e) {
+          const on = await page
+            .evaluate(() => {
+              const b = document.getElementById("first-hint-ok")?.getBoundingClientRect();
+              if (!b || !b.width) return "button not laid out";
+              const at = document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2);
+              const hud = document.getElementById("hud");
+              return `on the button: ${at ? at.id || at.className || at.tagName : "nothing"}; card ${hud && hud.dataset.collapsed === "1" ? "shut" : "open"}`;
+            })
+            .catch(() => "page gone");
+          gotIt.errors.push(`try ${attempt}: ${String((e && e.message) || e).split("\n")[0]} (${on})`);
+        }
+      }
+      cardJson = await pollFor(() => readCardJson(), (c) => c.firstHintSeen === true, GOT_IT_WAIT_MS, 200, (ms) => page.waitForTimeout(ms));
+      gotIt.seen = cardJson.firstHintSeen === true;
     }
     s = await state();
-    check("got_it_persists", !s.hint && cardJson.firstHintSeen === true, `hello ${s.hint ? "still shows" : "gone"}; card.json firstHintSeen ${cardJson.firstHintSeen}`);
+    const gi5 = gotItVerdict({ hint: s.hint, seen: gotIt.seen, presses: gotIt.presses, reopened: gotIt.reopened, errors: gotIt.errors });
+    check("got_it_persists", gi5.ok, gi5.detail);
 
     // 5b. The hello read: a care press on the card still holds it up while the pet walks (for a few seconds).
     if (!s.open) {
@@ -1486,7 +1546,7 @@ function trayIcons() {
   return lines.filter((l) => indent(l) === top && !/\s1x1\+/.test(l)).length;
 }
 
-module.exports = { overlaps, onScreen, duplicateLabels, allLabels, throwawayOk, scaleArg, waylandArg, autoWaylandStart, ozoneOf, sideGap, gateOf, STANDIN_KEY, WORK, HOOK, RELAUNCH_FILE, drive };
+module.exports = { overlaps, onScreen, duplicateLabels, allLabels, throwawayOk, scaleArg, waylandArg, autoWaylandStart, ozoneOf, sideGap, gateOf, pollFor, gotItVerdict, GOT_IT_TRIES, GOT_IT_WAIT_MS, STANDIN_KEY, WORK, HOOK, RELAUNCH_FILE, drive };
 
 if (require.main === module) {
   drive({ scale: scaleArg(process.argv.slice(2)), wayland: waylandArg(process.argv.slice(2)) }).then(

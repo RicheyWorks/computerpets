@@ -11,11 +11,13 @@ requires-python = ">=3.10"
 license = { text = "All Rights Reserved" }
 dependencies = [
   "PyQt6>=6.6",
-  "cryptography>=42",
+  # 49.0.0 fixes every pip-audit advisory against the old >=42 floor (OpenSSL in the
+  # wheels, PKCS12, EC key checks, name constraints, chain building).
+  "cryptography>=49",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8"]
+dev = ["pytest>=9.0.3"]  # 9.0.3: CVE-2025-71176 (shared /tmp/pytest-of-{user})
 # Optional: seal the Unlock download sign-in in the macOS/Linux keychain. Windows uses DPAPI with no extra package.
 secrets = ["keyring>=24"]
 

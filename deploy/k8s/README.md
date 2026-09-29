@@ -98,6 +98,7 @@ openssl rand -base64 24   # SPRING_DATASOURCE_PASSWORD (also POSTGRES_PASSWORD)
 | `SPRING_DATASOURCE_PASSWORD` | Yes | JDBC (must match `POSTGRES_PASSWORD`) |
 | `SPRING_DATASOURCE_REPLICA_URL` | No | Optional managed Postgres **read** replica. Leave unset for the in-cluster single primary. Do not invent a replica Service. |
 | `POSTGRES_USER` / `POSTGRES_PASSWORD` / `POSTGRES_DB` | Yes if using the in-cluster Postgres | `postgres` container |
+| `METRICS_SCRAPE_TOKEN` | No | Bearer for `/actuator/prometheus` and `/actuator/info` (32+ chars). Unset = nobody scrapes ([ADR 0133](../../docs/adr/0133-actuator-metrics-scrape-token.md)) |
 
 In-cluster Redis has no secret in this tree. `REDIS_HOST`, `REDIS_PORT`,
 and `REDIS_TIMEOUT` stay on the ConfigMap. Optional managed AUTH
@@ -173,8 +174,27 @@ docker build -t ghcr.io/richeyworks/computerpets:local .
 `SecurityConfig` permits those three paths (and `/actuator/health`)
 without a JWT. Public `/actuator/health` stays quiet — no room names,
 no Steam or Redis reasons. Liveness is the process is up. Unhung
-optional doors do not restart the house. `/actuator/prometheus` stays
-authenticated.
+optional doors do not restart the house.
+
+`/actuator/prometheus` and `/actuator/info` need their own scrape bearer
+([ADR 0133](../../docs/adr/0133-actuator-metrics-scrape-token.md)). A
+customer download JWT is **403** there. The Ingress routes `/` to this
+Service, so without that rule any keeper could read house metrics. Every
+other `/actuator/**` path is closed. Put `METRICS_SCRAPE_TOKEN` (32+
+chars, `openssl rand -hex 32`) on the Secret, or `METRICS_SCRAPE_TOKEN_FILE`.
+Unset means nobody scrapes. Health and probes do not change. An in-cluster
+Prometheus job reads the same token from a file:
+
+```yaml
+- job_name: computerpets
+  metrics_path: /actuator/prometheus
+  # scheme: https when the API listener has TLS (ADR 0077)
+  authorization:
+    type: Bearer
+    credentials_file: /etc/prometheus/secrets/computerpets/METRICS_SCRAPE_TOKEN
+  static_configs:
+    - targets: ["computerpets.computerpets.svc:8081"]
+```
 
 ## Horizontal pod autoscaling (ADR 0078)
 
