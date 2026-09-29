@@ -1016,20 +1016,60 @@ async function drive(opts = {}) {
     const afterRest = await lifeNow();
     check("rest_wakes_when_rested", restPressed && slept && wokeSelf, `Rest at 99: asleep ${slept}; woke by itself ${wokeSelf} in ${((Date.now() - restT) / 1000).toFixed(1)} s; energy ${afterRest.energy}, ${afterRest.cmd}/${afterRest.anim}`);
 
-    // The talk pose ends with the pet's own line. A Talk from the card; a second later the house chatters (the
-    // same say() a robin's song or a guest's line uses) and keeps the bubble up for 15 s. The pose held with it.
+    // The talk pose ends with the pet's own line. A Talk from the card; once the pet has said its own line the house
+    // chatters (the same say() a robin's song or a guest's line uses) and keeps the bubble up for 15 s. The pose held
+    // with it. Timed by the app's own events, not the drive's clock: say() and issue() are wrapped for the step and
+    // log when they ran, so a busy machine (late polls, a line still up from before the press, a slow mind) cannot
+    // pass or fail it by itself. The pose's end is the frame that issued "idle"; the bubble is read in that frame.
     await settle(30_000);
+    await page.evaluate(() => {
+      const w = /** @type {any} */ (window);
+      const log = [];
+      w.__talkLog = log;
+      const say0 = w.say;
+      const issue0 = w.issue;
+      w.__talkRestore = () => {
+        w.say = say0;
+        w.issue = issue0;
+      };
+      w.say = function (/** @type {string} */ text, /** @type {number} */ hold) {
+        const r = say0.apply(this, arguments);
+        if (text) log.push({ ev: "say", at: performance.now(), text: String(text).slice(0, 60), until: speechUntil, cmd: /** @type {any} */ (sim).cmd });
+        return r;
+      };
+      w.issue = function (/** @type {string} */ cmd) {
+        const was = /** @type {any} */ (sim).cmd;
+        const r = issue0.apply(this, arguments);
+        log.push({ ev: "issue", at: performance.now(), cmd, was, speechUntil, open: !!document.getElementById("bubble")?.classList.contains("open") });
+        return r;
+      };
+    });
     const talkPressed = await press("card", "talk");
-    const ownLine = await page
-      .waitForFunction(() => /** @type {any} */ (sim).cmd === "talk" && !!document.getElementById("bubble")?.classList.contains("open") && performance.now() < speechUntil, null, { timeout: 8000, polling: 100 })
-      .then(() => page.evaluate(() => speechUntil), () => 0);
-    await page.waitForTimeout(1000);
+    // The pet's own line: the first say() after the press made while the pose is "talk".
+    const own = await page
+      .waitForFunction(() => /** @type {any} */ (window).__talkLog.find((/** @type {any} */ e) => e.ev === "say" && e.cmd === "talk") || null, null, { timeout: 15_000, polling: 100 })
+      .then((h) => h.jsonValue(), () => null);
+    const ownLine = own ? own.until : 0;
     await page.evaluate(() => say("The house hums along: a robin somewhere sings a long, bright song.", 15_000));
-    const poseEnd = await page
-      .waitForFunction(() => /** @type {any} */ (sim).cmd !== "talk", null, { timeout: 25_000, polling: 100 })
-      .then(() => page.evaluate(() => ({ at: performance.now(), bubble: !!document.getElementById("bubble")?.classList.contains("open") })), () => null);
+    await page.waitForFunction(() => /** @type {any} */ (sim).cmd !== "talk", null, { timeout: 30_000, polling: 100 }).catch(() => null);
+    const talkLog = await page.evaluate(() => {
+      const w = /** @type {any} */ (window);
+      w.__talkRestore();
+      const log = w.__talkLog;
+      delete w.__talkLog;
+      delete w.__talkRestore;
+      return log;
+    });
+    const poseEnd = talkLog.find((/** @type {any} */ e) => e.ev === "issue" && e.was === "talk" && e.cmd !== "talk") || null;
     const lateBy = poseEnd && ownLine ? Math.round(poseEnd.at - ownLine) : -1;
-    check("talk_pose_ends_with_own_line", talkPressed && ownLine > 0 && !!poseEnd && lateBy <= 1200 && poseEnd.bubble, `the pet's line ended; the talk pose ended ${lateBy} ms after it${poseEnd ? `, with the house chatter still up ${poseEnd.bubble}` : " (never, in 25 s)"}`);
+    const chatterAt = talkLog.findIndex((/** @type {any} */ e) => e.ev === "say" && /house hums along/.test(e.text));
+    const saidAfter = talkLog.slice(chatterAt + 1).filter((/** @type {any} */ e) => e.ev === "say" && (!poseEnd || e.at <= poseEnd.at));
+    const chatterUp = !!poseEnd && poseEnd.speechUntil > poseEnd.at;
+    check(
+      "talk_pose_ends_with_own_line",
+      talkPressed && ownLine > 0 && !!poseEnd && lateBy >= -50 && lateBy <= 1200 && chatterUp,
+      `the pet's line ("${own ? own.text : "never said"}") ended; the talk pose ended ${lateBy} ms after it${poseEnd ? `, with the house chatter still up ${chatterUp}` : " (never, in 30 s)"}${saidAfter.length ? `; said after the chatter: ${saidAfter.map((/** @type {any} */ e) => `"${e.text}"`).join(", ")}` : ""}`,
+    );
     await page.evaluate(() => {
       speechUntil = 0;
       bubble.classList.remove("open");
