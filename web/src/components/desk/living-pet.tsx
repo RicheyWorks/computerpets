@@ -57,7 +57,7 @@ import {
   WALK_HOP_PX,
   enterSit,
   enterSpawn,
-  hideTuck,
+  hideTuckClear,
   isCrawlKey,
   isHighWalk,
   isLowWalk,
@@ -599,7 +599,17 @@ export function LivingPet({
         const width = box?.width ?? 800;
         s.leaving = true;
         s.waypoints = [];
-        aimAt(hideTuck(s.x, width, SPRITE, PAD));
+        // The room's panel and rail beside the pet's height: the tuck steps out from behind them (hideTuckClear).
+        const pet = hitRef.current?.getBoundingClientRect();
+        const blocks: { left: number; right: number }[] = [];
+        if (box && pet) {
+          for (const el of document.querySelectorAll<HTMLElement>("[data-desk-aside], [data-desk-rail]")) {
+            const r = el.getBoundingClientRect();
+            if (r.width < 1 || r.bottom <= pet.top || r.top >= pet.bottom) continue;
+            blocks.push({ left: r.left - box.left, right: r.right - box.left });
+          }
+        }
+        aimAt(hideTuckClear(s.x, width, blocks, SPRITE, PAD));
         return;
       }
       if (cmd === "enter") {

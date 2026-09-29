@@ -1,6 +1,10 @@
 # ComputerPets — PyQt blotter client
 
-A first real PyQt6 desk: **all two hundred twenty-one living companions** from the house catalog live on a wooden blotter — the original twenty who walk, the ten snakes who crawl, a tide of ten sea creatures, a garden of ten plants, a hive of ten insects plus ten bees and comb, a pond of ten Animalia, a roost of ten birds, a corner of ten arachnids and their neighbors, a wood of eleven wild mammals, a canopy of ten tree mammals, a stone of ten more reptiles, a creek of ten more fish, a log of ten litter guests, a shore of ten strand guests, a reef of ten living-rock guests, a meadow of ten grass-and-night insects, a cellar of ten fungi, a well of ten leftovers, a far den of ten guests that never evolved here, and a grid of ten cyber dragons. The tide den at `/sea` is the classroom for the marine guests. The garden den at `/garden` is ten plants on the blotter; plaques teach. The hive den at `/hive` keeps bees and comb; plaques teach. The pond den at `/pond` is ten Animalia on the blotter; plaques teach. The roost den at `/roost` is ten birds on the blotter; plaques teach. The corner at `/corner` is ten arachnids and their neighbors on the blotter; plaques teach. A harvestman is not a spider. The wood at `/wood` is ten wild mammals on the blotter; plaques teach. The canopy at `/canopy` is ten more mammals of the trees on the same wood; plaques teach. A sloth is not a red panda. A koala is not a bear. The stone at `/stone` is ten more reptiles on the blotter; plaques teach. A tuatara is not a lizard. An alligator is not a crocodile. A bat is not a bird. A porcupine is not Burr. The creek at `/creek` is ten more freshwater fish on the blotter; plaques teach. A bass is not a trout. A lamprey is not an eel. The log at `/log` is ten litter guests on the blotter; plaques teach. A millipede is not a centipede. A pillbug is not an insect. The shore at `/shore` is ten guests of the strand on the blotter; plaques teach. A fiddler is not a hermit. A ghost crab is not a horseshoe crab. The reef at `/reef` is ten guests of the living rock on the same wood; plaques teach. A coral is not a plant. An anemone is not a jelly. The meadow at `/meadow` is ten insects of the grass and the night song on the blotter; plaques teach. A cricket is not a cicada. A katydid is not a grasshopper. The cellar den at `/cellar` is ten fungi on the blotter; plaques teach. The well at `/well` is ten leftovers on the blotter; plaques teach. The far den at `/far` is ten guests that never evolved here; plaques teach. The grid at `/grid` is nine cyber dragons; plaques teach. A day here keeps the same **house hours** (dawn / day / dusk / night, and each species’ rest window), the same **weather** they sit or swim in, **today’s house visitor** walking through, and snakes that go **blue and shed** (the old coat stays on the wood). The blotter can go **unkempt** and the guest **unwell**, the way the web desk already does — ink smudges, a dull wash, **Clean** and **Medicine**. **Play** and each species’ **special** (Steal ribbon, Heel, Play dead, Coil, …) teach the house the way the web desk already does. Tap a guest (or a name on the rail) and a **species plaque** teaches the house the way `/study` and `/snakes` do: a tell, one mix-up, the latin, and the house voice. Unlock talks to a running house server using the published [client contract](../docs/CLIENT-CONTRACT.md). The Electron overlay in `desktop/` is unchanged and still implements that same contract.
+Pets on a wooden desk in one PyQt6 window. It runs from this folder with Python (there is no store
+download), and the pets walk with nothing else set up: no account, no house server, no key. To start,
+go to [Run](#run). Everything below that is optional.
+
+A first real PyQt6 desk: **all two hundred twenty-one living companions** from the house catalog live on a wooden blotter — the original twenty who walk, the ten snakes who crawl, a tide of ten sea creatures, a garden of ten plants, a hive of ten insects plus ten bees and comb, a pond of ten Animalia, a roost of ten birds, a corner of ten arachnids and their neighbors, a wood of eleven wild mammals, a canopy of ten tree mammals, a stone of ten more reptiles, a creek of ten more fish, a log of ten litter guests, a shore of ten strand guests, a reef of ten living-rock guests, a meadow of ten grass-and-night insects, a cellar of ten fungi, a well of ten leftovers, a far den of ten guests that never evolved here, and a grid of ten cyber dragons. The tide den at `/sea` is the classroom for the marine guests. The garden den at `/garden` is ten plants on the blotter; plaques teach. The hive den at `/hive` keeps bees and comb; plaques teach. The pond den at `/pond` is ten Animalia on the blotter; plaques teach. The roost den at `/roost` is ten birds on the blotter; plaques teach. The corner at `/corner` is ten arachnids and their neighbors on the blotter; plaques teach. A harvestman is not a spider. The wood at `/wood` is eleven wild mammals on the blotter; plaques teach. The canopy at `/canopy` is ten more mammals of the trees on the same wood; plaques teach. A sloth is not a red panda. A koala is not a bear. The stone at `/stone` is ten more reptiles on the blotter; plaques teach. A tuatara is not a lizard. An alligator is not a crocodile. A bat is not a bird. A porcupine is not Burr. The creek at `/creek` is ten more freshwater fish on the blotter; plaques teach. A bass is not a trout. A lamprey is not an eel. The log at `/log` is ten litter guests on the blotter; plaques teach. A millipede is not a centipede. A pillbug is not an insect. The shore at `/shore` is ten guests of the strand on the blotter; plaques teach. A fiddler is not a hermit. A ghost crab is not a horseshoe crab. The reef at `/reef` is ten guests of the living rock on the same wood; plaques teach. A coral is not a plant. An anemone is not a jelly. The meadow at `/meadow` is ten insects of the grass and the night song on the blotter; plaques teach. A cricket is not a cicada. A katydid is not a grasshopper. The cellar den at `/cellar` is ten fungi on the blotter; plaques teach. The well at `/well` is ten leftovers on the blotter; plaques teach. The far den at `/far` is ten guests that never evolved here; plaques teach. The grid at `/grid` is ten cyber dragons; plaques teach. A day here keeps the same **house hours** (dawn / day / dusk / night, and each species’ rest window), the same **weather** they sit or swim in, **today’s house visitor** walking through, and snakes that go **blue and shed** (the old coat stays on the wood). The blotter can go **unkempt** and the guest **unwell**, the way the web desk already does — ink smudges, a dull wash, **Clean** and **Medicine**. **Play** and each species’ **special** (Steal ribbon, Heel, Play dead, Coil, …) teach the house the way the web desk already does. Tap a guest (or a name on the rail) and a **species plaque** teaches the house the way `/study` and `/snakes` do: a tell, one mix-up, the latin, and the house voice. Unlock talks to a running house server using the published [client contract](../docs/CLIENT-CONTRACT.md). The Electron overlay in `desktop/` is unchanged and still implements that same contract.
 
 This is **not** a custom GPU shader engine. Drawing uses Qt’s GPU-backed scene: `QGraphicsView` with a `QOpenGLWidget` viewport (Qt RHI / OpenGL compositing). If the platform cannot create an OpenGL surface, the scene falls back to Qt software raster and says so in the status bar.
 
@@ -35,6 +39,7 @@ pets keep walking.
 cd client
 python3 -m venv .venv
 source .venv/bin/activate
+python -m pip install --upgrade pip
 pip install -e ".[dev]"
 
 python -m computerpets_client
@@ -54,12 +59,15 @@ python -m computerpets_client
 cd client
 py -3 -m venv .venv
 .\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 
 python -m computerpets_client
 ```
 
-`py -0p` lists the Pythons you have; `py -3.12 -m venv .venv` picks one. If
+The pip upgrade comes first because the pip that ships with Python 3.10 (21.2) cannot install
+this folder in editable mode and stops with "editable mode currently requires a setuptools-based
+build". `py -0p` lists the Pythons you have; `py -3.12 -m venv .venv` picks one. If
 PowerShell will not run `Activate.ps1`, skip that line and type
 `.\.venv\Scripts\python.exe` wherever the steps say `python`.
 
@@ -129,9 +137,10 @@ The download sign-in the house hands back at Unlock is never written in plain te
 
 | Variable | Required | Meaning |
 |----------|----------|---------|
-| `COMPUTERPETS_BACKEND_URL` | yes* | House server address, no trailing slash. Default `http://127.0.0.1:8081` if unset. |
+| `COMPUTERPETS_BACKEND_URL` | no* | House server address, no trailing slash. Default `http://127.0.0.1:8081` if unset. |
 | `LICENSE_SECRET_KEY` | yes | Same 32-byte standard Base64 key the house server uses. Signs `POST /api/verify` and decrypts the issued license. |
 | `BUNDLE_SIGNING_KEY` | no | If set, the client also checks the CDN URL HMAC. Download still works without it — the house server already signed the link. |
+| `COMPUTERPETS_STEAM_APP_ID` | no | The game's number on Steam, for a copy set up for one (a `steam_appid.txt` beside the program or in `client/` works too). ComputerPets has no Steam page yet, so the Unlock window hides its Steam App ID box unless one of these is set or a past unlock saved one. With none, Unlock says so in one line and sends nothing. |
 | `COMPUTERPETS_CLIENT_HOME` | no | Override the user-data directory (`license.json`, `hwid.txt`, last-seen, care). |
 
 `ENTERPRISEPET_BACKEND_URL` is accepted as another name for the house server address.
@@ -186,11 +195,13 @@ The living-desk PNGs are not in this repository. Frames are painted with `QPaint
 
 Inspect and verify real care actions (Feed, Rest, Talk, Treat, Play, Special / Steal ribbon, Hide, Clean, Bath, …):
 
-`powershell
+```powershell
 cd client
 py -m computerpets_client.care_harness
 py -m computerpets_client.care_harness --list
-`
+```
+
+On Linux or macOS, type `python` (inside the `.venv`) where these lines say `py`.
 
 See [docs/CARE-HARNESS.md](../docs/CARE-HARNESS.md). Guest options always include **Close** (dismiss menu) and **Exit** (leave pet care / unfocus).
 

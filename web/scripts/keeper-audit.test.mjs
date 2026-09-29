@@ -68,6 +68,6 @@ test("the blotter has Mac and Linux lines and names the Linux screen pieces", ()
   // The PowerShell blotter section stays PowerShell only; Mac and Linux get their own short section after it.
   assert.ok(startSrc.indexOf("\n## Blotter (optional)\n") < startSrc.indexOf("\n## Blotter on Mac or Linux\n"));
   const blotter = section(startSrc, "Blotter on Mac or Linux");
-  assert.match(blotter, /python3 -m venv \.venv\n\. \.venv\/bin\/activate\npython -m pip install -e \.\npython -m computerpets_client/);
+  assert.match(blotter, /python3 -m venv \.venv\n\. \.venv\/bin\/activate\npython -m pip install --upgrade pip\npython -m pip install -e \.\npython -m computerpets_client/);
   assert.match(blotter, /sudo apt install/);
 });
