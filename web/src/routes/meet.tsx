@@ -20,7 +20,7 @@ export const Route = createFileRoute("/meet")({
       {
         name: "description",
         content:
-          "Two hundred twenty-one living companions walk the blotter. The nest is a square; neglect can close a line.",
+          "Two hundred twenty-one living companions walk the blotter. Two grown pets of a kind can pair in the nest; a pet left without care too long leaves.",
       },
     ],
   }),
@@ -46,7 +46,7 @@ function MeetPage() {
             They live on the desk.
           </h1>
           <p className="mt-5 max-w-md text-base text-muted sm:text-lg">
-            Two hundred twenty-one guests walk the blotter. On Windows they walk on the real desktop. This page is the same house in a browser. The nest is a square; neglect can close a line.
+            Two hundred twenty-one guests walk the blotter. On Windows they walk on the real desktop. This page is the same house in a browser. Two grown pets of a kind can pair in the nest, and a pet left without care for too long leaves.
           </p>
           <MeetKeeperCard className="mt-6" />
           <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
@@ -90,8 +90,8 @@ function MeetPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Phone and tablet</p>
               <h3 className="mt-2 font-display text-2xl">On the home screen</h3>
               <p className="mt-2 text-sm text-muted">
-                On a tablet a tap is a choice. A drag is a carry. A long-press tends. On a phone they sit the
-                tall blotter the same way. Open Live, then Add to Home Screen. All two hundred twenty-one.
+                On a tablet a tap is a choice. A drag is a carry. A long-press tends. A phone works the same way
+                on its tall screen. Open Live, then Add to Home Screen. All two hundred twenty-one.
               </p>
               <p className="mt-3">
                 <Link to="/live" data-line-link className="text-sm text-fg">

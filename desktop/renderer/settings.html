@@ -96,9 +96,13 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
       <label for="steamId">Your Steam ID</label>
       <input id="steamId" placeholder="76561198000000000" autocomplete="off" />
       <p class="hint" id="steamIdHelp">Your Steam account number: 17 digits that start with 7656. Steam shows it under Account details.</p>
+      <!-- ComputerPets has no Steam page, so the App ID box shows only when this copy has one set up (a Steam build's
+           steam_appid.txt or COMPUTERPETS_STEAM_APP_ID) or a past unlock saved one (showLicense below). -->
+      <div id="appIdRow" hidden>
       <label for="appId">Steam App ID</label>
       <input id="appId" placeholder="123456" autocomplete="off" />
       <p class="hint" id="appIdHelp">The game's number on Steam. Ask whoever runs the house server. ComputerPets has no Steam page yet.</p>
+      </div>
       <label for="petType">Pet</label>
       <select id="petType"></select>
       <div>
@@ -266,6 +270,7 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
       const backend = document.getElementById("backend");
       const steamId = document.getElementById("steamId");
       const appId = document.getElementById("appId");
+      const appIdRow = document.getElementById("appIdRow");
       const petType = document.getElementById("petType");
       const licenseOk = document.getElementById("licenseOk");
       const licenseErr = document.getElementById("licenseErr");
@@ -483,6 +488,8 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
           if (status.fields.appId) appId.value = status.fields.appId;
           if (status.fields.petType) petType.value = status.fields.petType;
         }
+        if (typeof status.steamAppId === "string" && status.steamAppId && !appId.value) appId.value = status.steamAppId;
+        appIdRow.hidden = !(status.steamAppId || (status.fields && status.fields.appId) || appId.value);
         licenseErr.textContent = errorText(status.error, "");
         if (status.unlocked && status.license) {
           const bits = [status.license.pet, status.license.jti, "until " + status.license.validUntil];

@@ -15,6 +15,36 @@ const NO_LICENSE_MESSAGE = "No license on this computer yet. Unlock a pet first,
 const NO_TOKEN_MESSAGE =
   "The sign-in from the last unlock is not on this computer anymore, so nothing was downloaded. Unlock again, then download. Pets still work without it.";
 const FIELDS_MISSING_MESSAGE = "Fill in the Steam ID and the App ID first. Pets still work without it.";
+const NO_APP_ID_MESSAGE =
+  "This copy has no Steam App ID set, so Steam cannot unlock it yet. Pets still work without it.";
+const STEAM_APPID_FILE = "steam_appid.txt";
+
+/**
+ * The Steam App ID this copy was set up with, or "". ComputerPets has no Steam page, so the House window hides
+ * its App ID box unless one of these is there: COMPUTERPETS_STEAM_APP_ID, or a steam_appid.txt (the file a
+ * Steam build keeps beside its program) in one of dirs. Digits only; anything else counts as none.
+ * @param {NodeJS.ProcessEnv} env
+ * @param {string[]} dirs
+ * @param {(file: string, enc: "utf8") => string} readFile
+ */
+function configuredSteamAppId(env, dirs, readFile) {
+  const digits = (raw) => {
+    const text = String(raw == null ? "" : raw).trim();
+    return /^\d{1,12}$/.test(text) ? text : "";
+  };
+  const fromEnv = digits(env && env.COMPUTERPETS_STEAM_APP_ID);
+  if (fromEnv) return fromEnv;
+  for (const dir of dirs || []) {
+    if (!dir) continue;
+    try {
+      const found = digits(readFile(path.join(dir, STEAM_APPID_FILE), "utf8"));
+      if (found) return found;
+    } catch {
+      /* no file here */
+    }
+  }
+  return "";
+}
 
 function readStore(file, readFile) {
   try {
@@ -74,6 +104,7 @@ function shownCdnLine(input) {
  *   mkdir?: typeof fs.mkdirSync,
  *   platform?: NodeJS.Platform | string,
  *   exec?: typeof import("child_process").execSync,
+ *   steamDirs?: string[],
  *   codec?: { encrypt(text: string): string, decrypt(sealed: string): string } | null
  *     | (() => ({ encrypt(text: string): string, decrypt(sealed: string): string } | null)),
  * }} opts
@@ -209,6 +240,8 @@ function createLicenseSession(opts) {
       backendUrl,
       provider: store.provider || "steam",
       fields: store.fields && typeof store.fields === "object" ? store.fields : {},
+      // The App ID this copy was set up with (env or steam_appid.txt), "" when none: the House window shows its box then.
+      steamAppId: configuredSteamAppId(env, opts.steamDirs || [], readFile),
       hwid: mark.id,
       hwidMark: {
         read: mark.read,
@@ -253,11 +286,14 @@ function createLicenseSession(opts) {
         hwid: deviceId,
       };
       if (provider === "steam") {
-        if (!String(input.steamId || "").trim() || !String(input.appId || "").trim()) {
+        // The App ID box is hidden when this copy has none set up; the configured one stands in for an empty box.
+        const appId = String(input.appId || "").trim() || configuredSteamAppId(env, opts.steamDirs || [], readFile);
+        if (!String(input.steamId || "").trim()) {
           throw new LicenseError("fields_missing", FIELDS_MISSING_MESSAGE);
         }
+        if (!appId) throw new LicenseError("fields_missing", NO_APP_ID_MESSAGE);
         fields.steamId = String(input.steamId);
-        fields.appId = String(input.appId);
+        fields.appId = appId;
       } else if (input.fields && typeof input.fields === "object") {
         Object.assign(fields, input.fields);
         fields.hwid = deviceId;
@@ -496,4 +532,6 @@ module.exports = {
   NO_LICENSE_MESSAGE,
   NO_TOKEN_MESSAGE,
   FIELDS_MISSING_MESSAGE,
+  NO_APP_ID_MESSAGE,
+  configuredSteamAppId,
 };
