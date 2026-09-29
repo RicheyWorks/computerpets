@@ -39,6 +39,7 @@ import { Route as StoneRouteImport } from './routes/stone'
 import { Route as StudyRouteImport } from './routes/study'
 import { Route as WellRouteImport } from './routes/well'
 import { Route as WoodRouteImport } from './routes/wood'
+import { Route as DemoIndexRouteImport } from './routes/demo.index'
 import { Route as DemoSlugRouteImport } from './routes/demo.$slug'
 import { Route as PetsKeyRouteImport } from './routes/pets.$key'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
@@ -193,6 +194,11 @@ const WoodRoute = WoodRouteImport.update({
   path: '/wood',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DemoIndexRoute = DemoIndexRouteImport.update({
+  id: '/demo/',
+  path: '/demo/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DemoSlugRoute = DemoSlugRouteImport.update({
   id: '/demo/$slug',
   path: '/demo/$slug',
@@ -242,6 +248,7 @@ export interface FileRoutesByFullPath {
   '/wood': typeof WoodRoute
   '/demo/$slug': typeof DemoSlugRoute
   '/pets/$key': typeof PetsKeyRoute
+  '/demo/': typeof DemoIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
@@ -277,6 +284,7 @@ export interface FileRoutesByTo {
   '/wood': typeof WoodRoute
   '/demo/$slug': typeof DemoSlugRoute
   '/pets/$key': typeof PetsKeyRoute
+  '/demo': typeof DemoIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
@@ -313,6 +321,7 @@ export interface FileRoutesById {
   '/wood': typeof WoodRoute
   '/demo/$slug': typeof DemoSlugRoute
   '/pets/$key': typeof PetsKeyRoute
+  '/demo/': typeof DemoIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
@@ -350,6 +359,7 @@ export interface FileRouteTypes {
     | '/wood'
     | '/demo/$slug'
     | '/pets/$key'
+    | '/demo/'
     | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -385,6 +395,7 @@ export interface FileRouteTypes {
     | '/wood'
     | '/demo/$slug'
     | '/pets/$key'
+    | '/demo'
     | '/api/auth/$'
   id:
     | '__root__'
@@ -420,6 +431,7 @@ export interface FileRouteTypes {
     | '/wood'
     | '/demo/$slug'
     | '/pets/$key'
+    | '/demo/'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
@@ -456,6 +468,7 @@ export interface RootRouteChildren {
   WoodRoute: typeof WoodRoute
   DemoSlugRoute: typeof DemoSlugRoute
   PetsKeyRoute: typeof PetsKeyRoute
+  DemoIndexRoute: typeof DemoIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -671,6 +684,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WoodRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demo/': {
+      id: '/demo/'
+      path: '/demo'
+      fullPath: '/demo/'
+      preLoaderRoute: typeof DemoIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/demo/$slug': {
       id: '/demo/$slug'
       path: '/demo/$slug'
@@ -728,6 +748,7 @@ const rootRouteChildren: RootRouteChildren = {
   WoodRoute: WoodRoute,
   DemoSlugRoute: DemoSlugRoute,
   PetsKeyRoute: PetsKeyRoute,
+  DemoIndexRoute: DemoIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
