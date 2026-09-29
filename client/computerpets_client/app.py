@@ -180,6 +180,11 @@ class BlotterView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setFrameShape(QGraphicsView.Shape.NoFrame)
         self.setBackgroundBrush(QColor(42, 34, 24))
+        # The blotter is a picture with nothing to press from the keys (the care row does that), so Tab skips it;
+        # it still carries a name for a screen reader that walks the window.
+        self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.viewport().setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.setAccessibleName("The desk blotter")
         seal_widget(self)
 
     def dragEnterEvent(self, event) -> None:
@@ -325,6 +330,7 @@ class DeskWindow(QMainWindow):
             gait = "crawl" if spec.gait == "crawl" else "walk"
             self.kind_box.addItem(f"{spec.name} · {spec.label} ({gait})", key)
         self.kind_box.setCurrentIndex(0)
+        self.kind_box.setAccessibleName("Companion")
         # The longest name ("Bandit · California Kingsnake (crawl)") no longer sets the window's width: the box
         # keeps a short minimum and its open list is as wide as the longest name.
         self.kind_box.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)

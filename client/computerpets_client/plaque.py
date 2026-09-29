@@ -28,9 +28,10 @@ class SpeciesPlaque(QFrame):
             "QLabel { background: transparent; }"
         )
 
+        # Small print on the plaque is #6a6056: 5.0:1 on its paper (#f0e6d4); #8a8074 was 3.1:1.
         self.kicker = QLabel("Species plaque")
         self.kicker.setStyleSheet(
-            "color: #8a8074; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;"
+            "color: #6a6056; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;"
         )
         self.name = QLabel()
         name_font = QFont("Georgia", 18)
@@ -42,13 +43,13 @@ class SpeciesPlaque(QFrame):
         latin_font = QFont("Georgia", 10)
         latin_font.setItalic(True)
         self.latin.setFont(latin_font)
-        self.latin.setStyleSheet("color: #8a8074;")
+        self.latin.setStyleSheet("color: #6a6056;")
         self.tell = QLabel()
         self.tell.setWordWrap(True)
         self.tell.setStyleSheet("color: #2a2218; font-size: 13px;")
         self.mix_kicker = QLabel("A common mix-up")
         self.mix_kicker.setStyleSheet(
-            "color: #8a8074; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;"
+            "color: #6a6056; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;"
         )
         self.mixup = QLabel()
         self.mixup.setWordWrap(True)
@@ -60,7 +61,7 @@ class SpeciesPlaque(QFrame):
         self.lesson.setFont(lesson_font)
         self.lesson.setStyleSheet("color: #5a4634;")
         self.place = QLabel()
-        self.place.setStyleSheet("color: #8a8074; font-size: 11px;")
+        self.place.setStyleSheet("color: #6a6056; font-size: 11px;")
         self.classroom = QLabel()
         self.classroom.setStyleSheet("color: #5a4634; font-size: 12px;")
 
@@ -90,6 +91,8 @@ class SpeciesPlaque(QFrame):
         scroll.setFrameShape(QFrame.Shape.NoFrame)
         scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         scroll.setStyleSheet("QScrollArea { background: transparent; border: none; }")
+        # Tab stops here so the keys can scroll a long plaque; name it for a screen reader.
+        scroll.setAccessibleName("Species plaque")
 
         wrap = QVBoxLayout(self)
         wrap.setContentsMargins(0, 0, 0, 0)

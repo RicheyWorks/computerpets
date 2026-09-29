@@ -140,7 +140,8 @@ select {
 .desk-plate {
   --plate-bg: #161412;
   --plate-fg: #f2ece3;
-  --plate-muted: #9a9288;
+  /* 5.0:1 on the plate at its thinnest (82 % over a white window, #403e3d); #9a9288 was 3.5:1 there. */
+  --plate-muted: #b7b1a8;
   position: absolute;
   top: 8%;
   z-index: 4;
@@ -961,7 +962,8 @@ select {
   margin: 6px 0 0;
   font-size: 10px;
   letter-spacing: 0.08em;
-  color: #6e6860;
+  /* 5.0:1 on the card (#6e6860 was 3.3:1), the web's small-print color. */
+  color: #8c857b;
 }
 
 #hud-care,
@@ -1112,6 +1114,11 @@ select {
   font-size: 11px;
   font-variant-numeric: tabular-nums;
   color: #d8cfc0;
+}
+
+/* The bar is the pair's second <dd> (a <dl> holds only <dt> and <dd> in each group). */
+.keeper-meters dd.keeper-meter-bar {
+  grid-column: 1 / -1;
 }
 
 .keeper-meters i {

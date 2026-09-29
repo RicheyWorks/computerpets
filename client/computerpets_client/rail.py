@@ -96,6 +96,10 @@ class SpeciesRail(QWidget):
         scroll.setFrameShape(QFrame.Shape.NoFrame)
         scroll.setFixedHeight(46)
         scroll.setStyleSheet("QScrollArea { background: transparent; }")
+        # The chips are the Tab stops (the area scrolls to the one with the focus); the area itself is not one, and
+        # a screen reader hears what the row is.
+        scroll.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        scroll.setAccessibleName("Companions")
 
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 2, 0, 0)
@@ -103,7 +107,7 @@ class SpeciesRail(QWidget):
 
     def _label(self, text: str) -> QLabel:
         lab = QLabel(text)
-        lab.setStyleSheet("color: #8a8074; font-size: 11px; letter-spacing: 0.12em;")
+        lab.setStyleSheet("color: #9a9288; font-size: 11px; letter-spacing: 0.12em;")
         return lab
 
     def _chip(self, spec: Species) -> QPushButton:
@@ -115,6 +119,9 @@ class SpeciesRail(QWidget):
             " border-radius: 6px; padding: 4px 10px; }"
             "QPushButton:checked { background: #5a4634; border-color: #c4a574; color: #f4ead8; }"
             "QPushButton:hover { color: #f4ead8; }"
+            # A stylesheet drops Qt's own focus frame: a chip reached with Tab draws a 2 px light edge instead
+            # (the padding gives the extra pixel back, so the chip keeps its size).
+            "QPushButton:focus { border: 2px solid #f4ead8; padding: 3px 9px; }"
         )
         btn.clicked.connect(lambda _=False, key=spec.key: self.picked.emit(key))
         self._buttons[spec.key] = btn

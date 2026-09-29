@@ -42,7 +42,7 @@ function StudyPage() {
             <p className="mt-2 text-sm text-muted">
               Five walk at a time. The rest cycle onto the wood. Treat, hide, and talk still live on
               each companion&apos;s demo and on the desk. The ten snakes keep{" "}
-              <Link to="/snakes" className="text-fg no-underline hover:text-primary">
+              <Link to="/snakes" className="text-fg underline underline-offset-2 hover:text-primary">
                 their own den
               </Link>
               . The tide keeps the sea. The garden keeps the plants.

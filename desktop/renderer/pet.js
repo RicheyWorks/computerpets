@@ -3287,6 +3287,8 @@ function switchTo(key) {
   const fromLife = life;
   kind = { ...next, sprites: pack(next.key) };
   trait = window.PET_TRAITS[next.key] || window.PET_TRAITS.red_panda;
+  // The pet's picture is role="img": it is named for a screen reader ("Rui · Red Panda"); it had an empty name.
+  if (pet && window.PetRoster) pet.setAttribute("aria-label", window.PetRoster.choiceText(next));
   try {
     localStorage.setItem(STORE_KIND, next.key);
   } catch {
@@ -3856,6 +3858,7 @@ function startVisit() {
     return;
   }
   const sprites = pack(g.key);
+  if (window.PetRoster) guestEl.setAttribute("aria-label", window.PetRoster.choiceText(g));
   visit = {
     key: g.key,
     name: g.name,

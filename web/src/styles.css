@@ -7,7 +7,8 @@
   --color-elevated: #1d1a17;
   --color-fg: #f2ece3;
   --color-muted: #9a9288;
-  --color-subtle: #6e6860;
+  /* Small print: 4.75:1 on the lightest dark surface (#1d1a17), WCAG AA for text at 11 px; it was #6e6860 (3.1:1). */
+  --color-subtle: #8c857b;
   --color-primary: #d8cfc0;
   --color-primary-fg: #141210;
   --color-border: #2a2621;
@@ -374,7 +375,13 @@
   .paper-card {
     --color-fg: #2a241c;
     --color-muted: #5c544a;
-    --color-subtle: #7a7268;
+    /* Small print on paper: 5.1:1 on #e8dfd0 (it was #7a7268, 3.6:1). */
+    --color-subtle: #625a50;
+    /* The rarity badges on paper, the same hues deeper: 4.6 to 6.2:1 on #e8dfd0 (the dark-theme ones were 1.6 to 2.3:1). */
+    --color-common: #65615c;
+    --color-uncommon: #4f584c;
+    --color-rare: #4c535b;
+    --color-legendary: #614b39;
     --color-border: #c9bead;
     --color-bg: #e8dfd0;
     /* Light paper: the dark-theme amber is 1.9:1 here, so paper uses a deep amber (5.38:1 on #e8dfd0). */
@@ -487,6 +494,14 @@
   /* The pet is a keyboard button (Enter or Space taps); only a keyboard focus draws the ring. */
   [data-pet-hit]:focus-visible {
     outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+    border-radius: var(--radius-md);
+  }
+
+  /* A desk plant is a button too: its drawn outline (set inline while it is picked) gives way to the same ring on a
+     keyboard focus, which it had none of. */
+  [data-plant]:focus-visible {
+    outline: 2px solid var(--color-primary) !important;
     outline-offset: -2px;
     border-radius: var(--radius-md);
   }
@@ -817,6 +832,11 @@
     font-size: 11px;
     font-variant-numeric: tabular-nums;
     color: var(--color-primary);
+  }
+
+  /* The bar is the pair's second <dd> (a <dl> holds only <dt> and <dd> in each group). */
+  .keeper-meters dd.keeper-meter-bar {
+    grid-column: 1 / -1;
   }
 
   .keeper-meters i {

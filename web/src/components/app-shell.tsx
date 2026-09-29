@@ -131,8 +131,29 @@ export function SiteMenu({ items, pathname }: { items: readonly NavItem[]; pathn
   );
 }
 
+/**
+ * Escape closes the drawer (a <details>) the keyboard is in and puts the focus on its summary, the way Escape closes
+ * the Menu and the keeper card. A drawer only closed on a second press of its summary. Only this page's own keys; a
+ * key another control already took (defaultPrevented) is left alone.
+ */
+export function closeDrawerOnEscape(e: Pick<KeyboardEvent, "key" | "defaultPrevented" | "target" | "preventDefault">): boolean {
+  if (e.key !== "Escape" || e.defaultPrevented) return false;
+  const t = e.target as Element | null;
+  const drawer = t && typeof t.closest === "function" ? (t.closest("details[open]") as HTMLDetailsElement | null) : null;
+  if (!drawer) return false;
+  e.preventDefault();
+  drawer.open = false;
+  (drawer.querySelector(":scope > summary") as HTMLElement | null)?.focus();
+  return true;
+}
+
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => void closeDrawerOnEscape(e);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
   const { isPending } = useCurrentUserState();
   const desk = pathname === "/";
   const demo = pathname.startsWith("/demo/");
