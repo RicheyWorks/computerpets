@@ -140,11 +140,11 @@ test("the drive closes an app that never shows a window instead of waiting on it
   const src = read(DESKTOP, "first-run-drive.cjs");
   // Checked first: the old drive took no stand-in Playwright and would have started the real app here.
   assert.match(src, /const pw = opts\.pw \|\| playwright\(\);/);
-  const log = { closed: 0, killed: 0, args: null, proc: { exitCode: null, signalCode: null, kill: () => ((log.killed += 1), (log.proc.signalCode = "SIGTERM")) } };
+  const log = { closed: 0, killed: 0, args: null, env: null, proc: { exitCode: null, signalCode: null, kill: () => ((log.killed += 1), (log.proc.signalCode = "SIGTERM")) } };
   const app = {
     evaluate: async (fn) => {
       const f = String(fn);
-      if (f.includes("getPath")) return log.args.find((a) => a.startsWith("--user-data-dir=")).slice("--user-data-dir=".length);
+      if (f.includes("getPath")) return log.env.COMPUTERPETS_SETTINGS_DIR;
       if (f.includes("__dialogs")) return [];
       return undefined;
     },
@@ -156,7 +156,7 @@ test("the drive closes an app that never shows a window instead of waiting on it
     // A hung app: close() does not end it, only a kill does.
     process: () => log.proc,
   };
-  const pw = { _electron: { launch: async (o) => ((log.args = o.args), app) } };
+  const pw = { _electron: { launch: async (o) => ((log.args = o.args), (log.env = o.env), app) } };
   const r = await D.drive({ pw, exe: process.execPath, windowMs: 400 });
   assert.equal(r.ok, false);
   const drive = r.checks.find((c) => c.id === "drive");

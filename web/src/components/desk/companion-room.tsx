@@ -71,6 +71,7 @@ import { playClaim } from "@/lib/pets/play";
 import { colonyOf, colonyWord, isHivePlace, stampColony } from "@/lib/pets/hive";
 import { isPhone, isTablet, readSit, tabletOrient, type TabletOrient } from "@/lib/pets/tablet-desk";
 import { CARE_WORDS, distinctLabel } from "@/lib/pets/care-labels";
+import { hiddenCareLine } from "@/lib/pets/hidden-care";
 import { deskFit as fitDesk, phoneFit, phoneOrient, plaqueNeedsLine, railScrollFor, samePhoneFit, type DeskFit, type PhoneFit, type PhoneOrient } from "@/lib/pets/phone-desk";
 import { guestMarks, guestPick, guestTap, type GuestChoiceId } from "@/lib/pets/guest-choice";
 import { classifyKey, installFileDropGuard } from "@/lib/pets/presence";
@@ -377,6 +378,9 @@ export function CompanionRoom({
   useEffect(() => {
     const rail = railRef.current;
     if (!rail) return;
+    // A desktop rail waits for its measured height: before it the rail scrolls inside its first-paint cap (100dvh less
+    // 16 rem), and a guest scrolled into that shorter view fell out of it once the fit made the rail taller.
+    if (!hand && !pad && !deskFit) return;
     const key = `${railRoom} ${kind.key} ${hand ? "hand" : pad ? "pad" : "desk"}`;
     if (railShownRef.current === key) return;
     const frame = requestAnimationFrame(() => {
@@ -1326,6 +1330,9 @@ export function CompanionRoom({
         />
       ))}
 
+      {/* Until deskFit has measured (the server HTML, and a cold load's first seconds), the panel and the rail stop
+          10 rem above the screen's bottom, so they do not run over the care buttons and room links (they reached
+          1575 px on /catalog at 820×1180). The measured maxHeight replaces it. */}
       <aside
         ref={asideRef}
         data-desk-aside
@@ -1340,7 +1347,7 @@ export function CompanionRoom({
               ? orient === "sit"
                 ? "absolute left-4 right-16 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[min(100%-2rem,22rem)]"
                 : "absolute left-[max(1.5rem,env(safe-area-inset-left))] top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[min(100%-2rem,22rem)]"
-              : "absolute left-4 top-20 z-20 max-w-[min(100%-2rem,20rem)] overflow-y-auto overflow-x-hidden overscroll-contain sm:left-8 sm:top-24"
+              : "absolute left-4 top-20 z-20 max-h-[calc(100dvh-15rem)] max-w-[min(100%-2rem,20rem)] overflow-y-auto overflow-x-hidden overscroll-contain sm:left-8 sm:top-24 sm:max-h-[calc(100dvh-16rem)]"
         }
       >
         {hand && asideFirst ? null : kicker}
@@ -1501,7 +1508,7 @@ export function CompanionRoom({
             ? "absolute right-[max(0.75rem,env(safe-area-inset-right))] top-[calc(4.25rem+env(safe-area-inset-top))] z-20 w-[5.5rem] overflow-y-auto overscroll-contain text-right"
             : pad
               ? "absolute right-[max(1rem,env(safe-area-inset-right))] top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[11rem] text-right"
-              : "absolute right-4 top-20 z-20 max-w-[11rem] overflow-y-auto overflow-x-hidden overscroll-contain text-right sm:right-8 sm:top-24"
+              : "absolute right-4 top-20 z-20 max-h-[calc(100dvh-15rem)] max-w-[11rem] overflow-y-auto overflow-x-hidden overscroll-contain text-right sm:right-8 sm:top-24 sm:max-h-[calc(100dvh-16rem)]"
         }
       >
         <DenCabinet currentRoom={room.id} currentKey={kind.key} drawers onSelectKind={onSelectKind} />
@@ -1524,6 +1531,9 @@ export function CompanionRoom({
           </p>
           <p id="hud-voice-net" className="keeper-truth" hidden={!voiceAsked || !voiceLine}>
             {voiceAsked ? voiceLine : ""}
+          </p>
+          <p data-hidden-note className="keeper-truth" hidden={!stats.hidden} aria-live="polite">
+            {stats.hidden ? hiddenCareLine(displayName, treatFor(kind.key).verb) : ""}
           </p>
           <BlotterCare
             className={hand ? "blotter-care-phone" : pad ? "blotter-care-tablet" : undefined}
@@ -1574,7 +1584,7 @@ export function CompanionRoom({
                 onClick: () => void tend(mark.action),
               })),
               ...(extraMarks ?? []),
-              { label: "Talk", onClick: () => void talk(), disabled: busy },
+              { label: "Talk", onClick: () => void talk(), disabled: busyOrHidden },
               stats.hidden || leaving
                 ? { label: "Call back", onClick: callBack, disabled: busy }
                 : { label: "Hide", onClick: hide, disabled: busy },
@@ -1604,7 +1614,7 @@ export function CompanionRoom({
               type="submit"
               data-talk-send
               className="blotter-ink text-[11px] uppercase tracking-[0.16em]"
-              disabled={busy || !draft.trim()}
+              disabled={busyOrHidden || !draft.trim()}
             >
               Send
             </button>

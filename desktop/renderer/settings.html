@@ -86,7 +86,7 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
       </details>
       <fieldset class="optional" id="unlockOptional">
       <legend>Optional: only needed to unlock</legend>
-      <label>House server address</label>
+      <label for="backend">House server address</label>
       <input id="backend" placeholder="http://127.0.0.1:8081" />
       <p class="lead" id="licenseNet">Unlocking stays on this computer. The code made from this computer's ID does not leave.</p>
       <p class="lead" id="bundleNet">Your pet's files are not downloaded until this line names the website.</p>
@@ -99,12 +99,12 @@ If the code came from a random ID, deleting hwid.txt gives this computer a diffe
       <label for="appId">Steam App ID</label>
       <input id="appId" placeholder="123456" autocomplete="off" />
       <p class="hint" id="appIdHelp">The game's number on Steam. Ask whoever runs the house server. ComputerPets has no Steam page yet.</p>
-      <label>Pet</label>
+      <label for="petType">Pet</label>
       <select id="petType"></select>
       <div>
         <button id="unlock" type="button">Unlock</button>
         <button id="redownload" class="ghost" type="button">Download my pet</button>
-        <button id="lock" class="ghost" type="button">Clear</button>
+        <button id="lock" class="ghost" type="button" title="Forgets the saved unlock on this computer. The pets keep working.">Forget the unlock</button>
         <button id="weakMark" class="ghost" type="button" hidden>Use the computer name, or a random ID if there is no name</button>
       </div>
       </fieldset>

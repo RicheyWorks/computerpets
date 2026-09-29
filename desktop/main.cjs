@@ -47,6 +47,14 @@ if (GUI_HARNESS) {
     process.stderr.write(`${HarnessData.finishWords({ ...done, afterExit: after })}\n`);
   });
 }
+/** COMPUTERPETS_SETTINGS_DIR: this run keeps its settings in that folder, never the usual one (settings-dir.cjs). */
+const SETTINGS_DIR = GUI_HARNESS ? "" : require("./settings-dir.cjs").settingsDir(process.env, path.resolve);
+if (SETTINGS_DIR) {
+  fs.mkdirSync(SETTINGS_DIR, { recursive: true });
+  app.setPath("userData", SETTINGS_DIR);
+  console.log(`settings folder: ${SETTINGS_DIR}`);
+}
+
 
 app.setAppUserModelId("works.richey.computerpets.desk");
 app.commandLine.appendSwitch("enable-transparent-visuals");

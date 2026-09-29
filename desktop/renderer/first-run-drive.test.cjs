@@ -26,7 +26,9 @@ test("user data is a throwaway folder under target/first-run-drive, checked befo
   assert.equal(D.throwawayOk(join(D.WORK, "ud-12-34", "..", "..", "x")), false);
   assert.equal(D.throwawayOk(join(process.env.APPDATA || "/home/x/.config", "computerpets-desktop")), false);
   assert.match(D.WORK, /target[\\/]first-run-drive$/);
-  assert.match(src, /`--user-data-dir=\$\{ud\}`/);
+  // The supported settings-folder switch (settings-dir.cjs), for the first start and the second copy alike.
+  assert.equal((src.match(/COMPUTERPETS_SETTINGS_DIR: ud/g) || []).length, 2);
+  assert.doesNotMatch(src, /`--user-data-dir=/);
   assert.match(src, /a\.getPath\("userData"\)/);
   assert.match(src, /not the throwaway folder; stopped before touching it/);
   assert.match(src, /const removed = await removeDir\(ud\);/);

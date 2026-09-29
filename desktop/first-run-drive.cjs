@@ -10,7 +10,7 @@
  * volume slider is this pet's, and at the right edge the card stays by its pet off the plates. Every request to
  * api.x.ai is answered 401 inside the drive (page.route), so nothing leaves for the internet. `--scale 1.25`
  * (or 1.5) starts Electron with --force-device-scale-factor to check the same fit at display scaling. Playwright's _electron (playwright-core from web/node_modules or desktop/node_modules;
- * nothing is downloaded) launches desktop/node_modules/electron with --user-data-dir set to a throwaway folder under
+ * nothing is downloaded) launches desktop/node_modules/electron with COMPUTERPETS_SETTINGS_DIR set to a throwaway folder under
  * the gitignored target\first-run-drive, so the keeper's own settings and pets (%APPDATA%\computerpets-desktop) are
  * never read or written; it stops if Electron reports any other userData. Native menus are recorded instead of
  * popped up (Menu.prototype.popup), and their own click handlers are called; renderer input goes through Chromium's
@@ -260,9 +260,10 @@ async function drive(opts = {}) {
     try {
       app = await pw._electron.launch({
         executablePath: exe,
-        args: ["-r", HOOK, DESKTOP, `--user-data-dir=${ud}`, ...(scale ? [`--force-device-scale-factor=${scale}`] : []), ...nextArgs],
+        args: ["-r", HOOK, DESKTOP, ...(scale ? [`--force-device-scale-factor=${scale}`] : []), ...nextArgs],
         cwd: DESKTOP,
-        env: { ...process.env, COMPUTERPETS_GUI_HARNESS: "", ...nextEnv, ...env },
+        // The supported way to keep a run's settings apart (settings-dir.cjs); the userData check below proves it.
+        env: { ...process.env, COMPUTERPETS_GUI_HARNESS: "", ...nextEnv, ...env, COMPUTERPETS_SETTINGS_DIR: ud },
         timeout: 90_000,
       });
     } catch (e) {
@@ -355,6 +356,21 @@ async function drive(opts = {}) {
    * gpu-path.json itself and asks to restart (recorded), and the drive starts it again. A desktop without a
    * compositor ends the drive there, with that message checked.
    */
+  /**
+   * Rui rests from 1 to 6 in the morning (hours.js restWindow), and a run then saw her sleep on through Call back and
+   * Rest, failing three checks that pass at any other hour. The drive keeps the house's day hours instead, so a run
+   * checks the same thing whenever it starts: no resting hour, and no night sleep held over from before.
+   */
+  async function dayHours(page) {
+    await page
+      .evaluate(() => {
+        const g = /** @type {any} */ (window);
+        if (g.PetHours) g.PetHours.isRestingHour = () => false;
+        if (typeof life !== "undefined" && life && life.sleepHeld) Object.assign(life, { asleep: false, sleepHeld: false, nightSat: false });
+      })
+      .catch(() => {});
+  }
+
   async function launch(env = {}) {
     for (let round = 0; round < 3; round += 1) {
       const app = await start(env);
@@ -365,6 +381,7 @@ async function drive(opts = {}) {
       try {
         const got = await meet(app);
         if (got === "again") continue;
+        if (got && got.page) await dayHours(got.page);
         return got;
       } catch (e) {
         // Whatever went wrong, the app this round started is closed: it kept the drive waiting forever before.
@@ -1391,7 +1408,7 @@ async function drive(opts = {}) {
     );
     // Starting again brings them back, with the keeper card open: a second copy tells the first and quits.
     const { spawn } = require("node:child_process");
-    const second = spawn(exe, [DESKTOP, `--user-data-dir=${ud}`, ...nextArgs], { cwd: DESKTOP, env: { ...process.env, ...nextEnv, COMPUTERPETS_GUI_HARNESS: "" }, stdio: "ignore" });
+    const second = spawn(exe, [DESKTOP, ...nextArgs], { cwd: DESKTOP, env: { ...process.env, ...nextEnv, COMPUTERPETS_GUI_HARNESS: "", COMPUTERPETS_SETTINGS_DIR: ud }, stdio: "ignore" });
     const secondEnd = await new Promise((resolve) => {
       const t = setTimeout(() => {
         second.kill();
