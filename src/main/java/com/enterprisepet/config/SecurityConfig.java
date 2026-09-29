@@ -1,6 +1,7 @@
 package com.enterprisepet.config;
 
 import com.enterprisepet.security.JwtAuthenticationFilter;
+import com.enterprisepet.security.MetricsScrapeTokenFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +29,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            @Value("${metrics.scrape-token:}") String metricsScrapeToken) throws Exception {
+        MetricsScrapeTokenFilter metricsScrapeTokenFilter = new MetricsScrapeTokenFilter(metricsScrapeToken);
         http
             .csrf(csrf -> csrf.disable())
             .cors(Customizer.withDefaults())
@@ -44,6 +48,12 @@ public class SecurityConfig {
                                  "/actuator/health",
                                  "/actuator/health/liveness",
                                  "/actuator/health/readiness").permitAll()
+                // Metrics and info need the scrape token (ROLE_METRICS), not a customer
+                // download JWT (ROLE_CLIENT). Unset token = nobody scrapes (ADR 0133).
+                .requestMatchers(MetricsScrapeTokenFilter.SCRAPE_PATHS.toArray(String[]::new))
+                    .hasRole(MetricsScrapeTokenFilter.ROLE)
+                // Every other actuator path, including the /actuator index, is closed.
+                .requestMatchers("/actuator", "/actuator/**").denyAll()
                 // Advertised care paths answer 409 without a JWT. A missing license is not why feed fails.
                 .requestMatchers("/pet/feed", "/pet/play", "/pet/rest").permitAll()
                 // Admin HMAC is AdminRequestSignatureFilter (ADR 0071), not a license JWT.
@@ -52,7 +62,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/download/**").authenticated()
                 .anyRequest().authenticated()
             )
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(metricsScrapeTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

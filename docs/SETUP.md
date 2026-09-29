@@ -114,7 +114,7 @@ Phase 2.4 / ADR 0064 — three operator shapes, one deny-safe contract ([ADR 005
 
 **Prod attestation:** `ProductionProfileGuard` refuses to start on `prod` unless `COMPUTERPETS_SECRETS_SOURCE` is set (or local-only `COMPUTERPETS_ALLOW_PLAIN_SECRET=1`). When source is `file`, the four critical `*_FILE` paths are required. Deploy gate: `./deploy/k8s/verify-secret-operator.sh`.
 
-**Precedence:** non-blank `NAME` wins over `NAME_FILE`. If `NAME_FILE` is set and the path is missing or unreadable, the process **refuses to start**. Optional storefront keys (`STEAM_API_KEY`, `ITCH_API_KEY`, `EPIC_*`, `ETHEREUM_RPC_URL`) may use the same `*_FILE` pattern; blank or placeholder still **fails closed** at verify (no invented entitlement). `REDIS_PASSWORD_FILE` uses that same loader. It is required on `prod` only when Redis AUTH is on and `COMPUTERPETS_SECRETS_SOURCE=file` ([ADR 0075](adr/0075-redis-auth-and-transit-tls.md)).
+**Precedence:** non-blank `NAME` wins over `NAME_FILE`. If `NAME_FILE` is set and the path is missing or unreadable, the process **refuses to start**. Optional storefront keys (`STEAM_API_KEY`, `ITCH_API_KEY`, `EPIC_*`, `ETHEREUM_RPC_URL`) may use the same `*_FILE` pattern; blank or placeholder still **fails closed** at verify (no invented entitlement). `REDIS_PASSWORD_FILE` uses that same loader. It is required on `prod` only when Redis AUTH is on and `COMPUTERPETS_SECRETS_SOURCE=file` ([ADR 0075](adr/0075-redis-auth-and-transit-tls.md)). `METRICS_SCRAPE_TOKEN_FILE` works the same way: required on file-source `prod` only when a scrape token is set, and a set token under 32 characters refuses to start ([ADR 0133](adr/0133-actuator-metrics-scrape-token.md)).
 
 ```bash
 # Docker secrets overlay (files gitignored — see secrets/README.md)
@@ -343,6 +343,7 @@ The Electron overlay is still `cd desktop && npm start`.
 | `REDIS_PASSWORD`          | No       | empty | Redis AUTH token. Unset for compose and in-cluster Redis. Also `REDIS_PASSWORD_FILE` (ADR 0075) |
 | `REDIS_SSL`               | No       | false | Transit TLS on the same Lettuce client (`rediss`, peer verified). Default false |
 | `REDIS_AUTH_REQUIRED`     | No       | false | When true, a blank password or `REDIS_SSL=false` refuses to start. On `prod`, password, SSL, and this flag are all-or-nothing |
+| `METRICS_SCRAPE_TOKEN`    | No       | empty | Bearer for `/actuator/prometheus` and `/actuator/info` (32+ chars). A customer JWT is 403 there. Unset = nobody scrapes. Also `METRICS_SCRAPE_TOKEN_FILE` (ADR 0133) |
 | `RATE_LIMIT_BACKEND`      | No       | redis | `redis` (default, shared) or `memory` (tests / single local process only) |
 | `RATE_LIMIT_FAIL_CLOSED_RETRY_AFTER` | No | 5 | `Retry-After` seconds when Redis is down (HTTP 503) |
 | `TRUSTED_PROXY_CIDRS`     | No       | empty; `dev` → loopback | Comma/whitespace CIDRs allowed to present `X-Forwarded-For` / `Forwarded`. Empty = always `remoteAddr` (ADR 0067). |

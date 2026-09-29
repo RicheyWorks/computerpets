@@ -75,3 +75,37 @@ test("display scaling: --scale adds --force-device-scale-factor, and the gap jud
   assert.equal(D.sideGap([400, 18, 714, 1214], [500, 1244, 640, 1392]), 0, "overlapping in x");
   assert.equal(D.sideGap([100, 0, 200, 10], [260, 0, 300, 10]), 60);
 });
+
+test("Got it waits for the button, tries again when the card shut, reads card.json until it lands, and says why a press failed", async () => {
+  // The step: open the card when shut, wait for the button to show, press, poll card.json; no swallowed click.
+  const step = src.slice(src.indexOf("// 5. Got it:"), src.indexOf("// 5b."));
+  assert.match(step, /await ok\.waitFor\(\{ state: "visible", timeout: 5000 \}\);/);
+  assert.match(step, /for \(let attempt = 1; attempt <= GOT_IT_TRIES && !gotIt\.seen; attempt \+= 1\)/);
+  assert.match(step, /if \(!s\.open\) \{\n\s+gotIt\.reopened \+= 1;/);
+  assert.match(step, /pollFor\(\(\) => readCardJson\(\), \(c\) => c\.firstHintSeen === true, GOT_IT_WAIT_MS/);
+  assert.match(step, /gotIt\.errors\.push\(/);
+  assert.doesNotMatch(step, /#first-hint-ok"\)\.click\(\{ timeout: 5000 \}\)\.catch\(\(\) => \{\}\)/);
+  assert.doesNotMatch(step, /waitForTimeout\(900\)/);
+  assert.equal(D.GOT_IT_TRIES, 3);
+  assert.equal(D.GOT_IT_WAIT_MS, 4000);
+
+  // pollFor: keeps reading until done, returns the last read; gives up at the deadline.
+  let n = 0;
+  const slept = [];
+  const got = await D.pollFor(() => ++n, (v) => v >= 3, 10_000, 5, async (ms) => slept.push(ms));
+  assert.equal(got, 3);
+  assert.deepEqual(slept, [5, 5]);
+  const never = await D.pollFor(() => ({ firstHintSeen: false }), (c) => c.firstHintSeen === true, 30, 10, (ms) => new Promise((r) => setTimeout(r, ms)));
+  assert.equal(never.firstHintSeen, false);
+
+  // The verdict: gone and saved passes; the words carry presses, reopens, and each failed press.
+  assert.deepEqual(D.gotItVerdict({ hint: false, seen: true, presses: 1, reopened: 0, errors: [] }), {
+    ok: true,
+    detail: "hello gone; card.json firstHintSeen true; 1 press",
+  });
+  const late = D.gotItVerdict({ hint: false, seen: true, presses: 2, reopened: 1, errors: ["try 1: Timeout 5000ms exceeded. (button not laid out)"] });
+  assert.equal(late.ok, true);
+  assert.match(late.detail, /2 presses; card opened again 1x; press failed: try 1: Timeout 5000ms exceeded\. \(button not laid out\)/);
+  assert.equal(D.gotItVerdict({ hint: true, seen: false, presses: 3, reopened: 0, errors: [] }).ok, false);
+  assert.equal(D.gotItVerdict({ hint: false, seen: false, presses: 1, reopened: 0, errors: [] }).ok, false);
+});
