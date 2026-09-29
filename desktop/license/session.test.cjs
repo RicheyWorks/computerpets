@@ -5,7 +5,7 @@ const assert = require("node:assert/strict");
 const os = require("os");
 const path = require("path");
 const fs = require("fs");
-const { createLicenseSession, NO_LICENSE_MESSAGE, NO_TOKEN_MESSAGE, FIELDS_MISSING_MESSAGE } = require("./session.cjs");
+const { createLicenseSession, NO_LICENSE_MESSAGE, NO_TOKEN_MESSAGE, FIELDS_MISSING_MESSAGE, NO_APP_ID_MESSAGE, configuredSteamAppId } = require("./session.cjs");
 const { createContractTestDouble, encryptLicense } = require("./contract-test-double.cjs");
 const { LicenseError } = require("./errors.cjs");
 const { bundleHonesty, downloadTalkHonesty, licenseHonesty } = require("./license-net.cjs");
@@ -167,13 +167,39 @@ describe("license session", () => {
   it("asks for the Steam ID and App ID in plain words before anything leaves", async () => {
     const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
     const session = sessionFor(backend);
-    for (const input of [{ steamId: "", appId: "123456" }, { steamId: "76561198000000000", appId: "  " }]) {
-      await assert.rejects(
-        () => session.unlock(input),
-        (err) => err instanceof LicenseError && err.code === "fields_missing" && err.message === FIELDS_MISSING_MESSAGE
-      );
-    }
+    await assert.rejects(
+      () => session.unlock({ steamId: "", appId: "123456" }),
+      (err) => err instanceof LicenseError && err.code === "fields_missing" && err.message === FIELDS_MISSING_MESSAGE
+    );
+    // No App ID typed and none set up for this copy (the House window hides the box then): said plainly.
+    await assert.rejects(
+      () => session.unlock({ steamId: "76561198000000000", appId: "  " }),
+      (err) => err instanceof LicenseError && err.code === "fields_missing" && err.message === NO_APP_ID_MESSAGE
+    );
     assert.equal(backend.calls.length, 0);
+    assert.equal(session.status().steamAppId, "");
+  });
+
+  it("a Steam App ID set up for this copy (COMPUTERPETS_STEAM_APP_ID) is in status and stands in for an empty box", async () => {
+    const backend = createContractTestDouble({ licenseSecret: SECRET, signingKey: SIGNING });
+    const session = sessionFor(backend, { COMPUTERPETS_STEAM_APP_ID: " 480 " });
+    assert.equal(session.status().steamAppId, "480");
+    const result = await session.unlock({ steamId: "76561198000000000", appId: "", petType: "red_panda", provider: "steam" });
+    assert.equal(result.unlocked, true);
+    const verify = backend.calls.find((c) => c.path === "/api/verify/steam");
+    assert.equal(verify.body.appId, "480");
+  });
+
+  it("configuredSteamAppId: the env first, then a steam_appid.txt beside the program, digits only", () => {
+    const files = new Map([[path.join("/steam/build", "steam_appid.txt"), "123456\n"], [path.join("/odd", "steam_appid.txt"), "not a number"]]);
+    const read = (file) => {
+      if (!files.has(file)) throw Object.assign(new Error("ENOENT"), { code: "ENOENT" });
+      return files.get(file);
+    };
+    assert.equal(configuredSteamAppId({}, ["/nowhere", "/steam/build"], read), "123456");
+    assert.equal(configuredSteamAppId({ COMPUTERPETS_STEAM_APP_ID: "7" }, ["/steam/build"], read), "7");
+    assert.equal(configuredSteamAppId({ COMPUTERPETS_STEAM_APP_ID: "abc" }, ["/odd"], read), "");
+    assert.equal(configuredSteamAppId({}, [], read), "");
   });
 
   it("fails closed without LICENSE_SECRET_KEY — no always-licensed stub", async () => {

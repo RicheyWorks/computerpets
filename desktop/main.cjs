@@ -107,11 +107,29 @@ function getLicenseSession() {
     licenseSession = createLicenseSession({
       userDataDir: app.getPath("userData"),
       env: process.env,
+      // A Steam build keeps steam_appid.txt beside its program; with one (or COMPUTERPETS_STEAM_APP_ID) Unlock shows its App ID box.
+      steamDirs: steamDirs(),
       // The download sign-in is sealed in the OS secret store like a plugin key; with no store it stays in memory only.
       codec: () => mindCodec(),
     });
   }
   return licenseSession;
+}
+
+/** Where a Steam build keeps steam_appid.txt: beside the program, and the app's own folder. None when unknown. */
+function steamDirs() {
+  const dirs = [];
+  try {
+    if (typeof app.getPath === "function") dirs.push(path.dirname(app.getPath("exe")));
+  } catch {
+    /* no exe path in this run */
+  }
+  try {
+    if (typeof app.getAppPath === "function") dirs.push(app.getAppPath());
+  } catch {
+    /* no app path in this run */
+  }
+  return dirs.filter((dir) => typeof dir === "string" && dir);
 }
 
 /** The host a license call was aimed at, for the plain sentence when the error does not carry one. */

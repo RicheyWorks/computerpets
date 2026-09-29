@@ -13,7 +13,7 @@ const BEES_AND_COMB: FieldNoteSet = {
   kicker: "Bees and comb",
   heading: "Not ten copies of Comb.",
   intro:
-    "Comb stays Comb. These ten are other bees, a drone, a queen, and the nest as a place. A colony is many bees, one nest. Neglect can go quiet.",
+    "Comb stays Comb. These ten are other bees, a drone, a queen, and the nest itself. A colony is many bees sharing one nest.",
 };
 
 export const Route = createFileRoute("/hive")({
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/hive")({
       { title: "The hive den — ComputerPets" },
       {
         name: "description",
-        content: "The comb sits. Comb, Keep, and Hum keep it. The hive keeps a line. Neglect can go quiet.",
+        content: "A honeycomb and the insects around it. Feed the hive with Nectar and let it rest with Tend.",
       },
     ],
   }),
@@ -36,8 +36,8 @@ function HivePage() {
     <main className="bg-bg text-fg">
       <RoomHero
         room="hive"
-        headline="The comb sits. The line stays."
-        line="Wax is the nest. Comb, Keep, and Hum sit on it. Brood in some cells. Stores in others. Neglect can go quiet. The nest still keeps one. Read the plaque. Leave knowing a bumblebee is not a honey bee, a carpenter bee does not keep honey the honey-bee way, a drone is not a worker, and the queen is not a second Comb."
+        headline="A beehive, and the bugs around it."
+        line="The honeycomb in the middle is the hive itself. Comb the honeybee, Keep the queen, and Hum the drone sit on it, and the other insects take turns on the wood. Brood counts the cells with young bees in them; Stores is the food put by. Left alone too long, the hive goes quiet, and care brings it back. Tap a guest to read its plaque and leave knowing a bumblebee is not a honey bee, a carpenter bee does not keep honey the honey-bee way, a drone is not a worker, and the queen is not a second Comb."
       />
 
       <HiveDen selectedKey={selected} onSelect={setSelected} />
@@ -50,9 +50,10 @@ function HivePage() {
             <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">How to use the hive</p>
             <p className="mt-2 font-display text-2xl">Watch, then tap.</p>
             <p className="mt-2 text-sm text-muted">
-              The comb sits. Comb, Keep, and Hum keep it. The rest cycle onto the wood. Nectar
-              fills the stores. Tend the brood. Neglect can go quiet. Treat, hide, and talk still
-              live on each guest&apos;s demo and on the desk. It is not a shop.
+              Tap any guest to read about it. <strong className="text-fg">Nectar</strong> feeds the
+              hive and fills its Stores. <strong className="text-fg">Tend</strong> lets the bees rest
+              and get their energy back. If the hive has gone quiet, either one brings it back. Treat,
+              hide, and talk are on each guest&apos;s demo and on the desk. It is not a shop.
             </p>
             <p className="mt-4">
               <Link to="/" search={{ pet: selected }} className="inline-flex min-h-11 items-center text-sm text-fg">

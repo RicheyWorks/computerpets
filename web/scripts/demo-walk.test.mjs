@@ -225,7 +225,8 @@ test("the demo room shows the Mac walk the way it shows the Windows walk", () =>
   assert.match(demoSrc, /MacDeskExtra/);
   assert.match(extraSrc, /data-mac-extra/);
   assert.match(extraSrc, /CARE_VERBS/);
-  assert.match(extraSrc, /the extra/);
+  assert.match(extraSrc, /\{name\} · on a Mac/);
+  assert.doesNotMatch(extraSrc, /\{name\} · the extra/);
   assert.doesNotMatch(extraSrc, /Unlock|Minds/);
   for (const verb of D.careVerbs()) {
     assert.ok(D.CARE_VERBS.includes(verb));
@@ -269,7 +270,8 @@ test("the demo room shows the Linux walk the way it shows the Windows and Mac wa
   assert.match(demoSrc, /LinuxDeskExtra/);
   assert.match(markSrc, /data-linux-mark/);
   assert.match(markSrc, /CARE_VERBS/);
-  assert.match(markSrc, /the mark/);
+  assert.match(markSrc, /\{name\} · on Linux/);
+  assert.doesNotMatch(markSrc, /\{name\} · the mark/);
   assert.doesNotMatch(markSrc, /Unlock|Minds/);
   for (const verb of D.careVerbs()) {
     assert.ok(D.CARE_VERBS.includes(verb));
@@ -322,7 +324,7 @@ test("the demo room shows the Windows walk the way it shows the Mac and Linux wa
 
   assert.match(demoSrc, /WindowsDeskSit/);
   assert.match(windowsSitSrc, /data-windows-sit/);
-  assert.match(windowsSitSrc, /the tray/);
+  assert.match(windowsSitSrc, /\{name\} · on Windows · tray: On the desk/);
   assert.match(windowsSitSrc, /On the desk/);
   assert.match(windowsSitSrc, /Clicks pass the glass/);
   assert.match(windowsSitSrc, /\["Rui"/);
@@ -374,7 +376,8 @@ test("the demo room shows the tablet sit the way it shows the Windows, Mac, and 
   assert.match(demoSrc, /TabletDeskSit/);
   assert.match(sitSrc, /data-tablet-sit/);
   assert.match(sitSrc, /CARE_VERBS/);
-  assert.match(sitSrc, /the sit/);
+  assert.match(sitSrc, /\{name\} · on a tablet/);
+  assert.doesNotMatch(sitSrc, /\{name\} · the sit/);
   assert.doesNotMatch(sitSrc, /Unlock|Minds/);
   for (const verb of D.careVerbs()) {
     assert.ok(D.CARE_VERBS.includes(verb));
@@ -424,7 +427,8 @@ test("the demo room shows the phone sit the way it shows the desk and tablet wal
   assert.match(demoSrc, /TabletDeskSit/);
   assert.match(phoneSitSrc, /data-phone-sit/);
   assert.match(phoneSitSrc, /CARE_VERBS/);
-  assert.match(phoneSitSrc, /the sit/);
+  assert.match(phoneSitSrc, /\{name\} · on a phone/);
+  assert.doesNotMatch(phoneSitSrc, /\{name\} · the sit/);
   assert.doesNotMatch(phoneSitSrc, /Unlock|Minds/);
   for (const verb of D.careVerbs()) {
     assert.ok(D.CARE_VERBS.includes(verb));

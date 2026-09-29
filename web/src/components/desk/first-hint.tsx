@@ -6,11 +6,13 @@ import { firstHintSeen, firstHintWeb, markFirstHintSeen } from "@/lib/pets/first
  * and one Got it button in page order, so Tab reaches it and a screen reader reads it as a named section.
  * It shows after the first render (never during a server render) and never again once Got it is pressed.
  */
-export function FirstHint({ name, onDone }: { name: string; onDone?: () => void }) {
+export function FirstHint({ name, onDone, wait = false }: { name: string; onDone?: () => void; wait?: boolean }) {
   const [show, setShow] = useState(false);
   const id = useId();
   useEffect(() => setShow(!firstHintSeen()), []);
-  if (!show) return null;
+  // wait: the pet is hidden. The hello said "Tap Rui" while only a faded tail showed at the panel's edge; it
+  // waits for Call back now (the hidden note says so) and shows, still unseen, once the pet is back.
+  if (!show || wait) return null;
   const hint = firstHintWeb(name);
   return (
     <section
