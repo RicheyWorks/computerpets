@@ -84,7 +84,7 @@ function MeetPage() {
               <p className="mt-2 text-sm text-muted">
                 Transparent overlay. Treat, chase, hide. They walk the real screen. All two hundred twenty-one.
               </p>
-              <p className="mt-3 font-mono text-xs text-subtle">desktop/ — npm start</p>
+              <p className="mt-3 font-mono text-xs text-subtle">.\desktop.ps1 on Windows · sh desktop.sh on a Mac</p>
             </article>
             <article className="rounded-[var(--radius-lg)] border border-border bg-surface p-5">
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Phone and tablet</p>
@@ -94,7 +94,7 @@ function MeetPage() {
                 tall blotter the same way. Open Live, then Add to Home Screen. All two hundred twenty-one.
               </p>
               <p className="mt-3">
-                <Link to="/live" className="text-sm text-fg">
+                <Link to="/live" data-line-link className="text-sm text-fg">
                   Open Live
                 </Link>
               </p>

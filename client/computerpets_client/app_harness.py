@@ -4553,7 +4553,7 @@ def _invoke_blotter(local_id: str, **opts: Any) -> InvokeResult:
             return InvokeResult(aid, "blotter", False, error="weather_label drift")
         if weather_line("goldfish", "rain") != "Proper weather. At last.":
             return InvokeResult(aid, "blotter", False, error="rain swimmer line drift")
-        if weather_line("red_panda", "rain") != "The blotter is honest about rain.":
+        if weather_line("red_panda", "rain") != "It is raining outside. I will stay in, thanks.":
             return InvokeResult(aid, "blotter", False, error="rui rain line drift")
         if weather_idle("goldfish", "rain") != "wander" or weather_idle("red_panda", "rain") != "sit":
             return InvokeResult(aid, "blotter", False, error="weather_idle rain drift")

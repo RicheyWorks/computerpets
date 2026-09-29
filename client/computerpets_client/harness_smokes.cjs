@@ -1201,7 +1201,7 @@ function blotterWeather() {
   if (W.weatherLine("goldfish", "rain") !== "Proper weather. At last.") {
     return fail("goldfish rain line", { line: W.weatherLine("goldfish", "rain") });
   }
-  if (W.weatherLine("red_panda", "rain") !== "The blotter is honest about rain.") {
+  if (W.weatherLine("red_panda", "rain") !== "It is raining outside. I will stay in, thanks.") {
     return fail("rui rain line");
   }
   if (W.weatherIdle("goldfish", "rain") !== "wander") return fail("goldfish rain idle");

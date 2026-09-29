@@ -96,7 +96,7 @@ test("the weather line is the same house copy", () => {
   assert.equal(W.weatherLine("mallard", "rain"), "Proper weather. At last.");
   assert.equal(W.weatherLine("canada_goose", "rain"), "Proper weather. At last.");
   assert.equal(W.weatherLine("goldfish", "rain"), "Proper weather. At last.");
-  assert.equal(W.weatherLine("red_panda", "rain"), "The blotter is honest about rain.");
+  assert.equal(W.weatherLine("red_panda", "rain"), "It is raining outside. I will stay in, thanks.");
   assert.equal(W.weatherLine("crow", "wind"), "The air has opinions.");
   assert.equal(W.weatherLine("pileated", "wind"), "The air has opinions.");
   assert.equal(W.weatherLine("robin", "wind"), "The air has opinions.");

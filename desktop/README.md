@@ -24,7 +24,7 @@ A tap on the guest is a choice. They pick Rest, Walk or Sit, Talk, Treat, Play, 
 
 - Feed, treat (species snack), play (chase a ribbon), rest, talk
 - Hide — they walk off the screen. Call back — they walk in.
-- Call uses a species cry when the wav exists.
+- Talk plays the pet's own cry (its wav in `renderer/sounds/`) when it has one, then the line shows in the bubble; the computer's voice reads it when there is no cry. Call back brings a hidden pet in, and its line starts the same way.
 - Clean (click the brown mess on the floor too)
 - Gifts are small ribboned boxes on the floor — click to pick them up. Shed is a soft tuft.
 - Bath, medicine, praise
