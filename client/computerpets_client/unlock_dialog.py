@@ -58,6 +58,12 @@ APP_ID_HELP = "The game's number on Steam. Ask whoever runs the house server. Co
 UNLOCK_INTRO = "Pets work without unlocking. Unlocking is optional."
 UNLOCK_WHAT = "Unlock proves Steam ownership to the house server. It does not open a second overlay."
 DETAILS_LABEL = "Details"
+# One locked sentence for the blotter window, this Unlock window and the overlay's House window
+# (desktop/renderer/settings.html licenseOk).
+LOCKED_LINE = "Locked. Pets still work without unlocking."
+# With no license saved on this computer, Download my pet has nothing to fetch: it waits, and says why (the overlay's
+# #downloadHelp says the same).
+DOWNLOAD_WAITS = "Download my pet works after an unlock on this computer."
 
 # Each sentence is checked against license/hwid.py and license/session.py:
 # the three named sources, sha256("computerpets:" + platform + ":" + raw), hwid.txt in the
@@ -235,6 +241,8 @@ class UnlockDialog(QDialog):
         unlock_btn.clicked.connect(self._unlock)
         download_btn = QPushButton("Download my pet")
         download_btn.clicked.connect(self._download)
+        self.download_btn = download_btn
+        self.download_help = self._helper(DOWNLOAD_WAITS, "downloadHelp")
         clear_btn = QPushButton("Clear")
         clear_btn.clicked.connect(self._clear)
 
@@ -254,11 +262,13 @@ class UnlockDialog(QDialog):
         layout.addWidget(self.mark)
         layout.addLayout(form)
         layout.addLayout(row)
+        layout.addWidget(self.download_help)
         layout.addWidget(self.ok)
         layout.addWidget(self.err)
         layout.addWidget(buttons)
         # After the layout owns the row, so showing a part never opens it as its own window.
         self._paint_app_id(status)
+        self._paint_download(status)
 
     @staticmethod
     def _helper(text: str, name: str) -> QLabel:
@@ -282,6 +292,15 @@ class UnlockDialog(QDialog):
         shown = bool(configured or saved or self.app_id.text().strip())
         for part in (self.app_id_label, self.app_id, self.app_id_help):
             part.setVisible(shown)
+
+    def _paint_download(self, status: dict[str, Any]) -> None:
+        if not hasattr(self, "download_btn") or not isinstance(status, dict):
+            return
+        if "held" not in status and "unlocked" not in status:
+            return
+        can = status.get("held") is True or bool(status.get("unlocked") and status.get("license"))
+        self.download_btn.setEnabled(can)
+        self.download_help.setVisible(not can)
 
     def _mark_text(self, status: dict[str, Any]) -> str:
         mark = status.get("hwidMark") if isinstance(status, dict) else None
@@ -351,11 +370,11 @@ class UnlockDialog(QDialog):
 
     def _named_hold(self, err: LicenseError) -> bool:
         if err.code == "license_net_unnamed":
-            self.ok.setText("Locked. The pet on the blotter still works.")
+            self.ok.setText(LOCKED_LINE)
             self.err.setText("Nothing was sent. This page has to name the license website first.")
             return True
         if err.code == "download_net_unnamed":
-            self.ok.setText("Locked. The pet on the blotter still works.")
+            self.ok.setText(LOCKED_LINE)
             self.err.setText("Nothing was sent. This page has to name the license website first.")
             return True
         if err.code == "cdn_net_unnamed":
@@ -398,10 +417,12 @@ class UnlockDialog(QDialog):
             kept = status.get("tokenKept")
             self.err.setText(TOKEN_MEMORY_NOTE if kept == "memory" else TOKEN_GONE_NOTE if kept == "none" else "")
         else:
-            self.ok.setText("Locked. The pet on the blotter still works.")
+            self.ok.setText(LOCKED_LINE)
             err = status.get("error")
             # A stored license's own refusal (expired, cannot open) gets the same plain words.
             self.err.setText(license_error_text(err, host_of(status.get("backendUrl"))) if err else "")
+        if self.layout() is not None:
+            self._paint_download(status)
 
     def _pet_key(self) -> str:
         data = self.pet_type.currentData()
@@ -473,7 +494,7 @@ class UnlockDialog(QDialog):
         if isinstance(err, LicenseError) and self._named_hold(err):
             return
         text = license_error_text(err, host_of(self._unlock_target()))
-        self.ok.setText("Locked. The pet on the blotter still works.")
+        self.ok.setText(LOCKED_LINE)
         self.err.setText(text)
         if code == "hwid_needs_fallback_yes" and not self._unlock_allowed_weak:
             if self._ask_weak(text):
