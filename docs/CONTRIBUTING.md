@@ -156,7 +156,7 @@ When making architectural changes, remember to update the **"Last Updated"** dat
   .\.venv\Scripts\python.exe -m computerpets_client --check
   ```
 
-  - `py -0p` lists the Pythons you have. 3.10 is the floor because it is the oldest Python the whole suite has run on (3.10.0); nothing in the client needs 3.11 (`tests/test_python_minimum.py` checks). `computerpets_client/__init__.py` stops an older Python at start with one plain line. To skip the editable install, make the venv with `py -3` and install just the tools: `.\.venv\Scripts\python.exe -m pip install "PyQt6>=6.6" "cryptography>=42" "pytest>=8"`. `pythonpath = ["."]` in `pyproject.toml` lets pytest import the package without installing it.
+  - `py -0p` lists the Pythons you have. 3.10 is the floor because it is the oldest Python the whole suite has run on (3.10.0); nothing in the client needs 3.11 (`tests/test_python_minimum.py` checks). `computerpets_client/__init__.py` stops an older Python at start with one plain line. To skip the editable install, make the venv with `py -3` and install just the tools: `.\.venv\Scripts\python.exe -m pip install "PyQt6>=6.6" "cryptography>=49" "pytest>=9.0.3"`. `pythonpath = ["."]` in `pyproject.toml` lets pytest import the package without installing it.
   - `-rs` prints the reason for each skip. The one Windows skip is the half of `tests/test_gpu.py` that runs the POSIX `desktop/gpu-probe*.sh` scripts through `/bin/sh`.
   - A test that needs a license folder uses pytest's `tmp_path`, not a hard-coded `/tmp/...` path. When an in-memory fake disk is keyed by path, build the key with `Path(...) / name` so it matches on Windows.
   - A test that fakes `/etc/machine-id` pins the host to Linux, so a Windows run never reads the real registry GUID.
