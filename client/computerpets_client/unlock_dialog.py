@@ -218,6 +218,16 @@ class UnlockDialog(QDialog):
         else:
             self.pet_type.setEditText(str(current))
 
+        # Each field carries its row's words as its accessible name too, so a screen reader names it even where the
+        # platform does not follow the form's label.
+        for field, words in (
+            (self.backend, "House server address"),
+            (self.steam_id, STEAM_ID_LABEL),
+            (self.app_id, APP_ID_LABEL),
+            (self.pet_type, PET_LABEL),
+        ):
+            field.setAccessibleName(words)
+
         form = QFormLayout()
         form.addRow("House server address", self.backend)
         form.addRow("", self.net)

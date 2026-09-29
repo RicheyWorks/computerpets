@@ -1062,6 +1062,10 @@ export function CompanionRoom({
     </p>
   );
   const busyOrHidden = busy || stats.hidden;
+  // A phone has no clear spot for a hidden pet's line (at 390×844 it sat over the plaque's lower half, and a step
+  // around the plaque put it on the room rail, the care buttons or the room's links): the line shows above the
+  // hidden note instead, with the care buttons, and the bubble stays shut. A laptop keeps the bubble.
+  const speechInNote = hand && stats.hidden && !!speech;
   const age = stage ?? stageOf(stats);
   // The docked plates sit at the end of the panel; this jump takes a phone there without a long scroll. On its side
   // the jump sits beside the name (landJump): two short lines of small words, still 44 px tall.
@@ -1146,7 +1150,7 @@ export function CompanionRoom({
         key={resetKey}
         command={order.cmd}
         orderId={order.id}
-        speech={speech}
+        speech={speechInNote ? null : speech}
         onSpeechClose={closeSpeech}
         sprites={kind.sprites}
         fps={kind.fps}
@@ -1532,6 +1536,9 @@ export function CompanionRoom({
           </p>
           <p id="hud-voice-net" className="keeper-truth" hidden={!voiceAsked || !voiceLine}>
             {voiceAsked ? voiceLine : ""}
+          </p>
+          <p data-hidden-speech className="keeper-truth" hidden={!speechInNote} aria-live="polite">
+            {speechInNote ? `${displayName}: “${speech}”` : ""}
           </p>
           <p data-hidden-note className="keeper-truth" hidden={!stats.hidden} aria-live="polite">
             {stats.hidden ? hiddenCareLine(displayName, treatFor(kind.key).verb) : ""}
