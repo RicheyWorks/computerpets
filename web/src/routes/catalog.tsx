@@ -48,7 +48,7 @@ function Catalog() {
               <h2 data-bubble-avoid="" className="mt-1 font-display text-2xl">{room.label}</h2>
               <p className="mt-1 text-sm text-muted">{room.line}</p>
               <p className="mt-2">
-                <Link to={room.path} data-open-room className="text-sm text-fg no-underline hover:text-primary">
+                <Link to={room.path} data-open-room className="inline-flex min-h-11 items-center text-sm text-fg no-underline hover:text-primary">
                   Open the room
                 </Link>
               </p>
