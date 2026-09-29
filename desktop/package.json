@@ -13,7 +13,7 @@
     "dist:linux": "electron-builder --linux"
   },
   "devDependencies": {
-    "electron": "^35.7.5",
+    "electron": "^44.4.5",
     "electron-builder": "^26.0.12"
   },
   "build": {

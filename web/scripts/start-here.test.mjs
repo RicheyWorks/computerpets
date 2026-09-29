@@ -91,7 +91,8 @@ test("the start checks Node and the pieces in plain words, and a half-finished i
     assert.match(src, /node_modules\/?\\?electron[\\/]path\.txt/);
     assert.match(src, /\.computerpets-installed/);
     assert.match(src, /npm install did not finish/);
-    assert.match(src, /npm rebuild electron/);
+    assert.match(src, /\.package-lock\.json/);
+    assert.match(src, /node node_modules[\\/]electron[\\/]install\.js/);
     // Check mode prints and leaves before anything is installed or started.
     const check = src.search(/ok: node/);
     assert.ok(check > 0, "check mode prints ok: node");

@@ -20,7 +20,7 @@ HOUSE_FILES = ("card.json", "mind.json")
 # computer's ID goes there. Opening this process does not send it. Your
 # pet's files are asked for only after the download website is named.
 # Opening this process does not download them.
-# Electron 35
+# Electron 44
 # cannot revoke a Chromium grant.
 WEATHER_LOCATE_MS = 120_000
 _weather_locate_until = 0

@@ -18,14 +18,20 @@ if [ -z "$major" ] || [ "$major" -lt 22 ]; then
 fi
 
 # 2. The pieces. node_modules alone is not enough: a get-the-pieces run that was closed halfway
-#    leaves the folder without Electron. The stamp is written only after npm install finishes,
-#    and a newer package.json (after a pull) asks for the pieces again.
+#    leaves it unfinished. npm writes node_modules/.package-lock.json last, when an install finishes
+#    (this script's stamp says the same), so a plain npm install counts too; a newer package.json
+#    (after a pull) asks for the pieces again. Electron 42 and newer do not download Electron itself
+#    during npm install: it comes the first time Electron runs (the first npm start), so the pieces
+#    are ready only once node_modules/electron/path.txt names an Electron that is really there.
 electron=node_modules/electron/path.txt
+finished=node_modules/.package-lock.json
 stamp=node_modules/.computerpets-installed
+electron_here() { [ -f "$electron" ] && [ -f "node_modules/electron/dist/$(cat "$electron")" ]; }
 pieces() {
-  if [ ! -f "$electron" ]; then echo missing
-  elif [ ! -f "$stamp" ]; then echo unfinished
-  elif [ package.json -nt "$stamp" ]; then echo changed
+  if [ ! -f node_modules/electron/package.json ]; then echo missing
+  elif [ ! -f "$finished" ] && [ ! -f "$stamp" ]; then echo unfinished
+  elif [ package.json -nt "$finished" ] && [ package.json -nt "$stamp" ]; then echo changed
+  elif ! electron_here; then echo unfinished
   else echo ready
   fi
 }
@@ -121,8 +127,11 @@ fi
 if [ "$state" != ready ]; then
   echo "Getting the pieces (npm install). The first time can take a few minutes. Leave this window open."
   npm install || stop_start "npm install did not finish. Check the internet, then run sh desktop.sh again. It gets the pieces again."
-  [ -f "$electron" ] || npm rebuild electron || true
-  [ -f "$electron" ] || stop_start "The overlay piece (Electron) did not download. Check the internet, delete the desktop/node_modules folder, and run sh desktop.sh again."
+  if ! electron_here; then
+    echo "Getting Electron, the overlay piece (about 100 MB). Leave this window open."
+    node node_modules/electron/install.js || true
+  fi
+  electron_here || stop_start "The overlay piece (Electron) did not download. Check the internet, delete the desktop/node_modules folder, and run sh desktop.sh again."
   date > "$stamp"
 fi
 
