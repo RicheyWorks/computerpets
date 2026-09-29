@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
 import { GROK_PROVIDERS, authEnabled, signIn } from "@/lib/auth/client";
 import { safeReturnTo, signInHref } from "@/lib/auth/return-to";
+import { LOCAL_SIGN_IN_TRY, LOCAL_SIGN_IN_WORDS, isLoopbackHost } from "@/lib/auth/local-sign-in";
 import { Button } from "@/components/ui/button";
 import { loadProblem } from "@/lib/plain-error";
 
@@ -29,6 +30,9 @@ function Login() {
   const returnTo = safeReturnTo(next);
   const [problem, setProblem] = useState<string | null>(error ? SIGN_IN_UNFINISHED : null);
   const [starting, setStarting] = useState<string | null>(null);
+  // Read after hydration (the server render keeps the buttons): on localhost the hosted sign-in cannot finish.
+  const [loopback, setLoopback] = useState(false);
+  useEffect(() => setLoopback(isLoopbackHost(window.location.hostname)), []);
 
   async function start(providerId: string) {
     setProblem(null);
@@ -55,7 +59,16 @@ function Login() {
             Sign in to sit with the house. Hatch, nest, and keep a kennel.
           </p>
         </div>
-        {authEnabled ? (
+        {authEnabled && loopback ? (
+          <div data-login-local className="space-y-3 [@media(max-height:480px)]:space-y-1">
+            <p className="text-sm text-muted">{LOCAL_SIGN_IN_WORDS}</p>
+            {/* On a landscape phone the page must not scroll: the how-to-try line (also in web/README.md) waits for a taller screen. */}
+            <p className="text-sm text-muted [@media(max-height:480px)]:hidden">{LOCAL_SIGN_IN_TRY}</p>
+            <Link to="/" data-login-desk className="inline-flex min-h-11 items-center text-sm text-primary">
+              Go to the desk
+            </Link>
+          </div>
+        ) : authEnabled ? (
           <div className="space-y-2">
             {GROK_PROVIDERS.map((p) => (
               <Button

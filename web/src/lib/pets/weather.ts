@@ -20,7 +20,7 @@ export function weatherLabel(w: Weather) {
 export function weatherLine(key: string, w: Weather) {
   if (w === "rain") {
     if (key === "goldfish" || key === "axolotl" || key === "turtle" || key === "penguin" || key === "mallard" || key === "canada_goose") return "Proper weather. At last.";
-    return "The blotter is honest about rain.";
+    return "It is raining outside. I will stay in, thanks.";
   }
   if (w === "wind") {
     if (key === "budgie" || key === "parrot" || key === "toucan" || key === "phoenix" || key === "crow" || key === "raven" || key === "red_tail" || key === "chickadee" || key === "hummingbird" || key === "pileated" || key === "robin") return "The air has opinions.";

@@ -423,7 +423,11 @@ async function trayOnTheDesk() {
     const want = picks.map((r) => Roster.choiceText(r));
     const got = onDesk.submenu.map((r) => r.label);
     if (JSON.stringify(got) !== JSON.stringify(want)) fails.push("On the desk rows are not the desk picks in order");
-    if (!companions || companions.submenu.length !== roster.length) fails.push(`Companions lists ${companions ? companions.submenu.length : 0} of ${roster.length}`);
+    // Companions is one submenu per den: every guest once, in a menu short enough to fit a screen.
+    const dens = companions && Array.isArray(companions.submenu) ? companions.submenu : [];
+    const guests = dens.flatMap((d) => (Array.isArray(d.submenu) ? d.submenu : []));
+    if (guests.length !== roster.length || new Set(guests.map((g) => g.label)).size !== roster.length) fails.push(`Companions lists ${guests.length} of ${roster.length}`);
+    if (!dens.length || dens.length > 24 || dens.some((d) => !Array.isArray(d.submenu) || d.submenu.length > 24)) fails.push(`Companions has ${dens.length} dens, the largest ${Math.max(0, ...dens.map((d) => (d.submenu || []).length))} rows`);
     const start = checkedKey(onDesk.submenu, roster);
     if (start !== "red_panda") fails.push(`first checked guest is ${start || "none"}`);
     const target = picks.find((r) => r.key !== start);
@@ -457,9 +461,10 @@ async function trayOnTheDesk() {
       ? fail(fails.join("; "), { picks: picked })
       : ok(`On the desk ${picks.length} picks; tray + switch-pet switch ${target.key}, ${third.key}; hide/show`, {
           picks: picked,
-          companions: companions.submenu.length,
+          companions: guests.length,
+          dens: dens.length,
           switched: [target.key, third.key],
-        }, [`picks=${picks.length}`, `companions=${companions.submenu.length}`, `tray_switch=${target.key}`, `ipc_switch=${third.key}`, "unknown_key=ignored", "hide_show=ok"]);
+        }, [`picks=${picks.length}`, `companions=${guests.length}`, `dens=${dens.length}`, `tray_switch=${target.key}`, `ipc_switch=${third.key}`, "unknown_key=ignored", "hide_show=ok"]);
   } finally {
     ctx.cleanup();
   }

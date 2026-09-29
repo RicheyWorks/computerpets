@@ -32,9 +32,11 @@ function Catalog() {
       }
       aside={
         <div data-aside-list className="mt-5 max-h-[calc(100dvh-16rem)] max-w-sm space-y-3 overflow-y-auto pr-1">
+          {/* The pet's speech bubble steps around each shelf's kicker and heading (living-pet.tsx reads
+              [data-bubble-avoid]); at 820×1180 it sat on "The two hundred twenty-one." */}
           <aside className="paper-card rounded-[var(--radius-lg)] border p-4">
-            <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Shelf</p>
-            <h2 className="mt-1 font-display text-2xl">The two hundred twenty-one.</h2>
+            <p data-bubble-avoid="" className="text-[11px] uppercase tracking-[0.16em] text-subtle">Shelf</p>
+            <h2 data-bubble-avoid="" className="mt-1 font-display text-2xl">The two hundred twenty-one.</h2>
             <p className="mt-2 text-sm text-muted">
               Two hundred twenty-one guests, on their shelves. By den, not by rarity. They will be walking when the page opens.
             </p>
@@ -42,8 +44,8 @@ function Catalog() {
 
           {ROOMS.map((room) => (
             <aside key={room.id} className="paper-card rounded-[var(--radius-lg)] border p-4">
-              <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">{room.kicker}</p>
-              <h2 className="mt-1 font-display text-2xl">{room.label}</h2>
+              <p data-bubble-avoid="" className="text-[11px] uppercase tracking-[0.16em] text-subtle">{room.kicker}</p>
+              <h2 data-bubble-avoid="" className="mt-1 font-display text-2xl">{room.label}</h2>
               <p className="mt-1 text-sm text-muted">{room.line}</p>
               <p className="mt-2">
                 <Link to={room.path} data-open-room className="text-sm text-fg no-underline hover:text-primary">

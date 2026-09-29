@@ -15,7 +15,7 @@ import {
   loadActiveKindKey,
   saveActiveKindKey,
 } from "@/lib/pets/living";
-import { pageTitle } from "@/lib/page-title";
+import { petTitle } from "@/lib/page-title";
 import { loadProblem } from "@/lib/plain-error";
 
 const searchSchema = z.object({
@@ -25,7 +25,14 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/")({
   validateSearch: searchSchema,
   component: DeskHome,
-  head: () => ({ meta: [{ title: pageTitle("The desk") }] }),
+  // The tab names who is on the desk from the first paint: "Rui the Red Panda — ComputerPets", or the ?pet= guest.
+  // It said "The desk" until the page hydrated and the desk renamed it, so a slow load (a phone, a cold dev server)
+  // kept "The desk" while a quick one showed the pet. A renamed or remembered pet still retitles it after hydration.
+  head: ({ match }) => {
+    const pet = (match.search as { pet?: string }).pet;
+    const kind = livingByKey(pet && isLivingSpecies(pet) ? pet : "red_panda");
+    return { meta: [{ title: petTitle(kind.name, kind.speciesLabel) }] };
+  },
 });
 
 function useDeskKind() {

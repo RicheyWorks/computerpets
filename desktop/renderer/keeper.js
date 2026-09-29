@@ -36,7 +36,7 @@
   const HUD_WIDTH_COLLAPSED = 168;
   const KEEPER_KICKER = "Keeper card";
   const VOICE_TRUTH = "Rui, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Echo, Peck, Quill, Keel, Ember, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Rue, Wick, Burr, Floss, Bloom, Vesper, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Ochre, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Well, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Wax, Frill, Cap, Lattice, Horn, Ring, Mane, Puff, Flame, Starter, Pact, Gleam, Choir, Drift, Shard, Dusk, Knot, Brine, Beacon, Hush, Arca, Reed, Pebble, Eft, Dapple, Slip, Pinch, Whorl, Hinge, Latch, Prickle, Boot, Reach, Spot, Orb, Pane, Hold, Loom, and Leap talk with house cry first; system speech is the backup.";
-  const QUIT_TRUTH = "Turns the pets off. To bring them back, type .\\desktop.ps1 again, just like the first time.";
+  const QUIT_TRUTH = "Turns the pets off. To bring them back, type .\\desktop.ps1 again, just like the first time. If Windows says running scripts is disabled, type powershell -ExecutionPolicy Bypass -File .\\desktop.ps1 instead.";
   /** The Mac and Linux start with sh desktop.sh; the card told them to type .\\desktop.ps1 (Windows only). */
   const QUIT_TRUTH_SH = "Turns the pets off. To bring them back, type sh desktop.sh again, just like the first time.";
 

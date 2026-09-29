@@ -559,7 +559,7 @@ The tray has a line named **On the desk**.
 
 - It picks Rui, Sip, and the grid ten (Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground).
 - You do not scroll the whole house.
-- **Companions** still has all **221**.
+- **Companions** still has all **221**. They sit by den: House, Snakes, Tide, and so on.
 - Spark on the desk is the same Spark whose browser room is `/demo/crackle`.
 - The firefly already owns `/demo/spark`.
 

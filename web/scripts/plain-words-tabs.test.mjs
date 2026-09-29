@@ -56,7 +56,7 @@ test("care and Turn off lines: plain words; the overlay still names its real res
   // The developer detail stays on the API answer the house server gives, not on the card.
   assert.equal(K.careDoorRefusal("feed").detail, "Care is local. /pet/feed is not a door.");
   assert.equal(K.QUIT_TRUTH, "Turns the pet off on this page. Press Sit again to bring them back.");
-  assert.equal(OK.QUIT_TRUTH, "Turns the pets off. To bring them back, type .\\desktop.ps1 again, just like the first time.");
+  assert.equal(OK.QUIT_TRUTH, "Turns the pets off. To bring them back, type .\\desktop.ps1 again, just like the first time. If Windows says running scripts is disabled, type powershell -ExecutionPolicy Bypass -File .\\desktop.ps1 instead.");
   assert.equal(OC.QUIT_TRUTH, OK.QUIT_TRUTH);
   assert.equal(shipped("hud-off-truth"), OK.QUIT_TRUTH);
   assert.match(card, /Sit again/);
