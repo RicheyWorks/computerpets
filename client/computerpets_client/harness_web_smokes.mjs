@@ -1477,7 +1477,7 @@ async function deskGuardPlain() {
   const title = (n) => (readFileSync(join(ROOT, "docs", "adr", adrTitle(n)), "utf8").match(/^# \d{4}\. (.+)$/m) || [])[1] || "";
   const adr19 = readFileSync(join(ROOT, "docs", "adr", adrTitle("0019")), "utf8");
   const words = {
-    settings: settings.includes("<label>House server address</label>") && settings.includes('"Asking the house server…"') && !/Talking to the backend|<label>Backend URL|house backend|under Backend URL/.test(settings),
+    settings: settings.includes('<label for="backend">House server address</label>') && settings.includes('"Asking the house server…"') && !/Talking to the backend|<label>Backend URL|house backend|under Backend URL/.test(settings),
     dialog: dialog.includes('form.addRow("House server address", self.backend)') && dialog.includes('"Asking the house server…"') && !/Talking to the backend|"Backend URL"|house backend|under Backend URL/.test(dialog),
     errors: !/Backend URL/.test(plainErrJs) && !/Backend URL/.test(plainErrPy) && plainErrJs.includes("Check the house server address.") && plainErrPy.includes("Check the house server address."),
     admin: !/showError\(err, "[^"]*failed\."\)/.test(admin) && adminFallbacks.length === 3 && adminFallbacks.every((s) => /^[A-Z][^.]+\. Try again in a moment\.$/.test(s) && !/failed/i.test(s)) && !/failure\(res, "[^"]*failed\."\)/.test(adminApi),

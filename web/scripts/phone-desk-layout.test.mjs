@@ -32,6 +32,8 @@
 // room change without a page load), the speech bubble never crosses a plate while a line shows, a landscape phone's
 // plates jump is on the screen as the page opens, and signed in the panel is the one scroller on /collection, /nest
 // and /catalog (desktop and phone).
+// Every page (signed out and signed in) at 390×844, 820×1180 and 1366×768: no link, button, field or select under
+// 24×24, with its closed drawers opened too (a 17 px room-page link, a 16 px slider and 21 px selects slipped through).
 // Starts the Vite dev server in-process and drives the system Chrome or Edge (playwright-core, no downloaded
 // browser). Skips, and says why, when no browser is found.
 // PHONE_LAYOUT_URL=http://127.0.0.1:8097/ uses an already running dev server instead.
@@ -783,6 +785,14 @@ test("/meet on a phone: short enough to get through, a jump index opens each roo
       page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
       await page.goto(`${url}/meet`, { waitUntil: "load", timeout: 120_000 });
       await page.waitForSelector("[data-meet-index] a", { timeout: 60_000 });
+      // The jump links open their drawer from a click handler, so wait until React has hydrated them (it attaches its
+      // props to the element). On a cold dev server the page painted from the server HTML seconds before that, and
+      // the first taps only scrolled to a closed drawer: the test was early, the page was fine (a tap on the room's
+      // name opens it with no script, and on arrival the hash's room opens).
+      await page.waitForFunction(() => {
+        const a = document.querySelector("[data-meet-index] a");
+        return !!a && Object.keys(a).some((k) => k.startsWith("__reactProps"));
+      }, null, { timeout: 90_000 });
       await page.waitForTimeout(1_200);
       const first = await page.evaluate(() => ({
         height: document.documentElement.scrollHeight,
@@ -1701,6 +1711,12 @@ test("the rail shows the current guest on arrival and on a room change; the spee
         try {
           await page.goto(`${url}/demo/${slug}`, { waitUntil: "load", timeout: 120_000 });
           await page.waitForSelector("[data-desk-rail] .den-cabinet-guest.is-here", { state: "attached", timeout: 60_000 });
+          // Hydrated first (React's props on a rail link): on a cold dev server the server HTML showed for seconds,
+          // the rail had not scrolled yet and a room change by history did nothing, so the test was early.
+          await page.waitForFunction(() => {
+            const a = document.querySelector("[data-desk-rail] a");
+            return !!a && Object.keys(a).some((k) => k.startsWith("__reactProps"));
+          }, null, { timeout: 90_000 });
           await page.waitForTimeout(1_500);
           const here = await page.evaluate(railHere);
           if (!here?.shows) problems.push(`${label}: the current guest is not in the rail's view on arrival ${JSON.stringify(here)}`);
@@ -1855,6 +1871,89 @@ test("the rail shows the current guest on arrival and on a room change; the spee
     }
   }
   assert.deepEqual(problems, [], problems.join("\n"));
+});
+
+/** Every page a keeper can open, signed out: the desk, the site pages, the twenty room pages, /demo, /admin, a 404. */
+export const SWEEP_PAGES = [
+  "/", "/meet", "/catalog", "/login", "/mind", "/demo", "/demo/rui", "/admin", "/live", "/no-such-room",
+  "/snakes", "/sea", "/garden", "/grid", "/hive", "/canopy", "/cellar", "/corner", "/creek", "/far",
+  "/meadow", "/pond", "/reef", "/roost", "/shore", "/stone", "/well", "/wood", "/study", "/log",
+];
+/** Signed in (the stand-in session): the kennel, the hatchery, the nest, a kennel pet's page. */
+export const SWEEP_SIGNED_IN = ["/collection", "/hatch", "/nest", "/pets/rui"];
+/** Phone, tablet and laptop. The tablet checks the pages with the most layouts of their own. */
+export const SWEEP_SIZES = [
+  { h: 844, w: 390, phone: true },
+  { h: 1180, w: 820, only: ["/", "/meet", "/catalog", "/login", "/mind", "/demo", "/hive", "/snakes"] },
+  { w: 1366, h: 768 },
+];
+
+/**
+ * Runs in the page: every visible link, button, summary, field and select under min px on a side (WCAG 2.2 target
+ * size). Exempt, as WCAG allows: a link inside a sentence, and sr-only controls until they are focused (1 px).
+ * Closed drawers are opened first, so the targets inside them are measured too.
+ */
+function sweepTargets(min) {
+  const bad = [];
+  const name = (el) => (el.getAttribute("aria-label") || el.textContent || el.getAttribute("title") || el.tagName).trim().replace(/\s+/g, " ").slice(0, 40);
+  const shown = (el) => {
+    const b = el.getBoundingClientRect();
+    if (b.width <= 1 || b.height <= 1) return false;
+    for (let p = el; p; p = p.parentElement) {
+      const cs = getComputedStyle(p);
+      if (cs.visibility === "hidden" || cs.display === "none" || Number(cs.opacity) === 0) return false;
+    }
+    return true;
+  };
+  const inSentence = (el) => {
+    const p = el.parentElement;
+    return getComputedStyle(el).display === "inline" && !!p && (p.textContent || "").replace(/\s+/g, " ").trim().length > (el.textContent || "").trim().length + 12;
+  };
+  const check = () => {
+    for (const el of document.querySelectorAll("a[href], button, summary, select, textarea, input:not([type=hidden]), [role=button]")) {
+      if (!shown(el) || inSentence(el)) continue;
+      const b = el.getBoundingClientRect();
+      if (b.width < min - 0.5 || b.height < min - 0.5) bad.push(`${el.tagName.toLowerCase()}${el.type ? `[${el.type}]` : ""} "${name(el)}" is ${Math.round(b.width)}×${Math.round(b.height)} px`);
+    }
+  };
+  check();
+  for (const d of document.querySelectorAll("details:not([open])")) d.open = true;
+  check();
+  return [...new Set(bad)];
+}
+
+test("every page at phone, tablet and laptop sizes: no link, button, field or select under 24×24 (drawers opened too)", { skip, timeout: 900_000 }, async () => {
+  const { url, browser } = await site();
+  const signed = await standInSite();
+  const problems = [];
+  let visited = 0;
+  for (const size of SWEEP_SIZES) {
+    const ctx = await browser.newContext({ viewport: { width: size.w, height: size.h }, ...(size.phone ? { isMobile: true, hasTouch: true, userAgent: IPHONE } : {}) });
+    const page = await ctx.newPage();
+    const list = [...(size.only || SWEEP_PAGES).map((p) => [url, p, ""]), ...SWEEP_SIGNED_IN.map((p) => [signed.url, p, " (signed in)"])];
+    try {
+      for (const [base, path, tag] of list) {
+        const label = `${path}${tag} ${size.w}×${size.h}`;
+        try {
+          await page.goto(`${base}${path}`, { waitUntil: "load", timeout: 120_000 });
+          // Hydrated: React has attached its props to the header's first link (the page's own sizes are set by then).
+          await page.waitForFunction(() => {
+            const a = document.querySelector("header a");
+            return !!a && Object.keys(a).some((k) => k.startsWith("__reactProps"));
+          }, null, { timeout: 90_000 }).catch(() => {});
+          await page.waitForTimeout(900);
+          problems.push(...(await page.evaluate(sweepTargets, DESK_TARGET_MIN)).map((p) => `${label}: ${p}`));
+          visited += 1;
+        } catch (err) {
+          problems.push(`${label}: ${String(err?.message || err).split("\n")[0]}`);
+        }
+      }
+    } finally {
+      await ctx.close();
+    }
+  }
+  assert.deepEqual(problems, [], problems.join("\n"));
+  assert.equal(visited, SWEEP_SIZES.reduce((n, s) => n + (s.only || SWEEP_PAGES).length + SWEEP_SIGNED_IN.length, 0));
 });
 
 test("the in-process dev server left src/routeTree.gen.ts as checked in", { skip }, async () => {

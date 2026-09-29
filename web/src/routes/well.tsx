@@ -45,7 +45,7 @@ function WellPage() {
               each guest&apos;s demo and on the desk. A drop you look into. The plaque teaches.
             </p>
             <p className="mt-4">
-              <Link to="/" search={{ pet: selected }} className="text-sm text-fg">
+              <Link to="/" search={{ pet: selected }} className="inline-flex min-h-11 items-center text-sm text-fg">
                 Open the desk with this one
               </Link>
             </p>

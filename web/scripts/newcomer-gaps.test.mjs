@@ -103,7 +103,7 @@ test("the house server address lives under Unlock… in the tray menu (there is 
   const main = read(repo, "desktop/main.cjs");
   assert.match(main, /\{ label: "Unlock…", click: \(\) => openSettings\("unlock"\) \}/);
   assert.doesNotMatch(main, /label: "Settings/);
-  assert.match(read(repo, "desktop/renderer/settings.html"), /<label>House server address<\/label>/);
+  assert.match(read(repo, "desktop/renderer/settings.html"), /<label for="backend">House server address<\/label>/);
 });
 
 test("the web README says local sign-in is not set up for localhost and how to try the kennel with one local keeper", () => {

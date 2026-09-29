@@ -21,8 +21,9 @@ test("sign-in on this computer's own copy: loopback hosts say why instead of off
   // The preview client really is limited to the hosted preview, which is why localhost cannot finish.
   assert.match(read(root, "src/lib/auth/preview.ts"), /PREVIEW_ALLOWED_HOSTS = \["\*\.grok-sandbox\.com"\]/);
   const login = read(root, "src/routes/login.tsx");
-  assert.match(login, /useEffect\(\(\) => setLoopback\(isLoopbackHost\(window\.location\.hostname\)\), \[\]\);/);
-  assert.match(login, /\{authEnabled && loopback \? \(\n\s+<div data-login-local/);
+  // Pass 3: the host AND the server's sign-in client decide (newcomer-gaps-3.test.mjs).
+  assert.match(login, /useEffect\(\(\) => setBlocked\(localSignInBlocked\(window\.location\.hostname, ownClient\)\), \[ownClient\]\);/);
+  assert.match(login, /\{authEnabled && blocked \? \(\n\s+<div data-login-local/);
   // Everywhere else (a deployed site, the hosted preview) the buttons are exactly as before.
   assert.match(login, /\) : authEnabled \? \(\n\s+<div className="space-y-2">\n\s+\{GROK_PROVIDERS\.map/);
   assert.match(read(root, "README.md"), /The login page says the same on `localhost`/);
