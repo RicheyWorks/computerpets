@@ -32,15 +32,40 @@ pieces() {
 state=$(pieces)
 
 # 3. The pictures. The overlay's pet pictures are stored with Git LFS. A Git without LFS (common on
-#    Mac and Linux) copies small text pointers instead, and every pet would be invisible.
+#    Mac and Linux) copies small text pointers instead, and every pet would be invisible. A git lfs pull
+#    that stopped partway (a lost connection, a full disk) leaves some pets as pointers, and those pets
+#    would be invisible too, so every pet's folder is looked at, not only the crow's. A pointer is a small
+#    text file (about 130 bytes) and every real picture is over 10 KB, so only files under 1 KB are
+#    opened: one find and one grep, fast enough for every start.
+sprites=renderer/sprites
 picture=renderer/sprites/crow/idle/1.png
+pointer_pets() {
+  find "$sprites" -type f -name '*.png' -size -1024c -exec grep -l '^version https://git-lfs' {} + 2>/dev/null |
+    sed "s|^$sprites/||; s|/.*||" | sort -u | wc -l | tr -d ' '
+}
+all_pets() {
+  find "$sprites" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | tr -d ' '
+}
+gone=0
+pets=0
+if [ -f "$picture" ]; then
+  gone=$(pointer_pets)
+  pets=$(all_pets)
+fi
 pictures() {
   if [ ! -f "$picture" ]; then echo missing
-  elif head -c 23 "$picture" | grep -q '^version https://git-lfs'; then echo lfs-pointers
-  else echo ready
+  elif [ "$gone" -eq 0 ]; then echo ready
+  elif [ "$gone" -ge "$pets" ]; then echo lfs-pointers
+  else echo partial
   fi
 }
 seen=$(pictures)
+# "12 of 221 pets are still missing their pictures" (one pet: "is ... its").
+if [ "$gone" -eq 1 ]; then
+  still="1 of $pets pets is still missing its pictures"
+else
+  still="$gone of $pets pets are still missing their pictures"
+fi
 # Git LFS may be here already (installed after the clone, or a pull that stopped): then the words do not say to
 # install it, only to fetch the pictures. Asked only when the pictures are not ready.
 lfs_here() {
@@ -68,7 +93,9 @@ if [ "${1:-}" = "--check" ]; then
   echo "pieces: $state"
   echo "pictures: $seen"
   echo "display: $display"
-  if [ "$seen" != ready ] && [ "$lfs" = yes ]; then
+  if [ "$seen" = partial ]; then
+    echo "next: $still: Git LFS stopped before it fetched them all. In the computerpets folder type git lfs pull. Then type sh desktop.sh and press Enter."
+  elif [ "$seen" != ready ] && [ "$lfs" = yes ]; then
     echo "next: The pet pictures are not here yet. Git LFS is installed but has not fetched them. In the computerpets folder type git lfs install and then git lfs pull. Then type sh desktop.sh and press Enter."
   elif [ "$seen" != ready ]; then
     echo "next: The pet pictures are not here yet. Install Git LFS from https://git-lfs.com, then in the computerpets folder type git lfs install and then git lfs pull. Then type sh desktop.sh and press Enter."
@@ -85,6 +112,7 @@ if [ "${1:-}" = "--check" ]; then
   exit 0
 fi
 
+[ "$seen" != partial ] || stop_start "$still. Git LFS stopped before it fetched them all. In the computerpets folder run git lfs pull, and run sh desktop.sh again."
 [ "$seen" = ready ] || [ "$lfs" = no ] || stop_start "The pet pictures did not download. Git LFS is installed here, but it has not fetched them yet. In the computerpets folder run git lfs install and then git lfs pull, and run sh desktop.sh again."
 [ "$seen" = ready ] || stop_start "The pet pictures did not download. They come through Git LFS, which this Git does not have yet. Install Git LFS from https://git-lfs.com, then in the computerpets folder run git lfs install and then git lfs pull, and run sh desktop.sh again."
 

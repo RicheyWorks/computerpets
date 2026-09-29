@@ -2070,19 +2070,19 @@ async function picturesStartNames() {
   const P = require(join(RENDERER, "pictures.js"));
   const main = read("desktop", "main.cjs");
   const boot = main.slice(main.indexOf("function bootDesk()"));
-  const at = boot.indexOf('Pictures.picturesState(path.join(__dirname, "renderer"), fs, path.join)');
+  const at = boot.indexOf('Pictures.picturesSurvey(path.join(__dirname, "renderer"), fs, path.join)');
   const sh = read("desktop.sh");
   const ps1 = read("desktop.ps1");
   const shPicture = (sh.match(/^picture=(\S+)$/m) || [])[1];
-  const realState = P.picturesState(RENDERER, { readFileSync }, join);
-  const shState = !existsSync(join(ROOT, "desktop", shPicture || "none")) ? "missing" : readFileSync(join(ROOT, "desktop", shPicture)).subarray(0, 23).toString("latin1") === "version https://git-lfs" ? "lfs-pointers" : "ready";
+  const realState = P.picturesState(RENDERER, require("node:fs"), join);
   const w = P.words("lfs-pointers");
   const overlay = {
     beforeWindow: at > 0 && boot.indexOf("createWindow();") > at,
     smallWindow: /dialog\s*\.showMessageBox\(\{[\s\S]*?message: w\.message,\s*detail: w\.detail,/.test(main),
     tray: P.trayRows(w).map((r) => r.label || r.type).join("|") === "Pet pictures did not download|How to fix…|Open git-lfs.com|separator|Quit",
     samePicture: shPicture === "renderer/" + P.PICTURE.join("/"),
-    sameState: realState === shState,
+    // Every pet's folder, not only the crow's: a pull that stopped partway left the crow real (see pictures.test.cjs).
+    everyPet: /find "\$sprites" -type f -name '\*\.png' -size -1024c -exec grep -l '\^version https:\/\/git-lfs' \{\} \+/.test(sh) && /\$f\.Length -ge 1024/.test(ps1) && P.SMALL === 1024,
     sameSteps: sh.includes(P.STEPS) && ps1.includes(P.STEPS) && w.detail.includes(P.STEPS),
     secondStart: /if \(picturesGate\) \{\s*showPicturesMessage\(\);\s*return;\s*\}/.test(main),
   };

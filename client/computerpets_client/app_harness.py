@@ -1350,8 +1350,10 @@ def _desk_rows() -> list[Affordance]:
                 "Runs the real start script in check mode, which changes nothing. With Node 22 or newer "
                 "and npm on PATH it must print ok: node <the same version node -v prints> and a pieces "
                 "state (ready, missing, unfinished, or changed), and a pictures state that matches the file: "
-                "ready, missing, or lfs-pointers (a Git without LFS copied text pointers, so every pet would be "
-                "invisible; the real start stops with plain Git LFS words). With no Node, an older Node, or no npm "
+                "ready, missing, lfs-pointers (a Git without LFS copied text pointers, so every pet would be "
+                "invisible; the real start stops with plain Git LFS words), or partial (a git lfs pull that stopped "
+                "partway: every pet folder is scanned for PNGs under 1 KB that start like a pointer, and the next line "
+                "says how many pets are still missing their pictures and to run git lfs pull). With no Node, an older Node, or no npm "
                 "it must stop with plain words. The install stamp must not change. npm install and the "
                 "overlay are never run."
             ),
@@ -1389,7 +1391,10 @@ def _desk_rows() -> list[Affordance]:
                 "missing: no overlay window and no ticks, one small window with the Git LFS steps (Open git-lfs.com, OK), and "
                 "the tray says Pet pictures did not download with How to fix, Open git-lfs.com, and Quit. A second start shows "
                 "the words again; git-lfs.com opens through the same web-page-only gate as a clicked link. With the pictures "
-                "ready the glass opens and no window is shown. Other desk rows boot with the pictures ready."
+                "ready the glass opens and no window is shown. A partial download (renderer/pictures.js picturesSurvey found "
+                "12 of 221 pets still pointers) gets the same closed glass with Some pet pictures did not download, how "
+                "many pets, and git lfs pull; before, the crow alone was read and a partial pull opened a glass where "
+                "those pets were invisible. Other desk rows boot with the pictures ready."
             ),
         ),
         Affordance(
@@ -1425,7 +1430,11 @@ def _desk_rows() -> list[Affordance]:
                 "(--ozone-platform=wayland) with XWayland asks app.relaunch for --ozone-platform=x11 once and quits; with "
                 "none, no window and the wayland-native words. Found driving the desktop on Linux under Xvfb and a headless "
                 "sway: Electron crashed at a native Wayland boot (screen.getCursorScreenPoint), and with no tray Hide left "
-                "no way back that was said."
+                "no way back that was said. A tray host that shows up after the start (the panel loads late, "
+                "stalonetray or an AppIndicator host started later): learnTrayHost is asked again every 10 s "
+                "(TRAY_RECHECK_MS) until a tray is seen; on no -> yes the tray is made again (a StatusNotifier "
+                "watcher that appears late never hears of a tray made before it), the overlay is told, and Hide "
+                "hides at once again. Before, the answer was read once and the no-tray fallbacks stayed on for good."
             ),
         ),
         Affordance(
@@ -1663,11 +1672,26 @@ def launch_lfs_here() -> bool:
         return False
 
 
-def launch_next(pieces: str, pictures: str, script: str, display: str = "ok", lfs: bool = False) -> str:
+def launch_still(gone: int, pets: int) -> str:
+    """How many pets a pull that stopped partway left without pictures, in the start scripts' words."""
+    if gone == 1:
+        return f"1 of {pets} pets is still missing its pictures"
+    return f"{gone} of {pets} pets are still missing their pictures"
+
+
+def launch_next(
+    pieces: str, pictures: str, script: str, display: str = "ok", lfs: bool = False, gone: int = 0, pets: int = 0
+) -> str:
     """The plain next step check mode prints last: what to type, for the pictures first, then the screen (desktop.sh
     on Linux prints display: none with no DISPLAY or WAYLAND_DISPLAY), then the pieces. desktop.sh on a computer that
-    has Git LFS already (`lfs`) says to fetch the pictures, not to install Git LFS."""
+    has Git LFS already (`lfs`) says to fetch the pictures, not to install Git LFS. A pull that stopped partway
+    (pictures "partial") says how many pets are still missing pictures (`gone` of `pets`) and to run git lfs pull."""
     run = r".\desktop.ps1" if script == "desktop.ps1" else "sh desktop.sh"
+    if pictures == "partial":
+        return (
+            f"next: {launch_still(gone, pets)}: Git LFS stopped before it fetched them all. In the computerpets folder "
+            f"type git lfs pull. Then type {run} and press Enter."
+        )
     if pictures != "ready" and lfs and script == "desktop.sh":
         return (
             "next: The pet pictures are not here yet. Git LFS is installed but has not fetched them. In the computerpets "
@@ -1685,18 +1709,41 @@ def launch_next(pieces: str, pictures: str, script: str, display: str = "ok", lf
         "unfinished": f"next: Type {run} and press Enter. It finishes getting the pieces, then the pets come on.",
         "changed": f"next: Type {run} and press Enter. It gets the new pieces, then the pets come on.",
     }.get(pieces, f"next: Type {run} and press Enter to turn the pets on.")
-LAUNCH_PICTURES = ("ready", "missing", "lfs-pointers")
+LAUNCH_PICTURES = ("ready", "missing", "lfs-pointers", "partial")
 LAUNCH_PICTURE = ("desktop", "renderer", "sprites", "crow", "idle", "1.png")
+LAUNCH_SPRITES = ("desktop", "renderer", "sprites")
+
+
+def _launch_holds_pointer(pet: Path) -> bool:
+    for f in pet.rglob("*.png"):
+        try:
+            if f.stat().st_size >= 1024:
+                continue
+            with f.open("rb") as fh:
+                if fh.read(23) == b"version https://git-lfs":
+                    return True
+        except OSError:
+            continue
+    return False
+
+
+def launch_pictures_survey(root: Path) -> tuple[str, int, int]:
+    """(state, gone, pets): what the start script should say about the overlay pictures. A Git without LFS leaves text
+    pointers for every pet (lfs-pointers); a pull that stopped partway leaves some (partial, gone of pets)."""
+    picture = root.joinpath(*LAUNCH_PICTURE)
+    if not picture.is_file():
+        return ("missing", 0, 0)
+    sprites = root.joinpath(*LAUNCH_SPRITES)
+    pets = [d for d in sprites.iterdir() if d.is_dir()]
+    gone = sum(1 for pet in pets if _launch_holds_pointer(pet))
+    if gone == 0:
+        return ("ready", 0, len(pets))
+    return ("lfs-pointers" if gone >= len(pets) else "partial", gone, len(pets))
 
 
 def launch_pictures_state(root: Path) -> str:
-    """What the start script should say about the overlay pictures: a Git without LFS leaves text pointers."""
-    picture = root.joinpath(*LAUNCH_PICTURE)
-    if not picture.is_file():
-        return "missing"
-    with picture.open("rb") as fh:
-        head = fh.read(23)
-    return "lfs-pointers" if head == b"version https://git-lfs" else "ready"
+    """What the start script should say about the overlay pictures (launch_pictures_survey without the counts)."""
+    return launch_pictures_survey(root)[0]
 LAUNCH_NODE_MAJOR = 22
 
 
@@ -1728,7 +1775,7 @@ def _launch_check(aid: str) -> InvokeResult:
     pieces = re.search(r"^pieces: (\w+)\s*$", out, re.M)
     pictures = re.search(r"^pictures: ([\w-]+)\s*$", out, re.M)
     display = re.search(r"^display: (\w+)\s*$", out, re.M)
-    real_pictures = launch_pictures_state(root)
+    real_pictures, gone, pets = launch_pictures_survey(root)
     fails: list[str] = []
     if not node:
         expect = "no node"
@@ -1753,7 +1800,9 @@ def _launch_check(aid: str) -> InvokeResult:
         if not pictures or pictures.group(1) != real_pictures:
             fails.append(f"{script} check said pictures {pictures.group(1) if pictures else 'nothing'}, the file says {real_pictures}")
         if pieces and pictures:
-            want = launch_next(pieces.group(1), pictures.group(1), script, display.group(1) if display else "ok")
+            want = launch_next(
+                pieces.group(1), pictures.group(1), script, display.group(1) if display else "ok", gone=gone, pets=pets
+            )
             lines = [ln.strip() for ln in out.splitlines() if ln.strip()]
             if not lines or lines[-1] != want:
                 fails.append(f"{script} check's last line is {lines[-1] if lines else 'nothing'!r}, wanted {want!r}")
@@ -3471,6 +3520,8 @@ def _gui_rows() -> list[Affordance]:
                 "open (no_tray_second_start), and Turn off names this computer's start (turn_off_words). `--wayland` "
                 "starts natively on Wayland: with XWayland the app asks to start again on X11 (gate_wayland_restarts_on_x11) "
                 "and the drive follows; with none it checks the message (gate_wayland_says_so). "
+                "On Linux X11 with stalonetray installed, tray_appears_later starts a tray after the pets and needs "
+                "the overlay to hear yes, the hello to name the tray, one icon docked, and Hide to stop asking. "
                 "A start that shows neither window nor message is closed and killed, not waited on forever. "
                 "`--scale 1.25` / `1.5` adds "
                 "--force-device-scale-factor. Menus are recorded, "

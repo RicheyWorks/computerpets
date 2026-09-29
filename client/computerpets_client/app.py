@@ -34,6 +34,7 @@ from .gift import gift_line, leave_gift, pick_gift
 from .gpu import SPARK_H, SPARK_W, gpu_line, initial_sample, ink, read_local, remember, sparkline
 from .listener import listener_line
 from .minds import ADDRESS_LABEL, KEY_LABEL, MINDS_INTRO, MODEL_LABEL, blotter_minds_text, mind_fields
+from .screen import linux_screen_pieces_message
 from .presence import (
     allow_permission,
     arm_weather_locate,
@@ -928,6 +929,11 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.offscreen or args.check:
         os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    # A Linux desktop without libxcb-cursor: say which package, instead of Qt's abort that says to reinstall.
+    missing = linux_screen_pieces_message()
+    if missing:
+        print(missing, file=sys.stderr)
+        return 1
 
     app = QApplication.instance() or QApplication(sys.argv)
     app.setApplicationName("ComputerPets")
