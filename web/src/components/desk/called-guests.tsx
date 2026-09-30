@@ -23,6 +23,7 @@ import { traitFor } from "@/lib/pets/traits";
 import type { DeskWindow } from "@/lib/pets/windows";
 import { firstGrassBound, loadPlants } from "@/lib/pets/desk-plants";
 import { paintCalledFrame } from "@/lib/pets/desk-sprite-surface";
+import { CALLED_REST, calmHold, reducedMotion, type CalmHold } from "@/lib/pets/calm-motion";
 
 /** The frame guard's key for the shared part of the walk-on frame (not one guest's own step or paint). */
 const ALL_CALLED = "called guests";
@@ -101,11 +102,23 @@ export function CalledGuests({
       }
       hide(key);
     });
+    // Reduced motion: where each guest is drawn still (calm-motion.ts); null until it first rests.
+    const holds: Record<string, CalmHold> = {};
     const paintGuest = (el: HTMLElement, key: string, g: CalledWalker, dt: number) => {
-      el.style.display = "";
       const trait = traitFor(key);
-      el.style.transform = `translate3d(${g.x}px, ${-(g.lift || 0)}px, 0) scale(${g.facing * (trait.scale || 1) * 0.72}, 1)`;
       const imgs = poseFrames(g, { sit: sitFrames.current[key], walk: frames.current[key], idle: frames.current[key] });
+      if (reducedMotion()) {
+        // Drawn still where it rests, on its first frame; its walk goes on unseen and its next rest is a cut.
+        const hold = (holds[key] = calmHold(holds[key] ?? null, g, CALLED_REST));
+        el.style.display = hold ? "" : "none";
+        if (!hold) return;
+        el.style.transform = `translate3d(${hold.x}px, ${-hold.lift}px, 0) scale(${hold.facing * (trait.scale || 1) * 0.72}, 1)`;
+        const art = el.querySelector("canvas");
+        if (art instanceof HTMLCanvasElement && imgs[0]) paintCalledFrame(art, imgs[0]);
+        return;
+      }
+      el.style.display = "";
+      el.style.transform = `translate3d(${g.x}px, ${-(g.lift || 0)}px, 0) scale(${g.facing * (trait.scale || 1) * 0.72}, 1)`;
       if (Math.abs(g.target - g.x) > 2 && g.phase !== "perch" && g.phase !== "meet" && g.phase !== "bound") {
         acc.current[key] = (acc.current[key] || 0) + dt;
         if (acc.current[key] > 1 / 6.4 && imgs.length) {

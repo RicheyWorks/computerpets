@@ -7,6 +7,7 @@ interface Window {
   PetArrive: typeof import("../renderer/arrive.js");
   PetBirdFly: typeof import("../renderer/bird-fly.js");
   PetCallGuests: typeof import("../renderer/call-guests.js");
+  PetCalm: typeof import("../renderer/calm-motion.js");
   PetCard: typeof import("../renderer/card.js");
   PetChoice: typeof import("../renderer/choice.js");
   PetDesk: typeof import("../renderer/desk.js");

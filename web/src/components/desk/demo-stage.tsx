@@ -9,14 +9,15 @@ import type { LivingKind } from "@/lib/pets/living";
 
 export function DemoStage({ kind }: { kind: LivingKind }) {
   return (
-    // data-demo-stage: on a phone floor only the phone sit shows (styles.css).
-    <div data-demo-stage className="relative">
+    // data-demo-stage: on a phone floor only the phone sit shows (styles.css). The page's <main>, so the desk strips
+    // around the room are inside a landmark too (axe's region rule; the room itself is a named section).
+    <main data-demo-stage className="relative">
       <MacDeskExtra name={kind.name} />
       <LinuxDeskExtra name={kind.name} />
       <WindowsDeskSit name={kind.name} />
       <TabletDeskSit name={kind.name} />
       <PhoneDeskSit name={kind.name} />
       <CompanionRoom kind={kind} persistLocal={false} liveTick demoWindow extraCare={[...DESK_TEND]} />
-    </div>
+    </main>
   );
 }
