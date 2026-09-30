@@ -33,6 +33,13 @@ A tap on the guest is a choice. They pick Rest, Walk or Sit, Talk, Treat, Play, 
 
 **Keeper card from the keyboard.** The tray and the pet menu have **Keeper card**: it shows the overlay and opens the card with the keyboard on it (a click inside the open card does too). There is no global shortcut: main registers no system-wide keys ([ADR 0012](../docs/adr/0012-presence-does-not-log-keys.md)). While the card is open, Tab and Shift+Tab walk its buttons and then the weather, news, and market plates on the glass, with a visible ring; Escape closes the card. From a plate, Escape first goes back to the card (to the control you left), and the next Escape closes it; a field keeps its own Escape. A plate's tabs are one Tab stop: the Left and Right arrows (and Home / End) move along them, Enter or Space picks one. Dropping a saved line from the keyboard moves focus to the next line (or the Saved line field when none are left). With the card closed the glass stays click-through, as before.
 
+**Getting in from the keyboard, without a mouse.** The way in is the tray (or the Mac's menu-bar mark), reached with the system's own keys; ComputerPets adds no keys of its own outside its windows.
+- **Windows:** Win+B puts the keyboard on the notification area; the arrow keys move along its icons (ComputerPets may sit behind the **^** show-hidden-icons button: Enter opens it). Shift+F10 or the Menu key opens the ComputerPets tray menu; Up and Down move, Enter picks, Escape closes it. **Keeper card** opens the card with the keyboard in it.
+- **macOS:** Control+F8 moves the keyboard to the menu-bar status menus (the "Move focus to status menus" shortcut, in System Settings > Keyboard > Keyboard Shortcuts > Keyboard, where it can be turned on or changed); the arrow keys reach the ComputerPets mark and Space opens its menu.
+- **Linux:** it depends on the panel. Some tray hosts can be reached from the keyboard and some cannot. Where the panel cannot, there is no keyboard way in: the first press needs a pointer (the tray mark, or a right-click on the pet), and ComputerPets does not add a global shortcut to get around it.
+
+Once the card is open, the Menu key or Shift+F10 (outside a text field) opens the pet's own menu beside the pet: the same rows as a right-click on it (On the desk, Companions, the care words, Keeper card, Unlock…, Minds…, Hide the window, Quit), with the arrow keys, Enter and Escape. The Unlock and Minds window is an ordinary window: Tab walks its fields and buttons in order.
+
 They grow: hatchling → grown (day 1) → elder (day 7). Neglect them and they vanish until you call. Phoenix can burn out and come back kinder. Comb keeps brood and stores. Neglect can go cool.
 
 ## Run

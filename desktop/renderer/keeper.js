@@ -375,7 +375,8 @@
   }
 
   /**
-   * What a key does to the keeper card: "close" (Escape, no menu open), "tab", or "none".
+   * What a key does to the keeper card: "close" (Escape, no menu open), "tab", "menu" (the Menu key or Shift+F10
+   * outside a field: open the pet's menu), or "none".
    * Escape with focus on a weather, news, or market plate (`inPlate`) steps back instead: "card" (focus
    * returns to the open card; the next Escape closes it) or, with the card closed, "leave" (focus lets go).
    */
@@ -385,6 +386,9 @@
     if (!e.cardOpen) return "none";
     if (e.key === "Escape") return e.menuOpen ? "none" : "close";
     if (e.key === "Tab") return "tab";
+    // The keyboard's own menu keys (the Menu key, Shift+F10) open the pet's menu, as a right-click on the pet does;
+    // only while this window has the keyboard (the card is open), and not from a field, which keeps its own menu.
+    if ((e.key === "ContextMenu" || (e.key === "F10" && e.shiftKey)) && !e.inField && !e.menuOpen) return "menu";
     return "none";
   }
 

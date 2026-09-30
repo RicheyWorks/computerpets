@@ -4,6 +4,7 @@ import { livingByKey } from "@/lib/pets/living";
 import { beginFly, FLY_BIRD_KEY, FLY_BIRD_NAME, markCalled, shouldCall, stepFly, stillVisible } from "@/lib/pets/bird-fly";
 import { playVoice } from "@/lib/pets/desk-audio";
 import { paintSipFrame } from "@/lib/pets/desk-sprite-surface";
+import { BIRD_REST, calmHold, reducedMotion, type CalmHold } from "@/lib/pets/calm-motion";
 
 export function BirdFlyer({
   hidden,
@@ -41,6 +42,8 @@ export function BirdFlyer({
     let last = performance.now();
     let frame = 0;
     let acc = 0;
+    // Reduced motion: where Sip is drawn still (calm-motion.ts); null until she first hovers in place.
+    let hold: CalmHold = null;
     if (canvas.current) canvas.current.style.visibility = "";
     setOn(true);
     onVisible?.(true);
@@ -83,6 +86,20 @@ export function BirdFlyer({
         playVoice(FLY_BIRD_KEY);
         fly = markCalled(fly);
       }
+      if (reducedMotion()) {
+        // Drawn still where she hovers or perches, on her first frame; a new hover spot is a cut, not a flight.
+        hold = calmHold(hold, fly, BIRD_REST);
+        const el = canvas.current;
+        if (!el) return true;
+        if (!hold) {
+          el.style.visibility = "hidden";
+          return true;
+        }
+        el.style.visibility = "";
+        paintSipFrame(el, frames[0]!);
+        el.style.transform = `translate3d(${hold.x}px, ${-hold.lift}px, 0) scale(${hold.facing}, 1)`;
+        return true;
+      }
       acc += dt;
       if (acc > 1 / 8) {
         acc = 0;
@@ -115,6 +132,7 @@ export function BirdFlyer({
       data-hit
       data-bird={FLY_BIRD_KEY}
       data-surface="pending"
+      style={reducedMotion() ? { visibility: "hidden" } : undefined}
       className="pointer-events-auto absolute bottom-[18%] left-0 z-[6] h-28 w-28 origin-bottom select-none bg-transparent"
     />
   );

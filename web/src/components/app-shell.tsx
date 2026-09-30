@@ -147,12 +147,88 @@ export function closeDrawerOnEscape(e: Pick<KeyboardEvent, "key" | "defaultPreve
   return true;
 }
 
+/** Opens every closed drawer (a print shows them all) and returns the ones it opened, to close after the print. */
+export function openDrawersForPrint(doc: Document): HTMLDetailsElement[] {
+  const shut = Array.from(doc.querySelectorAll<HTMLDetailsElement>("details:not([open])"));
+  for (const d of shut) d.open = true;
+  return shut;
+}
+
+/** The care row a desk or den draws (BlotterCare, not a keeper card's own row): the skip link's target. */
+export const CARE_ROW = '.blotter-care[role="toolbar"]';
+
+/**
+ * Where the skip link sends the keyboard: the first care button that can be pressed (the row itself while the pet is
+ * busy and every word is greyed out), else the page's <main>, else the page under the header. Focus only; nothing is
+ * pressed. A target that is not a Tab stop gets tabindex -1 for as long as it holds the focus.
+ */
+export function skipTarget(doc: Document, page: HTMLElement | null): HTMLElement | null {
+  const row = doc.querySelector<HTMLElement>(CARE_ROW);
+  if (row) {
+    const ready = Array.from(row.querySelectorAll<HTMLButtonElement>("button")).find((b) => !b.disabled && b.getClientRects().length > 0);
+    return ready ?? row;
+  }
+  return doc.querySelector<HTMLElement>("main") ?? page;
+}
+
+/**
+ * The first Tab stop on every page: hidden until the keyboard reaches it, then a small plate at the top left. On a
+ * desk it skips the header and the room rail (about 55 Tab stops) to the care buttons; elsewhere it skips the header.
+ */
+function SkipLink({ pathname, page }: { pathname: string; page: React.RefObject<HTMLDivElement | null> }) {
+  const [care, setCare] = useState(false);
+  useEffect(() => {
+    const check = () => setCare(!!document.querySelector(CARE_ROW));
+    check();
+    const watch = new MutationObserver(check);
+    watch.observe(document.body, { childList: true, subtree: true });
+    return () => watch.disconnect();
+  }, [pathname]);
+  return (
+    <a
+      href="#page"
+      data-skip-link
+      className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:inline-flex focus:min-h-11 focus:items-center focus:rounded-[var(--radius-sm)] focus:border focus:border-border-strong focus:bg-elevated focus:px-4 focus:text-sm focus:text-fg focus:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      onClick={(e) => {
+        e.preventDefault();
+        const to = skipTarget(document, page.current);
+        if (!to) return;
+        if (!to.matches("a[href], button, input, select, textarea, [tabindex]")) {
+          to.setAttribute("tabindex", "-1");
+          to.addEventListener("blur", () => to.removeAttribute("tabindex"), { once: true });
+        }
+        to.focus();
+      }}
+    >
+      {care ? "Skip to the care buttons" : "Skip to the page"}
+    </a>
+  );
+}
+
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const pageRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => void closeDrawerOnEscape(e);
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
+  }, []);
+  useEffect(() => {
+    // A print shows every field note: the closed drawers open for it and close again after.
+    let opened: HTMLDetailsElement[] = [];
+    const before = () => {
+      opened = openDrawersForPrint(document);
+    };
+    const afterPrint = () => {
+      for (const d of opened) d.open = false;
+      opened = [];
+    };
+    window.addEventListener("beforeprint", before);
+    window.addEventListener("afterprint", afterPrint);
+    return () => {
+      window.removeEventListener("beforeprint", before);
+      window.removeEventListener("afterprint", afterPrint);
+    };
   }, []);
   const { isPending } = useCurrentUserState();
   const desk = pathname === "/";
@@ -190,7 +266,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const signInSearch = back === RETURN_FALLBACK ? {} : { next: back };
 
   return (
-    <div className={cn("bg-bg text-fg", desk || demo || live || kennelGuest || kennel || shelf || hatchery || nest ? "h-dvh overflow-hidden" : "min-h-dvh")}>
+    // A desk page is one screen that does not scroll, except in a window shorter than the room's 520 px floor (a
+    // laptop at 200 % zoom is 384 px tall) with a mouse: there it scrolls, so the care buttons under the fold can be
+    // reached. A phone (a coarse pointer) keeps its own fit, which measures the room to the screen.
+    <div
+      className={cn(
+        "bg-bg text-fg",
+        desk || demo || live || kennelGuest || kennel || shelf || hatchery || nest ? "h-dvh overflow-hidden [@media(max-height:519px)_and_(pointer:fine)]:overflow-y-auto" : "min-h-dvh",
+      )}
+    >
+      <SkipLink pathname={pathname} page={pageRef} />
       <header
         data-site-header
         className={cn(
@@ -202,9 +287,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               : "sticky top-0 bg-bg/90 backdrop-blur-sm",
         )}
       >
-        <div className="relative mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
+        {/* Under 320 px wide (a 280 px phone, or a narrow window zoomed in) the bar tightens so Sign in stays on
+            the screen; it ran 20 px past the right edge at 280 px. */}
+        <div className="relative mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6 max-[319px]:gap-1.5 max-[319px]:px-2">
           <Link to="/meet" className="flex shrink-0 items-baseline gap-2 whitespace-nowrap no-underline">
-            <span className="font-display text-lg tracking-tight text-fg">ComputerPets</span>
+            <span className="font-display text-lg tracking-tight text-fg max-[319px]:text-base">ComputerPets</span>
             <span className="hidden text-[11px] uppercase tracking-[0.18em] text-subtle sm:inline">
               Living desk
             </span>
@@ -253,11 +340,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
       {desk || demo || live || kennelGuest || kennel || shelf || hatchery || nest ? (
-        <div className="h-dvh">{children}</div>
+        <div ref={pageRef} id="page" className="h-dvh">{children}</div>
       ) : meet || den || tide || garden || hive || pond || roost || corner || wood || canopy || stone || creek || log || shore || reef || meadow || cellar || well || far || grid || study ? (
-        <div>{children}</div>
+        <div ref={pageRef} id="page">{children}</div>
       ) : (
-        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 [@media(max-height:480px)]:py-3">{children}</div>
+        <div ref={pageRef} id="page" className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 [@media(max-height:480px)]:py-3">{children}</div>
       )}
       <PortraitNote />
     </div>

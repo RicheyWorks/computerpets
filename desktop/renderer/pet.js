@@ -299,6 +299,11 @@ let sipSleepCalled = false;
 let robinFly = null;
 let robinAcc = 0;
 let robinFrame = 0;
+/** Under reduced motion, where Brick, Sip and each called guest are drawn still (calm-motion.js); null until they rest. */
+let robinHold = null;
+let birdHold = null;
+/** @type {Record<string, { phase: string, x: number, lift: number, facing: 1 | -1 } | null>} */
+let calledHold = {};
 let deskPlants = [];
 let plantAge = 0;
 let plantDrag = null;
@@ -1006,6 +1011,11 @@ function sitMusic() {
   });
 }
 
+/** Reduced motion is asked for (the system setting, read by the page; calm-motion.js). */
+function calmNow() {
+  return !!(window.PetCalm && window.PetCalm.reducedMotion());
+}
+
 function ruiSleepBout() {
   if (!kind || kind.key !== "red_panda") return false;
   if (life && life.hidden) return false;
@@ -1018,12 +1028,14 @@ function ruiSleepBout() {
 /** Brick leaves the glass: no flight left and no canvas left behind (flight end, hide, or a broken frame). */
 function dropRobin() {
   robinFly = null;
+  robinHold = null;
   if (robinEl) robinEl.classList.remove("show");
 }
 
 /** Sip leaves the glass the same way. */
 function dropBird() {
   birdFly = null;
+  birdHold = null;
   if (birdEl) birdEl.classList.remove("show");
 }
 
@@ -1038,11 +1050,13 @@ function callRobin() {
   robinFly = R.beginRobinFly(window.innerWidth, window.innerHeight, true);
   robinAcc = 0;
   robinFrame = 0;
+  robinHold = null;
   const sprites = pack(R.ROBIN_KEY);
   const src = R.destSrc(robinFly, sprites);
   R.applyDest(robinEl);
   if (src) paintActor(robinEl, src, "brick");
-  robinEl.classList.add("show");
+  // Reduced motion: Brick shows once he has landed (tickRobin), not on the way in.
+  if (!calmNow()) robinEl.classList.add("show");
 }
 
 function tickRobin(dt) {
@@ -1069,8 +1083,22 @@ function tickRobin(dt) {
     say(R.ROBIN_SONG);
     robinFly = R.markSung(robinFly);
   }
-  robinAcc += dt;
   const sprites = pack(R.ROBIN_KEY);
+  if (calmNow()) {
+    // Reduced motion: drawn still where he lands or perches, his first frame, no tilt or wing beat.
+    robinHold = window.PetCalm.calmHold(robinHold, robinFly, window.PetCalm.ROBIN_REST);
+    if (!robinHold) {
+      robinEl.classList.remove("show");
+      return;
+    }
+    const still = R.destSrc({ ...robinFly, phase: /** @type {any} */ (robinHold.phase), frame: 0 }, sprites);
+    R.applyDest(robinEl);
+    if (still) paintActor(robinEl, still, "brick");
+    robinEl.classList.add("show");
+    robinEl.style.transform = `translate3d(${robinHold.x}px, ${-robinHold.lift}px, 0) scale(${robinHold.facing}, 1)`;
+    return;
+  }
+  robinAcc += dt;
   if (robinAcc > 1 / 8) {
     robinAcc = 0;
     robinFrame = (robinFrame + 1) % 4;
@@ -1126,7 +1154,8 @@ function paintPlants() {
     P.applyDest(node);
     if (src) paintActor(node, src, "plant");
     node.dataset.on = plant.selected ? "1" : "0";
-    const lean = P.windLean(plantAge, windOn, plant.selected, plant.mode);
+    // Reduced motion: the plants stand still in the wind (calm-motion.js); a plant set to sway leans no more.
+    const lean = calmNow() ? 0 : P.windLean(plantAge, windOn, plant.selected, plant.mode);
     node.style.transform = P.paintTransform(plant, lean);
   }
 }
@@ -1217,7 +1246,9 @@ function callSip() {
   birdFly = F.beginFly(window.innerWidth, window.innerHeight, true);
   birdAcc = 0;
   birdFrame = 0;
-  birdEl.classList.add("show");
+  birdHold = null;
+  // Reduced motion: Sip shows once she hovers in place (tickBird), not on the way in.
+  if (!calmNow()) birdEl.classList.add("show");
   const sprites = pack(F.FLY_BIRD_KEY);
   paintActor(birdEl, (sprites.play && sprites.play[0]) || sprites.idle[0], "sip");
   birdFly = F.markCalled(birdFly);
@@ -1370,7 +1401,21 @@ function calledFlags() {
 function paintCalled() {
   const G = window.PetCallGuests;
   if (!G || !calledRoot || !G.syncCalledPaint) return;
+  const calm = calmNow();
+  if (!calm) calledHold = {};
   G.syncCalledPaint(calledRoot, called, {
+    // Reduced motion: each guest drawn still where it rests (calm-motion.js), on its first frame.
+    place: calm
+      ? (g) => {
+          // A guest the keeper drags goes where the pointer takes it, and rests there.
+          const hold =
+            calledDrag === g.key
+              ? { phase: g.phase, x: g.x, lift: g.lift || 0, facing: /** @type {1 | -1} */ (g.facing < 0 ? -1 : 1) }
+              : window.PetCalm.calmHold(calledHold[g.key] || null, g, window.PetCalm.CALLED_REST);
+          calledHold[g.key] = hold;
+          return hold ? { x: hold.x, lift: hold.lift, facing: hold.facing, frame: 0 } : null;
+        }
+      : undefined,
     frameOf: (g) => {
       const sprites = g.sprites || pack(g.key);
       return (G.poseFrames && G.poseFrames(g, sprites)) || (g.phase === "perch" || g.phase === "approach-perch" ? (sprites.sit && sprites.sit.length ? sprites.sit : sprites.idle) : sprites.walk || sprites.idle);
@@ -1451,9 +1496,22 @@ function tickBird(dt) {
     window.PetDeskHouse && window.PetDeskHouse.playVoice(F.FLY_BIRD_KEY, card);
     birdFly = F.markCalled(birdFly);
   }
-  birdAcc += dt;
   const sprites = pack(F.FLY_BIRD_KEY);
   const frames = sprites.play && sprites.play.length ? sprites.play : sprites.idle;
+  if (calmNow()) {
+    // Reduced motion: drawn still where she hovers or perches, her first frame; a new hover spot is a cut.
+    const was = birdHold;
+    birdHold = window.PetCalm.calmHold(birdHold, birdFly, window.PetCalm.BIRD_REST);
+    if (!birdHold) {
+      birdEl.classList.remove("show");
+      return;
+    }
+    if (birdHold !== was) paintActor(birdEl, frames[0], "sip");
+    birdEl.classList.add("show");
+    birdEl.style.transform = `translate3d(${birdHold.x}px, ${-birdHold.lift}px, 0) scale(${birdHold.facing}, 1)`;
+    return;
+  }
+  birdAcc += dt;
   if (birdAcc > 1 / 8) {
     birdAcc = 0;
     birdFrame = (birdFrame + 1) % frames.length;
@@ -4387,7 +4445,15 @@ document.addEventListener("keydown", (e) => {
   if (e.defaultPrevented || !K || !K.cardKey) return;
   const active = /** @type {HTMLElement | null} */ (document.activeElement);
   const plate = inPlate(active) && !fieldOf(active);
-  const act = K.cardKey({ key: e.key, cardOpen: !card.collapsed, menuOpen: !!(choiceOpen || plantChoiceKey), inPlate: plate });
+  const act = K.cardKey({ key: e.key, shiftKey: e.shiftKey, cardOpen: !card.collapsed, menuOpen: !!(choiceOpen || plantChoiceKey), inPlate: plate, inField: !!fieldOf(active) });
+  if (act === "menu") {
+    // The pet's own menu from the keyboard, beside the pet (the same menu a right-click opens; its rows take the
+    // arrow keys, Enter and Escape). This window's keys only: there is no global shortcut (ADR 0012).
+    e.preventDefault();
+    const at = pet.getBoundingClientRect();
+    window.desk?.openMenu(at.left + at.width / 2, at.top + at.height / 2);
+    return;
+  }
   if (act === "card") {
     // Escape on a plate steps back to the card; the next Escape closes the card.
     e.preventDefault();
