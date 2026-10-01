@@ -227,6 +227,10 @@ class UnlockDialog(QDialog):
             (self.pet_type, PET_LABEL),
         ):
             field.setAccessibleName(words)
+        # The pet box can be typed in: Tab lands once, on its text field (the box hands the focus over), which is
+        # what a screen reader reads, so the field carries the name too.
+        if self.pet_type.lineEdit() is not None:
+            self.pet_type.lineEdit().setAccessibleName(PET_LABEL)
 
         form = QFormLayout()
         form.addRow("House server address", self.backend)

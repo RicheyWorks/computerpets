@@ -1200,3 +1200,21 @@
     margin-top: 0.5rem;
   }
 }
+
+/* Printing (the access pass 2): dark ink on the paper. The page's light words sit on a dark ground that browsers
+   leave out of a print, so they printed near white on white. The header and the skip link stay off the paper;
+   AppShell opens every closed drawer for the print and closes them again after it. */
+@media print {
+  *,
+  *::before,
+  *::after {
+    color: #1d1a17 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  [data-site-header],
+  [data-skip-link] {
+    display: none !important;
+  }
+}

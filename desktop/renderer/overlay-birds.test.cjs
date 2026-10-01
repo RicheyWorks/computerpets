@@ -6,6 +6,7 @@ const vm = require("node:vm");
 const Robin = require("./robin-fly.js");
 const Bird = require("./bird-fly.js");
 const Guard = require("./frame-guard.js");
+const Calm = require("./calm-motion.js");
 
 // Brick (robin) and Sip (hummingbird) on the overlay: the real pet.js functions, run on a fake element.
 // The web desk had a bird frozen mid-air when hidden; these prove the overlay never keeps one.
@@ -35,13 +36,21 @@ function fakeEl() {
   };
 }
 
-function overlay(hostKey) {
+function overlay(hostKey, calm) {
   const robinEl = fakeEl();
   const birdEl = fakeEl();
   const guestEl = fakeEl();
   const logs = [];
   const ctx = {
-    window: { PetRobinFly: Robin, PetBirdFly: Bird, PetFrameGuard: Guard, PetDeskHouse: { playVoice() {} }, innerWidth: 1280, innerHeight: 720 },
+    window: {
+      PetRobinFly: Robin,
+      PetBirdFly: Bird,
+      PetFrameGuard: Guard,
+      PetCalm: { ...Calm, reducedMotion: () => !!calm },
+      PetDeskHouse: { playVoice() {} },
+      innerWidth: 1280,
+      innerHeight: 720,
+    },
     robinEl,
     birdEl,
     guestEl,
@@ -61,9 +70,9 @@ function overlay(hostKey) {
     ctx.painted += 1;
   };
   vm.createContext(ctx);
-  const names = ["dropRobin", "dropBird", "callRobin", "tickRobin", "callSip", "tickBird", "endVisit", "resetAfterFrameError"];
+  const names = ["calmNow", "dropRobin", "dropBird", "callRobin", "tickRobin", "callSip", "tickBird", "endVisit", "resetAfterFrameError"];
   vm.runInContext(
-    "var robinFly = null, robinAcc = 0, robinFrame = 0, birdFly = null, birdAcc = 0, birdFrame = 0, sipSleepCalled = false, visit = null;\n" +
+    "var robinFly = null, robinAcc = 0, robinFrame = 0, birdFly = null, birdAcc = 0, birdFrame = 0, sipSleepCalled = false, visit = null, robinHold = null, birdHold = null;\n" +
       names.map(fnSource).join("\n") +
       "\nvar frameGuard = window.PetFrameGuard.makeGuard({ reset: resetAfterFrameError, log: (t) => logs.push(t) });",
     Object.assign(ctx, { logs }),
@@ -187,4 +196,46 @@ test("pet.js wires the drops: every early exit and the frame reset use dropRobin
   assert.match(reset, /petKey === "bird"\) dropBird\(\)/);
   assert.match(reset, /petKey === "visit guest"\) endVisit\(\)/);
   assert.match(reset, /safeIdle\(sim\)/);
+});
+
+test("reduced motion: Brick shows only once he has landed, stays put, sings, and leaves without a flight", () => {
+  const o = overlay("cat", true);
+  run(o, "callRobin()");
+  assert.equal(o.robinEl.shown(), false, "not drawn on the way in");
+  const drawn = new Set();
+  let shownAt = -1;
+  let steps = 0;
+  while (run(o, "robinFly") && steps < 4000) {
+    run(o, "frameGuard.step(tickRobin, 0.05, 'robin')");
+    if (o.robinEl.shown()) {
+      if (shownAt < 0) shownAt = steps;
+      drawn.add(o.robinEl.style.transform);
+    }
+    steps += 1;
+  }
+  assert.ok(shownAt > 40, `he showed after landing (frame ${shownAt}), not at the start`);
+  assert.equal(drawn.size, 1, `one still spot: ${[...drawn].join(" / ")}`);
+  assert.doesNotMatch([...drawn][0], /rotate/);
+  assert.ok(o.said.includes(Robin.ROBIN_SONG), "he still sings");
+  assert.equal(o.robinEl.shown(), false, "gone at the end of his visit");
+  assert.equal(run(o, "frameGuard.caught()"), 0);
+});
+
+test("reduced motion: Sip is drawn still where she hovers, and leaves nothing behind", () => {
+  const o = overlay("cat", true);
+  run(o, "callSip()");
+  assert.equal(o.birdEl.shown(), false, "not drawn on the way in");
+  const drawn = [];
+  let steps = 0;
+  while (run(o, "birdFly") && steps < 6000) {
+    run(o, "frameGuard.step(tickBird, 0.05, 'bird')");
+    if (o.birdEl.shown() && drawn[drawn.length - 1] !== o.birdEl.style.transform) drawn.push(o.birdEl.style.transform);
+    steps += 1;
+  }
+  assert.ok(drawn.length >= 1, "she showed");
+  // Each change is a cut to a new hover spot, a handful in a whole visit, not a frame-by-frame flight.
+  assert.ok(drawn.length <= 12, `${drawn.length} spots in ${steps} frames`);
+  assert.ok(drawn.every((t) => !/rotate/.test(t)));
+  assert.equal(o.birdEl.shown(), false);
+  assert.equal(run(o, "frameGuard.caught()"), 0);
 });

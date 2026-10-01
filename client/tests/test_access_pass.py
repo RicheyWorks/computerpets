@@ -76,7 +76,27 @@ def test_a_companion_chip_draws_its_keyboard_focus():
     assert 'scroll.setAccessibleName("Companions")' in src
 
 
-def test_the_unlock_fields_carry_their_row_words(app, tmp_path):
+def _tab_walk(app, root, n):
+    """The widgets real Tab presses land on, in order, from the first Tab stop."""
+    from PyQt6.QtCore import Qt
+    from PyQt6.QtTest import QTest
+
+    root.show()
+    root.activateWindow()
+    app.processEvents()
+    root.focusNextChild()
+    app.processEvents()
+    seen = []
+    for _ in range(n):
+        seen.append(app.focusWidget())
+        QTest.keyClick(app.focusWidget(), Qt.Key.Key_Tab)
+        app.processEvents()
+    return seen
+
+
+def test_the_unlock_fields_carry_their_row_words_and_the_pet_box_is_one_tab_stop(app, tmp_path):
+    from PyQt6.QtWidgets import QComboBox, QLineEdit
+
     from computerpets_client.app import DeskWindow
     from computerpets_client.unlock_dialog import APP_ID_LABEL, PET_LABEL, STEAM_ID_LABEL, UnlockDialog
 
@@ -87,8 +107,15 @@ def test_the_unlock_fields_carry_their_row_words(app, tmp_path):
         assert d.steam_id.accessibleName() == STEAM_ID_LABEL
         assert d.app_id.accessibleName() == APP_ID_LABEL
         assert d.pet_type.accessibleName() == PET_LABEL
-        nameless = [type(x).__name__ for x in _chain(app, d) if not _named(x).strip() and type(x).__name__ != "QLineEdit"]
+        assert d.pet_type.lineEdit().accessibleName() == PET_LABEL
+        walk = _tab_walk(app, d, 20)
+        nameless = [type(x).__name__ for x in walk if not _named(x).strip()]
         assert nameless == [], nameless
+        # One lap of the window visits the pet box once (its own text field is not a second stop).
+        lap = walk[: walk.index(walk[0], 1)] if walk[0] in walk[1:] else walk
+        pet_stops = [x for x in lap if x is d.pet_type or x is d.pet_type.lineEdit()]
+        assert len(pet_stops) == 1, [type(x).__name__ for x in lap]
+        assert not any(isinstance(x, QLineEdit) and isinstance(x.parent(), QComboBox) for x in lap if x is not d.pet_type.lineEdit())
         d.close()
     finally:
         w.close()

@@ -8,6 +8,7 @@ import {
   ROBIN_SONG,
   beginRobinFly,
   destSrc,
+  type RobinFly,
   markSung,
   shouldSing,
   stepRobinFly,
@@ -15,6 +16,7 @@ import {
 } from "@/lib/pets/robin-fly";
 import { playVoice } from "@/lib/pets/desk-audio";
 import { paintBrickFrame } from "@/lib/pets/desk-sprite-surface";
+import { ROBIN_REST, calmHold, reducedMotion, type CalmHold } from "@/lib/pets/calm-motion";
 
 export function RobinFlyer({
   hidden,
@@ -55,6 +57,8 @@ export function RobinFlyer({
     let last = performance.now();
     let frame = 0;
     let acc = 0;
+    // Reduced motion: where Brick is drawn still (calm-motion.ts); null until he lands.
+    let hold: CalmHold = null;
     const first = destSrc(fly, guest.sprites);
     if (canvas.current) canvas.current.style.visibility = "";
     setOn(true);
@@ -99,6 +103,21 @@ export function RobinFlyer({
         if (song) songRef.current?.(song);
         fly = markSung(fly);
       }
+      if (reducedMotion()) {
+        // Drawn still where he lands or perches, on his first frame: no flight across the desk, tilt or wing beat.
+        hold = calmHold(hold, fly, ROBIN_REST);
+        const el = canvas.current;
+        if (!el) return true;
+        if (!hold) {
+          el.style.visibility = "hidden";
+          return true;
+        }
+        el.style.visibility = "";
+        const still = destSrc({ ...fly, phase: hold.phase as RobinFly["phase"], frame: 0 }, guest.sprites);
+        if (still) paintBrickFrame(el, still);
+        el.style.transform = `translate3d(${hold.x}px, ${-hold.lift}px, 0) scale(${hold.facing}, 1)`;
+        return true;
+      }
       acc += dt;
       if (acc > 1 / 8) {
         acc = 0;
@@ -133,6 +152,7 @@ export function RobinFlyer({
       data-hit
       data-robin={ROBIN_KEY}
       data-surface="pending"
+      style={reducedMotion() ? { visibility: "hidden" } : undefined}
       className="pointer-events-auto absolute bottom-0 left-0 z-[6] h-28 w-28 origin-bottom select-none border-0 bg-transparent shadow-none outline-none"
     />
   );

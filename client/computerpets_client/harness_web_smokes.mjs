@@ -1776,7 +1776,7 @@ async function overlayBirdsPlain() {
     resetDrops: reset.includes('petKey === "robin") dropRobin()') && reset.includes('petKey === "bird") dropBird()') && reset.includes('petKey === "visit guest") endVisit()') && reset.includes("safeIdle(sim)"),
     oneWayOut: !/robinFly = null;\s*robinEl\.classList\.remove/.test(pet) && !/birdFly = null;\s*birdEl\.classList\.remove/.test(pet),
   };
-  if (birds.status !== 0 || birds.pass !== 9 || birds.fail !== 0 || !birds.resetDrops || !birds.oneWayOut) bad.push(`overlay birds: ${JSON.stringify({ ...birds, err: (run.stderr || "").slice(0, 200) })}`);
+  if (birds.status !== 0 || birds.pass !== 11 || birds.fail !== 0 || !birds.resetDrops || !birds.oneWayOut) bad.push(`overlay birds: ${JSON.stringify({ ...birds, err: (run.stderr || "").slice(0, 200) })}`);
 
   // 2) + 4) Which AI, the model box, and the key box: the same plain words on the web, the overlay, and the Python client.
   const { MIND_WORDS, presetTag } = await lib("ai/mind-words.ts");

@@ -1,10 +1,12 @@
 // Accessibility, in a real browser (the access pass, September 2026). axe-core runs on every main page at a laptop
 // (1366×768) and a phone (390×844) size, signed out and, with the stand-in session, signed in; a new serious or
-// critical violation fails. Known and kept on purpose: axe's target-size on the drawn scene itself (a walking pet's
-// hit box and a desk plant), which the other pets and the care row pass over as they move; every other target is held
-// to 24×24 by the sweep in phone-desk-layout.test.mjs. Then the keyboard on the desk: a desk plant draws a focus
-// ring, a care word pressed with Enter keeps the focus through the busy spell (it fell to the page and Tab started
-// again at the top), and Escape closes a drawer and gives the focus to its summary.
+// critical violation fails, and so does a moderate `region` (content outside every landmark). Known and kept on
+// purpose: axe's target-size on the drawn scene itself (a walking pet's hit box, a desk plant, a called guest), which
+// the other pets and the care row pass over as they move; every other target is held to 24×24 by the sweep in
+// phone-desk-layout.test.mjs. Then the keyboard on the desk: the skip link is the first Tab stop and takes the focus
+// to the care buttons (the page elsewhere), a desk plant draws a focus ring, a care word pressed with Enter keeps the
+// focus through the busy spell (it fell to the page and Tab started again at the top), and Escape closes a drawer
+// and gives the focus to its summary. With reduced motion asked for, the desk plants stand still.
 // Starts the Vite dev server in-process and drives the system Chrome or Edge (playwright-core, no downloaded
 // browser); skips, and says why, when no browser is found. A11Y_URL / A11Y_SIGNED_IN_URL use running dev servers.
 
@@ -28,8 +30,15 @@ export const A11Y_SIZES = [
 ];
 /** The WCAG 2.0 to 2.2 A and AA rules and axe's best practices; only serious and critical ones fail. */
 export const A11Y_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"];
-/** The drawn scene: moving hit boxes other moving art passes over (see the top of this file). */
-export const A11Y_SCENE = "[data-pet-hit], [data-plant]";
+/**
+ * The drawn scene: moving hit boxes other moving art passes over (see the top of this file). Each is 112 to 176 px
+ * across; axe counts what is left uncovered at the moment it looks (a pet walking in front of a plant, a called guest
+ * beside another, the care row over a plant on a phone). A bigger invisible hit area would only cover more of its
+ * neighbours, so they are kept as drawn (the access pass 2 notes in docs/APP-HARNESS.md).
+ */
+export const A11Y_SCENE = "[data-pet-hit], [data-plant], .called-guest";
+/** Moderate rules held too: every piece of a page sits in a landmark (/demo's desk strips did not). */
+export const A11Y_ALSO = ["region"];
 
 function findBrowser() {
   const env = process.env.PHONE_LAYOUT_BROWSER || process.env.CHROME_PATH;
@@ -139,11 +148,11 @@ async function open(ctx, url) {
 }
 
 /** Runs in the page: axe's serious and critical violations, less the drawn scene's target-size. */
-async function axeRun([tags, scene]) {
+async function axeRun([tags, scene, also]) {
   const res = await window.axe.run(document, { runOnly: { type: "tag", values: tags }, resultTypes: ["violations"] });
   const out = [];
   for (const v of res.violations) {
-    if (v.impact !== "serious" && v.impact !== "critical") continue;
+    if (v.impact !== "serious" && v.impact !== "critical" && !also.includes(v.id)) continue;
     const nodes = v.nodes.filter((n) => {
       if (v.id !== "target-size") return true;
       const el = document.querySelector(n.target[0]);
@@ -163,7 +172,7 @@ async function sweep(base, pages) {
     for (const path of pages) {
       const page = await open(ctx, base + path);
       await page.addScriptTag({ content: axe });
-      for (const line of await page.evaluate(axeRun, [A11Y_TAGS, A11Y_SCENE])) bad.push(`${size.w}×${size.h} ${path}: ${line}`);
+      for (const line of await page.evaluate(axeRun, [A11Y_TAGS, A11Y_SCENE, A11Y_ALSO])) bad.push(`${size.w}×${size.h} ${path}: ${line}`);
       await page.close();
     }
     await ctx.close();
@@ -231,6 +240,134 @@ test("keyboard on the desk: a plant's focus ring, the focus kept through a busy 
   const shut = await meet.evaluate(() => ({ tag: document.activeElement?.tagName, open: !!document.activeElement?.closest("details")?.open }));
   if (!opened || !inDrawer || shut.tag !== "SUMMARY" || shut.open) problems.push(`/meet drawer: found ${opened}, focus inside ${inDrawer}, after Escape ${JSON.stringify(shut)}`);
   await phone.close();
+  assert.deepEqual(problems, [], problems.join("\n"));
+});
+
+test("the skip link: the first Tab on a desk goes to the care buttons, elsewhere to the page", { skip, timeout: 300_000 }, async () => {
+  const { url, browser } = await site();
+  const problems = [];
+  for (const size of A11Y_SIZES) {
+    const ctx = await browser.newContext({ viewport: { width: size.w, height: size.h }, isMobile: !!size.phone, hasTouch: !!size.phone });
+    for (const [path, words, lands] of [
+      ["/", "Skip to the care buttons", "care"],
+      ["/demo/rui", "Skip to the care buttons", "care"],
+      ["/meet", "Skip to the page", "main"],
+      ["/study", "Skip to the page", "main"],
+      ["/hive", "Skip to the care buttons", "care"],
+    ]) {
+      const page = await open(ctx, url + path);
+      await page.waitForFunction((w) => document.querySelector("[data-skip-link]")?.textContent === w, words, { timeout: 30_000 }).catch(() => {});
+      await page.evaluate(() => {
+        (document.activeElement instanceof HTMLElement ? document.activeElement : document.body).blur();
+        window.getSelection()?.removeAllRanges();
+      });
+      await page.keyboard.press("Tab");
+      const first = await page.evaluate(() => {
+        const el = document.activeElement;
+        const r = el?.getBoundingClientRect();
+        return { skip: !!el?.matches("[data-skip-link]"), text: el?.textContent, w: r?.width ?? 0, h: r?.height ?? 0, top: r?.top ?? -1 };
+      });
+      if (!first.skip || first.text !== words || first.w < 24 || first.h < 24 || first.top < 0) {
+        problems.push(`${size.w}×${size.h} ${path}: the first Tab reached ${JSON.stringify(first)}`);
+      }
+      await page.keyboard.press("Enter");
+      const at = await page.evaluate(() => {
+        const el = document.activeElement;
+        return { care: !!el?.closest('.blotter-care[role="toolbar"]'), main: el?.tagName === "MAIN", tag: el?.tagName, text: el?.textContent?.trim().slice(0, 30) };
+      });
+      if (!at[lands]) problems.push(`${size.w}×${size.h} ${path}: after Enter the focus is on ${at.tag} "${at.text}", not the ${lands}`);
+      await page.close();
+    }
+    await ctx.close();
+  }
+  assert.deepEqual(problems, [], problems.join("\n"));
+});
+
+test("reduced motion: the plants stand still, and Brick and Sip are drawn still where they rest", { skip, timeout: 300_000 }, async () => {
+  const { url, browser } = await site();
+  // The places each piece is drawn at, sampled over 7.5 s of /demo/rui (Brick and Sip fly in as it opens).
+  const sample = async (reducedMotion) => {
+    const ctx = await browser.newContext({ viewport: { width: 1366, height: 768 }, reducedMotion });
+    const page = await open(ctx, `${url}/demo/rui`);
+    const seen = { plants: new Set(), robin: new Set(), bird: new Set() };
+    for (let i = 0; i < 30; i += 1) {
+      const at = await page.evaluate(() => {
+        const shown = (sel) => {
+          const el = document.querySelector(sel);
+          return el && el.style.visibility !== "hidden" && el.style.transform ? el.style.transform : null;
+        };
+        return {
+          plants: [...document.querySelectorAll("[data-plant]")].map((el) => el.style.transform).join(" | "),
+          robin: shown("[data-robin]"),
+          bird: shown("[data-bird]"),
+        };
+      });
+      for (const k of ["plants", "robin", "bird"]) if (at[k]) seen[k].add(at[k]);
+      await page.waitForTimeout(250);
+    }
+    await ctx.close();
+    return { plants: seen.plants.size, robin: seen.robin.size, bird: seen.bird.size };
+  };
+  const moving = await sample("no-preference");
+  const calm = await sample("reduce");
+  // Without the setting they move (so the check below is a real one); with it, one still spot each (a bird that
+  // moves on to a new hover spot is drawn there at once: two).
+  assert.ok(moving.plants > 1 && moving.robin > 3 && moving.bird > 3, `the scene did not move without reduced motion: ${JSON.stringify(moving)}`);
+  assert.ok(calm.plants === 1 && calm.robin === 1 && calm.bird >= 1 && calm.bird <= 2, `reduced motion still moves: ${JSON.stringify(calm)}`);
+});
+
+test("a 280 px screen, 200 % zoom on a laptop, and print", { skip, timeout: 300_000 }, async () => {
+  const { url, browser } = await site();
+  const problems = [];
+  // 280 px wide: nothing runs past the right edge (Sign in did, by 20 px).
+  const narrow = await browser.newContext({ viewport: { width: 280, height: 653 } });
+  for (const path of ["/", "/meet", "/login", "/demo/rui"]) {
+    const page = await open(narrow, url + path);
+    const sw = await page.evaluate(() => document.documentElement.scrollWidth);
+    if (sw > 280) problems.push(`280 px ${path}: the page is ${sw} px wide`);
+    await page.close();
+  }
+  await narrow.close();
+  // 1366×768 at 200 %: a 683×384 window, under the room's 520 px floor. The mouse wheel scrolls the desk down to
+  // its care buttons (the page would not scroll, and they sat under the bottom edge).
+  const zoom = await browser.newContext({ viewport: { width: 683, height: 384 } });
+  for (const path of ["/", "/demo/rui"]) {
+    const page = await open(zoom, url + path);
+    await page.mouse.move(500, 250); // the floor, clear of the plaque and the rail (they scroll on their own)
+    for (let i = 0; i < 4; i += 1) await page.mouse.wheel(0, 400);
+    await page.waitForTimeout(400);
+    const off = await page.evaluate(() => {
+      const out = [];
+      for (const b of document.querySelectorAll('.blotter-care[role="toolbar"] button')) {
+        const r = b.getBoundingClientRect();
+        if (r.top < 0 || r.bottom > window.innerHeight + 1) out.push(`${b.textContent} ${Math.round(r.top)}-${Math.round(r.bottom)}`);
+      }
+      return out;
+    });
+    if (off.length) problems.push(`683×384 ${path}: care buttons off the screen after scrolling: ${off.join(", ")}`);
+    await page.close();
+  }
+  await zoom.close();
+  // Print: dark ink, no header, and every drawer open for the print (closed again after).
+  const paper = await browser.newContext({ viewport: { width: 1366, height: 768 } });
+  const study = await open(paper, `${url}/study`);
+  const shut = await study.evaluate(() => document.querySelectorAll("details:not([open])").length);
+  const during = await study.evaluate(() => {
+    window.dispatchEvent(new Event("beforeprint"));
+    return document.querySelectorAll("details:not([open])").length;
+  });
+  const afterPrint = await study.evaluate(() => {
+    window.dispatchEvent(new Event("afterprint"));
+    return document.querySelectorAll("details:not([open])").length;
+  });
+  if (!(shut > 0 && during === 0 && afterPrint === shut)) problems.push(`print drawers: ${shut} closed, ${during} during the print, ${afterPrint} after`);
+  await study.emulateMedia({ media: "print" });
+  const ink = await study.evaluate(() => ({
+    p: getComputedStyle(document.querySelector("main p")).color,
+    header: getComputedStyle(document.querySelector("[data-site-header]")).display,
+  }));
+  if (ink.p !== "rgb(29, 26, 23)" || ink.header !== "none") problems.push(`print: ${JSON.stringify(ink)}`);
+  await paper.close();
   assert.deepEqual(problems, [], problems.join("\n"));
 });
 
