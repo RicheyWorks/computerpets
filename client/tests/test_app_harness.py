@@ -1096,7 +1096,7 @@ def test_overlay_birds_row_leaves_no_bird_on_the_glass_and_keeps_minds_plain():
                  "minds=which_ai+model_name+key_placeholder_same", "overlay=no_plugin_key_or_mind_json_words",
                  "mind_page=kid_top+for_builders_fold", "cards=plain_blurbs+tags", "start_here=detail_short_lines+facts_kept"):
         assert mark in ob.trace, (mark, ob.trace)
-    assert ob.extras["birds"]["pass"] == 9 and ob.extras["birds"]["fail"] == 0
+    assert ob.extras["birds"]["pass"] == 11 and ob.extras["birds"]["fail"] == 0
     assert all(ob.extras["same"].values()), ob.extras["same"]
     assert all(ob.extras["overlay"].values()), ob.extras["overlay"]
     assert all(ob.extras["web"].values()), ob.extras["web"]

@@ -19,6 +19,7 @@ import {
   type PlantMode,
 } from "@/lib/pets/desk-plants";
 import { paintPlantFrame } from "@/lib/pets/desk-sprite-surface";
+import { reducedMotion } from "@/lib/pets/calm-motion";
 
 export function DeskPlants({ windOn }: { windOn?: boolean }) {
   const [plants, setPlants] = useState<DeskPlant[]>([]);
@@ -46,7 +47,8 @@ export function DeskPlants({ windOn }: { windOn?: boolean }) {
       last = now;
       age += dt;
       const selected = plantsRef.current.some((p) => p.selected);
-      const still = plantsRef.current.every((p) => p.mode === "still");
+      // Reduced motion: the plants stand still in the wind (calm-motion.ts), whatever each one is set to.
+      const still = reducedMotion() || plantsRef.current.every((p) => p.mode === "still");
       setLean(still ? 0 : windLean(age, wind.current, selected));
     };
     const tick = guardedLoop(step, (next) => { raf = window.requestAnimationFrame(next); }, guard, () => "plants", () => window.cancelAnimationFrame(raf));

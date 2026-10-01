@@ -874,12 +874,24 @@
       } else {
         reused += 1;
       }
+      // opts.place (reduced motion, calm-motion.js): where to draw the guest still, and its frame; null keeps it
+      // out of sight until it rests. Without it the guest is drawn where it walks.
+      const at = opts && opts.place ? opts.place(g) : undefined;
+      if (at === null) {
+        if (img.style) img.style.visibility = "hidden";
+        continue;
+      }
+      if (img.style && img.style.visibility) img.style.visibility = "";
       const frames = frameOf ? frameOf(g) : poseFrames(g, g.sprites);
-      let src = frames && frames.length ? frames[Math.abs(g.frame || 0) % frames.length] || frames[0] : "";
+      const frame = at ? at.frame : g.frame;
+      let src = frames && frames.length ? frames[Math.abs(frame || 0) % frames.length] || frames[0] : "";
       if (!src) src = poseSrc(g, g.sprites) || (g.sprites && (g.sprites.idle && g.sprites.idle[0])) || "";
       destFit(img);
       assignSrc(img, src, opts && opts.surface);
-      if (img.style) img.style.transform = `translate3d(${g.x}px, ${-(g.lift || 0)}px, 0) scale(${g.facing || 1}, 1)`;
+      const x = at ? at.x : g.x;
+      const lift = at ? at.lift : g.lift || 0;
+      const facing = at ? at.facing : g.facing || 1;
+      if (img.style) img.style.transform = `translate3d(${x}px, ${-lift}px, 0) scale(${facing}, 1)`;
     }
     return { reused, added, removed };
   }
