@@ -1,12 +1,14 @@
 // Accessibility, in a real browser (the access pass, September 2026). axe-core runs on every main page at a laptop
 // (1366×768) and a phone (390×844) size, signed out and, with the stand-in session, signed in; a new serious or
 // critical violation fails, and so does a moderate `region` (content outside every landmark). Known and kept on
-// purpose: axe's target-size on the drawn scene itself (a walking pet's hit box, a desk plant, a called guest), which
-// the other pets and the care row pass over as they move; every other target is held to 24×24 by the sweep in
-// phone-desk-layout.test.mjs. Then the keyboard on the desk: the skip link is the first Tab stop and takes the focus
-// to the care buttons (the page elsewhere), a desk plant draws a focus ring, a care word pressed with Enter keeps the
-// focus through the busy spell (it fell to the page and Tab started again at the top), and Escape closes a drawer
-// and gives the focus to its summary. With reduced motion asked for, the desk plants stand still.
+// purpose: axe's target-size on the moving scene itself (a walking pet's hit box, a called guest) at the moment two of
+// them overlap (A11Y_SCENE); under a control drawn over it one gives way, and the desk plants are held to 24 px like
+// every other target (the sweep in phone-desk-layout.test.mjs holds the rest to 24×24). Then the keyboard on the desk:
+// the skip link is the first Tab stop and takes the focus to the care buttons (the page elsewhere), a desk plant draws
+// a focus ring, a care word pressed with Enter keeps the focus through the busy spell (it fell to the page and Tab
+// started again at the top), and Escape closes a drawer and gives the focus to its summary. With reduced motion asked
+// for, the desk plants stand still, and so do the pet and a house visitor where they rest (a treat walk is one cut, and
+// still ends in the snack).
 // Starts the Vite dev server in-process and drives the system Chrome or Edge (playwright-core, no downloaded
 // browser); skips, and says why, when no browser is found. A11Y_URL / A11Y_SIGNED_IN_URL use running dev servers.
 
@@ -16,6 +18,7 @@ import { spawn } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { createServer as netServer } from "node:net";
 import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 
 const WEB = join(import.meta.dirname, "..");
 
@@ -31,12 +34,13 @@ export const A11Y_SIZES = [
 /** The WCAG 2.0 to 2.2 A and AA rules and axe's best practices; only serious and critical ones fail. */
 export const A11Y_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"];
 /**
- * The drawn scene: moving hit boxes other moving art passes over (see the top of this file). Each is 112 to 176 px
- * across; axe counts what is left uncovered at the moment it looks (a pet walking in front of a plant, a called guest
- * beside another, the care row over a plant on a phone). A bigger invisible hit area would only cover more of its
- * neighbours, so they are kept as drawn (the access pass 2 notes in docs/APP-HARNESS.md).
+ * The moving scene: a walking pet or guest's hit box, and a called guest. Under the controls drawn over it one gives
+ * way now (give-way.ts: out of the Tab order and hit testing while less than a 24 px square of it can be reached),
+ * and Brick and Sip are drawn only, so the plants are held to 24 px like every other target. Two cases are still left
+ * to axe's moment: two moving guests that overlap while both can still be reached (axe counts every overlap, not
+ * which is drawn on top), and the few hundred milliseconds between looks. The notes are in docs/APP-HARNESS.md.
  */
-export const A11Y_SCENE = "[data-pet-hit], [data-plant], .called-guest";
+export const A11Y_SCENE = "[data-pet-hit], .called-guest";
 /** Moderate rules held too: every piece of a page sits in a landmark (/demo's desk strips did not). */
 export const A11Y_ALSO = ["region"];
 
@@ -311,9 +315,148 @@ test("reduced motion: the plants stand still, and Brick and Sip are drawn still 
   const moving = await sample("no-preference");
   const calm = await sample("reduce");
   // Without the setting they move (so the check below is a real one); with it, one still spot each (a bird that
-  // moves on to a new hover spot is drawn there at once: two).
+  // moves on to a new hover spot is drawn there at once: up to three in the 7.5 s, each a cut, never a flight).
   assert.ok(moving.plants > 1 && moving.robin > 3 && moving.bird > 3, `the scene did not move without reduced motion: ${JSON.stringify(moving)}`);
-  assert.ok(calm.plants === 1 && calm.robin === 1 && calm.bird >= 1 && calm.bird <= 2, `reduced motion still moves: ${JSON.stringify(calm)}`);
+  assert.ok(calm.plants === 1 && calm.robin === 1 && calm.bird >= 1 && calm.bird <= 3, `reduced motion still moves: ${JSON.stringify(calm)}`);
+});
+
+test("reduced motion: the pet stays where it rests, a treat walk is one cut that still ends in the snack, and a house visitor is drawn still", { skip, timeout: 300_000 }, async () => {
+  const { url, browser } = await site();
+  const { SNACK_LINE } = await import(pathToFileURL(join(WEB, "src/lib/pets/hours.ts")).href);
+  // Every drawn pet on /demo/rui (Rui and, when one calls today, the house visitor), by element, for n samples.
+  const watch = async (page, n, seen) => {
+    for (let i = 0; i < n; i += 1) {
+      const at = await page.evaluate(() => ({
+        pets: [...document.querySelectorAll("[data-pet-hit]")].map((el) => {
+          el.dataset.watch ??= String(document.querySelectorAll("[data-watch]").length);
+          return { id: el.dataset.watch, visitor: /^Say hello to /.test(el.getAttribute("aria-label") || ""), t: el.style.transform };
+        }),
+        speech: [...document.querySelectorAll("[data-speech]")].map((el) => el.textContent.trim()).join(" / "),
+      }));
+      for (const p of at.pets) {
+        if (!p.t) continue;
+        const m = /translate3d\(([-\d.]+)px.*rotate\(([-\d.]+)deg\) scale\(([-\d.]+), ([-\d.]+)\)/.exec(p.t);
+        const e = (seen.pets[p.id] ??= { visitor: p.visitor, xs: new Set(), rot: new Set(), sy: new Set(), all: new Set() });
+        e.all.add(p.t);
+        if (m) {
+          e.xs.add(Math.round(Number(m[1])));
+          e.rot.add(Number(m[2]));
+          e.sy.add(Number(m[4]));
+        }
+      }
+      seen.speech.add(at.speech);
+      await page.waitForTimeout(250);
+    }
+    return seen;
+  };
+  const fresh = () => ({ pets: {}, speech: new Set() });
+
+  // Without the setting Rui breathes and walks (so the checks below are real ones).
+  const loose = await browser.newContext({ viewport: { width: 1366, height: 768 }, reducedMotion: "no-preference" });
+  const moving = await watch(await open(loose, `${url}/demo/rui`), 12, fresh());
+  await loose.close();
+  assert.ok((moving.pets["0"]?.all.size ?? 0) > 4, `Rui did not move without reduced motion: ${moving.pets["0"]?.all.size}`);
+
+  const ctx = await browser.newContext({ viewport: { width: 1366, height: 768 }, reducedMotion: "reduce" });
+  const page = await open(ctx, `${url}/demo/rui`);
+  const before = await watch(page, 12, fresh());
+  const rui = before.pets["0"];
+  assert.ok(rui, "Rui is drawn");
+  assert.equal(rui.all.size, 1, `Rui moved while resting under reduced motion: ${[...rui.all].join(" / ")}`);
+  const x0 = [...rui.xs][0];
+
+  await page.getByRole("button", { name: /^Bamboo/ }).first().click();
+  const after = await watch(page, 36, fresh());
+  const walk = after.pets["0"];
+  const xs = [...walk.xs].filter((x) => x !== x0);
+  assert.ok(xs.length <= 1, `the treat walk was drawn on the way (${[...walk.xs].join(", ")}), not as one cut`);
+  assert.deepEqual([...walk.rot], [0], "no tilt");
+  assert.equal(walk.sy.size, 1, "no hop, squash or breath");
+  assert.ok([...after.speech].some((line) => line.includes(SNACK_LINE.red_panda)), `the walk did not end in the snack: ${[...after.speech].join(" || ")}`);
+
+  // The house visitor comes 7.5 s in (when today's is not Brick, who flies instead): drawn in one spot, not walked.
+  const visitor = Object.values({ ...before.pets, ...after.pets }).find((p) => p.visitor);
+  if (visitor) {
+    assert.equal(visitor.xs.size, 1, `the house visitor was drawn walking: ${[...visitor.xs].join(", ")}`);
+    assert.deepEqual([...visitor.rot], [0]);
+  }
+  await ctx.close();
+});
+
+test("moving targets give way under the controls drawn over them, and a tap goes through Brick", { skip, timeout: 300_000 }, async () => {
+  const { url, browser } = await site();
+  const ctx = await browser.newContext({ viewport: { width: 1366, height: 768 } });
+  const page = await open(ctx, `${url}/login`);
+  // A walking target and a control, laid out by hand, with the page's own give-way module (give-way.ts).
+  const steps = await page.evaluate(async () => {
+    const G = await import("/src/lib/pets/give-way.ts");
+    const put = (el, css) => Object.assign(el.style, { position: "fixed", ...css });
+    const target = document.createElement("div");
+    target.tabIndex = 0;
+    target.setAttribute("role", "button");
+    target.setAttribute("aria-label", "A walking guest");
+    put(target, { left: "500px", top: "300px", width: "120px", height: "120px", zIndex: "50", background: "#345" });
+    const cover = document.createElement("button");
+    cover.textContent = "Care";
+    put(cover, { left: "500px", top: "300px", width: "120px", height: "110px", zIndex: "60" });
+    document.body.append(target, cover);
+    const undo = G.giveWay(target);
+    const look = () => {
+      G.giveWayNow(document);
+      return { inert: target.inert, marked: target.hasAttribute("data-giving-way") };
+    };
+    const out = {};
+    out.buried = look();
+    Object.assign(cover.style, { width: "60px", height: "120px" });
+    out.halfClear = look();
+    Object.assign(cover.style, { width: "120px", height: "110px" });
+    out.buriedAgain = look();
+    // Focused while it could be reached, then walked under the control: it keeps the focus (an inert target cannot
+    // be focused, so the keyboard reaches it only while it is clear).
+    Object.assign(cover.style, { width: "60px", height: "120px" });
+    look();
+    target.focus();
+    Object.assign(cover.style, { width: "120px", height: "110px" });
+    out.focused = look();
+    out.focusKept = document.activeElement === target;
+    target.blur();
+    target.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+    out.held = look();
+    window.dispatchEvent(new PointerEvent("pointerup"));
+    out.letGo = look();
+    cover.style.zIndex = "40";
+    out.coverUnder = look();
+    cover.style.zIndex = "60";
+    look();
+    undo();
+    out.undone = { inert: target.inert, marked: target.hasAttribute("data-giving-way") };
+    target.remove();
+    cover.remove();
+    return out;
+  });
+  assert.deepEqual(steps.buried, { inert: true, marked: true }, "a 10 px strip left: it gives way");
+  assert.deepEqual(steps.halfClear, { inert: false, marked: false }, "half of it clear: it is back");
+  assert.equal(steps.buriedAgain.inert, true);
+  assert.equal(steps.focused.inert, false, "the focused target is kept");
+  assert.equal(steps.focusKept, true);
+  assert.equal(steps.held.inert, false, "a target being held is kept");
+  assert.equal(steps.letGo.inert, true);
+  assert.deepEqual(steps.coverUnder, { inert: false, marked: false }, "a control drawn under it takes nothing from it");
+  assert.deepEqual(steps.undone, { inert: false, marked: false });
+  await ctx.close();
+
+  // Brick is drawn only: a tap where he flies lands on what is under him.
+  const desk = await browser.newContext({ viewport: { width: 1366, height: 768 } });
+  const room = await open(desk, `${url}/demo/rui`);
+  await room.waitForSelector("[data-robin]", { timeout: 30_000 });
+  const through = await room.evaluate(() => {
+    const robin = document.querySelector("[data-robin]");
+    const r = robin.getBoundingClientRect();
+    const at = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+    return { pointer: getComputedStyle(robin).pointerEvents, hitRobin: at === robin };
+  });
+  assert.deepEqual(through, { pointer: "none", hitRobin: false });
+  await desk.close();
 });
 
 test("a 280 px screen, 200 % zoom on a laptop, and print", { skip, timeout: 300_000 }, async () => {

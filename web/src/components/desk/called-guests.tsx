@@ -24,6 +24,7 @@ import type { DeskWindow } from "@/lib/pets/windows";
 import { firstGrassBound, loadPlants } from "@/lib/pets/desk-plants";
 import { paintCalledFrame } from "@/lib/pets/desk-sprite-surface";
 import { CALLED_REST, calmHold, reducedMotion, type CalmHold } from "@/lib/pets/calm-motion";
+import { giveWay } from "@/lib/pets/give-way";
 
 /** The frame guard's key for the shared part of the walk-on frame (not one guest's own step or paint). */
 const ALL_CALLED = "called guests";
@@ -206,6 +207,8 @@ export function CalledGuests({
             type="button"
             data-hit
             data-called={key}
+            // Walking under the care row or a link, it gives way until clear (give-way.ts).
+            ref={giveWay}
             aria-label={`Dismiss ${guest.name}`}
             className="called-guest pointer-events-auto absolute bottom-0 left-0 h-32 w-32 origin-bottom border-0 bg-transparent p-0 shadow-none outline-none"
             onClick={(e) => {

@@ -3,7 +3,10 @@
  * guests and the desk plants keep their visits, songs, calls and taps, but stop travelling across the desk. A guest
  * is drawn still where it rests: it shows once it first settles, stays put while its walk or flight goes on unseen,
  * and appears at its next resting spot without the trip between (a cut, not a glide). The wing wobble, the tilt and
- * the plants' wind lean stop. The same rules as desktop/renderer/calm-motion.js.
+ * the plants' wind lean stop. The pet itself and a house visitor keep their care words, poses and visits too: a walk is
+ * a cut to where it ends, the bob, breath, hop and lean stop, a pose is held on its first frame (a once-through pose
+ * such as eating still ends on time, calmOnceS), and window plays, tricks and small idle acts wait for motion to be
+ * allowed again. The same rules as desktop/renderer/calm-motion.js.
  */
 
 export type CalmHold = { phase: string; x: number; lift: number; facing: 1 | -1; away?: boolean } | null;
@@ -35,4 +38,13 @@ export function calmHold(hold: CalmHold, actor: { phase: string; x: number; lift
   if (!rest.includes(actor.phase)) return hold && !hold.away ? { ...hold, away: true } : hold;
   if (hold && hold.phase === actor.phase && !hold.away) return hold;
   return { phase: actor.phase, x: actor.x, lift: actor.lift || 0, facing: actor.facing != null && actor.facing < 0 ? -1 : 1 };
+}
+
+/**
+ * How long a once-through pose (eating, a thank-you word) lasts under reduced motion, held on its first frame: as long
+ * as its frames would have taken, never under 0.4 s, so what follows it (the thank-you, the next order) still comes on
+ * time.
+ */
+export function calmOnceS(len: number, fps: number): number {
+  return fps > 0 && len > 0 ? Math.max(0.4, len / fps) : 0.4;
 }
