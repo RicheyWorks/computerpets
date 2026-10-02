@@ -67,7 +67,9 @@ test("a finished walk or seek still arrives; leave arrives when they walk off", 
   assert.match(livingSrc, /finishArrive/);
   assert.match(livingSrc, /arriveFinish/);
   assert.match(livingSrc, /s\.settle === 0 && s\.arrivedPending/);
-  assert.equal([...livingSrc.matchAll(/arrivedRef\.current\?\.\(\)/g)].length, 3);
+  // The fourth: under reduced motion an idle wander waits, and the order is done at once.
+  assert.equal([...livingSrc.matchAll(/arrivedRef\.current\?\.\(\)/g)].length, 4);
+  assert.match(livingSrc, /if \(reduced && cmd === "wander"\) \{[\s\S]{0,400}?arrivedRef\.current\?\.\(\);\s*return;/);
   assert.match(livingSrc, /if \(!s\.act\) arrivedRef\.current\?\.\(\)/);
 });
 

@@ -3,7 +3,10 @@
  * robin, the hummingbird, called guests and the desk plants keep their visits, songs, calls and taps, but stop
  * travelling across the desk. A guest is drawn still where it rests: it shows once it first settles, stays put while
  * its walk or flight goes on unseen, and appears at its next resting spot without the trip between (a cut, not a
- * glide). The wing wobble, the tilt and the plants' wind lean stop. The same rules as web/src/lib/pets/calm-motion.ts.
+ * glide). The wing wobble, the tilt and the plants' wind lean stop. The pet itself and a house visitor keep their
+ * care words, poses and visits too: a walk is a cut to where it ends, the bob, breath, hop and lean stop, a pose is
+ * held on its first frame (a once-through pose such as eating still ends on time, calmOnceS), and window plays,
+ * tricks and small idle acts wait for motion to be allowed again. The same rules as web/src/lib/pets/calm-motion.ts.
  */
 (function (root) {
   const ROBIN_REST = ["stay", "perch"];
@@ -41,7 +44,18 @@
     return { phase: actor.phase, x: actor.x, lift: actor.lift || 0, facing };
   }
 
-  const api = { ROBIN_REST, BIRD_REST, CALLED_REST, reducedMotion, calmHold };
+  /**
+   * How long a once-through pose (eating, a thank-you word) lasts under reduced motion, held on its first frame: as
+   * long as its frames would have taken, never under 0.4 s, so what follows it (the thank-you, the next order) still
+   * comes on time.
+   * @param {number} len
+   * @param {number} fps
+   */
+  function calmOnceS(len, fps) {
+    return fps > 0 && len > 0 ? Math.max(0.4, len / fps) : 0.4;
+  }
+
+  const api = { ROBIN_REST, BIRD_REST, CALLED_REST, reducedMotion, calmHold, calmOnceS };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetCalm = api;
 })(typeof window !== "undefined" ? window : globalThis);
