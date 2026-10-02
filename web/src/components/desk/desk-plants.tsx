@@ -20,6 +20,7 @@ import {
 } from "@/lib/pets/desk-plants";
 import { paintPlantFrame } from "@/lib/pets/desk-sprite-surface";
 import { reducedMotion } from "@/lib/pets/calm-motion";
+import { giveWay } from "@/lib/pets/give-way";
 
 export function DeskPlants({ windOn }: { windOn?: boolean }) {
   const [plants, setPlants] = useState<DeskPlant[]>([]);
@@ -82,6 +83,9 @@ export function DeskPlants({ windOn }: { windOn?: boolean }) {
             data-hit
             data-plant={plant.key}
             data-mode={plant.mode}
+            // On a small phone the care row stands over the plants' spot: under it a plant gives way (give-way.ts),
+            // so the keyboard is not sent to a plant hidden behind the care buttons, and it comes back once clear.
+            ref={giveWay}
             aria-label={plant.name}
             className="pointer-events-auto absolute left-0 top-0 origin-bottom border-0 bg-transparent p-0"
             style={{

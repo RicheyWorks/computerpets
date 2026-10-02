@@ -144,6 +144,8 @@ export function RobinFlyer({
   // Only while the robin is on the desk. When a flight ends, breaks, or the desk hides mid-flight, the canvas
   // is taken off the page, so no picture is left frozen on the desk or offscreen, and its loop has stopped.
   if (!on) return null;
+  // Drawn only: nothing answers a tap on Brick, so a tap goes through to the pet, a plant or a button under the flight
+  // (the canvas took it before, and gave nothing back).
   return (
     <canvas
       ref={canvas}
@@ -153,7 +155,7 @@ export function RobinFlyer({
       data-robin={ROBIN_KEY}
       data-surface="pending"
       style={reducedMotion() ? { visibility: "hidden" } : undefined}
-      className="pointer-events-auto absolute bottom-0 left-0 z-[6] h-28 w-28 origin-bottom select-none border-0 bg-transparent shadow-none outline-none"
+      className="pointer-events-none absolute bottom-0 left-0 z-[6] h-28 w-28 origin-bottom select-none border-0 bg-transparent shadow-none outline-none"
     />
   );
 }
