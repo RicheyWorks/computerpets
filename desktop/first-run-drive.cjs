@@ -1164,6 +1164,75 @@ async function drive(opts = {}) {
     check("card_leash_on_long_walk", leashN >= 4 && walked >= 400 && maxGap <= 260, `food at ${foodAt}; the pet walked ${walked} px with the card open (${leashN} samples); widest card-to-pet gap ${maxGap} px (leash 260)`);
     await settle(30_000);
 
+    // 6d. Reduced motion (the system setting, emulated through Chromium; calm-motion.js reads it every frame): the pet
+    // is drawn still where it rests, and a Feed walk is one cut that still ends in the meal. Then motion is allowed
+    // again for the rest of the drive.
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    // Put at 60% of the screen, clear of the food, which lands at the far left again (Math.random pinned below).
+    await page.evaluate(() => Object.assign(/** @type {any} */ (sim), { x: Math.round(innerWidth * 0.6), target: null, waypoints: [] }));
+    // At rest means idle, sitting or asleep with no act: a once-through pose (a play, a yawn) is held still for as long as
+    // it would have played and then gives way to idle, where the pet may turn once to face the pointer; that turn is a
+    // cut, not motion, so the still window starts after it.
+    await page
+      .waitForFunction(() => {
+        const q = /** @type {any} */ (sim);
+        return ["idle", "sit", "sleep"].includes(q.anim) && !q.act && q.target == null;
+      }, null, { timeout: 15_000, polling: 100 })
+      .catch(() => {});
+    await page.waitForTimeout(400);
+    const calmPose = () =>
+      page.evaluate(() => {
+        const t = /** @type {HTMLElement} */ (document.getElementById("pet")).style.transform;
+        const m = /translate3d\(([-\d.]+)px, ([-\d.]+)px.*rotate\(([-\d.]+)deg\) scale\(([-\d.]+), ([-\d.]+)\)/.exec(t);
+        return m ? { t, x: Math.round(Number(m[1])), rot: Number(m[3]), sy: Number(m[5]) } : { t, x: NaN, rot: NaN, sy: NaN };
+      });
+    // Still means the same place, lift, tilt and size every sample. A turn to face the other way (the sign of the
+    // x scale) is a cut, not motion: an idle pet faces the pointer, and the first BLACKBEARD run at 1.25 saw one turn.
+    // At most one turn is allowed, and each is named with the pose it was in.
+    const restPoses = new Set();
+    const restAnims = new Set();
+    let restTurns = 0;
+    let lastFacing = 0;
+    for (let t = 0; t < 2000; t += 250) {
+      const o = await calmPose();
+      const facing = /scale\(-/.test(o.t) ? -1 : 1;
+      if (lastFacing && facing !== lastFacing) restTurns += 1;
+      lastFacing = facing;
+      restPoses.add(o.t.replace(/scale\(-/, "scale("));
+      restAnims.add(await page.evaluate(() => /** @type {any} */ (sim).anim));
+      await page.waitForTimeout(250);
+    }
+    await page.evaluate(() => Object.assign(/** @type {any} */ (life), { hunger: 40 }));
+    const calmFrom = (await calmPose()).x;
+    await page.evaluate(() => {
+      const r = Math.random;
+      Math.random = () => 0;
+      try {
+        /** @type {HTMLElement | null} */ (document.querySelector('#hud [data-care="feed"]'))?.click();
+      } finally {
+        Math.random = r;
+      }
+    });
+    const calmXs = new Set();
+    const calmRot = new Set();
+    const calmSy = new Set();
+    for (let t = 0; t < 8000; t += 200) {
+      const o = await calmPose();
+      calmXs.add(o.x);
+      calmRot.add(o.rot);
+      calmSy.add(o.sy);
+      await page.waitForTimeout(200);
+    }
+    const calmFed = await page.evaluate(() => /** @type {any} */ (life).hunger);
+    await page.emulateMedia({ reducedMotion: null });
+    const calmOn = [...calmXs].filter((x) => x !== calmFrom);
+    check(
+      "reduced_motion_pet_still",
+      restPoses.size === 1 && restTurns <= 1 && calmOn.length === 1 && calmRot.size === 1 && calmRot.has(0) && calmSy.size === 1 && calmFed > 40,
+      `resting: ${restPoses.size} drawn pose(s)${restPoses.size > 1 ? ` (${[...restPoses].join(" | ")})` : ""}, ${restTurns} turn(s) to face the other way, as ${[...restAnims].join("/")}; the Feed walk drawn at ${[calmFrom, ...calmOn].join(" then ")} (one cut is two spots), tilt ${[...calmRot].join("/")}, height scale ${calmSy.size} value(s); hunger 40 to ${Math.round(calmFed)}`,
+    );
+    await settle(20_000);
+
     // 7. Minds… opens the House window; Unlock… takes it to Unlock; closing it closes it.
     await petMenu();
     const winP = app.waitForEvent("window", { timeout: 20_000 }).catch(() => null);

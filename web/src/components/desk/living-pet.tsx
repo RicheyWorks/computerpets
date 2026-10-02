@@ -26,6 +26,8 @@ import {
   type ActMotion,
 } from "@/lib/pets/ethogram";
 import { dayPart } from "@/lib/pets/hours";
+import { calmOnceS, reducedMotion } from "@/lib/pets/calm-motion";
+import { giveWay } from "@/lib/pets/give-way";
 import { isTapKey } from "@/lib/pets/keeper";
 import { traitFor } from "@/lib/pets/traits";
 import { afterPlace, arriveFinish, pointerUp, walkLand } from "@/lib/pets/arrive";
@@ -412,11 +414,17 @@ export function LivingPet({
     };
   }, [speech]);
 
+  // Under the controls drawn over it (the care row, a plant, another guest on top), the walking pet gives way until it
+  // is clear: out of the Tab order and hit testing while less than a 24 px square of it can be reached (give-way.ts).
+  useEffect(() => giveWay(hitRef.current), []);
+
   useEffect(() => {
     const root = wrapRef.current;
     if (!root) return;
     const s = sim.current;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Reduced motion (calm-motion.ts), read every frame so the system setting takes hold at once: a walk is a cut to
+    // where it ends, a pose is held on its first frame, and window plays, tricks and small acts wait.
+    let reduced = reducedMotion();
     let last = performance.now();
     let raf = 0;
 
@@ -493,6 +501,47 @@ export function LivingPet({
       s.frame = 0;
       s.arrivedPending = true;
       s.actWait = afterSettleWait(traitFor(kindRef.current ?? "red_panda").wander);
+    };
+
+    // Where a walk ends, whether it got there step by step or, under reduced motion, in one cut.
+    const landWalk = () => {
+      const land = walkLand(s.actWalk, s.waypoints.length);
+      if (land === "act") {
+        s.target = null;
+        s.actWalk = false;
+        s.anim = s.actMotion === "circle" ? "sit" : "idle";
+        s.frame = 0;
+        s.land = 0.4;
+      } else if (land === "pause") {
+        s.target = null;
+        s.pause = wanderPauseS();
+        s.anim = "idle";
+        s.frame = 0;
+      } else {
+        finishArrive();
+      }
+    };
+
+    // A once-through pose (eating, a word) at its end: back to idle, the thank-you after a meal, and the order done.
+    const finishOnce = () => {
+      const wasEat = s.anim === "eat";
+      s.anim = "idle";
+      s.frame = 0;
+      if (wasEat) {
+        const thanks = startThankYou(kindRef.current, s.lastHappy, s.x, s.facing, {
+          asleep: false,
+          hidden: hiddenRef.current,
+          leaving: s.leaving,
+          cmd: "idle",
+        });
+        if (thanks) {
+          s.play = null;
+          s.trick = null;
+          s.happy = thanks.happy;
+          s.lastHappy = thanks.kind;
+        }
+      }
+      if (!s.act) arrivedRef.current?.();
     };
 
     const clearAct = () => {
@@ -580,6 +629,16 @@ export function LivingPet({
       if (order === lastOrder.current || cmd === "none") return;
       if (s.act && (cmd === "wander" || cmd === "idle")) {
         lastOrder.current = order;
+        return;
+      }
+      if (reduced && cmd === "wander") {
+        // Reduced motion: an idle wander waits. The pet stays where it rests and the order is done at once (a care
+        // walk, Hide and Call back still go, as a cut).
+        lastOrder.current = order;
+        s.target = null;
+        s.waypoints = [];
+        s.pause = 0;
+        arrivedRef.current?.();
         return;
       }
       lastOrder.current = order;
@@ -688,6 +747,7 @@ export function LivingPet({
     const frame = (now: number) => {
       const dt = Math.min(0.1, (now - last) / 1000);
       last = now;
+      reduced = reducedMotion();
       const box = stageBox();
       const width = box?.width ?? 800;
       const height = box?.height ?? 500;
@@ -699,7 +759,7 @@ export function LivingPet({
         s.hop = Math.max(0, s.hop - dt * 2.15);
         if (prev > 0 && s.hop === 0) {
           s.land = 1;
-          puff(s.x, 0, 5);
+          if (!reduced) puff(s.x, 0, 5);
         }
       }
       if (s.land > 0) s.land = Math.max(0, s.land - dt * LAND_DECAY);
@@ -729,7 +789,8 @@ export function LivingPet({
             leaving: s.leaving,
             cmd: cmdRef.current,
           });
-          s.x = s.happy.x;
+          // Under reduced motion the thank-you keeps its poses where the pet stands.
+          if (!reduced) s.x = s.happy.x;
           if (!asleepRef.current) s.anim = s.happy.anim;
           if (s.happy.phase === "done") {
             s.lastHappy = s.happy.kind as GroundHappyKind;
@@ -836,7 +897,7 @@ export function LivingPet({
             s.frame = 0;
             s.walkAge = 0;
           }
-        } else if (s.pause > 0 && !reduced) {
+        } else if (s.pause > 0) {
           s.pause = Math.max(0, s.pause - dt);
           if (asleepRef.current) s.anim = "sleep";
           else s.anim = "idle";
@@ -859,22 +920,13 @@ export function LivingPet({
           }
           if ((dir === 1 && s.x >= s.target) || (dir === -1 && s.x <= s.target)) {
             s.x = s.target;
-            const land = walkLand(s.actWalk, s.waypoints.length);
-            if (land === "act") {
-              s.target = null;
-              s.actWalk = false;
-              s.anim = s.actMotion === "circle" ? "sit" : "idle";
-              s.frame = 0;
-              s.land = 0.4;
-            } else if (land === "pause") {
-              s.target = null;
-              s.pause = wanderPauseS();
-              s.anim = "idle";
-              s.frame = 0;
-            } else {
-              finishArrive();
-            }
+            landWalk();
           }
+        } else if (s.anim === "walk" && s.target != null && reduced) {
+          // Reduced motion: no trip across the desk, the pet is drawn where the walk ends (a cut, not a glide).
+          s.facing = s.target >= s.x ? 1 : -1;
+          s.x = s.target;
+          landWalk();
         } else if (
           !s.act &&
           (s.anim === "idle" || s.anim === "sit") &&
@@ -932,6 +984,15 @@ export function LivingPet({
         if (s.shiftAge > 0) s.shiftAge = Math.max(0, s.shiftAge - dt);
 
         const fpsNow = reduced ? 0 : fpsRef.current[s.anim];
+        if (reduced && onceRef.current.has(s.anim)) {
+          // Held on its first frame, and over when its frames would have been.
+          s.frame = 0;
+          s.acc += dt;
+          if (s.acc >= calmOnceS(spritesRef.current[s.anim].length, fpsRef.current[s.anim])) {
+            s.acc = 0;
+            finishOnce();
+          }
+        }
         if (fpsNow > 0) {
           s.acc += dt;
           const step = 1 / fpsNow;
@@ -946,24 +1007,7 @@ export function LivingPet({
               s.frame = Math.min(len - 1, s.frame + 1);
             } else if (onceRef.current.has(s.anim)) {
               if (s.frame + 1 >= len) {
-                const wasEat = s.anim === "eat";
-                s.anim = "idle";
-                s.frame = 0;
-                if (wasEat) {
-                  const thanks = startThankYou(kindRef.current, s.lastHappy, s.x, s.facing, {
-                    asleep: false,
-                    hidden: hiddenRef.current,
-                    leaving: s.leaving,
-                    cmd: "idle",
-                  });
-                  if (thanks) {
-                    s.play = null;
-                    s.trick = null;
-                    s.happy = thanks.happy;
-                    s.lastHappy = thanks.kind;
-                  }
-                }
-                if (!s.act) arrivedRef.current?.();
+                finishOnce();
               } else {
                 s.frame += 1;
                 if (s.anim === "eat" && s.frame === 1) playDeskSound("munch");
@@ -984,9 +1028,10 @@ export function LivingPet({
       s.dust = s.dust.filter((d) => d.life > 0);
 
       const frames = spritesRef.current[s.anim];
-      const src = frames[Math.min(s.frame, frames.length - 1)]!;
+      // Under reduced motion a pose is drawn on its first frame (sleep keeps its own held frame).
+      const src = frames[reduced && s.anim !== "sleep" ? 0 : Math.min(s.frame, frames.length - 1)]!;
       const gaitNow = gaitRef.current;
-      const hopPx = s.hop > 0 ? Math.sin(s.hop * Math.PI) * (gaitNow?.hop ?? 26) : 0;
+      const hopPx = s.hop > 0 && !reduced ? Math.sin(s.hop * Math.PI) * (gaitNow?.hop ?? 26) : 0;
       const walkBob =
         s.anim === "walk" && !reduced
           ? p.crawl
@@ -997,21 +1042,22 @@ export function LivingPet({
                 ? Math.abs(Math.sin(s.walkAge * 10)) * WALK_HOP_PX
                 : 0
           : 0;
-      const water = gaitNow?.aquatic ? Math.sin(now * 0.004) * 6 : 0;
+      const water = gaitNow?.aquatic && !reduced ? Math.sin(now * 0.004) * 6 : 0;
       const perch = gaitNow?.perch ? 18 : 0;
       const stageNow = stageRef.current;
       const ageScale = stageNow === "hatchling" ? 0.82 : stageNow === "elder" ? 1.08 : 1;
       const scale = (gaitNow?.scale ?? 1) * ageScale;
-      const climbLift = s.play ? s.play.lift : s.happy ? s.happy.lift : s.trick ? s.trick.lift : 0;
-      const climbRot = s.play ? s.play.rot : s.happy ? s.happy.rot : s.trick ? s.trick.rot : 0;
+      const climbLift = reduced ? 0 : s.play ? s.play.lift : s.happy ? s.happy.lift : s.trick ? s.trick.lift : 0;
+      const climbRot = reduced ? 0 : s.play ? s.play.rot : s.happy ? s.happy.rot : s.trick ? s.trick.rot : 0;
       const y = floorY(height) + hopPx + walkBob + water + perch + liftRef.current + climbLift;
       const breathe =
-        s.anim === "idle" || s.anim === "sit" || s.anim === "sleep"
+        !reduced && (s.anim === "idle" || s.anim === "sit" || s.anim === "sleep")
           ? 1 + Math.sin(now * (s.anim === "sleep" ? 0.0032 : 0.0046)) * (s.anim === "sleep" ? BREATHE_SLEEP : BREATHE_IDLE)
           : 1;
       const pose = !reduced && s.act ? actPose(s.actMotion, s.actT, s.actHold) : { dx: 0, dy: 0, rot: 0, stretch: 1, squat: 1 };
-      const stretch =
-        s.hop > 0
+      const stretch = reduced
+        ? 1
+        : s.hop > 0
           ? 1 + Math.sin(s.hop * Math.PI) * 0.09
           : s.land > 0
             ? 1 - Math.sin(s.land * Math.PI) * 0.08

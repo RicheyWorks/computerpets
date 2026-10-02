@@ -20,7 +20,11 @@ test("living desk dropped the linear rail", () => {
   assert.match(livingSrc, /aimAt/);
   assert.doesNotMatch(gaitSrc, /age \/ 0\.28/);
   assert.doesNotMatch(livingSrc, /remaining < 56 \? remaining \/ 56/);
-  assert.doesNotMatch(livingSrc, /s\.facing = s\.target >= s\.x \? 1 : -1/);
+  // The walk turns with turnHoldS, never a snap. The one snap left is the reduced-motion walk, which is a cut to where
+  // the walk ends (no trip, so no turn to draw).
+  const snaps = [...livingSrc.matchAll(/s\.facing = s\.target >= s\.x \? 1 : -1/g)];
+  assert.equal(snaps.length, 1);
+  assert.match(livingSrc.slice(Math.max(0, snaps[0].index - 240), snaps[0].index), /s\.target != null && reduced\) \{\s*\/\/ Reduced motion/);
 });
 
 test("walkSpeed ease-out is not linear", () => {

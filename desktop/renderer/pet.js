@@ -2655,6 +2655,16 @@ function applyCommand() {
     sim.lastOrder = sim.order;
     return;
   }
+  if (sim.cmd === "wander" && calmNow()) {
+    // Reduced motion: an idle wander waits. The pet stays where it rests and the order is done at once (a care walk,
+    // Hide and Call back still go, as a cut).
+    sim.lastOrder = sim.order;
+    sim.target = null;
+    sim.waypoints = [];
+    sim.pause = 0;
+    applyArrive("arrive");
+    return;
+  }
   sim.lastOrder = sim.order;
   clearAct();
   if (sim.play && window.PetWindowPlay?.shouldAbort({
@@ -3179,7 +3189,8 @@ function aimAt(next) {
   sim.settle = 0;
   sim.arrivedPending = false;
   const desired = next >= sim.x ? 1 : -1;
-  if (desired !== sim.facing) {
+  // Under reduced motion there is no turn on the spot before a walk: the walk is a cut (calm-motion.js).
+  if (desired !== sim.facing && !calmNow()) {
     sim.turnHold = G.turnHoldS({ crawl: p.crawl, hop: p.hop, walk: p.walk });
     sim.pendingFacing = desired;
     sim.anim = "idle";
@@ -3243,6 +3254,25 @@ function applyArrive(via) {
     return;
   }
   if (hop.act === "idle") issue("idle");
+}
+
+// Where a walk ends, whether it got there step by step or, under reduced motion, in one cut.
+function landWalk() {
+  const land = window.PetArrive.walkLand(sim.actWalk, sim.waypoints.length);
+  if (land === "act") {
+    sim.target = null;
+    sim.actWalk = false;
+    sim.anim = sim.actMotion === "circle" ? "sit" : "idle";
+    sim.frame = 0;
+    sim.land = 0.4;
+  } else if (land === "pause") {
+    sim.target = null;
+    sim.pause = window.PetGait.wanderPauseS();
+    sim.anim = "idle";
+    sim.frame = 0;
+  } else {
+    finishArrive();
+  }
 }
 
 function finishArrive() {
@@ -3425,6 +3455,10 @@ function tickFrame(now) {
   const dt = Math.min(0.08, (now - lastTickAt) / 1000);
   lastTickAt = now;
   if (!kind || !trait) return;
+  // Reduced motion (calm-motion.js, the system setting through the page), read every frame: a walk is a cut to where
+  // it ends, a pose is held on its first frame, the bob, breath and hop stop, and window plays, tricks and small acts
+  // wait. Care words, poses, lines and visits go on as before.
+  const calm = calmNow();
   const width = window.innerWidth;
   const maxX = Math.max(PAD, width - BASE - PAD);
   const scale = window.PetLife.sizeScale(life, trait);
@@ -3440,7 +3474,7 @@ function tickFrame(now) {
     sim.hop = Math.max(0, sim.hop - dt * 2.15);
     if (prev > 0 && sim.hop === 0) {
       sim.land = 1;
-      puff(sim.x, 5);
+      if (!calm) puff(sim.x, 5);
     }
   }
   if (sim.land > 0) sim.land = Math.max(0, sim.land - dt * window.PetGait.LAND_DECAY);
@@ -3499,7 +3533,8 @@ function tickFrame(now) {
         leaving,
         cmd: sim.cmd,
       });
-      sim.x = sim.happy.x;
+      // Under reduced motion the thank-you keeps its poses where the pet stands.
+      if (!calm) sim.x = sim.happy.x;
       if (!life?.asleep) sim.anim = sim.happy.anim;
       if (sim.happy.phase === "done") {
         sim.lastHappy = sim.happy.kind;
@@ -3535,6 +3570,7 @@ function tickFrame(now) {
         resumeOrderWalk();
       }
     } else if (
+      !calm &&
       window.PetWindowPlay &&
       !sim.act &&
       !sim.happy &&
@@ -3557,6 +3593,7 @@ function tickFrame(now) {
         sim.playWait = window.PetWindowPlay.nextPlayWait(false);
       }
     } else if (
+      !calm &&
       T &&
       !sim.act &&
       !sim.happy &&
@@ -3607,6 +3644,11 @@ function tickFrame(now) {
       if (life?.asleep) sim.anim = "sleep";
       else sim.anim = "idle";
       if (sim.pause === 0 && sim.waypoints.length && !life?.asleep) aimAt(sim.waypoints.shift());
+    } else if (calm && sim.anim === "walk" && sim.target != null) {
+      // Reduced motion: no trip across the screen, the pet is drawn where the walk ends (a cut, not a glide).
+      sim.facing = sim.target >= sim.x ? 1 : -1;
+      sim.x = sim.target;
+      landWalk();
     } else if (sim.anim === "walk" && sim.target != null && sim.turnHold <= 0) {
       const remaining = Math.abs(sim.target - sim.x);
       const dir = sim.target >= sim.x ? 1 : -1;
@@ -3621,21 +3663,7 @@ function tickFrame(now) {
       }
       if ((dir === 1 && sim.x >= sim.target) || (dir === -1 && sim.x <= sim.target)) {
         sim.x = sim.target;
-        const land = window.PetArrive.walkLand(sim.actWalk, sim.waypoints.length);
-        if (land === "act") {
-          sim.target = null;
-          sim.actWalk = false;
-          sim.anim = sim.actMotion === "circle" ? "sit" : "idle";
-          sim.frame = 0;
-          sim.land = 0.4;
-        } else if (land === "pause") {
-          sim.target = null;
-          sim.pause = window.PetGait.wanderPauseS();
-          sim.anim = "idle";
-          sim.frame = 0;
-        } else {
-          finishArrive();
-        }
+        landWalk();
       }
     } else if (!sim.act && (sim.anim === "idle" || sim.anim === "sit") && sim.cursorX != null && Math.abs(sim.cursorX - (sim.x + BASE / 2)) > 36) {
       sim.facing = sim.cursorX >= sim.x + BASE / 2 ? 1 : -1;
@@ -3660,6 +3688,7 @@ function tickFrame(now) {
         sim.frame = 0;
       }
     } else if (
+      !calm &&
       !leaving &&
       !sim.play &&
       !sim.trick &&
@@ -3679,7 +3708,7 @@ function tickFrame(now) {
         sim.actWait = window.PetEthogram.nextActWait(trait?.wander ?? 0.45, !!trait?.nocturnal, night);
       }
     }
-    if ((sim.anim === "idle" || sim.anim === "sit") && sim.shiftAge <= 0 && sim.actMotion !== "freeze" && Math.random() < dt * 0.45) {
+    if (!calm && (sim.anim === "idle" || sim.anim === "sit") && sim.shiftAge <= 0 && sim.actMotion !== "freeze" && Math.random() < dt * 0.45) {
       sim.shift = (1 + Math.random() * 2) * (Math.random() < 0.5 ? 1 : -1);
       sim.shiftAge = 0.85;
     }
@@ -3691,7 +3720,20 @@ function tickFrame(now) {
       const hold = (window.PetGroundTricks?.sleepHoldFrame?.(kind.key, kind.sprites.sleep.length) ?? window.PetRuiTricks?.sleepHoldFrame?.(kind.key, kind.sprites.sleep.length));
       if (hold != null) sim.frame = hold;
     }
-    const fps = FPS[sim.anim] * (life.sick ? 0.75 : 1);
+    const fps = calm ? 0 : FPS[sim.anim] * (life.sick ? 0.75 : 1);
+    if (calm && ONCE.has(sim.anim)) {
+      // Held on its first frame, and over when its frames would have been.
+      sim.frame = 0;
+      sim.acc += dt;
+      if (sim.acc >= window.PetCalm.calmOnceS(kind.sprites[sim.anim].length, FPS[sim.anim])) {
+        sim.acc = 0;
+        const wasEat = sim.anim === "eat";
+        sim.anim = "idle";
+        sim.frame = 0;
+        if (wasEat) applyThankYou();
+        issue("idle");
+      }
+    }
     if (fps > 0) {
       sim.acc += dt;
       const step = 1 / fps;
@@ -3728,14 +3770,15 @@ function tickFrame(now) {
   sim.dust = sim.dust.filter((d) => d.life > 0);
 
   const frames = kind.sprites[sim.anim];
-  const src = frames[Math.min(sim.frame, frames.length - 1)];
+  // Under reduced motion a pose is drawn on its first frame (sleep keeps its own held frame).
+  const src = frames[calm && sim.anim !== "sleep" ? 0 : Math.min(sim.frame, frames.length - 1)];
   paintPetFrame(src);
 
   const G = window.PetGait;
   const p = gaitProfile();
-  const hopPx = sim.hop > 0 ? Math.sin(sim.hop * Math.PI) * (trait.hop || 20) : 0;
+  const hopPx = sim.hop > 0 && !calm ? Math.sin(sim.hop * Math.PI) * (trait.hop || 20) : 0;
   const walkBob =
-    sim.anim === "walk"
+    sim.anim === "walk" && !calm
       ? p.crawl
         ? 0
         : p.perch
@@ -3744,21 +3787,21 @@ function tickFrame(now) {
             ? Math.abs(Math.sin(sim.walkAge * 10)) * G.WALK_HOP_PX
             : 0
       : 0;
-  const water = trait.aquatic ? Math.sin(sim.bob) * 6 : 0;
+  const water = trait.aquatic && !calm ? Math.sin(sim.bob) * 6 : 0;
   const perch = trait.perch ? 18 : 0;
   const breathe =
-    sim.anim === "idle" || sim.anim === "sit" || sim.anim === "sleep"
+    !calm && (sim.anim === "idle" || sim.anim === "sit" || sim.anim === "sleep")
       ? 1 + Math.sin(now * (sim.anim === "sleep" ? 0.0032 : 0.0046)) * (sim.anim === "sleep" ? G.BREATHE_SLEEP : G.BREATHE_IDLE)
       : 1;
-  const pose = sim.act ? window.PetEthogram.actPose(sim.actMotion, sim.actT, sim.actHold) : { dx: 0, dy: 0, rot: 0, stretch: 1, squat: 1 };
-  const stretch = sim.hop > 0 ? 1 + Math.sin(sim.hop * Math.PI) * 0.09 : sim.land > 0 ? 1 - Math.sin(sim.land * Math.PI) * 0.08 : sim.act ? breathe * pose.stretch : breathe;
+  const pose = sim.act && !calm ? window.PetEthogram.actPose(sim.actMotion, sim.actT, sim.actHold) : { dx: 0, dy: 0, rot: 0, stretch: 1, squat: 1 };
+  const stretch = calm ? 1 : sim.hop > 0 ? 1 + Math.sin(sim.hop * Math.PI) * 0.09 : sim.land > 0 ? 1 - Math.sin(sim.land * Math.PI) * 0.08 : sim.act ? breathe * pose.stretch : breathe;
   const squat = sim.act && pose.squat !== 1 ? pose.squat : 2 - stretch;
-  const sway = sim.anim === "walk" && p.crawl ? Math.sin(sim.walkAge * 5.5) * G.SWAY_PX : 0;
-  const shiftX = sim.shiftAge > 0 ? sim.shift * Math.sin((1 - sim.shiftAge / 0.85) * Math.PI) : 0;
-  const settleX = sim.settle > 0 ? G.settleOffset(sim.settle, sim.settleDir, sim.overshoot) : 0;
+  const sway = sim.anim === "walk" && p.crawl && !calm ? Math.sin(sim.walkAge * 5.5) * G.SWAY_PX : 0;
+  const shiftX = sim.shiftAge > 0 && !calm ? sim.shift * Math.sin((1 - sim.shiftAge / 0.85) * Math.PI) : 0;
+  const settleX = sim.settle > 0 && !calm ? G.settleOffset(sim.settle, sim.settleDir, sim.overshoot) : 0;
   const drawX = sim.x + sway + shiftX + settleX + pose.dx;
-  const climbLift = sim.play ? sim.play.lift : sim.happy ? sim.happy.lift : sim.trick ? sim.trick.lift : 0;
-  const climbRot = sim.play ? sim.play.rot : sim.happy ? sim.happy.rot : sim.trick ? sim.trick.rot : 0;
+  const climbLift = calm ? 0 : sim.play ? sim.play.lift : sim.happy ? sim.happy.lift : sim.trick ? sim.trick.lift : 0;
+  const climbRot = calm ? 0 : sim.play ? sim.play.rot : sim.happy ? sim.happy.rot : sim.trick ? sim.trick.rot : 0;
   const lift = hopPx + walkBob + water + perch + pose.dy + climbLift;
   pet.style.transformOrigin = sim.play && (sim.play.phase === "dive" || sim.play.phase === "leap" || sim.play.phase === "ridge-leap" || sim.play.phase === "ridge-off" || sim.play.phase === "coil-on" || sim.play.phase === "coil-off" || sim.play.phase === "path-on" || sim.play.phase === "path-off" || sim.play.phase === "field-on" || sim.play.phase === "field-off" || sim.play.phase === "crackle-on" || sim.play.phase === "crackle-hop" || sim.play.phase === "crackle-off" || sim.play.phase === "charge-on" || sim.play.phase === "charge-bolt" || sim.play.phase === "charge-off" || sim.play.phase === "orbit-on" || sim.play.phase === "orbit-off" || sim.play.phase === "click-on" || sim.play.phase === "click-hop" || sim.play.phase === "click-off" || sim.play.phase === "hold-on" || sim.play.phase === "hold-off" || sim.play.phase === "earth-on" || sim.play.phase === "earth-off" || sim.play.phase === "ledge-on" || sim.play.phase === "ledge-off" || sim.play.phase === "circle-on" || sim.play.phase === "circle-off") ? "center center" : "center bottom";
   pet.style.transform = `translate3d(${drawX}px, ${-lift}px, 0) rotate(${pose.rot + climbRot}deg) scale(${sim.facing * squat * scale}, ${stretch * scale})`;
@@ -3962,7 +4005,8 @@ function tickVisit(dt, now, width) {
     visit.target = visit.x;
   } else if (phase === "wander" && !visit.wandered) {
     visit.wandered = true;
-    visit.target = Math.max(80, width * (visit.x < width * 0.5 ? 0.72 : 0.28));
+    // Under reduced motion the visitor stays where it stopped instead of crossing the screen.
+    if (!calmNow()) visit.target = Math.max(80, width * (visit.x < width * 0.5 ? 0.72 : 0.28));
   }
   if (phase === "talk" && !visit.said) {
     visit.said = true;
@@ -3972,7 +4016,13 @@ function tickVisit(dt, now, width) {
   const sitting = (visit.tapped || visit.placed) && phase !== "leave";
   const walking = !sitting && (phase === "in" || phase === "wander" || phase === "leave");
   const remaining = Math.abs(visit.target - visit.x);
-  if (walking && remaining > 2) {
+  if (walking && remaining > 2 && calmNow()) {
+    // Reduced motion: the visitor is drawn where its walk ends, standing (a cut, not a glide); its leave is a cut off
+    // the screen.
+    visit.facing = visit.target >= visit.x ? 1 : -1;
+    visit.x = visit.target;
+    paintActor(guestEl, visit.sprites.idle[0], "guest");
+  } else if (walking && remaining > 2) {
     visit.facing = visit.target >= visit.x ? 1 : -1;
     visit.x += visit.facing * 86 * dt;
     visit.acc += dt;
