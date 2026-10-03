@@ -8,6 +8,16 @@ Virtual pets that live on your computer — walk your windows, eat from the keep
 
 **Start here: [How to get your first pet](docs/START-HERE.md)**
 
+[Meet the guests](docs/GUESTS.md) · [Desktop controls](desktop/README.md) · [Check your setup](#check-your-setup) · [Operator setup](docs/SETUP.md)
+
+| Try it today | What you need |
+| --- | --- |
+| Desktop pets from source | Invited GitHub access, Node 22+, Git and Git LFS for the pictures |
+| Optional browser visit | The separate [web app](web/package.json) |
+| Backend and operator tools | Separate [setup guide](docs/SETUP.md); the desktop pet does not require Java |
+
+The desktop app is available from source. A store download or published installer is still pending.
+
 That page is a teacher. Click it. It has numbered steps. You do not need to know how to code.
 
 ## Meet some of them
@@ -65,6 +75,18 @@ npm.cmd start
 The first time can take a few minutes. `npm install` means "get the pieces." Leave the window open. A pet should walk on your real desktop. The keeper card starts with a short hello, just once: press **Got it** and it goes away for good.
 
 Git and Node are the two helpers that make that start work. Install [Git](https://git-scm.com) (or [GitHub Desktop](https://desktop.github.com) if you like pictures more than typing) and [Node](https://nodejs.org) (the big **LTS** button, version 22 or newer) once, before you type the start. The start-here page shows those buttons.
+
+### Check your setup
+
+The start helper can check the pieces without installing anything or opening the overlay:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\desktop.ps1 -Check
+```
+
+It reports Node, app dependencies and the pet pictures separately. If pictures are missing or partial, run `git lfs pull` in the repository folder before starting. The [first-pet guide](docs/START-HERE.md) walks through the same recovery.
+
+### Use the keeper card
 
 - **Click** the pet: they stop, and the keeper card opens with a small row of choices (Walk or Sit, Feed, Talk, Hide…). The first click counts; it does not only wake the window.
 - **Drag** is a carry.
@@ -153,4 +175,3 @@ Copyright (c) 2026 RicheyWorks. All rights reserved. This is a private house. Se
 ---
 
 *Two hundred twenty-one living kinds. Keep them so a line does not go cool.*
-
