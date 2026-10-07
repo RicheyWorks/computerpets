@@ -1374,8 +1374,10 @@ export function CompanionRoom({
             <div className="mt-3">{kicker}</div>
           </>
         ) : null}
-        <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>
+        {/* Upright, the jump sits right under the name: under the tagline it fell below a 320×568 panel's fold when
+            the tagline wrapped to more lines (a wider fallback font, when Figtree is not on the machine). */}
         {landJump ? null : platesJump}
+        <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>
         {line}
         {careProblem ? (
           <p role="status" aria-live="polite" data-care-problem={careProblem.act} className="mt-2 max-w-sm text-sm text-muted">
