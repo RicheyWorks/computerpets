@@ -170,7 +170,13 @@ More pages: [docs/README.md](docs/README.md). Cry credits: [docs/CRIES.md](docs/
 
 ## License
 
-Copyright (c) 2026 RicheyWorks. All rights reserved. This is a private house. See [LICENSE](LICENSE).
+RicheyWorks-owned source code and associated documentation are licensed under
+the [MIT License](LICENSE), copyright (c) 2026 RicheyWorks.
+
+Third-party audio, media, dependencies and vendor assets are excluded from this
+MIT grant and retain their own terms and notices. Preserve the recording credits
+and licenses in [docs/CRIES.md](docs/CRIES.md). Redistribution rights for recordings
+without verified source and license provenance remain unresolved.
 
 ---
 
