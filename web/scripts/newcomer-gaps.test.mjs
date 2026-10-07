@@ -84,15 +84,16 @@ test("the /demo room the docs name opens Rui's room instead of a 404", () => {
   assert.match(read(root, "src/routes/demo.$slug.tsx"), /if \(!livingBySlug\(params\.slug\)\) throw notFound\(\);/);
 });
 
-test("the copy step says the house is private: an invited GitHub account signs in, and Repository not found means no invite", () => {
-  assert.match(readme, /The page is private for now: the copy works for a GitHub account the owner has invited/);
-  assert.match(read(repo, "LICENSE"), /This is a private house\./);
+test("the copy step says the house is public: anyone can copy it, no account or invite, and Repository not found means a mistyped address", () => {
+  assert.match(readme, /The page is public and open source \(MIT\): anyone can copy it, and no GitHub account or invite is needed\./);
+  assert.match(read(repo, "LICENSE"), /^MIT License$/m);
+  assert.doesNotMatch(readme, /private for now|owner has invited|Invited GitHub access/);
   assert.doesNotMatch(start, /click through and still copy the pets/);
-  assert.match(start, /Sign in with the GitHub account the owner invited\./);
-  assert.match(section(start, "## Step 3 — Copy the pets onto your computer"), /The house is private for now\. The copy works only for a GitHub account the owner has invited\./);
+  assert.doesNotMatch(start, /owner invited|owner has invited|house is private|private GitHub house/);
+  assert.match(section(start, "## Step 3 — Copy the pets onto your computer"), /The house is public\. The copy works for anyone, with no GitHub account and no invite\./);
   const cloneFails = start.slice(start.indexOf("**If clone fails:**"), start.indexOf("If it says the folder already exists"));
-  assert.match(cloneFails, /`Repository not found`/);
-  assert.match(section(start, "### `git clone` failed"), /`Repository not found`, or keeps asking you to sign in, the house is private/);
+  assert.match(cloneFails, /`Repository not found`, check the address/);
+  assert.match(section(start, "### `git clone` failed"), /`Repository not found`, check the address is spelled exactly/);
   // Still honest that there is no store download.
   assert.match(readme, /There is no Steam, Itch, or Microsoft Store download yet/);
 });

@@ -57,6 +57,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # The pet pictures live in Git LFS and the tests check they are real images, not pointers.
+      # Pull only the folders this job reads; the cache is keyed by the LFS object list, so LFS
+      # bandwidth is spent only when the pictures change.
+      - name: LFS key (desktop)
+        id: lfs_desktop
+        run: echo "key=lfs-desktop-$(git lfs ls-files -l -I 'desktop/renderer/sprites/**' | cut -d' ' -f1 | sort | sha256sum | cut -c1-16)" >> "$GITHUB_OUTPUT"
+
+      - name: LFS cache (desktop)
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs/objects
+          key: ${{ steps.lfs_desktop.outputs.key }}
+
+      - name: LFS pictures (desktop)
+        run: git lfs pull --include='desktop/renderer/sprites/**'
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -72,6 +88,22 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      # The pet pictures live in Git LFS and the tests check they are real images, not pointers.
+      # Pull only the folders this job reads; the cache is keyed by the LFS object list, so LFS
+      # bandwidth is spent only when the pictures change.
+      - name: LFS key (web)
+        id: lfs_web
+        run: echo "key=lfs-web-$(git lfs ls-files -l -I 'web/public/pets/**,web/assets/sprites/**' | cut -d' ' -f1 | sort | sha256sum | cut -c1-16)" >> "$GITHUB_OUTPUT"
+
+      - name: LFS cache (web)
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs/objects
+          key: ${{ steps.lfs_web.outputs.key }}
+
+      - name: LFS pictures (web)
+        run: git lfs pull --include='web/public/pets/**,web/assets/sprites/**'
 
       # web/package-lock.json installs with npm 10 (Node 22) and npm 11 (Node 24) alike.
       - name: Set up Node.js
@@ -109,6 +141,51 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      # The pet pictures live in Git LFS and the tests check they are real images, not pointers.
+      # Pull only the folders this job reads; the cache is keyed by the LFS object list, so LFS
+      # bandwidth is spent only when the pictures change.
+      - name: LFS key (desktop)
+        id: lfs_desktop
+        run: echo "key=lfs-desktop-$(git lfs ls-files -l -I 'desktop/renderer/sprites/**' | cut -d' ' -f1 | sort | sha256sum | cut -c1-16)" >> "$GITHUB_OUTPUT"
+
+      - name: LFS cache (desktop)
+        uses: actions/cache/restore@v4
+        with:
+          path: .git/lfs/objects
+          key: ${{ steps.lfs_desktop.outputs.key }}
+
+      - name: LFS pictures (desktop)
+        run: git lfs pull --include='desktop/renderer/sprites/**'
+
+      # The pet pictures live in Git LFS and the tests check they are real images, not pointers.
+      # Pull only the folders this job reads; the cache is keyed by the LFS object list, so LFS
+      # bandwidth is spent only when the pictures change.
+      - name: LFS key (web)
+        id: lfs_web
+        run: echo "key=lfs-web-$(git lfs ls-files -l -I 'web/public/pets/**,web/assets/sprites/**' | cut -d' ' -f1 | sort | sha256sum | cut -c1-16)" >> "$GITHUB_OUTPUT"
+
+      - name: LFS cache (web)
+        uses: actions/cache/restore@v4
+        with:
+          path: .git/lfs/objects
+          key: ${{ steps.lfs_web.outputs.key }}
+
+      - name: LFS pictures (web)
+        run: git lfs pull --include='web/public/pets/**,web/assets/sprites/**'
+
+      # The app harness drives the web desk too (mount and sign-in rows import React), and
+      # desktop.sh --check needs Node 22 or newer.
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install web dependencies
+        working-directory: web
+        run: npm ci
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -185,6 +262,11 @@ jobs:
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3
 
+      # OCI references must be lowercase; github.repository is "RicheyWorks/computerpets".
+      - name: Lowercase image name
+        id: image_name
+        run: echo "ref=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+
       - name: Sign image digest (keyless)
         env:
           DIGEST: ${{ steps.image.outputs.digest }}
@@ -195,14 +277,14 @@ jobs:
             exit 1
           fi
           # Sign the immutable digest only — never a mutable tag (ADR 0061).
-          cosign sign --yes "ghcr.io/${{ github.repository }}@${DIGEST}"
+          cosign sign --yes "${{ steps.image_name.outputs.ref }}@${DIGEST}"
 
       - name: Verify image signature (fail-closed)
         env:
           DIGEST: ${{ steps.image.outputs.digest }}
         run: |
           set -euo pipefail
-          IMAGE="ghcr.io/${{ github.repository }}@${DIGEST}"
+          IMAGE="${{ steps.image_name.outputs.ref }}@${DIGEST}"
           IDENTITY="https://github.com/${{ github.repository }}/.github/workflows/ci.yml@refs/heads/main"
           ISSUER="https://token.actions.githubusercontent.com"
           cosign verify \

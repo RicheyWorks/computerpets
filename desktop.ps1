@@ -56,7 +56,7 @@ try {
   }
   function Get-Pieces {
     if (-not (Test-Path "node_modules\electron\package.json")) { return "missing" }
-    $done = @($finished, $stamp) | Where-Object { Test-Path $_ } | ForEach-Object { (Get-Item $_).LastWriteTimeUtc } | Sort-Object -Descending | Select-Object -First 1
+    $done = @($finished, $stamp) | Where-Object { Test-Path $_ } | ForEach-Object { (Get-Item -Force $_).LastWriteTimeUtc } | Sort-Object -Descending | Select-Object -First 1
     if (-not $done) { return "unfinished" }
     if ((Get-Item "package.json").LastWriteTimeUtc -gt $done) { return "changed" }
     if (-not (Test-Electron)) { return "unfinished" }
