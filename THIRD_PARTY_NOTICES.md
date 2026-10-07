@@ -48,6 +48,7 @@ Recordings marked CC BY-SA are adapted works and are shared here under the same 
 | `tarsier.wav` | Wich’yanan (Jay) Limparungpatthanakij (plains-wanderer) | CC BY (Creative Commons Attribution) | https://www.inaturalist.org/observations/323492684 |
 | `toad.wav` | SwampVids | Creative Commons Attribution 4.0 (CC BY 4.0) | https://commons.wikimedia.org/wiki/File:Anaxyrus_americanus_-_American_Toad_Vocalization.wav |
 | `turkey_tail.wav` | Gravity Sound | Creative Commons Attribution 4.0 (CC BY 4.0) | https://commons.wikimedia.org/wiki/File:Leaf_crunch_(Gravity_Sound).wav |
+| `cat.wav` | PantheraLeo1359531 | Creative Commons Attribution 4.0 (CC BY 4.0) | https://commons.wikimedia.org/wiki/File:Weibliche_Britisch_Kurzhaar_will_Futter_C1277_MIAUEN.wav |
 
 ## Creative Commons Attribution-ShareAlike (CC BY-SA): credit required, adaptations stay CC BY-SA
 
@@ -238,14 +239,12 @@ Recordings marked CC BY-SA are adapted works and are shared here under the same 
 | `widow.wav` | Sadiquecat | Creative Commons Zero (CC0 1.0) | https://freesound.org/people/Sadiquecat/sounds/689317/ |
 | `wolf_spider.wav` | elliotlp | CC0 (Creative Commons 0 / public domain) | https://freesound.org/people/elliotlp/sounds/235755/ |
 | `yeast.wav` | Joseph SARDIN / BigSoundBank.com | CC0 (public domain equivalent) | https://bigsoundbank.com/fermentation-airlock-1-s3560.html |
+| `chickadee.wav` | \*ngoomie | Creative Commons Zero (CC0 1.0) | https://commons.wikimedia.org/wiki/File:Black-capped_Chickadee_201947598.wav |
+| `dog.wav` | Joseph SARDIN | CC0 1.0 (public domain) | https://bigsoundbank.com/barking-dog-2-s2954.html |
 
 ## House-made sounds
 
 `sleep-rain.ogg` (house-made, CC0 per `sounds/README.txt`), `house-loop`, `step-claw`, `step-soft`, `step-tap`, `step-wood`: RicheyWorks originals, MIT. **Confirm before publishing.**
-
-## Unconfirmed: must be sourced or replaced before publishing
-
-`cat.wav`, `dog.wav`, `chickadee.wav`: "early house field drop (zip)", no source or license on record.
 
 ## Unconfirmed: image sources
 
