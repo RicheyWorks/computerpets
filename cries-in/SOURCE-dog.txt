@@ -1,0 +1,11 @@
+key: dog
+guest: Pip (Dog)
+source: BigSoundBank sound 2954, "Barking Dog #2"
+URL: https://bigsoundbank.com/barking-dog-2-s2954.html
+direct: https://bigsoundbank.com/UPLOAD/flac/2954.flac
+author: Joseph SARDIN
+license: CC0 1.0 (public domain) — https://creativecommons.org/publicdomain/zero/1.0/
+Species: Canis familiaris (domestic dog) — one double bark. No words. No music.
+Notes: House cut 2.0s mono 44.1kHz from the start; highpass 80 Hz, lowpass 12 kHz, dynaudnorm, alimiter, short fades. Replaces the unsourced early house drop.
+sat: 2026-10-07
+House path: build our own from field tape — not Grok Imagine

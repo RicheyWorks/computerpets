@@ -1,0 +1,11 @@
+key: chickadee
+guest: Dee (Black-capped Chickadee)
+source: Wikimedia Commons File:Black-capped Chickadee 201947598.wav
+URL: https://commons.wikimedia.org/wiki/File:Black-capped_Chickadee_201947598.wav
+direct: https://upload.wikimedia.org/wikipedia/commons/f/f7/Black-capped_Chickadee_201947598.wav
+author: *ngoomie
+license: Creative Commons Zero (CC0 1.0) — https://creativecommons.org/publicdomain/zero/1.0/
+Species: Poecile atricapillus (Black-capped Chickadee) — field calls. No words. No music.
+Notes: House cut 3.0s mono 44.1kHz from 0.1s; highpass 1.5 kHz, lowpass 12 kHz, dynaudnorm, +4 dB, alimiter, short fades. Replaces the unsourced early house drop.
+sat: 2026-10-07
+House path: build our own from field tape — not Grok Imagine

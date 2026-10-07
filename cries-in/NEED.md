@@ -10,10 +10,10 @@ After you drop a batch, tell me. I will sit them into the desk.
 ## Need first (the five that already play)
 
 - [x] `red_panda.mp4` — **Rui** (Red Panda) — sat 2026-09-03 Commons PD twittering (Mizunoryu)
-- [x] `cat.mp4` — **Miso** (Cat) — sat 2026-09-03 from Grok zip
-- [x] `dog.mp4` — **Pip** (Dog) — sat 2026-09-03 from Grok zip
+- [x] `cat.wav` — **Miso** (Cat) — sat 2026-10-07 field tape, Commons CC BY 4.0 (PantheraLeo1359531)
+- [x] `dog.wav` — **Pip** (Dog) — sat 2026-10-07 field tape, BigSoundBank #2954 CC0 (Joseph SARDIN)
 - [x] `hummingbird.mp4` — **Sip** (Ruby-throated Hummingbird) — sat 2026-09-03 XC109598 field chips
-- [x] `chickadee.mp4` — **Dee** (Black-capped Chickadee) — sat 2026-09-03 from Grok zip
+- [x] `chickadee.wav` — **Dee** (Black-capped Chickadee) — sat 2026-10-07 field tape, Commons CC0 (\*ngoomie)
 
 ## Need next (loud, real voices)
 
@@ -43,8 +43,8 @@ After you drop a batch, tell me. I will sit them into the desk.
 Check a box in your head when the Grok file is in this folder. Zip field tape is a stand-in, not done.
 
 1. [x] `red_panda.mp4` — **Rui** — Red Panda — A red panda twitters, then a short bleat-squeal. Females twitter; fights growl and bark. (zip synth — replace with Grok)
-2. [x] `cat.mp4` — **Miso** — Cat — A cat meows once, short. May purr or hiss. No words. (zip field — still want Grok)
-3. [x] `dog.mp4` — **Pip** — Dog — A dog barks once, short and bright. No words. (zip field — still want Grok)
+2. [x] `cat.wav` — **Miso** — Cat — A cat meows once, short. May purr or hiss. No words. (field tape, SOURCE-cat.txt)
+3. [x] `dog.wav` — **Pip** — Dog — A dog barks once, short and bright. No words. (field tape, SOURCE-dog.txt)
 4. [x] `rabbit.wav` — **Thimble** — Rabbit — A rabbit is almost voiceless. One hind-foot thump on wood. No scream. — sat 2026-09-03 Freesound CC0 Rabbit Thump on Soil (kessir)
 5. [x] `hamster.wav` — **Clip** — Hamster — A golden hamster squeaks, thin and high, almost ultrasonic. Quiet cheek rustle. — sat 2026-09-03 Freesound CC0 hamster2.wav (ondrosik)
 6. [x] `guinea_pig.wav` — **Whee** — Guinea Pig — A guinea pig wheeks, a loud whistle. No words. — sat 2026-09-03 Commons PD Guinea_Pig_Feeding_Wheek.ogg
@@ -156,7 +156,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 112. [x] `raven.wav` — **Wedge** — Common Raven — sat 2026-09-03 Commons PD Common_Raven.ogg (G. McGrane)
 113. [ ] `barn_owl.mp4` — **Heart** — Barn Owl — A barn owl shrieks a dry hiss-scream. Not a hoot. Wings nearly silent. (zip synth — replace with Grok)
 114. [ ] `red_tail.mp4` — **Hook** — Red-tailed Hawk — A red-tailed hawk screams a two-to-three-second hoarse kree-eee-ar that slurs downward. (zip synth — replace with Grok)
-115. [x] `chickadee.mp4` — **Dee** — Black-capped Chickadee — A black-capped chickadee calls chick-a-dee-dee, or a two-note fee-bee. (zip field — still want Grok)
+115. [x] `chickadee.wav` — **Dee** — Black-capped Chickadee — A black-capped chickadee calls chick-a-dee-dee, or a two-note fee-bee. (field tape, SOURCE-chickadee.txt)
 116. [x] `robin.wav` — **Brick** — American Robin — sat 2026-09-03 Commons PD American_Robin_Yellowstone_National_Park.ogg (NPS)
 117. [x] `mallard.wav` — **Drake** — Mallard — sat 2026-09-03 Commons CC BY-SA 4.0 female mallard (Aubrey John Williams / BL)
 118. [x] `canada_goose.wav` — **Vee** — Canada Goose — sat 2026-09-03 Commons PD Branta_canadensis.ogg

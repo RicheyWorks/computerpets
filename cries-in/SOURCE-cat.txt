@@ -1,0 +1,11 @@
+key: cat
+guest: Miso (Cat)
+source: Wikimedia Commons File:Weibliche Britisch Kurzhaar will Futter C1277 MIAUEN.wav
+URL: https://commons.wikimedia.org/wiki/File:Weibliche_Britisch_Kurzhaar_will_Futter_C1277_MIAUEN.wav
+direct: https://upload.wikimedia.org/wikipedia/commons/0/08/Weibliche_Britisch_Kurzhaar_will_Futter_C1277_MIAUEN.wav
+author: PantheraLeo1359531
+license: Creative Commons Attribution 4.0 (CC BY 4.0)
+Species: Felis catus (domestic cat, female British Shorthair) — two meows asking for food. No words. No music.
+Notes: House cut 3.4s mono 44.1kHz from 0.3s; highpass 150 Hz, lowpass 12 kHz, dynaudnorm, -2 dB, alimiter, short fades. Replaces the unsourced early house drop.
+sat: 2026-10-07
+House path: build our own from field tape — not Grok Imagine
