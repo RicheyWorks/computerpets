@@ -27,10 +27,13 @@ electron=node_modules/electron/path.txt
 finished=node_modules/.package-lock.json
 stamp=node_modules/.computerpets-installed
 electron_here() { [ -f "$electron" ] && [ -f "node_modules/electron/dist/$(cat "$electron")" ]; }
+# "$1 is newer than $2", where a missing $2 counts as older. dash (Ubuntu's sh) says false for -nt when $2
+# is missing, bash says true, so a missing stamp would hide a changed package.json on Linux.
+newer() { [ -f "$1" ] && { [ ! -f "$2" ] || [ "$1" -nt "$2" ]; }; }
 pieces() {
   if [ ! -f node_modules/electron/package.json ]; then echo missing
   elif [ ! -f "$finished" ] && [ ! -f "$stamp" ]; then echo unfinished
-  elif [ package.json -nt "$finished" ] && [ package.json -nt "$stamp" ]; then echo changed
+  elif newer package.json "$finished" && newer package.json "$stamp"; then echo changed
   elif ! electron_here; then echo unfinished
   else echo ready
   fi

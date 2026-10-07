@@ -480,22 +480,41 @@ function pickDisplay() {
   return ":97";
 }
 
-function readLine(stream) {
+// A fixture that dies (no display yet) ends its stdout without a line: resolve "" then, and give up after a while,
+// so the test fails with the fixture's own words instead of hanging the whole run.
+function readLine(stream, timeoutMs = 15_000) {
   return new Promise((resolve, reject) => {
     let buf = "";
+    const done = (value) => {
+      clearTimeout(timer);
+      stream.off("data", onData);
+      stream.off("end", onEnd);
+      resolve(value);
+    };
     const onData = (chunk) => {
       buf += chunk;
       const mark = buf.indexOf("\n");
       if (mark < 0) return;
-      stream.off("data", onData);
-      resolve(buf.slice(0, mark).trim());
+      done(buf.slice(0, mark).trim());
     };
+    const onEnd = () => done("");
+    const timer = setTimeout(() => done(""), timeoutMs);
     stream.on("data", onData);
+    stream.on("end", onEnd);
     stream.on("error", reject);
   });
 }
 
-test("an X11 client rect is listed and a dock, an iconic window, and a title are not perches", async (t) => {
+// Xvfb takes a moment to listen: wait for its socket rather than a fixed sleep (300 ms was not always enough in CI).
+async function waitForDisplay(display, timeoutMs = 10_000) {
+  const socket = "/tmp/.X11-unix/X" + display.slice(1);
+  const until = Date.now() + timeoutMs;
+  while (!existsSync(socket) && Date.now() < until) {
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
+}
+
+test("an X11 client rect is listed and a dock, an iconic window, and a title are not perches", { timeout: 60_000 }, async (t) => {
   if (!existsSync("/usr/bin/Xvfb")) {
     t.skip("Xvfb is not installed");
     return;
@@ -505,7 +524,7 @@ test("an X11 client rect is listed and a dock, an iconic window, and a title are
     stdio: "ignore",
   });
   let planter = null;
-  await new Promise((resolve) => setTimeout(resolve, 300));
+  await waitForDisplay(display);
   try {
     const env = { ...process.env, DISPLAY: display };
     planter = spawn("python3", ["-u", "-c", X11_FIXTURE], { env, stdio: ["pipe", "pipe", "pipe"] });

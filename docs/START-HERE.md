@@ -168,7 +168,7 @@ Pick **one** path. The picture app is easier if you have never typed a command.
 5. **Next** is okay. Leave the choices as they are.
 6. When it says you are done, you can close the installer.
 
-**What you should see:** an app called GitHub Desktop. It asks you to sign in. Sign in with the GitHub account the owner invited. The pets live in a private GitHub house for now, so the copy needs that account.
+**What you should see:** an app called GitHub Desktop. It may ask you to sign in. You can skip that: the pets live in a public GitHub house, so the copy needs no account.
 
 ### Or: Git itself
 
@@ -234,7 +234,7 @@ If you see `v20` or smaller, go back to [https://nodejs.org](https://nodejs.org)
 
 Now you copy this house: [https://github.com/RicheyWorks/computerpets](https://github.com/RicheyWorks/computerpets)
 
-The house is private for now. The copy works only for a GitHub account the owner has invited. When Git or GitHub Desktop asks you to sign in, use that account.
+The house is public. The copy works for anyone, with no GitHub account and no invite.
 
 Pick **one** path. Do not use someone else's folder. Do not use a path like `C:\Users\730ri\...`. That folder belongs to another person. Use **your** home.
 
@@ -291,7 +291,7 @@ You will also see a long pile of files with odd names that start with `_`. Those
 
 **If clone fails:**
 
-- If it says `Repository not found`, or keeps asking you to sign in, that GitHub account has no invite yet. Ask the owner to invite it, then try again
+- If it says `Repository not found`, check the address is spelled exactly as above, then try again
 - Check the internet
 - Check Git is installed: type `git --version` and press Enter. You should see a number. If Git is missing, go back to Step 1 and open a new PowerShell after the install
 
@@ -626,7 +626,7 @@ You started the pets, then closed the PowerShell. Open PowerShell in the `comput
 
 ### `git clone` failed
 
-- If it says `Repository not found`, or keeps asking you to sign in, the house is private and that GitHub account has no invite yet. Ask the owner to invite it, then try again.
+- If it says `Repository not found`, check the address is spelled exactly `https://github.com/RicheyWorks/computerpets`, then try again.
 - Check the internet.
 - Check the computer has about 8 GB of free space. A full disk stops the copy partway.
 - Type `git --version`. If Git is missing, do Step 1, then open a new PowerShell.

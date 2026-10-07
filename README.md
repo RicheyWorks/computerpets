@@ -12,7 +12,7 @@ Virtual pets that live on your computer — walk your windows, eat from the keep
 
 | Try it today | What you need |
 | --- | --- |
-| Desktop pets from source | Invited GitHub access, Node 22+, Git and Git LFS for the pictures |
+| Desktop pets from source | Node 22+, Git and Git LFS for the pictures |
 | Optional browser visit | The separate [web app](web/package.json) |
 | Backend and operator tools | Separate [setup guide](docs/SETUP.md); the desktop pet does not require Java |
 
@@ -44,7 +44,7 @@ You do not need an account. You do not need a license. You do not need Java.
 
 Windows 10 and Windows 11 first. Most friends are on Windows. The [start-here page](docs/START-HERE.md) shows every button.
 
-There is no Steam, Itch, or Microsoft Store download yet. There is no live Store ID. There is no `.exe` waiting on a website. You copy the pets from [this GitHub page](https://github.com/RicheyWorks/computerpets) and turn them on yourself. That is the real way. The page is private for now: the copy works for a GitHub account the owner has invited, and Git or GitHub Desktop asks you to sign in to it.
+There is no Steam, Itch, or Microsoft Store download yet. There is no live Store ID. There is no `.exe` waiting on a website. You copy the pets from [this GitHub page](https://github.com/RicheyWorks/computerpets) and turn them on yourself. That is the real way. The page is public and open source (MIT): anyone can copy it, and no GitHub account or invite is needed.
 
 Today the overlay needs two free helpers — Git and Node — because the start is `.\desktop.ps1`, which runs `npm start`, which is `electron .`. You do not have to learn Node. You only install it once. Grown-ups can later build their own installer with electron-builder. We do not publish one.
 
