@@ -1,4 +1,4 @@
-﻿# ComputerPets
+# ComputerPets
 
 Virtual pets that live on your computer — walk your windows, eat from the keeper card, and **caw** when you Call.
 
@@ -170,7 +170,9 @@ More pages: [docs/README.md](docs/README.md). Cry credits: [docs/CRIES.md](docs/
 
 ## License
 
-Copyright (c) 2026 RicheyWorks. All rights reserved. This is a private house. See [LICENSE](LICENSE).
+ComputerPets code is open source under the [MIT License](LICENSE). Copyright (c) 2026 RicheyWorks.
+
+The guest cries and other third-party sounds are not covered by MIT. Each keeps its own license (public domain, CC0, CC BY, or CC BY-SA), with credit to every recordist in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and [docs/CRIES.md](docs/CRIES.md). If you reuse a sound, follow its license. A few sounds and the pet images still have unconfirmed sources; they are listed in THIRD_PARTY_NOTICES.md.
 
 ---
 
