@@ -1,6 +1,8 @@
-﻿Source: xeno-canto XC109598
+Source: xeno-canto XC109598
 Species: Archilochus colubris (Ruby-throated Hummingbird)
 Recordist: Jonathon Jongsma
+Author: Jonathon Jongsma
+License: Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0) - https://creativecommons.org/licenses/by-sa/3.0/
 URL: https://xeno-canto.org/109598
-Notes: Field calls while foraging (Minnesota Valley NWR). House cut ~2.8s. Not synth. Credit the recordist; license on the XC page.
+Notes: Field calls while foraging (Minnesota Valley NWR). House cut ~2.8s. Not synth. Credit the recordist. License per the xeno-canto page: CC BY-SA 3.0.
 House path: build our own from field tape — not Grok Imagine
