@@ -62,6 +62,24 @@ export const PHONE_SIZES = [
   { w: 844, h: 390, ua: IPHONE, name: "iPhone landscape" },
 ];
 
+/**
+ * Waits until React has hydrated the page (its props sit on the DOM nodes), so a key or a tap reaches a real
+ * handler. "load" alone is not enough on a slow runner: the server HTML is on screen and clickable before the
+ * scripts take over, and an early Enter or tap is lost.
+ */
+async function hydrated(page) {
+  await page
+    .waitForFunction(
+      () => {
+        const el = document.querySelector("[data-site-menu-button]") || document.querySelector("main button, main summary, main a");
+        return !!el && Object.keys(el).some((k) => k.startsWith("__reactProps$"));
+      },
+      null,
+      { timeout: 60_000 },
+    )
+    .catch(() => {});
+}
+
 function findBrowser() {
   const env = process.env.PHONE_LAYOUT_BROWSER || process.env.CHROME_PATH;
   const list = [
@@ -655,6 +673,7 @@ test("phone desk: hello, plaque, rail, care buttons, speech bubbles and the head
     const page = await ctx.newPage();
     try {
       await page.goto(`${url}/`, { waitUntil: "load", timeout: 120_000 });
+      await hydrated(page);
       await page.waitForSelector("[data-first-hint-ok]", { timeout: 120_000 });
       const fitted = await page
         .waitForFunction(() => !!document.querySelector("[data-desk-aside]")?.style.maxHeight, null, { timeout: 8_000 })
@@ -744,6 +763,7 @@ test("site pages: the header fits and its menu works at phone and laptop sizes, 
         page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
         try {
           await page.goto(`${url}${path}`, { waitUntil: "load", timeout: 120_000 });
+          await hydrated(page);
           await page.waitForSelector("[data-site-menu-button]", { timeout: 60_000 });
           await page.waitForTimeout(1_200);
           problems.push(...(await page.evaluate(headerProblems)).map((p) => `${label}: ${p}`));
@@ -797,6 +817,7 @@ test("/meet on a phone: short enough to get through, a jump index opens each roo
       const thrown = [];
       page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
       await page.goto(`${url}/meet`, { waitUntil: "load", timeout: 120_000 });
+      await hydrated(page);
       await page.waitForSelector("[data-meet-index] a", { timeout: 60_000 });
       // The jump links open their drawer from a click handler, so wait until React has hydrated them (it attaches its
       // props to the element). On a cold dev server the page painted from the server HTML seconds before that, and
@@ -885,6 +906,7 @@ test("/meet on a phone: short enough to get through, a jump index opens each roo
     try {
       const page = await ctx.newPage();
       await page.goto(`${url}/login?next=%2Fcollection`, { waitUntil: "load", timeout: 120_000 });
+      await hydrated(page);
       await page.waitForSelector("h1", { timeout: 60_000 });
       await page.waitForTimeout(800);
       const fit = await page.evaluate(() => ({
@@ -910,6 +932,7 @@ test("/meet on a phone: short enough to get through, a jump index opens each roo
         const thrown = [];
         page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
         await page.goto(`${url}${path}`, { waitUntil: "load", timeout: 120_000 });
+        await hydrated(page);
         await page.waitForSelector("[data-field-notes] [data-note]", { timeout: 60_000 });
         await page.waitForTimeout(800);
         const first = await page.evaluate(() => ({
@@ -997,6 +1020,7 @@ test("/meet on a phone: short enough to get through, a jump index opens each roo
       });
       page.on("pageerror", (err) => loud.push(String(err?.message || err).split("\n")[0]));
       await page.goto(`${url}/demo/rui`, { waitUntil: "load", timeout: 120_000 });
+      await hydrated(page);
       const phoneFloor = await page.waitForSelector("[data-phone-floor] [data-desk-care]", { timeout: 60_000 }).then(() => true, () => false);
       if (!phoneFloor) problems.push(`${label}: the demo never took the phone layout`);
       else {
@@ -1018,6 +1042,7 @@ test("/meet on a phone: short enough to get through, a jump index opens each roo
     try {
       const page = await ctx.newPage();
       await page.goto(`${url}/no-such-room`, { waitUntil: "load", timeout: 120_000 });
+      await hydrated(page);
       await page.waitForSelector("[data-not-found] h1", { timeout: 60_000 });
       await page.waitForFunction(() => document.title === "No room here — ComputerPets", null, { timeout: 8_000 }).catch(() => {});
       const nf = await page.evaluate(() => ({
@@ -1077,6 +1102,7 @@ test("the eighteen room pages' field notes on a phone: closed drawers, every not
         page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
         try {
           await page.goto(`${url}${path}`, { waitUntil: "load", timeout: 120_000 });
+          await hydrated(page);
           await page.waitForSelector("[data-field-notes] [data-note]", { timeout: 60_000 });
           await page.waitForTimeout(600);
           const first = await page.evaluate(() => ({
@@ -1174,6 +1200,7 @@ test("the eighteen room pages' field notes on a phone: closed drawers, every not
     try {
       const page = await ctx.newPage();
       await page.goto(`${url}/demo/rui`, { waitUntil: "load", timeout: 120_000 });
+      await hydrated(page);
       await page.waitForSelector("[data-phone-floor] [data-desk-care]", { timeout: 60_000 });
       await page.waitForTimeout(1_500);
       const plates = await page.evaluate(() => {
@@ -1241,6 +1268,7 @@ test("the eighteen room pages' field notes on a phone: closed drawers, every not
     try {
       const page = await ctx.newPage();
       await page.goto(`${url}/mind`, { waitUntil: "load", timeout: 120_000 });
+      await hydrated(page);
       await page.waitForSelector("[data-mind-card]", { timeout: 60_000 });
       await page.waitForTimeout(800);
       const mind = await page.evaluate(() => ({
@@ -1293,6 +1321,7 @@ test("the eighteen room pages' field notes on a phone: closed drawers, every not
     try {
       const page = await ctx.newPage();
       await page.goto(`${url}/demo/nope`, { waitUntil: "load", timeout: 120_000 });
+      await hydrated(page);
       const link = await page.waitForSelector("[data-demo-missing]", { timeout: 60_000 }).then(() => page.evaluate(() => {
         const b = document.querySelector("[data-demo-missing]").getBoundingClientRect();
         return { w: Math.round(b.width), h: Math.round(b.height) };
@@ -1335,6 +1364,7 @@ test("desktop sizes: every target at least 24×24 with no two crowding, the rail
         page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
         try {
           await page.goto(`${url}${path}`, { waitUntil: "load", timeout: 120_000 });
+          await hydrated(page);
           await page.waitForSelector("[data-desk-care] button", { timeout: 60_000 });
           await page.waitForFunction(() => !!document.querySelector("[data-desk-rail]")?.style.maxHeight, null, { timeout: 8_000 }).catch(() => problems.push(`${label}: the rail was never fitted to the screen`));
           await page.waitForTimeout(1_200);
@@ -1420,6 +1450,7 @@ test("sign-in remembers the gated page it came from; the header's Sign in rememb
     page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
     for (const [from, want] of GATED_PAGES) {
       await page.goto(`${url}${from}`, { waitUntil: "load", timeout: 120_000 });
+      await hydrated(page);
       const landed = await page
         .waitForURL((u) => u.pathname === "/login", { timeout: 60_000 })
         .then(() => new URL(page.url()), () => null);
@@ -1427,6 +1458,7 @@ test("sign-in remembers the gated page it came from; the header's Sign in rememb
       else if (`${landed.pathname}${landed.search}` !== want) problems.push(`${from}: sent to ${landed.pathname}${landed.search}, wanted ${want}`);
     }
     await page.goto(`${url}/meet`, { waitUntil: "load", timeout: 120_000 });
+    await hydrated(page);
     await page.waitForSelector("[data-site-menu-button]", { timeout: 60_000 });
     await page.waitForTimeout(800);
     const hrefs = await page.evaluate(() => [...document.querySelectorAll("header a")].filter((a) => /sign in/i.test(a.textContent || "")).map((a) => a.getAttribute("href")));
@@ -1434,11 +1466,13 @@ test("sign-in remembers the gated page it came from; the header's Sign in rememb
     // A hostile next= does not break the page (the value is refused in lib/auth/return-to.ts; signin-return.test.mjs).
     for (const bad of ["https%3A%2F%2Fevil.example", "%2F%2Fevil.example", "javascript%3Aalert(1)"]) {
       await page.goto(`${url}/login?next=${bad}`, { waitUntil: "load", timeout: 120_000 });
+      await hydrated(page);
       const ok = await page.waitForSelector("h1", { timeout: 60_000 }).then(() => true, () => false);
       if (!ok) problems.push(`/login?next=${bad}: the sign-in page did not open`);
     }
     // Sign-in that came back with an error says so (Better Auth adds &error=… to errorCallbackURL).
     await page.goto(`${url}/login?next=%2Fcollection&error=access_denied`, { waitUntil: "load", timeout: 120_000 });
+    await hydrated(page);
     await page.waitForSelector("h1", { timeout: 60_000 });
     await page.waitForTimeout(800);
     const alert = await page.evaluate(() => document.querySelector('[role="alert"]')?.textContent?.trim() || "");
@@ -1470,6 +1504,7 @@ test("the desk stays quiet about the optional house server until it has answered
         if (/ERR_CONNECTION_REFUSED|8081/.test(msg.text())) refused.push(msg.text().slice(0, 120));
       });
       await page.goto(`${url}/`, { waitUntil: "load", timeout: 120_000 });
+      await hydrated(page);
       await page.waitForSelector("[data-desk-care]", { timeout: 120_000 });
       await page.waitForTimeout(6_000);
       if (!seenBefore) {
@@ -1520,6 +1555,7 @@ test("signed-in rooms (kennel, hatchery, nest) and a kennel pet's page on phones
         page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
         try {
           await page.goto(`${url}${path}`, { waitUntil: "load", timeout: 120_000 });
+          await hydrated(page);
           await page.waitForSelector("[data-phone-floor] [data-desk-care]", { timeout: 120_000 });
           if (new URL(page.url()).pathname !== path) throw new Error(`sent to ${page.url()} (the stand-in session is not signed in)`);
           await page
@@ -1576,6 +1612,7 @@ test("signed-in rooms (kennel, hatchery, nest) and a kennel pet's page on phones
         page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
         try {
           await page.goto(`${url}${petPage}`, { waitUntil: "load", timeout: 120_000 });
+          await hydrated(page);
           await page.waitForSelector("[data-phone-floor] [data-desk-care]", { timeout: 120_000 });
           await page.waitForFunction(() => / the .+ — ComputerPets$/.test(document.title), null, { timeout: 15_000 }).catch(() => {});
           const title = await page.title();
@@ -1599,6 +1636,7 @@ test("signed-in rooms (kennel, hatchery, nest) and a kennel pet's page on phones
       {
         const page = await ctx.newPage();
         await page.goto(`${url}/login`, { waitUntil: "load", timeout: 120_000 });
+        await hydrated(page);
         const desk = await page
           .waitForSelector("[data-login-desk]", { timeout: 60_000 })
           .then(() => page.evaluate(() => {
@@ -1613,6 +1651,7 @@ test("signed-in rooms (kennel, hatchery, nest) and a kennel pet's page on phones
       if (size === SIGNED_IN_SIZES[0]) {
         const page = await ctx.newPage();
         await page.goto(`${url}/pets/not-a-pet`, { waitUntil: "load", timeout: 120_000 });
+        await hydrated(page);
         const h1 = await page.waitForSelector("h1", { timeout: 60_000 }).then((h) => h.textContent(), () => "");
         if (!/not in your kennel|Couldn't open your kennel/.test(h1 || "")) problems.push(`/pets/not-a-pet: says "${h1}"`);
         const title = await page.title();
@@ -1723,6 +1762,7 @@ test("the rail shows the current guest on arrival and on a room change; the spee
         const page = await ctx.newPage();
         try {
           await page.goto(`${url}/demo/${slug}`, { waitUntil: "load", timeout: 120_000 });
+          await hydrated(page);
           await page.waitForSelector("[data-desk-rail] .den-cabinet-guest.is-here", { state: "attached", timeout: 60_000 });
           // Hydrated first (React's props on a rail link): on a cold dev server the server HTML showed for seconds,
           // the rail had not scrolled yet and a room change by history did nothing, so the test was early.
@@ -1772,6 +1812,7 @@ test("the rail shows the current guest on arrival and on a room change; the spee
     const page = await ctx.newPage();
     try {
       await page.goto(`${url}/demo/rui`, { waitUntil: "load", timeout: 120_000 });
+      await hydrated(page);
       await page.waitForSelector("[data-desk-care] button", { timeout: 60_000 });
       await page.waitForTimeout(1_200);
       const seen = new Set();
@@ -1823,6 +1864,7 @@ test("the rail shows the current guest on arrival and on a room change; the spee
     const page = await ctx.newPage();
     try {
       await page.goto(`${url}/demo/rui`, { waitUntil: "load", timeout: 120_000 });
+      await hydrated(page);
       await page.waitForSelector("[data-phone-floor] [data-plates-jump]", { timeout: 60_000 });
       await page.waitForTimeout(1_000);
       const jump = await page.evaluate(() => {
@@ -1852,6 +1894,7 @@ test("the rail shows the current guest on arrival and on a room change; the spee
         page.on("pageerror", (err) => thrown.push(String(err?.message || err).split("\n")[0]));
         try {
           await page.goto(`${signedIn}${path}`, { waitUntil: "load", timeout: 120_000 });
+          await hydrated(page);
           await page.waitForSelector("[data-desk-care] button", { timeout: 120_000 });
           if (new URL(page.url()).pathname !== path) throw new Error(`sent to ${page.url()} (the stand-in session is not signed in)`);
           await page.waitForTimeout(1_500);
@@ -1949,6 +1992,7 @@ test("every page at phone, tablet and laptop sizes: no link, button, field or se
         const label = `${path}${tag} ${size.w}×${size.h}`;
         try {
           await page.goto(`${base}${path}`, { waitUntil: "load", timeout: 120_000 });
+          await hydrated(page);
           // Hydrated: React has attached its props to the header's first link (the page's own sizes are set by then).
           await page.waitForFunction(() => {
             const a = document.querySelector("header a");
